@@ -1,0 +1,2333 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>create for ggdoc , @author sunyi</title>
+    <style>
+        .octicon{display:inline-block;fill:currentColor;vertical-align:text-bottom}
+        .anchor{float:left;line-height:1;margin-left:-20px;padding-right:4px}
+        .anchor:focus{outline:0}
+        h1 .octicon-link,h2 .octicon-link,h3 .octicon-link,h4 .octicon-link,h5 .octicon-link,h6 .octicon-link{color:#1b1f23;vertical-align:middle;visibility:hidden}
+        h1:hover .anchor,h2:hover .anchor,h3:hover .anchor,h4:hover .anchor,h5:hover .anchor,h6:hover .anchor{text-decoration:none}
+        h1:hover .anchor .octicon-link,h2:hover .anchor .octicon-link,h3:hover .anchor .octicon-link,h4:hover .anchor .octicon-link,h5:hover .anchor .octicon-link,h6:hover .anchor .octicon-link{visibility:visible}
+        h1:hover .anchor .octicon-link:before,h2:hover .anchor .octicon-link:before,h3:hover .anchor .octicon-link:before,h4:hover .anchor .octicon-link:before,h5:hover .anchor .octicon-link:before,h6:hover .anchor .octicon-link:before{width:16px;height:16px;content:" ";display:inline-block;background-image:url("data:image/svg+xml,%3Csvgxmlns='http://www.w3.org/2000/svg'viewBox='001616'version='1.1'width='16'height='16'aria-hidden='true'%3E%3Cpathfill-rule='evenodd'd='M49h1v1H4c-1.50-3-1.69-3-3.5S2.55343h4c1.45031.6933.501.41-.912.72-23.25V8.59c.58-.451-1.271-2.09C105.228.98484H4c-.980-21.22-22.5S3949zm9-3h-1v1h1c1021.2222.5S13.98121312H9c-.980-2-1.22-2-2.50-.83.42-1.641-2.09V6.25c-1.09.53-21.84-23.25C611.317.5513913h4c1.4503-1.693-3.5S14.56136z'%3E%3C/path%3E%3C/svg%3E")}
+        body{-webkit-text-size-adjust:100%;line-height:1.5;color:#24292e;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;font-size:16px;line-height:1.5;word-wrap:break-word;background-color:#e3e3ef;height:100%;width:100%;margin:0;padding:20px}
+        details{display:block}
+        summary{display:list-item}
+        a{background-color:initial}
+        a:active,a:hover{outline-width:0}
+        strong{font-weight:inherit;font-weight:bolder}
+        h1{font-size:2em;margin:.67em 0}
+        img{border-style:none}
+        code,kbd,pre{font-family:monospace,monospace;font-size:1em}
+        hr{box-sizing:initial;height:0;overflow:visible}
+        input{font:inherit;margin:0}
+        input{overflow:visible}
+        [type="checkbox"]{box-sizing:border-box;padding:0}
+        *{box-sizing:border-box}
+        input{font-family:inherit;font-size:inherit;line-height:inherit}
+        a{color:#0366d6;text-decoration:none}
+        a:hover{text-decoration:underline}
+        strong{font-weight:600}
+        hr{height:0;margin:15px 0;overflow:hidden;background:transparent;border:0;border-bottom:1px solid #dfe2e5}
+        hr:after,hr:before{display:table;content:""}
+        hr:after{clear:both}
+        table{border-spacing:0;border-collapse:collapse}
+        td,th{padding:0}
+        details summary{cursor:pointer}
+        kbd{display:inline-block;padding:3px 5px;font:11px SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;line-height:10px;color:#444d56;vertical-align:middle;background-color:#fafbfc;border:1px solid #d1d5da;border-radius:3px;box-shadow:inset 0 -1px 0 #d1d5da}
+        h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:0}
+        h1{font-size:32px}
+        h1,h2{font-weight:600}
+        h2{font-size:24px}
+        h3{font-size:20px}
+        h3,h4{font-weight:600}
+        h4{font-size:16px}
+        h5{font-size:14px}
+        h5,h6{font-weight:600}
+        h6{font-size:12px}
+        p{margin-top:0;margin-bottom:10px}
+        blockquote{margin:0}
+        ol,ul{padding-left:0;margin-top:0;margin-bottom:0}
+        ol ol,ul ol{list-style-type:lower-roman}
+        ol ol ol,ol ul ol,ul ol ol,ul ul ol{list-style-type:lower-alpha}
+        dd{margin-left:0}
+        code,pre{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:12px}
+        pre{margin-top:0;margin-bottom:0}
+        input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{margin:0;-webkit-appearance:none;appearance:none}
+        :checked+.radio-label{position:relative;z-index:1;border-color:#0366d6}
+        .border{border:1px solid #e1e4e8!important}
+        .border-0{border:0!important}
+        .border-bottom{border-bottom:1px solid #e1e4e8!important}
+        .rounded-1{border-radius:3px!important}
+        .bg-white{background-color:#fff!important}
+        .bg-gray-light{background-color:#fafbfc!important}
+        .text-gray-light{color:#6a737d!important}
+        .mb-0{margin-bottom:0!important}
+        .my-2{margin-top:8px!important;margin-bottom:8px!important}
+        .pl-0{padding-left:0!important}
+        .py-0{padding-top:0!important;padding-bottom:0!important}
+        .pl-1{padding-left:4px!important}
+        .pl-2{padding-left:8px!important}
+        .py-2{padding-top:8px!important;padding-bottom:8px!important}
+        .pl-3,.px-3{padding-left:16px!important}
+        .px-3{padding-right:16px!important}
+        .pl-4{padding-left:24px!important}
+        .pl-5{padding-left:32px!important}
+        .pl-6{padding-left:40px!important}
+        .f6{font-size:12px!important}
+        .lh-condensed{line-height:1.25!important}
+        .text-bold{font-weight:600!important}
+        .pl-c{color:#6a737d}
+        .pl-c1,.pl-s .pl-v{color:#005cc5}
+        .pl-e,.pl-en{color:#6f42c1}
+        .pl-s .pl-s1,.pl-smi{color:#24292e}
+        .pl-ent{color:#22863a}
+        .pl-k{color:#d73a49}
+        .pl-pds,.pl-s,.pl-s .pl-pse .pl-s1,.pl-sr,.pl-sr .pl-cce,.pl-sr .pl-sra,.pl-sr .pl-sre{color:#032f62}
+        .pl-smw,.pl-v{color:#e36209}
+        .pl-bu{color:#b31d28}
+        .pl-ii{color:#fafbfc;background-color:#b31d28}
+        .pl-c2{color:#fafbfc;background-color:#d73a49}
+        .pl-c2:before{content:"^M"}
+        .pl-sr .pl-cce{font-weight:700;color:#22863a}
+        .pl-ml{color:#735c0f}
+        .pl-mh,.pl-mh .pl-en,.pl-ms{font-weight:700;color:#005cc5}
+        .pl-mi{font-style:italic;color:#24292e}
+        .pl-mb{font-weight:700;color:#24292e}
+        .pl-md{color:#b31d28;background-color:#ffeef0}
+        .pl-mi1{color:#22863a;background-color:#f0fff4}
+        .pl-mc{color:#e36209;background-color:#ffebda}
+        .pl-mi2{color:#f6f8fa;background-color:#005cc5}
+        .pl-mdr{font-weight:700;color:#6f42c1}
+        .pl-ba{color:#586069}
+        .pl-sg{color:#959da5}
+        .pl-corl{text-decoration:underline;color:#032f62}
+        .mb-0{margin-bottom:0!important}
+        .my-2{margin-bottom:8px!important}
+        .my-2{margin-top:8px!important}
+        .pl-0{padding-left:0!important}
+        .py-0{padding-top:0!important;padding-bottom:0!important}
+        .pl-1{padding-left:4px!important}
+        .pl-2{padding-left:8px!important}
+        .py-2{padding-top:8px!important;padding-bottom:8px!important}
+        .pl-3{padding-left:16px!important}
+        .pl-4{padding-left:24px!important}
+        .pl-5{padding-left:32px!important}
+        .pl-6{padding-left:40px!important}
+        .pl-7{padding-left:48px!important}
+        .pl-8{padding-left:64px!important}
+        .pl-9{padding-left:80px!important}
+        .pl-10{padding-left:96px!important}
+        .pl-11{padding-left:112px!important}
+        .pl-12{padding-left:128px!important}
+        hr{border-bottom-color:#eee}
+        kbd{display:inline-block;padding:3px 5px;font:11px SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;line-height:10px;color:#444d56;vertical-align:middle;background-color:#fafbfc;border:1px solid #d1d5da;border-radius:3px;box-shadow:inset 0 -1px 0 #d1d5da}
+        .markdown-body:after,.markdown-body:before{display:table;content:""}
+        .markdown-body:after{clear:both}
+        .markdown-body>:first-child{margin-top:0!important}
+        .markdown-body>:last-child{margin-bottom:0!important}
+        a:not([href]){color:inherit;text-decoration:none}
+        blockquote,details,dl,ol,p,pre,table,ul{margin-top:0;margin-bottom:16px}
+        hr{height:.25em;padding:0;margin:24px 0;background-color:#e1e4e8;border:0}
+        blockquote{padding:0 1em;color:#6a737d;border-left:.25em solid #dfe2e5}
+        blockquote>:first-child{margin-top:0}
+        blockquote>:last-child{margin-bottom:0}
+        h1,h2,h3,h4,h5,h6{margin-top:24px;margin-bottom:16px;font-weight:600;line-height:1.25}
+        h1{font-size:2em}
+        h1,h2{padding-bottom:.3em;border-bottom:1px solid #eaecef}
+        h2{font-size:1.5em}
+        h3{font-size:1.25em}
+        h4{font-size:1em}
+        h5{font-size:.875em}
+        h6{font-size:.85em;color:#6a737d}
+        ol,ul{padding-left:2em}
+        ol ol,ol ul,ul ol,ul ul{margin-top:0;margin-bottom:0}
+        li{word-wrap:break-all}
+        li>p{margin-top:16px}
+        li+li{margin-top:.25em}
+        dl{padding:0}
+        dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:600}
+        dl dd{padding:0 16px;margin-bottom:16px}
+        table{display:block;width:100%;overflow:auto}
+        table th{font-weight:600}
+        table td,table th{padding:6px 13px;border:1px solid #dfe2e5}
+        table tr{background-color:#fff;border-top:1px solid #c6cbd1}
+        table tr:nth-child(2n){background-color:#f6f8fa}
+        img{max-width:100%;box-sizing:initial;background-color:#fff}
+        img[align="right"]{padding-left:20px}
+        img[align="left"]{padding-right:20px}
+        code{padding:.2em .4em;margin:0;font-size:85%;background-color:rgba(27,31,35,0.05);border-radius:3px}
+        pre{word-wrap:normal}
+        pre>code{padding:0;margin:0;font-size:100%;word-break:normal;white-space:pre;background:transparent;border:0}
+        .highlight{margin-bottom:16px}
+        .highlight pre{margin-bottom:0;word-break:normal}
+        .highlight pre,pre{padding:16px;overflow:auto;font-size:85%;line-height:1.45;background-color:#f6f8fa;border-radius:3px}
+        pre code{display:inline;max-width:auto;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:initial;border:0}
+        .commit-tease-sha{display:inline-block;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:90%;color:#444d56}
+        .full-commit .btn-outline:not(:disabled):hover{color:#005cc5;border-color:#005cc5}
+        .blob-wrapper{overflow-x:auto;overflow-y:hidden}
+        .blob-wrapper-embedded{max-height:240px;overflow-y:auto}
+        .blob-num{width:1%;min-width:50px;padding-right:10px;padding-left:10px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:12px;line-height:20px;color:rgba(27,31,35,0.3);text-align:right;white-space:nowrap;vertical-align:top;cursor:pointer;user-select:none}
+        .blob-num:hover{color:rgba(27,31,35,0.6)}
+        .blob-num:before{content:attr(data-line-number)}
+        .blob-code{position:relative;padding-right:10px;padding-left:10px;line-height:20px;vertical-align:top}
+        .blob-code-inner{overflow:visible;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:12px;color:#24292e;word-wrap:normal;white-space:pre}
+        .pl-token.active,.pl-token:hover{cursor:pointer;background:#ffea7f}
+        .tab-size[data-tab-size="1"]{-moz-tab-size:1;tab-size:1}
+        .tab-size[data-tab-size="2"]{-moz-tab-size:2;tab-size:2}
+        .tab-size[data-tab-size="3"]{-moz-tab-size:3;tab-size:3}
+        .tab-size[data-tab-size="4"]{-moz-tab-size:4;tab-size:4}
+        .tab-size[data-tab-size="5"]{-moz-tab-size:5;tab-size:5}
+        .tab-size[data-tab-size="6"]{-moz-tab-size:6;tab-size:6}
+        .tab-size[data-tab-size="7"]{-moz-tab-size:7;tab-size:7}
+        .tab-size[data-tab-size="8"]{-moz-tab-size:8;tab-size:8}
+        .tab-size[data-tab-size="9"]{-moz-tab-size:9;tab-size:9}
+        .tab-size[data-tab-size="10"]{-moz-tab-size:10;tab-size:10}
+        .tab-size[data-tab-size="11"]{-moz-tab-size:11;tab-size:11}
+        .tab-size[data-tab-size="12"]{-moz-tab-size:12;tab-size:12}
+        .task-list-item{list-style-type:none}
+        .task-list-item+.task-list-item{margin-top:3px}
+        .task-list-item input{margin:0 .2em .25em -1.6em;vertical-align:middle}
+        #page{width:calc(100% - 300px);margin-left:300px}
+        fieldset{display:none;background-color:#fff;border:0;overflow:hidden;box-shadow:2px 2px 10px rgba(128,128,128,0.2);margin-bottom:20px;padding:20px}
+        fieldset legend{font-weight:bold;color:green;height:3.5em;margin-left:-20px;padding:0}
+        #nav{background:rgb(255 255 255 / .6);padding:40px;position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto}
+        ::-webkit-scrollbar{width:5px}
+        ::-webkit-scrollbar-thumb{background-color:#79a5e8}
+        @media print,(max-width:900px){
+          #nav{display:none!important}
+          #page{width:100%!important;margin-left:0!important}
+          fieldset{display:block!important;box-shadow:none!important}
+          .toggle-hash-btn {display: none !important;}
+        }
+        .hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}
+        .hljs-comment,.hljs-quote{color:#998;font-style:italic}
+        .hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:bold}
+        .hljs-number,.hljs-literal,.hljs-variable,.hljs-template-variable,.hljs-tag .hljs-attr{color:#008080}
+        .hljs-string,.hljs-doctag{color:#d14}
+        .hljs-title,.hljs-section,.hljs-selector-id{color:#900;font-weight:bold}
+        .hljs-subst{font-weight:normal}
+        .hljs-type,.hljs-class .hljs-title{color:#458;font-weight:bold}
+        .hljs-tag,.hljs-name,.hljs-attribute{color:#000080;font-weight:normal}
+        .hljs-regexp,.hljs-link{color:#009926}
+        .hljs-symbol,.hljs-bullet{color:#990073}
+        .hljs-built_in,.hljs-builtin-name{color:#0086b3}
+        .hljs-meta{color:#999;font-weight:bold}
+        .hljs-deletion{background:#fdd}
+        .hljs-addition{background:#dfd}
+        .hljs-emphasis{font-style:italic}
+        .hljs-strong{font-weight:bold}
+        .toggle-hash-btn {position: fixed;bottom: 10px;left:10px;z-index: 1000; display: flex; justify-content: space-between;  width: 270px;}
+    </style>
+    <script>
+          const $ = selector => document.querySelector(selector);
+          const $$ = selector => document.querySelectorAll(selector);
+          const decode = s => decodeURIComponent(s);
+          const domInfo = dom => ({
+            offsetParent: dom.offsetParent.className,
+            offsetLeft: dom.offsetLeft,
+            offsetTop: dom.offsetTop,
+            clientWidth: dom.clientWidth,
+            offsetWidth: dom.offsetWidth,
+            BoundingClientRect: dom.getBoundingClientRect(),
+          });
+          let openHash = false;
+          function viewFieldset() {
+            const hash = decode(location.hash);
+            if(openHash && hash &&$(`fieldset${hash}`)) {
+              Array.from($$('fieldset')).forEach(dom  =>dom.style.display = 'none');
+              $(`fieldset${hash}`).style.display = 'block';
+            }else {
+              Array.from($$('fieldset')).forEach(dom  =>dom.style.display = 'block');
+            }
+          }
+          window.onhashchange = viewFieldset;
+          window.onload  = ()=>{
+            viewFieldset();
+            setATarget();
+          };
+          
+          function toggleHash() {
+            openHash = !openHash;
+            viewFieldset();
+            $('.toggle-hash-btn button').innerText = openHash ? '关闭专注模式' : '开启专注模式';
+          }
+          function setATarget() {
+            $$('#page a').forEach(a=>a.target = '_blank');
+          }
+    </script>
+</head>
+
+<body>
+  <div class="toggle-hash-btn">
+    <button  onclick="toggleHash()">开启专注模式</button>
+     <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+  </div><div id="page">
+      <fieldset id='_GlOZG6'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_QwsKjT'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_45OvgD'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_AEEHod'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_zky2Pj'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_OXSFVR'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_pWA0Oq'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_gCRExF'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_YJTkhE'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_aoj4U9'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_7yQ1FX'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6qjUAo'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_MsX1U1'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_kMw5Mx'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_oBhvkW'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_R4Dmo9'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_p65mft'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_F5co0a'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_WpUn7K'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_GwAbSM'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_k7cQMO'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Feo07C'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_TuCF6p'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_I7xVDn'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_U2Ywli'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_zmGNCE'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_1mOV1I'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Pu8OK4'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_O0ISlk'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_uUxZBn'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_UHRAGQ'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Y4oLEQ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_KGzAFG'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_EYXsPJ'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_8aNtfe'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_8TvX5R'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_M2CfBi'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_5lu1IP'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ftXARq'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_DgQrMa'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Wj98DQ'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_z8Gvz1'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Pzsgnm'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_2cYxXF'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mPtY3S'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_uwCZTQ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_QALxcY'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3KjV7m'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_1KTx49'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_y7xpev'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_wM5JXK'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_dXvbJW'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_bmLHSB'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_IuAWvs'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_L1c51H'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_V9MumE'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_KoBKpe'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_KZZ77R'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_DsLTkT'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Limfwn'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_NqNVG9'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_vZ8Yrg'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_wEvYyN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_FpvmmO'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_MBBqrG'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6blXcX'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lQSmob'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_UqYZcm'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Vz8KNs'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_dmjytu'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_c1s3Ch'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_XFs2NK'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_xQgA86'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_RqW24b'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3oGmEk'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_S7uYoz'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_LJ8zFi'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_FIybYF'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_CVqRR0'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_T0aSz0'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_9obHkL'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_AG6eHn'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_UvAaj3'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_fxdaju'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_NIY5Ii'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_m5OlV1'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_a5ooF9'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_qE8ss5'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_CUto2T'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_HXoL7h'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_RzljZZ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_JyHsXx'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_0dfFlf'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_eQkn9Q'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mRcTg3'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_LudVQv'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_IQwSma'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_NLeNYT'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_kBrym3'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_gOm428'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_qqxMVN'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_sz1fHQ'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3VdJsZ'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_cpwJ62'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_FIXGuW'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_QA2Vd4'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_vJWHvP'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_0brPlh'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_wH7BC5'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_szoaVA'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_uYIyB3'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3HbvDh'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_BghcEz'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_AnwTBU'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mnFqtN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_uDzaHS'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lxU5Bj'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Escps4'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_FtBXFN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_L1IqTY'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6HcIEp'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_NQcjEW'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_GaHhsq'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_H14o2d'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_dhLX5B'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_0yHENo'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_auaKsm'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6TAYPe'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_jlrrTz'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_LtPlgg'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Fjn8R0'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_wKS67f'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_aisxk3'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_imcrNq'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_uSVGU5'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_65Oiys'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_qV6hzT'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lh3o8w'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3HorZu'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_hFxbUx'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_VudWvp'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_HiXbP4'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_fuWWyx'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lwkl2F'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_jX0mcQ'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_b8GKy3'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_hVL68M'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_X8HblA'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_II2ctC'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_8RUC05'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_2cKTJz'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_sTiBPw'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_bD8GgM'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_N75CG0'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_c9fZ7k'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_QR3nym'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6WcZlD'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_eICSTI'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_otG5c8'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_1cLa5X'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lNi855'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_S2rJ2J'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_m9Zi6s'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_5gQaQp'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_zMZGgW'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_9ZFyRl'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_iu4usg'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_eItMXr'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_L1fABQ'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_L1C636'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_5WCdLx'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_rO4jOr'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_vt82VL'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_OpSmc8'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ino4xd'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_KuLu3l'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_JkInLN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_zhe0xh'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_T6KTHU'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_g1iDFC'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_cqk8wq'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6soLyI'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_fTTpWS'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_WZ5opZ'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_hEIuDy'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_RFbuak'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_hloHqD'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_taDoI8'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_HaCQrr'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_jlscPM'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_C3nS7I'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_RJU06H'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_TJtvKf'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_MO6m6r'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_QChsSt'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_oSFgRR'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_egZlSQ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_WBppuA'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_YwNp3I'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ZbrbKz'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_XwwuuF'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_SCI5NR'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_qgT7VN'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_QihstP'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_y4L9YB'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mOuppp'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_eyeJL7'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_EtJ4o6'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_83dweL'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_eKeSjS'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Ohtg1D'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_UncXSn'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Hezc2Q'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_eLzSaU'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lLeHTx'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_AaNxAi'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ZPniQP'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_0RQm9J'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_qNbhDd'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_eJj3rx'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_1noInP'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_4E2bvs'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_DDKOyp'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_eLDcPh'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_XAyWwl'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_EU7EsW'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_MTFSFr'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6htklm'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_qW9cB0'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_vFGjwN'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_JqeAFC'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_zVO9TF'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_PApOZ0'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_VWiJpS'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_4NspEN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_BS9y9e'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_7UiLgd'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_8KBZEA'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ZO69Uu'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_PQWeKe'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3k5jyZ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_RNrTPx'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_PKPmqV'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_wcgxJ7'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_T7Ey6D'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3DOGml'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_s4Rq6I'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_FEttpc'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ROoGyf'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_f2ZDBU'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_8kptA4'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Ba6Pcs'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_obWuBp'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3nRkca'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_qDAv86'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Rx1Qsd'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_iE81tX'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_SfOzoq'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_7Wzv4f'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mYwUVA'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_nC3LAE'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_bWPlJV'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_HPR84E'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_POOG3E'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_RTcXbr'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ZJz8aK'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_wuW4YN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_BHlDbd'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_2vgoM8'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_eBhzWO'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_O5xBtC'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Tm6fJ4'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_JdpJJT'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_oLriVp'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_5CdHu2'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_y1kfNr'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Ly1vxE'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_OXCzZf'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Ybnbgs'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_L5KFof'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_cEaQjD'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Godh9C'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_oNxLvj'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_yxiXAr'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_jWZ7Kd'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_kVDrBR'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_uXKAvd'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_XAxGv2'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_vn9elM'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_vst1qr'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_RG2SaB'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_hatwHv'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_rBVvhh'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_aJ3Ims'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_wXv0TY'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_CHnKuG'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_R0avlG'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_kKoap5'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_PJEGj6'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_yt5Yme'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_oKpr4F'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Lkinbm'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_XAhiKe'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ybBVKT'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_SVMhwY'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_GRTMK4'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_rdqVQF'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_A3c5uw'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_svSJwc'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_oDw1VK'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6VDWP3'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_YyqjYr'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_0jb6LW'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_IPWLWV'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_q5iojn'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_X7O093'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_PQTas5'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_g20OiI'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_OrYysL'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3TYePA'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_nQhKEO'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_yZz0bl'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_HZPB0k'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6lJtPs'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_92YfxQ'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_gYlbUq'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_XWj026'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_GpEpKR'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Wgg1zc'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_cyHOvK'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_baBLcg'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ZPl5Nv'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_cxmSUA'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_gc35Oj'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_DLn687'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_NaDZWu'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_RLLPa2'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_7H9l9t'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_gSYvnG'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_095Ieh'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_CYRZCb'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_izwW6J'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_S502XV'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_l9SgH3'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_FzTDy3'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_JQNmpQ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_yONHMl'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_fpQSdN'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_TH5W91'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_QrneAi'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_m2YiTF'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_uqls3g'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Qfk4Sz'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_bUfh42'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_uEFhxb'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_q2KeQb'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_CT40Z9'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_edx4Ga'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_BLJtTu'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_gijjt5'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_S4oRkY'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_WvH9xh'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_nHCmAQ'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mZ3Aip'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ZY8T0y'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_5Q6nAL'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3rtk6n'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_HlBWuu'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_4NPgyN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_npr49n'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_9iFVbl'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Q6DnZE'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_NlrUqQ'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_kcVLuS'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_e7sekw'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Wzgk2R'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_5VxCAh'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_RgZCpQ'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_QJm6hj'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_hy4Yyq'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_pUA5rF'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_2D9vPD'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_yjbpYg'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_WkoVXH'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_qEFSKN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_hAdhoD'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_XmCZlZ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Cappsx'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_9JLK3U'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_2Xi8um'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_WmNRNI'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_L4WerI'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_GZMhL5'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_jVlrkV'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_IfoRH6'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_tArlOI'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Oc4oqZ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_hOLH7h'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_SPW6iL'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Wamd5C'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_WFvQk4'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_N9NiQ9'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mYJT4E'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_LvxgG1'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ay9HvY'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_G7HbOf'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_wVDeyr'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ZPY9lq'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_9z1RkY'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_4q3E8X'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_M9HoGt'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_4ofeFT'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Klazrx'>
+      <legend>article</legend>
+      
+      </fieldset>
+      </div><div id="nav"><div style="margin-left:0em"><strong>getting-started</strong><br/></div><div style="margin-left:1em"><strong>intro</strong><br/></div><div style="margin-left:2em"><a href="#_GlOZG6">article</a><br/></div><div style="margin-left:1em"><strong>manuals-specifications</strong><br/></div><div style="margin-left:2em"><a href="#_QwsKjT">article</a><br/></div><div style="margin-left:1em"><strong>code-editors</strong><br/></div><div style="margin-left:2em"><a href="#_45OvgD">article</a><br/></div><div style="margin-left:1em"><strong>devtools</strong><br/></div><div style="margin-left:2em"><a href="#_AEEHod">article</a><br/></div><div style="margin-left:0em"><strong>first-steps</strong><br/></div><div style="margin-left:1em"><strong>hello-world</strong><br/></div><div style="margin-left:2em"><strong>hello-alert</strong><br/></div><div style="margin-left:3em"><a href="#_zky2Pj">solution</a><br/></div><div style="margin-left:3em"><a href="#_OXSFVR">task</a><br/></div><div style="margin-left:2em"><strong>hello-alert-ext</strong><br/></div><div style="margin-left:3em"><a href="#_pWA0Oq">solution</a><br/></div><div style="margin-left:3em"><a href="#_gCRExF">task</a><br/></div><div style="margin-left:2em"><a href="#_YJTkhE">article</a><br/></div><div style="margin-left:1em"><strong>structure</strong><br/></div><div style="margin-left:2em"><a href="#_aoj4U9">article</a><br/></div><div style="margin-left:1em"><strong>strict-mode</strong><br/></div><div style="margin-left:2em"><a href="#_7yQ1FX">article</a><br/></div><div style="margin-left:1em"><strong>variables</strong><br/></div><div style="margin-left:2em"><strong>hello-variables</strong><br/></div><div style="margin-left:3em"><a href="#_6qjUAo">solution</a><br/></div><div style="margin-left:3em"><a href="#_MsX1U1">task</a><br/></div><div style="margin-left:2em"><strong>declare-variables</strong><br/></div><div style="margin-left:3em"><a href="#_kMw5Mx">solution</a><br/></div><div style="margin-left:3em"><a href="#_oBhvkW">task</a><br/></div><div style="margin-left:2em"><strong>uppercast-constant</strong><br/></div><div style="margin-left:3em"><a href="#_R4Dmo9">solution</a><br/></div><div style="margin-left:3em"><a href="#_p65mft">task</a><br/></div><div style="margin-left:2em"><a href="#_F5co0a">article</a><br/></div><div style="margin-left:1em"><strong>types</strong><br/></div><div style="margin-left:2em"><strong>string-quotes</strong><br/></div><div style="margin-left:3em"><a href="#_WpUn7K">solution</a><br/></div><div style="margin-left:3em"><a href="#_GwAbSM">task</a><br/></div><div style="margin-left:2em"><a href="#_k7cQMO">article</a><br/></div><div style="margin-left:1em"><strong>alert-prompt-confirm</strong><br/></div><div style="margin-left:2em"><strong>simple-page</strong><br/></div><div style="margin-left:3em"><a href="#_Feo07C">solution</a><br/></div><div style="margin-left:3em"><a href="#_TuCF6p">task</a><br/></div><div style="margin-left:2em"><a href="#_I7xVDn">article</a><br/></div><div style="margin-left:1em"><strong>type-conversions</strong><br/></div><div style="margin-left:2em"><a href="#_U2Ywli">article</a><br/></div><div style="margin-left:1em"><strong>operators</strong><br/></div><div style="margin-left:2em"><strong>increment-order</strong><br/></div><div style="margin-left:3em"><a href="#_zmGNCE">solution</a><br/></div><div style="margin-left:3em"><a href="#_1mOV1I">task</a><br/></div><div style="margin-left:2em"><strong>assignment-result</strong><br/></div><div style="margin-left:3em"><a href="#_Pu8OK4">solution</a><br/></div><div style="margin-left:3em"><a href="#_O0ISlk">task</a><br/></div><div style="margin-left:2em"><strong>primitive-conversions-questions</strong><br/></div><div style="margin-left:3em"><a href="#_uUxZBn">solution</a><br/></div><div style="margin-left:3em"><a href="#_UHRAGQ">task</a><br/></div><div style="margin-left:2em"><strong>fix-prompt</strong><br/></div><div style="margin-left:3em"><a href="#_Y4oLEQ">solution</a><br/></div><div style="margin-left:3em"><a href="#_KGzAFG">task</a><br/></div><div style="margin-left:2em"><a href="#_EYXsPJ">article</a><br/></div><div style="margin-left:1em"><strong>comparison</strong><br/></div><div style="margin-left:2em"><strong>comparison-questions</strong><br/></div><div style="margin-left:3em"><a href="#_8aNtfe">solution</a><br/></div><div style="margin-left:3em"><a href="#_8TvX5R">task</a><br/></div><div style="margin-left:2em"><a href="#_M2CfBi">article</a><br/></div><div style="margin-left:1em"><strong>ifelse</strong><br/></div><div style="margin-left:2em"><strong>if-zero-string</strong><br/></div><div style="margin-left:3em"><a href="#_5lu1IP">solution</a><br/></div><div style="margin-left:3em"><a href="#_ftXARq">task</a><br/></div><div style="margin-left:2em"><strong>check-standard</strong><br/></div><div style="margin-left:3em"><strong>ifelse_task2</strong><br/></div><div style="margin-left:3em"><a href="#_DgQrMa">solution</a><br/></div><div style="margin-left:3em"><a href="#_Wj98DQ">task</a><br/></div><div style="margin-left:2em"><strong>sign</strong><br/></div><div style="margin-left:3em"><strong>if_sign</strong><br/></div><div style="margin-left:3em"><a href="#_z8Gvz1">solution</a><br/></div><div style="margin-left:3em"><a href="#_Pzsgnm">task</a><br/></div><div style="margin-left:2em"><strong>rewrite-if-question</strong><br/></div><div style="margin-left:3em"><a href="#_2cYxXF">solution</a><br/></div><div style="margin-left:3em"><a href="#_mPtY3S">task</a><br/></div><div style="margin-left:2em"><strong>rewrite-if-else-question</strong><br/></div><div style="margin-left:3em"><a href="#_uwCZTQ">solution</a><br/></div><div style="margin-left:3em"><a href="#_QALxcY">task</a><br/></div><div style="margin-left:2em"><a href="#_3KjV7m">article</a><br/></div><div style="margin-left:1em"><strong>logical-operators</strong><br/></div><div style="margin-left:2em"><strong>alert-null-undefined</strong><br/></div><div style="margin-left:3em"><a href="#_1KTx49">solution</a><br/></div><div style="margin-left:3em"><a href="#_y7xpev">task</a><br/></div><div style="margin-left:2em"><strong>alert-or</strong><br/></div><div style="margin-left:3em"><a href="#_wM5JXK">solution</a><br/></div><div style="margin-left:3em"><a href="#_dXvbJW">task</a><br/></div><div style="margin-left:2em"><strong>alert-null-2</strong><br/></div><div style="margin-left:3em"><a href="#_bmLHSB">solution</a><br/></div><div style="margin-left:3em"><a href="#_IuAWvs">task</a><br/></div><div style="margin-left:2em"><strong>alert-and</strong><br/></div><div style="margin-left:3em"><a href="#_L1c51H">solution</a><br/></div><div style="margin-left:3em"><a href="#_V9MumE">task</a><br/></div><div style="margin-left:2em"><strong>alert-and-or</strong><br/></div><div style="margin-left:3em"><a href="#_KoBKpe">solution</a><br/></div><div style="margin-left:3em"><a href="#_KZZ77R">task</a><br/></div><div style="margin-left:2em"><strong>check-if-in-range</strong><br/></div><div style="margin-left:3em"><a href="#_DsLTkT">solution</a><br/></div><div style="margin-left:3em"><a href="#_Limfwn">task</a><br/></div><div style="margin-left:2em"><strong>check-if-out-range</strong><br/></div><div style="margin-left:3em"><a href="#_NqNVG9">solution</a><br/></div><div style="margin-left:3em"><a href="#_vZ8Yrg">task</a><br/></div><div style="margin-left:2em"><strong>if-question</strong><br/></div><div style="margin-left:3em"><a href="#_wEvYyN">solution</a><br/></div><div style="margin-left:3em"><a href="#_FpvmmO">task</a><br/></div><div style="margin-left:2em"><strong>check-login</strong><br/></div><div style="margin-left:3em"><a href="#_MBBqrG">solution</a><br/></div><div style="margin-left:3em"><a href="#_6blXcX">task</a><br/></div><div style="margin-left:2em"><a href="#_lQSmob">article</a><br/></div><div style="margin-left:1em"><strong>nullish-coalescing-operator</strong><br/></div><div style="margin-left:2em"><a href="#_UqYZcm">article</a><br/></div><div style="margin-left:1em"><strong>while-for</strong><br/></div><div style="margin-left:2em"><strong>loop-last-value</strong><br/></div><div style="margin-left:3em"><a href="#_Vz8KNs">solution</a><br/></div><div style="margin-left:3em"><a href="#_dmjytu">task</a><br/></div><div style="margin-left:2em"><strong>which-value-while</strong><br/></div><div style="margin-left:3em"><a href="#_c1s3Ch">solution</a><br/></div><div style="margin-left:3em"><a href="#_XFs2NK">task</a><br/></div><div style="margin-left:2em"><strong>which-value-for</strong><br/></div><div style="margin-left:3em"><a href="#_xQgA86">solution</a><br/></div><div style="margin-left:3em"><a href="#_RqW24b">task</a><br/></div><div style="margin-left:2em"><strong>for-even</strong><br/></div><div style="margin-left:3em"><a href="#_3oGmEk">solution</a><br/></div><div style="margin-left:3em"><a href="#_S7uYoz">task</a><br/></div><div style="margin-left:2em"><strong>replace-for-while</strong><br/></div><div style="margin-left:3em"><a href="#_LJ8zFi">solution</a><br/></div><div style="margin-left:3em"><a href="#_FIybYF">task</a><br/></div><div style="margin-left:2em"><strong>repeat-until-correct</strong><br/></div><div style="margin-left:3em"><a href="#_CVqRR0">solution</a><br/></div><div style="margin-left:3em"><a href="#_T0aSz0">task</a><br/></div><div style="margin-left:2em"><strong>list-primes</strong><br/></div><div style="margin-left:3em"><a href="#_9obHkL">solution</a><br/></div><div style="margin-left:3em"><a href="#_AG6eHn">task</a><br/></div><div style="margin-left:2em"><a href="#_UvAaj3">article</a><br/></div><div style="margin-left:1em"><strong>switch</strong><br/></div><div style="margin-left:2em"><strong>rewrite-switch-if-else</strong><br/></div><div style="margin-left:3em"><a href="#_fxdaju">solution</a><br/></div><div style="margin-left:3em"><a href="#_NIY5Ii">task</a><br/></div><div style="margin-left:2em"><strong>rewrite-if-switch</strong><br/></div><div style="margin-left:3em"><a href="#_m5OlV1">solution</a><br/></div><div style="margin-left:3em"><a href="#_a5ooF9">task</a><br/></div><div style="margin-left:2em"><a href="#_qE8ss5">article</a><br/></div><div style="margin-left:1em"><strong>function-basics</strong><br/></div><div style="margin-left:2em"><strong>if-else-required</strong><br/></div><div style="margin-left:3em"><a href="#_CUto2T">solution</a><br/></div><div style="margin-left:3em"><a href="#_HXoL7h">task</a><br/></div><div style="margin-left:2em"><strong>rewrite-function-question-or</strong><br/></div><div style="margin-left:3em"><a href="#_RzljZZ">solution</a><br/></div><div style="margin-left:3em"><a href="#_JyHsXx">task</a><br/></div><div style="margin-left:2em"><strong>min</strong><br/></div><div style="margin-left:3em"><a href="#_0dfFlf">solution</a><br/></div><div style="margin-left:3em"><a href="#_eQkn9Q">task</a><br/></div><div style="margin-left:2em"><strong>pow</strong><br/></div><div style="margin-left:3em"><a href="#_mRcTg3">solution</a><br/></div><div style="margin-left:3em"><a href="#_LudVQv">task</a><br/></div><div style="margin-left:2em"><a href="#_IQwSma">article</a><br/></div><div style="margin-left:1em"><strong>function-expressions</strong><br/></div><div style="margin-left:2em"><a href="#_NLeNYT">article</a><br/></div><div style="margin-left:1em"><strong>arrow-functions-basics</strong><br/></div><div style="margin-left:2em"><strong>rewrite-arrow</strong><br/></div><div style="margin-left:3em"><a href="#_kBrym3">solution</a><br/></div><div style="margin-left:3em"><a href="#_gOm428">task</a><br/></div><div style="margin-left:2em"><a href="#_qqxMVN">article</a><br/></div><div style="margin-left:1em"><strong>javascript-specials</strong><br/></div><div style="margin-left:2em"><a href="#_sz1fHQ">article</a><br/></div><div style="margin-left:0em"><strong>code-quality</strong><br/></div><div style="margin-left:1em"><strong>debugging-chrome</strong><br/></div><div style="margin-left:2em"><a href="#_3VdJsZ">article</a><br/></div><div style="margin-left:1em"><strong>coding-style</strong><br/></div><div style="margin-left:2em"><strong>style-errors</strong><br/></div><div style="margin-left:3em"><a href="#_cpwJ62">solution</a><br/></div><div style="margin-left:3em"><a href="#_FIXGuW">task</a><br/></div><div style="margin-left:2em"><a href="#_QA2Vd4">article</a><br/></div><div style="margin-left:1em"><strong>comments</strong><br/></div><div style="margin-left:2em"><a href="#_vJWHvP">article</a><br/></div><div style="margin-left:1em"><strong>ninja-code</strong><br/></div><div style="margin-left:2em"><a href="#_0brPlh">article</a><br/></div><div style="margin-left:1em"><strong>testing-mocha</strong><br/></div><div style="margin-left:2em"><strong>pow-test-wrong</strong><br/></div><div style="margin-left:3em"><a href="#_wH7BC5">solution</a><br/></div><div style="margin-left:3em"><a href="#_szoaVA">task</a><br/></div><div style="margin-left:2em"><a href="#_uYIyB3">article</a><br/></div><div style="margin-left:1em"><strong>polyfills</strong><br/></div><div style="margin-left:2em"><a href="#_3HbvDh">article</a><br/></div><div style="margin-left:0em"><strong>object-basics</strong><br/></div><div style="margin-left:1em"><strong>object</strong><br/></div><div style="margin-left:2em"><strong>hello-object</strong><br/></div><div style="margin-left:3em"><a href="#_BghcEz">solution</a><br/></div><div style="margin-left:3em"><a href="#_AnwTBU">task</a><br/></div><div style="margin-left:2em"><strong>is-empty</strong><br/></div><div style="margin-left:3em"><a href="#_mnFqtN">solution</a><br/></div><div style="margin-left:3em"><a href="#_uDzaHS">task</a><br/></div><div style="margin-left:2em"><strong>sum-object</strong><br/></div><div style="margin-left:3em"><a href="#_lxU5Bj">solution</a><br/></div><div style="margin-left:3em"><a href="#_Escps4">task</a><br/></div><div style="margin-left:2em"><strong>multiply-numeric</strong><br/></div><div style="margin-left:3em"><a href="#_FtBXFN">solution</a><br/></div><div style="margin-left:3em"><a href="#_L1IqTY">task</a><br/></div><div style="margin-left:2em"><a href="#_6HcIEp">article</a><br/></div><div style="margin-left:1em"><strong>object-copy</strong><br/></div><div style="margin-left:2em"><a href="#_NQcjEW">article</a><br/></div><div style="margin-left:1em"><strong>garbage-collection</strong><br/></div><div style="margin-left:2em"><a href="#_GaHhsq">article</a><br/></div><div style="margin-left:1em"><strong>object-methods</strong><br/></div><div style="margin-left:2em"><strong>object-property-this</strong><br/></div><div style="margin-left:3em"><a href="#_H14o2d">solution</a><br/></div><div style="margin-left:3em"><a href="#_dhLX5B">task</a><br/></div><div style="margin-left:2em"><strong>calculator</strong><br/></div><div style="margin-left:3em"><a href="#_0yHENo">solution</a><br/></div><div style="margin-left:3em"><a href="#_auaKsm">task</a><br/></div><div style="margin-left:2em"><strong>chain-calls</strong><br/></div><div style="margin-left:3em"><a href="#_6TAYPe">solution</a><br/></div><div style="margin-left:3em"><a href="#_jlrrTz">task</a><br/></div><div style="margin-left:2em"><a href="#_LtPlgg">article</a><br/></div><div style="margin-left:1em"><strong>constructor-new</strong><br/></div><div style="margin-left:2em"><strong>two-functions-one-object</strong><br/></div><div style="margin-left:3em"><a href="#_Fjn8R0">solution</a><br/></div><div style="margin-left:3em"><a href="#_wKS67f">task</a><br/></div><div style="margin-left:2em"><strong>calculator-constructor</strong><br/></div><div style="margin-left:3em"><a href="#_aisxk3">solution</a><br/></div><div style="margin-left:3em"><a href="#_imcrNq">task</a><br/></div><div style="margin-left:2em"><strong>accumulator</strong><br/></div><div style="margin-left:3em"><a href="#_uSVGU5">solution</a><br/></div><div style="margin-left:3em"><a href="#_65Oiys">task</a><br/></div><div style="margin-left:2em"><a href="#_qV6hzT">article</a><br/></div><div style="margin-left:1em"><strong>optional-chaining</strong><br/></div><div style="margin-left:2em"><a href="#_lh3o8w">article</a><br/></div><div style="margin-left:1em"><strong>symbol</strong><br/></div><div style="margin-left:2em"><a href="#_3HorZu">article</a><br/></div><div style="margin-left:1em"><strong>object-toprimitive</strong><br/></div><div style="margin-left:2em"><a href="#_hFxbUx">article</a><br/></div><div style="margin-left:0em"><strong>data-types</strong><br/></div><div style="margin-left:1em"><strong>primitives-methods</strong><br/></div><div style="margin-left:2em"><strong>string-new-property</strong><br/></div><div style="margin-left:3em"><a href="#_VudWvp">solution</a><br/></div><div style="margin-left:3em"><a href="#_HiXbP4">task</a><br/></div><div style="margin-left:2em"><a href="#_fuWWyx">article</a><br/></div><div style="margin-left:1em"><strong>number</strong><br/></div><div style="margin-left:2em"><strong>sum-interface</strong><br/></div><div style="margin-left:3em"><a href="#_lwkl2F">solution</a><br/></div><div style="margin-left:3em"><a href="#_jX0mcQ">task</a><br/></div><div style="margin-left:2em"><strong>why-rounded-down</strong><br/></div><div style="margin-left:3em"><a href="#_b8GKy3">solution</a><br/></div><div style="margin-left:3em"><a href="#_hVL68M">task</a><br/></div><div style="margin-left:2em"><strong>repeat-until-number</strong><br/></div><div style="margin-left:3em"><a href="#_X8HblA">solution</a><br/></div><div style="margin-left:3em"><a href="#_II2ctC">task</a><br/></div><div style="margin-left:2em"><strong>endless-loop-error</strong><br/></div><div style="margin-left:3em"><a href="#_8RUC05">solution</a><br/></div><div style="margin-left:3em"><a href="#_2cKTJz">task</a><br/></div><div style="margin-left:2em"><strong>random-min-max</strong><br/></div><div style="margin-left:3em"><a href="#_sTiBPw">solution</a><br/></div><div style="margin-left:3em"><a href="#_bD8GgM">task</a><br/></div><div style="margin-left:2em"><strong>random-int-min-max</strong><br/></div><div style="margin-left:3em"><a href="#_N75CG0">solution</a><br/></div><div style="margin-left:3em"><a href="#_c9fZ7k">task</a><br/></div><div style="margin-left:2em"><a href="#_QR3nym">article</a><br/></div><div style="margin-left:1em"><strong>string</strong><br/></div><div style="margin-left:2em"><strong>ucfirst</strong><br/></div><div style="margin-left:3em"><a href="#_6WcZlD">solution</a><br/></div><div style="margin-left:3em"><a href="#_eICSTI">task</a><br/></div><div style="margin-left:2em"><strong>check-spam</strong><br/></div><div style="margin-left:3em"><a href="#_otG5c8">solution</a><br/></div><div style="margin-left:3em"><a href="#_1cLa5X">task</a><br/></div><div style="margin-left:2em"><strong>truncate</strong><br/></div><div style="margin-left:3em"><a href="#_lNi855">solution</a><br/></div><div style="margin-left:3em"><a href="#_S2rJ2J">task</a><br/></div><div style="margin-left:2em"><strong>extract-currency</strong><br/></div><div style="margin-left:3em"><a href="#_m9Zi6s">solution</a><br/></div><div style="margin-left:3em"><a href="#_5gQaQp">task</a><br/></div><div style="margin-left:2em"><a href="#_zMZGgW">article</a><br/></div><div style="margin-left:1em"><strong>array</strong><br/></div><div style="margin-left:2em"><strong>item-value</strong><br/></div><div style="margin-left:3em"><a href="#_9ZFyRl">solution</a><br/></div><div style="margin-left:3em"><a href="#_iu4usg">task</a><br/></div><div style="margin-left:2em"><strong>maximal-subarray</strong><br/></div><div style="margin-left:3em"><a href="#_eItMXr">solution</a><br/></div><div style="margin-left:3em"><a href="#_L1fABQ">task</a><br/></div><div style="margin-left:2em"><strong>create-array</strong><br/></div><div style="margin-left:3em"><a href="#_L1C636">solution</a><br/></div><div style="margin-left:3em"><a href="#_5WCdLx">task</a><br/></div><div style="margin-left:2em"><strong>call-array-this</strong><br/></div><div style="margin-left:3em"><a href="#_rO4jOr">solution</a><br/></div><div style="margin-left:3em"><a href="#_vt82VL">task</a><br/></div><div style="margin-left:2em"><strong>array-input-sum</strong><br/></div><div style="margin-left:3em"><a href="#_OpSmc8">solution</a><br/></div><div style="margin-left:3em"><a href="#_ino4xd">task</a><br/></div><div style="margin-left:2em"><a href="#_KuLu3l">article</a><br/></div><div style="margin-left:1em"><strong>array-methods</strong><br/></div><div style="margin-left:2em"><strong>camelcase</strong><br/></div><div style="margin-left:3em"><a href="#_JkInLN">solution</a><br/></div><div style="margin-left:3em"><a href="#_zhe0xh">task</a><br/></div><div style="margin-left:2em"><strong>average-age</strong><br/></div><div style="margin-left:3em"><a href="#_T6KTHU">solution</a><br/></div><div style="margin-left:3em"><a href="#_g1iDFC">task</a><br/></div><div style="margin-left:2em"><strong>array-unique</strong><br/></div><div style="margin-left:3em"><a href="#_cqk8wq">solution</a><br/></div><div style="margin-left:3em"><a href="#_6soLyI">task</a><br/></div><div style="margin-left:2em"><strong>reduce-object</strong><br/></div><div style="margin-left:3em"><a href="#_fTTpWS">solution</a><br/></div><div style="margin-left:3em"><a href="#_WZ5opZ">task</a><br/></div><div style="margin-left:2em"><strong>filter-range</strong><br/></div><div style="margin-left:3em"><a href="#_hEIuDy">solution</a><br/></div><div style="margin-left:3em"><a href="#_RFbuak">task</a><br/></div><div style="margin-left:2em"><strong>filter-range-in-place</strong><br/></div><div style="margin-left:3em"><a href="#_hloHqD">solution</a><br/></div><div style="margin-left:3em"><a href="#_taDoI8">task</a><br/></div><div style="margin-left:2em"><strong>sort-back</strong><br/></div><div style="margin-left:3em"><a href="#_HaCQrr">solution</a><br/></div><div style="margin-left:3em"><a href="#_jlscPM">task</a><br/></div><div style="margin-left:2em"><strong>copy-sort-array</strong><br/></div><div style="margin-left:3em"><a href="#_C3nS7I">solution</a><br/></div><div style="margin-left:3em"><a href="#_RJU06H">task</a><br/></div><div style="margin-left:2em"><strong>array-get-names</strong><br/></div><div style="margin-left:3em"><a href="#_TJtvKf">solution</a><br/></div><div style="margin-left:3em"><a href="#_MO6m6r">task</a><br/></div><div style="margin-left:2em"><strong>calculator-extendable</strong><br/></div><div style="margin-left:3em"><a href="#_QChsSt">solution</a><br/></div><div style="margin-left:3em"><a href="#_oSFgRR">task</a><br/></div><div style="margin-left:2em"><strong>map-objects</strong><br/></div><div style="margin-left:3em"><a href="#_egZlSQ">solution</a><br/></div><div style="margin-left:3em"><a href="#_WBppuA">task</a><br/></div><div style="margin-left:2em"><strong>sort-objects</strong><br/></div><div style="margin-left:3em"><a href="#_YwNp3I">solution</a><br/></div><div style="margin-left:3em"><a href="#_ZbrbKz">task</a><br/></div><div style="margin-left:2em"><strong>shuffle</strong><br/></div><div style="margin-left:3em"><a href="#_XwwuuF">solution</a><br/></div><div style="margin-left:3em"><a href="#_SCI5NR">task</a><br/></div><div style="margin-left:2em"><a href="#_qgT7VN">article</a><br/></div><div style="margin-left:1em"><strong>iterable</strong><br/></div><div style="margin-left:2em"><a href="#_QihstP">article</a><br/></div><div style="margin-left:1em"><strong>map-set</strong><br/></div><div style="margin-left:2em"><strong>array-unique-map</strong><br/></div><div style="margin-left:3em"><a href="#_y4L9YB">solution</a><br/></div><div style="margin-left:3em"><a href="#_mOuppp">task</a><br/></div><div style="margin-left:2em"><strong>filter-anagrams</strong><br/></div><div style="margin-left:3em"><a href="#_eyeJL7">solution</a><br/></div><div style="margin-left:3em"><a href="#_EtJ4o6">task</a><br/></div><div style="margin-left:2em"><strong>iterable-keys</strong><br/></div><div style="margin-left:3em"><a href="#_83dweL">solution</a><br/></div><div style="margin-left:3em"><a href="#_eKeSjS">task</a><br/></div><div style="margin-left:2em"><a href="#_Ohtg1D">article</a><br/></div><div style="margin-left:1em"><strong>weakmap-weakset</strong><br/></div><div style="margin-left:2em"><strong>recipients-read</strong><br/></div><div style="margin-left:3em"><a href="#_UncXSn">solution</a><br/></div><div style="margin-left:3em"><a href="#_Hezc2Q">task</a><br/></div><div style="margin-left:2em"><strong>recipients-when-read</strong><br/></div><div style="margin-left:3em"><a href="#_eLzSaU">solution</a><br/></div><div style="margin-left:3em"><a href="#_lLeHTx">task</a><br/></div><div style="margin-left:2em"><a href="#_AaNxAi">article</a><br/></div><div style="margin-left:1em"><strong>keys-values-entries</strong><br/></div><div style="margin-left:2em"><strong>sum-salaries</strong><br/></div><div style="margin-left:3em"><a href="#_ZPniQP">solution</a><br/></div><div style="margin-left:3em"><a href="#_0RQm9J">task</a><br/></div><div style="margin-left:2em"><strong>count-properties</strong><br/></div><div style="margin-left:3em"><a href="#_qNbhDd">solution</a><br/></div><div style="margin-left:3em"><a href="#_eJj3rx">task</a><br/></div><div style="margin-left:2em"><a href="#_1noInP">article</a><br/></div><div style="margin-left:1em"><strong>destructuring-assignment</strong><br/></div><div style="margin-left:2em"><strong>destruct-user</strong><br/></div><div style="margin-left:3em"><a href="#_4E2bvs">solution</a><br/></div><div style="margin-left:3em"><a href="#_DDKOyp">task</a><br/></div><div style="margin-left:2em"><strong>max-salary</strong><br/></div><div style="margin-left:3em"><a href="#_eLDcPh">solution</a><br/></div><div style="margin-left:3em"><a href="#_XAyWwl">task</a><br/></div><div style="margin-left:2em"><a href="#_EU7EsW">article</a><br/></div><div style="margin-left:1em"><strong>date</strong><br/></div><div style="margin-left:2em"><strong>new-date</strong><br/></div><div style="margin-left:3em"><a href="#_MTFSFr">solution</a><br/></div><div style="margin-left:3em"><a href="#_6htklm">task</a><br/></div><div style="margin-left:2em"><strong>get-week-day</strong><br/></div><div style="margin-left:3em"><a href="#_qW9cB0">solution</a><br/></div><div style="margin-left:3em"><a href="#_vFGjwN">task</a><br/></div><div style="margin-left:2em"><strong>weekday</strong><br/></div><div style="margin-left:3em"><a href="#_JqeAFC">solution</a><br/></div><div style="margin-left:3em"><a href="#_zVO9TF">task</a><br/></div><div style="margin-left:2em"><strong>get-date-ago</strong><br/></div><div style="margin-left:3em"><a href="#_PApOZ0">solution</a><br/></div><div style="margin-left:3em"><a href="#_VWiJpS">task</a><br/></div><div style="margin-left:2em"><strong>last-day-of-month</strong><br/></div><div style="margin-left:3em"><a href="#_4NspEN">solution</a><br/></div><div style="margin-left:3em"><a href="#_BS9y9e">task</a><br/></div><div style="margin-left:2em"><strong>get-seconds-today</strong><br/></div><div style="margin-left:3em"><a href="#_7UiLgd">solution</a><br/></div><div style="margin-left:3em"><a href="#_8KBZEA">task</a><br/></div><div style="margin-left:2em"><strong>get-seconds-to-tomorrow</strong><br/></div><div style="margin-left:3em"><a href="#_ZO69Uu">solution</a><br/></div><div style="margin-left:3em"><a href="#_PQWeKe">task</a><br/></div><div style="margin-left:2em"><strong>format-date-relative</strong><br/></div><div style="margin-left:3em"><a href="#_3k5jyZ">solution</a><br/></div><div style="margin-left:3em"><a href="#_RNrTPx">task</a><br/></div><div style="margin-left:2em"><a href="#_PKPmqV">article</a><br/></div><div style="margin-left:1em"><strong>json</strong><br/></div><div style="margin-left:2em"><strong>serialize-object</strong><br/></div><div style="margin-left:3em"><a href="#_wcgxJ7">solution</a><br/></div><div style="margin-left:3em"><a href="#_T7Ey6D">task</a><br/></div><div style="margin-left:2em"><strong>serialize-event-circular</strong><br/></div><div style="margin-left:3em"><a href="#_3DOGml">solution</a><br/></div><div style="margin-left:3em"><a href="#_s4Rq6I">task</a><br/></div><div style="margin-left:2em"><a href="#_FEttpc">article</a><br/></div><div style="margin-left:0em"><strong>advanced-functions</strong><br/></div><div style="margin-left:1em"><strong>recursion</strong><br/></div><div style="margin-left:2em"><strong>sum-to</strong><br/></div><div style="margin-left:3em"><a href="#_ROoGyf">solution</a><br/></div><div style="margin-left:3em"><a href="#_f2ZDBU">task</a><br/></div><div style="margin-left:2em"><strong>factorial</strong><br/></div><div style="margin-left:3em"><a href="#_8kptA4">solution</a><br/></div><div style="margin-left:3em"><a href="#_Ba6Pcs">task</a><br/></div><div style="margin-left:2em"><strong>fibonacci-numbers</strong><br/></div><div style="margin-left:3em"><a href="#_obWuBp">solution</a><br/></div><div style="margin-left:3em"><a href="#_3nRkca">task</a><br/></div><div style="margin-left:2em"><strong>output-single-linked-list</strong><br/></div><div style="margin-left:3em"><a href="#_qDAv86">solution</a><br/></div><div style="margin-left:3em"><a href="#_Rx1Qsd">task</a><br/></div><div style="margin-left:2em"><strong>output-single-linked-list-reverse</strong><br/></div><div style="margin-left:3em"><a href="#_iE81tX">solution</a><br/></div><div style="margin-left:3em"><a href="#_SfOzoq">task</a><br/></div><div style="margin-left:2em"><a href="#_7Wzv4f">article</a><br/></div><div style="margin-left:1em"><strong>rest-parameters-spread</strong><br/></div><div style="margin-left:2em"><a href="#_mYwUVA">article</a><br/></div><div style="margin-left:1em"><strong>closure</strong><br/></div><div style="margin-left:2em"><strong>closure-latest-changes</strong><br/></div><div style="margin-left:3em"><a href="#_nC3LAE">solution</a><br/></div><div style="margin-left:3em"><a href="#_bWPlJV">task</a><br/></div><div style="margin-left:2em"><strong>make-army</strong><br/></div><div style="margin-left:3em"><a href="#_HPR84E">solution</a><br/></div><div style="margin-left:3em"><a href="#_POOG3E">task</a><br/></div><div style="margin-left:2em"><strong>closure-variable-access</strong><br/></div><div style="margin-left:3em"><a href="#_RTcXbr">solution</a><br/></div><div style="margin-left:3em"><a href="#_ZJz8aK">task</a><br/></div><div style="margin-left:2em"><strong>counter-independent</strong><br/></div><div style="margin-left:3em"><a href="#_wuW4YN">solution</a><br/></div><div style="margin-left:3em"><a href="#_BHlDbd">task</a><br/></div><div style="margin-left:2em"><strong>counter-object-independent</strong><br/></div><div style="margin-left:3em"><a href="#_2vgoM8">solution</a><br/></div><div style="margin-left:3em"><a href="#_eBhzWO">task</a><br/></div><div style="margin-left:2em"><strong>function-in-if</strong><br/></div><div style="margin-left:3em"><a href="#_O5xBtC">solution</a><br/></div><div style="margin-left:3em"><a href="#_Tm6fJ4">task</a><br/></div><div style="margin-left:2em"><strong>closure-sum</strong><br/></div><div style="margin-left:3em"><a href="#_JdpJJT">solution</a><br/></div><div style="margin-left:3em"><a href="#_oLriVp">task</a><br/></div><div style="margin-left:2em"><strong>let-scope</strong><br/></div><div style="margin-left:3em"><a href="#_5CdHu2">solution</a><br/></div><div style="margin-left:3em"><a href="#_y1kfNr">task</a><br/></div><div style="margin-left:2em"><strong>filter-through-function</strong><br/></div><div style="margin-left:3em"><a href="#_Ly1vxE">solution</a><br/></div><div style="margin-left:3em"><a href="#_OXCzZf">task</a><br/></div><div style="margin-left:2em"><strong>sort-by-field</strong><br/></div><div style="margin-left:3em"><a href="#_Ybnbgs">solution</a><br/></div><div style="margin-left:3em"><a href="#_L5KFof">task</a><br/></div><div style="margin-left:2em"><a href="#_cEaQjD">article</a><br/></div><div style="margin-left:1em"><strong>var</strong><br/></div><div style="margin-left:2em"><a href="#_Godh9C">article</a><br/></div><div style="margin-left:1em"><strong>global-object</strong><br/></div><div style="margin-left:2em"><a href="#_oNxLvj">article</a><br/></div><div style="margin-left:1em"><strong>function-object</strong><br/></div><div style="margin-left:2em"><strong>counter-inc-dec</strong><br/></div><div style="margin-left:3em"><a href="#_yxiXAr">solution</a><br/></div><div style="margin-left:2em"><strong>sum-many-brackets</strong><br/></div><div style="margin-left:3em"><a href="#_jWZ7Kd">solution</a><br/></div><div style="margin-left:3em"><a href="#_kVDrBR">task</a><br/></div><div style="margin-left:2em"><a href="#_uXKAvd">article</a><br/></div><div style="margin-left:1em"><strong>new-function</strong><br/></div><div style="margin-left:2em"><a href="#_XAxGv2">article</a><br/></div><div style="margin-left:1em"><strong>settimeout-setinterval</strong><br/></div><div style="margin-left:2em"><strong>output-numbers-100ms</strong><br/></div><div style="margin-left:3em"><a href="#_vn9elM">solution</a><br/></div><div style="margin-left:3em"><a href="#_vst1qr">task</a><br/></div><div style="margin-left:2em"><strong>settimeout-result</strong><br/></div><div style="margin-left:3em"><a href="#_RG2SaB">solution</a><br/></div><div style="margin-left:3em"><a href="#_hatwHv">task</a><br/></div><div style="margin-left:2em"><a href="#_rBVvhh">article</a><br/></div><div style="margin-left:1em"><strong>call-apply-decorators</strong><br/></div><div style="margin-left:2em"><strong>spy-decorator</strong><br/></div><div style="margin-left:3em"><a href="#_aJ3Ims">solution</a><br/></div><div style="margin-left:3em"><a href="#_wXv0TY">task</a><br/></div><div style="margin-left:2em"><strong>delay</strong><br/></div><div style="margin-left:3em"><a href="#_CHnKuG">solution</a><br/></div><div style="margin-left:3em"><a href="#_R0avlG">task</a><br/></div><div style="margin-left:2em"><strong>debounce</strong><br/></div><div style="margin-left:3em"><a href="#_kKoap5">solution</a><br/></div><div style="margin-left:3em"><a href="#_PJEGj6">task</a><br/></div><div style="margin-left:2em"><strong>throttle</strong><br/></div><div style="margin-left:3em"><a href="#_yt5Yme">solution</a><br/></div><div style="margin-left:3em"><a href="#_oKpr4F">task</a><br/></div><div style="margin-left:2em"><a href="#_Lkinbm">article</a><br/></div><div style="margin-left:1em"><strong>bind</strong><br/></div><div style="margin-left:2em"><strong>write-to-object-after-bind</strong><br/></div><div style="margin-left:3em"><a href="#_XAhiKe">solution</a><br/></div><div style="margin-left:3em"><a href="#_ybBVKT">task</a><br/></div><div style="margin-left:2em"><strong>second-bind</strong><br/></div><div style="margin-left:3em"><a href="#_SVMhwY">solution</a><br/></div><div style="margin-left:3em"><a href="#_GRTMK4">task</a><br/></div><div style="margin-left:2em"><strong>function-property-after-bind</strong><br/></div><div style="margin-left:3em"><a href="#_rdqVQF">solution</a><br/></div><div style="margin-left:3em"><a href="#_A3c5uw">task</a><br/></div><div style="margin-left:2em"><strong>question-use-bind</strong><br/></div><div style="margin-left:3em"><a href="#_svSJwc">solution</a><br/></div><div style="margin-left:3em"><a href="#_oDw1VK">task</a><br/></div><div style="margin-left:2em"><strong>ask-partial</strong><br/></div><div style="margin-left:3em"><a href="#_6VDWP3">solution</a><br/></div><div style="margin-left:3em"><a href="#_YyqjYr">task</a><br/></div><div style="margin-left:2em"><a href="#_0jb6LW">article</a><br/></div><div style="margin-left:1em"><strong>arrow-functions</strong><br/></div><div style="margin-left:2em"><a href="#_IPWLWV">article</a><br/></div><div style="margin-left:0em"><strong>object-properties</strong><br/></div><div style="margin-left:1em"><strong>property-descriptors</strong><br/></div><div style="margin-left:2em"><a href="#_q5iojn">article</a><br/></div><div style="margin-left:1em"><strong>property-accessors</strong><br/></div><div style="margin-left:2em"><a href="#_X7O093">article</a><br/></div><div style="margin-left:0em"><strong>prototypes</strong><br/></div><div style="margin-left:1em"><strong>prototype-inheritance</strong><br/></div><div style="margin-left:2em"><strong>property-after-delete</strong><br/></div><div style="margin-left:3em"><a href="#_PQTas5">solution</a><br/></div><div style="margin-left:3em"><a href="#_g20OiI">task</a><br/></div><div style="margin-left:2em"><strong>search-algorithm</strong><br/></div><div style="margin-left:3em"><a href="#_OrYysL">solution</a><br/></div><div style="margin-left:3em"><a href="#_3TYePA">task</a><br/></div><div style="margin-left:2em"><strong>proto-and-this</strong><br/></div><div style="margin-left:3em"><a href="#_nQhKEO">solution</a><br/></div><div style="margin-left:3em"><a href="#_yZz0bl">task</a><br/></div><div style="margin-left:2em"><strong>hamster-proto</strong><br/></div><div style="margin-left:3em"><a href="#_HZPB0k">solution</a><br/></div><div style="margin-left:3em"><a href="#_6lJtPs">task</a><br/></div><div style="margin-left:2em"><a href="#_92YfxQ">article</a><br/></div><div style="margin-left:1em"><strong>function-prototype</strong><br/></div><div style="margin-left:2em"><strong>changing-prototype</strong><br/></div><div style="margin-left:3em"><a href="#_gYlbUq">solution</a><br/></div><div style="margin-left:3em"><a href="#_XWj026">task</a><br/></div><div style="margin-left:2em"><strong>new-object-same-constructor</strong><br/></div><div style="margin-left:3em"><a href="#_GpEpKR">solution</a><br/></div><div style="margin-left:3em"><a href="#_Wgg1zc">task</a><br/></div><div style="margin-left:2em"><a href="#_cyHOvK">article</a><br/></div><div style="margin-left:1em"><strong>native-prototypes</strong><br/></div><div style="margin-left:2em"><strong>defer-to-prototype</strong><br/></div><div style="margin-left:3em"><a href="#_baBLcg">solution</a><br/></div><div style="margin-left:3em"><a href="#_ZPl5Nv">task</a><br/></div><div style="margin-left:2em"><strong>defer-to-prototype-extended</strong><br/></div><div style="margin-left:3em"><a href="#_cxmSUA">solution</a><br/></div><div style="margin-left:3em"><a href="#_gc35Oj">task</a><br/></div><div style="margin-left:2em"><a href="#_DLn687">article</a><br/></div><div style="margin-left:1em"><strong>prototype-methods</strong><br/></div><div style="margin-left:2em"><strong>dictionary-tostring</strong><br/></div><div style="margin-left:3em"><a href="#_NaDZWu">solution</a><br/></div><div style="margin-left:3em"><a href="#_RLLPa2">task</a><br/></div><div style="margin-left:2em"><strong>compare-calls</strong><br/></div><div style="margin-left:3em"><a href="#_7H9l9t">solution</a><br/></div><div style="margin-left:3em"><a href="#_gSYvnG">task</a><br/></div><div style="margin-left:2em"><a href="#_095Ieh">article</a><br/></div><div style="margin-left:0em"><strong>classes</strong><br/></div><div style="margin-left:1em"><strong>class</strong><br/></div><div style="margin-left:2em"><strong>rewrite-to-class</strong><br/></div><div style="margin-left:3em"><a href="#_CYRZCb">solution</a><br/></div><div style="margin-left:3em"><a href="#_izwW6J">task</a><br/></div><div style="margin-left:2em"><a href="#_S502XV">article</a><br/></div><div style="margin-left:1em"><strong>class-inheritance</strong><br/></div><div style="margin-left:2em"><strong>class-constructor-error</strong><br/></div><div style="margin-left:3em"><a href="#_l9SgH3">solution</a><br/></div><div style="margin-left:3em"><a href="#_FzTDy3">task</a><br/></div><div style="margin-left:2em"><strong>clock-class-extended</strong><br/></div><div style="margin-left:3em"><a href="#_JQNmpQ">solution</a><br/></div><div style="margin-left:3em"><a href="#_yONHMl">task</a><br/></div><div style="margin-left:2em"><a href="#_fpQSdN">article</a><br/></div><div style="margin-left:1em"><strong>static-properties-methods</strong><br/></div><div style="margin-left:2em"><strong>class-extend-object</strong><br/></div><div style="margin-left:3em"><a href="#_TH5W91">solution</a><br/></div><div style="margin-left:3em"><a href="#_QrneAi">task</a><br/></div><div style="margin-left:2em"><a href="#_m2YiTF">article</a><br/></div><div style="margin-left:1em"><strong>private-protected-properties-methods</strong><br/></div><div style="margin-left:2em"><a href="#_uqls3g">article</a><br/></div><div style="margin-left:1em"><strong>extend-natives</strong><br/></div><div style="margin-left:2em"><a href="#_Qfk4Sz">article</a><br/></div><div style="margin-left:1em"><strong>instanceof</strong><br/></div><div style="margin-left:2em"><strong>strange-instanceof</strong><br/></div><div style="margin-left:3em"><a href="#_bUfh42">solution</a><br/></div><div style="margin-left:3em"><a href="#_uEFhxb">task</a><br/></div><div style="margin-left:2em"><a href="#_q2KeQb">article</a><br/></div><div style="margin-left:1em"><strong>mixins</strong><br/></div><div style="margin-left:2em"><a href="#_CT40Z9">article</a><br/></div><div style="margin-left:0em"><strong>error-handling</strong><br/></div><div style="margin-left:1em"><strong>try-catch</strong><br/></div><div style="margin-left:2em"><strong>finally-or-code-after</strong><br/></div><div style="margin-left:3em"><a href="#_edx4Ga">solution</a><br/></div><div style="margin-left:3em"><a href="#_BLJtTu">task</a><br/></div><div style="margin-left:2em"><a href="#_gijjt5">article</a><br/></div><div style="margin-left:1em"><strong>custom-errors</strong><br/></div><div style="margin-left:2em"><strong>format-error</strong><br/></div><div style="margin-left:3em"><a href="#_S4oRkY">solution</a><br/></div><div style="margin-left:3em"><a href="#_WvH9xh">task</a><br/></div><div style="margin-left:2em"><a href="#_nHCmAQ">article</a><br/></div><div style="margin-left:0em"><strong>async</strong><br/></div><div style="margin-left:1em"><strong>callbacks</strong><br/></div><div style="margin-left:2em"><strong>animate-circle-callback</strong><br/></div><div style="margin-left:3em"><a href="#_mZ3Aip">solution</a><br/></div><div style="margin-left:3em"><a href="#_ZY8T0y">task</a><br/></div><div style="margin-left:2em"><a href="#_5Q6nAL">article</a><br/></div><div style="margin-left:1em"><strong>promise-basics</strong><br/></div><div style="margin-left:2em"><strong>re-resolve</strong><br/></div><div style="margin-left:3em"><a href="#_3rtk6n">solution</a><br/></div><div style="margin-left:3em"><a href="#_HlBWuu">task</a><br/></div><div style="margin-left:2em"><strong>delay-promise</strong><br/></div><div style="margin-left:3em"><a href="#_4NPgyN">solution</a><br/></div><div style="margin-left:3em"><a href="#_npr49n">task</a><br/></div><div style="margin-left:2em"><strong>animate-circle-promise</strong><br/></div><div style="margin-left:3em"><a href="#_9iFVbl">solution</a><br/></div><div style="margin-left:3em"><a href="#_Q6DnZE">task</a><br/></div><div style="margin-left:2em"><a href="#_NlrUqQ">article</a><br/></div><div style="margin-left:1em"><strong>promise-chaining</strong><br/></div><div style="margin-left:2em"><strong>then-vs-catch</strong><br/></div><div style="margin-left:3em"><a href="#_kcVLuS">solution</a><br/></div><div style="margin-left:3em"><a href="#_e7sekw">task</a><br/></div><div style="margin-left:2em"><a href="#_Wzgk2R">article</a><br/></div><div style="margin-left:1em"><strong>promise-error-handling</strong><br/></div><div style="margin-left:2em"><strong>error-async</strong><br/></div><div style="margin-left:3em"><a href="#_5VxCAh">solution</a><br/></div><div style="margin-left:3em"><a href="#_RgZCpQ">task</a><br/></div><div style="margin-left:2em"><a href="#_QJm6hj">article</a><br/></div><div style="margin-left:1em"><strong>promise-api</strong><br/></div><div style="margin-left:2em"><a href="#_hy4Yyq">article</a><br/></div><div style="margin-left:1em"><strong>promisify</strong><br/></div><div style="margin-left:2em"><a href="#_pUA5rF">article</a><br/></div><div style="margin-left:1em"><strong>microtask-queue</strong><br/></div><div style="margin-left:2em"><a href="#_2D9vPD">article</a><br/></div><div style="margin-left:1em"><strong>async-await</strong><br/></div><div style="margin-left:2em"><strong>rewrite-async</strong><br/></div><div style="margin-left:3em"><a href="#_yjbpYg">solution</a><br/></div><div style="margin-left:3em"><a href="#_WkoVXH">task</a><br/></div><div style="margin-left:2em"><strong>rewrite-async-2</strong><br/></div><div style="margin-left:3em"><a href="#_qEFSKN">solution</a><br/></div><div style="margin-left:3em"><a href="#_hAdhoD">task</a><br/></div><div style="margin-left:2em"><strong>async-from-regular</strong><br/></div><div style="margin-left:3em"><a href="#_XmCZlZ">solution</a><br/></div><div style="margin-left:3em"><a href="#_Cappsx">task</a><br/></div><div style="margin-left:2em"><a href="#_9JLK3U">article</a><br/></div><div style="margin-left:0em"><strong>generators-iterators</strong><br/></div><div style="margin-left:1em"><strong>generators</strong><br/></div><div style="margin-left:2em"><strong>pseudo-random-generator</strong><br/></div><div style="margin-left:3em"><a href="#_2Xi8um">solution</a><br/></div><div style="margin-left:3em"><a href="#_WmNRNI">task</a><br/></div><div style="margin-left:2em"><a href="#_L4WerI">article</a><br/></div><div style="margin-left:1em"><strong>async-iterators-generators</strong><br/></div><div style="margin-left:2em"><a href="#_GZMhL5">article</a><br/></div><div style="margin-left:0em"><strong>modules</strong><br/></div><div style="margin-left:1em"><strong>modules-intro</strong><br/></div><div style="margin-left:2em"><a href="#_jVlrkV">article</a><br/></div><div style="margin-left:1em"><strong>import-export</strong><br/></div><div style="margin-left:2em"><a href="#_IfoRH6">article</a><br/></div><div style="margin-left:1em"><strong>modules-dynamic-imports</strong><br/></div><div style="margin-left:2em"><a href="#_tArlOI">article</a><br/></div><div style="margin-left:0em"><strong>js-misc</strong><br/></div><div style="margin-left:1em"><strong>proxy</strong><br/></div><div style="margin-left:2em"><strong>error-nonexisting</strong><br/></div><div style="margin-left:3em"><a href="#_Oc4oqZ">solution</a><br/></div><div style="margin-left:3em"><a href="#_hOLH7h">task</a><br/></div><div style="margin-left:2em"><strong>array-negative</strong><br/></div><div style="margin-left:3em"><a href="#_SPW6iL">solution</a><br/></div><div style="margin-left:3em"><a href="#_Wamd5C">task</a><br/></div><div style="margin-left:2em"><strong>observable</strong><br/></div><div style="margin-left:3em"><a href="#_WFvQk4">solution</a><br/></div><div style="margin-left:3em"><a href="#_N9NiQ9">task</a><br/></div><div style="margin-left:2em"><a href="#_mYJT4E">article</a><br/></div><div style="margin-left:1em"><strong>eval</strong><br/></div><div style="margin-left:2em"><strong>eval-calculator</strong><br/></div><div style="margin-left:3em"><a href="#_LvxgG1">solution</a><br/></div><div style="margin-left:3em"><a href="#_ay9HvY">task</a><br/></div><div style="margin-left:2em"><a href="#_G7HbOf">article</a><br/></div><div style="margin-left:1em"><strong>currying-partials</strong><br/></div><div style="margin-left:2em"><a href="#_wVDeyr">article</a><br/></div><div style="margin-left:1em"><strong>reference-type</strong><br/></div><div style="margin-left:2em"><strong>check-syntax</strong><br/></div><div style="margin-left:3em"><a href="#_ZPY9lq">solution</a><br/></div><div style="margin-left:3em"><a href="#_9z1RkY">task</a><br/></div><div style="margin-left:2em"><strong>why-this</strong><br/></div><div style="margin-left:3em"><a href="#_4q3E8X">solution</a><br/></div><div style="margin-left:3em"><a href="#_M9HoGt">task</a><br/></div><div style="margin-left:2em"><a href="#_4ofeFT">article</a><br/></div><div style="margin-left:1em"><strong>bigint</strong><br/></div><div style="margin-left:2em"><a href="#_Klazrx">article</a><br/></div></div>
+</body></html>

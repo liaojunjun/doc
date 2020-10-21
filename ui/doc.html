@@ -1,0 +1,1018 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>create for ggdoc , @author sunyi</title>
+    <style>
+        .octicon{display:inline-block;fill:currentColor;vertical-align:text-bottom}
+        .anchor{float:left;line-height:1;margin-left:-20px;padding-right:4px}
+        .anchor:focus{outline:0}
+        h1 .octicon-link,h2 .octicon-link,h3 .octicon-link,h4 .octicon-link,h5 .octicon-link,h6 .octicon-link{color:#1b1f23;vertical-align:middle;visibility:hidden}
+        h1:hover .anchor,h2:hover .anchor,h3:hover .anchor,h4:hover .anchor,h5:hover .anchor,h6:hover .anchor{text-decoration:none}
+        h1:hover .anchor .octicon-link,h2:hover .anchor .octicon-link,h3:hover .anchor .octicon-link,h4:hover .anchor .octicon-link,h5:hover .anchor .octicon-link,h6:hover .anchor .octicon-link{visibility:visible}
+        h1:hover .anchor .octicon-link:before,h2:hover .anchor .octicon-link:before,h3:hover .anchor .octicon-link:before,h4:hover .anchor .octicon-link:before,h5:hover .anchor .octicon-link:before,h6:hover .anchor .octicon-link:before{width:16px;height:16px;content:" ";display:inline-block;background-image:url("data:image/svg+xml,%3Csvgxmlns='http://www.w3.org/2000/svg'viewBox='001616'version='1.1'width='16'height='16'aria-hidden='true'%3E%3Cpathfill-rule='evenodd'd='M49h1v1H4c-1.50-3-1.69-3-3.5S2.55343h4c1.45031.6933.501.41-.912.72-23.25V8.59c.58-.451-1.271-2.09C105.228.98484H4c-.980-21.22-22.5S3949zm9-3h-1v1h1c1021.2222.5S13.98121312H9c-.980-2-1.22-2-2.50-.83.42-1.641-2.09V6.25c-1.09.53-21.84-23.25C611.317.5513913h4c1.4503-1.693-3.5S14.56136z'%3E%3C/path%3E%3C/svg%3E")}
+        body{-webkit-text-size-adjust:100%;line-height:1.5;color:#24292e;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;font-size:16px;line-height:1.5;word-wrap:break-word;background-color:#e3e3ef;height:100%;width:100%;margin:0;padding:20px}
+        details{display:block}
+        summary{display:list-item}
+        a{background-color:initial}
+        a:active,a:hover{outline-width:0}
+        strong{font-weight:inherit;font-weight:bolder}
+        h1{font-size:2em;margin:.67em 0}
+        img{border-style:none}
+        code,kbd,pre{font-family:monospace,monospace;font-size:1em}
+        hr{box-sizing:initial;height:0;overflow:visible}
+        input{font:inherit;margin:0}
+        input{overflow:visible}
+        [type="checkbox"]{box-sizing:border-box;padding:0}
+        *{box-sizing:border-box}
+        input{font-family:inherit;font-size:inherit;line-height:inherit}
+        a{color:#0366d6;text-decoration:none}
+        a:hover{text-decoration:underline}
+        strong{font-weight:600}
+        hr{height:0;margin:15px 0;overflow:hidden;background:transparent;border:0;border-bottom:1px solid #dfe2e5}
+        hr:after,hr:before{display:table;content:""}
+        hr:after{clear:both}
+        table{border-spacing:0;border-collapse:collapse}
+        td,th{padding:0}
+        details summary{cursor:pointer}
+        kbd{display:inline-block;padding:3px 5px;font:11px SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;line-height:10px;color:#444d56;vertical-align:middle;background-color:#fafbfc;border:1px solid #d1d5da;border-radius:3px;box-shadow:inset 0 -1px 0 #d1d5da}
+        h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:0}
+        h1{font-size:32px}
+        h1,h2{font-weight:600}
+        h2{font-size:24px}
+        h3{font-size:20px}
+        h3,h4{font-weight:600}
+        h4{font-size:16px}
+        h5{font-size:14px}
+        h5,h6{font-weight:600}
+        h6{font-size:12px}
+        p{margin-top:0;margin-bottom:10px}
+        blockquote{margin:0}
+        ol,ul{padding-left:0;margin-top:0;margin-bottom:0}
+        ol ol,ul ol{list-style-type:lower-roman}
+        ol ol ol,ol ul ol,ul ol ol,ul ul ol{list-style-type:lower-alpha}
+        dd{margin-left:0}
+        code,pre{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:12px}
+        pre{margin-top:0;margin-bottom:0}
+        input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{margin:0;-webkit-appearance:none;appearance:none}
+        :checked+.radio-label{position:relative;z-index:1;border-color:#0366d6}
+        .border{border:1px solid #e1e4e8!important}
+        .border-0{border:0!important}
+        .border-bottom{border-bottom:1px solid #e1e4e8!important}
+        .rounded-1{border-radius:3px!important}
+        .bg-white{background-color:#fff!important}
+        .bg-gray-light{background-color:#fafbfc!important}
+        .text-gray-light{color:#6a737d!important}
+        .mb-0{margin-bottom:0!important}
+        .my-2{margin-top:8px!important;margin-bottom:8px!important}
+        .pl-0{padding-left:0!important}
+        .py-0{padding-top:0!important;padding-bottom:0!important}
+        .pl-1{padding-left:4px!important}
+        .pl-2{padding-left:8px!important}
+        .py-2{padding-top:8px!important;padding-bottom:8px!important}
+        .pl-3,.px-3{padding-left:16px!important}
+        .px-3{padding-right:16px!important}
+        .pl-4{padding-left:24px!important}
+        .pl-5{padding-left:32px!important}
+        .pl-6{padding-left:40px!important}
+        .f6{font-size:12px!important}
+        .lh-condensed{line-height:1.25!important}
+        .text-bold{font-weight:600!important}
+        .pl-c{color:#6a737d}
+        .pl-c1,.pl-s .pl-v{color:#005cc5}
+        .pl-e,.pl-en{color:#6f42c1}
+        .pl-s .pl-s1,.pl-smi{color:#24292e}
+        .pl-ent{color:#22863a}
+        .pl-k{color:#d73a49}
+        .pl-pds,.pl-s,.pl-s .pl-pse .pl-s1,.pl-sr,.pl-sr .pl-cce,.pl-sr .pl-sra,.pl-sr .pl-sre{color:#032f62}
+        .pl-smw,.pl-v{color:#e36209}
+        .pl-bu{color:#b31d28}
+        .pl-ii{color:#fafbfc;background-color:#b31d28}
+        .pl-c2{color:#fafbfc;background-color:#d73a49}
+        .pl-c2:before{content:"^M"}
+        .pl-sr .pl-cce{font-weight:700;color:#22863a}
+        .pl-ml{color:#735c0f}
+        .pl-mh,.pl-mh .pl-en,.pl-ms{font-weight:700;color:#005cc5}
+        .pl-mi{font-style:italic;color:#24292e}
+        .pl-mb{font-weight:700;color:#24292e}
+        .pl-md{color:#b31d28;background-color:#ffeef0}
+        .pl-mi1{color:#22863a;background-color:#f0fff4}
+        .pl-mc{color:#e36209;background-color:#ffebda}
+        .pl-mi2{color:#f6f8fa;background-color:#005cc5}
+        .pl-mdr{font-weight:700;color:#6f42c1}
+        .pl-ba{color:#586069}
+        .pl-sg{color:#959da5}
+        .pl-corl{text-decoration:underline;color:#032f62}
+        .mb-0{margin-bottom:0!important}
+        .my-2{margin-bottom:8px!important}
+        .my-2{margin-top:8px!important}
+        .pl-0{padding-left:0!important}
+        .py-0{padding-top:0!important;padding-bottom:0!important}
+        .pl-1{padding-left:4px!important}
+        .pl-2{padding-left:8px!important}
+        .py-2{padding-top:8px!important;padding-bottom:8px!important}
+        .pl-3{padding-left:16px!important}
+        .pl-4{padding-left:24px!important}
+        .pl-5{padding-left:32px!important}
+        .pl-6{padding-left:40px!important}
+        .pl-7{padding-left:48px!important}
+        .pl-8{padding-left:64px!important}
+        .pl-9{padding-left:80px!important}
+        .pl-10{padding-left:96px!important}
+        .pl-11{padding-left:112px!important}
+        .pl-12{padding-left:128px!important}
+        hr{border-bottom-color:#eee}
+        kbd{display:inline-block;padding:3px 5px;font:11px SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;line-height:10px;color:#444d56;vertical-align:middle;background-color:#fafbfc;border:1px solid #d1d5da;border-radius:3px;box-shadow:inset 0 -1px 0 #d1d5da}
+        .markdown-body:after,.markdown-body:before{display:table;content:""}
+        .markdown-body:after{clear:both}
+        .markdown-body>:first-child{margin-top:0!important}
+        .markdown-body>:last-child{margin-bottom:0!important}
+        a:not([href]){color:inherit;text-decoration:none}
+        blockquote,details,dl,ol,p,pre,table,ul{margin-top:0;margin-bottom:16px}
+        hr{height:.25em;padding:0;margin:24px 0;background-color:#e1e4e8;border:0}
+        blockquote{padding:0 1em;color:#6a737d;border-left:.25em solid #dfe2e5}
+        blockquote>:first-child{margin-top:0}
+        blockquote>:last-child{margin-bottom:0}
+        h1,h2,h3,h4,h5,h6{margin-top:24px;margin-bottom:16px;font-weight:600;line-height:1.25}
+        h1{font-size:2em}
+        h1,h2{padding-bottom:.3em;border-bottom:1px solid #eaecef}
+        h2{font-size:1.5em}
+        h3{font-size:1.25em}
+        h4{font-size:1em}
+        h5{font-size:.875em}
+        h6{font-size:.85em;color:#6a737d}
+        ol,ul{padding-left:2em}
+        ol ol,ol ul,ul ol,ul ul{margin-top:0;margin-bottom:0}
+        li{word-wrap:break-all}
+        li>p{margin-top:16px}
+        li+li{margin-top:.25em}
+        dl{padding:0}
+        dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:600}
+        dl dd{padding:0 16px;margin-bottom:16px}
+        table{display:block;width:100%;overflow:auto}
+        table th{font-weight:600}
+        table td,table th{padding:6px 13px;border:1px solid #dfe2e5}
+        table tr{background-color:#fff;border-top:1px solid #c6cbd1}
+        table tr:nth-child(2n){background-color:#f6f8fa}
+        img{max-width:100%;box-sizing:initial;background-color:#fff}
+        img[align="right"]{padding-left:20px}
+        img[align="left"]{padding-right:20px}
+        code{padding:.2em .4em;margin:0;font-size:85%;background-color:rgba(27,31,35,0.05);border-radius:3px}
+        pre{word-wrap:normal}
+        pre>code{padding:0;margin:0;font-size:100%;word-break:normal;white-space:pre;background:transparent;border:0}
+        .highlight{margin-bottom:16px}
+        .highlight pre{margin-bottom:0;word-break:normal}
+        .highlight pre,pre{padding:16px;overflow:auto;font-size:85%;line-height:1.45;background-color:#f6f8fa;border-radius:3px}
+        pre code{display:inline;max-width:auto;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:initial;border:0}
+        .commit-tease-sha{display:inline-block;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:90%;color:#444d56}
+        .full-commit .btn-outline:not(:disabled):hover{color:#005cc5;border-color:#005cc5}
+        .blob-wrapper{overflow-x:auto;overflow-y:hidden}
+        .blob-wrapper-embedded{max-height:240px;overflow-y:auto}
+        .blob-num{width:1%;min-width:50px;padding-right:10px;padding-left:10px;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:12px;line-height:20px;color:rgba(27,31,35,0.3);text-align:right;white-space:nowrap;vertical-align:top;cursor:pointer;user-select:none}
+        .blob-num:hover{color:rgba(27,31,35,0.6)}
+        .blob-num:before{content:attr(data-line-number)}
+        .blob-code{position:relative;padding-right:10px;padding-left:10px;line-height:20px;vertical-align:top}
+        .blob-code-inner{overflow:visible;font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;font-size:12px;color:#24292e;word-wrap:normal;white-space:pre}
+        .pl-token.active,.pl-token:hover{cursor:pointer;background:#ffea7f}
+        .tab-size[data-tab-size="1"]{-moz-tab-size:1;tab-size:1}
+        .tab-size[data-tab-size="2"]{-moz-tab-size:2;tab-size:2}
+        .tab-size[data-tab-size="3"]{-moz-tab-size:3;tab-size:3}
+        .tab-size[data-tab-size="4"]{-moz-tab-size:4;tab-size:4}
+        .tab-size[data-tab-size="5"]{-moz-tab-size:5;tab-size:5}
+        .tab-size[data-tab-size="6"]{-moz-tab-size:6;tab-size:6}
+        .tab-size[data-tab-size="7"]{-moz-tab-size:7;tab-size:7}
+        .tab-size[data-tab-size="8"]{-moz-tab-size:8;tab-size:8}
+        .tab-size[data-tab-size="9"]{-moz-tab-size:9;tab-size:9}
+        .tab-size[data-tab-size="10"]{-moz-tab-size:10;tab-size:10}
+        .tab-size[data-tab-size="11"]{-moz-tab-size:11;tab-size:11}
+        .tab-size[data-tab-size="12"]{-moz-tab-size:12;tab-size:12}
+        .task-list-item{list-style-type:none}
+        .task-list-item+.task-list-item{margin-top:3px}
+        .task-list-item input{margin:0 .2em .25em -1.6em;vertical-align:middle}
+        #page{width:calc(100% - 300px);margin-left:300px}
+        fieldset{display:none;background-color:#fff;border:0;overflow:hidden;box-shadow:2px 2px 10px rgba(128,128,128,0.2);margin-bottom:20px;padding:20px}
+        fieldset legend{font-weight:bold;color:green;height:3.5em;margin-left:-20px;padding:0}
+        #nav{background:rgb(255 255 255 / .6);padding:40px;position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto}
+        ::-webkit-scrollbar{width:5px}
+        ::-webkit-scrollbar-thumb{background-color:#79a5e8}
+        @media print,(max-width:900px){
+          #nav{display:none!important}
+          #page{width:100%!important;margin-left:0!important}
+          fieldset{display:block!important;box-shadow:none!important}
+          .toggle-hash-btn {display: none !important;}
+        }
+        .hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}
+        .hljs-comment,.hljs-quote{color:#998;font-style:italic}
+        .hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:bold}
+        .hljs-number,.hljs-literal,.hljs-variable,.hljs-template-variable,.hljs-tag .hljs-attr{color:#008080}
+        .hljs-string,.hljs-doctag{color:#d14}
+        .hljs-title,.hljs-section,.hljs-selector-id{color:#900;font-weight:bold}
+        .hljs-subst{font-weight:normal}
+        .hljs-type,.hljs-class .hljs-title{color:#458;font-weight:bold}
+        .hljs-tag,.hljs-name,.hljs-attribute{color:#000080;font-weight:normal}
+        .hljs-regexp,.hljs-link{color:#009926}
+        .hljs-symbol,.hljs-bullet{color:#990073}
+        .hljs-built_in,.hljs-builtin-name{color:#0086b3}
+        .hljs-meta{color:#999;font-weight:bold}
+        .hljs-deletion{background:#fdd}
+        .hljs-addition{background:#dfd}
+        .hljs-emphasis{font-style:italic}
+        .hljs-strong{font-weight:bold}
+        .toggle-hash-btn {position: fixed;bottom: 10px;left:10px;z-index: 1000; display: flex; justify-content: space-between;  width: 270px;}
+    </style>
+    <script>
+          const $ = selector => document.querySelector(selector);
+          const $$ = selector => document.querySelectorAll(selector);
+          const decode = s => decodeURIComponent(s);
+          const domInfo = dom => ({
+            offsetParent: dom.offsetParent.className,
+            offsetLeft: dom.offsetLeft,
+            offsetTop: dom.offsetTop,
+            clientWidth: dom.clientWidth,
+            offsetWidth: dom.offsetWidth,
+            BoundingClientRect: dom.getBoundingClientRect(),
+          });
+          let openHash = false;
+          function viewFieldset() {
+            const hash = decode(location.hash);
+            if(openHash && hash &&$(`fieldset${hash}`)) {
+              Array.from($$('fieldset')).forEach(dom  =>dom.style.display = 'none');
+              $(`fieldset${hash}`).style.display = 'block';
+            }else {
+              Array.from($$('fieldset')).forEach(dom  =>dom.style.display = 'block');
+            }
+          }
+          window.onhashchange = viewFieldset;
+          window.onload  = ()=>{
+            viewFieldset();
+            setATarget();
+          };
+          
+          function toggleHash() {
+            openHash = !openHash;
+            viewFieldset();
+            $('.toggle-hash-btn button').innerText = openHash ? '关闭专注模式' : '开启专注模式';
+          }
+          function setATarget() {
+            $$('#page a').forEach(a=>a.target = '_blank');
+          }
+    </script>
+</head>
+
+<body>
+  <div class="toggle-hash-btn">
+    <button  onclick="toggleHash()">开启专注模式</button>
+     <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
+  </div><div id="page">
+      <fieldset id='_QeXsUz'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_TtUPMe'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Oh9UzV'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_41Ynvr'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_7YWBGG'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_M11zgy'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_nnDGSm'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_fGxSiU'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_YGND60'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_J9GKkB'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_K3ryuV'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_gUxBts'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_v7XRmH'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_MQVwTx'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6wr5bQ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_3tl1a0'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_TWVTvR'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_2YPsck'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_c3Cnfw'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_tCxzQy'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_z4NtM6'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_TCwStT'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_CwhVrb'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Ga3Ptd'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_e91YMQ'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_V5eBZj'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_qTkLFf'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_jxoNK0'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_cmwoks'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_VdKcrD'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Gjwb4d'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_DevYfO'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_7eFyvN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lU2WqG'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_LEYjmC'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_9Zqdcc'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_PvLFBr'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_QC0U8f'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_uZGZFY'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_U1NLh0'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_IYM8rN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Ox1mpm'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lyYxez'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_YhosVF'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_9CtjSM'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_DY2mXe'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_nkFFZM'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_kN4qQa'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_oedCBc'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_OztQPI'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_9xyLsN'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_4c4m5Y'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_DeVOfq'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_DqDgHG'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_qJGTZE'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_fgvZ1W'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_4qXwz4'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_IiHc02'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_bIyX4l'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_gcPOF8'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_VKWnpI'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_AXMnZA'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_TEDnQ9'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_WkoHkh'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_iJuvIl'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_nmqm8W'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mLe0pS'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_S2AD16'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_KxEM8W'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lzvISy'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_PUOTH2'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_cRWg1k'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_pCEBja'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_o2M0jf'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_c8mbnd'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Q3vyxo'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_1KC8Ic'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Xc2vya'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_KINS1c'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_BhhhCQ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Vcc64E'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_N2S1FM'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_kFltBm'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_6E5nTR'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_a6ez14'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_b9LAT5'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Uujo2J'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_d8XrGe'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_0WnxwU'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_NWPHjM'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_7gMR1n'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_9WepOa'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_DkYsmH'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_BlIJGG'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_OcXPWg'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_BkCe8r'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_fOk9GW'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Tyw0mc'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_RlEgHB'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_vYRB95'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_eAJUJl'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lwrqv5'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Kzujtx'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mGZS72'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_FWUIfV'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mzQBmj'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_VYPb1m'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_8roHgh'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_97BxPN'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_5CQjZR'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_xoUEcD'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_YRnPJJ'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_yDFWEc'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_9cN1QT'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_rhpHNU'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_BNxk2Z'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_zJXwX0'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_caF1M4'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_0bf6pz'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_yXL2x8'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Ud2IYk'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mOuGuw'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_4NADiT'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ziLw93'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_y2QcM9'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_urJqgd'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_TE5aeJ'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_bF4Qyz'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_1kZGZ5'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_15un9X'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_8GARmK'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_vYmYF5'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_zvlDtF'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_A0WVMx'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_AnNNm6'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_W0p2EK'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Rffx4l'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_nXROud'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_VfWwk5'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_ZOBBWx'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Fr9tYW'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_mHpvzt'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_AHTWf6'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_JicnIF'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_u5xr0u'>
+      <legend>solution</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_afTvwZ'>
+      <legend>task</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_Q0dLo3'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_FNyPRo'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_lpTCEE'>
+      <legend>article</legend>
+      
+      </fieldset>
+      
+      <fieldset id='_t4p5SI'>
+      <legend>article</legend>
+      
+      </fieldset>
+      </div><div id="nav"><div style="margin-left:0em"><strong>document</strong><br/></div><div style="margin-left:1em"><strong>browser-environment</strong><br/></div><div style="margin-left:2em"><a href="#_QeXsUz">article</a><br/></div><div style="margin-left:1em"><strong>dom-nodes</strong><br/></div><div style="margin-left:2em"><a href="#_TtUPMe">article</a><br/></div><div style="margin-left:1em"><strong>dom-navigation</strong><br/></div><div style="margin-left:2em"><strong>dom-children</strong><br/></div><div style="margin-left:3em"><a href="#_Oh9UzV">solution</a><br/></div><div style="margin-left:3em"><a href="#_41Ynvr">task</a><br/></div><div style="margin-left:2em"><strong>navigation-links-which-null</strong><br/></div><div style="margin-left:3em"><a href="#_7YWBGG">solution</a><br/></div><div style="margin-left:3em"><a href="#_M11zgy">task</a><br/></div><div style="margin-left:2em"><strong>select-diagonal-cells</strong><br/></div><div style="margin-left:3em"><a href="#_nnDGSm">solution</a><br/></div><div style="margin-left:3em"><a href="#_fGxSiU">task</a><br/></div><div style="margin-left:2em"><a href="#_YGND60">article</a><br/></div><div style="margin-left:1em"><strong>searching-elements-dom</strong><br/></div><div style="margin-left:2em"><strong>find-elements</strong><br/></div><div style="margin-left:3em"><a href="#_J9GKkB">solution</a><br/></div><div style="margin-left:3em"><a href="#_K3ryuV">task</a><br/></div><div style="margin-left:2em"><a href="#_gUxBts">article</a><br/></div><div style="margin-left:1em"><strong>basic-dom-node-properties</strong><br/></div><div style="margin-left:2em"><strong>lastchild-nodetype-inline</strong><br/></div><div style="margin-left:3em"><a href="#_v7XRmH">solution</a><br/></div><div style="margin-left:3em"><a href="#_MQVwTx">task</a><br/></div><div style="margin-left:2em"><strong>tree-info</strong><br/></div><div style="margin-left:3em"><a href="#_6wr5bQ">solution</a><br/></div><div style="margin-left:3em"><a href="#_3tl1a0">task</a><br/></div><div style="margin-left:2em"><strong>tag-in-comment</strong><br/></div><div style="margin-left:3em"><a href="#_TWVTvR">solution</a><br/></div><div style="margin-left:3em"><a href="#_2YPsck">task</a><br/></div><div style="margin-left:2em"><strong>where-document-in-hierarchy</strong><br/></div><div style="margin-left:3em"><a href="#_c3Cnfw">solution</a><br/></div><div style="margin-left:3em"><a href="#_tCxzQy">task</a><br/></div><div style="margin-left:2em"><a href="#_z4NtM6">article</a><br/></div><div style="margin-left:1em"><strong>dom-attributes-and-properties</strong><br/></div><div style="margin-left:2em"><strong>get-user-attribute</strong><br/></div><div style="margin-left:3em"><a href="#_TCwStT">solution</a><br/></div><div style="margin-left:3em"><a href="#_CwhVrb">task</a><br/></div><div style="margin-left:2em"><strong>yellow-links</strong><br/></div><div style="margin-left:3em"><a href="#_Ga3Ptd">solution</a><br/></div><div style="margin-left:3em"><a href="#_e91YMQ">task</a><br/></div><div style="margin-left:2em"><a href="#_V5eBZj">article</a><br/></div><div style="margin-left:1em"><strong>modifying-document</strong><br/></div><div style="margin-left:2em"><strong>createtextnode-vs-innerhtml</strong><br/></div><div style="margin-left:3em"><a href="#_qTkLFf">solution</a><br/></div><div style="margin-left:3em"><a href="#_jxoNK0">task</a><br/></div><div style="margin-left:2em"><strong>clock-setinterval</strong><br/></div><div style="margin-left:3em"><a href="#_cmwoks">solution</a><br/></div><div style="margin-left:3em"><a href="#_VdKcrD">task</a><br/></div><div style="margin-left:2em"><strong>append-to-list</strong><br/></div><div style="margin-left:3em"><a href="#_Gjwb4d">solution</a><br/></div><div style="margin-left:3em"><a href="#_DevYfO">task</a><br/></div><div style="margin-left:2em"><strong>sort-table</strong><br/></div><div style="margin-left:3em"><a href="#_7eFyvN">solution</a><br/></div><div style="margin-left:3em"><a href="#_lU2WqG">task</a><br/></div><div style="margin-left:2em"><strong>clear-elem</strong><br/></div><div style="margin-left:3em"><a href="#_LEYjmC">solution</a><br/></div><div style="margin-left:3em"><a href="#_9Zqdcc">task</a><br/></div><div style="margin-left:2em"><strong>why-aaa</strong><br/></div><div style="margin-left:3em"><a href="#_PvLFBr">solution</a><br/></div><div style="margin-left:3em"><a href="#_QC0U8f">task</a><br/></div><div style="margin-left:2em"><strong>create-list</strong><br/></div><div style="margin-left:3em"><a href="#_uZGZFY">solution</a><br/></div><div style="margin-left:3em"><a href="#_U1NLh0">task</a><br/></div><div style="margin-left:2em"><strong>create-object-tree</strong><br/></div><div style="margin-left:3em"><a href="#_IYM8rN">solution</a><br/></div><div style="margin-left:3em"><a href="#_Ox1mpm">task</a><br/></div><div style="margin-left:2em"><strong>tree-count</strong><br/></div><div style="margin-left:3em"><a href="#_lyYxez">solution</a><br/></div><div style="margin-left:3em"><a href="#_YhosVF">task</a><br/></div><div style="margin-left:2em"><strong>calendar-table</strong><br/></div><div style="margin-left:3em"><a href="#_9CtjSM">solution</a><br/></div><div style="margin-left:3em"><a href="#_DY2mXe">task</a><br/></div><div style="margin-left:2em"><a href="#_nkFFZM">article</a><br/></div><div style="margin-left:1em"><strong>styles-and-classes</strong><br/></div><div style="margin-left:2em"><strong>create-notification</strong><br/></div><div style="margin-left:3em"><a href="#_kN4qQa">solution</a><br/></div><div style="margin-left:3em"><a href="#_oedCBc">task</a><br/></div><div style="margin-left:2em"><a href="#_OztQPI">article</a><br/></div><div style="margin-left:1em"><strong>size-and-scroll</strong><br/></div><div style="margin-left:2em"><strong>get-scroll-height-bottom</strong><br/></div><div style="margin-left:3em"><a href="#_9xyLsN">solution</a><br/></div><div style="margin-left:3em"><a href="#_4c4m5Y">task</a><br/></div><div style="margin-left:2em"><strong>scrollbar-width</strong><br/></div><div style="margin-left:3em"><a href="#_DeVOfq">solution</a><br/></div><div style="margin-left:3em"><a href="#_DqDgHG">task</a><br/></div><div style="margin-left:2em"><strong>put-ball-in-center</strong><br/></div><div style="margin-left:3em"><strong>ball-half</strong><br/></div><div style="margin-left:3em"><a href="#_qJGTZE">solution</a><br/></div><div style="margin-left:3em"><a href="#_fgvZ1W">task</a><br/></div><div style="margin-left:2em"><strong>width-vs-clientwidth</strong><br/></div><div style="margin-left:3em"><a href="#_4qXwz4">solution</a><br/></div><div style="margin-left:3em"><a href="#_IiHc02">task</a><br/></div><div style="margin-left:2em"><a href="#_bIyX4l">article</a><br/></div><div style="margin-left:1em"><strong>size-and-scroll-window</strong><br/></div><div style="margin-left:2em"><a href="#_gcPOF8">article</a><br/></div><div style="margin-left:1em"><strong>coordinates</strong><br/></div><div style="margin-left:2em"><strong>find-point-coordinates</strong><br/></div><div style="margin-left:3em"><a href="#_VKWnpI">solution</a><br/></div><div style="margin-left:3em"><a href="#_AXMnZA">task</a><br/></div><div style="margin-left:2em"><strong>position-at</strong><br/></div><div style="margin-left:3em"><a href="#_TEDnQ9">solution</a><br/></div><div style="margin-left:3em"><a href="#_WkoHkh">task</a><br/></div><div style="margin-left:2em"><strong>position-at-absolute</strong><br/></div><div style="margin-left:3em"><a href="#_iJuvIl">solution</a><br/></div><div style="margin-left:3em"><a href="#_nmqm8W">task</a><br/></div><div style="margin-left:2em"><strong>position-inside-absolute</strong><br/></div><div style="margin-left:3em"><a href="#_mLe0pS">solution</a><br/></div><div style="margin-left:3em"><a href="#_S2AD16">task</a><br/></div><div style="margin-left:2em"><a href="#_KxEM8W">article</a><br/></div><div style="margin-left:0em"><strong>events</strong><br/></div><div style="margin-left:1em"><strong>introduction-browser-events</strong><br/></div><div style="margin-left:2em"><strong>hide-other</strong><br/></div><div style="margin-left:3em"><a href="#_lzvISy">solution</a><br/></div><div style="margin-left:3em"><a href="#_PUOTH2">task</a><br/></div><div style="margin-left:2em"><strong>hide-self-onclick</strong><br/></div><div style="margin-left:3em"><a href="#_cRWg1k">solution</a><br/></div><div style="margin-left:3em"><a href="#_pCEBja">task</a><br/></div><div style="margin-left:2em"><strong>which-handlers-run</strong><br/></div><div style="margin-left:3em"><a href="#_o2M0jf">solution</a><br/></div><div style="margin-left:3em"><a href="#_c8mbnd">task</a><br/></div><div style="margin-left:2em"><strong>move-ball-field</strong><br/></div><div style="margin-left:3em"><a href="#_Q3vyxo">solution</a><br/></div><div style="margin-left:3em"><a href="#_1KC8Ic">task</a><br/></div><div style="margin-left:2em"><strong>sliding-menu</strong><br/></div><div style="margin-left:3em"><a href="#_Xc2vya">solution</a><br/></div><div style="margin-left:3em"><a href="#_KINS1c">task</a><br/></div><div style="margin-left:2em"><strong>hide-message</strong><br/></div><div style="margin-left:3em"><a href="#_BhhhCQ">solution</a><br/></div><div style="margin-left:3em"><a href="#_Vcc64E">task</a><br/></div><div style="margin-left:2em"><strong>carousel</strong><br/></div><div style="margin-left:3em"><a href="#_N2S1FM">solution</a><br/></div><div style="margin-left:3em"><a href="#_kFltBm">task</a><br/></div><div style="margin-left:2em"><a href="#_6E5nTR">article</a><br/></div><div style="margin-left:1em"><strong>bubbling-and-capturing</strong><br/></div><div style="margin-left:2em"><a href="#_a6ez14">article</a><br/></div><div style="margin-left:1em"><strong>event-delegation</strong><br/></div><div style="margin-left:2em"><strong>hide-message-delegate</strong><br/></div><div style="margin-left:3em"><a href="#_b9LAT5">solution</a><br/></div><div style="margin-left:3em"><a href="#_Uujo2J">task</a><br/></div><div style="margin-left:2em"><strong>sliding-tree</strong><br/></div><div style="margin-left:3em"><a href="#_d8XrGe">solution</a><br/></div><div style="margin-left:3em"><a href="#_0WnxwU">task</a><br/></div><div style="margin-left:2em"><strong>sortable-table</strong><br/></div><div style="margin-left:3em"><a href="#_NWPHjM">solution</a><br/></div><div style="margin-left:3em"><a href="#_7gMR1n">task</a><br/></div><div style="margin-left:2em"><strong>behavior-tooltip</strong><br/></div><div style="margin-left:3em"><a href="#_9WepOa">solution</a><br/></div><div style="margin-left:3em"><a href="#_DkYsmH">task</a><br/></div><div style="margin-left:2em"><a href="#_BlIJGG">article</a><br/></div><div style="margin-left:1em"><strong>default-browser-action</strong><br/></div><div style="margin-left:2em"><strong>why-return-false-fails</strong><br/></div><div style="margin-left:3em"><a href="#_OcXPWg">solution</a><br/></div><div style="margin-left:3em"><a href="#_BkCe8r">task</a><br/></div><div style="margin-left:2em"><strong>catch-link-navigation</strong><br/></div><div style="margin-left:3em"><a href="#_fOk9GW">solution</a><br/></div><div style="margin-left:3em"><a href="#_Tyw0mc">task</a><br/></div><div style="margin-left:2em"><strong>image-gallery</strong><br/></div><div style="margin-left:3em"><a href="#_RlEgHB">solution</a><br/></div><div style="margin-left:3em"><a href="#_vYRB95">task</a><br/></div><div style="margin-left:2em"><a href="#_eAJUJl">article</a><br/></div><div style="margin-left:1em"><strong>dispatch-events</strong><br/></div><div style="margin-left:2em"><a href="#_lwrqv5">article</a><br/></div><div style="margin-left:0em"><strong>event-details</strong><br/></div><div style="margin-left:1em"><strong>mouse-events-basics</strong><br/></div><div style="margin-left:2em"><strong>selectable-list</strong><br/></div><div style="margin-left:3em"><a href="#_Kzujtx">solution</a><br/></div><div style="margin-left:3em"><a href="#_mGZS72">task</a><br/></div><div style="margin-left:2em"><a href="#_FWUIfV">article</a><br/></div><div style="margin-left:1em"><strong>mousemove-mouseover-mouseout-mouseenter-mouseleave</strong><br/></div><div style="margin-left:2em"><strong>behavior-nested-tooltip</strong><br/></div><div style="margin-left:3em"><a href="#_mzQBmj">solution</a><br/></div><div style="margin-left:3em"><a href="#_VYPb1m">task</a><br/></div><div style="margin-left:2em"><strong>hoverintent</strong><br/></div><div style="margin-left:3em"><a href="#_8roHgh">solution</a><br/></div><div style="margin-left:3em"><a href="#_97BxPN">task</a><br/></div><div style="margin-left:2em"><a href="#_5CQjZR">article</a><br/></div><div style="margin-left:1em"><strong>mouse-drag-and-drop</strong><br/></div><div style="margin-left:2em"><strong>slider</strong><br/></div><div style="margin-left:3em"><a href="#_xoUEcD">solution</a><br/></div><div style="margin-left:3em"><a href="#_YRnPJJ">task</a><br/></div><div style="margin-left:2em"><strong>drag-heroes</strong><br/></div><div style="margin-left:3em"><a href="#_yDFWEc">solution</a><br/></div><div style="margin-left:3em"><a href="#_9cN1QT">task</a><br/></div><div style="margin-left:2em"><a href="#_rhpHNU">article</a><br/></div><div style="margin-left:1em"><strong>pointer-events</strong><br/></div><div style="margin-left:2em"><a href="#_BNxk2Z">article</a><br/></div><div style="margin-left:1em"><strong>keyboard-events</strong><br/></div><div style="margin-left:2em"><strong>check-sync-keydown</strong><br/></div><div style="margin-left:3em"><a href="#_zJXwX0">solution</a><br/></div><div style="margin-left:3em"><a href="#_caF1M4">task</a><br/></div><div style="margin-left:2em"><a href="#_0bf6pz">article</a><br/></div><div style="margin-left:1em"><strong>onscroll</strong><br/></div><div style="margin-left:2em"><strong>endless-page</strong><br/></div><div style="margin-left:3em"><a href="#_yXL2x8">solution</a><br/></div><div style="margin-left:3em"><a href="#_Ud2IYk">task</a><br/></div><div style="margin-left:2em"><strong>updown-button</strong><br/></div><div style="margin-left:3em"><a href="#_mOuGuw">solution</a><br/></div><div style="margin-left:3em"><a href="#_4NADiT">task</a><br/></div><div style="margin-left:2em"><strong>load-visible-img</strong><br/></div><div style="margin-left:3em"><a href="#_ziLw93">solution</a><br/></div><div style="margin-left:3em"><a href="#_y2QcM9">task</a><br/></div><div style="margin-left:2em"><a href="#_urJqgd">article</a><br/></div><div style="margin-left:0em"><strong>forms-controls</strong><br/></div><div style="margin-left:1em"><strong>form-elements</strong><br/></div><div style="margin-left:2em"><strong>add-select-option</strong><br/></div><div style="margin-left:3em"><a href="#_TE5aeJ">solution</a><br/></div><div style="margin-left:3em"><a href="#_bF4Qyz">task</a><br/></div><div style="margin-left:2em"><a href="#_1kZGZ5">article</a><br/></div><div style="margin-left:1em"><strong>focus-blur</strong><br/></div><div style="margin-left:2em"><strong>editable-div</strong><br/></div><div style="margin-left:3em"><a href="#_15un9X">solution</a><br/></div><div style="margin-left:3em"><a href="#_8GARmK">task</a><br/></div><div style="margin-left:2em"><strong>edit-td-click</strong><br/></div><div style="margin-left:3em"><a href="#_vYmYF5">solution</a><br/></div><div style="margin-left:3em"><a href="#_zvlDtF">task</a><br/></div><div style="margin-left:2em"><strong>keyboard-mouse</strong><br/></div><div style="margin-left:3em"><a href="#_A0WVMx">solution</a><br/></div><div style="margin-left:3em"><a href="#_AnNNm6">task</a><br/></div><div style="margin-left:2em"><a href="#_W0p2EK">article</a><br/></div><div style="margin-left:1em"><strong>events-change-input</strong><br/></div><div style="margin-left:2em"><strong>deposit-calculator</strong><br/></div><div style="margin-left:3em"><a href="#_Rffx4l">solution</a><br/></div><div style="margin-left:3em"><a href="#_nXROud">task</a><br/></div><div style="margin-left:2em"><a href="#_VfWwk5">article</a><br/></div><div style="margin-left:1em"><strong>forms-submit</strong><br/></div><div style="margin-left:2em"><strong>modal-dialog</strong><br/></div><div style="margin-left:3em"><a href="#_ZOBBWx">solution</a><br/></div><div style="margin-left:3em"><a href="#_Fr9tYW">task</a><br/></div><div style="margin-left:2em"><a href="#_mHpvzt">article</a><br/></div><div style="margin-left:0em"><strong>loading</strong><br/></div><div style="margin-left:1em"><strong>onload-ondomcontentloaded</strong><br/></div><div style="margin-left:2em"><a href="#_AHTWf6">article</a><br/></div><div style="margin-left:1em"><strong>script-async-defer</strong><br/></div><div style="margin-left:2em"><a href="#_JicnIF">article</a><br/></div><div style="margin-left:1em"><strong>onload-onerror</strong><br/></div><div style="margin-left:2em"><strong>load-img-callback</strong><br/></div><div style="margin-left:3em"><a href="#_u5xr0u">solution</a><br/></div><div style="margin-left:3em"><a href="#_afTvwZ">task</a><br/></div><div style="margin-left:2em"><a href="#_Q0dLo3">article</a><br/></div><div style="margin-left:0em"><strong>ui-misc</strong><br/></div><div style="margin-left:1em"><strong>mutation-observer</strong><br/></div><div style="margin-left:2em"><a href="#_FNyPRo">article</a><br/></div><div style="margin-left:1em"><strong>selection-range</strong><br/></div><div style="margin-left:2em"><a href="#_lpTCEE">article</a><br/></div><div style="margin-left:1em"><strong>event-loop</strong><br/></div><div style="margin-left:2em"><a href="#_t4p5SI">article</a><br/></div></div>
+</body></html>
