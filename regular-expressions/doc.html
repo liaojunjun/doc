@@ -265,7 +265,7 @@
     <button  onclick="toggleHash()">开启专注模式</button>
      <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
   </div><div id="page">
-      <fieldset id='_mgsSqV'>
+      <fieldset id='_JPa4NU'>
       <legend>article</legend>
       <h1 id="模式（patterns）和修饰符（flags）">模式（Patterns）和修饰符（flags）</h1>
 <p>正则表达式是搜索和替换字符串的一种强大方式。</p>
@@ -360,7 +360,7 @@ alert( str.search(/LOVE/i) ); // 2
 
       </fieldset>
       
-      <fieldset id='_EmdOAF'>
+      <fieldset id='_mlNKry'>
       <legend>article</legend>
       <h1 id="字符类">字符类</h1>
 <p>考虑一个实际的任务 - 我们有一个电话号码，例如 <code>&quot;+7(903)-123-45-67&quot;</code>，我们需要将其转换为纯数字：<code>79035419441</code>。</p>
@@ -489,7 +489,7 @@ alert( &quot;1 - 5&quot;.match(/\d\s-\s\d/) ); // 1 - 5, also works
 
       </fieldset>
       
-      <fieldset id='_HPp3RU'>
+      <fieldset id='_5YkWaX'>
       <legend>article</legend>
       <h1 id="unicode：修饰符-u-和-class-p">Unicode：修饰符 “u” 和 class \p{...}</h1>
 <p>JavaScript 使用 <a href="https://en.wikipedia.org/wiki/Unicode">Unicode 编码</a> （Unicode encoding）对字符串进行编码。大多数字符使用 2 个字节编码，但这种方式只能编码最多 65536 个字符。</p>
@@ -653,7 +653,7 @@ alert( str.match(regexp) ); <span class="hljs-comment">// $2,€1,¥9</span></co
 
       </fieldset>
       
-      <fieldset id='_zzLIai'>
+      <fieldset id='_7CObhK'>
       <legend>solution</legend>
       <p>唯一一个匹配的字符串是空字符串：它的开始紧跟着结束。</p>
 <p>这个题目再一次说明了锚不是一个字符串，而是一个测试。</p>
@@ -661,14 +661,14 @@ alert( str.match(regexp) ); <span class="hljs-comment">// $2,€1,¥9</span></co
 
       </fieldset>
       
-      <fieldset id='_ATvnR1'>
+      <fieldset id='_NL2FeS'>
       <legend>task</legend>
       <h1 id="正则表达式-">正则表达式 ^$</h1>
 <p>什么字符串可以匹配模式 <code>^$</code>？</p>
 
       </fieldset>
       
-      <fieldset id='_WFiB4T'>
+      <fieldset id='_jT83CU'>
       <legend>article</legend>
       <h1 id="锚点（anchors：字符串开始--和末尾-">锚点（Anchors)：字符串开始 ^ 和末尾 $</h1>
 <p>插入符号 <code>pattern:^</code> 和美元符号 <code>pattern:$</code> 在正则表达式中具有特殊的意义。它们被称为“锚点”。</p>
@@ -700,7 +700,7 @@ alert( regexp.test(badInput) ); <span class="hljs-comment">// false</span></code
 
       </fieldset>
       
-      <fieldset id='_AfHTjZ'>
+      <fieldset id='_VXE4M5'>
       <legend>article</legend>
       <h1 id="flag-m--多行模式">Flag &quot;m&quot; — 多行模式</h1>
 <p>通过 flag <code>/.../m</code> 可以开启多行模式。</p>
@@ -749,14 +749,14 @@ alert( str.match(<span class="hljs-regexp">/\w+\n/gim</span>) ); <span class="hl
 
       </fieldset>
       
-      <fieldset id='_1N4CMQ'>
+      <fieldset id='_0zi6GX'>
       <legend>solution</legend>
       <p>答案是：<code>pattern:\b\d\d:\d\d\b</code>。</p>
 <pre><code class="language-js">alert( <span class="hljs-string">&quot;Breakfast at 09:00 in the room 123:456.&quot;</span>.match( <span class="hljs-regexp">/\b\d\d:\d\d\b/</span> ) ); <span class="hljs-comment">// 09:00</span></code></pre>
 
       </fieldset>
       
-      <fieldset id='_mInNQ7'>
+      <fieldset id='_Ose5mp'>
       <legend>task</legend>
       <h1 id="查找时间">查找时间</h1>
 <p>时间的格式是：<code>hours:minutes</code>。小时和分钟都是两位数，如 <code>09:00</code>。</p>
@@ -766,7 +766,7 @@ alert( str.match(<span class="hljs-regexp">/\w+\n/gim</span>) ); <span class="hl
 
       </fieldset>
       
-      <fieldset id='_eYc4iR'>
+      <fieldset id='_yzAhMT'>
       <legend>article</legend>
       <h1 id="词边界：b">词边界：\b</h1>
 <p>词边界 <code>pattern:\b</code> 是一种检查，就像 <code>pattern:^</code> 和 <code>pattern:$</code> 一样。</p>
@@ -804,7 +804,7 @@ alert( <span class="hljs-string">&quot;12,34,56&quot;</span>.match(<span class="
 
       </fieldset>
       
-      <fieldset id='_YV52Ht'>
+      <fieldset id='_jDkLyM'>
       <legend>article</legend>
       <h1 id="转义，特殊字符">转义，特殊字符</h1>
 <p>正如我们所看到的，一个反斜杠 <code>&quot;\&quot;</code> 是用来表示匹配字符类的。所以它是一个特殊字符。</p>
@@ -860,7 +860,7 @@ alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(regexp) );
 
       </fieldset>
       
-      <fieldset id='_VpmnFm'>
+      <fieldset id='_Zaa6ge'>
       <legend>solution</legend>
       <p>·答案：<strong>没有，是的</strong>。</p>
 <ul>
@@ -874,7 +874,7 @@ alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(regexp) );
 
       </fieldset>
       
-      <fieldset id='_Y2UQPW'>
+      <fieldset id='_bD8i5E'>
       <legend>task</legend>
       <h1 id="javascript">Java[^script]</h1>
 <p>我们有一个正则表达式 <code>pattern:/Java[^script]/</code>。</p>
@@ -882,17 +882,17 @@ alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(regexp) );
 
       </fieldset>
       
-      <fieldset id='_51t5jJ'>
+      <fieldset id='_VCmqXH'>
       <legend>solution</legend>
       
       </fieldset>
       
-      <fieldset id='_wyf3mn'>
+      <fieldset id='_fs33iP'>
       <legend>task</legend>
       
       </fieldset>
       
-      <fieldset id='_qK5O1D'>
+      <fieldset id='_6Wlmn4'>
       <legend>article</legend>
       <h1 id="集合和范围-">集合和范围 [...]</h1>
 <p>在方括号 <code>[…]</code> 中的几个字符或者字符类意味着“搜索给定的字符中的任意一个”。</p>
@@ -1013,7 +1013,7 @@ alert( <span class="hljs-string">&#x27;𝒴&#x27;</span>.match(<span class="hljs
 
       </fieldset>
       
-      <fieldset id='_ML74b9'>
+      <fieldset id='_aQFGsk'>
       <legend>solution</legend>
       <p>Solution:</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/\.{3,}/g</span>;
@@ -1022,7 +1022,7 @@ alert( <span class="hljs-string">&quot;Hello!... How goes?.....&quot;</span>.mat
 
       </fieldset>
       
-      <fieldset id='_aNykmQ'>
+      <fieldset id='_GTsyFB'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -1034,7 +1034,7 @@ alert( <span class="hljs-string">&quot;Hello!... How goes?.....&quot;</span>.mat
 
       </fieldset>
       
-      <fieldset id='_i2VxFJ'>
+      <fieldset id='_vYbKIr'>
       <legend>solution</legend>
       <p>我们需要寻找 <code>#</code> 字符，后跟六个十六进制字符。</p>
 <p>一个十六进制字符可以被描述为 <code>pattern:[0-9a-fA-F]</code>。如果我们使用 <code>i</code> 标识，那么只需要 <code>pattern:[0-9a-f]</code>。</p>
@@ -1056,7 +1056,7 @@ alert( <span class="hljs-string">&quot;#12345678&quot;</span>.match( <span class
 
       </fieldset>
       
-      <fieldset id='_Fr47hy'>
+      <fieldset id='_B4CK17'>
       <legend>task</legend>
       <h1 id="针对-html-颜色的正则表达式">针对 HTML 颜色的正则表达式</h1>
 <p>创建一个正则表达式来搜寻格式为 <code>#ABCDEF</code> 的 HTML 颜色值：首个字符 <code>#</code> 以及接下来的六位十六进制字符。</p>
@@ -1070,7 +1070,7 @@ alert( str.match(reg) )  <span class="hljs-comment">// #121212,#AA00ef</span></c
 
       </fieldset>
       
-      <fieldset id='_ynny3c'>
+      <fieldset id='_YuQTK4'>
       <legend>article</legend>
       <h1 id="量词--和-n">量词 <code>+,*,?</code> 和 <code>{n}</code></h1>
 <p>假设我们有一个字符串 <code>+7(903)-123-45-67</code>，并且想要找到它包含的所有数字。但与之前不同的是，我们对单个数字不感兴趣，只对全数感兴趣：<code>7, 903, 123, 45, 67</code>。</p>
@@ -1173,7 +1173,7 @@ alert( &quot;&lt;h1&gt;Hi!&lt;/h1&gt;&quot;.match(/&lt;\/?[a-z][a-z0-9]*&gt;/gi)
 
       </fieldset>
       
-      <fieldset id='_YMUvys'>
+      <fieldset id='_2Vgkqt'>
       <legend>solution</legend>
       <p>结果是：<code>match:123 4</code>。</p>
 <p>首先，懒惰模式 <code>pattern:\d+?</code> 尝试去获取尽可能少的字符，但当它检测到空格，就得出匹配结果 <code>match:123</code>。</p>
@@ -1181,7 +1181,7 @@ alert( &quot;&lt;h1&gt;Hi!&lt;/h1&gt;&quot;.match(/&lt;\/?[a-z][a-z0-9]*&gt;/gi)
 
       </fieldset>
       
-      <fieldset id='_0bk4vl'>
+      <fieldset id='_7Xl2oB'>
       <legend>task</legend>
       <h1 id="对于-d-d-的匹配">对于 /d+? d+?/ 的匹配</h1>
 <p>以下匹配的结果是什么？</p>
@@ -1189,7 +1189,7 @@ alert( &quot;&lt;h1&gt;Hi!&lt;/h1&gt;&quot;.match(/&lt;\/?[a-z][a-z0-9]*&gt;/gi)
 
       </fieldset>
       
-      <fieldset id='_ndccCF'>
+      <fieldset id='_igK7JS'>
       <legend>solution</legend>
       <p>我们需要找到注释的起始位置 <code>match:&lt;!--</code>，然后获取字符直到注释的末尾 <code>match:--&gt;</code>。</p>
 <p>首先想到的是 <code>pattern:&lt;!--.*?--&gt;</code> —— 惰性量词使得点（.）停在 <code>match:--&gt;</code> 之前。</p>
@@ -1205,7 +1205,7 @@ alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;!-- My -- comme
 
       </fieldset>
       
-      <fieldset id='_S6cb73'>
+      <fieldset id='_awh06F'>
       <legend>task</legend>
       <h1 id="查找-html-注释">查找 HTML 注释</h1>
 <p>找出文本中的所有注释：</p>
@@ -1219,7 +1219,7 @@ alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;!-- My -- comme
 
       </fieldset>
       
-      <fieldset id='_94aaIH'>
+      <fieldset id='_6sFiCZ'>
       <legend>solution</legend>
       <p>答案是 <code>pattern:&lt;[^&lt;&gt;]+&gt;</code>。</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;[^&lt;&gt;]+&gt;/g</span>;
@@ -1230,7 +1230,7 @@ alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;a href=&quot;/&
 
       </fieldset>
       
-      <fieldset id='_84bn6Y'>
+      <fieldset id='_uHSoL0'>
       <legend>task</legend>
       <h1 id="寻找-html-标签">寻找 HTML 标签</h1>
 <p>创建一个正则表达式语句来寻找所有具有其属性的（闭合或非闭合）HTML 标签。</p>
@@ -1244,7 +1244,7 @@ alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;a href=&quot;/&
 
       </fieldset>
       
-      <fieldset id='_bC3fmn'>
+      <fieldset id='_yESEKu'>
       <legend>article</legend>
       <h1 id="贪婪量词和惰性量词">贪婪量词和惰性量词</h1>
 <p>量词，看上去十分简单，但实际上它可能会很棘手。</p>
@@ -1448,7 +1448,7 @@ alert( str2.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link1&q
 
       </fieldset>
       
-      <fieldset id='_0DcW1S'>
+      <fieldset id='_4HKAu0'>
       <legend>solution</legend>
       <p>A two-digit hex number is <code>pattern:[0-9a-f]{2}</code> (assuming the flag <code>pattern:i</code> is set).</p>
 <p>We need that number <code>NN</code>, and then <code>:NN</code> repeated 5 times (more numbers);</p>
@@ -1467,7 +1467,7 @@ alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89:ZZ&#x27;</span
 
       </fieldset>
       
-      <fieldset id='_2eI9KA'>
+      <fieldset id='_4BrKA7'>
       <legend>task</legend>
       <h1 id="check-mac-address">Check MAC-address</h1>
 <p><a href="https://en.wikipedia.org/wiki/MAC_address">MAC-address</a> of a network interface consists of 6 two-digit hex numbers separated by a colon.</p>
@@ -1486,17 +1486,17 @@ alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89:ZZ&#x27;</span
 
       </fieldset>
       
-      <fieldset id='_9dsqYX'>
+      <fieldset id='_nc2jtw'>
       <legend>solution</legend>
       
       </fieldset>
       
-      <fieldset id='_cDeB0u'>
+      <fieldset id='_IbU29B'>
       <legend>task</legend>
       
       </fieldset>
       
-      <fieldset id='_tNmtXI'>
+      <fieldset id='_1N42jX'>
       <legend>solution</legend>
       <p>A positive number with an optional decimal part is (per previous task): <code>pattern:\d+(\.\d+)?</code>.</p>
 <p>Let&#39;s add the optional <code>pattern:-</code> in the beginning:</p>
@@ -1508,7 +1508,7 @@ alert( str.match(regexp) );   <span class="hljs-comment">// -1.5, 0, 2, -123.4</
 
       </fieldset>
       
-      <fieldset id='_rFRyGT'>
+      <fieldset id='_NhUra4'>
       <legend>task</legend>
       <h1 id="find-all-numbers">Find all numbers</h1>
 <p>Write a regexp that looks for all decimal numbers including integer ones, with the floating point and negative ones.</p>
@@ -1521,7 +1521,7 @@ alert( str.match(regexp) ); <span class="hljs-comment">// -1.5, 0, 2, -123.4</sp
 
       </fieldset>
       
-      <fieldset id='_oERCrA'>
+      <fieldset id='_HxXmD1'>
       <legend>solution</legend>
       <p>A regexp for a number is: <code>pattern:-?\d+(\.\d+)?</code>. We created it in previous tasks.</p>
 <p>An operator is <code>pattern:[-+*/]</code>. The hyphen <code>pattern:-</code> goes first in the square brackets, because in the middle it would mean a character range, while we just want a character <code>-</code>.</p>
@@ -1567,7 +1567,7 @@ alert( parse(<span class="hljs-string">&quot;-1.23 * 3.45&quot;</span>) );  <spa
 
       </fieldset>
       
-      <fieldset id='_RE2GaW'>
+      <fieldset id='_dNKsOx'>
       <legend>task</legend>
       <h1 id="parse-an-expression">Parse an expression</h1>
 <p>An arithmetical expression consists of 2 numbers and an operator between them, for instance:</p>
@@ -1594,7 +1594,7 @@ alert(b); <span class="hljs-comment">// 3.4</span></code></pre>
 
       </fieldset>
       
-      <fieldset id='_fsR4qp'>
+      <fieldset id='_7tOQQX'>
       <legend>article</legend>
       <h1 id="捕获组">捕获组</h1>
 <p>模式的一部分可以用括号括起来 <code>pattern:(...)</code>。这称为“捕获组（capturing group）”。</p>
@@ -1837,7 +1837,7 @@ alert( result.length ); <span class="hljs-comment">// 2（数组中没有更多�
 
       </fieldset>
       
-      <fieldset id='_4N1wdY'>
+      <fieldset id='_Sqbmlf'>
       <legend>article</legend>
       <h1 id="模式中的反向引用：n-和-k">模式中的反向引用：\N 和 \k<name></h1>
 <p>我们不仅可以在结果或替换字符串中使用捕获组 <code>pattern:(...)</code> 的内容，还可以在模式本身中使用它们。</p>
@@ -1889,7 +1889,7 @@ alert( str.match(regexp) ); // &quot;She&#x27;s the one!&quot;</code></pre>
 
       </fieldset>
       
-      <fieldset id='_rvy9Xk'>
+      <fieldset id='_KB1Lb3'>
       <legend>solution</legend>
       <p>第一个解法是列出所有语言，中间加上 <code>|</code> 符号。</p>
 <p>但是运行不如所愿：</p>
@@ -1915,7 +1915,7 @@ alert( str.match(reg) ); <span class="hljs-comment">// Java,JavaScript,PHP,C,C++
 
       </fieldset>
       
-      <fieldset id='_JzIUAi'>
+      <fieldset id='_p5yozQ'>
       <legend>task</legend>
       <h1 id="查找编程语言">查找编程语言</h1>
 <p>有许多编程语言，例如 Java, JavaScript, PHP, C, C++。</p>
@@ -1926,7 +1926,7 @@ alert(<span class="hljs-string">&quot;Java JavaScript PHP C++ C&quot;</span>.mat
 
       </fieldset>
       
-      <fieldset id='_a2smzj'>
+      <fieldset id='_i6prU2'>
       <legend>solution</legend>
       <p>起始标签是 <code>pattern:\[(b|url|quote)\]</code>。</p>
 <p>匹配字符串直到遇到结束标签 —— 模式 <code>pattern:[\s\S]*?</code> 匹配任意字符，包括换行和用于结束标记的反向引用。</p>
@@ -1946,7 +1946,7 @@ alert( str.match(reg) ); <span class="hljs-comment">// [b]hello![/b],[quote][url
 
       </fieldset>
       
-      <fieldset id='_TrFFNb'>
+      <fieldset id='_53I7pj'>
       <legend>task</legend>
       <h1 id="查找-bbtag-对">查找 bbtag 对</h1>
 <p>“bb-tag” 形如 <code>[tag]...[/tag]</code>，<code>tag</code> 匹配 <code>b</code>、<code>url</code> 或 <code>quote</code> 其中之一。</p>
@@ -1978,7 +1978,7 @@ alert( str.match(reg) ); <span class="hljs-comment">// [url][b]http://google.com
 
       </fieldset>
       
-      <fieldset id='_rF31od'>
+      <fieldset id='_RGMIyi'>
       <legend>solution</legend>
       <p>答案是 <code>pattern:/&quot;(\\.|[^&quot;\\])*&quot;/g</code>。</p>
 <p>步骤如下：</p>
@@ -1996,7 +1996,7 @@ alert( str.match(reg) ); <span class="hljs-comment">// &quot;test me&quot;,&quot
 
       </fieldset>
       
-      <fieldset id='_g8iZqK'>
+      <fieldset id='_rXT7Dk'>
       <legend>task</legend>
       <h1 id="查询引用字符串">查询引用字符串</h1>
 <p>构建一个正则表达式用于匹配双引号内的字符串 <code>subject:&quot;...&quot;</code>。</p>
@@ -2018,7 +2018,7 @@ alert(str); <span class="hljs-comment">//  .. &quot;test me&quot; .. &quot;Say \
 
       </fieldset>
       
-      <fieldset id='_W8DVRG'>
+      <fieldset id='_muDZxE'>
       <legend>solution</legend>
       <p>模式的开头显而易见：<code>pattern:&lt;style</code>。</p>
 <p>...然而不能简单地写出 <code>pattern:&lt;style.*?&gt;</code> 这样的表达式，因为会同时匹配 <code>match:&lt;styler&gt;</code>。</p>
@@ -2031,7 +2031,7 @@ alert( <span class="hljs-string">&#x27;&lt;style&gt; &lt;styler&gt; &lt;style te
 
       </fieldset>
       
-      <fieldset id='_n5crwV'>
+      <fieldset id='_h9HUp6'>
       <legend>task</legend>
       <h1 id="查找完整标签">查找完整标签</h1>
 <p>写出一个正则表达式，用于查找 <code>&lt;style...&gt;</code> 标签。它应该匹配完整的标签：该标签可能是没有属性的标签 <code>&lt;style&gt;</code> 或是有很多属性的标签 <code>&lt;style type=&quot;...&quot; id=&quot;...&quot;&gt;</code>。</p>
@@ -2043,7 +2043,7 @@ alert( <span class="hljs-string">&#x27;&lt;style&gt; &lt;styler&gt; &lt;style te
 
       </fieldset>
       
-      <fieldset id='_kK1HTh'>
+      <fieldset id='_cI1isi'>
       <legend>article</legend>
       <h1 id="选择（or）">选择（OR）|</h1>
 <p>选择是正则表达式中的一个术语，实际上是一个简单的“或”。</p>
@@ -2089,7 +2089,7 @@ alert(<span class="hljs-string">&quot;00:00 10:10 23:59 25:99 1:2&quot;</span>.m
 
       </fieldset>
       
-      <fieldset id='_Nd7jDo'>
+      <fieldset id='_k4RjEh'>
       <legend>solution</legend>
       <p>The regexp for an integer number is <code>pattern:\d+</code>.</p>
 <p>We can exclude negatives by prepending it with the negative lookahead: <code>pattern:(?&lt;!-)\d+</code>.</p>
@@ -2110,7 +2110,7 @@ alert( str.match(regexp) ); <span class="hljs-comment">// 0, 12, 123</span></cod
 
       </fieldset>
       
-      <fieldset id='_kspaBl'>
+      <fieldset id='_npTF3j'>
       <legend>task</legend>
       <h1 id="find-non-negative-integers">Find non-negative integers</h1>
 <p>There&#39;s a string of integer numbers.</p>
@@ -2124,7 +2124,7 @@ alert( str.match(regexp) ); <span class="hljs-comment">// 0, 12, 123</span></cod
 
       </fieldset>
       
-      <fieldset id='_FM2WpC'>
+      <fieldset id='_VrTrxm'>
       <legend>solution</legend>
       <p>Для того, чтобы вставить после тега <code>&lt;body&gt;</code>, нужно вначале его найти. Будем использовать регулярное выражение <code>pattern:&lt;body.*&gt;</code>.</p>
 <p>Далее, нам нужно оставить сам тег <code>&lt;body&gt;</code> на месте и добавить текст после него.</p>
@@ -2145,7 +2145,7 @@ alert(str); <span class="hljs-comment">// ...&lt;body style=&quot;...&quot;&gt;&
 
       </fieldset>
       
-      <fieldset id='_DPJMss'>
+      <fieldset id='_BrJ5VL'>
       <legend>task</legend>
       <h1 id="вставьте-после-фрагмента">Вставьте после фрагмента</h1>
 <p>Есть строка с HTML-документом.</p>
@@ -2171,7 +2171,7 @@ str = str.replace(regexp, <span class="hljs-string">`&lt;h1&gt;Hello&lt;/h1&gt;`
 
       </fieldset>
       
-      <fieldset id='_SMJ9jP'>
+      <fieldset id='_VqPIXf'>
       <legend>article</legend>
       <h1 id="前瞻断言与后瞻断言">前瞻断言与后瞻断言</h1>
 <p>有时候我们需要匹配后面跟着特定模式的一段模式。比如，我们要从 <code>subject:1 turkey costs 30€</code> 这段字符中匹配价格数值。</p>
@@ -2258,7 +2258,7 @@ alert( str.match(reg) ); <span class="hljs-comment">// 30, $</span></code></pre>
 
       </fieldset>
       
-      <fieldset id='_NGO3Hd'>
+      <fieldset id='_F4FTge'>
       <legend>article</legend>
       <h1 id="catastrophic-backtracking">Catastrophic backtracking</h1>
 <p>Some regular expressions are looking simple, but can execute veeeeeery long time, and even &quot;hang&quot; the JavaScript engine.</p>
@@ -2439,7 +2439,7 @@ alert( regexp.test(<span class="hljs-string">&quot;A correct string&quot;</span>
 
       </fieldset>
       
-      <fieldset id='_tAFAfH'>
+      <fieldset id='_ipXlIZ'>
       <legend>article</legend>
       <h1 id="粘性标志-y，在位置处搜索">粘性标志 &quot;y&quot;，在位置处搜索</h1>
 <p><code>pattern:y</code> 标志允许在源字符串中的指定位置执行搜索。</p>
@@ -2528,7 +2528,7 @@ alert( regexp.exec(str) ); <span class="hljs-comment">// varName（在位置 4 �
 
       </fieldset>
       
-      <fieldset id='_kCBhLS'>
+      <fieldset id='_9Sfx7r'>
       <legend>article</legend>
       <h1 id="正则表达式（regexp）和字符串（string）的方法">正则表达式（RegExp）和字符串（String）的方法</h1>
 <p>在本文中，我们将深入探讨与正则表达式配合使用的各种方法。</p>
@@ -2778,5 +2778,5 @@ alert( regexp.test(&quot;javascript&quot;) ); // false
 如要解决这个问题，我们可以在每次搜索之前设置 `regexp.lastIndex = 0`。或者，不调用正则表达式的方法，而是使用字符串方法 `str.match/search/...`，这些方法不用 `lastIndex`。</code></pre>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>regexp-introduction</strong><br/></div><div style="margin-left:1em"><a href="#_mgsSqV">article</a><br/></div><div style="margin-left:0em"><strong>regexp-character-classes</strong><br/></div><div style="margin-left:1em"><a href="#_EmdOAF">article</a><br/></div><div style="margin-left:0em"><strong>regexp-unicode</strong><br/></div><div style="margin-left:1em"><a href="#_HPp3RU">article</a><br/></div><div style="margin-left:0em"><strong>regexp-anchors</strong><br/></div><div style="margin-left:1em"><strong>start-end</strong><br/></div><div style="margin-left:2em"><a href="#_zzLIai">solution</a><br/></div><div style="margin-left:2em"><a href="#_ATvnR1">task</a><br/></div><div style="margin-left:1em"><a href="#_WFiB4T">article</a><br/></div><div style="margin-left:0em"><strong>regexp-multiline-mode</strong><br/></div><div style="margin-left:1em"><a href="#_AfHTjZ">article</a><br/></div><div style="margin-left:0em"><strong>regexp-boundary</strong><br/></div><div style="margin-left:1em"><strong>find-time-hh-mm</strong><br/></div><div style="margin-left:2em"><a href="#_1N4CMQ">solution</a><br/></div><div style="margin-left:2em"><a href="#_mInNQ7">task</a><br/></div><div style="margin-left:1em"><a href="#_eYc4iR">article</a><br/></div><div style="margin-left:0em"><strong>regexp-escaping</strong><br/></div><div style="margin-left:1em"><a href="#_YV52Ht">article</a><br/></div><div style="margin-left:0em"><strong>regexp-character-sets-and-ranges</strong><br/></div><div style="margin-left:1em"><strong>find-range-1</strong><br/></div><div style="margin-left:2em"><a href="#_VpmnFm">solution</a><br/></div><div style="margin-left:2em"><a href="#_Y2UQPW">task</a><br/></div><div style="margin-left:1em"><strong>find-time-formats</strong><br/></div><div style="margin-left:2em"><a href="#_51t5jJ">solution</a><br/></div><div style="margin-left:2em"><a href="#_wyf3mn">task</a><br/></div><div style="margin-left:1em"><a href="#_qK5O1D">article</a><br/></div><div style="margin-left:0em"><strong>regexp-quantifiers</strong><br/></div><div style="margin-left:1em"><strong>find-text-manydots</strong><br/></div><div style="margin-left:2em"><a href="#_ML74b9">solution</a><br/></div><div style="margin-left:2em"><a href="#_aNykmQ">task</a><br/></div><div style="margin-left:1em"><strong>find-html-colors-6hex</strong><br/></div><div style="margin-left:2em"><a href="#_i2VxFJ">solution</a><br/></div><div style="margin-left:2em"><a href="#_Fr47hy">task</a><br/></div><div style="margin-left:1em"><a href="#_ynny3c">article</a><br/></div><div style="margin-left:0em"><strong>regexp-greedy-and-lazy</strong><br/></div><div style="margin-left:1em"><strong>lazy-greedy</strong><br/></div><div style="margin-left:2em"><a href="#_YMUvys">solution</a><br/></div><div style="margin-left:2em"><a href="#_0bk4vl">task</a><br/></div><div style="margin-left:1em"><strong>find-html-comments</strong><br/></div><div style="margin-left:2em"><a href="#_ndccCF">solution</a><br/></div><div style="margin-left:2em"><a href="#_S6cb73">task</a><br/></div><div style="margin-left:1em"><strong>find-html-tags-greedy-lazy</strong><br/></div><div style="margin-left:2em"><a href="#_94aaIH">solution</a><br/></div><div style="margin-left:2em"><a href="#_84bn6Y">task</a><br/></div><div style="margin-left:1em"><a href="#_bC3fmn">article</a><br/></div><div style="margin-left:0em"><strong>regexp-groups</strong><br/></div><div style="margin-left:1em"><strong>test-mac</strong><br/></div><div style="margin-left:2em"><a href="#_0DcW1S">solution</a><br/></div><div style="margin-left:2em"><a href="#_2eI9KA">task</a><br/></div><div style="margin-left:1em"><strong>find-webcolor-or-6</strong><br/></div><div style="margin-left:2em"><a href="#_9dsqYX">solution</a><br/></div><div style="margin-left:2em"><a href="#_cDeB0u">task</a><br/></div><div style="margin-left:1em"><strong>find-decimal-numbers</strong><br/></div><div style="margin-left:2em"><a href="#_tNmtXI">solution</a><br/></div><div style="margin-left:2em"><a href="#_rFRyGT">task</a><br/></div><div style="margin-left:1em"><strong>parse-expression</strong><br/></div><div style="margin-left:2em"><a href="#_oERCrA">solution</a><br/></div><div style="margin-left:2em"><a href="#_RE2GaW">task</a><br/></div><div style="margin-left:1em"><a href="#_fsR4qp">article</a><br/></div><div style="margin-left:0em"><strong>regexp-backreferences</strong><br/></div><div style="margin-left:1em"><a href="#_4N1wdY">article</a><br/></div><div style="margin-left:0em"><strong>regexp-alternation</strong><br/></div><div style="margin-left:1em"><strong>find-programming-language</strong><br/></div><div style="margin-left:2em"><a href="#_rvy9Xk">solution</a><br/></div><div style="margin-left:2em"><a href="#_JzIUAi">task</a><br/></div><div style="margin-left:1em"><strong>find-matching-bbtags</strong><br/></div><div style="margin-left:2em"><a href="#_a2smzj">solution</a><br/></div><div style="margin-left:2em"><a href="#_TrFFNb">task</a><br/></div><div style="margin-left:1em"><strong>match-quoted-string</strong><br/></div><div style="margin-left:2em"><a href="#_rF31od">solution</a><br/></div><div style="margin-left:2em"><a href="#_g8iZqK">task</a><br/></div><div style="margin-left:1em"><strong>match-exact-tag</strong><br/></div><div style="margin-left:2em"><a href="#_W8DVRG">solution</a><br/></div><div style="margin-left:2em"><a href="#_n5crwV">task</a><br/></div><div style="margin-left:1em"><a href="#_kK1HTh">article</a><br/></div><div style="margin-left:0em"><strong>regexp-lookahead-lookbehind</strong><br/></div><div style="margin-left:1em"><strong>find-non-negative-integers</strong><br/></div><div style="margin-left:2em"><a href="#_Nd7jDo">solution</a><br/></div><div style="margin-left:2em"><a href="#_kspaBl">task</a><br/></div><div style="margin-left:1em"><strong>insert-after-head</strong><br/></div><div style="margin-left:2em"><a href="#_FM2WpC">solution</a><br/></div><div style="margin-left:2em"><a href="#_DPJMss">task</a><br/></div><div style="margin-left:1em"><a href="#_SMJ9jP">article</a><br/></div><div style="margin-left:0em"><strong>regexp-catastrophic-backtracking</strong><br/></div><div style="margin-left:1em"><a href="#_NGO3Hd">article</a><br/></div><div style="margin-left:0em"><strong>regexp-sticky</strong><br/></div><div style="margin-left:1em"><a href="#_tAFAfH">article</a><br/></div><div style="margin-left:0em"><strong>regexp-methods</strong><br/></div><div style="margin-left:1em"><a href="#_kCBhLS">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>regexp-introduction</strong><br/></div><div style="margin-left:1em"><a href="#_JPa4NU">article</a><br/></div><div style="margin-left:0em"><strong>regexp-character-classes</strong><br/></div><div style="margin-left:1em"><a href="#_mlNKry">article</a><br/></div><div style="margin-left:0em"><strong>regexp-unicode</strong><br/></div><div style="margin-left:1em"><a href="#_5YkWaX">article</a><br/></div><div style="margin-left:0em"><strong>regexp-anchors</strong><br/></div><div style="margin-left:1em"><strong>start-end</strong><br/></div><div style="margin-left:2em"><a href="#_7CObhK">solution</a><br/></div><div style="margin-left:2em"><a href="#_NL2FeS">task</a><br/></div><div style="margin-left:1em"><a href="#_jT83CU">article</a><br/></div><div style="margin-left:0em"><strong>regexp-multiline-mode</strong><br/></div><div style="margin-left:1em"><a href="#_VXE4M5">article</a><br/></div><div style="margin-left:0em"><strong>regexp-boundary</strong><br/></div><div style="margin-left:1em"><strong>find-time-hh-mm</strong><br/></div><div style="margin-left:2em"><a href="#_0zi6GX">solution</a><br/></div><div style="margin-left:2em"><a href="#_Ose5mp">task</a><br/></div><div style="margin-left:1em"><a href="#_yzAhMT">article</a><br/></div><div style="margin-left:0em"><strong>regexp-escaping</strong><br/></div><div style="margin-left:1em"><a href="#_jDkLyM">article</a><br/></div><div style="margin-left:0em"><strong>regexp-character-sets-and-ranges</strong><br/></div><div style="margin-left:1em"><strong>find-range-1</strong><br/></div><div style="margin-left:2em"><a href="#_Zaa6ge">solution</a><br/></div><div style="margin-left:2em"><a href="#_bD8i5E">task</a><br/></div><div style="margin-left:1em"><strong>find-time-formats</strong><br/></div><div style="margin-left:2em"><a href="#_VCmqXH">solution</a><br/></div><div style="margin-left:2em"><a href="#_fs33iP">task</a><br/></div><div style="margin-left:1em"><a href="#_6Wlmn4">article</a><br/></div><div style="margin-left:0em"><strong>regexp-quantifiers</strong><br/></div><div style="margin-left:1em"><strong>find-text-manydots</strong><br/></div><div style="margin-left:2em"><a href="#_aQFGsk">solution</a><br/></div><div style="margin-left:2em"><a href="#_GTsyFB">task</a><br/></div><div style="margin-left:1em"><strong>find-html-colors-6hex</strong><br/></div><div style="margin-left:2em"><a href="#_vYbKIr">solution</a><br/></div><div style="margin-left:2em"><a href="#_B4CK17">task</a><br/></div><div style="margin-left:1em"><a href="#_YuQTK4">article</a><br/></div><div style="margin-left:0em"><strong>regexp-greedy-and-lazy</strong><br/></div><div style="margin-left:1em"><strong>lazy-greedy</strong><br/></div><div style="margin-left:2em"><a href="#_2Vgkqt">solution</a><br/></div><div style="margin-left:2em"><a href="#_7Xl2oB">task</a><br/></div><div style="margin-left:1em"><strong>find-html-comments</strong><br/></div><div style="margin-left:2em"><a href="#_igK7JS">solution</a><br/></div><div style="margin-left:2em"><a href="#_awh06F">task</a><br/></div><div style="margin-left:1em"><strong>find-html-tags-greedy-lazy</strong><br/></div><div style="margin-left:2em"><a href="#_6sFiCZ">solution</a><br/></div><div style="margin-left:2em"><a href="#_uHSoL0">task</a><br/></div><div style="margin-left:1em"><a href="#_yESEKu">article</a><br/></div><div style="margin-left:0em"><strong>regexp-groups</strong><br/></div><div style="margin-left:1em"><strong>test-mac</strong><br/></div><div style="margin-left:2em"><a href="#_4HKAu0">solution</a><br/></div><div style="margin-left:2em"><a href="#_4BrKA7">task</a><br/></div><div style="margin-left:1em"><strong>find-webcolor-or-6</strong><br/></div><div style="margin-left:2em"><a href="#_nc2jtw">solution</a><br/></div><div style="margin-left:2em"><a href="#_IbU29B">task</a><br/></div><div style="margin-left:1em"><strong>find-decimal-numbers</strong><br/></div><div style="margin-left:2em"><a href="#_1N42jX">solution</a><br/></div><div style="margin-left:2em"><a href="#_NhUra4">task</a><br/></div><div style="margin-left:1em"><strong>parse-expression</strong><br/></div><div style="margin-left:2em"><a href="#_HxXmD1">solution</a><br/></div><div style="margin-left:2em"><a href="#_dNKsOx">task</a><br/></div><div style="margin-left:1em"><a href="#_7tOQQX">article</a><br/></div><div style="margin-left:0em"><strong>regexp-backreferences</strong><br/></div><div style="margin-left:1em"><a href="#_Sqbmlf">article</a><br/></div><div style="margin-left:0em"><strong>regexp-alternation</strong><br/></div><div style="margin-left:1em"><strong>find-programming-language</strong><br/></div><div style="margin-left:2em"><a href="#_KB1Lb3">solution</a><br/></div><div style="margin-left:2em"><a href="#_p5yozQ">task</a><br/></div><div style="margin-left:1em"><strong>find-matching-bbtags</strong><br/></div><div style="margin-left:2em"><a href="#_i6prU2">solution</a><br/></div><div style="margin-left:2em"><a href="#_53I7pj">task</a><br/></div><div style="margin-left:1em"><strong>match-quoted-string</strong><br/></div><div style="margin-left:2em"><a href="#_RGMIyi">solution</a><br/></div><div style="margin-left:2em"><a href="#_rXT7Dk">task</a><br/></div><div style="margin-left:1em"><strong>match-exact-tag</strong><br/></div><div style="margin-left:2em"><a href="#_muDZxE">solution</a><br/></div><div style="margin-left:2em"><a href="#_h9HUp6">task</a><br/></div><div style="margin-left:1em"><a href="#_cI1isi">article</a><br/></div><div style="margin-left:0em"><strong>regexp-lookahead-lookbehind</strong><br/></div><div style="margin-left:1em"><strong>find-non-negative-integers</strong><br/></div><div style="margin-left:2em"><a href="#_k4RjEh">solution</a><br/></div><div style="margin-left:2em"><a href="#_npTF3j">task</a><br/></div><div style="margin-left:1em"><strong>insert-after-head</strong><br/></div><div style="margin-left:2em"><a href="#_VrTrxm">solution</a><br/></div><div style="margin-left:2em"><a href="#_BrJ5VL">task</a><br/></div><div style="margin-left:1em"><a href="#_VqPIXf">article</a><br/></div><div style="margin-left:0em"><strong>regexp-catastrophic-backtracking</strong><br/></div><div style="margin-left:1em"><a href="#_F4FTge">article</a><br/></div><div style="margin-left:0em"><strong>regexp-sticky</strong><br/></div><div style="margin-left:1em"><a href="#_ipXlIZ">article</a><br/></div><div style="margin-left:0em"><strong>regexp-methods</strong><br/></div><div style="margin-left:1em"><a href="#_9Sfx7r">article</a><br/></div></div>
 </body></html>

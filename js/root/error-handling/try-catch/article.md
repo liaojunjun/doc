@@ -79,7 +79,7 @@ try {
 
 ```js run
 try {
-  {{{{{{{{{{{{
+  error
 } catch(e) {
   alert("The engine can't understand this code, it's invalid");
 }
