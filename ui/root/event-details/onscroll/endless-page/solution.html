@@ -1,0 +1,40 @@
+<p>解决方案的核心是一个函数，当我们在页面末端时，该函数可以向页面添加更多日期（或者在实际开发中是加载更多内容）。</p>
+<p>我们可以立即调用它，并将其添加为 <code>window.onscroll</code> 处理程序。</p>
+<p>最重要的问题是：“如何检测页面滚动到了末端？”</p>
+<p>让我们使用相对于窗口的坐标。</p>
+<p>文档（document）在 <code>&lt;html&gt;</code> 标签中被表示（被包含）为 <code>document.documentElement</code>。</p>
+<p>我们可以通过 <code>document.documentElement.getBoundingClientRect()</code> 来获取整个文档相对于窗口的坐标。<code>bottom</code> 属性将是文档末端的相对于窗口的坐标。</p>
+<p>例如，如果整个 HTML 文档的高度是 <code>2000px</code>，那么：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 当我们在页面顶端时</span>
+<span class="hljs-comment">// 相对于窗口 top = 0</span>
+<span class="hljs-built_in">document</span>.documentElement.getBoundingClientRect().top = <span class="hljs-number">0</span>
+
+<span class="hljs-comment">// 相对于窗口 bottom = 2000</span>
+<span class="hljs-comment">// 如果文档太长，那么可能会远远超出窗口底部</span>
+<span class="hljs-built_in">document</span>.documentElement.getBoundingClientRect().bottom = <span class="hljs-number">2000</span></code></pre>
+<p>如果我们向下滚动 <code>500px</code>，那么：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 文档顶端在窗口之方 500px</span>
+<span class="hljs-built_in">document</span>.documentElement.getBoundingClientRect().top = <span class="hljs-number">-500</span>
+<span class="hljs-comment">// 文档末端相对于窗口近了 500px</span>
+<span class="hljs-built_in">document</span>.documentElement.getBoundingClientRect().bottom = <span class="hljs-number">1500</span></code></pre>
+<p>当我们滚动到文档末端时，假设窗口高度为 <code>600px</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 文档顶端在窗口上方 -1400px</span>
+<span class="hljs-built_in">document</span>.documentElement.getBoundingClientRect().top = <span class="hljs-number">-1400</span>
+<span class="hljs-comment">// 文档末端相对于窗口坐标为 600px</span>
+<span class="hljs-built_in">document</span>.documentElement.getBoundingClientRect().bottom = <span class="hljs-number">600</span></code></pre>
+<p>请注意，<code>bottom</code> 不能为 <code>0</code>，因为它永远不会到达窗口顶部。<code>bottom</code> 坐标的最低限度是窗口高度（我们假设其为 <code>600</code>），我们无法再向上滚动了。</p>
+<p>我们可以获得窗口的高度为 <code>document.documentElement.clientHeight</code>。</p>
+<p>对于本任务，我们需要知道何时文档末端距窗口底部不超过 <code>100px</code>（即，如果窗口高度为 <code>600px</code>，则为 <code>600-700px</code>）。</p>
+<p>所以，函数如下：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">populate</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {
+    <span class="hljs-comment">// 文档末端</span>
+    <span class="hljs-keyword">let</span> windowRelativeBottom = <span class="hljs-built_in">document</span>.documentElement.getBoundingClientRect().bottom;
+
+    <span class="hljs-comment">// 如果用户将页面滚动了足够远（文档末端距窗口底部 &lt;100px）</span>
+    <span class="hljs-keyword">if</span> (windowRelativeBottom &lt; <span class="hljs-built_in">document</span>.documentElement.clientHeight + <span class="hljs-number">100</span>) {
+      <span class="hljs-comment">// 让我们添加更多数据</span>
+      <span class="hljs-built_in">document</span>.body.insertAdjacentHTML(<span class="hljs-string">&quot;beforeend&quot;</span>, <span class="hljs-string">`&lt;p&gt;Date: <span class="hljs-subst">${<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()}</span>&lt;/p&gt;`</span>);
+    }
+  }
+}</code></pre>

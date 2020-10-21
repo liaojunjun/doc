@@ -1,0 +1,12 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="二次-bind">二次 bind</h1>
+<p>我们可以通过额外的绑定改变 <code>this</code> 吗？</p>
+<p>输出将会是什么？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-built_in">this</span>.name);
+}
+
+f = f.bind( {<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>} ).bind( {<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Ann&quot;</span> } );
+
+f();</code></pre>

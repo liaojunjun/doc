@@ -1,0 +1,12 @@
+<p><strong>答案：在这两种情况下都是从 <code>0</code> 到 <code>4</code>。</strong></p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; ++i) alert( i );
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) alert( i );</code></pre>
+<p>这可以很容易地从 <code>for</code> 算法中推导出：</p>
+<ol>
+<li>在一切开始之前执行 <code>i = 0</code>。</li>
+<li>检查 <code>i &lt; 5</code> 条件</li>
+<li>如果 <code>true</code> —— 执行循环体并 <code>alert(i)</code>，然后进行 <code>i++</code></li>
+</ol>
+<p>递增 <code>i++</code> 与检查条件（2）分开。这只是另一种写法。</p>
+<p>在这没使用返回的递增值，因此 <code>i++</code> 和 <code>++i</code>之间没有区别。</p>

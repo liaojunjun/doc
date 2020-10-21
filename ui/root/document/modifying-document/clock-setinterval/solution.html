@@ -1,0 +1,38 @@
+<p>首先，让我们编写 HTML/CSS。</p>
+<p>时间的每个组件都有其自己的 <code>&lt;span&gt;</code>，那将会看起来很棒：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;clock&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;hour&quot;</span>&gt;</span>hh<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>:<span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;min&quot;</span>&gt;</span>mm<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>:<span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;sec&quot;</span>&gt;</span>ss<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<p>另外，我们需要使用 CSS 为它们着色。</p>
+<p>函数 <code>update</code> 会刷新时钟，由 <code>setInterval</code> 每秒调用一次：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">update</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> clock = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;clock&#x27;</span>);
+*!*
+  <span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(); <span class="hljs-comment">// (*)</span>
+*/!*
+  <span class="hljs-keyword">let</span> hours = date.getHours();
+  <span class="hljs-keyword">if</span> (hours &lt; <span class="hljs-number">10</span>) hours = <span class="hljs-string">&#x27;0&#x27;</span> + hours;
+  clock.children[<span class="hljs-number">0</span>].innerHTML = hours;
+
+  <span class="hljs-keyword">let</span> minutes = date.getMinutes();
+  <span class="hljs-keyword">if</span> (minutes &lt; <span class="hljs-number">10</span>) minutes = <span class="hljs-string">&#x27;0&#x27;</span> + minutes;
+  clock.children[<span class="hljs-number">1</span>].innerHTML = minutes;
+
+  <span class="hljs-keyword">let</span> seconds = date.getSeconds();
+  <span class="hljs-keyword">if</span> (seconds &lt; <span class="hljs-number">10</span>) seconds = <span class="hljs-string">&#x27;0&#x27;</span> + seconds;
+  clock.children[<span class="hljs-number">2</span>].innerHTML = seconds;
+}</code></pre>
+<p>在 <code>(*)</code> 行中，我们每次都检查当前时间。<code>setInterval</code> 调用并不可靠：它们可能会发生延迟现象。</p>
+<p>时钟管理函数：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> timerId;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clockStart</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// 运行时钟</span>
+  timerId = <span class="hljs-built_in">setInterval</span>(update, <span class="hljs-number">1000</span>);
+  update(); <span class="hljs-comment">// (*)</span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clockStop</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">clearInterval</span>(timerId);
+  timerId = <span class="hljs-literal">null</span>;
+}</code></pre>
+<p>请注意，<code>update()</code> 不仅在 <code>clockStart()</code> 中被调度，而且还立即在 <code>(*)</code> 行运行。否则，访问者将不得不等到 <code>setInterval</code> 第一次执行。在那之前，时钟将是空的。</p>

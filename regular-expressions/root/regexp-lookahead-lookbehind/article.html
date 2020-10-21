@@ -1,0 +1,82 @@
+<h1 id="前瞻断言与后瞻断言">前瞻断言与后瞻断言</h1>
+<p>有时候我们需要匹配后面跟着特定模式的一段模式。比如，我们要从 <code>subject:1 turkey costs 30€</code> 这段字符中匹配价格数值。</p>
+<p>我们需要获取 <code>subject:€</code> 符号前面的数值（假设价格是整数）。</p>
+<p>那就是前瞻断言要做的事情。</p>
+<h2 id="前瞻断言">前瞻断言</h2>
+<p>语法为：<code>pattern:x(?=y)</code>，它表示 “匹配 <code>pattern:x</code>, 仅在后面是 <code>pattern:y</code> 的情况&quot;”</p>
+<p>那么对于一个后面跟着 <code>€</code> 的整数金额，它的正则表达式应该为：<code>pattern:\d+(?=€)</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;1 turkey costs 30€&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/\d+(?=€)/</span>) ); <span class="hljs-comment">// 30 （正确地跳过了单个的数字 1）</span></code></pre>
+<p>让我们来看另一种情况：这次我们想要一个数量，它是一个不被 <code>subject:€</code> 跟着的数值。</p>
+<p>这里就要用到前瞻否定断言了。</p>
+<p>语法为：<code>pattern:x(?!y)</code>，意思是 &quot;查找 <code>pattern:x</code>, 但是仅在不被 <code>pattern:y</code> 跟随的情况下匹配成功&quot;。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;2 turkeys cost 60€&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/\d+(?!€)/</span>) ); <span class="hljs-comment">// 2（正确地跳过了价格）</span></code></pre>
+<h2 id="后瞻断言">后瞻断言</h2>
+<p>前瞻断言允许添加一个“后面要跟着什么”的条件判断。</p>
+<p>后瞻断言也是类似的，只不过它是在相反的方向上进行条件判断。也就是说，它只允许匹配前面有特定字符串的模式。</p>
+<p>语法为:</p>
+<ul>
+<li>后瞻肯定断言：<code>pattern:(?&lt;=y)x</code>, 匹配 <code>pattern:x</code>, 仅在前面是 <code>pattern:y</code> 的情况。</li>
+<li>后瞻否定断言：<code>pattern:(?&lt;!y)x</code>, 匹配 <code>pattern:x</code>, 仅在前面不是 <code>pattern:y</code> 的情况。</li>
+</ul>
+<p>举个例子，让我们把价格换成美元。美元符号通常在数字之前，所以要查找 <code>$30</code> 我们将使用 <code>pattern:(?&lt;=\$)\d+</code> —— 一个前面带 <code>subject:$</code> 的数值：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;1 turkey costs $30&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/(?&lt;=\$)\d+/</span>) ); <span class="hljs-comment">// 30 （跳过了单个的数字 1）</span></code></pre>
+<p>另外，为了找到数量 —— 一个前面不带 <code>subject:$</code> 的数字，我们可以使用否定后瞻断言：<code>pattern:(?&lt;!\$)\d+</code></p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;2 turkeys cost $60&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/(?&lt;!\$)\d+/</span>) ); <span class="hljs-comment">// 2 (跳过了价格)</span></code></pre>
+<h2 id="捕获组">捕获组</h2>
+<p>一般来说，环视断言括号中（前瞻和后瞻的通用名称）的内容不会成为匹配到的一部分结果。</p>
+<p>例如：在模式 <code>pattern:\d+(?!€)</code> 中，<code>pattern:€</code> 符号就不会出现在匹配结果中。</p>
+<p>但是如果我们想要捕捉整个环视表达式或其中的一部分，那也是有可能的。只需要将其包裹在另加的括号中。</p>
+<p>例如，这里货币符号 <code>pattern:(€|kr)</code> 和金额一起被捕获了：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;1 turkey costs 30€&quot;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/\d+(?=(€|kr))/</span>; <span class="hljs-comment">// €|kr 两边有额外的括号</span>
+
+alert( str.match(reg) ); <span class="hljs-comment">// 30, €</span></code></pre>
+<p>后瞻断言也一样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;1 turkey costs $30&quot;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/(?&lt;=(\$|£))\d+/</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// 30, $</span></code></pre>
+<p>请注意，对于后瞻断言，顺序保持不变，尽管前瞻括号在主模式之前。</p>
+<p>通常括号是从左到右编号，但是后瞻断言是一个例外，它总是在主模式之后被捕获。所以 <code>pattern:\d+</code> 的匹配会首先进入结果数组，然后是 <code>pattern:(\$|£)</code>。</p>
+<h2 id="总结">总结</h2>
+<p>当我们想根据前面/后面的上下文筛选出一些东西的时候，前瞻断言和后瞻断言（通常被称为“环视断言”）对于简单的正则表达式就很有用。</p>
+<p>有时我们可以手动处理来得到相同的结果，即：匹配所有，然后在循环中按上下文进行筛选。请记住，<code>str.matchAll</code> 和<code>reg.exec</code> 返回的匹配结果有 <code>.index</code> 属性，因此我们能知道它在文本中的确切位置。但通常正则表达式可以做得更好。</p>
+<p>环视断言类型:</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>类型</th>
+<th>匹配</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pattern:x(?=y)</code></td>
+<td>前瞻肯定断言</td>
+<td><code>x</code> ，仅当后面跟着 <code>y</code></td>
+</tr>
+<tr>
+<td><code>pattern:x(?!y)</code></td>
+<td>前瞻否定断言</td>
+<td><code>x</code> ，仅当后面不跟 <code>y</code></td>
+</tr>
+<tr>
+<td><code>pattern:(?&lt;=y)x</code></td>
+<td>后瞻肯定断言</td>
+<td><code>x</code> ，仅当跟在 <code>y</code> 后面</td>
+</tr>
+<tr>
+<td><code>pattern:(?&lt;!y)x</code></td>
+<td>后瞻否定断言</td>
+<td><code>x</code> ，仅当不跟在 <code>y</code> 后面</td>
+</tr>
+</tbody></table>
+<p>前瞻断言也可用于禁用回溯。为什么它是需要的 - 请看下一章。</p>

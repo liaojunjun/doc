@@ -1,0 +1,10 @@
+<p>为了使搜索不区分大小写，我们将字符串改为小写，然后搜索：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkSpam</span>(<span class="hljs-params">str</span>) </span>{
+  <span class="hljs-keyword">let</span> lowerStr = str.toLowerCase();
+
+  <span class="hljs-keyword">return</span> lowerStr.includes(<span class="hljs-string">&#x27;viagra&#x27;</span>) || lowerStr.includes(<span class="hljs-string">&#x27;xxx&#x27;</span>);
+}
+
+alert( checkSpam(<span class="hljs-string">&#x27;buy ViAgRA now&#x27;</span>) );
+alert( checkSpam(<span class="hljs-string">&#x27;free xxxxx&#x27;</span>) );
+alert( checkSpam(<span class="hljs-string">&quot;innocent rabbit&quot;</span>) );</code></pre>

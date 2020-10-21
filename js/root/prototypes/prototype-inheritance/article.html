@@ -1,0 +1,246 @@
+<h1 id="原型继承">原型继承</h1>
+<p>在编程中，我们经常会想获取并扩展一些东西。</p>
+<p>例如，我们有一个 <code>user</code> 对象及其属性和方法，并希望将 <code>admin</code> 和 <code>guest</code> 作为基于 <code>user</code> 稍加修改的变体。我们想重用 <code>user</code> 中的内容，而不是复制/重新实现它的方法，而只是在其之上构建一个新的对象。</p>
+<p><strong>原型继承（Prototypal inheritance）</strong> 这个语言特性能够帮助我们实现这一需求。</p>
+<h2 id="prototype">[[Prototype]]</h2>
+<p>在 JavaScript 中，对象有一个特殊的隐藏属性 <code>[[Prototype]]</code>（如规范中所命名的），它要么为 <code>null</code>，要么就是对另一个对象的引用。该对象被称为“原型”：</p>
+<p><img src="object-prototype-empty.svg" alt="prototype"></p>
+<p>原型有点“神奇”。当我们想要从 <code>object</code> 中读取一个缺失的属性时，JavaScript 会自动从原型中获取该属性。在编程中，这种行为被称为“原型继承”。许多炫酷的语言特性和编程技巧都基于此。</p>
+<p>属性 <code>[[Prototype]]</code> 是内部的而且是隐藏的，但是这儿有很多设置它的方式。</p>
+<p>其中之一就是使用特殊的名字 <code>__proto__</code>，就像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>
+};
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">jumps</span>: <span class="hljs-literal">true</span>
+};
+
+*!*
+rabbit.__proto__ = animal;
+*/!*</code></pre>
+<p>```smart header=&quot;<code>__proto__</code> 是 <code>[[Prototype]]</code> 的因历史原因而留下来的 getter/setter&quot;
+请注意，<code>__proto__</code> 与 <code>[[Prototype]]</code> **不一样**。<code>__proto__</code> 是 <code>[[Prototype]]</code> 的 getter/setter。</p>
+<p><code>__proto__</code> 的存在是历史的原因。在现代编程语言中，将其替换为函数 <code>Object.getPrototypeOf/Object.setPrototypeOf</code> 也能 get/set 原型。我们稍后将学习造成这种情况的原因以及这些函数。</p>
+<p>根据规范，<code>__proto__</code> 必须仅在浏览器环境下才能得到支持，但实际上，包括服务端在内的所有环境都支持它。目前，由于 <code>__proto__</code> 标记在观感上更加明显，所以我们在后面的示例中将使用它。</p>
+<pre><code>
+如果我们在 `rabbit` 中查找一个缺失的属性，JavaScript 会自动从 `animal` 中获取它。
+
+例如：
+
+```js
+let animal = {
+  eats: true
+};
+let rabbit = {
+  jumps: true
+};
+
+*!*
+rabbit.__proto__ = animal; // (*)
+*/!*
+
+// 现在这两个属性我们都能在 rabbit 中找到：
+*!*
+alert( rabbit.eats ); // true (**)
+*/!*
+alert( rabbit.jumps ); // true</code></pre>
+<p>这里的 <code>(*)</code> 行将 <code>animal</code> 设置为 <code>rabbit</code> 的原型。</p>
+<p>当 <code>alert</code> 试图读取 <code>rabbit.eats</code> <code>(**)</code> 时，因为它不存在于 <code>rabbit</code> 中，所以 JavaScript 会顺着 <code>[[Prototype]]</code> 引用，在 <code>animal</code> 中查找（自下而上）：</p>
+<p><img src="proto-animal-rabbit.svg" alt=""></p>
+<p>在这儿我们可以说 &quot;<code>animal</code> 是 <code>rabbit</code> 的原型&quot;，或者说 &quot;<code>rabbit</code> 的原型是从 <code>animal</code> 继承而来的&quot;。</p>
+<p>因此，如果 <code>animal</code> 有许多有用的属性和方法，那么它们将自动地变为在 <code>rabbit</code> 中可用。这种属性被称为“继承”。</p>
+<p>如果我们在 <code>animal</code> 中有一个方法，它可以在 <code>rabbit</code> 中被调用：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>,
+*!*
+  walk() {
+    alert(<span class="hljs-string">&quot;Animal walk&quot;</span>);
+  }
+*/!*
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">jumps</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">__proto__</span>: animal
+};
+
+<span class="hljs-comment">// walk 方法是从原型中获得的</span>
+*!*
+rabbit.walk(); <span class="hljs-comment">// Animal walk</span>
+*/!*</code></pre>
+<p>该方法是自动地从原型中获得的，像这样：</p>
+<p><img src="proto-animal-rabbit-walk.svg" alt=""></p>
+<p>原型链可以很长：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>,
+  walk() {
+    alert(<span class="hljs-string">&quot;Animal walk&quot;</span>);
+  }
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">jumps</span>: <span class="hljs-literal">true</span>,
+*!*
+  __proto__: animal
+*/!*
+};
+
+<span class="hljs-keyword">let</span> longEar = {
+  <span class="hljs-attr">earLength</span>: <span class="hljs-number">10</span>,
+*!*
+  __proto__: rabbit
+*/!*
+};
+
+<span class="hljs-comment">// walk 是通过原型链获得的</span>
+longEar.walk(); <span class="hljs-comment">// Animal walk</span>
+alert(longEar.jumps); <span class="hljs-comment">// true（从 rabbit）</span></code></pre>
+<p><img src="proto-animal-rabbit-chain.svg" alt=""></p>
+<p>这里只有两个限制：</p>
+<ol>
+<li>引用不能形成闭环。如果我们试图在一个闭环中分配 <code>__proto__</code>，JavaScript 会抛出错误。</li>
+<li><code>__proto__</code> 的值可以是对象，也可以是 <code>null</code>。而其他的类型都会被忽略。</li>
+</ol>
+<p>当然，这可能很显而易见，但是仍然要强调：只能有一个 <code>[[Prototype]]</code>。一个对象不能从其他两个对象获得继承。</p>
+<h2 id="写入不使用原型">写入不使用原型</h2>
+<p>原型仅用于读取属性。</p>
+<p>对于写入/删除操作可以直接在对象上进行。</p>
+<p>在下面的示例中，我们将为 <code>rabbit</code> 分配自己的 <code>walk</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>,
+  walk() {
+    <span class="hljs-comment">/* rabbit 不会使用此方法 */</span>  
+  }
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">__proto__</span>: animal
+};
+
+*!*
+rabbit.walk = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">&quot;Rabbit! Bounce-bounce!&quot;</span>);
+};
+*/!*
+
+rabbit.walk(); <span class="hljs-comment">// Rabbit! Bounce-bounce!</span></code></pre>
+<p>从现在开始，<code>rabbit.walk()</code> 将立即在对象中找到该方法并执行，而无需使用原型：</p>
+<p><img src="proto-animal-rabbit-walk-2.svg" alt=""></p>
+<p>访问器（accessor）属性是一个例外，因为分配（assignment）操作是由 setter 函数处理的。因此，写入此类属性实际上与调用函数相同。</p>
+<p>也就是这个原因，所以下面这段代码中的 <code>admin.fullName</code> 能够正常运行：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Smith&quot;</span>,
+
+  <span class="hljs-keyword">set</span> <span class="hljs-title">fullName</span>(<span class="hljs-params">value</span>) {
+    [<span class="hljs-built_in">this</span>.name, <span class="hljs-built_in">this</span>.surname] = value.split(<span class="hljs-string">&quot; &quot;</span>);
+  },
+
+  <span class="hljs-keyword">get</span> <span class="hljs-title">fullName</span>() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> <span class="hljs-subst">${<span class="hljs-built_in">this</span>.surname}</span>`</span>;
+  }
+};
+
+<span class="hljs-keyword">let</span> admin = {
+  <span class="hljs-attr">__proto__</span>: user,
+  <span class="hljs-attr">isAdmin</span>: <span class="hljs-literal">true</span>
+};
+
+alert(admin.fullName); <span class="hljs-comment">// John Smith (*)</span>
+
+<span class="hljs-comment">// setter triggers!</span>
+admin.fullName = <span class="hljs-string">&quot;Alice Cooper&quot;</span>; <span class="hljs-comment">// (**)</span></code></pre>
+<p>在 <code>(*)</code> 行中，属性 <code>admin.fullName</code> 在原型 <code>user</code> 中有一个 getter，因此它会被调用。在 <code>(**)</code> 行中，属性在原型中有一个 setter，因此它会被调用。</p>
+<h2 id="this-的值">&quot;this&quot; 的值</h2>
+<p>在上面的例子中可能会出现一个有趣的问题：在 <code>set fullName(value)</code> 中 <code>this</code> 的值是什么？属性 <code>this.name</code> 和 <code>this.surname</code> 被写在哪里：在 <code>user</code> 还是 <code>admin</code>？</p>
+<p>答案很简单：<code>this</code> 根本不受原型的影响。</p>
+<p><strong>无论在哪里找到方法：在一个对象还是在原型中。在一个方法调用中，<code>this</code> 始终是点符号 <code>.</code> 前面的对象。</strong></p>
+<p>因此，setter 调用 <code>admin.fullName=</code> 使用 <code>admin</code> 作为 <code>this</code>，而不是 <code>user</code>。</p>
+<p>这是一件非常重要的事儿，因为我们可能有一个带有很多方法的大对象，并且还有从其继承的对象。当继承的对象运行继承的方法时，它们将仅修改自己的状态，而不会修改大对象的状态。</p>
+<p>例如，这里的 <code>animal</code> 代表“方法存储”，<code>rabbit</code> 在使用其中的方法。</p>
+<p>调用 <code>rabbit.sleep()</code> 会在 <code>rabbit</code> 对象上设置 <code>this.isSleeping</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// animal 有一些方法</span>
+<span class="hljs-keyword">let</span> animal = {
+  walk() {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">this</span>.isSleeping) {
+      alert(<span class="hljs-string">`I walk`</span>);
+    }
+  },
+  sleep() {
+    <span class="hljs-built_in">this</span>.isSleeping = <span class="hljs-literal">true</span>;
+  }
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;White Rabbit&quot;</span>,
+  <span class="hljs-attr">__proto__</span>: animal
+};
+
+<span class="hljs-comment">// 修改 rabbit.isSleeping</span>
+rabbit.sleep();
+
+alert(rabbit.isSleeping); <span class="hljs-comment">// true</span>
+alert(animal.isSleeping); <span class="hljs-comment">// undefined（原型中没有此属性）</span></code></pre>
+<p>结果示意图：</p>
+<p><img src="proto-animal-rabbit-walk-3.svg" alt=""></p>
+<p>如果我们还有从 <code>animal</code> 继承的其他对象，像 <code>bird</code> 和 <code>snake</code> 等，它们也将可以访问 <code>animal</code> 的方法。但是，每个方法调用中的 <code>this</code> 都是在调用时（点符号前）评估的对应的对象，而不是 <code>animal</code>。因此，当我们将数据写入 <code>this</code> 时，会将其存储到这些对象中。</p>
+<p>所以，方法是共享的，但对象状态不是。</p>
+<h2 id="forin-循环">for..in 循环</h2>
+<p><code>for..in</code> 循环也会迭代继承的属性。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">jumps</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">__proto__</span>: animal
+};
+
+*!*
+<span class="hljs-comment">// Object.keys 只返回自己的 key</span>
+alert(<span class="hljs-built_in">Object</span>.keys(rabbit)); <span class="hljs-comment">// jumps</span>
+*/!*
+
+*!*
+<span class="hljs-comment">// for..in 会遍历自己以及继承的键</span>
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> prop <span class="hljs-keyword">in</span> rabbit) alert(prop); <span class="hljs-comment">// jumps，然后是 eats</span>
+*/!*</code></pre>
+<p>如果这不是我们想要的，并且我们想排除继承的属性，那么这儿有一个内建方法 <a href="mdn:js/Object/hasOwnProperty">obj.hasOwnProperty(key)</a>：如果 <code>obj</code> 具有自己的（非继承的）名为 <code>key</code> 的属性，则返回 <code>true</code>。</p>
+<p>因此，我们可以过滤掉继承的属性（或对它们进行其他操作）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">jumps</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">__proto__</span>: animal
+};
+
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> prop <span class="hljs-keyword">in</span> rabbit) {
+  <span class="hljs-keyword">let</span> isOwn = rabbit.hasOwnProperty(prop);
+
+  <span class="hljs-keyword">if</span> (isOwn) {
+    alert(<span class="hljs-string">`Our: <span class="hljs-subst">${prop}</span>`</span>); <span class="hljs-comment">// Our: jumps</span>
+  } <span class="hljs-keyword">else</span> {
+    alert(<span class="hljs-string">`Inherited: <span class="hljs-subst">${prop}</span>`</span>); <span class="hljs-comment">// Inherited: eats</span>
+  }
+}</code></pre>
+<p>这里我们有以下继承链：<code>rabbit</code> 从 <code>animal</code> 中继承，<code>animal</code> 从 <code>Object.prototype</code> 中继承（因为 <code>animal</code> 是对象字面量 <code>{...}</code>，所以这是默认的继承），然后再向上是 <code>null</code>：</p>
+<p><img src="rabbit-animal-object.svg" alt=""></p>
+<p>注意，这有一件很有趣的事儿。方法 <code>rabbit.hasOwnProperty</code> 来自哪儿？我们并没有定义它。从上图中的原型链我们可以看到，该方法是 <code>Object.prototype.hasOwnProperty</code> 提供的。换句话说，它是继承的。</p>
+<p>……如果 <code>for..in</code> 循环会列出继承的属性，那为什么 <code>hasOwnProperty</code> 没有像 <code>eats</code> 和 <code>jumps</code> 那样出现在 <code>for..in</code> 循环中？</p>
+<p>答案很简单：它是不可枚举的。就像 <code>Object.prototype</code> 的其他属性，<code>hasOwnProperty</code> 有 <code>enumerable:false</code> 标志。并且 <code>for..in</code> 只会列出可枚举的属性。这就是为什么它和其余的 <code>Object.prototype</code> 属性都未被列出。</p>
+<pre><code class="language-smart">几乎所有其他键/值获取方法，例如 `Object.keys` 和 `Object.values` 等，都会忽略继承的属性。
+
+它们只会对对象自身进行操作。**不考虑** 继承自原型的属性。</code></pre>
+<h2 id="总结">总结</h2>
+<ul>
+<li>在 JavaScript 中，所有的对象都有一个隐藏的 <code>[[Prototype]]</code> 属性，它要么是另一个对象，要么就是 <code>null</code>。</li>
+<li>我们可以使用 <code>obj.__proto__</code> 访问它（历史遗留下来的 getter/setter，这儿还有其他方法，很快我们就会讲到）。</li>
+<li>通过 <code>[[Prototype]]</code> 引用的对象被称为“原型”。</li>
+<li>如果我们想要读取 <code>obj</code> 的一个属性或者调用一个方法，并且它不存在，那么 JavaScript 就会尝试在原型中查找它。</li>
+<li>写/删除操作直接在对象上进行，它们不使用原型（假设它是数据属性，不是 setter）。</li>
+<li>如果我们调用 <code>obj.method()</code>，而且 <code>method</code> 是从原型中获取的，<code>this</code> 仍然会引用 <code>obj</code>。因此，方法始终与当前对象一起使用，即使方法是继承的。</li>
+<li><code>for..in</code> 循环在其自身和继承的属性上进行迭代。所有其他的键/值获取方法仅对对象本身起作用。</li>
+</ul>

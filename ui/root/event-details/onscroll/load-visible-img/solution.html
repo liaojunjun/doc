@@ -1,0 +1,38 @@
+<p><code>onscroll</code> 处理程序应该检查哪些图像是可见的，并显示它们。</p>
+<p>我们还希望在页面加载时运行它，以检测即将可见的图像并加载它们。</p>
+<p>该代码应该在文档加载完成时执行，以便可以访问文档内容。</p>
+<p>或者将该代码放在 <code>&lt;body&gt;</code> 底部：</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...页面内容在上面...</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isVisible</span>(<span class="hljs-params">elem</span>) </span>{
+
+  <span class="hljs-keyword">let</span> coords = elem.getBoundingClientRect();
+
+  <span class="hljs-keyword">let</span> windowHeight = <span class="hljs-built_in">document</span>.documentElement.clientHeight;
+
+  <span class="hljs-comment">// 顶部元素边缘可见吗？</span>
+  <span class="hljs-keyword">let</span> topVisible = coords.top &gt; <span class="hljs-number">0</span> &amp;&amp; coords.top &lt; windowHeight;
+
+  <span class="hljs-comment">// 底部元素边缘可见吗？</span>
+  <span class="hljs-keyword">let</span> bottomVisible = coords.bottom &lt; windowHeight &amp;&amp; coords.bottom &gt; <span class="hljs-number">0</span>;
+
+  <span class="hljs-keyword">return</span> topVisible || bottomVisible;
+}</code></pre>
+<p><code>showVisible()</code> 函数使用通过 <code>isVisible()</code> 实现的可见性检查，来加载可见图像：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showVisible</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> img <span class="hljs-keyword">of</span> <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;img&#x27;</span>)) {
+    <span class="hljs-keyword">let</span> realSrc = img.dataset.src;
+    <span class="hljs-keyword">if</span> (!realSrc) <span class="hljs-keyword">continue</span>;
+
+    <span class="hljs-keyword">if</span> (isVisible(img)) {
+      img.src = realSrc;
+      img.dataset.src = <span class="hljs-string">&#x27;&#x27;</span>;
+    }
+  }
+}
+
+*!*
+showVisible();
+<span class="hljs-built_in">window</span>.onscroll = showVisible;
+*/!*</code></pre>
+<p>P.S. 此解决方案还有一个 <code>isVisible</code> 的变体，可以“预加载”当前文档滚动上方/下方 1 页内的图像</p>

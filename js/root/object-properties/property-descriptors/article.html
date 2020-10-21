@@ -1,0 +1,221 @@
+<h1 id="属性标志和属性描述符">属性标志和属性描述符</h1>
+<p>我们知道，对象可以存储属性。</p>
+<p>到目前为止，属性对我们来说只是一个简单的“键值”对。但对象属性实际上是更灵活且更强大的东西。</p>
+<p>在本章中，我们将学习其他配置选项，在下一章中，我们将学习如何将它们无形地转换为 getter/setter 函数。</p>
+<h2 id="属性标志">属性标志</h2>
+<p>对象属性（properties），除 <strong><code>value</code></strong> 外，还有三个特殊的特性（attributes），也就是所谓的“标志”：</p>
+<ul>
+<li><strong><code>writable</code></strong> — 如果为 <code>true</code>，则值可以被修改，否则它是只可读的。</li>
+<li><strong><code>enumerable</code></strong> — 如果为 <code>true</code>，则会被在循环中列出，否则不会被列出。</li>
+<li><strong><code>configurable</code></strong> — 如果为 <code>true</code>，则此特性可以被删除，这些属性也可以被修改，否则不可以。</li>
+</ul>
+<p>我们到现在还没看到它们，是因为它们通常不会出现。当我们用“常用的方式”创建一个属性时，它们都为 <code>true</code>。但我们也可以随时更改它们。</p>
+<p>首先，让我们来看看如何获得这些标志。</p>
+<p><a href="mdn:js/Object/getOwnPropertyDescriptor">Object.getOwnPropertyDescriptor</a> 方法允许查询有关属性的 <strong>完整</strong> 信息。</p>
+<p>语法是：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> descriptor = <span class="hljs-built_in">Object</span>.getOwnPropertyDescriptor(obj, propertyName);</code></pre>
+<p><code>obj</code>
+: 需要从中获取信息的对象。</p>
+<p><code>propertyName</code>
+: 属性的名称。</p>
+<p>返回值是一个所谓的“属性描述符”对象：它包含值和所有的标志。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+};
+
+<span class="hljs-keyword">let</span> descriptor = <span class="hljs-built_in">Object</span>.getOwnPropertyDescriptor(user, <span class="hljs-string">&#x27;name&#x27;</span>);
+
+alert( <span class="hljs-built_in">JSON</span>.stringify(descriptor, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span> ) );
+<span class="hljs-comment">/* 属性描述符：
+{
+  &quot;value&quot;: &quot;John&quot;,
+  &quot;writable&quot;: true,
+  &quot;enumerable&quot;: true,
+  &quot;configurable&quot;: true
+}
+*/</span></code></pre>
+<p>为了修改标志，我们可以使用 <a href="mdn:js/Object/defineProperty">Object.defineProperty</a>。</p>
+<p>语法是：</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.defineProperty(obj, propertyName, descriptor)</code></pre>
+<p><code>obj</code>，<code>propertyName</code>
+: 要应用描述符的对象及其属性。</p>
+<p><code>descriptor</code>
+: 要应用的属性描述符对象。</p>
+<p>如果该属性存在，<code>defineProperty</code> 会更新其标志。否则，它会使用给定的值和标志创建属性；在这种情况下，如果没有提供标志，则会假定它是 <code>false</code>。</p>
+<p>例如，这里创建了一个属性 <code>name</code>，该属性的所有标志都为 <code>false</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {};
+
+*!*
+<span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;name&quot;</span>, {
+  <span class="hljs-attr">value</span>: <span class="hljs-string">&quot;John&quot;</span>
+});
+*/!*
+
+<span class="hljs-keyword">let</span> descriptor = <span class="hljs-built_in">Object</span>.getOwnPropertyDescriptor(user, <span class="hljs-string">&#x27;name&#x27;</span>);
+
+alert( <span class="hljs-built_in">JSON</span>.stringify(descriptor, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span> ) );
+<span class="hljs-comment">/*
+{
+  &quot;value&quot;: &quot;John&quot;,
+*!*
+  &quot;writable&quot;: false,
+  &quot;enumerable&quot;: false,
+  &quot;configurable&quot;: false
+*/</span>!*
+}
+ */</code></pre>
+<p>将它与上面的“以常用方式创建的” <code>user.name</code> 进行比较：现在所有标志都为 <code>false</code>。如果这不是我们想要的，那么我们最好在 <code>descriptor</code> 中将它们设置为 <code>true</code>。</p>
+<p>现在让我们通过示例来看看标志的影响。</p>
+<h2 id="只读">只读</h2>
+<p>让我们通过更改 <code>writable</code> 标志来把 <code>user.name</code> 设置为只读（<code>user.name</code> 不能被重新赋值）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+};
+
+<span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;name&quot;</span>, {
+*!*
+  writable: <span class="hljs-literal">false</span>
+*/!*
+});
+
+*!*
+user.name = <span class="hljs-string">&quot;Pete&quot;</span>; <span class="hljs-comment">// Error: Cannot assign to read only property &#x27;name&#x27;</span>
+*/!*</code></pre>
+<p>现在没有人可以改变我们 <code>user</code> 的 <code>name</code>，除非它们应用自己的 <code>defineProperty</code> 来覆盖我们的 <code>user</code> 的 <code>name</code>。</p>
+<pre><code class="language-smart">在非严格模式下，在对不可写的属性等进行写入操作时，不会出现错误。但是操作仍然不会成功。在非严格模式下，违反标志的行为（flag-violating action）只会被默默地忽略掉。</code></pre>
+<p>这是相同的示例，但针对的是属性不存在的情况：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { };
+
+<span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;name&quot;</span>, {
+*!*
+  value: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-comment">// 对于新属性，我们需要明确地列出哪些是 true</span>
+  <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">configurable</span>: <span class="hljs-literal">true</span>
+*/!*
+});
+
+alert(user.name); <span class="hljs-comment">// John</span>
+user.name = <span class="hljs-string">&quot;Pete&quot;</span>; <span class="hljs-comment">// Error</span></code></pre>
+<h2 id="不可枚举">不可枚举</h2>
+<p>现在让我们向 <code>user</code> 添加一个自定义的 <code>toString</code>。</p>
+<p>通常，对象的内置 <code>toString</code> 是不可枚举的，它不会显示在 <code>for..in</code> 中。但是如果我们添加我们自己的 <code>toString</code>，那么默认情况下它将显示在 <code>for..in</code> 中，如下所示：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  toString() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.name;
+  }
+};
+
+<span class="hljs-comment">// 默认情况下，我们的两个属性都会被列出：</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> user) alert(key); <span class="hljs-comment">// name, toString</span></code></pre>
+<p>如果我们不喜欢它，那么我们可以设置 <code>enumerable:false</code>。之后它就不会出现在 <code>for..in</code> 循环中了，就像内建的 <code>toString</code> 一样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  toString() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.name;
+  }
+};
+
+<span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;toString&quot;</span>, {
+*!*
+  enumerable: <span class="hljs-literal">false</span>
+*/!*
+});
+
+*!*
+<span class="hljs-comment">// 现在我们的 toString 消失了：</span>
+*/!*
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> user) alert(key); <span class="hljs-comment">// name</span></code></pre>
+<p>不可枚举的属性也会被 <code>Object.keys</code> 排除：</p>
+<pre><code class="language-js">alert(<span class="hljs-built_in">Object</span>.keys(user)); <span class="hljs-comment">// name</span></code></pre>
+<h2 id="不可配置">不可配置</h2>
+<p>不可配置标志（<code>configurable:false</code>）有时会预设在内建对象和属性中。</p>
+<p>不可配置的属性不能被删除。</p>
+<p>例如，<code>Math.PI</code> 是只读的、不可枚举和不可配置的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> descriptor = <span class="hljs-built_in">Object</span>.getOwnPropertyDescriptor(<span class="hljs-built_in">Math</span>, <span class="hljs-string">&#x27;PI&#x27;</span>);
+
+alert( <span class="hljs-built_in">JSON</span>.stringify(descriptor, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span> ) );
+<span class="hljs-comment">/*
+{
+  &quot;value&quot;: 3.141592653589793,
+  &quot;writable&quot;: false,
+  &quot;enumerable&quot;: false,
+  &quot;configurable&quot;: false
+}
+*/</span></code></pre>
+<p>因此，开发人员无法修改 <code>Math.PI</code> 的值或覆盖它。</p>
+<pre><code class="language-js"><span class="hljs-built_in">Math</span>.PI = <span class="hljs-number">3</span>; <span class="hljs-comment">// Error</span>
+
+<span class="hljs-comment">// 删除 Math.PI 也不会起作用</span></code></pre>
+<p>使属性变成不可配置是一条单行道。我们无法使用 <code>defineProperty</code> 把它改回去。</p>
+<p>确切地说，不可配置性对 <code>defineProperty</code> 施加了一些限制：</p>
+<ol>
+<li>不能修改 <code>configurable</code> 标志。</li>
+<li>不能修改 <code>enumerable</code> 标志。</li>
+<li>不能将 <code>writable: false</code> 修改为 <code>true</code>（反之亦然）。</li>
+<li>不能修改访问者属性的 <code>get/set</code>（但是如果没有可以分配它们）。</li>
+</ol>
+<p>在这里，我们将 <code>user.name</code> 设置为“永久密封”的常量：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { };
+
+<span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;name&quot;</span>, {
+  <span class="hljs-attr">value</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">writable</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">configurable</span>: <span class="hljs-literal">false</span>
+});
+
+*!*
+<span class="hljs-comment">// 不能修改 user.name 或它的标志</span>
+<span class="hljs-comment">// 下面的所有操作都不起作用：</span>
+<span class="hljs-comment">//   user.name = &quot;Pete&quot;</span>
+<span class="hljs-comment">//   delete user.name</span>
+<span class="hljs-comment">//   defineProperty(user, &quot;name&quot;, { value: &quot;Pete&quot; })</span>
+<span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;name&quot;</span>, {<span class="hljs-attr">writable</span>: <span class="hljs-literal">true</span>}); <span class="hljs-comment">// Error</span>
+*/!*</code></pre>
+<pre><code class="language-smart">值得注意的例外情况：不可配置但可写的属性的值是可以被更改的。
+
+`configurable: false` 的思想是防止更改属性标志或删除属性标志，而不是更改它的值。</code></pre>
+<h2 id="objectdefineproperties">Object.defineProperties</h2>
+<p>有一个方法 <a href="mdn:js/Object/defineProperties">Object.defineProperties(obj, descriptors)</a>，允许一次定义多个属性。</p>
+<p>语法是：</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.defineProperties(obj, {
+  <span class="hljs-attr">prop1</span>: descriptor1,
+  <span class="hljs-attr">prop2</span>: descriptor2
+  <span class="hljs-comment">// ...</span>
+});</code></pre>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.defineProperties(user, {
+  <span class="hljs-attr">name</span>: { <span class="hljs-attr">value</span>: <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-attr">writable</span>: <span class="hljs-literal">false</span> },
+  <span class="hljs-attr">surname</span>: { <span class="hljs-attr">value</span>: <span class="hljs-string">&quot;Smith&quot;</span>, <span class="hljs-attr">writable</span>: <span class="hljs-literal">false</span> },
+  <span class="hljs-comment">// ...</span>
+});</code></pre>
+<p>所以，我们可以一次性设置多个属性。</p>
+<h2 id="objectgetownpropertydescriptors">Object.getOwnPropertyDescriptors</h2>
+<p>要一次获取所有属性描述符，我们可以使用 <a href="mdn:js/Object/getOwnPropertyDescriptors">Object.getOwnPropertyDescriptors(obj)</a> 方法。</p>
+<p>它与 <code>Object.defineProperties</code> 一起可以用作克隆对象的“标志感知”方式：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> clone = <span class="hljs-built_in">Object</span>.defineProperties({}, <span class="hljs-built_in">Object</span>.getOwnPropertyDescriptors(obj));</code></pre>
+<p>通常，当我们克隆一个对象时，我们使用赋值的方式来复制属性，像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> user) {
+  clone[key] = user[key]
+}</code></pre>
+<p>……但是，这并不能复制标志。所以如果我们想要一个“更好”的克隆，那么 <code>Object.defineProperties</code> 是首选。</p>
+<p>另一个区别是 <code>for..in</code> 会忽略 symbol 类型的属性，但是 <code>Object.getOwnPropertyDescriptors</code> 返回包含 symbol 类型的属性在内的 <strong>所有</strong> 属性描述符。</p>
+<h2 id="设定一个全局的密封对象">设定一个全局的密封对象</h2>
+<p>属性描述符在单个属性的级别上工作。</p>
+<p>还有一些限制访问 <strong>整个</strong> 对象的方法：</p>
+<p><a href="mdn:js/Object/preventExtensions">Object.preventExtensions(obj)</a>
+: 禁止向对象添加新属性。</p>
+<p><a href="mdn:js/Object/seal">Object.seal(obj)</a>
+: 禁止添加/删除/修改属性。为所有现有的属性设置 <code>configurable: false</code>。</p>
+<p><a href="mdn:js/Object/freeze">Object.freeze(obj)</a>
+: 禁止添加/删除/更改属性。为所有现有的属性设置 <code>configurable: false, writable: false</code>。</p>
+<p>还有针对它们的测试：</p>
+<p><a href="mdn:js/Object/isExtensible">Object.isExtensible(obj)</a>
+: 如果添加属性被禁止，则返回 <code>false</code>，否则返回 <code>true</code>。</p>
+<p><a href="mdn:js/Object/isSealed">Object.isSealed(obj)</a>
+: 如果添加/删除属性被禁止，并且所有现有的属性都具有 <code>configurable: false</code>则返回 <code>true</code>。</p>
+<p><a href="mdn:js/Object/isFrozen">Object.isFrozen(obj)</a>
+: 如果添加/删除/更改属性被禁止，并且所有当前属性都是 <code>configurable: false, writable: false</code>，则返回 <code>true</code>。</p>
+<p>这些方法在实际中很少使用。</p>

@@ -1,0 +1,232 @@
+<h1 id="asyncawait">Async/await</h1>
+<p>Async/await 是以更舒适的方式使用 promise 的一种特殊语法，同时它也非常易于理解和使用。</p>
+<h2 id="async-function">Async function</h2>
+<p>让我们以 <code>async</code> 这个关键字开始。它可以被放置在一个函数前面，如下所示：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+}</code></pre>
+<p>在函数前面的 &quot;async&quot; 这个单词表达了一个简单的事情：即这个函数总是返回一个 promise。其他值将自动被包装在一个 resolved 的 promise 中。</p>
+<p>例如，下面这个函数返回一个结果为 <code>1</code> 的 resolved promise，让我们测试一下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+}
+
+f().then(alert); <span class="hljs-comment">// 1</span></code></pre>
+<p>……我们也可以显式地返回一个 promise，结果是一样的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Promise</span>.resolve(<span class="hljs-number">1</span>);
+}
+
+f().then(alert); <span class="hljs-comment">// 1</span></code></pre>
+<p>所以说，<code>async</code> 确保了函数返回一个 promise，也会将非 promise 的值包装进去。很简单，对吧？但不仅仅这些。还有另外一个叫 <code>await</code> 的关键词，它只在 <code>async</code> 函数内工作，也非常酷。</p>
+<h2 id="await">Await</h2>
+<p>语法如下：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 只在 async 函数内工作</span>
+<span class="hljs-keyword">let</span> value = <span class="hljs-keyword">await</span> promise;</code></pre>
+<p>关键字 <code>await</code> 让 JavaScript 引擎等待直到 promise 完成（settle）并返回结果。</p>
+<p>这里的例子就是一个 1 秒后 resolve 的 promise：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-keyword">let</span> promise = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> resolve(<span class="hljs-string">&quot;done!&quot;</span>), <span class="hljs-number">1000</span>)
+  });
+
+*!*
+  <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> promise; <span class="hljs-comment">// 等待，直到 promise resolve (*)</span>
+*/!*
+
+  alert(result); <span class="hljs-comment">// &quot;done!&quot;</span>
+}
+
+f();</code></pre>
+<p>这个函数在执行的时候，“暂停”在了 <code>(*)</code> 那一行，并在 promise settle 时，拿到 <code>result</code> 作为结果继续往下执行。所以上面这段代码在一秒后显示 &quot;done!&quot;。</p>
+<p>让我们强调一下：<code>await</code> 字面的意思就是让 JavaScript 引擎等待直到 promise settle，然后以 promise 的结果继续执行。这个行为不会耗费任何 CPU 资源，因为引擎可以同时处理其他任务：执行其他脚本，处理事件等。</p>
+<p>相比于 <code>promise.then</code>，它只是获取 promise 的结果的一个更优雅的语法，同时也更易于读写。</p>
+<p>````warn header=&quot;不能在普通函数中使用 <code>await</code>&quot;
+如果我们尝试在非 async 函数中使用 <code>await</code> 的话，就会报语法错误：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> promise = <span class="hljs-built_in">Promise</span>.resolve(<span class="hljs-number">1</span>);
+*!*
+  <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> promise; <span class="hljs-comment">// Syntax error</span>
+*/!*
+}</code></pre>
+<p>如果函数前面没有 <code>async</code> 关键字，我们就会得到一个语法错误。就像前面说的，<code>await</code> 只在 <code>async 函数</code> 中有效。</p>
+<pre><code>
+让我们拿 &lt;info:promise-chaining&gt; 那一章的 `showAvatar()` 例子，并将其改写成 `async/await` 的形式：
+
+1. 我们需要用 `await` 替换掉 `.then` 的调用。
+2. 另外，我们需要在函数前面加上 `async` 关键字，以使它们能工作。
+
+```js run
+async function showAvatar() {
+
+  // 读取我们的 JSON
+  let response = await fetch(&#x27;/article/promise-chaining/user.json&#x27;);
+  let user = await response.json();
+
+  // 读取 github 用户信息
+  let githubResponse = await fetch(`https://api.github.com/users/${user.name}`);
+  let githubUser = await githubResponse.json();
+
+  // 显示头像
+  let img = document.createElement(&#x27;img&#x27;);
+  img.src = githubUser.avatar_url;
+  img.className = &quot;promise-avatar-example&quot;;
+  document.body.append(img);
+
+  // 等待 3 秒
+  await new Promise((resolve, reject) =&gt; setTimeout(resolve, 3000));
+
+  img.remove();
+
+  return githubUser;
+}
+
+showAvatar();
+```
+
+简洁明了，是吧？比之前可强多了。
+
+````smart header=&quot;`await` 不能在顶层代码运行&quot;
+刚开始使用 `await` 的人常常会忘记 `await` 不能用在顶层代码中。例如，下面这样就不行：
+
+```js run
+// 用在顶层代码中会报语法错误
+let response = await fetch(&#x27;/article/promise-chaining/user.json&#x27;);
+let user = await response.json();
+```
+
+但我们可以将其包裹在一个匿名 async 函数中，如下所示：
+
+```js
+(async () =&gt; {
+  let response = await fetch(&#x27;/article/promise-chaining/user.json&#x27;);
+  let user = await response.json();
+  ...
+})();
+```
+
+</code></pre>
+<p>````smart header=&quot;<code>await</code> 接受 &quot;thenables&quot;&quot;
+像 <code>promise.then</code> 那样，<code>await</code> 允许我们使用 thenable 对象（那些具有可调用的 <code>then</code> 方法的对象）。这里的想法是，第三方对象可能不是一个 promise，但却是 promise 兼容的：如果这些对象支持 <code>.then</code>，那么就可以对它们使用 <code>await</code>。</p>
+<p>这有一个用于演示的 <code>Thenable</code> 类，下面的 <code>await</code> 接受了该类的实例：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Thenable</span> </span>{
+  <span class="hljs-keyword">constructor</span>(num) {
+    <span class="hljs-built_in">this</span>.num = num;
+  }
+  then(resolve, reject) {
+    alert(resolve);
+    <span class="hljs-comment">// 1000ms 后使用 this.num*2 进行 resolve</span>
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> resolve(<span class="hljs-built_in">this</span>.num * <span class="hljs-number">2</span>), <span class="hljs-number">1000</span>); <span class="hljs-comment">// (*)</span>
+  }
+};
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// 等待 1 秒，之后 result 变为 2</span>
+  <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> Thenable(<span class="hljs-number">1</span>);
+  alert(result);
+}
+
+f();</code></pre>
+<p>如果 <code>await</code> 接收了一个非 promise 的但是提供了 <code>.then</code> 方法的对象，它就会调用这个 <code>.then</code> 方法，并将内建的函数 <code>resolve</code> 和 <code>reject</code> 作为参数传入（就像它对待一个常规的 <code>Promise</code> executor 时一样）。然后 <code>await</code> 等待直到这两个函数中的某个被调用（在上面这个例子中发生在 <code>(*)</code> 行），然后使用得到的结果继续执行后续任务。</p>
+<pre><code>
+````smart header=&quot;Class 中的 async 方法&quot;
+要声明一个 class 中的 async 方法，只需在对应方法前面加上 `async` 即可：
+
+```js run
+class Waiter {
+*!*
+  async wait() {
+*/!*
+    return await Promise.resolve(1);
+  }
+}
+
+new Waiter()
+  .wait()
+  .then(alert); // 1
+```
+这里的含义是一样的：它确保了方法的返回值是一个 promise 并且可以在方法中使用 `await`。
+</code></pre>
+<h2 id="error-处理">Error 处理</h2>
+<p>如果一个 promise 正常 resolve，<code>await promise</code> 返回的就是其结果。但是如果 promise 被 reject，它将 throw 这个 error，就像在这一行有一个 <code>throw</code> 语句那样。</p>
+<p>这个代码：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+*!*
+  <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Whoops!&quot;</span>));
+*/!*
+}</code></pre>
+<p>……和下面是一样的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+*!*
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Whoops!&quot;</span>);
+*/!*
+}</code></pre>
+<p>在真实开发中，promise 可能需要一点时间后才 reject。在这种情况下，在 <code>await</code> 抛出（throw）一个 error 之前会有一个延时。</p>
+<p>我们可以用 <code>try..catch</code> 来捕获上面提到的那个 error，与常规的 <code>throw</code> 使用的是一样的方式：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;http://no-such-url&#x27;</span>);
+  } <span class="hljs-keyword">catch</span>(err) {
+*!*
+    alert(err); <span class="hljs-comment">// TypeError: failed to fetch</span>
+*/!*
+  }
+}
+
+f();</code></pre>
+<p>如果有 error 发生，执行控制权马上就会被移交至 <code>catch</code> 块。我们也可以用 <code>try</code> 包装多行 <code>await</code> 代码：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/no-user-here&#x27;</span>);
+    <span class="hljs-keyword">let</span> user = <span class="hljs-keyword">await</span> response.json();
+  } <span class="hljs-keyword">catch</span>(err) {
+    <span class="hljs-comment">// 捕获到 fetch 和 response.json 中的错误</span>
+    alert(err);
+  }
+}
+
+f();</code></pre>
+<p>如果我们没有 <code>try..catch</code>，那么由异步函数 <code>f()</code> 的调用生成的 promise 将变为 rejected。我们可以在函数调用后面添加 <code>.catch</code> 来处理这个 error：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;http://no-such-url&#x27;</span>);
+}
+
+<span class="hljs-comment">// f() 变成了一个 rejected 的 promise</span>
+*!*
+f().catch(alert); <span class="hljs-comment">// TypeError: failed to fetch // (*)</span>
+*/!*</code></pre>
+<p>如果我们忘了在这添加 <code>.catch</code>，那么我们就会得到一个未处理的 promise error（可以在控制台中查看）。我们可以使用在 <a href="info:promise-error-handling">info:promise-error-handling</a> 一章中所讲的全局事件处理程序 <code>unhandledrejection</code> 来捕获这类 error。</p>
+<p>```smart header=&quot;<code>async/await</code> 和 <code>promise.then/catch</code>&quot;
+当我们使用 <code>async/await</code> 时，几乎就不会用到 <code>.then</code> 了，因为 <code>await</code> 为我们处理了等待。并且我们使用常规的 <code>try..catch</code> 而不是 <code>.catch</code>。这通常（但不总是）更加方便。</p>
+<p>但是当我们在代码的顶层时，也就是在所有 <code>async</code> 函数之外，我们在语法上就不能使用 <code>await</code> 了，所以这时候通常的做法是添加 <code>.then/catch</code> 来处理最终的结果（result）或掉出来的（falling-through）error，例如像上面那个例子中的 <code>(*)</code> 行那样。</p>
+<pre><code>
+````smart header=&quot;`async/await` 可以和 `Promise.all` 一起使用&quot;
+当我们需要同时等待多个 promise 时，我们可以用 `Promise.all` 把它们包装起来，然后使用 `await`：
+
+```js
+// 等待结果数组
+let results = await Promise.all([
+  fetch(url1),
+  fetch(url2),
+  ...
+]);</code></pre>
+<p>如果出现 error，也会正常传递，从失败了的 promise 传到 <code>Promise.all</code>，然后变成我们能通过使用 <code>try..catch</code> 在调用周围捕获到的异常（exception）。</p>
+<pre><code>
+## 总结
+
+函数前面的关键字 `async` 有两个作用：
+
+1. 让这个函数总是返回一个 promise。
+2. 允许在该函数内使用 `await`。
+
+Promise 前的关键字 `await` 使 JavaScript 引擎等待该 promise settle，然后：
+
+1. 如果有 error，就会抛出异常 — 就像那里调用了 `throw error` 一样。
+2. 否则，就返回结果。
+
+这两个关键字一起提供了一个很好的用来编写异步代码的框架，这种代码易于阅读也易于编写。
+
+有了 `async/await` 之后，我们就几乎不需要使用 `promise.then/catch`，但是不要忘了它们是基于 promise 的，因为有些时候（例如在最外层作用域）我们不得不使用这些方法。并且，当我们需要同时等待需要任务时，`Promise.all` 是很好用的。</code></pre>

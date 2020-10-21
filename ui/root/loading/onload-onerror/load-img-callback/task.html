@@ -1,0 +1,19 @@
+<p>importance: 4</p>
+<hr>
+<h1 id="使用回调函数加载图片">使用回调函数加载图片</h1>
+<p>通常，图片在被创建时才会被加载。所以，当我们向页面中添加 <code>&lt;img&gt;</code> 时，用户不会立即看到图片。浏览器首先需要加载它。</p>
+<p>为了立即显示一张图片，我们可以“提前”创建它，像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> img = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;img&#x27;</span>);
+img.src = <span class="hljs-string">&#x27;my.jpg&#x27;</span>;</code></pre>
+<p>浏览器开始加载图片，并将其保存到缓存中。以后，当相同图片出现在文档中时（无论怎样），它都会立即显示。</p>
+<p><strong>创建一个函数 <code>preloadImages(sources, callback)</code>，来加载来自数组 <code>source</code> 的所有图片，并在准备就绪时运行 <code>callback</code>。</strong></p>
+<p>例如，这段代码将在图片加载完成后显示一个 <code>alert</code>：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loaded</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">&quot;Images loaded&quot;</span>)
+}
+
+preloadImages([<span class="hljs-string">&quot;1.jpg&quot;</span>, <span class="hljs-string">&quot;2.jpg&quot;</span>, <span class="hljs-string">&quot;3.jpg&quot;</span>], loaded);</code></pre>
+<p>如果出现错误，函数应该仍假定图片已经“加载完成”。</p>
+<p>换句话说，当所有图片都已加载完成，或出现错误输出时，将执行 <code>callback</code>。</p>
+<p>例如，当我们计划显示一个包含很多图片的可滚动图册，并希望确保所有图片都已加载完成时，这个函数很有用。</p>
+<p>在源文档中，你可以找到指向测试图片的链接，以及检查它们是否已加载完成的代码。它应该输出 <code>300</code>。</p>

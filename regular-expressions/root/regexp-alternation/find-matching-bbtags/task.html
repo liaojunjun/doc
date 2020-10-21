@@ -1,0 +1,27 @@
+<h1 id="查找-bbtag-对">查找 bbtag 对</h1>
+<p>“bb-tag” 形如 <code>[tag]...[/tag]</code>，<code>tag</code> 匹配 <code>b</code>、<code>url</code> 或 <code>quote</code> 其中之一。</p>
+<p>例如：</p>
+<pre><code>[b]text[/b]
+[url]http://google.com[/url]</code></pre>
+<p>BB-tags 可以嵌套。但标签不能自嵌套，比如：</p>
+<pre><code>可行：
+[url] [b]http://google.com[/b] [/url]
+[quote] [b]text[/b] [/quote]
+
+不可行：
+[b][b]text[/b][/b]</code></pre>
+<p>标签可以包含换行，通常为以下形式：</p>
+<pre><code>[quote]
+  [b]text[/b]
+[/quote]</code></pre>
+<p>构造一个正则式用于查找所有 BB-tags 和其内容。</p>
+<p>举例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/your regexp/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;..[url]http://google.com[/url]..&quot;</span>;
+alert( str.match(reg) ); <span class="hljs-comment">// [url]http://google.com[/url]</span></code></pre>
+<p>如果标签嵌套，那么我们需要记录匹配的外层标签（如果希望继续查找匹配的标签内容的话）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/your regexp/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;..[url][b]http://google.com[/b][/url]..&quot;</span>;
+alert( str.match(reg) ); <span class="hljs-comment">// [url][b]http://google.com[/b][/url]</span></code></pre>

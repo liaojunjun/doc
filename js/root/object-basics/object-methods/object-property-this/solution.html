@@ -1,0 +1,39 @@
+<p><strong>答案：一个错误。</strong></p>
+<p>试一下：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeUser</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+    <span class="hljs-attr">ref</span>: <span class="hljs-built_in">this</span>
+  };
+};
+
+<span class="hljs-keyword">let</span> user = makeUser();
+
+alert( user.ref.name ); <span class="hljs-comment">// Error: Cannot read property &#x27;name&#x27; of undefined</span></code></pre>
+<p>这是因为设置 <code>this</code> 的规则不考虑对象定义。只有调用那一刻才重要。</p>
+<p>这里 <code>makeUser()</code> 中的 <code>this</code> 的值是 <code>undefined</code>，因为它是被作为函数调用的，而不是通过点符号被作为方法调用。</p>
+<p><code>this</code> 的值是对于整个函数的，代码段和对象字面量对它都没有影响。</p>
+<p>所以 <code>ref: this</code> 实际上取的是当前函数的 <code>this</code>。</p>
+<p>我们可以重写这个函数，并返回和上面相同的值为 <code>undefined</code> 的 <code>this</code>：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeUser</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>; <span class="hljs-comment">// 这次这里没有对象字面量</span>
+}
+
+alert( makeUser().name ); <span class="hljs-comment">// Error: Cannot read property &#x27;name&#x27; of undefined</span></code></pre>
+<p>我们可以看到 <code>alert( makeUser().name )</code> 的结果和前面那个例子中 <code>alert( user.ref.name )</code> 的结果相同。</p>
+<p>这里有个反例：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeUser</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+*!*
+    ref() {
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>;
+    }
+*/!*
+  };
+};
+
+<span class="hljs-keyword">let</span> user = makeUser();
+
+alert( user.ref().name ); <span class="hljs-comment">// John</span></code></pre>
+<p>现在正常了，因为 <code>user.ref()</code> 是一个方法。<code>this</code> 的值为点符号 <code>.</code> 前的这个对象。</p>

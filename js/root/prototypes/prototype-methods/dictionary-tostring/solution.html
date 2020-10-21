@@ -1,0 +1,24 @@
+<p>可以使用 <code>Object.keys</code> 获取所有可枚举的键，并输出其列表。</p>
+<p>为了使 <code>toString</code> 不可枚举，我们使用一个属性描述器来定义它。<code>Object.create</code> 语法允许我们为一个对象提供属性描述器作为第二参数。</p>
+<pre><code class="language-js">*!*
+<span class="hljs-keyword">let</span> dictionary = <span class="hljs-built_in">Object</span>.create(<span class="hljs-literal">null</span>, {
+  <span class="hljs-attr">toString</span>: { <span class="hljs-comment">// 定义 toString 属性</span>
+    value() { <span class="hljs-comment">// value 是一个 function</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.keys(<span class="hljs-built_in">this</span>).join();
+    }
+  }
+});
+*/!*
+
+dictionary.apple = <span class="hljs-string">&quot;Apple&quot;</span>;
+dictionary.__proto__ = <span class="hljs-string">&quot;test&quot;</span>;
+
+<span class="hljs-comment">// apple 和 __proto__ 在循环中</span>
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> dictionary) {
+  alert(key); <span class="hljs-comment">// &quot;apple&quot;，然后是 &quot;__proto__&quot;</span>
+}  
+
+<span class="hljs-comment">// 通过 toString 处理获得的以逗号分隔的属性列表</span>
+alert(dictionary); <span class="hljs-comment">// &quot;apple,__proto__&quot;</span></code></pre>
+<p>当我们使用描述器创建一个属性，它的标识默认是 <code>false</code>。因此在上面这段代码中，<code>dictonary.toString</code> 是不可枚举的。</p>
+<p>请阅读 <a href="info:property-descriptors"></a> 一章进行回顾。</p>

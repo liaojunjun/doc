@@ -1,0 +1,21 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="counter-对象">Counter 对象</h1>
+<p>这里通过构造函数创建了一个 counter 对象。</p>
+<p>它能正常工作吗？它会显示什么呢？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Counter</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+
+  <span class="hljs-built_in">this</span>.up = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> ++count;
+  };
+  <span class="hljs-built_in">this</span>.down = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> --count;
+  };
+}
+
+<span class="hljs-keyword">let</span> counter = <span class="hljs-keyword">new</span> Counter();
+
+alert( counter.up() ); <span class="hljs-comment">// ?</span>
+alert( counter.up() ); <span class="hljs-comment">// ?</span>
+alert( counter.down() ); <span class="hljs-comment">// ?</span></code></pre>

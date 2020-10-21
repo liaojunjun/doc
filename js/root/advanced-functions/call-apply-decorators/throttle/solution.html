@@ -1,0 +1,36 @@
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">throttle</span>(<span class="hljs-params">func, ms</span>) </span>{
+
+  <span class="hljs-keyword">let</span> isThrottled = <span class="hljs-literal">false</span>,
+    savedArgs,
+    savedThis;
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">wrapper</span>(<span class="hljs-params"></span>) </span>{
+
+    <span class="hljs-keyword">if</span> (isThrottled) { <span class="hljs-comment">// (2)</span>
+      savedArgs = <span class="hljs-built_in">arguments</span>;
+      savedThis = <span class="hljs-built_in">this</span>;
+      <span class="hljs-keyword">return</span>;
+    }
+
+    func.apply(<span class="hljs-built_in">this</span>, <span class="hljs-built_in">arguments</span>); <span class="hljs-comment">// (1)</span>
+
+    isThrottled = <span class="hljs-literal">true</span>;
+
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+      isThrottled = <span class="hljs-literal">false</span>; <span class="hljs-comment">// (3)</span>
+      <span class="hljs-keyword">if</span> (savedArgs) {
+        wrapper.apply(savedThis, savedArgs);
+        savedArgs = savedThis = <span class="hljs-literal">null</span>;
+      }
+    }, ms);
+  }
+
+  <span class="hljs-keyword">return</span> wrapper;
+}</code></pre>
+<p>调用 <code>throttle(func, ms)</code> 返回 <code>wrapper</code>。</p>
+<ol>
+<li>在第一次调用期间，<code>wrapper</code> 只运行 <code>func</code> 并设置冷却状态（<code>isThrottled = true</code>）。</li>
+<li>在这种状态下，所有调用都记忆在 <code>savedArgs/savedThis</code> 中。请注意，上下文和参数（arguments）同等重要，应该被记下来。我们同时需要他们以重现调用。</li>
+<li>……然后经过 <code>ms</code> 毫秒后，触发 <code>setTimeout</code>。冷却状态被移除（<code>isThrottled = false</code>），如果我们忽略了调用，则将使用最后记忆的参数和上下文执行 <code>wrapper</code>。</li>
+</ol>
+<p>第 3 步运行的不是 <code>func</code>，而是 <code>wrapper</code>，因为我们不仅需要执行 <code>func</code>，还需要再次进入冷却状态并设置 timeout 以重置它。</p>

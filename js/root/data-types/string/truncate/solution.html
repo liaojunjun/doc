@@ -1,0 +1,6 @@
+<p>最大长度必须是 <code>maxlength</code>，因此为了给省略号留空间我们需要缩短它。</p>
+<p>请注意，省略号实际上有一个单独的 unicode 字符，而不是三个点。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">truncate</span>(<span class="hljs-params">str, maxlength</span>) </span>{
+  <span class="hljs-keyword">return</span> (str.length &gt; maxlength) ?
+    str.slice(<span class="hljs-number">0</span>, maxlength - <span class="hljs-number">1</span>) + <span class="hljs-string">&#x27;…&#x27;</span> : str;
+}</code></pre>

@@ -1,0 +1,22 @@
+<h1 id="外角">外角</h1>
+<p>外角就是我们从 <a href="https://developer.mozilla.org/en-US/docs/DOM/element.getBoundingClientRect">elem.getBoundingClientRect()</a> 获取的。</p>
+<p><code>answer1</code> 为左上角的坐标，<code>answer2</code> 为右下角的坐标：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> coords = elem.getBoundingClientRect();
+
+<span class="hljs-keyword">let</span> answer1 = [coords.left, coords.top];
+<span class="hljs-keyword">let</span> answer2 = [coords.right, coords.bottom];</code></pre>
+<h1 id="左上的内角坐标">左上的内角坐标</h1>
+<p>内角与外角主要的不同在于边框的宽度。一种获取距离的可靠的方法是 <code>clientLeft/clientTop</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> answer3 = [coords.left + field.clientLeft, coords.top + field.clientTop];</code></pre>
+<h1 id="右下的内角坐标">右下的内角坐标</h1>
+<p>在我们的例子中，我们需要把外部坐标减去边框（border）大小。</p>
+<p>我们可以使用 CSS 的方式：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> answer4 = [
+  coords.right - <span class="hljs-built_in">parseInt</span>(getComputedStyle(field).borderRightWidth),
+  coords.bottom - <span class="hljs-built_in">parseInt</span>(getComputedStyle(field).borderBottomWidth)
+];</code></pre>
+<p>另一种方式是把 <code>clientWidth/clientHeight</code> 和左上角的坐标相加。这个方式相较于上一个或许更好：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> answer4 = [
+  coords.left + elem.clientLeft + elem.clientWidth,
+  coords.top + elem.clientTop + elem.clientHeight
+];</code></pre>

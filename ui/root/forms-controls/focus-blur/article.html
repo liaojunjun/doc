@@ -1,0 +1,169 @@
+<h1 id="聚焦：focusblur">聚焦：focus/blur</h1>
+<p>当用户点击某个元素或使用键盘上的 <code>key:Tab</code> 键选中时，该元素将会获得聚焦（focus）。当网页加载时，HTML-特性（attribute）<code>autofocus</code> 也可以让一个焦点落在元素上，不仅如此，还有其它途径可以获得焦点。</p>
+<p>聚焦到一个元素通常意味着：“准备在此处接受数据”，所以，这正是我们可以运行代码以初始化所需功能的时刻。</p>
+<p>失去焦点的时刻（“blur”）可能更为重要。它可能发生在用户点击页面的其它地方，或者按下 <code>key:Tab</code> 键跳转到下一个表单字段，亦或是其它途径的时候。</p>
+<p>失去焦点通常意味着：“数据已经输入完成”，所以我们可以运行代码来检查它，甚至可以将其保存到服务器上，或进行其他操作。</p>
+<p>当处理焦点事件时，有一些重要的特性。我们将尽力把这些内容介绍完整。</p>
+<h2 id="focusblur-事件">focus/blur 事件</h2>
+<p>当元素聚焦时，会触发 <code>focus</code> 事件，当元素失去焦点时，会触发 <code>blur</code> 事件。</p>
+<p>让我们使用它们来校验一个 <code>input</code> 字段。</p>
+<p>在下面这个示例中：</p>
+<ul>
+<li><code>blur</code> 事件处理程序检查这个字段是否输入了电子邮箱，如果没有输入，则显示一个 error。</li>
+<li><code>focus</code> 事件处理程序隐藏 error 信息（在 <code>blur</code> 事件处理程序上会被再检查一遍）：</li>
+</ul>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+  <span class="hljs-selector-class">.invalid</span> { <span class="hljs-attribute">border-color</span>: red; }
+  <span class="hljs-selector-id">#error</span> { <span class="hljs-attribute">color</span>: red }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+Your email please: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;email&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;input&quot;</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;error&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+*!*input.onblur*/!* = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (!input.value.includes(<span class="hljs-string">&#x27;@&#x27;</span>)) { <span class="hljs-comment">// not email</span>
+    input.classList.add(<span class="hljs-string">&#x27;invalid&#x27;</span>);
+    error.innerHTML = <span class="hljs-string">&#x27;Please enter a correct email.&#x27;</span>
+  }
+};
+
+*!*input.onfocus*/!* = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.classList.contains(<span class="hljs-string">&#x27;invalid&#x27;</span>)) {
+    <span class="hljs-comment">// 移除 &quot;error&quot; 指示，因为用户想要重新输入一些内容</span>
+    <span class="hljs-built_in">this</span>.classList.remove(<span class="hljs-string">&#x27;invalid&#x27;</span>);
+    error.innerHTML = <span class="hljs-string">&quot;&quot;</span>;
+  }
+};
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>现代 HTML 允许我们使用 <code>input</code> 特性（attribute）进行许多验证：<code>required</code>，<code>pattern</code> 等。有时它们正是我们所需要的。当我们需要更大的灵活性时，可以使用 JavaScript。如果数据是正确的，我们可以把它自动发送到服务器。</p>
+<h2 id="focusblur-方法">focus/blur 方法</h2>
+<p><code>elem.focus()</code> 和 <code>elem.blur()</code> 方法可以设置和移除元素上的焦点。</p>
+<p>例如，如果输入值无效，我们可以让焦点无法离开这个 <code>input</code> 字段：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+  <span class="hljs-selector-class">.error</span> {
+    <span class="hljs-attribute">background</span>: red;
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+Your email please: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;email&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;input&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width:220px&quot;</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">&quot;make email invalid and try to focus here&quot;</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  input.onblur = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">this</span>.value.includes(<span class="hljs-string">&#x27;@&#x27;</span>)) { <span class="hljs-comment">// not email</span>
+      <span class="hljs-comment">// 显示 error</span>
+      <span class="hljs-built_in">this</span>.classList.add(<span class="hljs-string">&quot;error&quot;</span>);
+*!*
+      <span class="hljs-comment">// ...将焦点放回来</span>
+      input.focus();
+*/!*
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-built_in">this</span>.classList.remove(<span class="hljs-string">&quot;error&quot;</span>);
+    }
+  };
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>这段代码在除了火狐（<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=53579">bug</a>）之外的浏览器上都可以正常工作。</p>
+<p>如果我们在 <code>input</code> 中输入一些内容，然后尝试使用 <code>key:Tab</code> 键或点击远离 <code>&lt;input&gt;</code> 的位置，那么 <code>onblur</code> 事件处理程序会把焦点重新设置到这个 <code>input</code> 字段上。</p>
+<p>请注意，我们无法通过在 <code>onblur</code> 事件处理程序中调用 <code>event.preventDefault()</code> 来“阻止失去焦点”，因为 <code>onblur</code> 事件处理程序是在元素失去焦点 <strong>之后</strong> 运行的。</p>
+<pre><code class="language-warn">很多种原因可以导致焦点丢失。
+
+其中之一就是用户点击了其它位置。当然 JavaScript 自身也可能导致焦点丢失，例如：
+
+- 一个 `alert` 会将焦点移至自身，因此会导致元素失去焦点（触发 `blur` 事件），而当 `alert` 对话框被取消时，焦点又回重新回到原元素上（触发 `focus` 事件）。
+- 如果一个元素被从 DOM 中移除，那么也会导致焦点丢失。如果稍后它被重新插入到 DOM，焦点也不会回到它身上。
+
+这些特性有时候会导致 `focus/blur` 处理程序发生异常 —— 在不需要它们时触发。
+
+最好的秘诀就是在使用这些事件时小心点。如果我们想要跟踪用户导致的焦点丢失，则应该避免自己造成的焦点丢失。</code></pre>
+<h2 id="允许在任何元素上聚焦：tabindex">允许在任何元素上聚焦：tabindex</h2>
+<p>默认情况下，很多元素不支持聚焦。</p>
+<p>列表（list）在不同的浏览器表现不同，但有一件事总是正确的：<code>focus/blur</code> 保证支持那些用户可以交互的元素：<code>&lt;button&gt;</code>，<code>&lt;input&gt;</code>，<code>&lt;select&gt;</code>，<code>&lt;a&gt;</code> 等。</p>
+<p>另一方面，为了格式化某些东西而存在的元素像 <code>&lt;div&gt;</code>，<code>&lt;span&gt;</code> 和 <code>&lt;table&gt;</code> —— 默认是不能被聚焦的。<code>elem.focus()</code> 方法不适用于它们，并且 <code>focus/blur</code> 事件也绝不会被触发。</p>
+<p>使用 HTML-特性（attribute）<code>tabindex</code> 可以改变这种情况。</p>
+<p>任何具有 <code>tabindex</code> 特性的元素，都会变成可聚焦的。该特性的 <code>value</code> 是当使用 <code>key:Tab</code>（或类似的东西）在元素之间进行切换时，元素的顺序号。</p>
+<p>也就是说：如果我们有两个元素，第一个具有 <code>tabindex=&quot;1&quot;</code>，第二个具有 <code>tabindex=&quot;2&quot;</code>，然后当焦点在第一个元素的时候，按下 <code>key:Tab</code> 键，会使焦点移动到第二个元素身上。</p>
+<p>切换顺序为：从 <code>1</code> 开始的具有 <code>tabindex</code> 的元素排在前面（按 <code>tabindex</code> 顺序），然后是不具有 <code>tabindex</code> 的元素（例如常规的 <code>&lt;input&gt;</code>）。</p>
+<p>具有 <code>tabindex</code> 的元素按文档源顺序（默认顺序）切换。</p>
+<p>这里有两个特殊的值：</p>
+<ul>
+<li><p><code>tabindex=&quot;0&quot;</code> 会使该元素被与那些不具有 <code>tabindex</code> 的元素放在一起。也就是说，当我们切换元素时，具有 <code>tabindex=&quot;0&quot;</code> 的元素将排在那些具有 <code>tabindex ≥ 1</code> 的元素的后面。</p>
+<p>  通常，它用于使元素具有焦点，但是保留默认的切换顺序。使元素成为与 <code>&lt;input&gt;</code> 一样的表单的一部分。</p>
+</li>
+<li><p><code>tabindex=&quot;-1&quot;</code> 只允许以编程的方式聚焦于元素。<code>key:Tab</code> 键会忽略这样的元素，但是 <code>elem.focus()</code> 有效。</p>
+</li>
+</ul>
+<p>举个例子，这里有一个列表。点击第一项，然后按 <code>key:Tab</code> 键：</p>
+<pre><code class="language-html">点击第一项，然后按 Tab 键。跟踪顺序。请注意，多按几次 Tab 键后，会将焦点移到这个通过 iframe 嵌入的示例的外面。
+<span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">tabindex</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span>One<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">tabindex</span>=<span class="hljs-string">&quot;0&quot;</span>&gt;</span>Zero<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">tabindex</span>=<span class="hljs-string">&quot;2&quot;</span>&gt;</span>Two<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">tabindex</span>=<span class="hljs-string">&quot;-1&quot;</span>&gt;</span>Minus one<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+  <span class="hljs-selector-tag">li</span> { <span class="hljs-attribute">cursor</span>: pointer; }
+  <span class="hljs-selector-pseudo">:focus</span> { <span class="hljs-attribute">outline</span>: <span class="hljs-number">1px</span> dashed green; }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></code></pre>
+<p>顺序就像这样：<code>1 - 2 - 0</code>。通常，<code>&lt;li&gt;</code> 不支持聚焦，但 <code>tabindex</code> 可以使它能聚焦，使这成为可能，并且还带有事件以及 <code>:focus</code> 样式。</p>
+<p>```smart header=&quot;属性 <code>elem.tabIndex</code> 也有效&quot;
+我们可以使用 <code>elem.tabIndex</code> 通过 JavaScript 来添加 <code>tabindex</code>。效果是一样的。</p>
+<pre><code>
+## focus/blur 委托
+
+`focus` 和 `blur` 事件不会向上冒泡。
+
+例如，我们不能把 `onfocus` 放在 `&lt;form&gt;` 上来对其进行高亮，像这样：
+
+```html autorun height=80
+&lt;!-- on focusing in the form -- add the class --&gt;
+&lt;form *!*onfocus=&quot;this.className=&#x27;focused&#x27;&quot;*/!*&gt;
+  &lt;input type=&quot;text&quot; name=&quot;name&quot; value=&quot;Name&quot;&gt;
+  &lt;input type=&quot;text&quot; name=&quot;surname&quot; value=&quot;Surname&quot;&gt;
+&lt;/form&gt;
+
+&lt;style&gt; .focused { outline: 1px solid red; } &lt;/style&gt;</code></pre>
+<p>上面这个示例并不工作，因为当用户聚焦于 <code>&lt;input&gt;</code> 时，<code>focus</code> 事件只会在该 <code>&lt;input&gt;</code> 上触发。它不会向上冒泡。所以 <code>form.onfocus</code> 永远不会触发。</p>
+<p>这里有两个解决方案。</p>
+<p>方案一，有一个遗留下来的有趣的特性（feature）：<code>focus/blur</code> 不会向上冒泡，但会在捕获阶段向下传播。</p>
+<p>这样可以生效：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;form&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Name&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;surname&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Surname&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-class">.focused</span> { <span class="hljs-attribute">outline</span>: <span class="hljs-number">1px</span> solid red; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+*!*
+  <span class="hljs-comment">// 将处理程序置于捕获阶段（最后一个参数为 true）</span>
+  form.addEventListener(<span class="hljs-string">&quot;focus&quot;</span>, <span class="hljs-function">() =&gt;</span> form.classList.add(<span class="hljs-string">&#x27;focused&#x27;</span>), <span class="hljs-literal">true</span>);
+  form.addEventListener(<span class="hljs-string">&quot;blur&quot;</span>, <span class="hljs-function">() =&gt;</span> form.classList.remove(<span class="hljs-string">&#x27;focused&#x27;</span>), <span class="hljs-literal">true</span>);
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>方案二，可以使用 <code>focusin</code> 和 <code>focusout</code> 事件 —— 与 <code>focus/blur</code> 事件完全一样，只是它们会冒泡。</p>
+<p>值得注意的是，必须使用 <code>elem.addEventListener</code> 来分配它们，而不是 <code>on&lt;event&gt;</code>。</p>
+<p>所以，这是另一个可行的变体：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;form&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Name&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;surname&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Surname&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-class">.focused</span> { <span class="hljs-attribute">outline</span>: <span class="hljs-number">1px</span> solid red; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+*!*
+  form.addEventListener(<span class="hljs-string">&quot;focusin&quot;</span>, <span class="hljs-function">() =&gt;</span> form.classList.add(<span class="hljs-string">&#x27;focused&#x27;</span>));
+  form.addEventListener(<span class="hljs-string">&quot;focusout&quot;</span>, <span class="hljs-function">() =&gt;</span> form.classList.remove(<span class="hljs-string">&#x27;focused&#x27;</span>));
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="总结">总结</h2>
+<p>在元素获得/失去焦点时会触发 <code>focus</code> 和 <code>blur</code> 事件。</p>
+<p>它们的特点是：</p>
+<ul>
+<li>它们不会冒泡。但是可以改为在捕获阶段触发，或者使用 <code>focusin/focusout</code>。</li>
+<li>大多数元素默认不支持聚焦。使用 <code>tabindex</code> 可以使任何元素变成可聚焦的。</li>
+</ul>
+<p>可以通过 <code>document.activeElement</code> 来获取当前所聚焦的元素。</p>

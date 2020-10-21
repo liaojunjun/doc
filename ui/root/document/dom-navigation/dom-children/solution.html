@@ -1,0 +1,14 @@
+<p>这里有很多种方法，例如：</p>
+<p>获取 <code>&lt;div&gt;</code> DOM 节点：</p>
+<pre><code class="language-js"><span class="hljs-built_in">document</span>.body.firstElementChild
+<span class="hljs-comment">// 或</span>
+<span class="hljs-built_in">document</span>.body.children[<span class="hljs-number">0</span>]
+<span class="hljs-comment">// 或（第一个节点是空格，所以我们应该获取的是第二个）</span>
+<span class="hljs-built_in">document</span>.body.childNodes[<span class="hljs-number">1</span>]</code></pre>
+<p>获取 <code>&lt;ul&gt;</code> DOM 节点：</p>
+<pre><code class="language-js"><span class="hljs-built_in">document</span>.body.lastElementChild
+<span class="hljs-comment">// 或</span>
+<span class="hljs-built_in">document</span>.body.children[<span class="hljs-number">1</span>]</code></pre>
+<p>获取第二个 <code>&lt;li&gt;</code>（即包含 Pete 的节点）：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 获取 &lt;ul&gt;，然后获取它的最后一个子元素</span>
+<span class="hljs-built_in">document</span>.body.lastElementChild.lastElementChild</code></pre>

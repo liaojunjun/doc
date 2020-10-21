@@ -1,0 +1,8 @@
+<p>模式的开头显而易见：<code>pattern:&lt;style</code>。</p>
+<p>...然而不能简单地写出 <code>pattern:&lt;style.*?&gt;</code> 这样的表达式，因为会同时匹配 <code>match:&lt;styler&gt;</code>。</p>
+<p>要么匹配 <code>match:&lt;style</code> 后的一个空格，然后匹配任意内容；要么直接匹配结束符号 <code>match:&gt;</code>。</p>
+<p>最终的正则表达式为：<code>pattern:&lt;style(&gt;|\s.*?&gt;)</code>。</p>
+<p>运行代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;style(&gt;|\s.*?&gt;)/g</span>;
+
+alert( <span class="hljs-string">&#x27;&lt;style&gt; &lt;styler&gt; &lt;style test=&quot;...&quot;&gt;&#x27;</span>.match(reg) ); <span class="hljs-comment">// &lt;style&gt;, &lt;style test=&quot;...&quot;&gt;</span></code></pre>

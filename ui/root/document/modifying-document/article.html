@@ -1,0 +1,436 @@
+<h1 id="修改文档（document）">修改文档（document）</h1>
+<p>DOM 修改是创建“实时”页面的关键。</p>
+<p>在这里，我们将会看到如何“即时”创建新元素并修改现有页面内容。</p>
+<h2 id="例子：展示一条消息">例子：展示一条消息</h2>
+<p>让我们使用一个示例进行演示。我们将在页面上添加一条比 <code>alert</code> 更好看的消息。</p>
+<p>它的外观如下：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+<span class="hljs-selector-class">.alert</span> {
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">15px</span>;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#d6e9c6</span>;
+  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#3c763d</span>;
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#dff0d8</span>;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+*!*
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;alert&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Hi there!<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span> You&#x27;ve read an important message.
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+*/!*</code></pre>
+<p>这是一个 HTML 示例。现在，让我们使用 JavaScript 创建一个相同的 <code>div</code>（假设样式已经在 HTML/CSS 文件中）。</p>
+<h2 id="创建一个元素">创建一个元素</h2>
+<p>要创建 DOM 节点，这里有两种方法：</p>
+<p><code>document.createElement(tag)</code>
+: 用给定的标签创建一个新 <strong>元素节点（element node）</strong>：</p>
+<pre><code>```js
+let div = document.createElement(&#x27;div&#x27;);
+```</code></pre>
+<p><code>document.createTextNode(text)</code>
+: 用给定的文本创建一个 <strong>文本节点</strong>：</p>
+<pre><code>```js
+let textNode = document.createTextNode(&#x27;Here I am&#x27;);
+```</code></pre>
+<p>大多数情况下，我们需要为此消息创建像 <code>div</code> 这样的元素节点。</p>
+<h3 id="创建一条消息">创建一条消息</h3>
+<p>创建一个消息 <code>div</code> 分为 3 个步骤：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 1. 创建 &lt;div&gt; 元素</span>
+<span class="hljs-keyword">let</span> div = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
+
+<span class="hljs-comment">// 2. 将元素的类设置为 &quot;alert&quot;</span>
+div.className = <span class="hljs-string">&quot;alert&quot;</span>;
+
+<span class="hljs-comment">// 3. 填充消息内容</span>
+div.innerHTML = <span class="hljs-string">&quot;&lt;strong&gt;Hi there!&lt;/strong&gt; You&#x27;ve read an important message.&quot;</span>;</code></pre>
+<p>我们已经创建了该元素。但到目前为止，它还只是在一个名为 <code>div</code> 的变量中，尚未在页面中。所以我们无法在页面上看到它。</p>
+<h2 id="插入方法">插入方法</h2>
+<p>为了让 <code>div</code> 显示出来，我们需要将其插入到 <code>document</code> 中的某处。例如，into <code>&lt;body&gt;</code> element, referenced by <code>document.body</code>.</p>
+<p>对此有一个特殊的方法 <code>append</code>：<code>document.body.append(div)</code>。</p>
+<p>这是完整代码：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+<span class="hljs-selector-class">.alert</span> {
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">15px</span>;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#d6e9c6</span>;
+  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#3c763d</span>;
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#dff0d8</span>;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> div = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
+  div.className = <span class="hljs-string">&quot;alert&quot;</span>;
+  div.innerHTML = <span class="hljs-string">&quot;&lt;strong&gt;Hi there!&lt;/strong&gt; You&#x27;ve read an important message.&quot;</span>;
+
+*!*
+  <span class="hljs-built_in">document</span>.body.append(div);
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>在这个例子中，我们对 <code>document.body</code> 调用了 <code>append</code> 方法。不过我们可以在其他任何元素上调用 <code>append</code> 方法，以将另外一个元素放入到里面。例如，通过调用 <code>div.append(anotherElement)</code>，我们便可以在 <code>&lt;div&gt;</code> 末尾添加一些内容。</p>
+<p>这里是更多的元素插入方法，指明了不同的插入位置：</p>
+<ul>
+<li><code>node.append(...nodes or strings)</code> —— 在 <code>node</code> <strong>末尾</strong> 插入节点或字符串，</li>
+<li><code>node.prepend(...nodes or strings)</code> —— 在 <code>node</code> <strong>开头</strong> 插入节点或字符串，</li>
+<li><code>node.before(...nodes or strings)</code> —— 在 <code>node</code> <strong>前面</strong> 插入节点或字符串，</li>
+<li><code>node.after(...nodes or strings)</code> —— 在 <code>node</code> <strong>后面</strong> 插入节点或字符串，</li>
+<li><code>node.replaceWith(...nodes or strings)</code> —— 将 <code>node</code> 替换为给定的节点或字符串。</li>
+</ul>
+<p>这些方法的参数可以是一个要插入的任意的 DOM 节点列表，或者文本字符串（会被自动转换成文本节点）。</p>
+<p>让我们在实际应用中看一看。</p>
+<p>下面是使用这些方法将列表项添加到列表中，以及将文本添加到列表前面和后面的示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">ol</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ol&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>0<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ol</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  ol.before(<span class="hljs-string">&#x27;before&#x27;</span>); <span class="hljs-comment">// 将字符串 &quot;before&quot; 插入到 &lt;ol&gt; 前面</span>
+  ol.after(<span class="hljs-string">&#x27;after&#x27;</span>); <span class="hljs-comment">// 将字符串 &quot;after&quot; 插入到 &lt;ol&gt; 后面</span>
+
+  <span class="hljs-keyword">let</span> liFirst = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;li&#x27;</span>);
+  liFirst.innerHTML = <span class="hljs-string">&#x27;prepend&#x27;</span>;
+  ol.prepend(liFirst); <span class="hljs-comment">// 将 liFirst 插入到 &lt;ol&gt; 的最开始</span>
+
+  <span class="hljs-keyword">let</span> liLast = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;li&#x27;</span>);
+  liLast.innerHTML = <span class="hljs-string">&#x27;append&#x27;</span>;
+  ol.append(liLast); <span class="hljs-comment">// 将 liLast 插入到 &lt;ol&gt; 的最末尾</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>这张图片直观地显示了这些方法所做的工作：</p>
+<p><img src="before-prepend-append-after.svg" alt=""></p>
+<p>因此，最终列表将为：</p>
+<pre><code class="language-html">before
+<span class="hljs-tag">&lt;<span class="hljs-name">ol</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ol&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>prepend<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>0<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>append<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ol</span>&gt;</span>
+after</code></pre>
+<p>如上所述，这些方法可以在单个调用中插入多个节点列表和文本片段。</p>
+<p>例如，在这里插入了一个字符串和一个元素：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;div&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  div.before(<span class="hljs-string">&#x27;&lt;p&gt;Hello&lt;/p&gt;&#x27;</span>, <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;hr&#x27;</span>));
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>请注意：这里的文字都被“作为文本”插入，而不是“作为 HTML 代码”。因此像 <code>&lt;</code>、<code>&gt;</code> 这样的符号都会被作转义处理来保证正确显示。</p>
+<p>所以，最终的 HTML 为：</p>
+<pre><code class="language-html">*!*
+<span class="hljs-symbol">&amp;lt;</span>p<span class="hljs-symbol">&amp;gt;</span>Hello<span class="hljs-symbol">&amp;lt;</span>/p<span class="hljs-symbol">&amp;gt;</span>
+*/!*
+<span class="hljs-tag">&lt;<span class="hljs-name">hr</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;div&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<p>换句话说，字符串被以一种安全的方式插入到页面中，就像 <code>elem.textContent</code> 所做的一样。</p>
+<p>所以，这些方法只能用来插入 DOM 节点或文本片段。</p>
+<p>但如果我们想要将内容“作为 HTML 代码插入”，让内容中的所有标签和其他东西都像使用 <code>elem.innerHTML</code> 所表现的效果一样，那应该怎么办呢？</p>
+<h2 id="insertadjacenthtmltextelement">insertAdjacentHTML/Text/Element</h2>
+<p>为此，我们可以使用另一个非常通用的方法：<code>elem.insertAdjacentHTML(where, html)</code>。</p>
+<p>该方法的第一个参数是代码字（code word），指定相对于 <code>elem</code> 的插入位置。必须为以下之一：</p>
+<ul>
+<li><code>&quot;beforebegin&quot;</code> — 将 <code>html</code> 插入到 <code>elem</code> 前插入，</li>
+<li><code>&quot;afterbegin&quot;</code> — 将 <code>html</code> 插入到 <code>elem</code> 开头，</li>
+<li><code>&quot;beforeend&quot;</code> — 将 <code>html</code> 插入到 <code>elem</code> 末尾，</li>
+<li><code>&quot;afterend&quot;</code> — 将 <code>html</code> 插入到 <code>elem</code> 后。</li>
+</ul>
+<p>第二个参数是 HTML 字符串，该字符串会被“作为 HTML” 插入。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;div&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  div.insertAdjacentHTML(<span class="hljs-string">&#x27;beforebegin&#x27;</span>, <span class="hljs-string">&#x27;&lt;p&gt;Hello&lt;/p&gt;&#x27;</span>);
+  div.insertAdjacentHTML(<span class="hljs-string">&#x27;afterend&#x27;</span>, <span class="hljs-string">&#x27;&lt;p&gt;Bye&lt;/p&gt;&#x27;</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>……将导致：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;div&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Bye<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></code></pre>
+<p>这就是我们可以在页面上附加任意 HTML 的方式。</p>
+<p>这是插入变体的示意图：</p>
+<p><img src="insert-adjacent.svg" alt=""></p>
+<p>我们很容易就会注意到这张图片和上一张图片的相似之处。插入点实际上是相同的，但此方法插入的是 HTML。</p>
+<p>这个方法有两个兄弟：</p>
+<ul>
+<li><code>elem.insertAdjacentText(where, text)</code> — 语法一样，但是将 <code>text</code> 字符串“作为文本”插入而不是作为 HTML，</li>
+<li><code>elem.insertAdjacentElement(where, elem)</code> — 语法一样，但是插入的是一个元素。</li>
+</ul>
+<p>它们的存在主要是为了使语法“统一”。实际上，大多数时候只使用 <code>insertAdjacentHTML</code>。因为对于元素和文本，我们有 <code>append/prepend/before/after</code> 方法 — 它们也可以用于插入节点/文本片段，但写起来更短。</p>
+<p>所以，下面是显示一条消息的另一种变体：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+<span class="hljs-selector-class">.alert</span> {
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">15px</span>;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#d6e9c6</span>;
+  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#3c763d</span>;
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#dff0d8</span>;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
+  document.body.insertAdjacentHTML(&quot;afterbegin&quot;, `<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;alert&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Hi there!<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span> You&#x27;ve read an important message.
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>`);
+</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="节点移除">节点移除</h2>
+<p>想要移除一个节点，可以使用 <code>node.remove()</code>。</p>
+<p>让我们的消息在一秒后消失：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+<span class="hljs-selector-class">.alert</span> {
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">15px</span>;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#d6e9c6</span>;
+  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#3c763d</span>;
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#dff0d8</span>;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> div = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
+  div.className = <span class="hljs-string">&quot;alert&quot;</span>;
+  div.innerHTML = <span class="hljs-string">&quot;&lt;strong&gt;Hi there!&lt;/strong&gt; You&#x27;ve read an important message.&quot;</span>;
+
+  <span class="hljs-built_in">document</span>.body.append(div);
+*!*
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> div.remove(), <span class="hljs-number">1000</span>);
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>请注意：如果我们要将一个元素 <strong>移动</strong> 到另一个地方，则无需将其从原来的位置中删除。</p>
+<p><strong>所有插入方法都会自动从旧位置删除该节点。</strong></p>
+<p>例如，让我们进行元素交换：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;first&quot;</span>&gt;</span>First<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;second&quot;</span>&gt;</span>Second<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 无需调用 remove</span>
+  second.after(first); <span class="hljs-comment">// 获取 #second，并在其后面插入 #first</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="克隆节点：clonenode">克隆节点：cloneNode</h2>
+<p>如何再插入一条类似的消息？</p>
+<p>我们可以创建一个函数，并将代码放在其中。但是另一种方法是 <strong>克隆</strong> 现有的 <code>div</code>，并修改其中的文本（如果需要）。</p>
+<p>当我们有一个很大的元素时，克隆的方式可能更快更简单。</p>
+<p>调用 <code>elem.cloneNode(true)</code> 来创建元素的一个“深”克隆 — 具有所有特性（attribute）和子元素。如果我们调用 <code>elem.cloneNode(false)</code>，那克隆就不包括子元素。</p>
+<p>一个拷贝消息的示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+<span class="hljs-selector-class">.alert</span> {
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">15px</span>;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#d6e9c6</span>;
+  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#3c763d</span>;
+  <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#dff0d8</span>;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;alert&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;div&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Hi there!<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span> You&#x27;ve read an important message.
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+*!*
+  <span class="hljs-keyword">let</span> div2 = div.cloneNode(<span class="hljs-literal">true</span>); <span class="hljs-comment">// 克隆消息</span>
+  div2.querySelector(<span class="hljs-string">&#x27;strong&#x27;</span>).innerHTML = <span class="hljs-string">&#x27;Bye there!&#x27;</span>; <span class="hljs-comment">// 修改克隆</span>
+
+  div.after(div2); <span class="hljs-comment">// 在已有的 div 后显示克隆</span>
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="documentfragment-document-fragment">DocumentFragment [#document-fragment]</h2>
+<p><code>DocumentFragment</code> 是一个特殊的 DOM 节点，用作来传递节点列表的包装器（wrapper）。</p>
+<p>我们可以向其附加其他节点，但是当我们将其插入某个位置时，则会插入其内容。</p>
+<p>例如，下面这段代码中的 <code>getListContent</code> 会生成带有 <code>&lt;li&gt;</code> 列表项的片段，然后将其插入到 <code>&lt;ul&gt;</code> 中：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ul&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getListContent</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> fragment = <span class="hljs-keyword">new</span> DocumentFragment();
+
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-number">3</span>; i++) {
+    <span class="hljs-keyword">let</span> li = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;li&#x27;</span>);
+    li.append(i);
+    fragment.append(li);
+  }
+
+  <span class="hljs-keyword">return</span> fragment;
+}
+
+*!*
+ul.append(getListContent()); <span class="hljs-comment">// (*)</span>
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>请注意，在最后一行 <code>(*)</code> 我们附加了 <code>DocumentFragment</code>，但是它和 <code>ul</code> “融为一体（blends in）”了，所以最终的文档结构应该是：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>3<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></code></pre>
+<p><code>DocumentFragment</code> 很少被显式使用。如果可以改为返回一个节点数组，那为什么还要附加到特殊类型的节点上呢？重写示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ul&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getListContent</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> result = [];
+
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i=<span class="hljs-number">1</span>; i&lt;=<span class="hljs-number">3</span>; i++) {
+    <span class="hljs-keyword">let</span> li = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;li&#x27;</span>);
+    li.append(i);
+    result.push(li);
+  }
+
+  <span class="hljs-keyword">return</span> result;
+}
+
+*!*
+ul.append(...getListContent()); <span class="hljs-comment">// append + &quot;...&quot; operator = friends!</span>
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>我们之所以提到 <code>DocumentFragment</code>，主要是因为它上面有一些概念，例如 <a href="info:template-element">template</a> 元素，我们将在以后讨论。</p>
+<h2 id="老式的-insertremove-方法">老式的 insert/remove 方法</h2>
+<p>[old]</p>
+<p>由于历史原因，还存在“老式”的 DOM 操作方法。</p>
+<p>这些方法来自真正的远古时代。如今，没有理由再使用它们了，因为诸如 <code>append</code>，<code>prepend</code>，<code>before</code>，<code>after</code>，<code>remove</code>，<code>replaceWith</code> 这些现代方法更加灵活。</p>
+<p>我们在这儿列出这些方法的唯一原因是，你可能会在许多脚本中遇到它们。</p>
+<p><code>parentElem.appendChild(node)</code>
+: 将 <code>node</code> 附加为 <code>parentElem</code> 的最后一个子元素。</p>
+<pre><code>下面这个示例在 `&lt;ol&gt;` 的末尾添加了一个新的 `&lt;li&gt;`：
+
+```html run height=100
+&lt;ol id=&quot;list&quot;&gt;
+  &lt;li&gt;0&lt;/li&gt;
+  &lt;li&gt;1&lt;/li&gt;
+  &lt;li&gt;2&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;script&gt;
+  let newLi = document.createElement(&#x27;li&#x27;);
+  newLi.innerHTML = &#x27;Hello, world!&#x27;;
+
+  list.appendChild(newLi);
+&lt;/script&gt;
+```</code></pre>
+<p><code>parentElem.insertBefore(node, nextSibling)</code>
+: 在 <code>parentElem</code> 的 <code>nextSibling</code> 前插入 <code>node</code>。</p>
+<pre><code>下面这段代码在第二个 `&lt;li&gt;` 前插入了一个新的列表项：
+
+```html run height=100
+&lt;ol id=&quot;list&quot;&gt;
+  &lt;li&gt;0&lt;/li&gt;
+  &lt;li&gt;1&lt;/li&gt;
+  &lt;li&gt;2&lt;/li&gt;
+&lt;/ol&gt;
+&lt;script&gt;
+  let newLi = document.createElement(&#x27;li&#x27;);
+  newLi.innerHTML = &#x27;Hello, world!&#x27;;
+
+*!*
+  list.insertBefore(newLi, list.children[1]);
+*/!*
+&lt;/script&gt;
+```
+如果要将 `newLi` 插入为第一个元素，我们可以这样做：
+
+```js
+list.insertBefore(newLi, list.firstChild);
+```</code></pre>
+<p><code>parentElem.replaceChild(node, oldChild)</code>
+: 将 <code>parentElem</code> 的后代中的 <code>oldChild</code> 替换为 <code>node</code>。</p>
+<p><code>parentElem.removeChild(node)</code>
+: 从 <code>parentElem</code> 中删除 <code>node</code>（假设 <code>node</code> 为 <code>parentElem</code> 的后代）。</p>
+<pre><code>下面这个示例从 `&lt;ol&gt;` 中删除了 `&lt;li&gt;`：
+
+```html run height=100
+&lt;ol id=&quot;list&quot;&gt;
+  &lt;li&gt;0&lt;/li&gt;
+  &lt;li&gt;1&lt;/li&gt;
+  &lt;li&gt;2&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;script&gt;
+  let li = list.firstElementChild;
+  list.removeChild(li);
+&lt;/script&gt;
+```</code></pre>
+<p>所有这些方法都会返回插入/删除的节点。换句话说，<code>parentElem.appendChild(node)</code> 返回 <code>node</code>。但是通常我们不会使用返沪值，我们只是使用对应的方法。</p>
+<h2 id="聊一聊-documentwrite">聊一聊 &quot;document.write&quot;</h2>
+<p>还有一个非常古老的向网页添加内容的方法：<code>document.write</code>。</p>
+<p>语法如下：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Somewhere in the page...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+*!*
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-built_in">document</span>.write(<span class="hljs-string">&#x27;&lt;b&gt;Hello from JS&lt;/b&gt;&#x27;</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+*/!*
+<span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>The end<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></code></pre>
+<p>调用 <code>document.write(html)</code> 意味着将 <code>html</code> “就地马上”写入页面。<code>html</code> 字符串可以是动态生成的，所以它很灵活。我们可以使用 JavaScript 创建一个完整的页面并对其进行写入。</p>
+<p>这个方法来自于没有 DOM，没有标准的上古时期……。但这个方法依被保留了下来，因为还有脚本在使用它。</p>
+<p>由于以下重要的限制，在现代脚本中我们很少看到它：</p>
+<p><strong><code>document.write</code> 调用只在页面加载时工作。</strong></p>
+<p>如果我们稍后调用它，则现有文档内容将被擦除。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>After one second the contents of this page will be replaced...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+*!*
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 1 秒后调用 document.write</span>
+  <span class="hljs-comment">// 这时页面已经加载完成，所以它会擦除现有内容</span>
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">document</span>.write(<span class="hljs-string">&#x27;&lt;b&gt;...By this.&lt;/b&gt;&#x27;</span>), <span class="hljs-number">1000</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+*/!*</code></pre>
+<p>因此，在某种程度上讲，它在“加载完成”阶段是不可用的，这与我们上面介绍的其他 DOM 方法不同。</p>
+<p>这是它的缺陷。</p>
+<p>还有一个好处。从技术上讲，当在浏览器正在读取（“解析”）传入的 HTML 时调用 <code>document.write</code> 方法来写入一些东西，浏览器会像它本来就在 HTML 文本中那样使用它。</p>
+<p>所以它运行起来出奇的快，因为它 <strong>不涉及 DOM 修改</strong>。它直接写入到页面文本中，而此时 DOM 尚未构建。</p>
+<p>因此，如果我们需要向 HTML 动态地添加大量文本，并且我们正处于页面加载阶段，并且速度很重要，那么它可能会有帮助。但实际上，这些要求很少同时出现。我们可以在脚本中看到此方法，通常是因为这些脚本很旧。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li><p>创建新节点的方法：</p>
+<ul>
+<li><code>document.createElement(tag)</code> — 用给定的标签创建一个元素节点，</li>
+<li><code>document.createTextNode(value)</code> — 创建一个文本节点（很少使用），</li>
+<li><code>elem.cloneNode(deep)</code> — 克隆元素，如果 <code>deep==true</code> 则与其后代一起克隆。</li>
+</ul>
+</li>
+<li><p>插入和移除节点的方法：</p>
+<ul>
+<li><p><code>node.append(...nodes or strings)</code> — 在 <code>node</code> 末尾插入，</p>
+</li>
+<li><p><code>node.prepend(...nodes or strings)</code> — 在 <code>node</code> 开头插入，</p>
+</li>
+<li><p><code>node.before(...nodes or strings)</code> — 在 <code>node</code> 之前插入，</p>
+</li>
+<li><p><code>node.after(...nodes or strings)</code> — 在 <code>node</code> 之后插入，</p>
+</li>
+<li><p><code>node.replaceWith(...nodes or strings)</code> — 替换 <code>node</code>。</p>
+</li>
+<li><p><code>node.remove()</code> — 移除 <code>node</code>。</p>
+<p>文本字符串被“作为文本”插入。</p>
+</li>
+</ul>
+</li>
+<li><p>这里还有“旧式”的方法：</p>
+<ul>
+<li><p><code>parent.appendChild(node)</code></p>
+</li>
+<li><p><code>parent.insertBefore(node, nextSibling)</code></p>
+</li>
+<li><p><code>parent.removeChild(node)</code></p>
+</li>
+<li><p><code>parent.replaceChild(newElem, node)</code></p>
+<p>这些方法都返回 <code>node</code>。</p>
+</li>
+</ul>
+</li>
+<li><p>在 <code>html</code> 中给定一些 HTML，<code>elem.insertAdjacentHTML(where, html)</code> 会根据 <code>where</code> 的值来插入它：</p>
+<ul>
+<li><code>&quot;beforebegin&quot;</code> — 将 <code>html</code> 插入到 <code>elem</code> 前面，</li>
+<li><code>&quot;afterbegin&quot;</code> — 将 <code>html</code> 插入到 <code>elem</code> 的开头，</li>
+<li><code>&quot;beforeend&quot;</code> — 将 <code>html</code> 插入到 <code>elem</code> 的末尾，</li>
+<li><code>&quot;afterend&quot;</code> — 将 <code>html</code> 插入到 <code>elem</code> 后面。</li>
+</ul>
+</li>
+</ul>
+<p>另外，还有类似的方法，<code>elem.insertAdjacentText</code> 和 <code>elem.insertAdjacentElement</code>，它们会插入文本字符串和元素，但很少使用。</p>
+<ul>
+<li><p>要在页面加载完成之前将 HTML 附加到页面：</p>
+<ul>
+<li><p><code>document.write(html)</code></p>
+<p>页面加载完成后，这样的调用将会擦除文档。多见于旧脚本。</p>
+</li>
+</ul>
+</li>
+</ul>

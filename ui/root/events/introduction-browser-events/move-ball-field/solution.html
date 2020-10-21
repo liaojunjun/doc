@@ -1,0 +1,28 @@
+<p>首先，我们需要选择一种定位球的方法。</p>
+<p>我们不能使用 <code>position:fixed</code>，因为滚动页面会造成球被移出球场。</p>
+<p>所以我们应该使用 <code>position:absolute</code>，并且要使定位真正可靠，应该使 <code>field</code> 自身具有 <code>position:absolute</code>。</p>
+<p>然后，球将相对于球场定位：</p>
+<pre><code class="language-css"><span class="hljs-selector-id">#field</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">200px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">150px</span>;
+  <span class="hljs-attribute">position</span>: relative;
+}
+
+<span class="hljs-selector-id">#ball</span> {
+  <span class="hljs-attribute">position</span>: absolute;
+  <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>; <span class="hljs-comment">/* 相对于最接近的祖先（field） */</span>
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">transition</span>: <span class="hljs-number">1s</span> all; <span class="hljs-comment">/* left/top 的 CSS 动画，使球飞起来 */</span>
+}</code></pre>
+<p>接下来我们需要指定正确的 <code>ball.style.left/top</code>。它们现在包含相对于球场的坐标。</p>
+<p>这是示意图：</p>
+<p><img src="move-ball-coords.svg" alt=""></p>
+<p>我们有 <code>event.clientX/clientY</code> —— 点击位置的窗口相对坐标。</p>
+<p>要获取点击位置的球场相对坐标 <code>left</code>，我们可以减去球场左边缘和边框的宽度：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> left = event.clientX - fieldCoords.left - field.clientLeft;</code></pre>
+<p>通常情况下，<code>ball.style.left</code> 表示“元素的左边缘”（球）。因此，如果我们将其指定为 <code>left</code>，那么球的边缘而非球的中心将位于鼠标光标下方。</p>
+<p>我们需要将球向左移动球宽度的一半，向上移动球高度的一半，以使其居中。</p>
+<p>所以，最后的 <code>left</code> 将是：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> left = event.clientX - fieldCoords.left - field.clientLeft - ball.offsetWidth/<span class="hljs-number">2</span>;</code></pre>
+<p>使用相同的逻辑来计算垂直坐标。</p>
+<p>请注意，球的宽度/高度必须在我们访问 <code>ball.offsetWidth</code> 时就已知。应该在 HTML 或 CSS 中指定。</p>

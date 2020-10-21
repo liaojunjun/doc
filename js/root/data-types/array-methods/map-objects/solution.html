@@ -1,0 +1,36 @@
+<pre><code class="language-js"><span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Smith&quot;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> };
+<span class="hljs-keyword">let</span> pete = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pete&quot;</span>, <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Hunt&quot;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">2</span> };
+<span class="hljs-keyword">let</span> mary = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Key&quot;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">3</span> };
+
+<span class="hljs-keyword">let</span> users = [ john, pete, mary ];
+
+*!*
+<span class="hljs-keyword">let</span> usersMapped = users.map(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> ({
+  <span class="hljs-attr">fullName</span>: <span class="hljs-string">`<span class="hljs-subst">${user.name}</span> <span class="hljs-subst">${user.surname}</span>`</span>,
+  <span class="hljs-attr">id</span>: user.id
+}));
+*/!*
+
+<span class="hljs-comment">/*
+usersMapped = [
+  { fullName: &quot;John Smith&quot;, id: 1 },
+  { fullName: &quot;Pete Hunt&quot;, id: 2 },
+  { fullName: &quot;Mary Key&quot;, id: 3 }
+]
+*/</span>
+
+alert( usersMapped[<span class="hljs-number">0</span>].id ); <span class="hljs-comment">// 1</span>
+alert( usersMapped[<span class="hljs-number">0</span>].fullName ); <span class="hljs-comment">// John Smith</span></code></pre>
+<p>请注意，在箭头函数中，我们需要使用额外的括号。 </p>
+<p>我们不能这样写：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> usersMapped = users.map(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> *!*{*/!*
+  fullName: <span class="hljs-string">`<span class="hljs-subst">${user.name}</span> <span class="hljs-subst">${user.surname}</span>`</span>,
+  <span class="hljs-attr">id</span>: user.id
+});</code></pre>
+<p>我们记得，有两种箭头函数的写法：直接返回值 <code>value =&gt; expr</code> 和带主体的 <code>value =&gt; {...}</code>。</p>
+<p>JavaScript 在这里会把 <code>{</code> 视为函数体的开始，而不是对象的开始。解决方法是将它们包装在普通括号 <code>()</code> 中：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> usersMapped = users.map(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> *!*({*/!*
+  fullName: <span class="hljs-string">`<span class="hljs-subst">${user.name}</span> <span class="hljs-subst">${user.surname}</span>`</span>,
+  <span class="hljs-attr">id</span>: user.id
+}));</code></pre>
+<p>这样就可以了。</p>

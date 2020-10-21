@@ -1,0 +1,13 @@
+<p>答案是 <code>pattern:/&quot;(\\.|[^&quot;\\])*&quot;/g</code>。</p>
+<p>步骤如下：</p>
+<ul>
+<li>首先匹配左双引号 <code>pattern:&quot;</code></li>
+<li>接着如果有反斜杠 <code>pattern:\\</code>，则匹配其后跟随的任意字符。（技术上，我们必须在模式中用双反斜杠，因为它是一个特殊的字符，但实际上是一个反斜杠字符）</li>
+<li>如果没有，则匹配除双引号（字符串的结束）和反斜杠（排除仅存在反斜杠的情况，反斜杠仅在和其后字符一起使用时有效）外的任意字符：<code>pattern:[^&quot;\\]</code></li>
+<li>...继续匹配直到遇到反双引号</li>
+</ul>
+<p>运行代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&quot;(\\.|[^&quot;\\])*&quot;/g</span>;
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27; .. &quot;test me&quot; .. &quot;Say \\&quot;Hello\\&quot;!&quot; .. &quot;\\\\ \\&quot;&quot; .. &#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &quot;test me&quot;,&quot;Say \&quot;Hello\&quot;!&quot;,&quot;\\ \&quot;&quot;</span></code></pre>

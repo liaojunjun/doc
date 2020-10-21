@@ -1,0 +1,144 @@
+<h1 id="formdata">FormData</h1>
+<p>这一章是关于发送 HTML 表单的：带有或不带文件，带有其他字段等。</p>
+<p><a href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> 对象可以提供帮助。你可能已经猜到了，它是表示 HTML 表单数据的对象。</p>
+<p>构造函数是：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> formData = <span class="hljs-keyword">new</span> FormData([form]);</code></pre>
+<p>如果提供了 HTML <code>form</code> 元素，它会自动捕获 <code>form</code> 元素字段。</p>
+<p><code>FormData</code> 的特殊之处在于网络方法（network methods），例如 <code>fetch</code> 可以接受一个 <code>FormData</code> 对象作为 body。它会被编码并发送出去，带有 <code>Content-Type: multipart/form-data</code>。</p>
+<p>从服务器角度来看，它就像是一个普通的表单提交。</p>
+<h2 id="发送一个简单的表单">发送一个简单的表单</h2>
+<p>我们先来发送一个简单的表单。</p>
+<p>正如你所看到的，它几乎就是一行代码：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;formElem&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;John&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;surname&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Smith&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  formElem.onsubmit = <span class="hljs-keyword">async</span> (e) =&gt; {
+    e.preventDefault();
+
+    <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/formdata/post/user&#x27;</span>, {
+      <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+*!*
+      body: <span class="hljs-keyword">new</span> FormData(formElem)
+*/!*
+    });
+
+    <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
+
+    alert(result.message);
+  };
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>在这个示例中，没有将服务器代码展示出来，因为它超出了我们当前的学习范围。服务器接受 POST 请求并回应 &quot;User saved&quot;。</p>
+<h2 id="formdata-方法">FormData 方法</h2>
+<p>我们可以使用以下方法修改 <code>FormData</code> 中的字段：</p>
+<ul>
+<li><code>formData.append(name, value)</code> —— 添加具有给定 <code>name</code> 和 <code>value</code> 的表单字段，</li>
+<li><code>formData.append(name, blob, fileName)</code> —— 添加一个字段，就像它是 <code>&lt;input type=&quot;file&quot;&gt;</code>，第三个参数 <code>fileName</code> 设置文件名（而不是表单字段名），因为它是用户文件系统中文件的名称，</li>
+<li><code>formData.delete(name)</code> —— 移除带有给定 <code>name</code> 的字段，</li>
+<li><code>formData.get(name)</code> —— 获取带有给定 <code>name</code> 的字段值，</li>
+<li><code>formData.has(name)</code> —— 如果存在带有给定 <code>name</code> 的字段，则返回 <code>true</code>，否则返回 <code>false</code>。</li>
+</ul>
+<p>从技术上来讲，一个表单可以包含多个具有相同 <code>name</code> 的字段，因此，多次调用 <code>append</code> 将会添加多个具有相同名称的字段。</p>
+<p>还有一个 <code>set</code> 方法，语法与 <code>append</code> 相同。不同之处在于 <code>.set</code> 移除所有具有给定 <code>name</code> 的字段，然后附加一个新字段。因此，它确保了只有一个具有这种 <code>name</code> 的字段，其他的和 <code>append</code> 一样：</p>
+<ul>
+<li><code>formData.set(name, value)</code>，</li>
+<li><code>formData.set(name, blob, fileName)</code>。</li>
+</ul>
+<p>我们也可以使用 <code>for..of</code> 循环迭代 formData 字段：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> formData = <span class="hljs-keyword">new</span> FormData();
+formData.append(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;value1&#x27;</span>);
+formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;value2&#x27;</span>);
+
+<span class="hljs-comment">// 列出 key/value 对</span>
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> [name, value] <span class="hljs-keyword">of</span> formData) {
+  alert(<span class="hljs-string">`<span class="hljs-subst">${name}</span> = <span class="hljs-subst">${value}</span>`</span>); <span class="hljs-comment">// key1=value1，然后是 key2=value2</span>
+}</code></pre>
+<h2 id="发送带有文件的表单">发送带有文件的表单</h2>
+<p>表单始终以 <code>Content-Type: multipart/form-data</code> 来发送数据，这个编码允许发送文件。因此 <code>&lt;input type=&quot;file&quot;&gt;</code> 字段也能被发送，类似于普通的表单提交。</p>
+<p>这是具有这种形式的示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;formElem&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;firstName&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;John&quot;</span>&gt;</span>
+  Picture: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;file&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;picture&quot;</span> <span class="hljs-attr">accept</span>=<span class="hljs-string">&quot;image/*&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  formElem.onsubmit = <span class="hljs-keyword">async</span> (e) =&gt; {
+    e.preventDefault();
+
+    <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/formdata/post/user-avatar&#x27;</span>, {
+      <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+*!*
+      body: <span class="hljs-keyword">new</span> FormData(formElem)
+*/!*
+    });
+
+    <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
+
+    alert(result.message);
+  };
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="发送具有-blob-数据的表单">发送具有 Blob 数据的表单</h2>
+<p>正如我们在 <a href="info:fetch">info:fetch</a> 一章中所看到的，以 <code>Blob</code> 发送一个动态生成的二进制数据，例如图片，是很简单的。我们可以直接将其作为 <code>fetch</code> 参数的 <code>body</code>。</p>
+<p>但在实际中，通常更方便的发送图片的方式不是单独发送，而是将其作为表单的一部分，并带有附加字段（例如 &quot;name&quot; 和其他 metadata）一起发送。</p>
+<p>并且，服务器通常更适合接收多部分编码的表单（multipart-encoded form），而不是原始的二进制数据。</p>
+<p>下面这个例子使用 <code>FormData</code> 将一个来自 <code>&lt;canvas&gt;</code> 的图片和一些其他字段一起作为一个表单提交：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin:0&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;canvasElem&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;100&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;80&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;border:1px solid&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;submit()&quot;</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    canvasElem.onmousemove = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+      <span class="hljs-keyword">let</span> ctx = canvasElem.getContext(<span class="hljs-string">&#x27;2d&#x27;</span>);
+      ctx.lineTo(e.clientX, e.clientY);
+      ctx.stroke();
+    };
+
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">submit</span>(<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">let</span> imageBlob = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> canvasElem.toBlob(resolve, <span class="hljs-string">&#x27;image/png&#x27;</span>));
+
+*!*
+      <span class="hljs-keyword">let</span> formData = <span class="hljs-keyword">new</span> FormData();
+      formData.append(<span class="hljs-string">&quot;firstName&quot;</span>, <span class="hljs-string">&quot;John&quot;</span>);
+      formData.append(<span class="hljs-string">&quot;image&quot;</span>, imageBlob, <span class="hljs-string">&quot;image.png&quot;</span>);
+*/!*    
+
+      <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/formdata/post/image-form&#x27;</span>, {
+        <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+        <span class="hljs-attr">body</span>: formData
+      });
+      <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
+      alert(result.message);
+    }
+
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
+<p>请注意图片 <code>Blob</code> 是如何添加的：</p>
+<pre><code class="language-js">formData.append(<span class="hljs-string">&quot;image&quot;</span>, imageBlob, <span class="hljs-string">&quot;image.png&quot;</span>);</code></pre>
+<p>就像表单中有 <code>&lt;input type=&quot;file&quot; name=&quot;image&quot;&gt;</code> 一样，用户从他们的文件系统中使用数据 <code>imageBlob</code>（第二个参数）提交了一个名为 <code>image.png</code>（第三个参数）的文件。</p>
+<p>服务器读取表单数据和文件，就好像它是常规的表单提交一样。</p>
+<h2 id="总结">总结</h2>
+<p><a href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> 对象用于捕获 HTML 表单，并使用 <code>fetch</code> 或其他网络方法提交。</p>
+<p>我们可以从 HTML 表单创建 <code>new FormData(form)</code>，也可以创建一个完全没有表单的对象，然后使用以下方法附加字段：</p>
+<ul>
+<li><code>formData.append(name, value)</code></li>
+<li><code>formData.append(name, blob, fileName)</code></li>
+<li><code>formData.set(name, value)</code></li>
+<li><code>formData.set(name, blob, fileName)</code></li>
+</ul>
+<p>让我们在这里注意两个特点：</p>
+<ol>
+<li><code>set</code> 方法会移除具有相同名称（name）的字段，而 <code>append</code> 不会。</li>
+<li>要发送文件，需要使用三个参数的语法，最后一个参数是文件名，一般是通过 <code>&lt;input type=&quot;file&quot;&gt;</code> 从用户文件系统中获取的。</li>
+</ol>
+<p>其他方法是：</p>
+<ul>
+<li><code>formData.delete(name)</code></li>
+<li><code>formData.get(name)</code></li>
+<li><code>formData.has(name)</code></li>
+</ul>
+<p>这就是它的全貌！</p>

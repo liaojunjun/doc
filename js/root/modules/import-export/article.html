@@ -1,0 +1,320 @@
+<h1 id="导出和导入">导出和导入</h1>
+<p>导出（export）和导入（import）指令有几种语法变体。</p>
+<p>在上一节，我们看到了一个简单的用法，现在让我们来探索更多示例吧。</p>
+<h2 id="在声明前导出">在声明前导出</h2>
+<p>我们可以通过在声明之前放置 <code>export</code> 来标记任意声明为导出，无论声明的是变量，函数还是类都可以。</p>
+<p>例如，这里的所有导出均有效：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 导出数组</span>
+*!*<span class="hljs-keyword">export</span>*/!* <span class="hljs-keyword">let</span> months = [<span class="hljs-string">&#x27;Jan&#x27;</span>, <span class="hljs-string">&#x27;Feb&#x27;</span>, <span class="hljs-string">&#x27;Mar&#x27;</span>,<span class="hljs-string">&#x27;Apr&#x27;</span>, <span class="hljs-string">&#x27;Aug&#x27;</span>, <span class="hljs-string">&#x27;Sep&#x27;</span>, <span class="hljs-string">&#x27;Oct&#x27;</span>, <span class="hljs-string">&#x27;Nov&#x27;</span>, <span class="hljs-string">&#x27;Dec&#x27;</span>];
+
+<span class="hljs-comment">// 导出 const 声明的变量</span>
+*!*<span class="hljs-keyword">export</span>*/!* <span class="hljs-keyword">const</span> MODULES_BECAME_STANDARD_YEAR = <span class="hljs-number">2015</span>;
+
+<span class="hljs-comment">// 导出类</span>
+*!*<span class="hljs-keyword">export</span>*/!* <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+  <span class="hljs-keyword">constructor</span>(name) {
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+}</code></pre>
+<pre><code class="language-smart">注意，在类或者函数前的 `export` 不会让它们变成 [函数表达式](info:function-expressions)。尽管被导出了，但它仍然是一个函数声明。
+
+大部分 JavaScript 样式指南都不建议在函数和类声明后使用分号。
+
+这就是为什么在 `export class` 和 `export function` 的末尾不需要加分号：
+
+```js
+export function sayHi(user) {
+  alert(`Hello, ${user}!`);
+} *!* // 在这里没有分号 ; */!*
+```
+</code></pre>
+<h2 id="导出与声明分开">导出与声明分开</h2>
+<p>另外，我们还可以将 <code>export</code> 分开放置。</p>
+<p>下面的例子中，我们先声明函数，然后再导出它们：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 say.js</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">user</span>) </span>{
+  alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${user}</span>!`</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayBye</span>(<span class="hljs-params">user</span>) </span>{
+  alert(<span class="hljs-string">`Bye, <span class="hljs-subst">${user}</span>!`</span>);
+}
+
+*!*
+<span class="hljs-keyword">export</span> {sayHi, sayBye}; <span class="hljs-comment">// 导出变量列表</span>
+*/!*</code></pre>
+<p>……从技术上讲，我们也可以把 <code>export</code> 放在函数上面。</p>
+<h2 id="import-">Import *</h2>
+<p>通常，我们把要导入的东西列在花括号 <code>import {...}</code> 中，就像这样：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 main.js</span>
+*!*
+<span class="hljs-keyword">import</span> {sayHi, sayBye} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./say.js&#x27;</span>;
+*/!*
+
+sayHi(<span class="hljs-string">&#x27;John&#x27;</span>); <span class="hljs-comment">// Hello, John!</span>
+sayBye(<span class="hljs-string">&#x27;John&#x27;</span>); <span class="hljs-comment">// Bye, John!</span></code></pre>
+<p>但是如果有很多要导入的内容，我们可以使用 <code>import * as &lt;obj&gt;</code> 将所有内容导入为一个对象，例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 main.js</span>
+*!*
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> say <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./say.js&#x27;</span>;
+*/!*
+
+say.sayHi(<span class="hljs-string">&#x27;John&#x27;</span>);
+say.sayBye(<span class="hljs-string">&#x27;John&#x27;</span>);</code></pre>
+<p>乍一看，“通通导入”看起来很酷，写起来也很短，但是我们通常为什么要明确列出我们需要导入的内容？</p>
+<p>这里有几个原因。</p>
+<ol>
+<li><p>现代的构建工具（<a href="http://webpack.github.io">webpack</a> 和其他工具）将模块打包到一起并对其进行优化，以加快加载速度并删除未使用的代码。</p>
+<p> 比如说，我们向我们的项目里添加一个第三方库 <code>say.js</code>，它具有许多函数：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 say.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{ ... }
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayBye</span>(<span class="hljs-params"></span>) </span>{ ... }
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">becomeSilent</span>(<span class="hljs-params"></span>) </span>{ ... }</code></pre>
+<p> 现在，如果我们只在我们的项目里使用了 <code>say.js</code> 中的一个函数：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 main.js</span>
+<span class="hljs-keyword">import</span> {sayHi} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./say.js&#x27;</span>;</code></pre>
+<p> ……那么，优化器（optimizer）就会检测到它，并从打包好的代码中删除那些未被使用的函数，从而使构建更小。这就是所谓的“摇树（tree-shaking）”。</p>
+</li>
+<li><p>明确列出要导入的内容会使得名称较短：<code>sayHi()</code> 而不是 <code>say.sayHi()</code>。</p>
+</li>
+<li><p>导入的显式列表可以更好地概述代码结构：使用的内容和位置。它使得代码支持重构，并且重构起来更容易。</p>
+</li>
+</ol>
+<h2 id="import-as">Import &quot;as&quot;</h2>
+<p>我们也可以使用 <code>as</code> 让导入具有不同的名字。</p>
+<p>例如，简洁起见，我们将 <code>sayHi</code> 导入到局部变量 <code>hi</code>，将 <code>sayBye</code> 导入到 <code>bye</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 main.js</span>
+*!*
+<span class="hljs-keyword">import</span> {sayHi <span class="hljs-keyword">as</span> hi, sayBye <span class="hljs-keyword">as</span> bye} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./say.js&#x27;</span>;
+*/!*
+
+hi(<span class="hljs-string">&#x27;John&#x27;</span>); <span class="hljs-comment">// Hello, John!</span>
+bye(<span class="hljs-string">&#x27;John&#x27;</span>); <span class="hljs-comment">// Bye, John!</span></code></pre>
+<h2 id="export-as">Export &quot;as&quot;</h2>
+<p>导出也具有类似的语法。</p>
+<p>我们将函数导出为 <code>hi</code> 和 <code>bye</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 say.js</span>
+...
+export {sayHi <span class="hljs-keyword">as</span> hi, sayBye <span class="hljs-keyword">as</span> bye};</code></pre>
+<p>现在 <code>hi</code> 和 <code>bye</code> 是在外面使用时的正式名称：</p>
+<pre><code class="language-js">// 📁 main.js
+import * as say from &#x27;./say.js&#x27;;
+
+say.*!*hi*/!*(&#x27;John&#x27;); // Hello, John!
+say.*!*bye*/!*(&#x27;John&#x27;); // Bye, John!</code></pre>
+<h2 id="export-default">Export default</h2>
+<p>在实际中，主要有两种模块。</p>
+<ul>
+<li>包含库或函数包的模块，像上面的 <code>say.js</code>。</li>
+<li>声明单个实体的模块，例如模块 <code>user.js</code> 仅导出 <code>class User</code>。</li>
+</ul>
+<p>大部分情况下，开发者倾向于使用第二种方式，以便每个“东西”都存在于它自己的模块中。</p>
+<p>当然，这需要大量文件，因为每个东西都需要自己的模块，但这根本不是问题。实际上，如果文件具有良好的命名，并且文件夹结构得当，那么代码导航（navigation）会变得更容易。</p>
+<p>模块提供了一个特殊的默认导出 <code>export default</code> 语法，以使“一个模块只做一件事”的方式看起来更好。</p>
+<p>将 <code>export default</code> 放在要导出的实体前：</p>
+<pre><code class="language-js">// 📁 user.js
+export *!*default*/!* class User { // 只需要添加 &quot;default&quot; 即可
+  constructor(name) {
+    this.name = name;
+  }
+}</code></pre>
+<p>每个文件可能只有一个 <code>export default</code>：</p>
+<p>……然后将其导入而不需要花括号：</p>
+<pre><code class="language-js">// 📁 main.js
+import *!*User*/!* from &#x27;./user.js&#x27;; // 不需要花括号 {User}，只需要写成 User 即可
+
+new User(&#x27;John&#x27;);</code></pre>
+<p>不用花括号的导入看起来很酷。刚开始使用模块时，一个常见的错误就是忘记写花括号。所以，请记住，<code>import</code> 命名的导出时需要花括号，而 <code>import</code> 默认的导出时不需要花括号。</p>
+<table>
+<thead>
+<tr>
+<th>命名的导出</th>
+<th>默认的导出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>export class User {...}</code></td>
+<td><code>export default class User {...}</code></td>
+</tr>
+<tr>
+<td><code>import {User} from ...</code></td>
+<td><code>import User from ...</code></td>
+</tr>
+</tbody></table>
+<p>从技术上讲，我们可以在一个模块中同时有默认的导出和命名的导出，但是实际上人们通常不会混合使用它们。模块要么是命名的导出要么是默认的导出。</p>
+<p>由于每个文件最多只能有一个默认的导出，因此导出的实体可能没有名称。</p>
+<p>例如，下面这些都是完全有效的默认的导出：</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> </span>{ <span class="hljs-comment">// 没有类名</span>
+  <span class="hljs-keyword">constructor</span>() { ... }
+}</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">user</span>) </span>{ <span class="hljs-comment">// 没有函数名</span>
+  alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${user}</span>!`</span>);
+}</code></pre>
+<pre><code class="language-js"><span class="hljs-comment">// 导出单个值，而不使用变量</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> [<span class="hljs-string">&#x27;Jan&#x27;</span>, <span class="hljs-string">&#x27;Feb&#x27;</span>, <span class="hljs-string">&#x27;Mar&#x27;</span>,<span class="hljs-string">&#x27;Apr&#x27;</span>, <span class="hljs-string">&#x27;Aug&#x27;</span>, <span class="hljs-string">&#x27;Sep&#x27;</span>, <span class="hljs-string">&#x27;Oct&#x27;</span>, <span class="hljs-string">&#x27;Nov&#x27;</span>, <span class="hljs-string">&#x27;Dec&#x27;</span>];</code></pre>
+<p>不指定名称是可以的，因为每个文件只有一个 <code>export default</code>，因此不带花括号的 <code>import</code> 知道要导入的内容是什么。</p>
+<p>如果没有 <code>default</code>，这样的导出将会出错：</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> </span>{ <span class="hljs-comment">// Error!（非默认的导出需要名称）</span>
+  <span class="hljs-keyword">constructor</span>() {}
+}</code></pre>
+<h3 id="default-名称">&quot;default&quot; 名称</h3>
+<p>在某些情况下，<code>default</code> 关键词被用于引用默认的导出。</p>
+<p>例如，要将函数与其定义分开导出：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">user</span>) </span>{
+  alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${user}</span>!`</span>);
+}
+
+<span class="hljs-comment">// 就像我们在函数之前添加了 &quot;export default&quot; 一样</span>
+<span class="hljs-keyword">export</span> {sayHi <span class="hljs-keyword">as</span> <span class="hljs-keyword">default</span>};</code></pre>
+<p>或者，另一种情况，假设模块 <code>user.js</code> 导出了一个主要的默认的导出和一些命名的导出（这种情况很少见，但确实会发生）：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 user.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+  <span class="hljs-keyword">constructor</span>(name) {
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">user</span>) </span>{
+  alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${user}</span>!`</span>);
+}</code></pre>
+<p>这是导入默认的导出以及命名的导出的方法：</p>
+<pre><code class="language-js">// 📁 main.js
+import {*!*default as User*/!*, sayHi} from &#x27;./user.js&#x27;;
+
+new User(&#x27;John&#x27;);</code></pre>
+<p>如果我们将所有东西 <code>*</code> 作为一个对象导入，那么 <code>default</code> 属性正是默认的导出：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 main.js</span>
+<span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> user <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.js&#x27;</span>;
+
+<span class="hljs-keyword">let</span> User = user.default; <span class="hljs-comment">// 默认的导出</span>
+<span class="hljs-keyword">new</span> User(<span class="hljs-string">&#x27;John&#x27;</span>);</code></pre>
+<h3 id="我应该使用默认的导出吗？">我应该使用默认的导出吗？</h3>
+<p>命名的导出是明确的。它们确切地命名了它们要导出的内容，因此我们能从它们获得这些信息，这是一件好事。</p>
+<p>命名的导出会强制我们使用正确的名称进行导入：</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> {User} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.js&#x27;</span>;
+<span class="hljs-comment">// 导入 {MyUser} 不起作用，导入名字必须为 {User}</span></code></pre>
+<p>……对于默认的导出，我们总是在导入时选择名称：</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> User <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.js&#x27;</span>; <span class="hljs-comment">// 有效</span>
+<span class="hljs-keyword">import</span> MyUser <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.js&#x27;</span>; <span class="hljs-comment">// 也有效</span>
+<span class="hljs-comment">// 使用任何名称导入都没有问题</span></code></pre>
+<p>因此，团队成员可能会使用不同的名称来导入相同的内容，这不好。</p>
+<p>通常，为了避免这种情况并使代码保持一致，可以遵从这条规则，即导入的变量应与文件名相对应，例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> User <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.js&#x27;</span>;
+<span class="hljs-keyword">import</span> LoginForm <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./loginForm.js&#x27;</span>;
+<span class="hljs-keyword">import</span> func <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;/path/to/func.js&#x27;</span>;
+...</code></pre>
+<p>但是，一些团队仍然认为这是默认的导出的严重缺陷。因此，他们更倾向于始终使用命名的导出。即使只导出一个东西，也仍然使用命名的导出，而不是默认的导出。</p>
+<p>这也使得重新导出（见下文）更容易。</p>
+<h2 id="重新导出">重新导出</h2>
+<p>“重新导出（Re-export）”语法 <code>export ... from ...</code> 允许导入内容，并立即将其导出（可能是用的是其他的名字），就像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> {sayHi} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./say.js&#x27;</span>; <span class="hljs-comment">// 重新导出 sayHi</span>
+
+<span class="hljs-keyword">export</span> {<span class="hljs-keyword">default</span> <span class="hljs-keyword">as</span> User} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.js&#x27;</span>; <span class="hljs-comment">// 重新导出 default</span></code></pre>
+<p>为什么要这样做？我们看一个实际开发中的用例。</p>
+<p>想象一下，我们正在编写一个 &quot;package&quot;：一个包含大量模块的文件夹，其中一些功能是导出到外部的（像 NPM 这样的工具允许我们发布和分发这样的 package），并且其中一些模块仅仅是供其他 package 中的模块内部使用的 &quot;helpers&quot;。</p>
+<p>文件结构可能是这样的：</p>
+<pre><code>auth/
+    index.js  
+    user.js
+    helpers.js
+    tests/
+        login.js
+    providers/
+        github.js
+        facebook.js
+        ...</code></pre>
+<p>我们想通过单个入口，即“主文件” <code>auth/index.js</code> 来公开 package 的功能，进而可以像下面这样使用我们的 package：</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> {login, logout} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;auth/index.js&#x27;</span></code></pre>
+<p>我们的想法是，使用我们 package 的开发者，不应该干预其内部结构，不应该搜索我们 package 的文件夹中的文件。我们只在 <code>auth/index.js</code> 中导出必须的内容，并保持其他内容“不可见”。</p>
+<p>由于实际导出的功能分散在 package 中，所以我们可以将它们导入到 <code>auth/index.js</code>，然后再从中导出它们：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 auth/index.js</span>
+
+<span class="hljs-comment">// 导入 login/logout 然后立即导出它们</span>
+<span class="hljs-keyword">import</span> {login, logout} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./helpers.js&#x27;</span>;
+<span class="hljs-keyword">export</span> {login, logout};
+
+<span class="hljs-comment">// 将默认导出导入为 User，然后导出它</span>
+<span class="hljs-keyword">import</span> User <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.js&#x27;</span>;
+<span class="hljs-keyword">export</span> {User};
+...</code></pre>
+<p>现在使用我们 package 的人可以 <code>import {login} from &quot;auth/index.js&quot;</code>。</p>
+<p>语法 <code>export ... from ...</code> 只是下面这种导入-导出的简写：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 auth/index.js</span>
+<span class="hljs-comment">// 导入 login/logout 然后立即导出它们</span>
+<span class="hljs-keyword">export</span> {login, logout} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./helpers.js&#x27;</span>;
+
+<span class="hljs-comment">// 将默认导出导入为 User，然后导出它</span>
+<span class="hljs-keyword">export</span> {<span class="hljs-keyword">default</span> <span class="hljs-keyword">as</span> User} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.js&#x27;</span>;
+...</code></pre>
+<h3 id="重新导出默认导出">重新导出默认导出</h3>
+<p>重新导出时，默认导出需要单独处理。</p>
+<p>假设我们有 <code>user.js</code>，我们想从中重新导出类 <code>User</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 user.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+  <span class="hljs-comment">// ...</span>
+}</code></pre>
+<ol>
+<li><p><code>export User from &#39;./user.js&#39;</code> 无效。什么出了问题？这实际上是一个语法错误。</p>
+<p> 要重新导出默认导出，我们必须明确写出 <code>export {default as User}</code>，就像上面的例子中那样。</p>
+</li>
+<li><p><code>export * from &#39;./user.js&#39;</code> 重新导出只导出了命名的导出，但是忽略了默认的导出。</p>
+<p> 如果我们想将命名的导出和默认的导出都重新导出，那么需要两条语句：</p>
+<pre><code class="language-js"><span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.js&#x27;</span>; <span class="hljs-comment">// 重新导出命名的导出</span>
+<span class="hljs-keyword">export</span> {<span class="hljs-keyword">default</span>} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./user.js&#x27;</span>; <span class="hljs-comment">// 重新导出默认的导出</span></code></pre>
+</li>
+</ol>
+<p>重新导出默认的导出的这种奇怪现象是某些开发者不喜欢它们的原因之一。</p>
+<h2 id="总结">总结</h2>
+<p>这是我们在本节和前面章节中介绍的所有 <code>export</code> 类型：</p>
+<p>你可以阅读并回忆它们的含义来进行自查：</p>
+<ul>
+<li>在声明一个 class/function/.. 之前：<ul>
+<li><code>export [default] class/function/variable ...</code></li>
+</ul>
+</li>
+<li>独立的导出：<ul>
+<li><code>export {x [as y], ...}</code>.</li>
+</ul>
+</li>
+<li>重新导出：<ul>
+<li><code>export {x [as y], ...} from &quot;module&quot;</code></li>
+<li><code>export * from &quot;module&quot;</code>（不会重新导出默认的导出）。</li>
+<li><code>export {default [as y]} from &quot;module&quot;</code>（重新导出默认的导出）。</li>
+</ul>
+</li>
+</ul>
+<p>导入：</p>
+<ul>
+<li>模块中命名的导出：<ul>
+<li><code>import {x [as y], ...} from &quot;module&quot;</code></li>
+</ul>
+</li>
+<li>默认的导出：<ul>
+<li><code>import x from &quot;module&quot;</code></li>
+<li><code>import {default as x} from &quot;module&quot;</code></li>
+</ul>
+</li>
+<li>所有：<ul>
+<li><code>import * as obj from &quot;module&quot;</code></li>
+</ul>
+</li>
+<li>导入模块（它的代码，并运行），但不要将其赋值给变量：<ul>
+<li><code>import &quot;module&quot;</code></li>
+</ul>
+</li>
+</ul>
+<p>我们把 <code>import/export</code> 语句放在脚本的顶部或底部，都没关系。</p>
+<p>因此，从技术上讲，下面这样的代码没有问题：</p>
+<pre><code class="language-js">sayHi();
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">import</span> {sayHi} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./say.js&#x27;</span>; <span class="hljs-comment">// 在文件底部导入</span></code></pre>
+<p>在实际开发中，导入通常位于文件的开头，但是这只是为了更加方便。</p>
+<p><strong>请注意在 <code>{...}</code> 中的 import/export 语句无效。</strong></p>
+<p>像这样的有条件的导入是无效的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (something) {
+  <span class="hljs-keyword">import</span> {sayHi} <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./say.js&quot;</span>; <span class="hljs-comment">// Error: import must be at top level</span>
+}</code></pre>
+<p>……但是，如果我们真的需要根据某些条件来进行导入呢？或者在某些合适的时间？例如，根据请求（request）加载模块，什么时候才是真正需要呢？</p>
+<p>我们将在下一章节中学习动态导入。</p>

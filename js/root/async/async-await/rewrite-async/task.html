@@ -1,0 +1,15 @@
+<h1 id="用-asyncawait-来重写">用 async/await 来重写</h1>
+<p>重写下面这个来自 <a href="info:promise-chaining">info:promise-chaining</a> 一章的示例代码，使用 <code>async/await</code> 而不是 <code>.then/catch</code>：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadJson</span>(<span class="hljs-params">url</span>) </span>{
+  <span class="hljs-keyword">return</span> fetch(url)
+    .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {
+      <span class="hljs-keyword">if</span> (response.status == <span class="hljs-number">200</span>) {
+        <span class="hljs-keyword">return</span> response.json();
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(response.status);
+      }
+    })
+}
+
+loadJson(<span class="hljs-string">&#x27;no-such-user.json&#x27;</span>)
+  .catch(alert); <span class="hljs-comment">// Error: 404</span></code></pre>

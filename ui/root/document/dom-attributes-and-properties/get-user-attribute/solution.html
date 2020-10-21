@@ -1,0 +1,17 @@
+<pre><code class="language-html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-widget-name</span>=<span class="hljs-string">&quot;menu&quot;</span>&gt;</span>Choose the genre<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-comment">// 获取它</span>
+    <span class="hljs-keyword">let</span> elem = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&#x27;[data-widget-name]&#x27;</span>);
+
+    <span class="hljs-comment">// 读取值</span>
+    alert(elem.dataset.widgetName);
+    <span class="hljs-comment">// 或</span>
+    alert(elem.getAttribute(<span class="hljs-string">&#x27;data-widget-name&#x27;</span>));
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>

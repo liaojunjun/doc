@@ -1,0 +1,19 @@
+<p>思路很简单：从 <code>date</code> 中减去给定的天数：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getDateAgo</span>(<span class="hljs-params">date, days</span>) </span>{
+  date.setDate(date.getDate() - days);
+  <span class="hljs-keyword">return</span> date.getDate();
+}</code></pre>
+<p>……但是函数不能修改 <code>date</code>。这一点很重要，因为我们提供日期的外部代码不希望它被修改。</p>
+<p>要实现这一点，我们可以复制这个日期，就像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getDateAgo</span>(<span class="hljs-params">date, days</span>) </span>{
+  <span class="hljs-keyword">let</span> dateCopy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(date);
+
+  dateCopy.setDate(date.getDate() - days);
+  <span class="hljs-keyword">return</span> dateCopy.getDate();
+}
+
+<span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2015</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>);
+
+alert( getDateAgo(date, <span class="hljs-number">1</span>) ); <span class="hljs-comment">// 1, (1 Jan 2015)</span>
+alert( getDateAgo(date, <span class="hljs-number">2</span>) ); <span class="hljs-comment">// 31, (31 Dec 2014)</span>
+alert( getDateAgo(date, <span class="hljs-number">365</span>) ); <span class="hljs-comment">// 2, (2 Jan 2014)</span></code></pre>

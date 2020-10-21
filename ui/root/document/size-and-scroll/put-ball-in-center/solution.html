@@ -1,0 +1,29 @@
+<p>球具有 <code>position:absolute</code>。这意味着它的 <code>left/top</code> 坐标是从最近的具有定位属性的元素开始测量的，这个元素即 <code>#field</code>（因为它有 <code>position:relative</code>）。</p>
+<p>坐标从场（field）的左上角内侧开始：</p>
+<p><img src="field.svg" alt=""></p>
+<p>内部的场（field）的 width/height 是 <code>clientWidth/clientHeight</code>。所以场（field）的中心坐标为 <code>(clientWidth/2, clientHeight/2)</code>。</p>
+<p>……但是，如果我们将 <code>ball.style.left/top</code> 设置为这种值，那么在中心的会是球的左上边缘，而不是整个球：</p>
+<pre><code class="language-js">ball.style.left = <span class="hljs-built_in">Math</span>.round(field.clientWidth / <span class="hljs-number">2</span>) + <span class="hljs-string">&#x27;px&#x27;</span>;
+ball.style.top = <span class="hljs-built_in">Math</span>.round(field.clientHeight / <span class="hljs-number">2</span>) + <span class="hljs-string">&#x27;px&#x27;</span>;</code></pre>
+<p>这是它将显示出来的效果：</p>
+<p>[iframe height=180 src=&quot;ball-half&quot;]</p>
+<p>为了使球的中心与场（field）的中心重合，我们应该把球向左移动球宽度的一半，并向上移动球高度的一半：</p>
+<pre><code class="language-js">ball.style.left = <span class="hljs-built_in">Math</span>.round(field.clientWidth / <span class="hljs-number">2</span> - ball.offsetWidth / <span class="hljs-number">2</span>) + <span class="hljs-string">&#x27;px&#x27;</span>;
+ball.style.top = <span class="hljs-built_in">Math</span>.round(field.clientHeight / <span class="hljs-number">2</span> - ball.offsetHeight / <span class="hljs-number">2</span>) + <span class="hljs-string">&#x27;px&#x27;</span>;</code></pre>
+<p>现在，球终于居中了。</p>
+<pre><code class="language-warn">
+当 `&lt;img&gt;` 没有 width/height 时，代码将无法可靠地工作：
+
+```html
+&lt;img src=&quot;ball.png&quot; id=&quot;ball&quot;&gt;
+```</code></pre>
+<p>当浏览器不知道图片的 width/height（通过标签 attribute 或 CSS）时，它会假定它们等于 <code>0</code>，直到图片加载完成。</p>
+<p>因此，在图片加载完成之前，<code>ball.offsetWidth</code> 的值为 <code>0</code>。这会导致上面的代码中会有错误的坐标。</p>
+<p>在第一次加载完成后，浏览器通常会缓存该图片，并在下一次加载时，浏览器会立即拥有该图片的大小。但是在第一次加载时，<code>ball.offsetWidth</code> 的值为 <code>0</code>。</p>
+<p>我们应该通过在 <code>&lt;img&gt;</code> 中添加 <code>width/height</code> 来解决这个问题：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;ball.png&quot;</span> *!*<span class="hljs-attr">width</span>=<span class="hljs-string">&quot;40&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;40&quot;</span>*/!* <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ball&quot;</span>&gt;</span></code></pre>
+<p>……或者在 CSS 中提供大小：</p>
+<pre><code class="language-css"><span class="hljs-selector-id">#ball</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">40px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">40px</span>;
+}</code></pre>

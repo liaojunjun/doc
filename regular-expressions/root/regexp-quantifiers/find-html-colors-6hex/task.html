@@ -1,0 +1,9 @@
+<h1 id="针对-html-颜色的正则表达式">针对 HTML 颜色的正则表达式</h1>
+<p>创建一个正则表达式来搜寻格式为 <code>#ABCDEF</code> 的 HTML 颜色值：首个字符 <code>#</code> 以及接下来的六位十六进制字符。</p>
+<p>一个例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/...你的正则表达式.../</span>
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;color:#121212; background-color:#AA00ef bad-colors:f#fddee #fd2 #12345678&quot;</span>;
+
+alert( str.match(reg) )  <span class="hljs-comment">// #121212,#AA00ef</span></code></pre>
+<p>P.S. 在这个任务中，我们不需要其他的颜色格式，比如 <code>#123</code> 或 <code>rgb(1,2,3)</code> 等。</p>

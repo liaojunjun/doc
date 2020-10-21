@@ -1,0 +1,210 @@
+<h1 id="weakmap-and-weakset（弱映射和弱集合）">WeakMap and WeakSet（弱映射和弱集合）</h1>
+<p>我们从前面的 <a href="info:garbage-collection">info:garbage-collection</a> 章节中知道，JavaScript 引擎在值可访问（并可能被使用）时将其存储在内存中。</p>
+<p>例如:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
+
+<span class="hljs-comment">// 该对象能被访问，john 是它的引用</span>
+
+<span class="hljs-comment">// 覆盖引用</span>
+john = <span class="hljs-literal">null</span>;
+
+*!*
+<span class="hljs-comment">// 该对象将会被从内存中清除</span>
+*/!*</code></pre>
+<p>通常，当对象、数组这类数据结构在内存中时，它们的子元素，如对象的属性、数组的元素都是可以访问的。</p>
+<p>例如，如果把一个对象放入到数组中，那么只要这个数组存在，那么这个对象也就存在，即使没有其他对该对象的引用。</p>
+<p>就像这样:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
+
+<span class="hljs-keyword">let</span> array = [ john ];
+
+john = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 覆盖引用</span>
+
+*!*
+<span class="hljs-comment">// john 被存储在数组里, 所以它不会被垃圾回收机制回收</span>
+<span class="hljs-comment">// 我们可以通过 array[0] 来获取它</span>
+*/!*</code></pre>
+<p>类似的，如果我们使用对象作为常规 <code>Map</code> 的键，那么当 <code>Map</code> 存在时，该对象也将存在。它会占用内存，并且应该不会被（垃圾回收机制）回收。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
+
+<span class="hljs-keyword">let</span> map = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
+map.set(john, <span class="hljs-string">&quot;...&quot;</span>);
+
+john = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 覆盖引用</span>
+
+*!*
+<span class="hljs-comment">// john 被存储在 map 中，</span>
+<span class="hljs-comment">// 我们可以使用 map.keys() 来获取它</span>
+*/!*</code></pre>
+<p><code>WeakMap</code> 在这方面有着根本上的不同。它不会阻止垃圾回收机制对作为键的对象（key object）的回收。</p>
+<p>让我们通过例子来看看这指的到底是什么。</p>
+<h2 id="weakmap">WeakMap</h2>
+<p><code>WeakMap</code> 和 <code>Map</code> 的第一个不同点就是，<code>WeakMap</code> 的键必须是对象，不能是原始值：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> weakMap = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>();
+
+<span class="hljs-keyword">let</span> obj = {};
+
+weakMap.set(obj, <span class="hljs-string">&quot;ok&quot;</span>); <span class="hljs-comment">// 正常工作（以对象作为键）</span>
+
+*!*
+<span class="hljs-comment">// 不能使用字符串作为键</span>
+weakMap.set(<span class="hljs-string">&quot;test&quot;</span>, <span class="hljs-string">&quot;Whoops&quot;</span>); <span class="hljs-comment">// Error，因为 &quot;test&quot; 不是一个对象</span>
+*/!*</code></pre>
+<p>现在，如果我们在 weakMap 中使用一个对象作为键，并且没有其他对这个对象的引用 —— 该对象将会被从内存（和map）中自动清除。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
+
+<span class="hljs-keyword">let</span> weakMap = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>();
+weakMap.set(john, <span class="hljs-string">&quot;...&quot;</span>);
+
+john = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 覆盖引用</span>
+
+<span class="hljs-comment">// john 被从内存中删除了！</span></code></pre>
+<p>与上面常规的 <code>Map</code> 的例子相比，现在如果 <code>john</code> 仅仅是作为 <code>WeakMap</code> 的键而存在 —— 它将会被从 map（和内存）中自动删除。</p>
+<p><code>WeakMap</code> 不支持迭代以及 <code>keys()</code>，<code>values()</code> 和 <code>entries()</code> 方法。所以没有办法获取 <code>WeakMap</code> 的所有键或值。</p>
+<p><code>WeakMap</code> 只有以下的方法：</p>
+<ul>
+<li><code>weakMap.get(key)</code></li>
+<li><code>weakMap.set(key, value)</code></li>
+<li><code>weakMap.delete(key)</code></li>
+<li><code>weakMap.has(key)</code></li>
+</ul>
+<p>为什么会有这种限制呢？这是技术的原因。如果一个对象丢失了其它所有引用（就像上面示例中的 <code>john</code>），那么它就会被垃圾回收机制自动回收。但是在从技术的角度并不能准确知道 <strong>何时会被回收</strong>。</p>
+<p>这些都是由 JavaScript 引擎决定的。JavaScript 引擎可能会选择立即执行内存清理，如果现在正在发生很多删除操作，那么 JavaScript 引擎可能就会选择等一等，稍后再进行内存清理。因此，从技术上讲，<code>WeakMap</code> 的当前元素的数量是未知的。JavaScript 引擎可能清理了其中的垃圾，可能没清理，也可能清理了一部分。因此，暂不支持访问 <code>WeakMap</code> 的所有键/值的方法。</p>
+<p>那么，在哪里我们会需要这样的数据结构呢？</p>
+<h2 id="使用案例：额外的数据">使用案例：额外的数据</h2>
+<p><code>WeakMap</code> 的主要应用场景是 <strong>额外数据的存储</strong>。</p>
+<p>假如我们正在处理一个“属于”另一个代码的一个对象，也可能是第三方库，并想存储一些与之相关的数据，那么这些数据就应该与这个对象共存亡 —— 这时候 <code>WeakMap</code> 正是我们所需要的利器。</p>
+<p>我们将这些数据放到 <code>WeakMap</code> 中，并使用该对象作为这些数据的键，那么当该对象被垃圾回收机制回收后，这些数据也会被自动清除。</p>
+<pre><code class="language-js">weakMap.set(john, <span class="hljs-string">&quot;secret documents&quot;</span>);
+<span class="hljs-comment">// 如果 john 消失，secret documents 将会被自动清除</span></code></pre>
+<p>让我们来看一个例子。</p>
+<p>例如，我们有用于处理用户访问计数的代码。收集到的信息被存储在 map 中：一个用户对象作为键，其访问次数为值。当一个用户离开时（该用户对象将被垃圾回收机制回收），这时我们就不再需要他的访问次数了。</p>
+<p>下面是一个使用 <code>Map</code> 的计数函数的例子：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 visitsCount.js</span>
+<span class="hljs-keyword">let</span> visitsCountMap = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>(); <span class="hljs-comment">// map: user =&gt; visits count</span>
+
+<span class="hljs-comment">// 递增用户来访次数</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">countUser</span>(<span class="hljs-params">user</span>) </span>{
+  <span class="hljs-keyword">let</span> count = visitsCountMap.get(user) || <span class="hljs-number">0</span>;
+  visitsCountMap.set(user, count + <span class="hljs-number">1</span>);
+}</code></pre>
+<p>下面是其他部分的代码，可能是使用它的其它代码：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 main.js</span>
+<span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
+
+countUser(john); <span class="hljs-comment">// count his visits</span>
+
+<span class="hljs-comment">// 不久之后，john 离开了</span>
+john = <span class="hljs-literal">null</span>;</code></pre>
+<p>现在 <code>john</code> 这个对象应该被垃圾回收，但他仍在内存中，因为它是 <code>visitsCountMap</code> 中的一个键。</p>
+<p>当我们移除用户时，我们需要清理 <code>visitsCountMap</code>，否则它将在内存中无限增大。在复杂的架构中，这种清理会成为一项繁重的任务。</p>
+<p>我们可以通过使用 <code>WeakMap</code> 来避免这样的问题：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 visitsCount.js</span>
+<span class="hljs-keyword">let</span> visitsCountMap = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>(); <span class="hljs-comment">// weakmap: user =&gt; visits count</span>
+
+<span class="hljs-comment">// 递增用户来访次数</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">countUser</span>(<span class="hljs-params">user</span>) </span>{
+  <span class="hljs-keyword">let</span> count = visitsCountMap.get(user) || <span class="hljs-number">0</span>;
+  visitsCountMap.set(user, count + <span class="hljs-number">1</span>);
+}</code></pre>
+<p>现在我们不需要去清理 <code>visitsCountMap</code> 了。当 <code>john</code> 对象变成不可访问时，即便它是 <code>WeakMap</code> 里的一个键，它也会连同它作为 <code>WeakMap</code> 里的键所对应的信息一同被从内存中删除。</p>
+<h2 id="使用案例：缓存">使用案例：缓存</h2>
+<p>另外一个普遍的例子是缓存：当一个函数的结果需要被记住（“缓存”），这样在后续的对同一个对象的调用时，就可以重用这个被缓存的结果。</p>
+<p>我们可以使用 <code>Map</code> 来存储结果，就像这样：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 cache.js</span>
+<span class="hljs-keyword">let</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
+
+<span class="hljs-comment">// 计算并记住结果</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">process</span>(<span class="hljs-params">obj</span>) </span>{
+  <span class="hljs-keyword">if</span> (!cache.has(obj)) {
+    <span class="hljs-keyword">let</span> result = <span class="hljs-comment">/* calculations of the result for */</span> obj;
+
+    cache.set(obj, result);
+  }
+
+  <span class="hljs-keyword">return</span> cache.get(obj);
+}
+
+*!*
+<span class="hljs-comment">// 现在我们在其它文件中使用 process()</span>
+*/!*
+
+<span class="hljs-comment">// 📁 main.js</span>
+<span class="hljs-keyword">let</span> obj = {<span class="hljs-comment">/* 假设我们有个对象 */</span>};
+
+<span class="hljs-keyword">let</span> result1 = process(obj); <span class="hljs-comment">// 计算完成</span>
+
+<span class="hljs-comment">// ……稍后，来自代码的另外一个地方……</span>
+<span class="hljs-keyword">let</span> result2 = process(obj); <span class="hljs-comment">// 取自缓存的被记忆的结果</span>
+
+<span class="hljs-comment">// ……稍后，我们不再需要这个对象时：</span>
+obj = <span class="hljs-literal">null</span>;
+
+alert(cache.size); <span class="hljs-comment">// 1（啊！该对象依然在 cache 中，并占据着内存！）</span></code></pre>
+<p>对于多次调用同一个对象，它只需在第一次调用时计算出结果，之后的调用可以直接从 <code>cache</code> 中获取。这样做的缺点是，当我们不再需要这个对象的时候需要清理 <code>cache</code>。</p>
+<p>如果我们用 <code>WeakMap</code> 替代 <code>Map</code>，这个问题便会消失：当对象被垃圾回收时，对应的缓存的结果也会被自动地从内存中清除。</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 cache.js</span>
+*!*
+<span class="hljs-keyword">let</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>();
+*/!*
+
+<span class="hljs-comment">// 计算并记结果</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">process</span>(<span class="hljs-params">obj</span>) </span>{
+  <span class="hljs-keyword">if</span> (!cache.has(obj)) {
+    <span class="hljs-keyword">let</span> result = <span class="hljs-comment">/* calculate the result for */</span> obj;
+
+    cache.set(obj, result);
+  }
+
+  <span class="hljs-keyword">return</span> cache.get(obj);
+}
+
+<span class="hljs-comment">// 📁 main.js</span>
+<span class="hljs-keyword">let</span> obj = {<span class="hljs-comment">/* some object */</span>};
+
+<span class="hljs-keyword">let</span> result1 = process(obj);
+<span class="hljs-keyword">let</span> result2 = process(obj);
+
+<span class="hljs-comment">// ……稍后，我们不再需要这个对象时：</span>
+obj = <span class="hljs-literal">null</span>;
+
+<span class="hljs-comment">// 无法获取 cache.size，因为它是一个 WeakMap，</span>
+<span class="hljs-comment">// 要么是 0，或即将变为 0</span>
+<span class="hljs-comment">// 当 obj 被垃圾回收，缓存的数据也会被清除</span></code></pre>
+<h2 id="weakset">WeakSet</h2>
+<p><code>WeakSet</code> 的表现类似：</p>
+<ul>
+<li>与 <code>Set</code> 类似，但是我们只能向 <code>WeakSet</code> 添加对象（而不能是原始值）。</li>
+<li>对象只有在其它某个（些）地方能被访问的时候，才能留在 set 中。</li>
+<li>跟 <code>Set</code> 一样，<code>WeakSet</code> 支持 <code>add</code>，<code>has</code> 和 <code>delete</code> 方法，但不支持 <code>size</code> 和 <code>keys()</code>，并且不可迭代。</li>
+</ul>
+<p>变“弱（weak）”的同时，它也可以作为额外的存储空间。但并非针对任意数据，而是针对“是/否”的事实。<code>WeakSet</code> 的元素可能代表着有关该对象的某些信息。</p>
+<p>例如，我们可以将用户添加到 <code>WeakSet</code> 中，以追踪访问过我们网站的用户：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> visitedSet = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakSet</span>();
+
+<span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
+<span class="hljs-keyword">let</span> pete = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pete&quot;</span> };
+<span class="hljs-keyword">let</span> mary = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Mary&quot;</span> };
+
+visitedSet.add(john); <span class="hljs-comment">// John 访问了我们</span>
+visitedSet.add(pete); <span class="hljs-comment">// 然后是 Pete</span>
+visitedSet.add(john); <span class="hljs-comment">// John 再次访问</span>
+
+<span class="hljs-comment">// visitedSet 现在有两个用户了</span>
+
+<span class="hljs-comment">// 检查 John 是否来访过？</span>
+alert(visitedSet.has(john)); <span class="hljs-comment">// true</span>
+
+<span class="hljs-comment">// 检查 Mary 是否来访过？</span>
+alert(visitedSet.has(mary)); <span class="hljs-comment">// false</span>
+
+john = <span class="hljs-literal">null</span>;
+
+<span class="hljs-comment">// visitedSet 将被自动清理</span></code></pre>
+<p><code>WeakMap</code> 和 <code>WeakSet</code> 最明显的局限性就是不能迭代，并且无法获取所有当前内容。那样可能会造成不便，但是并不会阻止 <code>WeakMap/WeakSet</code> 完成其主要工作 — 成为在其它地方管理/存储“额外”的对象数据。</p>
+<h2 id="总结">总结</h2>
+<p><code>WeakMap</code> 是类似于 <code>Map</code> 的集合，它仅允许对象作为键，并且一旦通过其他方式无法访问它们，便会将它们与其关联值一同删除。</p>
+<p><code>WeakSet</code> 是类似于 <code>Set</code> 的集合，它仅存储对象，并且一旦通过其他方式无法访问它们，便会将其删除。</p>
+<p>它们都不支持引用所有键或其计数的方法和属性。仅允许单个操作。</p>
+<p><code>WeakMap</code> 和 <code>WeakSet</code> 被用作“主要”对象存储之外的“辅助”数据结构。一旦将对象从主存储器中删除，如果该对象仅被用作 <code>WeakMap</code> 或 <code>WeakSet</code> 的键，那么它将被自动清除。</p>

@@ -1,0 +1,14 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="继承-syntaxerror">继承 SyntaxError</h1>
+<p>创建一个继承自内建类 <code>SyntaxError</code> 的类 <code>FormatError</code>。</p>
+<p>它应该支持 <code>message</code>，<code>name</code> 和 <code>stack</code> 属性。</p>
+<p>用例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> err = <span class="hljs-keyword">new</span> FormatError(<span class="hljs-string">&quot;formatting error&quot;</span>);
+
+alert( err.message ); <span class="hljs-comment">// formatting error</span>
+alert( err.name ); <span class="hljs-comment">// FormatError</span>
+alert( err.stack ); <span class="hljs-comment">// stack</span>
+
+alert( err <span class="hljs-keyword">instanceof</span> FormatError ); <span class="hljs-comment">// true</span>
+alert( err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span> ); <span class="hljs-comment">// true（因为它继承自 SyntaxError）</span></code></pre>

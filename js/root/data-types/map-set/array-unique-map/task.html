@@ -1,0 +1,17 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="过滤数组中的唯一元素">过滤数组中的唯一元素</h1>
+<p>定义 <code>arr</code> 为一个数组。</p>
+<p>创建一个函数 <code>unique(arr)</code>，该函数返回一个由 <code>arr</code> 中所有唯一元素所组成的数组。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unique</span>(<span class="hljs-params">arr</span>) </span>{
+  <span class="hljs-comment">/* 你的代码 */</span>
+}
+
+<span class="hljs-keyword">let</span> values = [<span class="hljs-string">&quot;Hare&quot;</span>, <span class="hljs-string">&quot;Krishna&quot;</span>, <span class="hljs-string">&quot;Hare&quot;</span>, <span class="hljs-string">&quot;Krishna&quot;</span>,
+  <span class="hljs-string">&quot;Krishna&quot;</span>, <span class="hljs-string">&quot;Krishna&quot;</span>, <span class="hljs-string">&quot;Hare&quot;</span>, <span class="hljs-string">&quot;Hare&quot;</span>, <span class="hljs-string">&quot;:-O&quot;</span>
+];
+
+alert( unique(values) ); <span class="hljs-comment">// Hare, Krishna, :-O</span></code></pre>
+<p>P.S. 这里用到了 string 类型，但其实可以是任何类型的值。</p>
+<p>P.S. 使用 <code>Set</code> 来存储唯一值。</p>

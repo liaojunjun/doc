@@ -1,0 +1,13 @@
+<p>使用 <code>if</code> 的解决方案：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">min</span>(<span class="hljs-params">a, b</span>) </span>{
+  <span class="hljs-keyword">if</span> (a &lt; b) {
+    <span class="hljs-keyword">return</span> a;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> b;
+  }
+}</code></pre>
+<p>使用问号运算符 <code>&#39;?&#39;</code> 的解决方案：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">min</span>(<span class="hljs-params">a, b</span>) </span>{
+  <span class="hljs-keyword">return</span> a &lt; b ? a : b;
+}</code></pre>
+<p>P.S. 在 <code>a == b</code> 的情况下，返回什么都无关紧要。</p>

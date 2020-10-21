@@ -1,0 +1,8 @@
+<h1 id="基于-promise-的延时">基于 promise 的延时</h1>
+<p>内建函数 <code>setTimeout</code> 使用了回调函数。请创建一个基于 promise 的替代方案。</p>
+<p>函数 <code>delay(ms)</code> 应该返回一个 promise。这个 promise 应该在 <code>ms</code> 毫秒后被 resolve，所以我们可以向其中添加 <code>.then</code>，像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">delay</span>(<span class="hljs-params">ms</span>) </span>{
+  <span class="hljs-comment">// 你的代码</span>
+}
+
+delay(<span class="hljs-number">3000</span>).then(<span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&#x27;runs after 3 seconds&#x27;</span>));</code></pre>

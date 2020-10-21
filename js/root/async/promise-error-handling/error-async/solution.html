@@ -1,0 +1,8 @@
+<p>答案是：<strong>不，它不会被触发</strong>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">resolve, reject</span>) </span>{
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Whoops!&quot;</span>);
+  }, <span class="hljs-number">1000</span>);
+}).catch(alert);</code></pre>
+<p>正如本章所讲，函数代码周围有个“隐式的 <code>try..catch</code>”。所以，所有同步错误都会得到处理。</p>
+<p>但是这里的错误并不是在 executor 运行时生成的，而是在稍后生成的。因此，promise 无法处理它。</p>

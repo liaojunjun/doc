@@ -1,0 +1,8 @@
+<h1 id="find-all-numbers">Find all numbers</h1>
+<p>Write a regexp that looks for all decimal numbers including integer ones, with the floating point and negative ones.</p>
+<p>An example of use:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/your regexp/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;-1.5 0 2 -123.4.&quot;</span>;
+
+alert( str.match(regexp) ); <span class="hljs-comment">// -1.5, 0, 2, -123.4</span></code></pre>

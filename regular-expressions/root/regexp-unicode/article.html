@@ -1,0 +1,159 @@
+<h1 id="unicode：修饰符-u-和-class-p">Unicode：修饰符 “u” 和 class \p{...}</h1>
+<p>JavaScript 使用 <a href="https://en.wikipedia.org/wiki/Unicode">Unicode 编码</a> （Unicode encoding）对字符串进行编码。大多数字符使用 2 个字节编码，但这种方式只能编码最多 65536 个字符。</p>
+<p>这个范围不足以对所有可能的字符进行编码，这就是为什么一些罕见的字符使用 4 个字节进行编码，比如 <code>𝒳</code> （数学符号 X）或者 <code>😄</code> （笑脸），一些象形文字等等。</p>
+<p>以下是一些字符对应的 unicode 编码：</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>Unicode</th>
+<th>unicode 中的字节数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td><code>0x0061</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>≈</td>
+<td><code>0x2248</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>𝒳</td>
+<td><code>0x1d4b3</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>𝒴</td>
+<td><code>0x1d4b4</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>😄</td>
+<td><code>0x1f604</code></td>
+<td>4</td>
+</tr>
+</tbody></table>
+<p>所以像 <code>a</code> 和 <code>≈</code> 这样的字符占用 2 个字节，而 <code>𝒳</code>，<code>𝒴</code> 和 <code>😄</code> 的对应编码则更长，它们具有 4 个字节的长度。</p>
+<p>很久以前，当 JavaScript 被发明出来的时候，Unicode 的编码要更加简单：当时并没有 4 个字节长的字符。所以，一部分语言特性在现在仍旧无法对 unicode 进行正确的处理。</p>
+<p>比如 <code>length</code> 认为这里的输入有 2 个字符：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&#x27;😄&#x27;</span>.length); <span class="hljs-comment">// 2</span>
+alert(<span class="hljs-string">&#x27;𝒳&#x27;</span>.length); <span class="hljs-comment">// 2</span></code></pre>
+<p>...但我们可以清楚地认识到输入的字符只有一个，对吧？关键在于 <code>length</code> 把 4 个字节当成了 2 个 2 字节长的字符。这是不对的，因为它们必须被当作一个整体来考虑。（即所谓的“代理伪字符”（surrogate pair），你可以在这里进一步阅读有关的的信息 <a href="info:string">info:string</a>）。</p>
+<p>默认情况下，正则表达式同样把一个 4 个字节的“长字符”当成一对 2 个字节长的字符。正如在字符串中遇到的情况，这将导致一些奇怪的结果。我们将很快在后面的文章中遇到 <a href="info:regexp-character-sets-and-ranges">info:regexp-character-sets-and-ranges</a>。</p>
+<p>与字符串有所不同的是，正则表达式有一个修饰符 <code>pattern:u</code> 被用以解决此类问题。当一个正则表达式使用这个修饰符后，4 个字节长的字符将被正确地处理。同时也能够用上 Unicode 属性（Unicode property）来进行查找了。我们接下来就来了解这方面的内容。</p>
+<h2 id="unicode-属性（unicode-properties）p">Unicode 属性（Unicode properties）\p{...}</h2>
+<pre><code class="language-warn">尽管 unicode property 从 2018 年以来便作为标准的一部分, 但 unicode 属性在 Firefox ([bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1361876)) 和 Edge ([bug](https://github.com/Microsoft/ChakraCore/issues/2969)) 中并没有相应的支持。
+
+目前 [XRegExp](http://xregexp.com) 这个库提供“扩展”的正则表达式，其中包括对 unicode property 的跨平台支持。</code></pre>
+<p>Unicode 中的每一个字符都具有很多的属性。它们描述了一个字符属于哪个“类别”，包含了各种关于字符的信息。</p>
+<p>例如，如果一个字符具有 <code>Letter</code> 属性，这意味着这个字符归属于（任意语言的）一个字母表。而 <code>Number</code> 属性则表示这是一个数字：也许是阿拉伯语，亦或者是中文，等等。</p>
+<p>我们可以查找具有某种属性的字符，写作 <code>pattern:\p{…}</code>。为了顺利使用 <code>pattern:\p{…}</code>，一个正则表达式必须使用修饰符 <code>pattern:u</code>。</p>
+<p>举个例子，<code>\p{Letter}</code> 表示任何语言中的一个字母。我们也可以使用 <code>\p{L}</code>，因为 <code>L</code> 是 <code>Letter</code> 的一个别名（alias）。对于每种属性而言，几乎都存在对应的缩写别名。</p>
+<p>在下面的例子中 3 种字母将会被查找出：英语、格鲁吉亚语和韩语。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;A ბ ㄱ&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/\p{L}/gu</span>) ); <span class="hljs-comment">// A,ბ,ㄱ</span>
+alert( str.match(<span class="hljs-regexp">/\p{L}/g</span>) ); <span class="hljs-comment">// null（没有匹配的文本，因为没有修饰符“u”）</span></code></pre>
+<p>以下是主要的字符类别和它们对应的子类别：</p>
+<ul>
+<li>字母（Letter） <code>L</code>:<ul>
+<li>小写（lowercase） <code>Ll</code></li>
+<li>修饰（modifier） <code>Lm</code>,</li>
+<li>首字母大写（titlecase） <code>Lt</code>,</li>
+<li>大写（uppercase） <code>Lu</code>,</li>
+<li>其它（other） <code>Lo</code>。</li>
+</ul>
+</li>
+<li>数字（Number） <code>N</code>:<ul>
+<li>十进制数字（decimal digit） <code>Nd</code>,</li>
+<li>字母数字（letter number） <code>Nl</code>,</li>
+<li>其它（other） <code>No</code>。</li>
+</ul>
+</li>
+<li>标点符号（Punctuation） <code>P</code>:<ul>
+<li>链接符（connector） <code>Pc</code>,</li>
+<li>横杠（dash） <code>Pd</code>,</li>
+<li>起始引用号（initial quote） <code>Pi</code>,</li>
+<li>结束引用号（final quote） <code>Pf</code>,</li>
+<li>开（open） <code>Ps</code>,</li>
+<li>闭（close） <code>Pe</code>,</li>
+<li>其它（other） <code>Po</code>。</li>
+</ul>
+</li>
+<li>标记（Mark） <code>M</code> (accents etc):<ul>
+<li>间隔合并（spacing combining） <code>Mc</code>,</li>
+<li>封闭（enclosing） <code>Me</code>,</li>
+<li>非间隔（non-spacing） <code>Mn</code>。</li>
+</ul>
+</li>
+<li>符号（Symbol） <code>S</code>:<ul>
+<li>货币（currency） <code>Sc</code>,</li>
+<li>修饰（modifier） <code>Sk</code>,</li>
+<li>数学（math） <code>Sm</code>,</li>
+<li>其它（other） <code>So</code>。</li>
+</ul>
+</li>
+<li>分隔符（Separator） <code>Z</code>:<ul>
+<li>行（line） <code>Zl</code>,</li>
+<li>段落（paragraph） <code>Zp</code>,</li>
+<li>空格（space） <code>Zs</code>。</li>
+</ul>
+</li>
+<li>其它（Other） <code>C</code>:<ul>
+<li>控制符（control） <code>Cc</code>,</li>
+<li>格式（format） <code>Cf</code>,</li>
+<li>未分配（not assigned） <code>Cn</code>,</li>
+<li>私有（private use） <code>Co</code>,</li>
+<li>代理伪字符（surrogate） <code>Cs</code>。</li>
+</ul>
+</li>
+</ul>
+<p>因此，比如说我们需要小写的字母，就可以写成 <code>pattern:\p{Ll}</code>，标点符号写作 <code>pattern:\p{P}</code> 等等。</p>
+<p>也有其它派生的类别，例如：</p>
+<ul>
+<li><code>Alphabetic</code> (<code>Alpha</code>), 包含了字母 <code>L</code>, 加上字母数字 <code>Nl</code> （例如 Ⅻ - 罗马数字 12），加上一些其它符号 <code>Other_Alphabetic</code> (<code>OAlpha</code>)。</li>
+<li><code>Hex_Digit</code> 包括 16 进制数字 <code>0-9</code>，<code>a-f</code>。</li>
+<li>...等等</li>
+</ul>
+<p>Unicode 支持相当数量的属性，列出整个清单需要占用大量的空间，因此在这里列出相关的链接：</p>
+<ul>
+<li>列出一个字符的所有属性 <a href="https://unicode.org/cldr/utility/character.jsp">https://unicode.org/cldr/utility/character.jsp</a>.</li>
+<li>按照属性列出所有的字符 <a href="https://unicode.org/cldr/utility/list-unicodeset.jsp">https://unicode.org/cldr/utility/list-unicodeset.jsp</a>.</li>
+<li>属性的对应缩写形式：<a href="https://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt">https://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt</a>.</li>
+<li>以文本格式整理的所有 Unicode 字符，包含了所有的属性：<a href="https://www.unicode.org/Public/UCD/latest/ucd/">https://www.unicode.org/Public/UCD/latest/ucd/</a>.</li>
+</ul>
+<h3 id="实例：16-进制数字">实例：16 进制数字</h3>
+<p>举个例子，让我们来查找 16 进制数字，写作 <code>xFF</code> 其中 <code>F</code> 是一个 16 进制的数字（0..1 或者 A..F）。</p>
+<p>一个 16 进制数字可以表示为 <code>pattern:\p{Hex_Digit}</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/x\p{Hex_Digit}\p{Hex_Digit}/u</span>;
+
+alert(<span class="hljs-string">&quot;number: xAF&quot;</span>.match(regexp)); <span class="hljs-comment">// xAF</span></code></pre>
+<h3 id="实例：中文字符">实例：中文字符</h3>
+<p>让我们再来考虑中文字符。</p>
+<p>有一个 unicode 属性 <code>Script</code> （一个书写系统），这个属性可以有一个值：<code>Cyrillic</code>，<code>Greek</code>，<code>Arabic</code>，<code>Han</code> （中文）等等，<a href="https://en.wikipedia.org/wiki/Script_(Unicode)">这里是一个完整的列表</a>。</p>
+<p>为了实现查找一个给定的书写系统中的字符，我们需要使用 <code>pattern:Script=&lt;value&gt;</code>，例如对于西里尔字符：<code>pattern:\p{sc=Cyrillic}</code>, 中文字符：<code>pattern:\p{sc=Han}</code>，等等。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\p{sc=Han}/gu</span>; <span class="hljs-comment">// returns Chinese hieroglyphs</span>
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">`Hello Привет 你好 123_456`</span>;
+
+alert( str.match(regexp) ); <span class="hljs-comment">// 你,好</span></code></pre>
+<h3 id="实例：货币">实例：货币</h3>
+<p>表示货币的字符，例如 <code>$</code>，<code>€</code>，<code>¥</code>，具有 unicode 属性 <code>pattern:\p{Currency_Symbol}</code>，缩写为 <code>pattern:\p{Sc}</code>。</p>
+<p>让我们使用这一属性来查找符合“货币，接着是一个数字”的价格文本：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\p{Sc}\d/gu</span>;
+
+<span class="hljs-keyword">let</span>  str = <span class="hljs-string">`Prices: $2, €1, ¥9`</span>;
+
+alert( str.match(regexp) ); <span class="hljs-comment">// $2,€1,¥9</span></code></pre>
+<p>之后，在文章 <a href="info:regexp-quantifiers">info:regexp-quantifiers</a> 中我们将会了解如何查找包含很多位的数字。</p>
+<h2 id="总结">总结</h2>
+<p>修饰符 <code>pattern:u</code> 在正则表达式中提供对 Unicode 的支持。</p>
+<p>这意味着两件事：</p>
+<ol>
+<li>4 个字节长的字符被以正确的方式处理：被看成单个的字符，而不是 2 个 2 字节长的字符。</li>
+<li>Unicode 属性可以被用于查找中 <code>\p{…}</code>。</li>
+</ol>
+<p>有了 unicode 属性我们可以查找给定语言中的词，特殊字符（引用，货币）等等。</p>

@@ -1,0 +1,38 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="节流装饰者">节流装饰者</h1>
+<p>创建一个“节流”装饰者 <code>throttle(f, ms)</code> —— 返回一个包装器。</p>
+<p>当被多次调用时，它会在每 <code>ms</code> 毫秒最多将调用传递给 <code>f</code> 一次。</p>
+<p>与去抖的不同是，它是个完全不同的装饰器：</p>
+<ul>
+<li><code>debounce</code> 会在“冷却（cooldown）”期后运行函数一次。适用于处理最终结果。</li>
+<li><code>throttle</code> 运行函数的频率不会大于所给定的时间 <code>ms</code> 毫秒。适用于不应该经常进行的定期更新。</li>
+</ul>
+<p>让我们看看现实生活中的应用程序，以便更好地理解这个需求，并了解它的来源。</p>
+<p><strong>例如，我们想要跟踪鼠标移动。</strong></p>
+<p>在浏览器中，我们可以设置一个函数，使其在每次鼠标移动时运行，并获取鼠标移动时的指针位置。在使用鼠标的过程中，此函数通常会执行地非常频繁，大概每秒 100 次（每 10 毫秒）。</p>
+<p><strong>我们想要在鼠标指针移动时，更新网页上的某些信息。</strong></p>
+<p>……但是更新函数 <code>update()</code> 太重了，无法在每个微小移动上都执行。高于每 100ms 更新一次的更新频次也没有意义。</p>
+<p>因此，我们将其包装到装饰者中：使用 <code>throttle(update, 100)</code> 作为在每次鼠标移动时运行的函数，而不是原始的 <code>update()</code>。装饰者会被频繁地调用，但是最多每 100ms 将调用转发给 <code>update()</code> 一次。</p>
+<p>在视觉上，它看起来像这样：</p>
+<ol>
+<li>对于第一个鼠标移动，装饰的变体立即将调用传递给 <code>update</code>。这很重要，用户会立即看到我们对其动作的反应。</li>
+<li>然后，随着鼠标移动，直到 <code>100ms</code> 没有任何反应。装饰的变体忽略了调用。</li>
+<li>在 <code>100ms</code> 结束时 —— 最后一个坐标又发生了一次 <code>update</code>。</li>
+<li>然后，最后，鼠标停在某处。装饰的变体会等到 <code>100ms</code> 到期，然后用最后一个坐标运行一次 <code>update</code>。因此，非常重要的是，处理最终的鼠标坐标。</li>
+</ol>
+<p>一个代码示例：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">a</span>) </span>{
+  <span class="hljs-built_in">console</span>.log(a);
+}
+
+<span class="hljs-comment">// f1000 最多每 1000ms 将调用传递给 f 一次</span>
+<span class="hljs-keyword">let</span> f1000 = throttle(f, <span class="hljs-number">1000</span>);
+
+f1000(<span class="hljs-number">1</span>); <span class="hljs-comment">// 显示 1</span>
+f1000(<span class="hljs-number">2</span>); <span class="hljs-comment">// (节流，尚未到 1000ms)</span>
+f1000(<span class="hljs-number">3</span>); <span class="hljs-comment">// (节流，尚未到 1000ms)</span>
+
+<span class="hljs-comment">// 当 1000ms 时间到...</span>
+<span class="hljs-comment">// ...输出 3，中间值 2 被忽略</span></code></pre>
+<p>P.S. 参数（arguments）和传递给 <code>f1000</code> 的上下文 <code>this</code> 应该被传递给原始的 <code>f</code>。</p>

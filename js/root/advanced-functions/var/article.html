@@ -1,0 +1,192 @@
+<h1 id="旧时的-var">旧时的 &quot;var&quot;</h1>
+<pre><code class="language-smart">本文所讲的内容对于帮助理解旧脚本很有用。
+
+但这不是我们编写新代码的方式。</code></pre>
+<p>在本教程最开始那部分的 <a href="info:variables">变量</a> 这章中，我们提到了变量声明的三种方式：</p>
+<ol>
+<li><code>let</code></li>
+<li><code>const</code></li>
+<li><code>var</code></li>
+</ol>
+<p><code>var</code> 声明与 <code>let</code> 相似。大部分情况下，我们可以用 <code>let</code> 代替 <code>var</code> 或者 <code>var</code> 代替 <code>let</code>，都能达到预期的效果：</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> message = <span class="hljs-string">&quot;Hi&quot;</span>;
+alert(message); <span class="hljs-comment">// Hi</span></code></pre>
+<p>但实际上 <code>var</code> 却是一头非常不同的，源自远古时代的怪兽。在现代脚本中一般不再使用它，但它仍然潜伏在旧脚本中。</p>
+<p>如果你不打算接触这样的脚本，你甚至可以跳过本章或推迟阅读本章。</p>
+<p>另一方面，了解将旧脚本从 <code>var</code> 迁移到 <code>let</code> 时的区别，以避免奇怪的错误，是很重要的。</p>
+<h2 id="var-没有块级作用域">&quot;var&quot; 没有块级作用域</h2>
+<p>用 <code>var</code> 声明的变量，不是函数作用域就是全局作用域。它们在代码块外也是可见的（译注：也就是说，<code>var</code> 声明的变量只有函数作用域和全局作用域，没有块级作用域）。</p>
+<p>举个例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
+  <span class="hljs-keyword">var</span> test = <span class="hljs-literal">true</span>; <span class="hljs-comment">// 使用 &quot;var&quot; 而不是 &quot;let&quot;</span>
+}
+
+*!*
+alert(test); <span class="hljs-comment">// true，变量在 if 结束后仍存在</span>
+*/!*</code></pre>
+<p>由于 <code>var</code> 会忽略代码块，因此我们有了一个全局变量 <code>test</code>。</p>
+<p>如果我们在第二行使用 <code>let test</code> 而不是 <code>var test</code>，那么该变量将仅在 <code>if</code> 内部可见：</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
+  <span class="hljs-keyword">let</span> test = <span class="hljs-literal">true</span>; <span class="hljs-comment">// 使用 &quot;let&quot;</span>
+}
+
+*!*
+alert(test); <span class="hljs-comment">// Error: test is not defined</span>
+*/!*</code></pre>
+<p>对于循环也是这样的，<code>var</code> 声明的变量没有块级作用域也没有循环局部作用域：</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+  <span class="hljs-comment">// ...</span>
+}
+
+*!*
+alert(i); <span class="hljs-comment">// 10，&quot;i&quot; 在循环结束后仍可见，它是一个全局变量</span>
+*/!*</code></pre>
+<p>如果一个代码块位于函数内部，那么 <code>var</code> 声明的变量的作用域将为函数作用域：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
+    <span class="hljs-keyword">var</span> phrase = <span class="hljs-string">&quot;Hello&quot;</span>;
+  }
+
+  alert(phrase); <span class="hljs-comment">// works</span>
+}
+
+sayHi();
+alert(phrase); <span class="hljs-comment">// Error: phrase is not defined（检查开发者控制台）</span></code></pre>
+<p>可以看到，<code>var</code> 穿透了 <code>if</code>，<code>for</code> 和其它代码块。这是因为在早期的 JavaScript 中，块没有词法环境。而 <code>var</code> 就是这个时期的代表之一。</p>
+<h2 id="var-允许重新声明">&quot;var&quot; 允许重新声明</h2>
+<p>如果我们用 <code>let</code> 在同一作用域下将同一个变量声明两次，则会出现错误：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user;
+<span class="hljs-keyword">let</span> user; <span class="hljs-comment">// SyntaxError: &#x27;user&#x27; has already been declared</span></code></pre>
+<p>使用 <code>var</code>，我们可以重复声明一个变量，不管多少次都行。如果我们对一个已经声明的变量使用 <code>var</code>，这条新的声明语句会被忽略：</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> user = <span class="hljs-string">&quot;Pete&quot;</span>;
+
+<span class="hljs-keyword">var</span> user = <span class="hljs-string">&quot;John&quot;</span>; <span class="hljs-comment">// 这个 &quot;var&quot; 无效（因为变量已经声明过了）</span>
+<span class="hljs-comment">// ……不会触发错误</span>
+
+alert(user); <span class="hljs-comment">// John</span></code></pre>
+<h2 id="var-声明的变量，可以在其声明语句前被使用">&quot;var&quot; 声明的变量，可以在其声明语句前被使用</h2>
+<p>当函数开始的时候，就会处理 <code>var</code> 声明（脚本启动对应全局变量）。</p>
+<p>换言之，<code>var</code> 声明的变量会在函数开头被定义，与它在代码中定义的位置无关（这里不考虑定义在嵌套函数中的情况）。</p>
+<p>那么看一下这段代码：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
+  phrase = <span class="hljs-string">&quot;Hello&quot;</span>;
+
+  alert(phrase);
+
+*!*
+  <span class="hljs-keyword">var</span> phrase;
+*/!*
+}
+sayHi();</code></pre>
+<p>……从技术上讲，它与下面这种情况是一样的（<code>var phrase</code> 被上移至函数开头）：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
+*!*
+  <span class="hljs-keyword">var</span> phrase;
+*/!*
+
+  phrase = <span class="hljs-string">&quot;Hello&quot;</span>;
+
+  alert(phrase);
+}
+sayHi();</code></pre>
+<p>……甚至与这种情况也一样（记住，代码块是会被忽略的）：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
+  phrase = <span class="hljs-string">&quot;Hello&quot;</span>; <span class="hljs-comment">// (*)</span>
+
+  *!*
+  <span class="hljs-keyword">if</span> (<span class="hljs-literal">false</span>) {
+    <span class="hljs-keyword">var</span> phrase;
+  }
+  */!*
+
+  alert(phrase);
+}
+sayHi();</code></pre>
+<p>人们将这种行为称为“提升”（英文为 &quot;hoisting&quot; 或 &quot;raising&quot;），因为所有的 <code>var</code> 都被“提升”到了函数的顶部。</p>
+<p>所以，在上面的例子中，<code>if (false)</code> 分支永远都不会执行，但没关系，它里面的 <code>var</code> 在函数刚开始时就被处理了，所以在执行 <code>(*)</code> 那行代码时，变量是存在的。</p>
+<p><strong>声明会被提升，但是赋值不会。</strong></p>
+<p>我们最好用例子来说明：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
+  alert(phrase);  
+
+*!*
+  <span class="hljs-keyword">var</span> phrase = <span class="hljs-string">&quot;Hello&quot;</span>;
+*/!*
+}
+
+sayHi();</code></pre>
+<p><code>var phrase = &quot;Hello&quot;</code> 这行代码包含两个行为：</p>
+<ol>
+<li>使用 <code>var</code> 声明变量</li>
+<li>使用 <code>=</code> 给变量赋值。</li>
+</ol>
+<p>声明在函数刚开始执行的时候（“提升”）就被处理了，但是赋值操作始终是在它出现的地方才起作用。所以这段代码实际上是这样工作的：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
+*!*
+  <span class="hljs-keyword">var</span> phrase; <span class="hljs-comment">// 在函数刚开始时进行变量声明</span>
+*/!*
+
+  alert(phrase); <span class="hljs-comment">// undefined</span>
+
+*!*
+  phrase = <span class="hljs-string">&quot;Hello&quot;</span>; <span class="hljs-comment">// ……赋值 — 当程序执行到这一行时。</span>
+*/!*
+}
+
+sayHi();</code></pre>
+<p>因为所有的 <code>var</code> 声明都是在函数开头处理的，我们可以在任何地方引用它们。但是在它们被赋值之前都是 undefined。</p>
+<p>上面两个例子中 <code>alert</code> 运行都不会报错，因为变量 <code>phrase</code> 是存在的。但是它还没有被赋值，所以显示 <code>undefiend</code>。</p>
+<h3 id="iife">IIFE</h3>
+<p>在之前，JavaScript 中只有 <code>var</code> 这一种声明变量的方式，并且这种方式声明的变量没有块级作用域，程序员们就发明了一种模仿块级作用域的方法。这种方法被称为“立即调用函数表达式”（immediately-invoked function expressions，IIFE）。</p>
+<p>如今，我们不应该再使用 IIFE 了，但是你可以在旧脚本中找到它们。</p>
+<p>IIFE 看起来像这样：</p>
+<pre><code class="language-js">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&quot;Hello&quot;</span>;
+
+  alert(message); <span class="hljs-comment">// Hello</span>
+
+})();</code></pre>
+<p>这里创建了一个函数表达式并立即调用。因此，代码立即执行并拥有了自己的私有变量。</p>
+<p>函数表达式被括号 <code>(function {...})</code> 包裹起来，因为在 JavaScript 中，当主代码流遇到 <code>&quot;function&quot;</code> 时，它会把它当成一个函数声明的开始。但函数声明必须有一个函数名，所以这样的代码会导致错误：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 尝试声明并立即调用一个函数</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// &lt;-- Error: Function statements require a function name</span>
+
+  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&quot;Hello&quot;</span>;
+
+  alert(message); <span class="hljs-comment">// Hello</span>
+
+}();</code></pre>
+<p>即使我们说：“好吧，那我们加一个名称吧”，但它仍然不工作，因为 JavaScript 不允许立即调用函数声明：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 下面的括号会导致语法错误</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">go</span>(<span class="hljs-params"></span>) </span>{
+
+}(); <span class="hljs-comment">// &lt;-- 不能立即调用函数声明</span></code></pre>
+<p>因此，需要使用圆括号把该函数表达式包起来，以告诉 JavaScript，这个函数是在另一个表达式的上下文中创建的，因此它是一个函数表达式：它不需要函数名，可以立即调用。</p>
+<p>除了使用括号，还有其他方式可以告诉 JavaScript 在这我们指的是函数表达式：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 创建 IIFE 的方法</span>
+
+(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">&quot;Parentheses around the function&quot;</span>);
+}*!*)*/!*();
+
+(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">&quot;Parentheses around the whole thing&quot;</span>);
+}()*!*)*/!*;
+
+*!*!*/!*<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">&quot;Bitwise NOT operator starts the expression&quot;</span>);
+}();
+
+*!*+*/!*<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">&quot;Unary plus starts the expression&quot;</span>);
+}();</code></pre>
+<p>在上面的所有情况中，我们都声明了一个函数表达式并立即运行它。请再注意一下：如今我们没有理由来编写这样的代码。</p>
+<h2 id="总结">总结</h2>
+<p><code>var</code> 与 <code>let/const</code> 有两个主要的区别：</p>
+<ol>
+<li><code>var</code> 声明的变量没有块级作用域，它们的最小作用域就是函数级作用域。</li>
+<li><code>var</code>  变量声明在函数开头就会被处理（脚本启动对应全局变量）。</li>
+</ol>
+<p>涉及全局对象时，还有一个非常小的差异，我们将在下一章中介绍。</p>
+<p>这些差异使 <code>var</code> 在大多数情况下都比 <code>let</code> 更糟糕。块级作用域是这么好的一个东西。这就是 <code>let</code> 在几年前就被写入到标准中的原因，并且现在（与 <code>const</code> 一起）已经成为了声明变量的主要方式。</p>

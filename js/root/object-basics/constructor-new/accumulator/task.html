@@ -1,0 +1,18 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="创建-new-accumulator">创建 new Accumulator</h1>
+<p>创建一个构造函数 <code>Accumulator(startingValue)</code>。</p>
+<p>它创建的对象应该：</p>
+<ul>
+<li>将“当前 value”存储在属性 <code>value</code> 中。起始值被设置到构造器 <code>startingValue</code> 的参数。</li>
+<li><code>read()</code> 方法应该使用 <code>prompt</code> 来读取一个新的数字，并将其添加到 <code>value</code> 中。</li>
+</ul>
+<p>换句话说，<code>value</code> 属性是所有用户输入值与初始值 <code>startingValue</code> 的总和。</p>
+<p>下面是示例代码：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> accumulator = <span class="hljs-keyword">new</span> Accumulator(<span class="hljs-number">1</span>); <span class="hljs-comment">// 初始值 1</span>
+
+accumulator.read(); <span class="hljs-comment">// 添加用户输入的 value</span>
+accumulator.read(); <span class="hljs-comment">// 添加用户输入的 value</span>
+
+alert(accumulator.value); <span class="hljs-comment">// 显示这些值的总和</span></code></pre>
+<p>[demo]</p>

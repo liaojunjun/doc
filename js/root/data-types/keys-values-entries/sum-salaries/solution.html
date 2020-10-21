@@ -1,0 +1,24 @@
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sumSalaries</span>(<span class="hljs-params">salaries</span>) </span>{
+
+  <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> salary <span class="hljs-keyword">of</span> <span class="hljs-built_in">Object</span>.values(salaries)) {
+    sum += salary;
+  }
+
+  <span class="hljs-keyword">return</span> sum; <span class="hljs-comment">// 650</span>
+}
+
+<span class="hljs-keyword">let</span> salaries = {
+  <span class="hljs-string">&quot;John&quot;</span>: <span class="hljs-number">100</span>,
+  <span class="hljs-string">&quot;Pete&quot;</span>: <span class="hljs-number">300</span>,
+  <span class="hljs-string">&quot;Mary&quot;</span>: <span class="hljs-number">250</span>
+};
+
+alert( sumSalaries(salaries) ); <span class="hljs-comment">// 650</span></code></pre>
+<p>还有另外一种可选方案，即使用 <code>Object.values</code> 和 <code>reduce</code> 来求和：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 使用 reduce 方法遍历 salaries 数组</span>
+<span class="hljs-comment">// 把它们加起来</span>
+<span class="hljs-comment">// 返回最终结果</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sumSalaries</span>(<span class="hljs-params">salaries</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.values(salaries).reduce(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a + b, <span class="hljs-number">0</span>) <span class="hljs-comment">// 650</span>
+}</code></pre>

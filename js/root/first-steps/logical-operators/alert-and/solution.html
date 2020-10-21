@@ -1,0 +1,4 @@
+<p>答案：<code>1</code>，然后 <code>undefined</code>。</p>
+<pre><code class="language-js">alert( alert(<span class="hljs-number">1</span>) &amp;&amp; alert(<span class="hljs-number">2</span>) );</code></pre>
+<p>调用 <code>alert</code> 返回了 <code>undefined</code>（它只展示消息，所以没有有意义的返回值）。</p>
+<p>因此，<code>&amp;&amp;</code> 计算了它左边的操作数（显示 <code>1</code>），然后立即停止了，因为 <code>undefined</code> 是一个假值。<code>&amp;&amp;</code> 就是寻找假值然后返回它，所以运算结束。</p>

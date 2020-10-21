@@ -1,0 +1,71 @@
+<p>为了获取 <code>date</code> 距离当前时间的间隔 —— 我们将两个日期相减。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">formatDate</span>(<span class="hljs-params">date</span>) </span>{
+  <span class="hljs-keyword">let</span> diff = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>() - date; <span class="hljs-comment">// 以毫秒表示的差值</span>
+
+  <span class="hljs-keyword">if</span> (diff &lt; <span class="hljs-number">1000</span>) { <span class="hljs-comment">// 少于 1 秒</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;right now&#x27;</span>;
+  }
+
+  <span class="hljs-keyword">let</span> sec = <span class="hljs-built_in">Math</span>.floor(diff / <span class="hljs-number">1000</span>); <span class="hljs-comment">// 将 diff 转换为秒</span>
+
+  <span class="hljs-keyword">if</span> (sec &lt; <span class="hljs-number">60</span>) {
+    <span class="hljs-keyword">return</span> sec + <span class="hljs-string">&#x27; sec. ago&#x27;</span>;
+  }
+
+  <span class="hljs-keyword">let</span> min = <span class="hljs-built_in">Math</span>.floor(diff / <span class="hljs-number">60000</span>); <span class="hljs-comment">// 将 diff 转换为分钟</span>
+  <span class="hljs-keyword">if</span> (min &lt; <span class="hljs-number">60</span>) {
+    <span class="hljs-keyword">return</span> min + <span class="hljs-string">&#x27; min. ago&#x27;</span>;
+  }
+
+  <span class="hljs-comment">// 格式化 date</span>
+  <span class="hljs-comment">// 将前置 0 加到一位数 day/month/hours/minutes 前</span>
+  <span class="hljs-keyword">let</span> d = date;
+  d = [
+    <span class="hljs-string">&#x27;0&#x27;</span> + d.getDate(),
+    <span class="hljs-string">&#x27;0&#x27;</span> + (d.getMonth() + <span class="hljs-number">1</span>),
+    <span class="hljs-string">&#x27;&#x27;</span> + d.getFullYear(),
+    <span class="hljs-string">&#x27;0&#x27;</span> + d.getHours(),
+    <span class="hljs-string">&#x27;0&#x27;</span> + d.getMinutes()
+  ].map(<span class="hljs-function"><span class="hljs-params">component</span> =&gt;</span> component.slice(<span class="hljs-number">-2</span>)); <span class="hljs-comment">// 得到每个组件的后两位</span>
+
+  <span class="hljs-comment">// 将时间信息和日期组合在一起</span>
+ <span class="hljs-keyword">return</span> d.slice(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>).join(<span class="hljs-string">&#x27;.&#x27;</span>) + <span class="hljs-string">&#x27; &#x27;</span> + d.slice(<span class="hljs-number">3</span>).join(<span class="hljs-string">&#x27;:&#x27;</span>);
+}
+
+alert( formatDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> - <span class="hljs-number">1</span>)) ); <span class="hljs-comment">// &quot;right now&quot;</span>
+
+alert( formatDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> - <span class="hljs-number">30</span> * <span class="hljs-number">1000</span>)) ); <span class="hljs-comment">// &quot;30 sec. ago&quot;</span>
+
+alert( formatDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> - <span class="hljs-number">5</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>)) ); <span class="hljs-comment">// &quot;5 min. ago&quot;</span>
+
+<span class="hljs-comment">// 昨天的日期如：31.12.2016 20:00</span>
+alert( formatDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> - <span class="hljs-number">86400</span> * <span class="hljs-number">1000</span>)) );</code></pre>
+<p>另一种解法：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">formatDate</span>(<span class="hljs-params">date</span>) </span>{
+  <span class="hljs-keyword">let</span> dayOfMonth = date.getDate();
+  <span class="hljs-keyword">let</span> month = date.getMonth() + <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">let</span> year = date.getFullYear();
+  <span class="hljs-keyword">let</span> hour = date.getHours();
+  <span class="hljs-keyword">let</span> minutes = date.getMinutes();
+  <span class="hljs-keyword">let</span> diffMs = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>() - date;
+  <span class="hljs-keyword">let</span> diffSec = <span class="hljs-built_in">Math</span>.round(diffMs / <span class="hljs-number">1000</span>);
+  <span class="hljs-keyword">let</span> diffMin = diffSec / <span class="hljs-number">60</span>;
+  <span class="hljs-keyword">let</span> diffHour = diffMin / <span class="hljs-number">60</span>;
+
+  <span class="hljs-comment">// 格式化</span>
+  year = year.toString().slice(<span class="hljs-number">-2</span>);
+  month = month &lt; <span class="hljs-number">10</span> ? <span class="hljs-string">&#x27;0&#x27;</span> + month : month;
+  dayOfMonth = dayOfMonth &lt; <span class="hljs-number">10</span> ? <span class="hljs-string">&#x27;0&#x27;</span> + dayOfMonth : dayOfMonth;
+  hour = hour &lt; <span class="hljs-number">10</span> ? <span class="hljs-string">&#x27;0&#x27;</span> + hour : hour;
+  minutes = minutes &lt; <span class="hljs-number">10</span> ? <span class="hljs-string">&#x27;0&#x27;</span> + minutes : minutes;
+
+  <span class="hljs-keyword">if</span> (diffSec &lt; <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;right now&#x27;</span>;  
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (diffMin &lt; <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${diffSec}</span> sec. ago`</span>
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (diffHour &lt; <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${diffMin}</span> min. ago`</span>
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${dayOfMonth}</span>.<span class="hljs-subst">${month}</span>.<span class="hljs-subst">${year}</span> <span class="hljs-subst">${hour}</span>:<span class="hljs-subst">${minutes}</span>`</span>
+  }
+}</code></pre>

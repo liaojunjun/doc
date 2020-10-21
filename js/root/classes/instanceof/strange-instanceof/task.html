@@ -1,0 +1,14 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="不按套路出牌的-instanceof">不按套路出牌的 instanceof</h1>
+<p>在下面的代码中，为什么 <code>instanceof</code> 会返回 <code>true</code>？我们可以明显看到，<code>a</code> 并不是通过 <code>B()</code> 创建的。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">A</span>(<span class="hljs-params"></span>) </span>{}
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">B</span>(<span class="hljs-params"></span>) </span>{}
+
+A.prototype = B.prototype = {};
+
+<span class="hljs-keyword">let</span> a = <span class="hljs-keyword">new</span> A();
+
+*!*
+alert( a <span class="hljs-keyword">instanceof</span> B ); <span class="hljs-comment">// true</span>
+*/!*</code></pre>

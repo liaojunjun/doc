@@ -1,0 +1,36 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="从对象创建树">从对象创建树</h1>
+<p>编写一个函数 <code>createTree</code>，从嵌套对象创建一个嵌套的 <code>ul/li</code> 列表（list）。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> data = {
+  <span class="hljs-string">&quot;Fish&quot;</span>: {
+    <span class="hljs-string">&quot;trout&quot;</span>: {},
+    <span class="hljs-string">&quot;salmon&quot;</span>: {}
+  },
+
+  <span class="hljs-string">&quot;Tree&quot;</span>: {
+    <span class="hljs-string">&quot;Huge&quot;</span>: {
+      <span class="hljs-string">&quot;sequoia&quot;</span>: {},
+      <span class="hljs-string">&quot;oak&quot;</span>: {}
+    },
+    <span class="hljs-string">&quot;Flowering&quot;</span>: {
+      <span class="hljs-string">&quot;apple tree&quot;</span>: {},
+      <span class="hljs-string">&quot;magnolia&quot;</span>: {}
+    }
+  }
+};</code></pre>
+<p>语法：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> container = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;container&#x27;</span>);
+*!*
+createTree(container, data); <span class="hljs-comment">// 将树创建在 container 中</span>
+*/!*</code></pre>
+<p>结果（树）看起来像这样：</p>
+<p>[iframe border=1 src=&quot;build-tree-dom&quot;]</p>
+<p>选择下面两种方式中的一种，来完成这个任务：</p>
+<ol>
+<li>为树创建 HTML，然后将它们赋值给 <code>container.innerHTML</code>。</li>
+<li>创建节点树，并使用 DOM 方法将它们附加（append）上去。</li>
+</ol>
+<p>如果这两种方式你都做，那就太好了。</p>
+<p>P.S. 树上不应该有“多余”的元素，例如空的 <code>&lt;ul&gt;&lt;/ul&gt;</code> 叶子节点。</p>

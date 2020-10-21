@@ -1,0 +1,16 @@
+<h1 id="计时器元素实例">计时器元素实例</h1>
+<p>我们已经创建了 <code>&lt;time-formatted&gt;</code> 元素用于展示格式化好的时间。</p>
+<p>创建一个 <code>&lt;live-timer&gt;</code> 元素用于展示当前时间：</p>
+<ol>
+<li>这个元素应该在内部使用 <code>&lt;time-formatted&gt;</code>，不要重复实现这个元素的功能。</li>
+<li>每秒钟更新。</li>
+<li>每一秒钟都应该有一个自定义事件 <code>tick</code> 被生成，这个事件的 <code>event.detail</code> 属性带有当前日期。（参考章节 <a href="info:dispatch-events">info:dispatch-events</a> ）。</li>
+</ol>
+<p>使用方式：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">live-timer</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">live-timer</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  elem.addEventListener(<span class="hljs-string">&#x27;tick&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(event.detail));
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>例子：</p>
+<p>[iframe src=&quot;solution&quot; height=40]</p>

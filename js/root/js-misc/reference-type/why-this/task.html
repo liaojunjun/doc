@@ -1,0 +1,18 @@
+<p>importance: 3</p>
+<hr>
+<h1 id="解释-this-的值">解释 &quot;this&quot; 的值</h1>
+<p>在下面的代码中，我们试图连续调用 <code>obj.go()</code> 方法 4 次。</p>
+<p>但是前两次和后两次调用的结果不同，为什么呢？</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj, method;
+
+obj = {
+  <span class="hljs-attr">go</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-built_in">this</span>); }
+};
+
+obj.go();               <span class="hljs-comment">// (1) [object Object]</span>
+
+(obj.go)();             <span class="hljs-comment">// (2) [object Object]</span>
+
+(method = obj.go)();    <span class="hljs-comment">// (3) undefined</span>
+
+(obj.go || obj.stop)(); <span class="hljs-comment">// (4) undefined</span></code></pre>

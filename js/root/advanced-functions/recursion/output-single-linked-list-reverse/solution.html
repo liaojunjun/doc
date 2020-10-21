@@ -1,0 +1,61 @@
+<h1 id="使用递归">使用递归</h1>
+<p>递归逻辑在这稍微有点儿棘手。</p>
+<p>我们需要先输出列表的其它元素，<strong>然后</strong> 输出当前的元素：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> list = {
+  <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">next</span>: {
+    <span class="hljs-attr">value</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">next</span>: {
+      <span class="hljs-attr">value</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">next</span>: {
+        <span class="hljs-attr">value</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">next</span>: <span class="hljs-literal">null</span>
+      }
+    }
+  }
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printReverseList</span>(<span class="hljs-params">list</span>) </span>{
+
+  <span class="hljs-keyword">if</span> (list.next) {
+    printReverseList(list.next);
+  }
+
+  alert(list.value);
+}
+
+printReverseList(list);</code></pre>
+<h1 id="使用循环">使用循环</h1>
+<p>循环解法也比直接输出稍微复杂了点儿。</p>
+<p>在这而没有什么方法可以获取 <code>list</code> 中的最后一个值。我们也不能“从后向前”读取。</p>
+<p>因此，我们可以做的就是直接按顺序遍历每个元素，并把它们存到一个数组中，然后反向输出我们存储在数组中的元素：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> list = {
+  <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">next</span>: {
+    <span class="hljs-attr">value</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">next</span>: {
+      <span class="hljs-attr">value</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">next</span>: {
+        <span class="hljs-attr">value</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">next</span>: <span class="hljs-literal">null</span>
+      }
+    }
+  }
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printReverseList</span>(<span class="hljs-params">list</span>) </span>{
+  <span class="hljs-keyword">let</span> arr = [];
+  <span class="hljs-keyword">let</span> tmp = list;
+
+  <span class="hljs-keyword">while</span> (tmp) {
+    arr.push(tmp.value);
+    tmp = tmp.next;
+  }
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = arr.length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
+    alert( arr[i] );
+  }
+}
+
+printReverseList(list);</code></pre>
+<p>请注意，递归解法实际上也是这样做的：它顺着链表，记录每一个嵌套调用里链表的元素（在执行上下文堆栈里），然后输出它们。</p>

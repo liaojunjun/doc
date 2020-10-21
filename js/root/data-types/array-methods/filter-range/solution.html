@@ -1,0 +1,12 @@
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">filterRange</span>(<span class="hljs-params">arr, a, b</span>) </span>{
+  <span class="hljs-comment">// 在表达式周围添加了括号，以提高可读性</span>
+  <span class="hljs-keyword">return</span> arr.filter(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> (a &lt;= item &amp;&amp; item &lt;= b));
+}
+
+<span class="hljs-keyword">let</span> arr = [<span class="hljs-number">5</span>, <span class="hljs-number">3</span>, <span class="hljs-number">8</span>, <span class="hljs-number">1</span>];
+
+<span class="hljs-keyword">let</span> filtered = filterRange(arr, <span class="hljs-number">1</span>, <span class="hljs-number">4</span>);
+
+alert( filtered ); <span class="hljs-comment">// 3,1（匹配的值）</span>
+
+alert( arr ); <span class="hljs-comment">// 5,3,8,1（未经改动的数组中的值）</span></code></pre>

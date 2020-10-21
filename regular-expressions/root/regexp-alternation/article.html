@@ -1,0 +1,41 @@
+<h1 id="选择（or）">选择（OR）|</h1>
+<p>选择是正则表达式中的一个术语，实际上是一个简单的“或”。</p>
+<p>在正则表达式中，它用竖线 <code>pattern:|</code> 表示。</p>
+<p>例如，我们需要找出编程语言：HTML、PHP、Java 或 JavaScript。</p>
+<p>对应的正则表达式为：<code>pattern:html|php|java(script)?</code>。</p>
+<p>用例如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/html|php|css|java(script)?/gi</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;First HTML appeared, then CSS, then JavaScript&quot;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &#x27;HTML&#x27;, &#x27;CSS&#x27;, &#x27;JavaScript&#x27;</span></code></pre>
+<p>我们已知的一个相似符号 —— 方括号。就允许在许多字符中进行选择，例如 <code>pattern:gr[ae]y</code> 匹配 <code>match:gray</code> 或 <code>match:grey</code>。</p>
+<p>选择符号并非在字符级别生效，而是在表达式级别。正则表达式 <code>pattern:A|B|C</code> 意思是命中 <code>A</code>、<code>B</code> 或 <code>C</code> 其一均可。</p>
+<p>例如：</p>
+<ul>
+<li><code>pattern:gr(a|e)y</code> 严格等同 <code>pattern:gr[ae]y</code>。</li>
+<li><code>pattern:gra|ey</code> 匹配 &quot;gra&quot; or &quot;ey&quot;。</li>
+</ul>
+<p>我们通常用圆括号把模式中的选择部分括起来，像这样 <code>pattern:before(XXX|YYY)after</code>。</p>
+<h2 id="时间正则表达式">时间正则表达式</h2>
+<p>在之前的章节中有个任务是构建用于查找形如 <code>hh:mm</code> 的时间字符串，例如 <code>12:00</code>。但是简单的 <code>pattern:\d\d:\d\d</code> 过于模糊。它同时匹配 <code>25:99</code>。</p>
+<p>如何构建更优的正则表达式？</p>
+<p>我们可以应用到更多的严格匹配结果中：</p>
+<ul>
+<li>首个匹配数字必须是 <code>0</code> 或 <code>1</code>，同时其后还要跟随任一数字。</li>
+<li>或者是数字 <code>2</code> 之后跟随 <code>pattern:[0-3]</code>。</li>
+</ul>
+<p>构建正则表达式：<code>pattern:[01]\d|2[0-3]</code>。</p>
+<p>接着可以添加冒号和分钟的部分。</p>
+<p>分钟的部分必须在 <code>0</code> 到 <code>59</code> 区间，在正则表达式语言中含义为首个匹配数字 <code>pattern:[0-5]</code> 其后跟随任一数字 <code>\d</code>。</p>
+<p>把它们拼接在一起形成最终的模式 <code>pattern:[01]\d|2[0-3]:[0-5]\d</code>。</p>
+<p>快大功告成了，但仍然存在一个问题。选择符 <code>|</code> 在 <code>pattern:[01]\d</code> 和 <code>pattern:2[0-3]:[0-5]\d</code> 之间。这是错误的，因为它只匹配符号左侧或右侧任一表达式。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/[01]\d|2[0-3]:[0-5]\d/g</span>;
+
+alert(<span class="hljs-string">&quot;12&quot;</span>.match(reg)); <span class="hljs-comment">// 12 (matched [01]\d)</span></code></pre>
+<p>这个错误相当明显，但也是初学正则表达式的常见错误。</p>
+<p>我们需要添加一个插入语用于匹配时钟：<code>[01]\d</code> 或 <code>2[0-3]</code>。</p>
+<p>以下为正确版本：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/([01]\d|2[0-3]):[0-5]\d/g</span>;
+
+alert(<span class="hljs-string">&quot;00:00 10:10 23:59 25:99 1:2&quot;</span>.match(reg)); <span class="hljs-comment">// 00:00,10:10,23:59</span></code></pre>

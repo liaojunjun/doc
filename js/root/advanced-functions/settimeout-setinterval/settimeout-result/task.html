@@ -1,0 +1,19 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="settimeout-会显示什么？">setTimeout 会显示什么？</h1>
+<p>下面代码中使用 <code>setTimeout</code> 调度了一个调用，然后需要运行一个计算量很大的 <code>for</code> 循环，这段运算耗时超过 100 毫秒。</p>
+<p>调度的函数会在何时运行？</p>
+<ol>
+<li>循环执行完成后。</li>
+<li>循环执行前。</li>
+<li>循环刚开始时。</li>
+</ol>
+<p><code>alert</code> 会显示什么？</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> alert(i), <span class="hljs-number">100</span>); <span class="hljs-comment">// ?</span>
+
+<span class="hljs-comment">// 假设这段代码的运行时间 &gt;100ms</span>
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">100000000</span>; j++) {
+  i++; 
+}</code></pre>

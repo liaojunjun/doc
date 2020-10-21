@@ -1,0 +1,10 @@
+<p>简要回答就是：<strong>不，它们不相等</strong>：</p>
+<p>不同之处在于，如果 <code>f1</code> 中出现 error，那么在这儿它会被 <code>.catch</code> 处理：</p>
+<pre><code class="language-js">promise
+  .then(f1)
+  .catch(f2);</code></pre>
+<p>……在这儿则不会：</p>
+<pre><code class="language-js">promise
+  .then(f1, f2);</code></pre>
+<p>这是因为 error 是沿着链传递的，而在第二段代码中，<code>f1</code> 下面没有链。</p>
+<p>换句话说，<code>.then</code> 将 result/error 传递给下一个 <code>.then/.catch</code>。所以在第一个例子中，在下面有一个 <code>catch</code>，而在第二个例子中并没有 <code>catch</code>，所以 error 未被处理。</p>

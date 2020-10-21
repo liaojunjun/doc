@@ -1,0 +1,301 @@
+<h1 id="特性和属性（attributes-and-properties）">特性和属性（Attributes and properties）</h1>
+<p>当浏览器加载页面时，它会“读取”（或者称之为：“解析”）HTML 并从中生成 DOM 对象。对于元素节点，大多数标准的 HTML 特性（attributes）会自动变成 DOM 对象的属性（properties）。（译注：attribute 和 property 两词意思相近，为作区分，全文将 attribute 译为“特性”，property 译为“属性”，请读者注意区分。）</p>
+<p>例如，如果标签是 <code>&lt;body id=&quot;page&quot;&gt;</code>，那么 DOM 对象就会有 <code>body.id=&quot;page&quot;</code>。</p>
+<p>但特性—属性映射并不是一一对应的！在本章，我们将带领你一起分清楚这两个概念，了解如何使用它们，了解它们何时相同何时不同。</p>
+<h2 id="dom-属性">DOM 属性</h2>
+<p>我们已经见过了内建 DOM 属性。它们数量庞大。但是从技术上讲，没有人会限制我们，如果我们觉得这些 DOM 还不够，我们可以添加我们自己的。</p>
+<p>DOM 节点是常规的 JavaScript 对象。我们可以 alert 它们。</p>
+<p>例如，让我们在 <code>document.body</code> 中创建一个新的属性：</p>
+<pre><code class="language-js"><span class="hljs-built_in">document</span>.body.myData = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Caesar&#x27;</span>,
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;Imperator&#x27;</span>
+};
+
+alert(<span class="hljs-built_in">document</span>.body.myData.title); <span class="hljs-comment">// Imperator</span></code></pre>
+<p>我们也可以像下面这样添加一个方法：</p>
+<pre><code class="language-js"><span class="hljs-built_in">document</span>.body.sayTagName = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-built_in">this</span>.tagName);
+};
+
+<span class="hljs-built_in">document</span>.body.sayTagName(); <span class="hljs-comment">// BODY（这个方法中的 &quot;this&quot; 的值是 document.body）</span></code></pre>
+<p>我们还可以修改内建属性的原型，例如修改 <code>Element.prototype</code> 为所有元素添加一个新方法：</p>
+<pre><code class="language-js">Element.prototype.sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">`Hello, I&#x27;m <span class="hljs-subst">${<span class="hljs-built_in">this</span>.tagName}</span>`</span>);
+};
+
+<span class="hljs-built_in">document</span>.documentElement.sayHi(); <span class="hljs-comment">// Hello, I&#x27;m HTML</span>
+<span class="hljs-built_in">document</span>.body.sayHi(); <span class="hljs-comment">// Hello, I&#x27;m BODY</span></code></pre>
+<p>所以，DOM 属性和方法的行为就像常规的 Javascript 对象一样：</p>
+<ul>
+<li>它们可以有很多值。</li>
+<li>它们是大小写敏感的（要写成 <code>elem.nodeType</code>，而不是 <code>elem.NoDeTyPe</code>）。</li>
+</ul>
+<h2 id="html-特性">HTML 特性</h2>
+<p>在 HTML 中，标签可能拥有特性（attributes）。当浏览器解析 HTML 文本，并根据标签创建 DOM 对象时，浏览器会辨别 <strong>标准的</strong> 特性并以此创建 DOM 属性。</p>
+<p>所以，当一个元素有 <code>id</code> 或其他 <strong>标准的</strong> 特性，那么就会生成对应的 DOM 属性。但是非 <strong>标准的</strong> 特性则不会。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;test&quot;</span> <span class="hljs-attr">something</span>=<span class="hljs-string">&quot;non-standard&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    alert(<span class="hljs-built_in">document</span>.body.id); <span class="hljs-comment">// test</span>
+*!*
+    <span class="hljs-comment">// 非标准的特性没有获得对应的属性</span>
+    alert(<span class="hljs-built_in">document</span>.body.something); <span class="hljs-comment">// undefined</span>
+*/!*
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
+<p>请注意，一个元素的标准的特性对于另一个元素可能是未知的。例如 <code>&quot;type&quot;</code> 是 <code>&lt;input&gt;</code> 的一个标准的特性（<a href="https://html.spec.whatwg.org/#htmlinputelement">HTMLInputElement</a>），但对于 <code>&lt;body&gt;</code>（<a href="https://html.spec.whatwg.org/#htmlbodyelement">HTMLBodyElement</a>）来说则不是。规范中对相应元素类的标准的属性进行了详细的描述。</p>
+<p>这里我们可以看到：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;body&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;...&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;input&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    alert(input.type); <span class="hljs-comment">// text</span>
+*!*
+    alert(body.type); <span class="hljs-comment">// undefined：DOM 属性没有被创建，因为它不是一个标准的特性</span>
+*/!*
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
+<p>所以，如果一个特性不是标准的，那么就没有相对应的 DOM 属性。那我们有什么方法来访问这些特性吗？</p>
+<p>当然。所有特性都可以通过使用以下方法进行访问：</p>
+<ul>
+<li><code>elem.hasAttribute(name)</code> — 检查特性是否存在。</li>
+<li><code>elem.getAttribute(name)</code> — 获取这个特性值。</li>
+<li><code>elem.setAttribute(name, value)</code> — 设置这个特性值。</li>
+<li><code>elem.removeAttribute(name)</code> — 移除这个特性。</li>
+</ul>
+<p>这些方法操作的实际上是 HTML 中的内容。</p>
+<p>我们也可以使用 <code>elem.attributes</code> 读取所有特性：属于内建 <a href="https://dom.spec.whatwg.org/#attr">Attr</a> 类的对象的集合，具有 <code>name</code> 和 <code>value</code> 属性。</p>
+<p>下面是一个读取非标准的特性的示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">something</span>=<span class="hljs-string">&quot;non-standard&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+*!*
+    alert(<span class="hljs-built_in">document</span>.body.getAttribute(<span class="hljs-string">&#x27;something&#x27;</span>)); <span class="hljs-comment">// 非标准的</span>
+*/!*
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
+<p>HTML 特性有以下几个特征：</p>
+<ul>
+<li>它们的名字是大小写不敏感的（<code>id</code> 与 <code>ID</code> 相同）。</li>
+<li>它们的值总是字符串类型的。</li>
+</ul>
+<p>下面是一个使用特性的扩展示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span> <span class="hljs-attr">about</span>=<span class="hljs-string">&quot;Elephant&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    alert( elem.getAttribute(<span class="hljs-string">&#x27;About&#x27;</span>) ); <span class="hljs-comment">// (1) &#x27;Elephant&#x27;，读取</span>
+
+    elem.setAttribute(<span class="hljs-string">&#x27;Test&#x27;</span>, <span class="hljs-number">123</span>); <span class="hljs-comment">// (2) 写入</span>
+
+    alert( elem.outerHTML ); <span class="hljs-comment">// (3) 查看特性是否在 HTML 中（在）</span>
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> attr <span class="hljs-keyword">of</span> elem.attributes) { <span class="hljs-comment">// (4) 列出所有</span>
+      alert( <span class="hljs-string">`<span class="hljs-subst">${attr.name}</span> = <span class="hljs-subst">${attr.value}</span>`</span> );
+    }
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
+<p>请注意：</p>
+<ol>
+<li><code>getAttribute(&#39;About&#39;)</code> — 这里的第一个字母是大写的，但是在 HTML 中，它们都是小写的。但这没有影响：特性的名称是大小写不敏感的。</li>
+<li>我们可以将任何东西赋值给特性，但是这些东西会变成字符串类型的。所以这里我们的值为 <code>&quot;123&quot;</code>。</li>
+<li>所有特性，包括我们设置的那个特性，在 <code>outerHTML</code> 中都是可见的。</li>
+<li><code>attributes</code> 集合是可迭代对象，该对象将所有元素的特性（标准和非标准的）作为 <code>name</code> 和 <code>value</code> 属性存储在对象中。</li>
+</ol>
+<h2 id="属性特性同步">属性—特性同步</h2>
+<p>当一个标准的特性被改变，对应的属性也会自动更新，（除了几个特例）反之亦然。</p>
+<p>在下面这个示例中，<code>id</code> 被修改为特性，我们可以看到对应的属性也发生了变化。然后反过来也是同样的效果：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> input = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&#x27;input&#x27;</span>);
+
+  <span class="hljs-comment">// 特性 =&gt; 属性</span>
+  input.setAttribute(<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-string">&#x27;id&#x27;</span>);
+  alert(input.id); <span class="hljs-comment">// id（被更新了）</span>
+
+  <span class="hljs-comment">// 属性 =&gt; 特性</span>
+  input.id = <span class="hljs-string">&#x27;newId&#x27;</span>;
+  alert(input.getAttribute(<span class="hljs-string">&#x27;id&#x27;</span>)); <span class="hljs-comment">// newId（被更新了）</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>但这里也有些例外，例如 <code>input.value</code> 只能从特性同步到属性，反过来则不行：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> input = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&#x27;input&#x27;</span>);
+
+  <span class="hljs-comment">// 特性 =&gt; 属性</span>
+  input.setAttribute(<span class="hljs-string">&#x27;value&#x27;</span>, <span class="hljs-string">&#x27;text&#x27;</span>);
+  alert(input.value); <span class="hljs-comment">// text</span>
+
+*!*
+  <span class="hljs-comment">// 这个操作无效，属性 =&gt; 特性</span>
+  input.value = <span class="hljs-string">&#x27;newValue&#x27;</span>;
+  alert(input.getAttribute(<span class="hljs-string">&#x27;value&#x27;</span>)); <span class="hljs-comment">// text（没有被更新！）</span>
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>在上面这个例子中：</p>
+<ul>
+<li>改变特性值 <code>value</code> 会更新属性。</li>
+<li>但是属性的更改不会影响特性。</li>
+</ul>
+<p>这个“功能”在实际中会派上用场，因为用户行为可能会导致 <code>value</code> 的更改，然后在这些操作之后，如果我们想从 HTML 中恢复“原始”值，那么该值就在特性中。</p>
+<h2 id="dom-属性是多类型的">DOM 属性是多类型的</h2>
+<p>DOM 属性不总是字符串类型的。例如，<code>input.checked</code> 属性（对于 checkbox 的）是布尔型的。</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;input&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;checkbox&quot;</span> <span class="hljs-attr">checked</span>&gt;</span> checkbox
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  alert(input.getAttribute(<span class="hljs-string">&#x27;checked&#x27;</span>)); <span class="hljs-comment">// 特性值是：空字符串</span>
+  alert(input.checked); <span class="hljs-comment">// 属性值是：true</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>还有其他的例子。<code>style</code> 特性是字符串类型的，但 <code>style</code> 属性是一个对象：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;div&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;color:red;font-size:120%&quot;</span>&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 字符串</span>
+  alert(div.getAttribute(<span class="hljs-string">&#x27;style&#x27;</span>)); <span class="hljs-comment">// color:red;font-size:120%</span>
+
+  <span class="hljs-comment">// 对象</span>
+  alert(div.style); <span class="hljs-comment">// [object CSSStyleDeclaration]</span>
+  alert(div.style.color); <span class="hljs-comment">// red</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>尽管大多数 DOM 属性都是字符串类型的。</p>
+<p>有一种非常少见的情况，即使一个 DOM 属性是字符串类型的，但它可能和 HTML 特性也是不同的。例如，<code>href</code> DOM 属性一直是一个 <strong>完整的</strong> URL，即使该特性包含一个相对路径或者包含一个 <code>#hash</code>。</p>
+<p>这里有一个例子：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;a&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#hello&quot;</span>&gt;</span>link<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 特性</span>
+  alert(a.getAttribute(<span class="hljs-string">&#x27;href&#x27;</span>)); <span class="hljs-comment">// #hello</span>
+
+  <span class="hljs-comment">// 属性</span>
+  alert(a.href ); <span class="hljs-comment">// http://site.com/page#hello 形式的完整 URL </span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>如果我们需要 <code>href</code> 特性的值，或者其他与 HTML 中所写的完全相同的特性，则可以使用 <code>getAttribute</code>。</p>
+<h2 id="非标准的特性，dataset">非标准的特性，dataset</h2>
+<p>当编写 HTML 时，我们会用到很多标准的特性。但是非标准的，自定义的呢？首先，让我们看看它们是否有用？用来做什么？</p>
+<p>有时，非标准的特性常常用于将自定义的数据从 HTML 传递到 JavaScript，或者用于为 JavaScript “标记” HTML 元素。</p>
+<p>像这样：</p>
+<pre><code class="language-html"><span class="hljs-comment">&lt;!-- 标记这个 div 以在这显示 &quot;name&quot; --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> *!*<span class="hljs-attr">show-info</span>=<span class="hljs-string">&quot;name&quot;</span>*/!*&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-comment">&lt;!-- 标记这个 div 以在这显示 &quot;age&quot; --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> *!*<span class="hljs-attr">show-info</span>=<span class="hljs-string">&quot;age&quot;</span>*/!*&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 这段代码找到带有标记的元素，并显示需要的内容</span>
+  <span class="hljs-keyword">let</span> user = {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pete&quot;</span>,
+    <span class="hljs-attr">age</span>: <span class="hljs-number">25</span>
+  };
+
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> div <span class="hljs-keyword">of</span> <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;[show-info]&#x27;</span>)) {
+    <span class="hljs-comment">// 在字段中插入相应的信息</span>
+    <span class="hljs-keyword">let</span> field = div.getAttribute(<span class="hljs-string">&#x27;show-info&#x27;</span>);
+    div.innerHTML = user[field]; <span class="hljs-comment">// 首先 &quot;name&quot; 变为 Pete，然后 &quot;age&quot; 变为 25</span>
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>它们还可以用来设置元素的样式。</p>
+<p>例如，这里使用 <code>order-state</code> 特性来设置订单状态：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+  <span class="hljs-comment">/* 样式依赖于自定义特性 &quot;order-state&quot; */</span>
+  <span class="hljs-selector-class">.order</span><span class="hljs-selector-attr">[order-state=<span class="hljs-string">&quot;new&quot;</span>]</span> {
+    <span class="hljs-attribute">color</span>: green;
+  }
+
+  <span class="hljs-selector-class">.order</span><span class="hljs-selector-attr">[order-state=<span class="hljs-string">&quot;pending&quot;</span>]</span> {
+    <span class="hljs-attribute">color</span>: blue;
+  }
+
+  <span class="hljs-selector-class">.order</span><span class="hljs-selector-attr">[order-state=<span class="hljs-string">&quot;canceled&quot;</span>]</span> {
+    <span class="hljs-attribute">color</span>: red;
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;order&quot;</span> <span class="hljs-attr">order-state</span>=<span class="hljs-string">&quot;new&quot;</span>&gt;</span>
+  A new order.
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;order&quot;</span> <span class="hljs-attr">order-state</span>=<span class="hljs-string">&quot;pending&quot;</span>&gt;</span>
+  A pending order.
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;order&quot;</span> <span class="hljs-attr">order-state</span>=<span class="hljs-string">&quot;canceled&quot;</span>&gt;</span>
+  A canceled order.
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<p>为什么使用特性比使用 <code>.order-state-new</code>，<code>.order-state-pending</code>，<code>order-state-canceled</code> 这些样式类要好？</p>
+<p>因为特性值更容易管理。我们可以轻松地更改状态：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 比删除旧的或者添加一个新的类要简单一些</span>
+div.setAttribute(<span class="hljs-string">&#x27;order-state&#x27;</span>, <span class="hljs-string">&#x27;canceled&#x27;</span>);</code></pre>
+<p>但是自定义的特性也存在问题。如果我们出于我们的目的使用了非标准的特性，之后它被引入到了标准中并有了其自己的用途，该怎么办？HTML 语言是在不断发展的，并且更多的特性出现在了标准中，以满足开发者的需求。在这种情况下，自定义的属性可能会产生意料不到的影响。</p>
+<p>为了避免冲突，存在 <a href="https://html.spec.whatwg.org/#embedding-custom-non-visible-data-with-the-data-*-attributes">data-*</a> 特性。</p>
+<p><strong>所有以 &quot;data-&quot; 开头的特性均被保留供程序员使用。它们可在 <code>dataset</code> 属性中使用。</strong></p>
+<p>例如，如果一个 <code>elem</code> 有一个名为 <code>&quot;data-about&quot;</code> 的特性，那么可以通过 <code>elem.dataset.about</code> 取到它。</p>
+<p>像这样：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">data-about</span>=<span class="hljs-string">&quot;Elephants&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  alert(<span class="hljs-built_in">document</span>.body.dataset.about); <span class="hljs-comment">// Elephants</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>像 <code>data-order-state</code> 这样的多词特性可以以驼峰式进行调用：<code>dataset.orderState</code>。</p>
+<p>这里是 &quot;order state&quot; 那个示例的重构版：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+  <span class="hljs-selector-class">.order</span><span class="hljs-selector-attr">[data-order-state=<span class="hljs-string">&quot;new&quot;</span>]</span> {
+    <span class="hljs-attribute">color</span>: green;
+  }
+
+  <span class="hljs-selector-class">.order</span><span class="hljs-selector-attr">[data-order-state=<span class="hljs-string">&quot;pending&quot;</span>]</span> {
+    <span class="hljs-attribute">color</span>: blue;
+  }
+
+  <span class="hljs-selector-class">.order</span><span class="hljs-selector-attr">[data-order-state=<span class="hljs-string">&quot;canceled&quot;</span>]</span> {
+    <span class="hljs-attribute">color</span>: red;
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;order&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;order&quot;</span> <span class="hljs-attr">data-order-state</span>=<span class="hljs-string">&quot;new&quot;</span>&gt;</span>
+  A new order.
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 读取</span>
+  alert(order.dataset.orderState); <span class="hljs-comment">// new</span>
+
+  <span class="hljs-comment">// 修改</span>
+  order.dataset.orderState = <span class="hljs-string">&quot;pending&quot;</span>; <span class="hljs-comment">// (*)</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>使用 <code>data-*</code> 特性是一种合法且安全的传递自定义数据的方式。</p>
+<p>请注意，我们不仅可以读取数据，还可以修改数据属性（data-attributes）。然后 CSS 会更新相应的视图：在上面这个例子中的最后一行 <code>(*)</code> 将颜色更改为了蓝色。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>特性（attribute）— 写在 HTML 中的内容。</li>
+<li>属性（property）— DOM 对象中的内容。</li>
+</ul>
+<p>简略的对比：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>属性</th>
+<th>特性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>类型</td>
+<td>任何值，标准的属性具有规范中描述的类型</td>
+<td>字符串</td>
+</tr>
+<tr>
+<td>名字</td>
+<td>名字（name）是大小写敏感的</td>
+<td>名字（name）是大小写不敏感的</td>
+</tr>
+</tbody></table>
+<p>操作特性的方法：</p>
+<ul>
+<li><code>elem.hasAttribute(name)</code> — 检查是否存在这个特性。</li>
+<li><code>elem.getAttribute(name)</code> — 获取这个特性值。</li>
+<li><code>elem.setAttribute(name, value)</code> — 设置这个特性值。</li>
+<li><code>elem.removeAttribute(name)</code> — 移除这个特性。</li>
+<li><code>elem.attributes</code> — 所有特性的集合。</li>
+</ul>
+<p>在大多数情况下，最好使用 DOM 属性。仅当 DOM 属性无法满足开发需求，并且我们真的需要特性时，才使用特性，例如：</p>
+<ul>
+<li>我们需要一个非标准的特性。但是如果它以 <code>data-</code> 开头，那么我们应该使用 <code>dataset</code>。</li>
+<li>我们想要读取 HTML 中“所写的”值。对应的 DOM 属性可能不同，例如 <code>href</code> 属性一直是一个 <strong>完整的</strong> URL，但是我们想要的是“原始的”值。</li>
+</ul>

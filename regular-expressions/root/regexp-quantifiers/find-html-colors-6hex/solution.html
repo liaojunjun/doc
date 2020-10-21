@@ -1,0 +1,17 @@
+<p>我们需要寻找 <code>#</code> 字符，后跟六个十六进制字符。</p>
+<p>一个十六进制字符可以被描述为 <code>pattern:[0-9a-fA-F]</code>。如果我们使用 <code>i</code> 标识，那么只需要 <code>pattern:[0-9a-f]</code>。</p>
+<p>然后我们可以用量词 <code>pattern:{6}</code> 来查找这六个。</p>
+<p>因此，我们得到正则表达式：<code>pattern:/#[a-f0-9]{6}/gi</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/#[a-f0-9]{6}/gi</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;color:#121212; background-color:#AA00ef bad-colors:f#fddee #fd2&quot;</span>
+
+alert( str.match(reg) );  <span class="hljs-comment">// #121212,#AA00ef</span></code></pre>
+<p>问题是其从更长的序列中匹配了颜色值：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;#12345678&quot;</span>.match( <span class="hljs-regexp">/#[a-f0-9]{6}/gi</span> ) ) <span class="hljs-comment">// #123456</span></code></pre>
+<p>为了解决这个问题，我们可以在末尾加上 <code>pattern:\b</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// color</span>
+alert( <span class="hljs-string">&quot;#123456&quot;</span>.match( <span class="hljs-regexp">/#[a-f0-9]{6}\b/gi</span> ) ); <span class="hljs-comment">// #123456</span>
+
+<span class="hljs-comment">// not a color</span>
+alert( <span class="hljs-string">&quot;#12345678&quot;</span>.match( <span class="hljs-regexp">/#[a-f0-9]{6}\b/gi</span> ) ); <span class="hljs-comment">// null</span></code></pre>

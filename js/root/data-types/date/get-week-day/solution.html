@@ -1,0 +1,10 @@
+<p><code>date.getDay()</code> 方法返回从星期日开始的星期数。</p>
+<p>我们创建一个关于星期的数组，这样我们就可以通过编号获取正确的日期名称：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getWeekDay</span>(<span class="hljs-params">date</span>) </span>{
+  <span class="hljs-keyword">let</span> days = [<span class="hljs-string">&#x27;SU&#x27;</span>, <span class="hljs-string">&#x27;MO&#x27;</span>, <span class="hljs-string">&#x27;TU&#x27;</span>, <span class="hljs-string">&#x27;WE&#x27;</span>, <span class="hljs-string">&#x27;TH&#x27;</span>, <span class="hljs-string">&#x27;FR&#x27;</span>, <span class="hljs-string">&#x27;SA&#x27;</span>];
+
+  <span class="hljs-keyword">return</span> days[date.getDay()];
+}
+
+<span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2014</span>, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>); <span class="hljs-comment">// 3 Jan 2014</span>
+alert( getWeekDay(date) ); <span class="hljs-comment">// FR</span></code></pre>

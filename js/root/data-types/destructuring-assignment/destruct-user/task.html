@@ -1,0 +1,23 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="解构赋值">解构赋值</h1>
+<p>我们有一个对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">years</span>: <span class="hljs-number">30</span>
+};</code></pre>
+<p>写一个解构赋值语句使得：</p>
+<ul>
+<li><code>name</code> 属性赋值给变量 <code>name</code>。</li>
+<li><code>years</code> 属性赋值给变量 <code>age</code>。</li>
+<li><code>isAdmin</code> 属性赋值给变量 <code>isAdmin</code>（如果属性缺失则取默认值 false）。</li>
+</ul>
+<p>下面是赋值完成后的值的情况：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-attr">years</span>: <span class="hljs-number">30</span> };
+
+<span class="hljs-comment">// 等号左侧是你的代码</span>
+<span class="hljs-comment">// ... = user</span>
+
+alert( name ); <span class="hljs-comment">// John</span>
+alert( age ); <span class="hljs-comment">// 30</span>
+alert( isAdmin ); <span class="hljs-comment">// false</span></code></pre>

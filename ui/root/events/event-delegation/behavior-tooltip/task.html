@@ -1,0 +1,26 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="工具提示行为">工具提示行为</h1>
+<p>编写工具提示（tooltip）行为的 JavaScript 代码。</p>
+<p>当鼠标在带有 <code>data-tooltip</code> 的元素的上方时，工具提示应显示在其上方，当鼠标移开时，工具提示将隐藏起来。</p>
+<p>带有注释的 HTML 示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-tooltip</span>=<span class="hljs-string">&quot;the tooltip is longer than the element&quot;</span>&gt;</span>Short button<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-tooltip</span>=<span class="hljs-string">&quot;HTML&lt;br&gt;tooltip&quot;</span>&gt;</span>One more button<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre>
+<p>运行效果如下：</p>
+<p>[iframe src=&quot;solution&quot; height=200 border=1]</p>
+<p>在此任务中，我们假设所有具有 <code>data-tooltip</code> 的元素中都只有文本。尚无嵌套标签。</p>
+<p>详情：</p>
+<ul>
+<li>元素和工具提示之间的距离应为 <code>5px</code>。</li>
+<li>如果可能，工具提示应相对于元素居中。</li>
+<li>工具提示不应与窗口边缘交叉。通常，它应该在元素的上方，但是如果元素位于页面顶部，并且没有工具提示的空间，则应该在元素的下方。</li>
+<li>工具提示的内容在 <code>data-tooltip</code> 属性中给定。它可以是任意 HTML。</li>
+</ul>
+<p>在这里你将需要两个事件：</p>
+<ul>
+<li><code>mouseover</code> 当鼠标指针出现在元素上方时触发。</li>
+<li><code>mouseout</code> 当鼠标指针离开元素时触发。</li>
+</ul>
+<p>请使用事件委托：在 <code>document</code> 上设置两个处理程序，以跟踪带有 <code>data-tooltip</code> 的元素中的所有 &quot;over&quot; 和 &quot;out&quot;，并从那里管理工具提示。</p>
+<p>在实现了该行为后，即使不熟悉 JavaScript 的人也可以添加带注释的元素。</p>
+<p>P.S. 一次只能显示一个工具提示。</p>

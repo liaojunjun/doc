@@ -265,279 +265,2518 @@
     <button  onclick="toggleHash()">开启专注模式</button>
      <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
   </div><div id="page">
-      <fieldset id='_Flk2Ar'>
+      <fieldset id='_mgsSqV'>
       <legend>article</legend>
-      
+      <h1 id="模式（patterns）和修饰符（flags）">模式（Patterns）和修饰符（flags）</h1>
+<p>正则表达式是搜索和替换字符串的一种强大方式。</p>
+<p>在 JavaScript 中，正则表达式通过内置的“RegExp”类的对象来实现，并与字符串集成。</p>
+<p>请注意，在各编程语言之间，正则表达式是有所不同的。在本教程中，我们只专注于 JavaScript。当然，它们有很多共同点，但在 Perl、Ruby 和 PHP 等语言下会有所不同。</p>
+<h2 id="正则表达式">正则表达式</h2>
+<p>正则表达式（可叫作“regexp”或者“reg”）包含 <strong>模式</strong> 和可选的 <strong>修饰符</strong>。</p>
+<p>创建一个正则表达式对象有两种语法。</p>
+<p>较长一点的语法：</p>
+<pre><code class="language-js">regexp = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">&quot;pattern&quot;</span>, <span class="hljs-string">&quot;flags&quot;</span>);</code></pre>
+<p>...较短一点的语法，使用斜杠 <code>&quot;/&quot;</code>：</p>
+<pre><code class="language-js">regexp = <span class="hljs-regexp">/pattern/</span>; <span class="hljs-comment">// 没有修饰符</span>
+regexp = <span class="hljs-regexp">/pattern/gmi</span>; <span class="hljs-comment">// 伴随修饰符 g、m 和 i（后面会讲到）</span></code></pre>
+<p>斜杠 <code>&quot;/&quot;</code> 会告诉 JavaScript 我们正在创建一个正则表达式。它的作用类似于字符串的引号。</p>
+<h2 id="用法">用法</h2>
+<p>如果要在字符串中进行搜索，可以使用 <a href="mdn:js/String/search">search</a> 方法。</p>
+<p>下面是示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;I love JavaScript!&quot;</span>; <span class="hljs-comment">// 将在这里搜索</span>
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/love/</span>;
+alert( str.search(regexp) ); <span class="hljs-comment">// 2</span></code></pre>
+<p><code>str.search</code> 方法会查找模式 <code>pattern:/love/</code>，然后返回匹配项在字符串中的位置。我们可以猜到，<code>pattern:/love/</code> 是最简单的模式。它所做的就是简单的子字符串的查找。</p>
+<p>上面的代码等同于：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;I love JavaScript!&quot;</span>; <span class="hljs-comment">// 将在这里搜索</span>
+
+<span class="hljs-keyword">let</span> substr = <span class="hljs-string">&#x27;love&#x27;</span>;
+alert( str.search(substr) ); <span class="hljs-comment">// 2</span></code></pre>
+<p>所以搜索 <code>pattern:/love/</code> 与搜索 <code>&quot;love&quot;</code> 是等价的。</p>
+<p>但这只是暂时的。很快我们就会接触更复杂的正则表达式，其搜索功能将更强大。</p>
+<pre><code class="language-smart">本文中的配色方案如下：
+
+- regexp -- `pattern:red`
+- string（我们要搜索的）-- `subject:blue`
+- result -- `match:green`</code></pre>
+<p>````smart header=&quot;什么时候使用 <code>new RegExp</code>?&quot;
+通常我们使用的都是简短语法 <code>/.../</code>。但是它不接受任何变量插入，所以我们必须在写代码的时候就知道确切的 regexp。</p>
+<p>另一方面，<code>new RegExp</code> 允许从字符串中动态地构造模式。</p>
+<p>所以我们可以找出需要搜索的字段，然后根据搜索字段创建 <code>new RegExp</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> search = prompt(<span class="hljs-string">&quot;What you want to search?&quot;</span>, <span class="hljs-string">&quot;love&quot;</span>);
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(search);
+
+<span class="hljs-comment">// 找到用户想要的任何东西</span>
+alert( <span class="hljs-string">&quot;I love JavaScript&quot;</span>.search(regexp));</code></pre>
+<pre><code>
+
+## 修饰符
+
+正则表达式的修饰符可能会影响搜索结果。
+
+在 JavaScript 中，有 5 个修饰符：
+
+`i`
+: 使用此修饰符后，搜索时不区分大小写: `A` 和 `a` 没有区别（具体看下面的例子）。
+
+`g`
+: 使用此修饰符后，搜索时会查找所有的匹配项，而不只是第一个（在下一章会讲到）。
+
+`m`
+: 多行模式（详见章节 &lt;info:regexp-multiline&gt;）。
+
+`u`
+: 开启完整的 unicode 支持。该修饰符能够修正对于代理对的处理。更详细的内容见章节 &lt;info:regexp-unicode&gt;。
+
+`y`
+: 粘滞模式（详见 [下一章节](info:regexp-methods#y-flag)）
+
+
+## “i”修饰符
+
+最简单的修饰符就是 `i` 了。
+
+示例代码如下：
+
+```js run
+let str = &quot;I love JavaScript!&quot;;
+
+alert( str.search(/LOVE/) ); // -1（没找到）
+alert( str.search(/LOVE/i) ); // 2
+```
+
+1. 第一个搜索返回的是 `-1`（也就是没找到），因为搜索默认是区分大小写的。
+2. 使用修饰符 `pattern:/LOVE/i`，在字符串的第 2 个位置上搜索到了 `match:love`。
+
+相比与简单的子字符串查找，`i` 修饰符已经让正则表达式变得更加强大了。但是这还不够。我们会在下一章节讲述其它修饰符和特性。
+
+
+## 总结
+
+- 一个正则表达式包含模式和可选修饰符：`g`、`i`、`m`、`u`、`y`。
+- 如果不使用我们在后面将要学到的修饰符和特殊标志，正则表达式的搜索就等同于子字符串查找。
+- `str.search(regexp)` 方法返回的是找到的匹配项的索引位置，如果没找到则返回 `-1`。</code></pre>
+
       </fieldset>
       
-      <fieldset id='_h34dst'>
+      <fieldset id='_EmdOAF'>
       <legend>article</legend>
-      
+      <h1 id="字符类">字符类</h1>
+<p>考虑一个实际的任务 - 我们有一个电话号码，例如 <code>&quot;+7(903)-123-45-67&quot;</code>，我们需要将其转换为纯数字：<code>79035419441</code>。</p>
+<p>为此，我们可以查找并删除所有非数字的内容。字符类可以帮助解决这个问题。</p>
+<p><strong>字符类（Character classes）</strong> 是一个特殊的符号，匹配特定集中的任何符号。</p>
+<p>首先，让我们探索“数字”类。它写为 <code>pattern:\d</code>，对应于“任何一个数字”。</p>
+<p>例如，让我们找到电话号码的第一个数字：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;+7(903)-123-45-67&quot;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\d/</span>;
+
+alert( str.match(regexp) ); <span class="hljs-comment">// 7</span></code></pre>
+<p>如果没有标志 <code>pattern:g</code>，则正则表达式仅查找第一个匹配项，即第一个数字 <code>pattern:\d</code>。</p>
+<p>让我们添加 <code>pattern:g</code>标志来查找所有数字：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;+7(903)-123-45-67&quot;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\d/g</span>;
+
+alert( str.match(regexp) ); <span class="hljs-comment">// array of matches: 7,9,0,3,1,2,3,4,5,6,7</span>
+
+<span class="hljs-comment">// let&#x27;s make the digits-only phone number of them:</span>
+alert( str.match(regexp).join(<span class="hljs-string">&#x27;&#x27;</span>) ); <span class="hljs-comment">// 79035419441</span></code></pre>
+<p>这是数字的字符类。还有其他字符类。</p>
+<p>最常用的是：</p>
+<p><code>pattern:\d</code>（&quot;d&quot; 来自 &quot;digit&quot;）
+: 数字：从 <code>0</code> 到 <code>9</code> 的字符。</p>
+<p><code>pattern:\s</code>（&quot;s&quot; 来自 &quot;space&quot;）
+: 空格符号：包括空格，制表符 <code>\t</code>，换行符 <code>\n</code> 和其他少数稀有字符，例如 <code>\v</code>，<code>\f</code> 和 <code>\r</code>。</p>
+<p><code>pattern:\w</code>（&quot;w&quot; 来自 &quot;word&quot;）
+: “单字”字符：拉丁字母或数字或下划线 <code>_</code>。非拉丁字母（如西里尔字母或印地文）不属于 <code>pattern:\w</code>。</p>
+<p>例如，<code>pattern:\d\s\w</code>表示“数字”，后跟“空格字符”，后跟“单字字符”，例如 <code>match:1 a</code>。</p>
+<p><strong>正则表达式可能同时包含常规符号和字符类。</strong></p>
+<p>例如，<code>pattern:CSS\d</code> 匹配字符串 <code>match:CSS</code> 与后面的数字：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Is there CSS4?&quot;</span>;
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/CSS\d/</span>
+
+alert( str.match(regexp) ); <span class="hljs-comment">// CSS4</span></code></pre>
+<p>我们还可以使用许多字符类：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;I love HTML5!&quot;</span>.match(<span class="hljs-regexp">/\s\w\w\w\w\d/</span>) ); <span class="hljs-comment">// &#x27; HTML5&#x27;</span></code></pre>
+<p>匹配项（每个正则表达式字符类都有对应的结果字符）：</p>
+<p><img src="love-html5-classes.svg" alt=""></p>
+<h2 id="反向类">反向类</h2>
+<p>对于每个字符类，都有一个“反向类”，用相同的字母表示，但要以大写书写形式。</p>
+<p>“反向”表示它与所有其他字符匹配，例如：</p>
+<p><code>pattern:\D</code>
+: 非数字：除 <code>pattern:\d</code> 以外的任何字符，例如字母。</p>
+<p><code>pattern:\S</code>
+: 非空格符号：除 <code>pattern:\s</code> 以外的任何字符，例如字母。</p>
+<p><code>pattern:\W</code>
+: 非单字字符：除 <code>pattern:\w</code> 以外的任何字符，例如非拉丁字母或空格。</p>
+<p>在这一章的开头，我们看到了如何从 <code>subject:+7(903)-123-45-67</code> 这样的字符串中创建一个只包含数字的电话号码: 找到所有的数字并将它们连接起来。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;+7(903)-123-45-67&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/\d/g</span>).join(<span class="hljs-string">&#x27;&#x27;</span>) ); <span class="hljs-comment">// 79031234567</span></code></pre>
+<p>另一种快捷的替代方法是查找非数字 <code>pattern:\D</code> 并将其从字符串中删除：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;+7(903)-123-45-67&quot;</span>;
+
+alert( str.replace(<span class="hljs-regexp">/\D/g</span>, <span class="hljs-string">&quot;&quot;</span>) ); <span class="hljs-comment">// 79031234567</span></code></pre>
+<h2 id="点（）是匹配任何字符">点（.）是匹配“任何字符”</h2>
+<p>点 <code>pattern:.</code> 是一种特殊字符类，它与 “除换行符之外的任何字符” 匹配。</p>
+<p>例如：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Z&quot;</span>.match(<span class="hljs-regexp">/./</span>) ); <span class="hljs-comment">// Z</span></code></pre>
+<p>或在正则表达式中间：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/CS.4/</span>;
+
+alert( <span class="hljs-string">&quot;CSS4&quot;</span>.match(regexp) ); <span class="hljs-comment">// CSS4</span>
+alert( <span class="hljs-string">&quot;CS-4&quot;</span>.match(regexp) ); <span class="hljs-comment">// CS-4</span>
+alert( <span class="hljs-string">&quot;CS 4&quot;</span>.match(regexp) ); <span class="hljs-comment">// CS 4 (space is also a character)</span></code></pre>
+<p>请注意，点表示“任何字符”，而不是“缺少字符”。必须有一个与之匹配的字符：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;CS4&quot;</span>.match(<span class="hljs-regexp">/CS.4/</span>) ); <span class="hljs-comment">// null, no match because there&#x27;s no character for the dot</span></code></pre>
+<h3 id="带有s标志时点字符类严格匹配任何字符">带有“s”标志时点字符类严格匹配任何字符</h3>
+<p>默认情况下，点与换行符 <code>\n</code> 不匹配。</p>
+<p>例如，正则表达式 <code>pattern:A.B</code> 匹配 <code>match:A</code>，然后匹配 <code>match:B</code> 和它们之间的任何字符，除了换行符<code>\n</code>：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;A\nB&quot;</span>.match(<span class="hljs-regexp">/A.B/</span>) ); <span class="hljs-comment">// null (no match)</span></code></pre>
+<p>在许多情况下，当我们希望用点来表示“任何字符”（包括换行符）时。</p>
+<p>这就是标志 <code>pattern:s</code> 所做的。如果有一个正则表达式，则点 <code>pattern:.</code> 实际上匹配任何字符：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;A\nB&quot;</span>.match(<span class="hljs-regexp">/A.B/</span>s) ); <span class="hljs-comment">// A\nB (match!)</span></code></pre>
+<pre><code class="language-warn">使用前可从 &lt;https://caniuse.com/#search=dotall&gt; 确认以获得最新的支持状态。在撰写本文时，它不包括 Firefox、IE、Edge。
+
+幸运的是，有一种替代方法可以在任何地方使用。我们可以使用诸如 `pattern:[\s\S]` 之类的正则表达式来匹配“任何字符”。
+
+```js run
+alert( &quot;A\nB&quot;.match(/A[\s\S]B/) ); // A\nB (match!)
+```
+
+模式 `pattern:[\s\S]` 从字面上说：“空格字符或非空格字符”。换句话说，“任何东西”。我们可以使用另一对互补的类，例如 `pattern:[\d\D]`。甚至是 `pattern:[^]` —— 意思是匹配任何字符，除了什么都没有。
+
+如果我们希望两种“点”都使用相同的模式，也可以使用此技巧：实际的点 `pattern:.` 具有常规方式（“不包括换行符”）以及一种使用 `pattern:[\s\S]` 或类似形式匹配“任何字符”。</code></pre>
+<pre><code class="language-warn">通常我们很少注意空格。对我们来说，字符串 `subject:1-5` 和 `subject:1 - 5` 几乎相同。
+
+但是，如果正则表达式未考虑空格，则可能无法正常工作。
+
+让我们尝试查找由连字符（-）分隔的数字：
+
+```js run
+alert( &quot;1 - 5&quot;.match(/\d-\d/) ); // null, no match!
+```
+
+让我们修复一下，在正则表达式中添加空格：\ d-\ d`：
+
+```js run
+alert( &quot;1 - 5&quot;.match(/\d - \d/) ); // 1 - 5, now it works
+// or we can use \s class:
+alert( &quot;1 - 5&quot;.match(/\d\s-\s\d/) ); // 1 - 5, also works
+```
+
+**空格是一个字符。与其他字符同等重要。**
+
+我们无法在正则表达式中添加或删除空格，并且期望能正常工作。
+
+换句话说，在正则表达式中，所有字符都很重要，空格也很重要。</code></pre>
+<h2 id="总结">总结</h2>
+<p>存在以下字符类：</p>
+<ul>
+<li><code>pattern:\d</code> —— 数字。</li>
+<li><code>pattern:\D</code> —— 非数字。</li>
+<li><code>pattern:\s</code> —— 空格符号，制表符，换行符。</li>
+<li><code>pattern:\S</code> —— 除了 <code>pattern:\s</code> 。</li>
+<li><code>pattern:\w</code> —— 拉丁字母，数字，下划线 <code>&#39;_&#39;</code>。</li>
+<li><code>pattern:\W</code> —— 除了 <code>pattern:\w</code>。</li>
+<li><code>pattern:.</code> —— 任何带有 <code>&#39;s&#39;</code> 标志的字符，否则为除换行符 <code>\n</code>之外的任何字符。</li>
+</ul>
+<p>……但这还不是全部！</p>
+<p>JavaScript 用于字符串的 Unicode 编码提供了许多字符属性，例如：这个字母属于哪一种语言（如果它是一个字母）？它是标点符号吗？等等。</p>
+<p>我们也可以通过这些属性进行搜索。这需要标志 <code>pattern:u</code>，在下一篇文章中介绍。</p>
+
       </fieldset>
       
-      <fieldset id='_3B1vHA'>
+      <fieldset id='_HPp3RU'>
       <legend>article</legend>
-      
+      <h1 id="unicode：修饰符-u-和-class-p">Unicode：修饰符 “u” 和 class \p{...}</h1>
+<p>JavaScript 使用 <a href="https://en.wikipedia.org/wiki/Unicode">Unicode 编码</a> （Unicode encoding）对字符串进行编码。大多数字符使用 2 个字节编码，但这种方式只能编码最多 65536 个字符。</p>
+<p>这个范围不足以对所有可能的字符进行编码，这就是为什么一些罕见的字符使用 4 个字节进行编码，比如 <code>𝒳</code> （数学符号 X）或者 <code>😄</code> （笑脸），一些象形文字等等。</p>
+<p>以下是一些字符对应的 unicode 编码：</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>Unicode</th>
+<th>unicode 中的字节数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td><code>0x0061</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>≈</td>
+<td><code>0x2248</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>𝒳</td>
+<td><code>0x1d4b3</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>𝒴</td>
+<td><code>0x1d4b4</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>😄</td>
+<td><code>0x1f604</code></td>
+<td>4</td>
+</tr>
+</tbody></table>
+<p>所以像 <code>a</code> 和 <code>≈</code> 这样的字符占用 2 个字节，而 <code>𝒳</code>，<code>𝒴</code> 和 <code>😄</code> 的对应编码则更长，它们具有 4 个字节的长度。</p>
+<p>很久以前，当 JavaScript 被发明出来的时候，Unicode 的编码要更加简单：当时并没有 4 个字节长的字符。所以，一部分语言特性在现在仍旧无法对 unicode 进行正确的处理。</p>
+<p>比如 <code>length</code> 认为这里的输入有 2 个字符：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&#x27;😄&#x27;</span>.length); <span class="hljs-comment">// 2</span>
+alert(<span class="hljs-string">&#x27;𝒳&#x27;</span>.length); <span class="hljs-comment">// 2</span></code></pre>
+<p>...但我们可以清楚地认识到输入的字符只有一个，对吧？关键在于 <code>length</code> 把 4 个字节当成了 2 个 2 字节长的字符。这是不对的，因为它们必须被当作一个整体来考虑。（即所谓的“代理伪字符”（surrogate pair），你可以在这里进一步阅读有关的的信息 <a href="info:string">info:string</a>）。</p>
+<p>默认情况下，正则表达式同样把一个 4 个字节的“长字符”当成一对 2 个字节长的字符。正如在字符串中遇到的情况，这将导致一些奇怪的结果。我们将很快在后面的文章中遇到 <a href="info:regexp-character-sets-and-ranges">info:regexp-character-sets-and-ranges</a>。</p>
+<p>与字符串有所不同的是，正则表达式有一个修饰符 <code>pattern:u</code> 被用以解决此类问题。当一个正则表达式使用这个修饰符后，4 个字节长的字符将被正确地处理。同时也能够用上 Unicode 属性（Unicode property）来进行查找了。我们接下来就来了解这方面的内容。</p>
+<h2 id="unicode-属性（unicode-properties）p">Unicode 属性（Unicode properties）\p{...}</h2>
+<pre><code class="language-warn">尽管 unicode property 从 2018 年以来便作为标准的一部分, 但 unicode 属性在 Firefox ([bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1361876)) 和 Edge ([bug](https://github.com/Microsoft/ChakraCore/issues/2969)) 中并没有相应的支持。
+
+目前 [XRegExp](http://xregexp.com) 这个库提供“扩展”的正则表达式，其中包括对 unicode property 的跨平台支持。</code></pre>
+<p>Unicode 中的每一个字符都具有很多的属性。它们描述了一个字符属于哪个“类别”，包含了各种关于字符的信息。</p>
+<p>例如，如果一个字符具有 <code>Letter</code> 属性，这意味着这个字符归属于（任意语言的）一个字母表。而 <code>Number</code> 属性则表示这是一个数字：也许是阿拉伯语，亦或者是中文，等等。</p>
+<p>我们可以查找具有某种属性的字符，写作 <code>pattern:\p{…}</code>。为了顺利使用 <code>pattern:\p{…}</code>，一个正则表达式必须使用修饰符 <code>pattern:u</code>。</p>
+<p>举个例子，<code>\p{Letter}</code> 表示任何语言中的一个字母。我们也可以使用 <code>\p{L}</code>，因为 <code>L</code> 是 <code>Letter</code> 的一个别名（alias）。对于每种属性而言，几乎都存在对应的缩写别名。</p>
+<p>在下面的例子中 3 种字母将会被查找出：英语、格鲁吉亚语和韩语。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;A ბ ㄱ&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/\p{L}/gu</span>) ); <span class="hljs-comment">// A,ბ,ㄱ</span>
+alert( str.match(<span class="hljs-regexp">/\p{L}/g</span>) ); <span class="hljs-comment">// null（没有匹配的文本，因为没有修饰符“u”）</span></code></pre>
+<p>以下是主要的字符类别和它们对应的子类别：</p>
+<ul>
+<li>字母（Letter） <code>L</code>:<ul>
+<li>小写（lowercase） <code>Ll</code></li>
+<li>修饰（modifier） <code>Lm</code>,</li>
+<li>首字母大写（titlecase） <code>Lt</code>,</li>
+<li>大写（uppercase） <code>Lu</code>,</li>
+<li>其它（other） <code>Lo</code>。</li>
+</ul>
+</li>
+<li>数字（Number） <code>N</code>:<ul>
+<li>十进制数字（decimal digit） <code>Nd</code>,</li>
+<li>字母数字（letter number） <code>Nl</code>,</li>
+<li>其它（other） <code>No</code>。</li>
+</ul>
+</li>
+<li>标点符号（Punctuation） <code>P</code>:<ul>
+<li>链接符（connector） <code>Pc</code>,</li>
+<li>横杠（dash） <code>Pd</code>,</li>
+<li>起始引用号（initial quote） <code>Pi</code>,</li>
+<li>结束引用号（final quote） <code>Pf</code>,</li>
+<li>开（open） <code>Ps</code>,</li>
+<li>闭（close） <code>Pe</code>,</li>
+<li>其它（other） <code>Po</code>。</li>
+</ul>
+</li>
+<li>标记（Mark） <code>M</code> (accents etc):<ul>
+<li>间隔合并（spacing combining） <code>Mc</code>,</li>
+<li>封闭（enclosing） <code>Me</code>,</li>
+<li>非间隔（non-spacing） <code>Mn</code>。</li>
+</ul>
+</li>
+<li>符号（Symbol） <code>S</code>:<ul>
+<li>货币（currency） <code>Sc</code>,</li>
+<li>修饰（modifier） <code>Sk</code>,</li>
+<li>数学（math） <code>Sm</code>,</li>
+<li>其它（other） <code>So</code>。</li>
+</ul>
+</li>
+<li>分隔符（Separator） <code>Z</code>:<ul>
+<li>行（line） <code>Zl</code>,</li>
+<li>段落（paragraph） <code>Zp</code>,</li>
+<li>空格（space） <code>Zs</code>。</li>
+</ul>
+</li>
+<li>其它（Other） <code>C</code>:<ul>
+<li>控制符（control） <code>Cc</code>,</li>
+<li>格式（format） <code>Cf</code>,</li>
+<li>未分配（not assigned） <code>Cn</code>,</li>
+<li>私有（private use） <code>Co</code>,</li>
+<li>代理伪字符（surrogate） <code>Cs</code>。</li>
+</ul>
+</li>
+</ul>
+<p>因此，比如说我们需要小写的字母，就可以写成 <code>pattern:\p{Ll}</code>，标点符号写作 <code>pattern:\p{P}</code> 等等。</p>
+<p>也有其它派生的类别，例如：</p>
+<ul>
+<li><code>Alphabetic</code> (<code>Alpha</code>), 包含了字母 <code>L</code>, 加上字母数字 <code>Nl</code> （例如 Ⅻ - 罗马数字 12），加上一些其它符号 <code>Other_Alphabetic</code> (<code>OAlpha</code>)。</li>
+<li><code>Hex_Digit</code> 包括 16 进制数字 <code>0-9</code>，<code>a-f</code>。</li>
+<li>...等等</li>
+</ul>
+<p>Unicode 支持相当数量的属性，列出整个清单需要占用大量的空间，因此在这里列出相关的链接：</p>
+<ul>
+<li>列出一个字符的所有属性 <a href="https://unicode.org/cldr/utility/character.jsp">https://unicode.org/cldr/utility/character.jsp</a>.</li>
+<li>按照属性列出所有的字符 <a href="https://unicode.org/cldr/utility/list-unicodeset.jsp">https://unicode.org/cldr/utility/list-unicodeset.jsp</a>.</li>
+<li>属性的对应缩写形式：<a href="https://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt">https://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt</a>.</li>
+<li>以文本格式整理的所有 Unicode 字符，包含了所有的属性：<a href="https://www.unicode.org/Public/UCD/latest/ucd/">https://www.unicode.org/Public/UCD/latest/ucd/</a>.</li>
+</ul>
+<h3 id="实例：16-进制数字">实例：16 进制数字</h3>
+<p>举个例子，让我们来查找 16 进制数字，写作 <code>xFF</code> 其中 <code>F</code> 是一个 16 进制的数字（0..1 或者 A..F）。</p>
+<p>一个 16 进制数字可以表示为 <code>pattern:\p{Hex_Digit}</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/x\p{Hex_Digit}\p{Hex_Digit}/u</span>;
+
+alert(<span class="hljs-string">&quot;number: xAF&quot;</span>.match(regexp)); <span class="hljs-comment">// xAF</span></code></pre>
+<h3 id="实例：中文字符">实例：中文字符</h3>
+<p>让我们再来考虑中文字符。</p>
+<p>有一个 unicode 属性 <code>Script</code> （一个书写系统），这个属性可以有一个值：<code>Cyrillic</code>，<code>Greek</code>，<code>Arabic</code>，<code>Han</code> （中文）等等，<a href="https://en.wikipedia.org/wiki/Script_(Unicode)">这里是一个完整的列表</a>。</p>
+<p>为了实现查找一个给定的书写系统中的字符，我们需要使用 <code>pattern:Script=&lt;value&gt;</code>，例如对于西里尔字符：<code>pattern:\p{sc=Cyrillic}</code>, 中文字符：<code>pattern:\p{sc=Han}</code>，等等。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\p{sc=Han}/gu</span>; <span class="hljs-comment">// returns Chinese hieroglyphs</span>
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">`Hello Привет 你好 123_456`</span>;
+
+alert( str.match(regexp) ); <span class="hljs-comment">// 你,好</span></code></pre>
+<h3 id="实例：货币">实例：货币</h3>
+<p>表示货币的字符，例如 <code>$</code>，<code>€</code>，<code>¥</code>，具有 unicode 属性 <code>pattern:\p{Currency_Symbol}</code>，缩写为 <code>pattern:\p{Sc}</code>。</p>
+<p>让我们使用这一属性来查找符合“货币，接着是一个数字”的价格文本：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\p{Sc}\d/gu</span>;
+
+<span class="hljs-keyword">let</span>  str = <span class="hljs-string">`Prices: $2, €1, ¥9`</span>;
+
+alert( str.match(regexp) ); <span class="hljs-comment">// $2,€1,¥9</span></code></pre>
+<p>之后，在文章 <a href="info:regexp-quantifiers">info:regexp-quantifiers</a> 中我们将会了解如何查找包含很多位的数字。</p>
+<h2 id="总结">总结</h2>
+<p>修饰符 <code>pattern:u</code> 在正则表达式中提供对 Unicode 的支持。</p>
+<p>这意味着两件事：</p>
+<ol>
+<li>4 个字节长的字符被以正确的方式处理：被看成单个的字符，而不是 2 个 2 字节长的字符。</li>
+<li>Unicode 属性可以被用于查找中 <code>\p{…}</code>。</li>
+</ol>
+<p>有了 unicode 属性我们可以查找给定语言中的词，特殊字符（引用，货币）等等。</p>
+
       </fieldset>
       
-      <fieldset id='_IITte9'>
+      <fieldset id='_zzLIai'>
       <legend>solution</legend>
-      
+      <p>唯一一个匹配的字符串是空字符串：它的开始紧跟着结束。</p>
+<p>这个题目再一次说明了锚不是一个字符串，而是一个测试。</p>
+<p>对于空字符串 <code>&quot;&quot;</code>，正则表达式引擎将会首先匹配模式 <code>^</code>（输入开始），匹配成功之后，会紧跟着检查模式 <code>$</code>，也匹配成功。所以空字符串是匹配 <code>^$</code> 的。</p>
+
       </fieldset>
       
-      <fieldset id='_xhNFTJ'>
+      <fieldset id='_ATvnR1'>
       <legend>task</legend>
-      
+      <h1 id="正则表达式-">正则表达式 ^$</h1>
+<p>什么字符串可以匹配模式 <code>^$</code>？</p>
+
       </fieldset>
       
-      <fieldset id='_0Q7gCe'>
+      <fieldset id='_WFiB4T'>
       <legend>article</legend>
-      
+      <h1 id="锚点（anchors：字符串开始--和末尾-">锚点（Anchors)：字符串开始 ^ 和末尾 $</h1>
+<p>插入符号 <code>pattern:^</code> 和美元符号 <code>pattern:$</code> 在正则表达式中具有特殊的意义。它们被称为“锚点”。</p>
+<p>插入符号 <code>pattern:^</code> 匹配文本开头，而美元符号 <code>pattern:$</code> － 则匹配文本末尾。</p>
+<p>举个例子，让我们测试一下文本是否以 <code>Mary</code> 开头：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str1 = <span class="hljs-string">&quot;Mary had a little lamb&quot;</span>;
+alert( <span class="hljs-regexp">/^Mary/</span>.test(str1) ); <span class="hljs-comment">// true</span></code></pre>
+<p>该模式 <code>pattern:^Mary</code> 的意思是：字符串开始，接着是 “Mary”。</p>
+<p>与此类似，我们可以用 <code>pattern:snow$</code> 来测试文本是否以 <code>snow</code> 结尾:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str1 = <span class="hljs-string">&quot;it&#x27;s fleece was white as snow&quot;</span>;
+alert( <span class="hljs-regexp">/snow$/</span>.test(str1) ); <span class="hljs-comment">// true</span></code></pre>
+<p>在以上这些具体的例子中我们实际上可以用 <code>startsWith/endsWith</code> 来代替。正则表达式应该被用于更加复杂的测试中。</p>
+<h2 id="测试完全匹配">测试完全匹配</h2>
+<p>这两个锚点 <code>pattern:^...$</code> 放在一起常常被用于测试一个字符串是否完全匹配一个模式。比如，测试用户的输入是否符合正确的格式。</p>
+<p>让我们测试一下一个字符串是否属于 <code>12:34</code> 格式的时间。即，两个数字，然后一个冒号，接着是另外两个数字。</p>
+<p>用正则表达式来表示就是 <code>pattern:\d\d:\d\d</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> goodInput = <span class="hljs-string">&quot;12:34&quot;</span>;
+<span class="hljs-keyword">let</span> badInput = <span class="hljs-string">&quot;12:345&quot;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^\d\d:\d\d$/</span>;
+alert( regexp.test(goodInput) ); <span class="hljs-comment">// true</span>
+alert( regexp.test(badInput) ); <span class="hljs-comment">// false</span></code></pre>
+<p>在这个例子中 <code>pattern:\d\d:\d\d</code> 所对应的匹配文本必须正好在文本开头 <code>pattern:^</code> 之后，而在这之后必须紧跟文本末尾 <code>pattern:$</code>。</p>
+<p>整个字符串必须准确地符合这一个格式。如果其中有任何偏差或者额外的字符，结果将为 <code>false</code>。</p>
+<p>当修饰符 <code>pattern:m</code> 出现时，锚点将会有不同的行为。我们将在后面学习到。</p>
+<pre><code class="language-smart">锚点 `pattern:^` 和 `pattern:$` 属于测试。它们的宽度为零。
+
+换句话来说，它们并不匹配一个具体的字符，而是让正则引擎测试所表示的条件（文本开头/文本末尾）。</code></pre>
+
       </fieldset>
       
-      <fieldset id='_IG0FUI'>
+      <fieldset id='_AfHTjZ'>
       <legend>article</legend>
-      
+      <h1 id="flag-m--多行模式">Flag &quot;m&quot; — 多行模式</h1>
+<p>通过 flag <code>/.../m</code> 可以开启多行模式。</p>
+<p>这仅仅会影响 <code>^</code> 和 <code>$</code> 锚符的行为。</p>
+<p>在多行模式下，它们不仅仅匹配文本的开始与结束，还匹配每一行的开始与结束。</p>
+<h2 id="行的开头-">行的开头 ^</h2>
+<p>在这个有多行文本的例子中，正则表达式 <code>/^\d+/gm</code> 将匹配每一行的开头数字：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`1st place: Winnie
+2nd place: Piglet
+33rd place: Eeyore`</span>;
+
+*!*
+alert( str.match(<span class="hljs-regexp">/^\d+/gm</span>) ); <span class="hljs-comment">// 1, 2, 33</span>
+*/!*</code></pre>
+<p>没有 flag  <code>/.../m</code> 时，仅仅是第一个数字被匹配到：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`1st place: Winnie
+2nd place: Piglet
+33rd place: Eeyore`</span>;
+
+*!*
+alert( str.match(<span class="hljs-regexp">/^\d+/g</span>) ); <span class="hljs-comment">// 1</span>
+*/!*</code></pre>
+<p>这是因为默认情况下，锚符 <code>^</code> 仅仅匹配文本的开头，在多行模式下，它匹配行的开头。</p>
+<p>正则表达式引擎将会在文本中查找以锚符 <code>^</code> 开始的字符串，我们找到之后继续匹配 <code>\d+</code> 模式。</p>
+<h2 id="行的结尾-">行的结尾 $</h2>
+<p>美元符 <code>$</code> 行为也相似。</p>
+<p>正则表达式 `\w+$ 会找到每一行的最后一个单词：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`1st place: Winnie
+2nd place: Piglet
+33rd place: Eeyore`</span>;
+
+alert( str.match(<span class="hljs-regexp">/\w+$/gim</span>) ); <span class="hljs-comment">// Winnie,Piglet,Eeyore</span></code></pre>
+<p>没有 <code>/.../m</code> flag 的话，美元符 <code>$</code> 将会仅仅匹配整个文本的结尾，所以只有最后的一个单词会被找到。</p>
+<h2 id="锚符--对比-n">锚符 ^$ 对比 \n</h2>
+<p>要寻找新的一行的话，我们不仅可以使用锚符 <code>^</code> 和 <code>$</code>，也可以使用换行符 <code>\n</code>。</p>
+<p>它和锚符 <code>^</code> 和 <code>$</code> 的第一个不同点是它不像锚符那样，它会“消耗”掉 <code>\n</code> 并且将其（<code>\n</code>）加入到匹配结果中。</p>
+<p>举个例子，我们在下面的代码中用它来替代 <code>$</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`1st place: Winnie
+2nd place: Piglet
+33rd place: Eeyore`</span>;
+
+alert( str.match(<span class="hljs-regexp">/\w+\n/gim</span>) ); <span class="hljs-comment">// Winnie\n,Piglet\n</span></code></pre>
+<p>这里，我们每次匹配到的时候都会被添加一个换行符。</p>
+<p>还有一个不同点——换行符 <code>\n</code> 不会匹配字符串结尾。这就是为什么在上面的例子中 <code>Eeyore</code> 没有匹配到。</p>
+<p>所以，通常情况下使用锚符更棒，用它匹配出来的结果更加接近我们想要的结果。</p>
+
       </fieldset>
       
-      <fieldset id='_DeO8i5'>
+      <fieldset id='_1N4CMQ'>
       <legend>solution</legend>
-      
+      <p>答案是：<code>pattern:\b\d\d:\d\d\b</code>。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Breakfast at 09:00 in the room 123:456.&quot;</span>.match( <span class="hljs-regexp">/\b\d\d:\d\d\b/</span> ) ); <span class="hljs-comment">// 09:00</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_qDB6jB'>
+      <fieldset id='_mInNQ7'>
       <legend>task</legend>
-      
+      <h1 id="查找时间">查找时间</h1>
+<p>时间的格式是：<code>hours:minutes</code>。小时和分钟都是两位数，如 <code>09:00</code>。</p>
+<p>编写正则表达式在字符串 <code>subject:Breakfast at 09:00 in the room 123:456.</code> 中查找时间。</p>
+<p>P.S. 在这个任务里没有必要校验时间的正确性，所以 <code>25:99</code> 也可算做有效的结果。</p>
+<p>P.P.S. 正则表达式不能匹配 <code>123:456</code>。</p>
+
       </fieldset>
       
-      <fieldset id='_ILYdyJ'>
+      <fieldset id='_eYc4iR'>
       <legend>article</legend>
-      
+      <h1 id="词边界：b">词边界：\b</h1>
+<p>词边界 <code>pattern:\b</code> 是一种检查，就像 <code>pattern:^</code> 和 <code>pattern:$</code> 一样。</p>
+<p>当正则表达式引擎（实现搜索正则表达式的程序模块）遇到 <code>pattern:\b</code> 时，它会检查字符串中的位置是否是词边界。</p>
+<p>有三种不同的位置可作为词边界：</p>
+<ul>
+<li>在字符串开头，如果第一个字符是单词字符 <code>pattern:\w</code>。</li>
+<li>在字符串中的两个字符之间，其中一个是单词字符 <code>pattern:\w</code>，另一个不是。</li>
+<li>在字符串末尾，如果最后一个字符是单词字符 <code>pattern:\w</code>。</li>
+</ul>
+<p>例如，可以在 <code>subject:Hello, Java!</code> 中找到匹配 <code>pattern:\bJava\b</code> 的单词，其中 <code>subject:Java</code> 是一个独立的单词，而在 <code>subject:Hello, JavaScript!</code> 中则不行。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Hello, Java!&quot;</span>.match(<span class="hljs-regexp">/\bJava\b/</span>) ); <span class="hljs-comment">// Java</span>
+alert( <span class="hljs-string">&quot;Hello, JavaScript!&quot;</span>.match(<span class="hljs-regexp">/\bJava\b/</span>) ); <span class="hljs-comment">// null</span></code></pre>
+<p>在字符串 <code>subject:Hello, Java!</code> 中，以下位置对应于 <code>pattern:\b</code>：</p>
+<p><img src="hello-java-boundaries.svg" alt=""></p>
+<p>因此，它与模式 <code>pattern:\bHello\b</code> 相匹配，因为：</p>
+<ol>
+<li>字符串的开头符合第一种检查 <code>pattern:\b</code>。</li>
+<li>然后匹配了单词 <code>pattern:Hello</code>。</li>
+<li>然后与 <code>pattern:\b</code> 再次匹配，因为我们在 <code>subject:o</code> 和一个空格之间。</li>
+</ol>
+<p>模式 <code>pattern:\bJava\b</code> 也同样匹配。但 <code>pattern:\bHell\b</code>（因为 <code>l</code> 之后没有词边界）和 <code>Java!\b</code>（因为感叹号不是单词 <code>pattern:\w</code>，所以其后没有词边界）却不匹配。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Hello, Java!&quot;</span>.match(<span class="hljs-regexp">/\bHello\b/</span>) ); <span class="hljs-comment">// Hello</span>
+alert( <span class="hljs-string">&quot;Hello, Java!&quot;</span>.match(<span class="hljs-regexp">/\bJava\b/</span>) );  <span class="hljs-comment">// Java</span>
+alert( <span class="hljs-string">&quot;Hello, Java!&quot;</span>.match(<span class="hljs-regexp">/\bHell\b/</span>) );  <span class="hljs-comment">// null (no match)</span>
+alert( <span class="hljs-string">&quot;Hello, Java!&quot;</span>.match(<span class="hljs-regexp">/\bJava!\b/</span>) ); <span class="hljs-comment">// null (no match)</span></code></pre>
+<p><code>pattern:\b</code> 既可以用于单词，也可以用于数字。</p>
+<p>例如，模式 <code>pattern:\b\d\d\b</code> 查找独立的两位数。换句话说，它查找的是两位数，其周围是与 <code>pattern:\w</code> 不同的字符，例如空格或标点符号（或文本开头/结尾）。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;1 23 456 78&quot;</span>.match(<span class="hljs-regexp">/\b\d\d\b/g</span>) ); <span class="hljs-comment">// 23,78</span>
+alert( <span class="hljs-string">&quot;12,34,56&quot;</span>.match(<span class="hljs-regexp">/\b\d\d\b/g</span>) ); <span class="hljs-comment">// 12,34,56</span></code></pre>
+<p>```warn header=&quot;词边界 <code>pattern:\b</code> 不适用于非拉丁字母&quot;
+词边界测试 <code>pattern:\b</code> 检查位置的一侧是否匹配 <code>pattern:\w</code>，而另一侧则不匹配 &quot;<code>pattern:\w</code>&quot;。</p>
+<p>但是，<code>pattern:\w</code> 表示拉丁字母 <code>a-z</code>（或数字或下划线），因此此检查不适用于其他字符，如西里尔字母（cyrillic letters）或象形文字（hieroglyphs）。</p>
+<pre><code></code></pre>
+
       </fieldset>
       
-      <fieldset id='_oYPMJp'>
+      <fieldset id='_YV52Ht'>
       <legend>article</legend>
-      
+      <h1 id="转义，特殊字符">转义，特殊字符</h1>
+<p>正如我们所看到的，一个反斜杠 <code>&quot;\&quot;</code> 是用来表示匹配字符类的。所以它是一个特殊字符。</p>
+<p>还存在其它的特殊字符，这些字符在正则表达式中有特殊的含义。它们可以被用来做更加强大的搜索。</p>
+<p>这里是包含所有特殊字符的列表：<code>pattern:[ \ ^ $ . | ? * + ( )</code>。</p>
+<p>现在并不需要尝试去记住它们 —— 当我们分别处理其中的每一个时，你自然而然就会记住它们。</p>
+<h2 id="转义">转义</h2>
+<p>如果要把特殊字符作为常规字符来使用，只需要在它前面加个反斜杠。</p>
+<p>这种方式也被叫做“转义一个字符”。</p>
+<p>比如说，我们需要找到一个点号 <code>pattern:&#39;.&#39;</code>。在一个正则表达式中一个点号意味着“除了换行符以外的任意字符”，所以如果我们想真正表示对“一个点号”查询的时候，可以在点号前加一个反斜杠。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(<span class="hljs-regexp">/\d\.\d/</span>) ); <span class="hljs-comment">// 5.1</span></code></pre>
+<p>括号也是特殊字符，所以如果我们想要在正则中查找它们，我们应该使用 <code>pattern:\(</code>。下面的例子会查找一个字符串 <code>&quot;g()&quot;</code>：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;function g()&quot;</span>.match(<span class="hljs-regexp">/g\(\)/</span>) ); <span class="hljs-comment">// &quot;g()&quot;</span></code></pre>
+<p>如果我们想查找反斜杠 <code>\</code>，我们就应该使用两个反斜杠来查找：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;1\\2&quot;</span>.match(<span class="hljs-regexp">/\\/</span>) ); <span class="hljs-comment">// &#x27;\&#x27;</span></code></pre>
+<h2 id="一个斜杠">一个斜杠</h2>
+<p>斜杠符号 <code>&#39;/&#39;</code> 并不是一个特殊符号，但是它被用于在 Javascript 中开启和关闭正则匹配：<code>pattern:/...pattern.../</code>，所以我们也应该转义它。</p>
+<p>下面是查询斜杠 <code>&#39;/&#39;</code> 的表达式：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;/&quot;</span>.match(<span class="hljs-regexp">/\//</span>) ); <span class="hljs-comment">// &#x27;/&#x27;</span></code></pre>
+<p>从另一个方面看，如果使用另一种 <code>new RegExp</code> 方式就不需要转义斜杠：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;/&quot;</span>.match(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">&quot;/&quot;</span>)) ); <span class="hljs-comment">// &#x27;/&#x27;</span></code></pre>
+<h2 id="使用-new-regexp-创建正则实例">使用 new RegExp 创建正则实例</h2>
+<p>如果我们使用 <code>new RegExp</code> 来创建一个正则表达式实例，那么我们需要对其做一些额外的转义。</p>
+<p>比如说，考虑下面的示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">&quot;\d\.\d&quot;</span>);
+
+alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(reg) ); <span class="hljs-comment">// null</span></code></pre>
+<p>它并没有正常发挥作用，但是为什么呢？</p>
+<p>原因就在于字符串转义规则。看下面的例子：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&quot;\d\.\d&quot;</span>); <span class="hljs-comment">// d.d</span></code></pre>
+<p>在字符串中的反斜杠表示转义或者类似 <code>\n</code> 这种只能在字符串中使用的特殊字符。这个引用会“消费”并且解释这些字符，比如说：</p>
+<ul>
+<li><code>\n</code> —— 变成一个换行字符，</li>
+<li><code>\u1234</code> —— 变成包含该码位的 Unicode 字符，</li>
+<li>。。。其它有些并没有特殊的含义，就像 <code>\d</code> 或者 <code>\z</code>，碰到这种情况的话会把反斜杠移除。</li>
+</ul>
+<p>所以调用 <code>new RegExp</code> 会获得一个没有反斜杠的字符串。</p>
+<p>如果要修复这个问题，我们需要双斜杠，因为引用会把 <code>\\</code> 变为 <code>\</code>：</p>
+<pre><code class="language-js">*!*
+<span class="hljs-keyword">let</span> regStr = <span class="hljs-string">&quot;\\d\\.\\d&quot;</span>;
+*/!*
+alert(regStr); <span class="hljs-comment">// \d\.\d (correct now)</span>
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(regStr);
+
+alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(regexp) ); <span class="hljs-comment">// 5.1</span></code></pre>
+<h2 id="summary">Summary</h2>
+<ul>
+<li>要在字面（意义）上搜索特殊字符 <code>pattern:[ \ ^ $ . | ? * + ( )</code>，我们需要在它们前面加上反斜杠 <code>\</code>（&quot;转义它们&quot;）。</li>
+<li>如果我们在 <code>pattern:/.../</code> 内部（但不在 <code>new RegExp</code> 内部），还需要转义 <code>/</code>。</li>
+<li>传递一个字符串（参数）给 <code>new RegExp</code> 时，我们需要双倍反斜杠 <code>\\</code>，因为字符串引号会消费其中的一个。</li>
+</ul>
+
       </fieldset>
       
-      <fieldset id='_65HtVP'>
+      <fieldset id='_VpmnFm'>
+      <legend>solution</legend>
+      <p>·答案：<strong>没有，是的</strong>。</p>
+<ul>
+<li><p>在脚本 <code>subject:Java</code> 中它并不会匹配到任何字符串，因为 <code>pattern:[^script]</code> 表示的是“除了给定的字符之外的任何字符”。所以这个正则会查找 <code>&quot;Java&quot;</code> 之后是否有匹配这个规则的符号，但是这已经是整个字符串的结尾了，在其之后并没有任何符号。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Java&quot;</span>.match(<span class="hljs-regexp">/Java[^script]/</span>) ); <span class="hljs-comment">// null</span></code></pre>
+</li>
+<li><p>是的，因为正则表达式是大小写敏感的，<code>pattern:[^script]</code> 部分匹配到了字符 <code>&quot;S&quot;</code>。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;JavaScript&quot;</span>.match(<span class="hljs-regexp">/Java[^script]/</span>) ); <span class="hljs-comment">// &quot;JavaS&quot;</span></code></pre>
+</li>
+</ul>
+
+      </fieldset>
+      
+      <fieldset id='_Y2UQPW'>
+      <legend>task</legend>
+      <h1 id="javascript">Java[^script]</h1>
+<p>我们有一个正则表达式 <code>pattern:/Java[^script]/</code>。</p>
+<p>它会和字符串 <code>subject:Java</code> 中的任何一部分匹配吗？会和字符串 <code>subject:JavaScript</code> 任何一部分匹配吗？</p>
+
+      </fieldset>
+      
+      <fieldset id='_51t5jJ'>
       <legend>solution</legend>
       
       </fieldset>
       
-      <fieldset id='_uosdf0'>
+      <fieldset id='_wyf3mn'>
       <legend>task</legend>
       
       </fieldset>
       
-      <fieldset id='_lzUBRM'>
-      <legend>solution</legend>
-      
-      </fieldset>
-      
-      <fieldset id='_gxPg60'>
-      <legend>task</legend>
-      
-      </fieldset>
-      
-      <fieldset id='_MmadNu'>
+      <fieldset id='_qK5O1D'>
       <legend>article</legend>
-      
+      <h1 id="集合和范围-">集合和范围 [...]</h1>
+<p>在方括号 <code>[…]</code> 中的几个字符或者字符类意味着“搜索给定的字符中的任意一个”。</p>
+<h2 id="集合">集合</h2>
+<p>比如说，<code>pattern:[eao]</code> 意味着查找在 3 个字符 <code>&#39;a&#39;</code>、<code>&#39;e&#39;</code> 或者 `&#39;o&#39; 中的任意一个。</p>
+<p>这被叫做一个<strong>集合</strong>。集合可以在正则表达式中和其它常规字符一起使用。</p>
+<pre><code class="language-js"><span class="hljs-comment">// 查找 [t 或者 m]，然后再匹配 “op”</span>
+alert( <span class="hljs-string">&quot;Mop top&quot;</span>.match(<span class="hljs-regexp">/[tm]op/gi</span>) ); <span class="hljs-comment">// &quot;Mop&quot;, &quot;top&quot;</span></code></pre>
+<p>请注意尽管在集合中有多个字符，但它们在匹配中只会对应其中的一个。</p>
+<p>所以下面的示例并不会匹配上：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 查找 “V”，然后匹配 [o 或者 i]，之后再匹配 “la”</span>
+alert( <span class="hljs-string">&quot;Voila&quot;</span>.match(<span class="hljs-regexp">/V[oi]la/</span>) ); <span class="hljs-comment">// null，并没有匹配上</span></code></pre>
+<p>这个模式会做以下假设：</p>
+<ul>
+<li><code>pattern:V</code>，</li>
+<li>然后匹配其中的<strong>一个字符</strong> <code>pattern:[oi]</code>，</li>
+<li>然后匹配 <code>pattern:la</code>，</li>
+</ul>
+<p>所以可以匹配上 <code>match:Vola</code> 或者 <code>match:Vila</code>。</p>
+<h2 id="范围">范围</h2>
+<p>方括号也可以包含<strong>字符范围</strong>。</p>
+<p>比如说，<code>pattern:[a-z]</code> 会匹配从 <code>a</code> 到 <code>z</code> 范围内的字母，<code>pattern:[0-5]</code> 表示从 <code>0</code> 到 <code>5</code> 的数字。</p>
+<p>在下面的示例中，我们会查询首先匹配 <code>&quot;x&quot;</code> 字符，再匹配两个数字或者位于 <code>A</code> 到 <code>F</code> 范围内的字符。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Exception 0xAF&quot;</span>.match(<span class="hljs-regexp">/x[0-9A-F][0-9A-F]/g</span>) ); <span class="hljs-comment">// xAF</span></code></pre>
+<p><code>pattern:[0-9A-F]</code> 表示两个范围：它搜索一个字符，满足数字 <code>0</code> 到 <code>9</code> 或字母 <code>A</code> 到 <code>F</code>。</p>
+<p>如果我们还想查找小写字母，则可以添加范围 <code>a-f</code>：<code>pattern:[0-9A-Fa-f]</code>。或添加标志 <code>pattern:i</code>。</p>
+<p>我们也可以在 <code>[…]</code> 里面使用字符类。</p>
+<p>例如，如果我们想要查找单词字符 <code>pattern:\w</code> 或连字符 <code>pattern:-</code>，则该集合为 <code>pattern:[\w-]</code>。</p>
+<p>也可以组合多个类，例如 <code>pattern:[\s\d]</code> 表示 “空格字符或数字”。</p>
+<pre><code class="language-smart">例如：
+
+* **\d** —— 和 `pattern:[0-9]` 相同，
+* **\w** —— 和 `pattern:[a-zA-Z0-9_]` 相同，
+* **\s** —— 和 `pattern:[\t\n\v\f\r ]` 外加少量罕见的 unicode 空格字符相同。</code></pre>
+<h3 id="示例：多语言-w">示例：多语言 \w</h3>
+<p>由于字符类 <code>pattern:\w</code> 是简写的 <code>pattern:[a-zA-Z0-9_]</code>，因此无法找到中文象形文字，西里尔字母等。</p>
+<p>我们可以编写一个更通用的模式，该模式可以查找任何语言中的文字字符。这很容易想到就 Unicode 属性：<code>pattern:[\p{Alpha}\p{M}\p{Nd}\p{Pc}\p{Join_C}]</code>。</p>
+<p>让我们理解它。类似于 <code>pattern:\w</code>，我们在制作自己的一套字符集，包括以下 unicode 字符：</p>
+<ul>
+<li><code>Alphabetic</code> (<code>Alpha</code>) —— 字母，</li>
+<li><code>Mark</code> (<code>M</code>) —— 重读，</li>
+<li><code>Decimal_Number</code> (<code>Nd</code>) —— 数字，</li>
+<li><code>Connector_Punctuation</code> (<code>Pc</code>) —— 下划线 <code>&#39;_&#39;</code> 和类似的字符，</li>
+<li><code>Join_Control</code> (<code>Join_C</code>) —— 两个特殊代码 <code>200c</code> and <code>200d</code>，用于连字，例如阿拉伯语。</li>
+</ul>
+<p>使用示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/[\p{Alpha}\p{M}\p{Nd}\p{Pc}\p{Join_C}]/gu</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">`Hi 你好 12`</span>;
+
+<span class="hljs-comment">// finds all letters and digits:</span>
+alert( str.match(regexp) ); <span class="hljs-comment">// H,i,你,好,1,2</span></code></pre>
+<p>当然，我们可以编辑此模式：添加 unicode 属性或删除它们。文章 <a href="info:regexp-unicode">info:regexp-unicode</a> 中包含了更多 Unicode 属性的细节。</p>
+<pre><code class="language-warn">Edge 和 Firefox 尚未实现 Unicode 属性 `pattern:p{…}`。如果确实需要它们，可以使用库 [XRegExp](http://xregexp.com/)。
+
+或者只使用我们想要的语言范围的字符，例如西里尔字母 `pattern:[а-я]`。</code></pre>
+<h2 id="排除范围">排除范围</h2>
+<p>除了普通的范围匹配，还有类似 <code>pattern:[^…]</code> 的“排除”范围匹配。</p>
+<p>它们通过在匹配查询的开头添加插入符号 <code>^</code> 来表示，它会匹配所有<strong>除了给定的字符</strong>之外的任意字符。</p>
+<p>比如说：</p>
+<ul>
+<li><code>pattern:[^aeyo]</code> —— 匹配任何除了 <code>&#39;a&#39;</code>、<code>&#39;e&#39;</code>、<code>&#39;y&#39;</code> 或者 <code>&#39;o&#39;</code> 之外的字符。</li>
+<li><code>pattern:[^0-9]</code> —— 匹配任何除了数字之外的字符，也可以使用 <code>\D</code> 来表示。</li>
+<li><code>pattern:[^\s]</code> —— 匹配任何非空字符，也可以使用 <code>\S</code> 来表示。</li>
+</ul>
+<p>下面的示例查询除了字母，数字和空格之外的任意字符：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;alice15@gmail.com&quot;</span>.match(<span class="hljs-regexp">/[^\d\sA-Z]/gi</span>) ); <span class="hljs-comment">// @ and .</span></code></pre>
+<h2 id="在--中不转义">在 […] 中不转义</h2>
+<p>通常当我们的确需要查询点字符时，我们需要把它转义成像 <code>pattern:\.</code> 这样的形式。如果我们需要查询一个反斜杠，我们需要使用 <code>pattern:\\</code>。</p>
+<p>在方括号表示中，绝大多数特殊字符可以在不转义的情况下使用：</p>
+<ul>
+<li>表示一个点符号 <code>pattern:&#39;.&#39;</code>。</li>
+<li>表示一个加号 <code>pattern:&#39;+&#39;</code>。</li>
+<li>表示一个括号 <code>pattern:&#39;( )&#39;</code>。</li>
+<li>在开头或者结尾表示一个破折号（在这些位置该符号表示的就不是一个范围） `pattern:&#39;-&#39;。</li>
+<li>在不是开头的位置表示一个插入符号（在开头位置该符号表示的是排除）<code>pattern:&#39;^&#39;</code>。</li>
+<li>表示一个开口的方括号符号 <code>pattern:&#39;[&#39;</code>。</li>
+</ul>
+<p>换句话说，除了在方括号中有特殊含义的字符外，其它所有特殊字符都是允许不添加反斜杠的。</p>
+<p>一个在方括号中的点符号 <code>&quot;.&quot;</code> 表示的就是一个点字符。查询模式 <code>pattern:[.,]</code> 将会寻找一个为点或者逗号的字符。</p>
+<p>在下面的示例中，<code>pattern:[-().^+]</code> 会查找 <code>-().^+</code> 的其中任意一个字符：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 并不需要转义</span>
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/[-().^+]/g</span>;
+
+alert( <span class="hljs-string">&quot;1 + 2 - 3&quot;</span>.match(reg) ); <span class="hljs-comment">// 匹配 +，-</span></code></pre>
+<p>。。。但是如果你为了“以防万一”转义了它们，这也不会有任何问题：</p>
+<pre><code class="language-js"><span class="hljs-comment">//转义其中的所有字符</span>
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/[\-\(\)\.\^\+]/g</span>;
+
+alert( <span class="hljs-string">&quot;1 + 2 - 3&quot;</span>.match(reg) ); <span class="hljs-comment">// 仍能正常工作：+，-</span></code></pre>
+<h2 id="范围和标志u">范围和标志“u”</h2>
+<p>如果集合中有代理对（surrogate pairs），则需要标志 <code>pattern:u</code> 以使其正常工作。</p>
+<p>例如，让我们在字符串 <code>subject:𝒳</code> 中查找 <code>pattern:[𝒳𝒴]</code>：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;𝒳&#x27;</span>.match(<span class="hljs-regexp">/[𝒳𝒴]/</span>) ); <span class="hljs-comment">// 显示一个奇怪的字符，像 [?]</span>
+<span class="hljs-comment">//（搜索执行不正确，返回了半个字符）</span></code></pre>
+<p>结果不正确，因为默认情况下正则表达式“不知道”代理对。</p>
+<p>正则表达式引擎认为 <code>[𝒳𝒴]</code> —— 不是两个，而是四个字符：</p>
+<ol>
+<li><code>𝒳</code> <code>(1)</code> 的左半部分，</li>
+<li><code>𝒳</code> <code>(2)</code> 的右半部分，</li>
+<li><code>𝒴</code> <code>(3)</code> 的左半部分，</li>
+<li><code>𝒴</code> <code>(4)</code> 的右半部分。</li>
+</ol>
+<p>我们可以看到它们的代码，如下所示：</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-string">&#x27;𝒳𝒴&#x27;</span>.length; i++) {
+  alert(<span class="hljs-string">&#x27;𝒳𝒴&#x27;</span>.charCodeAt(i)); <span class="hljs-comment">// 55349, 56499, 55349, 56500</span>
+};</code></pre>
+<p>因此，以上示例查找并显示了 <code>𝒳</code> 的左半部分。</p>
+<p>如果我们添加标志 <code>pattern:u</code>，那么行为将是正确的：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;𝒳&#x27;</span>.match(<span class="hljs-regexp">/[𝒳𝒴]/u</span>) ); <span class="hljs-comment">// 𝒳</span></code></pre>
+<p>当我们查找范围时也会出现类似的情况，就像 <code>[𝒳-𝒴]</code>。</p>
+<p>如果我们忘记添加标志 <code>pattern:u</code>，则会出现错误：</p>
+<pre><code class="language-js"><span class="hljs-string">&#x27;𝒳&#x27;</span>.match(<span class="hljs-regexp">/[𝒳-𝒴]/</span>); <span class="hljs-comment">// 错误：无效的正则表达式</span></code></pre>
+<p>原因是，没有标志 <code>pattern:u</code> 的代理对被视为两个字符，因此 <code>[𝒳-𝒴]</code> 被解释为 <code>[&lt;55349&gt;&lt;56499&gt;-&lt;55349&gt;&lt;56500&gt;]</code>（每个代理对都替换为其代码）。现在很容易看出范围 <code>56499-55349</code> 是无效的：其起始代码 <code>56499</code> 大于终止代码 <code>55349</code>。这就是错误的原因。</p>
+<p>使用标志 <code>pattern:u</code>，该模式可以正常匹配：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 查找字符从 𝒳 到 𝒵</span>
+alert( <span class="hljs-string">&#x27;𝒴&#x27;</span>.match(<span class="hljs-regexp">/[𝒳-𝒵]/u</span>) ); <span class="hljs-comment">// 𝒴</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_IKWb5O'>
+      <fieldset id='_ML74b9'>
       <legend>solution</legend>
-      
+      <p>Solution:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/\.{3,}/g</span>;
+alert( <span class="hljs-string">&quot;Hello!... How goes?.....&quot;</span>.match(reg) ); <span class="hljs-comment">// ..., .....</span></code></pre>
+<p>需要注意的是，点号（.）是一个特殊字符，因此我们需要将其转义并作为 <code>\.</code> 插入语句。</p>
+
       </fieldset>
       
-      <fieldset id='_3746iG'>
+      <fieldset id='_aNykmQ'>
       <legend>task</legend>
-      
+      <p>importance: 5</p>
+<hr>
+<h1 id="如何找到省略号-？">如何找到省略号 &quot;...&quot;？</h1>
+<p>创建一个正则表达式来查找省略号：连续 3（或更多）个点。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/你的正则表达式/g</span>;
+alert( <span class="hljs-string">&quot;Hello!... How goes?.....&quot;</span>.match(reg) ); <span class="hljs-comment">// ..., .....</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_OQjOc8'>
+      <fieldset id='_i2VxFJ'>
       <legend>solution</legend>
-      
+      <p>我们需要寻找 <code>#</code> 字符，后跟六个十六进制字符。</p>
+<p>一个十六进制字符可以被描述为 <code>pattern:[0-9a-fA-F]</code>。如果我们使用 <code>i</code> 标识，那么只需要 <code>pattern:[0-9a-f]</code>。</p>
+<p>然后我们可以用量词 <code>pattern:{6}</code> 来查找这六个。</p>
+<p>因此，我们得到正则表达式：<code>pattern:/#[a-f0-9]{6}/gi</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/#[a-f0-9]{6}/gi</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;color:#121212; background-color:#AA00ef bad-colors:f#fddee #fd2&quot;</span>
+
+alert( str.match(reg) );  <span class="hljs-comment">// #121212,#AA00ef</span></code></pre>
+<p>问题是其从更长的序列中匹配了颜色值：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;#12345678&quot;</span>.match( <span class="hljs-regexp">/#[a-f0-9]{6}/gi</span> ) ) <span class="hljs-comment">// #123456</span></code></pre>
+<p>为了解决这个问题，我们可以在末尾加上 <code>pattern:\b</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// color</span>
+alert( <span class="hljs-string">&quot;#123456&quot;</span>.match( <span class="hljs-regexp">/#[a-f0-9]{6}\b/gi</span> ) ); <span class="hljs-comment">// #123456</span>
+
+<span class="hljs-comment">// not a color</span>
+alert( <span class="hljs-string">&quot;#12345678&quot;</span>.match( <span class="hljs-regexp">/#[a-f0-9]{6}\b/gi</span> ) ); <span class="hljs-comment">// null</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_atBe9M'>
+      <fieldset id='_Fr47hy'>
       <legend>task</legend>
-      
+      <h1 id="针对-html-颜色的正则表达式">针对 HTML 颜色的正则表达式</h1>
+<p>创建一个正则表达式来搜寻格式为 <code>#ABCDEF</code> 的 HTML 颜色值：首个字符 <code>#</code> 以及接下来的六位十六进制字符。</p>
+<p>一个例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/...你的正则表达式.../</span>
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;color:#121212; background-color:#AA00ef bad-colors:f#fddee #fd2 #12345678&quot;</span>;
+
+alert( str.match(reg) )  <span class="hljs-comment">// #121212,#AA00ef</span></code></pre>
+<p>P.S. 在这个任务中，我们不需要其他的颜色格式，比如 <code>#123</code> 或 <code>rgb(1,2,3)</code> 等。</p>
+
       </fieldset>
       
-      <fieldset id='_cRhQnh'>
+      <fieldset id='_ynny3c'>
       <legend>article</legend>
-      
+      <h1 id="量词--和-n">量词 <code>+,*,?</code> 和 <code>{n}</code></h1>
+<p>假设我们有一个字符串 <code>+7(903)-123-45-67</code>，并且想要找到它包含的所有数字。但与之前不同的是，我们对单个数字不感兴趣，只对全数感兴趣：<code>7, 903, 123, 45, 67</code>。</p>
+<p>数字是一个或多个 <code>\d</code> 的序列。用来形容我们所需要的数量的词被称为<strong>量词</strong>。</p>
+<h2 id="数量-n">数量 {n}</h2>
+<p>最明显的量词便是一对引号间的数字：<code>pattern:{n}</code>。在一个字符（或一个字符类等等）后跟着一个量词，用来指出我们具体需要的数量。</p>
+<p>它有更高级的格式，用一个例子来说明：</p>
+<p>确切的位数：<code>{5}</code>
+: <code>pattern:\d{5}</code> 表示 5 位的数字，如同 <code>pattern:\d\d\d\d\d</code>。</p>
+<pre><code>接下来的例子将会查找一个五位数的数字：
+
+```js run
+alert( &quot;I&#x27;m 12345 years old&quot;.match(/\d{5}/) ); //  &quot;12345&quot;
+```
+
+我们可以添加 `\b` 来排除更多位数的数字：`pattern:\b\d{5}\b`。</code></pre>
+<p>某个范围的位数：<code>{3,5}</code>
+: 我们可以将限制范围的数字放入括号中，来查找位数为 3 至 5 位的数字：<code>pattern:\d{3,5}</code></p>
+<pre><code>```js run
+alert( &quot;I&#x27;m not 12, but 1234 years old&quot;.match(/\d{3,5}/) ); // &quot;1234&quot;
+```
+
+我们可以省略上限。那么正则表达式 `pattern:\d{3,}` 就会查找位数大于或等于 3 的数字：
+
+```js run
+alert( &quot;I&#x27;m not 12, but 345678 years old&quot;.match(/\d{3,}/) ); // &quot;345678&quot;
+```</code></pre>
+<p>对于字符串 <code>+7(903)-123-45-67</code> 来说，我们如果需要一个或多个连续的数字，就使用 <code>pattern:\d{1,}</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;+7(903)-123-45-67&quot;</span>;
+
+<span class="hljs-keyword">let</span> numbers = str.match(<span class="hljs-regexp">/\d{1,}/g</span>);
+
+alert(numbers); <span class="hljs-comment">// 7,903,123,45,67</span></code></pre>
+<h2 id="缩写">缩写</h2>
+<p>大多数常用的量词都可以有缩写：</p>
+<p><code>+</code>
+: 代表“一个或多个”，相当于 <code>{1,}</code>。</p>
+<pre><code>例如，`pattern:\d+` 用来查找所有数字：
+
+```js run
+let str = &quot;+7(903)-123-45-67&quot;;
+
+alert( str.match(/\d+/g) ); // 7,903,123,45,67
+```</code></pre>
+<p><code>?</code>
+: 代表“零个或一个”，相当于 <code>{0,1}</code>。换句话说，它使得符号变得可选。</p>
+<pre><code>例如，模式 `pattern:ou?r` 查找 `match:o`，后跟零个或一个 `match:u`，然后是 `match:r`。
+
+所以他能够在 `subject:color` 中找到 `match:or`，以及在 `subject:colour` 中找到 `match:our`：
+
+```js run
+let str = &quot;Should I write color or colour?&quot;;
+
+alert( str.match(/colou?r/g) ); // color, colour
+```</code></pre>
+<p><code>*</code>
+: 代表着“零个或多个”，相当于 <code>{0,}</code>。也就是说，这个字符可以多次出现或不出现。</p>
+<pre><code>接下来的例子将要寻找一个后跟任意数量的 0 的数字：
+
+```js run
+alert( &quot;100 10 1&quot;.match(/\d0*/g) ); // 100, 10, 1
+```
+
+将它与 `&#x27;+&#x27;`（一个或多个）作比较：
+
+```js run
+alert( &quot;100 10 1&quot;.match(/\d0+/g) ); // 100, 10
+```</code></pre>
+<h2 id="更多示例">更多示例</h2>
+<p>量词是经常被使用的。它们是构成复杂的正则表达式的主要模块之一，我们接着来看更多的例子。</p>
+<p>正则表达式“浮点数”（带浮点的数字）：<code>pattern:\d+\.\d+</code>
+: 实现：
+    <code>js run     alert( &quot;0 1 12.345 7890&quot;.match(/\d+\.\d+/g) ); // 12.345     </code></p>
+<p>正则表达式“打开没有属性的 HTML 标记”，比如 <code>&lt;span&gt;</code> 或 <code>&lt;p&gt;</code>：<code>pattern:/&lt;[a-z]+&gt;/i</code>
+: 实现：</p>
+<pre><code>```js run
+alert( &quot;&lt;body&gt; ... &lt;/body&gt;&quot;.match(/&lt;[a-z]+&gt;/gi) ); // &lt;body&gt;
+```
+
+我们查找字符 `pattern:&#x27;&lt;&#x27;` 后跟一个或多个英文字母，然后是 `pattern:&#x27;&gt;&#x27;`。</code></pre>
+<p>正则表达式“打开没有属性的HTML标记”（改进版）：<code>pattern:/&lt;[a-z][a-z0-9]*&gt;/i</code>
+: 更好的表达式：根据标准，HTML 标记名称可以在除了第一个位置以外的任意一个位置有一个数字，比如 <code>&lt;h1&gt;</code>。</p>
+<pre><code>```js run
+alert( &quot;&lt;h1&gt;Hi!&lt;/h1&gt;&quot;.match(/&lt;[a-z][a-z0-9]*&gt;/gi) ); // &lt;h1&gt;
+```</code></pre>
+<p>正则表达式“打开没有属性的HTML标记”：<code>pattern:/&lt;\/?[a-z][a-z0-9]*&gt;/i</code>
+: 我们在标记前加上了一个可选的斜杆 <code>pattern:/?</code>。必须用一个反斜杠来转义它，否则 JavaScript 就会认为它是这个模式的结束符。</p>
+<pre><code>```js run
+alert( &quot;&lt;h1&gt;Hi!&lt;/h1&gt;&quot;.match(/&lt;\/?[a-z][a-z0-9]*&gt;/gi) ); // &lt;h1&gt;, &lt;/h1&gt;
+```</code></pre>
+<pre><code class="language-smart">我们能够从这些例子中看到一个共同的规则：正则表达式越精确 —— 它就越长且越复杂。
+
+例如，HTML 标记能用一个简单的正则表达式：`pattern:&lt;\w+&gt;`。
+
+因为 `pattern:\w` 代表任意英文字母或数字或 `&#x27;_&#x27;`，这个正则表达式也能够匹配非标注的内容，比如 `match:&lt;_&gt;`。但它要比 `pattern:&lt;[a-z][a-z0-9]*&gt;` 简单很多。
+
+我们能够接受 `pattern:&lt;\w+&gt;` 或者我们需要 `pattern:&lt;[a-z][a-z0-9]*&gt;`？
+
+在现实生活中，两种方式都能接受。取决于我们对于“额外”匹配的宽容程度以及是否难以通过其他方式来过滤掉它们。</code></pre>
+
       </fieldset>
       
-      <fieldset id='_HroW30'>
+      <fieldset id='_YMUvys'>
       <legend>solution</legend>
-      
+      <p>结果是：<code>match:123 4</code>。</p>
+<p>首先，懒惰模式 <code>pattern:\d+?</code> 尝试去获取尽可能少的字符，但当它检测到空格，就得出匹配结果 <code>match:123</code>。</p>
+<p>然后，第二个 <code>\d+?</code> 就只获取一个字符，因为这就已足够了。</p>
+
       </fieldset>
       
-      <fieldset id='_OjkkAM'>
+      <fieldset id='_0bk4vl'>
       <legend>task</legend>
-      
+      <h1 id="对于-d-d-的匹配">对于 /d+? d+?/ 的匹配</h1>
+<p>以下匹配的结果是什么？</p>
+<pre><code class="language-js"><span class="hljs-string">&quot;123 456&quot;</span>.match(<span class="hljs-regexp">/\d+? \d+?/g</span>) ); <span class="hljs-comment">// ?</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_bxdsik'>
+      <fieldset id='_ndccCF'>
       <legend>solution</legend>
-      
+      <p>我们需要找到注释的起始位置 <code>match:&lt;!--</code>，然后获取字符直到注释的末尾 <code>match:--&gt;</code>。</p>
+<p>首先想到的是 <code>pattern:&lt;!--.*?--&gt;</code> —— 惰性量词使得点（.）停在 <code>match:--&gt;</code> 之前。</p>
+<p>但是在 Javascript 中，一个点（.）表示除换行符之外的任意字符。所以这是无法匹配多行注释的。</p>
+<p>我们可以用 <code>pattern:[\s\S]</code>，而不是用点（.）来匹配“任何东西”：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;!--[\s\S]*?--&gt;/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">`... &lt;!-- My -- comment
+ test --&gt; ..  &lt;!----&gt; ..
+`</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;!-- My -- comment \n test --&gt;&#x27;, &#x27;&lt;!----&gt;&#x27;</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_5Me50s'>
+      <fieldset id='_S6cb73'>
       <legend>task</legend>
-      
+      <h1 id="查找-html-注释">查找 HTML 注释</h1>
+<p>找出文本中的所有注释：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/你的正则表达式/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">`... &lt;!-- My -- comment
+ test --&gt; ..  &lt;!----&gt; .. 
+`</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;!-- My -- comment \n test --&gt;&#x27;, &#x27;&lt;!----&gt;&#x27;</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_jZT5Gj'>
+      <fieldset id='_94aaIH'>
       <legend>solution</legend>
-      
+      <p>答案是 <code>pattern:&lt;[^&lt;&gt;]+&gt;</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;[^&lt;&gt;]+&gt;/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&lt;&gt; &lt;a href=&quot;/&quot;&gt; &lt;input type=&quot;radio&quot; checked&gt; &lt;b&gt;&#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;a href=&quot;/&quot;&gt;&#x27;, &#x27;&lt;input type=&quot;radio&quot; checked&gt;&#x27;, &#x27;&lt;b&gt;&#x27;</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_K8cVUc'>
+      <fieldset id='_84bn6Y'>
       <legend>task</legend>
-      
+      <h1 id="寻找-html-标签">寻找 HTML 标签</h1>
+<p>创建一个正则表达式语句来寻找所有具有其属性的（闭合或非闭合）HTML 标签。</p>
+<p>用例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/你的正则表达式/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&lt;&gt; &lt;a href=&quot;/&quot;&gt; &lt;input type=&quot;radio&quot; checked&gt; &lt;b&gt;&#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;a href=&quot;/&quot;&gt;&#x27;, &#x27;&lt;input type=&quot;radio&quot; checked&gt;&#x27;, &#x27;&lt;b&gt;&#x27;</span></code></pre>
+<p>假设不包含 <code>&lt;</code> 和 <code>&gt;</code>（也包括引号），这将会简单许多。</p>
+
       </fieldset>
       
-      <fieldset id='_oQxnQL'>
+      <fieldset id='_bC3fmn'>
       <legend>article</legend>
-      
+      <h1 id="贪婪量词和惰性量词">贪婪量词和惰性量词</h1>
+<p>量词，看上去十分简单，但实际上它可能会很棘手。</p>
+<p>如果我们打算寻找比 <code>pattern:/\d+/</code> 更加复杂的东西，就需要理解搜索工作是如何进行的。</p>
+<p>以接下来的问题为例。</p>
+<p>有一个文本，我们需要用书名号：<code>«...»</code> 来代替所有的引号 <code>&quot;...&quot;</code>。在许多国家，它们是排版的首选。</p>
+<p>例如：<code>&quot;Hello, world&quot;</code> 将会变成 <code>«Hello, world»</code>。</p>
+<p>一些国家偏爱 <code>„Witam, świat!”</code>（波兰语）甚至 <code>「你好，世界」</code>（汉语）引号。对于不同的语言环境，我们可以选择不同的替代方式，但它们都是一样的，那我们就以书名号 <code>«...»</code> 开始。</p>
+<p>为了进行替换，我们首先要找出所有被引号围起来的子串。</p>
+<p>正则表达式看上去可能是这样的：<code>pattern:/&quot;.+&quot;/g</code>。这个表达式的意思是：我们要查找这样一个句子，一个引号后跟一个或多个字符，然后以另一个引号结尾。</p>
+<p>...但如果我们试着在一个如此简单的例子中去应用它...</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&quot;.+&quot;/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;a &quot;witch&quot; and her &quot;broom&quot; is one&#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &quot;witch&quot; and her &quot;broom&quot;</span></code></pre>
+<p>...我们会发现它的运行结果与预期不同！</p>
+<p>它直接找到了一个匹配结果：<code>match:&quot;witch&quot; and her &quot;broom&quot;</code>，而不是找到两个匹配结果 <code>match:&quot;witch&quot;</code> 和 <code>match:&quot;broom&quot;</code>。</p>
+<p>这可被称为“贪婪是万恶之源”。</p>
+<h2 id="贪婪搜索">贪婪搜索</h2>
+<p>为了查找到一个匹配项，正则表达式引擎采用了以下算法：</p>
+<ul>
+<li>对于字符串中的每一个字符<ul>
+<li>用这个模式来匹配此字符。</li>
+<li>若无匹配，移至下一个字符</li>
+</ul>
+</li>
+</ul>
+<p>这些简单的词语没有说清楚为什么这个正则表达式匹配失败了，因此，让我们详细说明一下模式 <code>pattern:&quot;.+&quot;</code> 是如何进行搜索工作的。</p>
+<ol>
+<li><p>该模式的第一个字符是一个引号 <code>pattern:&quot;</code>。</p>
+<p> 正则表达式引擎企图在字符串 <code>subject:a &quot;witch&quot; and her &quot;broom&quot; is one</code> 的第一个位置就匹配到目标，但这个位置是 subject:a，所以匹配失败。</p>
+<p> 然后它进行下一步：移至字符串中的下一个位置，并试图匹配模式中的第一个字符，最终在第三个位置匹配到了引号：</p>
+<p> <img src="witch_greedy1.svg" alt=""></p>
+</li>
+<li><p>检测到了引号后，引擎就尝试去匹配模式中的剩余字符。它试图查看剩余的字符串主体是否符合 <code>pattern:.+&quot;</code>。</p>
+<p> 在我们的用例中，模式中的下一个字符为 <code>pattern:.</code>（一个点）。它表示匹配除了换行符之外的任意字符，所以将会匹配下一个字符 <code>match:&#39;w&#39;</code>：</p>
+<p> <img src="witch_greedy2.svg" alt=""></p>
+</li>
+<li><p>然后因为量词 <code>pattern:.+</code>，模式中的点（.）将会重复。正则表达式引擎逐一读取字符，当该字符可能匹配时就用它来构建匹配项。</p>
+<p> ...什么时候会不匹配？点（.）能够匹配所有字符，所以只有在移至字符串末尾时才停止匹配：</p>
+<p> <img src="witch_greedy3.svg" alt=""></p>
+</li>
+<li><p>现在引擎完成了对重复模式 <code>pattern:.+</code> 的搜索，并且试图寻找模式中的下一个字符。这个字符是引号 <code>pattern:&quot;</code>。但还有一个问题，对字符串的遍历已经结束，已经没有更多的字符了！</p>
+<p> 正则表达式引擎明白它已经为 <code>pattern:.+</code> 匹配了太多项了，所以开始<strong>回溯</strong>了。</p>
+<p> 换句话说，它去掉了量词的匹配项的最后一个字符：</p>
+<p> <img src="witch_greedy4.svg" alt=""></p>
+<p> 现在它假设在结束前，<code>pattern:.+</code> 会匹配一个字符，并尝试匹配剩余的字符。</p>
+<p> 如果出现了一个引号，就表示到达了末尾，但最后一个字符是 <code>subject:&#39;e&#39;</code>，所以无法匹配。 </p>
+</li>
+<li><p>...所以引擎会再去掉一个字符，以此来减少 <code>pattern:.+</code> 的重复次数：</p>
+<p> <img src="witch_greedy5.svg" alt=""></p>
+<p> <code>pattern:&#39;&quot;&#39;</code> 并不会匹配 <code>subject:&#39;n&#39;</code>。</p>
+</li>
+<li><p>引擎不断进行回溯：它减少了 <code>pattern:&#39;.&#39;</code> 的重复次数，直到模式的其它部分（在我们的用例中是 <code>pattern:&#39;&quot;&#39;</code>）匹配到结果：</p>
+<p> <img src="witch_greedy6.svg" alt=""></p>
+</li>
+<li><p>匹配完成。</p>
+</li>
+<li><p>所以，第一次匹配是 <code>match:&quot;witch&quot; and her &quot;broom&quot;</code>。接下来的搜索的起点位于第一次搜索的终点，但在 <code>subject:is one</code> 中没有更多的引号了，所以没有其它的结果了。</p>
+</li>
+</ol>
+<p>这可能不是我们所想要的，但这就是它的工作原理。</p>
+<p><strong>在贪婪模式下（默认情况下），量词都会尽可能地重复多次。</strong></p>
+<p>正则表达式引擎尝试用 <code>pattern:.+</code> 去获取尽可能多的字符，然后再一步步地筛选它们。</p>
+<p>对于这个问题，我们想要另一种结果，这也就是懒惰量词模式的用途。</p>
+<h2 id="懒惰模式">懒惰模式</h2>
+<p>懒惰模式中的量词与贪婪模式中的是相反的。它想要“重复最少次数”。</p>
+<p>我们能够通过在量词之后添加一个问号 <code>pattern:&#39;?&#39;</code> 来启用它，所以匹配模式变为 <code>pattern:*?</code> 或 <code>pattern:+?</code>，甚至将 <code>pattern:&#39;?&#39;</code> 变为 <code>pattern:??</code>。</p>
+<p>这么说吧：通常，一个问号 <code>pattern:?</code> 就是一个它本身的量词（0 或 1），但如果添加<strong>另一个量词（甚至可以是它自己）</strong>，就会有不同的意思 —— 它将匹配的模式从贪婪转为懒惰。</p>
+<p>正则表达式 <code>pattern:/&quot;.+?&quot;/g</code> 正如预期工作：它找到了 <code>match:&quot;witch&quot;</code> 和 <code>match:&quot;broom&quot;</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&quot;.+?&quot;/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;a &quot;witch&quot; and her &quot;broom&quot; is one&#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// witch, broom</span></code></pre>
+<p>为了更清楚地理解这个变化，我们来一步步解析这个搜索过程。</p>
+<ol>
+<li><p>第一步依然相同：它在第三个位置开始 <code>pattern:&#39;&quot;&#39;</code>：</p>
+<p> <img src="witch_greedy1.svg" alt=""></p>
+</li>
+<li><p>下一步也是类似的：引擎为 <code>pattern:&#39;.&#39;</code> 找到了一个匹配项：</p>
+<p> <img src="witch_greedy2.svg" alt=""></p>
+</li>
+<li><p>接下来就是搜索过程出现不同的时候了。因为我们对 <code>pattern:+?</code> 启用了懒惰模式，引擎不会去尝试多匹配一个点，并且开始了对剩余的 <code>pattern:&#39;&quot;&#39;</code> 的匹配：</p>
+<p> <img src="witch_lazy3.svg" alt=""></p>
+<p> 如果有一个引号，搜索就会停止，但是有一个 <code>&#39;i&#39;</code>，所以没有匹配到引号。</p>
+</li>
+<li><p>接着，正则表达式引擎增加对点的重复搜索次数，并且再次尝试：</p>
+<p> <img src="witch_lazy4.svg" alt=""></p>
+<p> 又失败了。然后重复次数一次又一次的增加...</p>
+</li>
+<li><p>...直到模式中的剩余部分找到匹配项：</p>
+<p> <img src="witch_lazy5.svg" alt=""></p>
+</li>
+<li><p>接下来的搜索工作从当前匹配结束的那一项开始，就会再产生一个结果：</p>
+<p> <img src="witch_lazy6.svg" alt=""></p>
+</li>
+</ol>
+<p>在这个例子中，我们看到了懒惰模式 <code>pattern:+?</code> 是怎样工作的。量词 <code>pattern:*?</code> 和 <code>pattern:??</code> 也有类似的效果 —— 只有在模式的剩余部分无法在给定位置匹配时，正则表达式引擎才会增加重复次数。</p>
+<p><strong>懒惰模式只能够通过带 <code>?</code> 的量词启用</strong></p>
+<p>其它的量词依旧保持贪婪模式。</p>
+<p>例如：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;123 456&quot;</span>.match(<span class="hljs-regexp">/\d+ \d+?/g</span>) ); <span class="hljs-comment">// 123 4</span></code></pre>
+<ol>
+<li><p>模式 <code>pattern:\d+</code> 尝试匹配尽可能多的数字（贪婪模式），因此在它找到 <code>match:123</code> 时停止，因为下一个字符为空格 <code>pattern:&#39; &#39;</code>。</p>
+</li>
+<li><p>匹配到一个空格。</p>
+</li>
+<li><p>由于 <code>pattern:\d+?</code>。量词是出于懒惰模式的，所以它匹配一个数字 <code>match:4</code> 并且尝试去检测模式的剩余部分是否匹配。</p>
+<p> 。。。但是在 <code>pattern:\d+?</code> 之后没有其它的匹配项了。</p>
+<p> 懒惰模式不会在不必要的情况下重复任何事情。模式结束，所以我们找到了匹配项 <code>match:123 4</code>。</p>
+</li>
+<li><p>接下来的搜索工作从字符 <code>5</code> 开始。</p>
+</li>
+</ol>
+<pre><code class="language-smart">当代的正则表达式引擎会通过优化内部算法来提升效率。所以它们的工作流程和所描述的算法可能略有不同。
+
+但如果只是为了理解正则表达式是如何工作以及如何构建的，我们不需要知道这些，它们仅用于内部优化。
+
+复杂的正则表达式是难以优化的，所以搜索的过程可能会完全按照描述进行。</code></pre>
+<h2 id="替代方法">替代方法</h2>
+<p>在正则表达式中，通常有多种方法来达到某个相同目的。</p>
+<p>在用例中，我们能够在不启用懒惰模式的情况下用 <code>pattern:&quot;[^&quot;]+&quot;</code> 找到带引号的字符串：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&quot;[^&quot;]+&quot;/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;a &quot;witch&quot; and her &quot;broom&quot; is one&#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// witch, broom</span></code></pre>
+<p><code>pattern:&quot;[^&quot;]+&quot;</code> 得到了正确的答案，因为它查找一个引号 <code>pattern:&#39;&quot;&#39;</code>，后跟一个或多个非引号字符  <code>pattern:[^&quot;]</code>，然后是结束的引号。</p>
+<p>当引擎寻找 <code>pattern:[^&quot;]+</code> 时，它会在匹配到结束的引号时停止重复，这样就完成了。</p>
+<p>请注意，这个逻辑并不能取代惰性量词！</p>
+<p>这是不同的，我们有时需要这一个，有时却需要另一个。</p>
+<p>让我们再来看一个使用惰性量词失败而使用这种方式正确的例子。</p>
+<p>例如，我们想要找到 <code>&lt;a href=&quot;...&quot; class=&quot;doc&quot;&gt;</code> 形式的链接，或是任意 <code>href</code>。</p>
+<p>该使用哪个正则表达式呢？</p>
+<p>首先可能会想到：<code>pattern:/&lt;a href=&quot;.*&quot; class=&quot;doc&quot;&gt;/g</code>。</p>
+<p>验证一下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;a href=&quot;link&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;a href=&quot;.*&quot; class=&quot;doc&quot;&gt;/g</span>;
+
+<span class="hljs-comment">// Works!</span>
+alert( str.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link&quot; class=&quot;doc&quot;&gt;</span></code></pre>
+<p>...但如果文本中有多个链接呢？</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;... &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;a href=&quot;.*&quot; class=&quot;doc&quot;&gt;/g</span>;
+
+<span class="hljs-comment">// Whoops! Two links in one match!</span>
+alert( str.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;... &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;</span></code></pre>
+<p>现在这个结果和我们的 &quot;witches&quot; 用例结果的错误原因是一样的。量词 <code>pattern:.*</code> 占用太多字符了。</p>
+<p>匹配结果如下：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;.....................................&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;link1&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>... <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;link2&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span></code></pre>
+<p>让我们启用惰性量词 <code>pattern:.*?</code> 来修改模式：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;... &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;a href=&quot;.*?&quot; class=&quot;doc&quot;&gt;/g</span>;
+
+<span class="hljs-comment">// 有效！</span>
+alert( str.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;, &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;</span></code></pre>
+<p>现在能成功了，有两个匹配项：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;.....&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;.....&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;link1&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>... <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;link2&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span></code></pre>
+<p>它的工作原理是 —— 在上述的解释之后，这应该是显而易见的。所以我们不停留在这些细节上，来再尝试一个例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;a href=&quot;link1&quot; class=&quot;wrong&quot;&gt;... &lt;p style=&quot;&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;a href=&quot;.*?&quot; class=&quot;doc&quot;&gt;/g</span>;
+
+<span class="hljs-comment">// 错误！</span>
+alert( str.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link1&quot; class=&quot;wrong&quot;&gt;... &lt;p style=&quot;&quot; class=&quot;doc&quot;&gt;</span></code></pre>
+<p>我们会发现，这个正则表达式不仅匹配了一个链接，还匹配了包含 <code>&lt;p...&gt;</code> 的一段文本。</p>
+<p>为什么？</p>
+<ol>
+<li><p>首先，正则表达式发现一个链接标签：<code>match:&lt;a href=&quot;</code>。</p>
+</li>
+<li><p>然后它寻找 <code>pattern:.*?</code>，我们取一个字符，检查其是否与模式的剩余部分匹配，然后再取另一个。。。</p>
+<p> 量词 <code>pattern:.*?</code> 检测字符，直到 <code>match:class=&quot;doc&quot;&gt;</code>。</p>
+<p> ...在哪里可以找到它呢？我们如果查看文本，就可以看到唯一的 <code>match:class=&quot;doc&quot;&gt;</code> 是在链接之后的，在 <code>&lt;p&gt;</code> 中。</p>
+</li>
+<li><p>所以有了如下匹配项：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;...................................&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;link1&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;wrong&quot;</span>&gt;</span>... <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span></code></pre>
+</li>
+</ol>
+<p>所以，懒惰模式在这里不起作用。</p>
+<p>我们需要寻找 <code>&lt;a href=&quot;...something...&quot; class=&quot;doc&quot;&gt;</code>，但贪婪和懒惰模式都有一些问题。</p>
+<p>正确的做法应该是这样的：<code>pattern:href=&quot;[^&quot;]*&quot;</code>。它会获取 href 属性中的所有字符，正好符合我们的需求。</p>
+<p>一个实例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str1 = <span class="hljs-string">&#x27;...&lt;a href=&quot;link1&quot; class=&quot;wrong&quot;&gt;... &lt;p style=&quot;&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> str2 = <span class="hljs-string">&#x27;...&lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;... &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;a href=&quot;[^&quot;]*&quot; class=&quot;doc&quot;&gt;/g</span>;
+
+<span class="hljs-comment">// Works!</span>
+alert( str1.match(reg) ); <span class="hljs-comment">// 没有匹配项，是正确的</span>
+alert( str2.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;, &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;</span></code></pre>
+<h2 id="总结">总结</h2>
+<p>量词有两种工作模式：</p>
+<p>贪婪模式
+: 默认情况下，正则表达式引擎会尝试尽可能多地重复量词。例如，<code>pattern:\d+</code> 检测所有可能的字符。当不可能检测更多（没有更多的字符或到达字符串末尾）时，然后它再匹配模式的剩余部分。如果没有匹配，则减少重复的次数（回溯），并再次尝试。</p>
+<p>懒惰模式
+: 通过在量词后添加问号 <code>pattern:?</code> 来启用。在每次重复量词之前，引擎会尝试去匹配模式的剩余部分。</p>
+<p>正如我们所见，懒惰模式并不是针对贪婪搜索的灵丹妙药。另一种方式是“微调”贪婪搜索，我们很快就会见到更多的例子。</p>
+
       </fieldset>
       
-      <fieldset id='_xMNys2'>
+      <fieldset id='_0DcW1S'>
+      <legend>solution</legend>
+      <p>A two-digit hex number is <code>pattern:[0-9a-f]{2}</code> (assuming the flag <code>pattern:i</code> is set).</p>
+<p>We need that number <code>NN</code>, and then <code>:NN</code> repeated 5 times (more numbers);</p>
+<p>The regexp is: <code>pattern:[0-9a-f]{2}(:[0-9a-f]{2}){5}</code></p>
+<p>Now let&#39;s show that the match should capture all the text: start at the beginning and end at the end. That&#39;s done by wrapping the pattern in <code>pattern:^...$</code>.</p>
+<p>Finally:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}$/i</span>;
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89:AB&#x27;</span>) ); <span class="hljs-comment">// true</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;0132546789AB&#x27;</span>) ); <span class="hljs-comment">// false (no colons)</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89&#x27;</span>) ); <span class="hljs-comment">// false (5 numbers, need 6)</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89:ZZ&#x27;</span>) ) <span class="hljs-comment">// false (ZZ in the end)</span></code></pre>
+
+      </fieldset>
+      
+      <fieldset id='_2eI9KA'>
+      <legend>task</legend>
+      <h1 id="check-mac-address">Check MAC-address</h1>
+<p><a href="https://en.wikipedia.org/wiki/MAC_address">MAC-address</a> of a network interface consists of 6 two-digit hex numbers separated by a colon.</p>
+<p>For instance: <code>subject:&#39;01:32:54:67:89:AB&#39;</code>.</p>
+<p>Write a regexp that checks whether a string is MAC-address.</p>
+<p>Usage:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/your regexp/</span>;
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89:AB&#x27;</span>) ); <span class="hljs-comment">// true</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;0132546789AB&#x27;</span>) ); <span class="hljs-comment">// false (no colons)</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89&#x27;</span>) ); <span class="hljs-comment">// false (5 numbers, must be 6)</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89:ZZ&#x27;</span>) ) <span class="hljs-comment">// false (ZZ ad the end)</span></code></pre>
+
+      </fieldset>
+      
+      <fieldset id='_9dsqYX'>
       <legend>solution</legend>
       
       </fieldset>
       
-      <fieldset id='_P4Vmze'>
+      <fieldset id='_cDeB0u'>
       <legend>task</legend>
       
       </fieldset>
       
-      <fieldset id='_cmj4vZ'>
+      <fieldset id='_tNmtXI'>
       <legend>solution</legend>
-      
+      <p>A positive number with an optional decimal part is (per previous task): <code>pattern:\d+(\.\d+)?</code>.</p>
+<p>Let&#39;s add the optional <code>pattern:-</code> in the beginning:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/-?\d+(\.\d+)?/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;-1.5 0 2 -123.4.&quot;</span>;
+
+alert( str.match(regexp) );   <span class="hljs-comment">// -1.5, 0, 2, -123.4</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_cur5Rn'>
+      <fieldset id='_rFRyGT'>
       <legend>task</legend>
-      
+      <h1 id="find-all-numbers">Find all numbers</h1>
+<p>Write a regexp that looks for all decimal numbers including integer ones, with the floating point and negative ones.</p>
+<p>An example of use:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/your regexp/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;-1.5 0 2 -123.4.&quot;</span>;
+
+alert( str.match(regexp) ); <span class="hljs-comment">// -1.5, 0, 2, -123.4</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_CmT3gu'>
+      <fieldset id='_oERCrA'>
       <legend>solution</legend>
-      
+      <p>A regexp for a number is: <code>pattern:-?\d+(\.\d+)?</code>. We created it in previous tasks.</p>
+<p>An operator is <code>pattern:[-+*/]</code>. The hyphen <code>pattern:-</code> goes first in the square brackets, because in the middle it would mean a character range, while we just want a character <code>-</code>.</p>
+<p>The slash <code>/</code> should be escaped inside a JavaScript regexp <code>pattern:/.../</code>, we&#39;ll do that later.</p>
+<p>We need a number, an operator, and then another number. And optional spaces between them.</p>
+<p>The full regular expression: <code>pattern:-?\d+(\.\d+)?\s*[-+*/]\s*-?\d+(\.\d+)?</code>.</p>
+<p>It has 3 parts, with <code>pattern:\s*</code> between them:</p>
+<ol>
+<li><code>pattern:-?\d+(\.\d+)?</code> - the first number,</li>
+<li><code>pattern:[-+*/]</code> - the operator,</li>
+<li><code>pattern:-?\d+(\.\d+)?</code> - the second number.</li>
+</ol>
+<p>To make each of these parts a separate element of the result array, let&#39;s enclose them in parentheses: <code>pattern:(-?\d+(\.\d+)?)\s*([-+*/])\s*(-?\d+(\.\d+)?)</code>.</p>
+<p>In action:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/(-?\d+(\.\d+)?)\s*([-+*\/])\s*(-?\d+(\.\d+)?)/</span>;
+
+alert( <span class="hljs-string">&quot;1.2 + 12&quot;</span>.match(regexp) );</code></pre>
+<p>The result includes:</p>
+<ul>
+<li><code>result[0] == &quot;1.2 + 12&quot;</code> (full match)</li>
+<li><code>result[1] == &quot;1.2&quot;</code> (first group <code>(-?\d+(\.\d+)?)</code> -- the first number, including the decimal part)</li>
+<li><code>result[2] == &quot;.2&quot;</code> (second group<code>(\.\d+)?</code> -- the first decimal part)</li>
+<li><code>result[3] == &quot;+&quot;</code> (third group <code>([-+*\/])</code> -- the operator)</li>
+<li><code>result[4] == &quot;12&quot;</code> (forth group <code>(-?\d+(\.\d+)?)</code> -- the second number)</li>
+<li><code>result[5] == undefined</code> (fifth group <code>(\.\d+)?</code> -- the last decimal part is absent, so it&#39;s undefined)</li>
+</ul>
+<p>We only want the numbers and the operator, without the full match or the decimal parts, so let&#39;s &quot;clean&quot; the result a bit.</p>
+<p>The full match (the arrays first item) can be removed by shifting the array <code>result.shift()</code>.</p>
+<p>Groups that contain decimal parts (number 2 and 4) <code>pattern:(.\d+)</code> can be excluded by adding  <code>pattern:?:</code> to the beginning: <code>pattern:(?:\.\d+)?</code>.</p>
+<p>The final solution:</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parse</span>(<span class="hljs-params">expr</span>) </span>{
+  <span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/(-?\d+(?:\.\d+)?)\s*([-+*\/])\s*(-?\d+(?:\.\d+)?)/</span>;
+
+  <span class="hljs-keyword">let</span> result = expr.match(regexp);
+
+  <span class="hljs-keyword">if</span> (!result) <span class="hljs-keyword">return</span> [];
+  result.shift();
+
+  <span class="hljs-keyword">return</span> result;
+}
+
+alert( parse(<span class="hljs-string">&quot;-1.23 * 3.45&quot;</span>) );  <span class="hljs-comment">// -1.23, *, 3.45</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_DGmxS3'>
+      <fieldset id='_RE2GaW'>
       <legend>task</legend>
-      
+      <h1 id="parse-an-expression">Parse an expression</h1>
+<p>An arithmetical expression consists of 2 numbers and an operator between them, for instance:</p>
+<ul>
+<li><code>1 + 2</code></li>
+<li><code>1.2 * 3.4</code></li>
+<li><code>-3 / -6</code></li>
+<li><code>-2 - 2</code></li>
+</ul>
+<p>The operator is one of: <code>&quot;+&quot;</code>, <code>&quot;-&quot;</code>, <code>&quot;*&quot;</code> or <code>&quot;/&quot;</code>.</p>
+<p>There may be extra spaces at the beginning, at the end or between the parts.</p>
+<p>Create a function <code>parse(expr)</code> that takes an expression and returns an array of 3 items:</p>
+<ol>
+<li>The first number.</li>
+<li>The operator.</li>
+<li>The second number.</li>
+</ol>
+<p>For example:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> [a, op, b] = parse(<span class="hljs-string">&quot;1.2 * 3.4&quot;</span>);
+
+alert(a); <span class="hljs-comment">// 1.2</span>
+alert(op); <span class="hljs-comment">// *</span>
+alert(b); <span class="hljs-comment">// 3.4</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_XJ48yW'>
-      <legend>solution</legend>
-      
-      </fieldset>
-      
-      <fieldset id='_jG9kpk'>
-      <legend>task</legend>
-      
-      </fieldset>
-      
-      <fieldset id='_zkFW5B'>
+      <fieldset id='_fsR4qp'>
       <legend>article</legend>
-      
+      <h1 id="捕获组">捕获组</h1>
+<p>模式的一部分可以用括号括起来 <code>pattern:(...)</code>。这称为“捕获组（capturing group）”。</p>
+<p>这有两个影响：</p>
+<ol>
+<li>它允许将匹配的一部分作为结果数组中的单独项。</li>
+<li>如果我们将量词放在括号后，则它将括号视为一个整体。</li>
+</ol>
+<h2 id="示例">示例</h2>
+<p>让我们看看在示例中的括号是如何工作的。</p>
+<h3 id="示例：gogogo">示例：gogogo</h3>
+<p>不带括号，模式 <code>pattern:go+</code> 表示 <code>subject:g</code> 字符，其后 <code>subject:o</code> 重复一次或多次。例如 <code>match:goooo</code> 或 <code>match:gooooooooo</code>。</p>
+<p>括号将字符组合，所以 <code>pattern:(go)+</code> 匹配 <code>match:go</code>，<code>match:gogo</code>，<code>match:gogogo</code>等。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;Gogogo now!&#x27;</span>.match(<span class="hljs-regexp">/(go)+/i</span>) ); <span class="hljs-comment">// &quot;Gogogo&quot;</span></code></pre>
+<h3 id="示例：域名">示例：域名</h3>
+<p>让我们做些更复杂的事 —— 搜索域名的正则表达式。</p>
+<p>例如：</p>
+<pre><code>mail.com
+users.mail.com
+smith.users.mail.com</code></pre>
+<p>正如我们所看到的，一个域名由重复的单词组成，每个单词后面有一个点，除了最后一个单词。</p>
+<p>在正则表达式中是 <code>pattern:(\w+\.)+\w+</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/(\w+\.)+\w+/g</span>;
+
+alert( <span class="hljs-string">&quot;site.com my.site.com&quot;</span>.match(regexp) ); <span class="hljs-comment">// site.com,my.site.com</span></code></pre>
+<p>搜索有效，但是该模式无法匹配带有连字符的域名，例如 my-site.com，因为连字符不属于 <code>pattern:\w</code> 类。</p>
+<p>我们可以通过用 <code>pattern:[\w-]</code> 替换 <code>pattern:\w</code> 来匹配除最后一个的每个单词：<code>pattern:([\w-]+\.)+\w+</code>。</p>
+<h3 id="示例：email">示例：email</h3>
+<p>前面的示例可以扩展。我们可以基于它为电子邮件创建一个正则表达式。</p>
+<p>email 格式为：<code>name@domain</code>。名称可以是任何单词，可以使用连字符和点。在正则表达式中为 <code>pattern:[-.\w]+</code>。</p>
+<p>模式：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/[-.\w]+@([\w-]+\.)+[\w-]+/g</span>;
+
+alert(<span class="hljs-string">&quot;my@mail.com @ his@site.com.uk&quot;</span>.match(regexp)); <span class="hljs-comment">// my@mail.com, his@site.com.uk</span></code></pre>
+<p>该正则表达式并不完美的，但多数情况下都可以工作，并且有助于修复意外的错误类型。唯一真正可靠的 email 检查只能通过发送 email 来完成。</p>
+<h2 id="匹配括号中的内容">匹配括号中的内容</h2>
+<p>括号从左到右编号。正则引擎会记住它们各自匹配的内容，并允许在结果中获得它。</p>
+<p>方法 <code>str.match(regexp)</code>，如果 <code>regexp</code> 没有 <code>g</code> 标志，将查找第一个匹配并将它作为一个数组返回：</p>
+<ol>
+<li>在索引 <code>0</code> 处：完全匹配。</li>
+<li>在索引 <code>1</code> 处：第一个括号的内容。</li>
+<li>在索引 <code>2</code> 处：第二个括号的内容。</li>
+<li>…等等…</li>
+</ol>
+<p>例如，我们想找到 HTML 标记 <code>pattern:&lt;.*?&gt;</code> 并进行处理。这将很方便的把标签内容（尖括号内的内容）放在单独的变量中。</p>
+<p>让我们将内部内容包装在括号中，像这样：<code>pattern:&lt;(.*?)&gt;</code>。</p>
+<p>现在，我们能在结果数组中获取标签的整体 <code>match:&lt;h1&gt;</code> 及其内容 <code>match:h1</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&lt;h1&gt;Hello, world!&lt;/h1&gt;&#x27;</span>;
+
+<span class="hljs-keyword">let</span> tag = str.match(<span class="hljs-regexp">/&lt;(.*?)&gt;/</span>);
+
+alert( tag[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// &lt;h1&gt;</span>
+alert( tag[<span class="hljs-number">1</span>] ); <span class="hljs-comment">// h1</span></code></pre>
+<h3 id="嵌套组">嵌套组</h3>
+<p>括号可以嵌套。在这种情况下，编号也从左到右。</p>
+<p>例如，在搜索标签 <code>subject:&lt;span class=&quot;my&quot;&gt;</code> 时我们可能会对以下内容感兴趣：</p>
+<ol>
+<li>整个标签内容：<code>match:span class=&quot;my&quot;</code>。</li>
+<li>标签名称：<code>match:span</code>。</li>
+<li>标签属性：<code>match:class=&quot;my&quot;</code>。</li>
+</ol>
+<p>让我们为它们添加括号：<code>pattern:&lt;(([a-z]+)\s*([^&gt;]*))&gt;</code>。</p>
+<p>这是它们的编号方式（从左到右，由左括号开始）：</p>
+<p><img src="regexp-nested-groups-pattern.svg" alt=""></p>
+<p>实际上：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&lt;span class=&quot;my&quot;&gt;&#x27;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/&lt;(([a-z]+)\s*([^&gt;]*))&gt;/</span>;
+
+<span class="hljs-keyword">let</span> result = str.match(regexp);
+alert(result[<span class="hljs-number">0</span>]); <span class="hljs-comment">// &lt;span class=&quot;my&quot;&gt;</span>
+alert(result[<span class="hljs-number">1</span>]); <span class="hljs-comment">// span class=&quot;my&quot;</span>
+alert(result[<span class="hljs-number">2</span>]); <span class="hljs-comment">// span</span>
+alert(result[<span class="hljs-number">3</span>]); <span class="hljs-comment">// class=&quot;my&quot;</span></code></pre>
+<p><code>result</code> 的零索引始终保持完全匹配。</p>
+<p>然后按左括号将组从左到右编号。第一组返回为 <code>result[1]</code>。它包含了整个标签内容。</p>
+<p>然后 <code>result[2]</code> 从第二个开始的括号中进入该组 <code>pattern:([a-z]+)</code> —— 标签名称，然后在 <code>result[3]</code> 标签中：<code>pattern:([^&gt;]*)</code>。</p>
+<p>字符串中每个组的内容：</p>
+<p><img src="regexp-nested-groups-matches.svg" alt=""></p>
+<h3 id="可选组">可选组</h3>
+<p>即使组是可选的并且在匹配项中不存在（例如，具有数量词 <code>pattern:(...)?</code>），也存在相应的 <code>result</code> 数组项，并且等于 <code>undefined</code>。</p>
+<p>例如，让我们考虑正则 <code>pattern:a(z)?(c)?</code>。它寻找 <code>&quot;a&quot;</code> ，然后是可选的 <code>&quot;z&quot;</code>，然后是可选的 <code>&quot;c&quot;</code>。</p>
+<p>如果我们在单个字母的字符串上运行 <code>subject:a</code>，则结果为：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> match = <span class="hljs-string">&#x27;a&#x27;</span>.match(<span class="hljs-regexp">/a(z)?(c)?/</span>);
+
+alert( match.length ); <span class="hljs-comment">// 3</span>
+alert( match[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// a（完全匹配）</span>
+alert( match[<span class="hljs-number">1</span>] ); <span class="hljs-comment">// undefined</span>
+alert( match[<span class="hljs-number">2</span>] ); <span class="hljs-comment">// undefined</span></code></pre>
+<p>数组的长度为 <code>3</code>，但所有组均为空。</p>
+<p>这是字符串的一个更复杂的匹配 <code>subject:ac</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> match = <span class="hljs-string">&#x27;ac&#x27;</span>.match(<span class="hljs-regexp">/a(z)?(c)?/</span>)
+
+alert( match.length ); <span class="hljs-comment">// 3</span>
+alert( match[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// ac（完全匹配）</span>
+alert( match[<span class="hljs-number">1</span>] ); <span class="hljs-comment">// undefined，因为 (z)? 没匹配项</span>
+alert( match[<span class="hljs-number">2</span>] ); <span class="hljs-comment">// c</span></code></pre>
+<p>数组长度是恒定的：<code>3</code>。但是对于组 <code>pattern:(z)?</code> 而言，什么都没有，所以结果是 <code>[&quot;ac&quot;, undefined, &quot;c&quot;]</code>。</p>
+<h2 id="搜索所有具有组的匹配项：matchall">搜索所有具有组的匹配项：matchAll</h2>
+<p>```warn header=&quot;<code>matchAll</code> 是一个新方法，可能需要使用 polyfill&quot;
+旧的浏览器不支持 <code>matchAll</code>。</p>
+<p>可能需要一个 polyfill，例如 <a href="https://github.com/ljharb/String.prototype.matchAll">https://github.com/ljharb/String.prototype.matchAll</a>.</p>
+<pre><code>
+当我们搜索所有匹配项（标志 `pattern:g`）时，`match` 方法不会返回组的内容。
+
+例如，让我们查找字符串中的所有标签：
+
+```js run
+let str = &#x27;&lt;h1&gt; &lt;h2&gt;&#x27;;
+
+let tags = str.match(/&lt;(.*?)&gt;/g);
+
+alert( tags ); // &lt;h1&gt;,&lt;h2&gt;</code></pre>
+<p>结果是一个匹配数组，但没有每个匹配项的详细信息。但是实际上，我们通常需要在结果中获取捕获组的内容。</p>
+<p>要获取它们，我们应该使用方法 <code>str.matchAll(regexp)</code> 进行搜索。</p>
+<p>在使用 <code>match</code> 很长一段时间后，它作为“新的改进版本”被加入到 JavaScript 中。</p>
+<p>就像 <code>match</code> 一样，它寻找匹配项，但有 3 个区别：</p>
+<ol>
+<li>它返回的不是数组，而是一个可迭代的对象。</li>
+<li>当标志 <code>pattern:g</code> 存在时，它将每个匹配组作为一个数组返回。</li>
+<li>如果没有匹配项，则不返回 <code>null</code>，而是返回一个空的可迭代对象。</li>
+</ol>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> results = <span class="hljs-string">&#x27;&lt;h1&gt; &lt;h2&gt;&#x27;</span>.matchAll(<span class="hljs-regexp">/&lt;(.*?)&gt;/gi</span>);
+
+<span class="hljs-comment">// results - is not an array, but an iterable object</span>
+alert(results); <span class="hljs-comment">// [object RegExp String Iterator]</span>
+
+alert(results[<span class="hljs-number">0</span>]); <span class="hljs-comment">// undefined (*)</span>
+
+results = <span class="hljs-built_in">Array</span>.from(results); <span class="hljs-comment">// let&#x27;s turn it into array</span>
+
+alert(results[<span class="hljs-number">0</span>]); <span class="hljs-comment">// &lt;h1&gt;,h1 (1st tag)</span>
+alert(results[<span class="hljs-number">1</span>]); <span class="hljs-comment">// &lt;h2&gt;,h2 (2nd tag)</span></code></pre>
+<p>我们可以看到，第一个区别非常重要，如 <code>(*)</code> 行所示。我们无法获得 <code>results[0]</code> 的匹配内容，因为该对象是伪数组。我们可以使用 <code>Array.from</code> 把它变成一个真正的 <code>Array</code>。在 Iterable（可迭代对象）<a href="info:iterable">info:iterable</a>一文中有关于伪数组和可迭代对象的更多详细信息。</p>
+<p>如果我们不需要遍历结果，则 <code>Array.from</code> 没有必要：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> results = <span class="hljs-string">&#x27;&lt;h1&gt; &lt;h2&gt;&#x27;</span>.matchAll(<span class="hljs-regexp">/&lt;(.*?)&gt;/gi</span>);
+
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> result <span class="hljs-keyword">of</span> results) {
+  alert(result);
+  <span class="hljs-comment">// 第一个结果: &lt;h1&gt;,h1</span>
+  <span class="hljs-comment">// 第二个结果: &lt;h2&gt;,h2</span>
+}</code></pre>
+<p>……或使用解构：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> [tag1, tag2] = <span class="hljs-string">&#x27;&lt;h1&gt; &lt;h2&gt;&#x27;</span>.matchAll(<span class="hljs-regexp">/&lt;(.*?)&gt;/gi</span>);</code></pre>
+<p>由 <code>matchAll</code> 所返回的每个匹配，其格式与不带标志 <code>pattern:g</code> 的 <code>match</code> 所返回的格式相同：它是一个具有额外的 <code>index</code>（字符串中的匹配索引）属性和 <code>input</code>（源字符串）的数组：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> results = <span class="hljs-string">&#x27;&lt;h1&gt; &lt;h2&gt;&#x27;</span>.matchAll(<span class="hljs-regexp">/&lt;(.*?)&gt;/gi</span>);
+
+<span class="hljs-keyword">let</span> [tag1, tag2] = results;
+
+alert( tag1[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// &lt;h1&gt;</span>
+alert( tag1[<span class="hljs-number">1</span>] ); <span class="hljs-comment">// h1</span>
+alert( tag1.index ); <span class="hljs-comment">// 0</span>
+alert( tag1.input ); <span class="hljs-comment">// &lt;h1&gt; &lt;h2&gt;</span></code></pre>
+<p>```smart header=&quot;为什么 <code>matchAll</code> 的结果是可迭代对象而不是数组？&quot;
+为什么这个方法这样设计？原因很简单 — 为了优化。</p>
+<p>调用 <code>matchAll</code> 不会执行搜索。相反，它返回一个可迭代的对象，最初没有结果。每当我们对它进行迭代时才会执行搜索，例如在循环中。</p>
+<p>因此，这将根据需要找到尽可能多的结果，而不是全部。</p>
+<p>例如，文本中可能有 100 个匹配项，但是在一个 <code>for..of</code> 循环中，我们已经找到了 5 个匹配项，然后觉得足够了并做出一个 <code>break</code>。这时引擎就不会花时间查找其他 95 个匹配。</p>
+<pre><code>
+## 命名组
+
+用数字记录组很困难。对于简单模式，它是可行的，但对于更复杂的模式，计算括号很不方便。我们有一个更好的选择：给括号起个名字。
+
+这是通过在开始括号之后立即放置 `pattern:?&lt;name&gt;` 来完成的。
+
+例如，让我们查找 &quot;year-month-day&quot; 格式的日期：
+
+```js run
+*!*
+let dateRegexp = /(?&lt;year&gt;[0-9]{4})-(?&lt;month&gt;[0-9]{2})-(?&lt;day&gt;[0-9]{2})/;
+*/!*
+let str = &quot;2019-04-30&quot;;
+
+let groups = str.match(dateRegexp).groups;
+
+alert(groups.year); // 2019
+alert(groups.month); // 04
+alert(groups.day); // 30</code></pre>
+<p>如您所见，匹配的组在 <code>.groups</code> 属性中。</p>
+<p>要查找所有日期，我们可以添加标志 <code>pattern:g</code>。</p>
+<p>We&#39;ll also need <code>matchAll</code> to obtain full matches, together with groups:
+我们还需要 <code>matchAll</code> 获取完整的组匹配：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> dateRegexp = <span class="hljs-regexp">/(?&lt;year&gt;[0-9]{4})-(?&lt;month&gt;[0-9]{2})-(?&lt;day&gt;[0-9]{2})/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;2019-10-30 2020-01-01&quot;</span>;
+
+<span class="hljs-keyword">let</span> results = str.matchAll(dateRegexp);
+
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> result <span class="hljs-keyword">of</span> results) {
+  <span class="hljs-keyword">let</span> {year, month, day} = result.groups;
+
+  alert(<span class="hljs-string">`<span class="hljs-subst">${day}</span>.<span class="hljs-subst">${month}</span>.<span class="hljs-subst">${year}</span>`</span>);
+  <span class="hljs-comment">// 第一个 alert：30.10.2019</span>
+  <span class="hljs-comment">// 第二个：01.01.2020</span>
+}</code></pre>
+<h2 id="替换捕获组">替换捕获组</h2>
+<p>方法 <code>str.replace(regexp, replacement)</code> 用 <code>replacement</code> 替换 <code>str</code> 中匹配 <code>regexp</code> 的所有捕获组。这使用 <code>pattern:$n</code> 来完成，其中 <code>pattern:n</code> 是组号。</p>
+<p>例如，</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;John Bull&quot;</span>;
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/(\w+) (\w+)/</span>;
+
+alert( str.replace(regexp, <span class="hljs-string">&#x27;$2, $1&#x27;</span>) ); <span class="hljs-comment">// Bull, John</span></code></pre>
+<p>对于命名括号，引用为 <code>pattern:$&lt;name&gt;</code>。</p>
+<p>例如，让我们将日期格式从 &quot;year-month-day&quot; 更改为 &quot;day.month.year&quot;：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/(?&lt;year&gt;[0-9]{4})-(?&lt;month&gt;[0-9]{2})-(?&lt;day&gt;[0-9]{2})/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;2019-10-30, 2020-01-01&quot;</span>;
+
+alert( str.replace(regexp, <span class="hljs-string">&#x27;$&lt;day&gt;.$&lt;month&gt;.$&lt;year&gt;&#x27;</span>) );
+<span class="hljs-comment">// 30.10.2019, 01.01.2020</span></code></pre>
+<h2 id="非捕获组-">非捕获组 ?:</h2>
+<p>有时我们需要括号才能正确应用量词，但我们不希望它们的内容出现在结果中。</p>
+<p>可以通过在开头添加 <code>pattern:?:</code> 来排除组。</p>
+<p>例如，如果我们要查找 <code>pattern:(go)+</code>，但不希望括号内容（<code>go</code>）作为一个单独的数组项，则可以编写：<code>pattern:(?:go)+</code>。</p>
+<p>在下面的示例中，我们仅将名称 <code>match:John</code> 作为匹配项的单独成员：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Gogogo John!&quot;</span>;
+
+*!*
+<span class="hljs-comment">// ?: 从捕获组中排除 &#x27;go&#x27;</span>
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/(?:go)+ (\w+)/i</span>;
+*/!*
+
+<span class="hljs-keyword">let</span> result = str.match(regexp);
+
+alert( result[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// Gogogo John（完全匹配）</span>
+alert( result[<span class="hljs-number">1</span>] ); <span class="hljs-comment">// John</span>
+alert( result.length ); <span class="hljs-comment">// 2（数组中没有更多项）</span></code></pre>
+<h2 id="总结">总结</h2>
+<p>括号将正则表达式的一部分组合在一起，以便量词可以整体应用。</p>
+<p>括号组从左到右编号，可以选择用 <code>(?&lt;name&gt;...)</code> 命名。</p>
+<p>可以在结果中获得按组匹配的内容：</p>
+<ul>
+<li>方法 <code>str.match</code> 仅当不带标志 <code>pattern:g</code> 时返回捕获组。</li>
+<li>方法 <code>str.matchAll</code> 始终返回捕获组。</li>
+</ul>
+<p>如果括号没有名称，则匹配数组按编号提供其内容。命名括号还可使用属性 <code>groups</code>。</p>
+<p>我们还可以使用 <code>str.replace</code> 来替换括号内容中的字符串：使用 <code>$n</code> 或者名称 <code>$&lt;name&gt;</code>。</p>
+<p>可以通过在组的开头添加 <code>pattern:?:</code> 来排除编号组。当我们需要对整个组应用量词，但不希望将其作为结果数组中的单独项时这很有用。我们也不能在替换字符串时引用此类括号。</p>
+
       </fieldset>
       
-      <fieldset id='_Lk5ZVx'>
+      <fieldset id='_4N1wdY'>
       <legend>article</legend>
-      
+      <h1 id="模式中的反向引用：n-和-k">模式中的反向引用：\N 和 \k<name></h1>
+<p>我们不仅可以在结果或替换字符串中使用捕获组 <code>pattern:(...)</code> 的内容，还可以在模式本身中使用它们。</p>
+<h2 id="按编号反向引用：n">按编号反向引用：\N</h2>
+<p>可以使用 <code>pattern:\N</code> 在模式中引用一个组，其中 <code>N</code> 是组号。</p>
+<p>为了弄清那为什么有帮助，让我们考虑一项任务。</p>
+<p>我们需要找到带引号的字符串：单引号 <code>subject:&#39;...&#39;</code> 或双引号 <code>subject:&quot;...&quot;</code>– 应匹配两种变体。</p>
+<p>如何找到它们？</p>
+<p>我们可以将两种引号放在方括号中：<code>pattern:[&#39;&quot;](.*?)[&#39;&quot;]</code>，但它会找到带有混合引号的字符串，例如 <code>match:&quot;...&#39;</code> 和 <code>match:&#39;...&quot;</code>。当一种引号出现在另一种引号内，比如在字符串 <code>subject:&quot;She&#39;s the one!&quot;</code> 中时，便会导致不正确的匹配：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`He said: &quot;She&#x27;s the one!&quot;.`</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/[&#x27;&quot;](.*?)[&#x27;&quot;]/g</span>;
+
+<span class="hljs-comment">// 不是我们想要的结果</span>
+alert( str.match(regexp) ); <span class="hljs-comment">// &quot;She&#x27;</span></code></pre>
+<p>如我们所见，该模式找到了一个开头的引号 <code>match:&quot;</code>，然后文本被匹配，直到另一个引号 <code>match:&#39;</code>，该匹配结束。</p>
+<p>为了确保模式查找的结束引号与开始的引号完全相同，我们可以将其包装到捕获组中并对其进行反向引用：<code>pattern:([&#39;&quot;])(.*?)\1</code>。</p>
+<p>这是正确的代码：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`He said: &quot;She&#x27;s the one!&quot;.`</span>;
+
+*!*
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/([&#x27;&quot;])(.*?)\1/g</span>;
+*/!*
+
+alert( str.match(regexp) ); <span class="hljs-comment">// &quot;She&#x27;s the one!&quot;</span></code></pre>
+<p>现在可以了！正则表达式引擎会找到第一个引号 <code>pattern:([&#39;&quot;])</code> 并记住其内容。那是第一个捕获组。</p>
+<p><code>pattern:\1</code> 在模式中进一步的含义是“查找与第一（捕获）分组相同的文本”，在我们的示例中为完全相同的引号。</p>
+<p>与此类似，<code>pattern:\2</code> 表示第二（捕获）分组的内容，<code>pattern:\3</code> – 第三分组，依此类推。</p>
+<pre><code class="language-smart">如果我们在组中使用 `?:`，那么我们将无法引用它。用 `(?:...)` 捕获的组被排除，引擎不会存储。</code></pre>
+<p>```warn header=&quot;不要搞混了： 在模式中用 <code>pattern:\1</code>，在替换项中用：<code>pattern:$1</code>&quot;
+在替换字符串中我们使用美元符号：<code>pattern:$1</code>，而在模式中 - 使用反斜杠 <code>pattern:\1</code>。</p>
+<pre><code>
+## 按命名反向引用：`\k&lt;name&gt;`
+
+如果正则表达式中有很多括号对（注：捕获组），给它们起个名字方便引用。
+
+要引用命名组，我们可以使用：`pattern:\k&lt;name&gt;`。
+
+在下面的示例中引号组命名为 `pattern:?&lt;quote&gt;`，因此反向引用为  `pattern:\k&lt;quote&gt;`：
+
+```js run
+let str = `He said: &quot;She&#x27;s the one!&quot;.`;
+
+*!*
+let regexp = /(?&lt;quote&gt;[&#x27;&quot;])(.*?)\k&lt;quote&gt;/g;
+*/!*
+
+alert( str.match(regexp) ); // &quot;She&#x27;s the one!&quot;</code></pre>
+
       </fieldset>
       
-      <fieldset id='_Dnpcxb'>
+      <fieldset id='_rvy9Xk'>
       <legend>solution</legend>
-      
+      <p>第一个解法是列出所有语言，中间加上 <code>|</code> 符号。</p>
+<p>但是运行不如所愿：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/Java|JavaScript|PHP|C|C\+\+/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Java, JavaScript, PHP, C, C++&quot;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// Java,Java,PHP,C,C</span></code></pre>
+<p>正则表达式引擎查找选择模式的时是挨个查找的。意思是：它先匹配是否存在 <code>match:Java</code>，否则 —— 接着匹配 <code>match:JavaScript</code> 及其后的字符串。</p>
+<p>结果，<code>match:JavaScript</code> 永远匹配不到，因为 <code>match:Java</code> 先被匹配了。</p>
+<p><code>match:C</code> 和 <code>match:C++</code> 同理。</p>
+<p>这个问题有两个解决办法：</p>
+<ol>
+<li>变更匹配顺序，长的字符串优先匹配：<code>pattern:JavaScript|Java|C\+\+|C|PHP</code>。</li>
+<li>合并相同前缀：<code>pattern:Java(Script)?|C(\+\+)?|PHP</code>。</li>
+</ol>
+<p>运行代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/Java(Script)?|C(\+\+)?|PHP/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Java, JavaScript, PHP, C, C++&quot;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// Java,JavaScript,PHP,C,C++</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_weDcfV'>
+      <fieldset id='_JzIUAi'>
       <legend>task</legend>
-      
+      <h1 id="查找编程语言">查找编程语言</h1>
+<p>有许多编程语言，例如 Java, JavaScript, PHP, C, C++。</p>
+<p>构建一个正则式，用来匹配字符串 <code>subject:Java JavaScript PHP C++ C</code> 中包含的编程语言：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/your regexp/g</span>;
+
+alert(<span class="hljs-string">&quot;Java JavaScript PHP C++ C&quot;</span>.match(reg)); <span class="hljs-comment">// Java JavaScript PHP C++ C</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_vcv5ao'>
+      <fieldset id='_a2smzj'>
       <legend>solution</legend>
-      
+      <p>起始标签是 <code>pattern:\[(b|url|quote)\]</code>。</p>
+<p>匹配字符串直到遇到结束标签 —— 模式 <code>pattern:[\s\S]*?</code> 匹配任意字符，包括换行和用于结束标记的反向引用。</p>
+<p>完整模式为：<code>pattern:\[(b|url|quote)\][\s\S]*?\[/\1\]</code>。</p>
+<p>运行代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/\[(b|url|quote)\][\s\S]*?\[\/\1\]/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">`
+  [b]hello![/b]
+  [quote]
+    [url]http://google.com[/url]
+  [/quote]
+`</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// [b]hello![/b],[quote][url]http://google.com[/url][/quote]</span></code></pre>
+<p>请注意我们要转义结束标签 <code>pattern:[/\1]</code> 中的斜杠，通常斜杠会关闭模式。</p>
+
       </fieldset>
       
-      <fieldset id='_9gt3M3'>
+      <fieldset id='_TrFFNb'>
       <legend>task</legend>
-      
+      <h1 id="查找-bbtag-对">查找 bbtag 对</h1>
+<p>“bb-tag” 形如 <code>[tag]...[/tag]</code>，<code>tag</code> 匹配 <code>b</code>、<code>url</code> 或 <code>quote</code> 其中之一。</p>
+<p>例如：</p>
+<pre><code>[b]text[/b]
+[url]http://google.com[/url]</code></pre>
+<p>BB-tags 可以嵌套。但标签不能自嵌套，比如：</p>
+<pre><code>可行：
+[url] [b]http://google.com[/b] [/url]
+[quote] [b]text[/b] [/quote]
+
+不可行：
+[b][b]text[/b][/b]</code></pre>
+<p>标签可以包含换行，通常为以下形式：</p>
+<pre><code>[quote]
+  [b]text[/b]
+[/quote]</code></pre>
+<p>构造一个正则式用于查找所有 BB-tags 和其内容。</p>
+<p>举例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/your regexp/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;..[url]http://google.com[/url]..&quot;</span>;
+alert( str.match(reg) ); <span class="hljs-comment">// [url]http://google.com[/url]</span></code></pre>
+<p>如果标签嵌套，那么我们需要记录匹配的外层标签（如果希望继续查找匹配的标签内容的话）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/your regexp/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;..[url][b]http://google.com[/b][/url]..&quot;</span>;
+alert( str.match(reg) ); <span class="hljs-comment">// [url][b]http://google.com[/b][/url]</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_INLAoE'>
+      <fieldset id='_rF31od'>
       <legend>solution</legend>
-      
+      <p>答案是 <code>pattern:/&quot;(\\.|[^&quot;\\])*&quot;/g</code>。</p>
+<p>步骤如下：</p>
+<ul>
+<li>首先匹配左双引号 <code>pattern:&quot;</code></li>
+<li>接着如果有反斜杠 <code>pattern:\\</code>，则匹配其后跟随的任意字符。（技术上，我们必须在模式中用双反斜杠，因为它是一个特殊的字符，但实际上是一个反斜杠字符）</li>
+<li>如果没有，则匹配除双引号（字符串的结束）和反斜杠（排除仅存在反斜杠的情况，反斜杠仅在和其后字符一起使用时有效）外的任意字符：<code>pattern:[^&quot;\\]</code></li>
+<li>...继续匹配直到遇到反双引号</li>
+</ul>
+<p>运行代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&quot;(\\.|[^&quot;\\])*&quot;/g</span>;
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27; .. &quot;test me&quot; .. &quot;Say \\&quot;Hello\\&quot;!&quot; .. &quot;\\\\ \\&quot;&quot; .. &#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &quot;test me&quot;,&quot;Say \&quot;Hello\&quot;!&quot;,&quot;\\ \&quot;&quot;</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_DLvrhN'>
+      <fieldset id='_g8iZqK'>
       <legend>task</legend>
-      
+      <h1 id="查询引用字符串">查询引用字符串</h1>
+<p>构建一个正则表达式用于匹配双引号内的字符串 <code>subject:&quot;...&quot;</code>。</p>
+<p>最重要的部分是字符串应该支持转义，正如 JavaScript 字符串的行为一样。例如，引号可以插入为 <code>subject:\&quot;</code>，换行符为 <code>subject:\n</code>，斜杠本身为 <code>subject:\\</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Just like \&quot;here\&quot;.&quot;</span>;</code></pre>
+<p>对我们来说，重要的是转义的引号 <code>subject:\&quot;</code> 不会结束字符串匹配。</p>
+<p>所以，我们应该匹配两个引号之间的内容，且忽略中间转义的引号。</p>
+<p>这是任务的关键部分，否则这个任务就没什么意思了。</p>
+<p>匹配字符串示例：</p>
+<pre><code class="language-js">.. *!*<span class="hljs-string">&quot;test me&quot;</span>*/!* ..  
+.. *!*<span class="hljs-string">&quot;Say \&quot;Hello\&quot;!&quot;</span>*/!* ... (escaped quotes inside)
+.. *!*<span class="hljs-string">&quot;\\&quot;</span>*/!* ..  (double slash inside)
+.. *!*<span class="hljs-string">&quot;\\ \&quot;&quot;</span>*/!* ..  (double slash and an escaped quote inside)</code></pre>
+<p>在 JavaScript 中，双斜杠用于把斜杠转义为字符串，如下所示：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27; .. &quot;test me&quot; .. &quot;Say \\&quot;Hello\\&quot;!&quot; .. &quot;\\\\ \\&quot;&quot; .. &#x27;</span>;
+
+<span class="hljs-comment">// the in-memory string</span>
+alert(str); <span class="hljs-comment">//  .. &quot;test me&quot; .. &quot;Say \&quot;Hello\&quot;!&quot; .. &quot;\\ \&quot;&quot; ..</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_WbQVhf'>
+      <fieldset id='_W8DVRG'>
       <legend>solution</legend>
-      
+      <p>模式的开头显而易见：<code>pattern:&lt;style</code>。</p>
+<p>...然而不能简单地写出 <code>pattern:&lt;style.*?&gt;</code> 这样的表达式，因为会同时匹配 <code>match:&lt;styler&gt;</code>。</p>
+<p>要么匹配 <code>match:&lt;style</code> 后的一个空格，然后匹配任意内容；要么直接匹配结束符号 <code>match:&gt;</code>。</p>
+<p>最终的正则表达式为：<code>pattern:&lt;style(&gt;|\s.*?&gt;)</code>。</p>
+<p>运行代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;style(&gt;|\s.*?&gt;)/g</span>;
+
+alert( <span class="hljs-string">&#x27;&lt;style&gt; &lt;styler&gt; &lt;style test=&quot;...&quot;&gt;&#x27;</span>.match(reg) ); <span class="hljs-comment">// &lt;style&gt;, &lt;style test=&quot;...&quot;&gt;</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_xDjYw6'>
+      <fieldset id='_n5crwV'>
       <legend>task</legend>
-      
+      <h1 id="查找完整标签">查找完整标签</h1>
+<p>写出一个正则表达式，用于查找 <code>&lt;style...&gt;</code> 标签。它应该匹配完整的标签：该标签可能是没有属性的标签 <code>&lt;style&gt;</code> 或是有很多属性的标签 <code>&lt;style type=&quot;...&quot; id=&quot;...&quot;&gt;</code>。</p>
+<p>...同时正则表达式不应该匹配 <code>&lt;styler&gt;</code>！</p>
+<p>举例如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/your regexp/g</span>;
+
+alert( <span class="hljs-string">&#x27;&lt;style&gt; &lt;styler&gt; &lt;style test=&quot;...&quot;&gt;&#x27;</span>.match(reg) ); <span class="hljs-comment">// &lt;style&gt;, &lt;style test=&quot;...&quot;&gt;</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_GNog0H'>
+      <fieldset id='_kK1HTh'>
       <legend>article</legend>
-      
+      <h1 id="选择（or）">选择（OR）|</h1>
+<p>选择是正则表达式中的一个术语，实际上是一个简单的“或”。</p>
+<p>在正则表达式中，它用竖线 <code>pattern:|</code> 表示。</p>
+<p>例如，我们需要找出编程语言：HTML、PHP、Java 或 JavaScript。</p>
+<p>对应的正则表达式为：<code>pattern:html|php|java(script)?</code>。</p>
+<p>用例如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/html|php|css|java(script)?/gi</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;First HTML appeared, then CSS, then JavaScript&quot;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &#x27;HTML&#x27;, &#x27;CSS&#x27;, &#x27;JavaScript&#x27;</span></code></pre>
+<p>我们已知的一个相似符号 —— 方括号。就允许在许多字符中进行选择，例如 <code>pattern:gr[ae]y</code> 匹配 <code>match:gray</code> 或 <code>match:grey</code>。</p>
+<p>选择符号并非在字符级别生效，而是在表达式级别。正则表达式 <code>pattern:A|B|C</code> 意思是命中 <code>A</code>、<code>B</code> 或 <code>C</code> 其一均可。</p>
+<p>例如：</p>
+<ul>
+<li><code>pattern:gr(a|e)y</code> 严格等同 <code>pattern:gr[ae]y</code>。</li>
+<li><code>pattern:gra|ey</code> 匹配 &quot;gra&quot; or &quot;ey&quot;。</li>
+</ul>
+<p>我们通常用圆括号把模式中的选择部分括起来，像这样 <code>pattern:before(XXX|YYY)after</code>。</p>
+<h2 id="时间正则表达式">时间正则表达式</h2>
+<p>在之前的章节中有个任务是构建用于查找形如 <code>hh:mm</code> 的时间字符串，例如 <code>12:00</code>。但是简单的 <code>pattern:\d\d:\d\d</code> 过于模糊。它同时匹配 <code>25:99</code>。</p>
+<p>如何构建更优的正则表达式？</p>
+<p>我们可以应用到更多的严格匹配结果中：</p>
+<ul>
+<li>首个匹配数字必须是 <code>0</code> 或 <code>1</code>，同时其后还要跟随任一数字。</li>
+<li>或者是数字 <code>2</code> 之后跟随 <code>pattern:[0-3]</code>。</li>
+</ul>
+<p>构建正则表达式：<code>pattern:[01]\d|2[0-3]</code>。</p>
+<p>接着可以添加冒号和分钟的部分。</p>
+<p>分钟的部分必须在 <code>0</code> 到 <code>59</code> 区间，在正则表达式语言中含义为首个匹配数字 <code>pattern:[0-5]</code> 其后跟随任一数字 <code>\d</code>。</p>
+<p>把它们拼接在一起形成最终的模式 <code>pattern:[01]\d|2[0-3]:[0-5]\d</code>。</p>
+<p>快大功告成了，但仍然存在一个问题。选择符 <code>|</code> 在 <code>pattern:[01]\d</code> 和 <code>pattern:2[0-3]:[0-5]\d</code> 之间。这是错误的，因为它只匹配符号左侧或右侧任一表达式。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/[01]\d|2[0-3]:[0-5]\d/g</span>;
+
+alert(<span class="hljs-string">&quot;12&quot;</span>.match(reg)); <span class="hljs-comment">// 12 (matched [01]\d)</span></code></pre>
+<p>这个错误相当明显，但也是初学正则表达式的常见错误。</p>
+<p>我们需要添加一个插入语用于匹配时钟：<code>[01]\d</code> 或 <code>2[0-3]</code>。</p>
+<p>以下为正确版本：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/([01]\d|2[0-3]):[0-5]\d/g</span>;
+
+alert(<span class="hljs-string">&quot;00:00 10:10 23:59 25:99 1:2&quot;</span>.match(reg)); <span class="hljs-comment">// 00:00,10:10,23:59</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_hqzvxd'>
+      <fieldset id='_Nd7jDo'>
       <legend>solution</legend>
-      
+      <p>The regexp for an integer number is <code>pattern:\d+</code>.</p>
+<p>We can exclude negatives by prepending it with the negative lookahead: <code>pattern:(?&lt;!-)\d+</code>.</p>
+<p>Although, if we try it now, we may notice one more &quot;extra&quot; result:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/(?&lt;!-)\d+/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;0 12 -5 123 -18&quot;</span>;
+
+<span class="hljs-built_in">console</span>.log( str.match(regexp) ); <span class="hljs-comment">// 0, 12, 123, *!*8*/!*</span></code></pre>
+<p>As you can see, it matches <code>match:8</code>, from <code>subject:-18</code>. To exclude it, we need to ensure that the regexp starts matching a number not from the middle of another (non-matching) number.</p>
+<p>We can do it by specifying another negative lookbehind: <code>pattern:(?&lt;!-)(?&lt;!\d)\d+</code>. Now <code>pattern:(?&lt;!\d)</code> ensures that a match does not start after another digit, just what we need.</p>
+<p>We can also join them into a single lookbehind here:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/(?&lt;![-\d])\d+/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;0 12 -5 123 -18&quot;</span>;
+
+alert( str.match(regexp) ); <span class="hljs-comment">// 0, 12, 123</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_FF1aXc'>
+      <fieldset id='_kspaBl'>
       <legend>task</legend>
-      
+      <h1 id="find-non-negative-integers">Find non-negative integers</h1>
+<p>There&#39;s a string of integer numbers.</p>
+<p>Create a regexp that looks for only non-negative ones (zero is allowed).</p>
+<p>An example of use:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/your regexp/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;0 12 -5 123 -18&quot;</span>;
+
+alert( str.match(regexp) ); <span class="hljs-comment">// 0, 12, 123</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_En7NUm'>
+      <fieldset id='_FM2WpC'>
       <legend>solution</legend>
-      
+      <p>Для того, чтобы вставить после тега <code>&lt;body&gt;</code>, нужно вначале его найти. Будем использовать регулярное выражение <code>pattern:&lt;body.*&gt;</code>.</p>
+<p>Далее, нам нужно оставить сам тег <code>&lt;body&gt;</code> на месте и добавить текст после него.</p>
+<p>Это можно сделать вот так:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;body style=&quot;...&quot;&gt;...&#x27;</span>;
+str = str.replace(<span class="hljs-regexp">/&lt;body.*&gt;/</span>, <span class="hljs-string">&#x27;$&amp;&lt;h1&gt;Hello&lt;/h1&gt;&#x27;</span>);
+
+alert(str); <span class="hljs-comment">// ...&lt;body style=&quot;...&quot;&gt;&lt;h1&gt;Hello&lt;/h1&gt;...</span></code></pre>
+<p>В строке замены <code>$&amp;</code> означает само совпадение, то есть мы заменяем <code>pattern:&lt;body.*&gt;</code> заменяется на самого себя плюс <code>&lt;h1&gt;Hello&lt;/h1&gt;</code>.</p>
+<p>Альтернативный вариант - использовать ретроспективную проверку:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;body style=&quot;...&quot;&gt;...&#x27;</span>;
+str = str.replace(<span class="hljs-regexp">/(?&lt;=&lt;body.*&gt;)/</span>, <span class="hljs-string">`&lt;h1&gt;Hello&lt;/h1&gt;`</span>);
+
+alert(str); <span class="hljs-comment">// ...&lt;body style=&quot;...&quot;&gt;&lt;h1&gt;Hello&lt;/h1&gt;...</span></code></pre>
+<p>Такое регулярное выражение на каждой позиции будет проверять, не идёт ли прямо перед ней <code>pattern:&lt;body.*&gt;</code>. Если да - совпадение найдено. Но сам тег <code>pattern:&lt;body.*&gt;</code> в совпадение не входит, он только участвует в проверке. А других символов после проверки в нём нет, так что текст совпадения будет пустым.</p>
+<p>Происходит замена &quot;пустой строки&quot;, перед которой идёт <code>pattern:&lt;body.*&gt;</code> на <code>&lt;h1&gt;Hello&lt;/h1&gt;</code>. Что, как раз, и есть вставка этой строки после <code>&lt;body&gt;</code>.</p>
+<p>P.S. Этому регулярному выражению не помешают флаги: <code>pattern:/&lt;body.*&gt;/si</code>, чтобы в &quot;точку&quot; входил перевод строки (тег может занимать несколько строк), а также чтобы теги в другом регистре типа <code>match:&lt;BODY&gt;</code> тоже находились.</p>
+
       </fieldset>
       
-      <fieldset id='_iT9LXQ'>
+      <fieldset id='_DPJMss'>
       <legend>task</legend>
-      
+      <h1 id="вставьте-после-фрагмента">Вставьте после фрагмента</h1>
+<p>Есть строка с HTML-документом.</p>
+<p>Вставьте после тега <code>&lt;body&gt;</code> (у него могут быть атрибуты) строку <code>&lt;h1&gt;Hello&lt;/h1&gt;</code>.</p>
+<p>Например:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/ваше регулярное выражение/</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">`
+&lt;html&gt;
+  &lt;body style=&quot;height: 200px&quot;&gt;
+  ...
+  &lt;/body&gt;
+&lt;/html&gt;
+`</span>;
+
+str = str.replace(regexp, <span class="hljs-string">`&lt;h1&gt;Hello&lt;/h1&gt;`</span>);</code></pre>
+<p>После этого значение <code>str</code>:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;height: 200px&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+  ...
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+
       </fieldset>
       
-      <fieldset id='_YdkFJk'>
+      <fieldset id='_SMJ9jP'>
       <legend>article</legend>
-      
+      <h1 id="前瞻断言与后瞻断言">前瞻断言与后瞻断言</h1>
+<p>有时候我们需要匹配后面跟着特定模式的一段模式。比如，我们要从 <code>subject:1 turkey costs 30€</code> 这段字符中匹配价格数值。</p>
+<p>我们需要获取 <code>subject:€</code> 符号前面的数值（假设价格是整数）。</p>
+<p>那就是前瞻断言要做的事情。</p>
+<h2 id="前瞻断言">前瞻断言</h2>
+<p>语法为：<code>pattern:x(?=y)</code>，它表示 “匹配 <code>pattern:x</code>, 仅在后面是 <code>pattern:y</code> 的情况&quot;”</p>
+<p>那么对于一个后面跟着 <code>€</code> 的整数金额，它的正则表达式应该为：<code>pattern:\d+(?=€)</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;1 turkey costs 30€&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/\d+(?=€)/</span>) ); <span class="hljs-comment">// 30 （正确地跳过了单个的数字 1）</span></code></pre>
+<p>让我们来看另一种情况：这次我们想要一个数量，它是一个不被 <code>subject:€</code> 跟着的数值。</p>
+<p>这里就要用到前瞻否定断言了。</p>
+<p>语法为：<code>pattern:x(?!y)</code>，意思是 &quot;查找 <code>pattern:x</code>, 但是仅在不被 <code>pattern:y</code> 跟随的情况下匹配成功&quot;。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;2 turkeys cost 60€&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/\d+(?!€)/</span>) ); <span class="hljs-comment">// 2（正确地跳过了价格）</span></code></pre>
+<h2 id="后瞻断言">后瞻断言</h2>
+<p>前瞻断言允许添加一个“后面要跟着什么”的条件判断。</p>
+<p>后瞻断言也是类似的，只不过它是在相反的方向上进行条件判断。也就是说，它只允许匹配前面有特定字符串的模式。</p>
+<p>语法为:</p>
+<ul>
+<li>后瞻肯定断言：<code>pattern:(?&lt;=y)x</code>, 匹配 <code>pattern:x</code>, 仅在前面是 <code>pattern:y</code> 的情况。</li>
+<li>后瞻否定断言：<code>pattern:(?&lt;!y)x</code>, 匹配 <code>pattern:x</code>, 仅在前面不是 <code>pattern:y</code> 的情况。</li>
+</ul>
+<p>举个例子，让我们把价格换成美元。美元符号通常在数字之前，所以要查找 <code>$30</code> 我们将使用 <code>pattern:(?&lt;=\$)\d+</code> —— 一个前面带 <code>subject:$</code> 的数值：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;1 turkey costs $30&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/(?&lt;=\$)\d+/</span>) ); <span class="hljs-comment">// 30 （跳过了单个的数字 1）</span></code></pre>
+<p>另外，为了找到数量 —— 一个前面不带 <code>subject:$</code> 的数字，我们可以使用否定后瞻断言：<code>pattern:(?&lt;!\$)\d+</code></p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;2 turkeys cost $60&quot;</span>;
+
+alert( str.match(<span class="hljs-regexp">/(?&lt;!\$)\d+/</span>) ); <span class="hljs-comment">// 2 (跳过了价格)</span></code></pre>
+<h2 id="捕获组">捕获组</h2>
+<p>一般来说，环视断言括号中（前瞻和后瞻的通用名称）的内容不会成为匹配到的一部分结果。</p>
+<p>例如：在模式 <code>pattern:\d+(?!€)</code> 中，<code>pattern:€</code> 符号就不会出现在匹配结果中。</p>
+<p>但是如果我们想要捕捉整个环视表达式或其中的一部分，那也是有可能的。只需要将其包裹在另加的括号中。</p>
+<p>例如，这里货币符号 <code>pattern:(€|kr)</code> 和金额一起被捕获了：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;1 turkey costs 30€&quot;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/\d+(?=(€|kr))/</span>; <span class="hljs-comment">// €|kr 两边有额外的括号</span>
+
+alert( str.match(reg) ); <span class="hljs-comment">// 30, €</span></code></pre>
+<p>后瞻断言也一样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;1 turkey costs $30&quot;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/(?&lt;=(\$|£))\d+/</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// 30, $</span></code></pre>
+<p>请注意，对于后瞻断言，顺序保持不变，尽管前瞻括号在主模式之前。</p>
+<p>通常括号是从左到右编号，但是后瞻断言是一个例外，它总是在主模式之后被捕获。所以 <code>pattern:\d+</code> 的匹配会首先进入结果数组，然后是 <code>pattern:(\$|£)</code>。</p>
+<h2 id="总结">总结</h2>
+<p>当我们想根据前面/后面的上下文筛选出一些东西的时候，前瞻断言和后瞻断言（通常被称为“环视断言”）对于简单的正则表达式就很有用。</p>
+<p>有时我们可以手动处理来得到相同的结果，即：匹配所有，然后在循环中按上下文进行筛选。请记住，<code>str.matchAll</code> 和<code>reg.exec</code> 返回的匹配结果有 <code>.index</code> 属性，因此我们能知道它在文本中的确切位置。但通常正则表达式可以做得更好。</p>
+<p>环视断言类型:</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>类型</th>
+<th>匹配</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pattern:x(?=y)</code></td>
+<td>前瞻肯定断言</td>
+<td><code>x</code> ，仅当后面跟着 <code>y</code></td>
+</tr>
+<tr>
+<td><code>pattern:x(?!y)</code></td>
+<td>前瞻否定断言</td>
+<td><code>x</code> ，仅当后面不跟 <code>y</code></td>
+</tr>
+<tr>
+<td><code>pattern:(?&lt;=y)x</code></td>
+<td>后瞻肯定断言</td>
+<td><code>x</code> ，仅当跟在 <code>y</code> 后面</td>
+</tr>
+<tr>
+<td><code>pattern:(?&lt;!y)x</code></td>
+<td>后瞻否定断言</td>
+<td><code>x</code> ，仅当不跟在 <code>y</code> 后面</td>
+</tr>
+</tbody></table>
+<p>前瞻断言也可用于禁用回溯。为什么它是需要的 - 请看下一章。</p>
+
       </fieldset>
       
-      <fieldset id='_OtmzXj'>
+      <fieldset id='_NGO3Hd'>
       <legend>article</legend>
-      
+      <h1 id="catastrophic-backtracking">Catastrophic backtracking</h1>
+<p>Some regular expressions are looking simple, but can execute veeeeeery long time, and even &quot;hang&quot; the JavaScript engine.</p>
+<p>Sooner or later most developers occasionally face such behavior, because it&#39;s quite easy to create such a regexp.</p>
+<p>The typical symptom -- a regular expression works fine sometimes, but for certain strings it &quot;hangs&quot;, consuming 100% of CPU.</p>
+<p>In such case a web-browser suggests to kill the script and reload the page. Not a good thing for sure.</p>
+<p>For server-side JavaScript it may become a vulnerability if regular expressions process user data.</p>
+<h2 id="example">Example</h2>
+<p>Let&#39;s say we have a string, and we&#39;d like to check if it consists of words  <code>pattern:\w+</code> with an optional space <code>pattern:\s?</code> after each.</p>
+<p>We&#39;ll use a regexp <code>pattern:^(\w+\s?)*$</code>, it specifies 0 or more such words.</p>
+<p>In action:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^(\w+\s?)*$/</span>;
+
+alert( regexp.test(<span class="hljs-string">&quot;A good string&quot;</span>) ); <span class="hljs-comment">// true</span>
+alert( regexp.test(<span class="hljs-string">&quot;Bad characters: $@#&quot;</span>) ); <span class="hljs-comment">// false</span></code></pre>
+<p>It seems to work. The result is correct. Although, on certain strings it takes a lot of time. So long that JavaScript engine &quot;hangs&quot; with 100% CPU consumption.</p>
+<p>If you run the example below, you probably won&#39;t see anything, as JavaScript will just &quot;hang&quot;. A web-browser will stop reacting on events, the UI will stop working. After some time it will suggest to reloaad the page. So be careful with this:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^(\w+\s?)*$/</span>;
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;An input string that takes a long time or even makes this regexp to hang!&quot;</span>;
+
+<span class="hljs-comment">// will take a very long time</span>
+alert( regexp.test(str) );</code></pre>
+<p>Some regular expression engines can handle such search, but most of them can&#39;t.</p>
+<h2 id="simplified-example">Simplified example</h2>
+<p>What&#39;s the matter? Why the regular expression &quot;hangs&quot;?</p>
+<p>To understand that, let&#39;s simplify the example: remove spaces <code>pattern:\s?</code>. Then it becomes <code>pattern:^(\w+)*$</code>.</p>
+<p>And, to make things more obvious, let&#39;s replace <code>pattern:\w</code> with <code>pattern:\d</code>. The resulting regular expression still hangs, for instance:</p>
+<!-- let str = `AnInputStringThatMakesItHang!`; -->
+
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^(\d+)*$/</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;012345678901234567890123456789!&quot;</span>;
+
+<span class="hljs-comment">// will take a very long time</span>
+alert( regexp.test(str) );</code></pre>
+<p>So what&#39;s wrong with the regexp?</p>
+<p>First, one may notice that the regexp <code>pattern:(\d+)*</code> is a little bit strange. The quantifier <code>pattern:*</code> looks extraneous. If we want a number, we can use <code>pattern:\d+</code>.</p>
+<p>Indeed, the regexp is artificial. But the reason why it is slow is the same as those we saw above. So let&#39;s understand it, and then the previous example will become obvious.</p>
+<p>What happens during the search of <code>pattern:^(\d+)*$</code> in the line <code>subject:123456789!</code> (shortened a bit for clarity), why does it take so long?</p>
+<ol>
+<li><p>First, the regexp engine tries to find a number <code>pattern:\d+</code>. The plus <code>pattern:+</code> is greedy by default, so it consumes all digits:</p>
+<pre><code>\d+.......
+(123456789)z</code></pre>
+<p> Then it tries to apply the star quantifier, but there are no more digits, so it the star doesn&#39;t give anything.</p>
+<p> The next in the pattern is the string end <code>pattern:$</code>, but in the text we have <code>subject:!</code>, so there&#39;s no match:</p>
+<pre><code>           X
+\d+........$
+(123456789)!</code></pre>
+</li>
+<li><p>As there&#39;s no match, the greedy quantifier <code>pattern:+</code> decreases the count of repetitions, backtracks one character back.</p>
+<p> Now <code>pattern:\d+</code> takes all digits except the last one:</p>
+<pre><code>\d+.......
+(12345678)9!</code></pre>
+</li>
+<li><p>Then the engine tries to continue the search from the new position (<code>9</code>).</p>
+<p> The star <code>pattern:(\d+)*</code> can be applied -- it gives the number <code>match:9</code>:</p>
+<pre><code>
+\d+.......\d+
+(12345678)(9)!</code></pre>
+<p> The engine tries to match <code>pattern:$</code> again, but fails, because meets <code>subject:!</code>:</p>
+<pre><code>             X
+\d+.......\d+
+(12345678)(9)z</code></pre>
+</li>
+</ol>
+<ol start="4">
+<li><p>There&#39;s no match, so the engine will continue backtracking, decreasing the number of repetitions. Backtracking generally works like this: the last greedy quantifier decreases the number of repetitions until it can. Then the previous greedy quantifier decreases, and so on.</p>
+<p> All possible combinations are attempted. Here are their examples.</p>
+<p> The first number <code>pattern:\d+</code> has 7 digits, and then a number of 2 digits:</p>
+<pre><code>             X
+\d+......\d+
+(1234567)(89)!</code></pre>
+<p> The first number has 7 digits, and then two numbers of 1 digit each:</p>
+<pre><code>               X
+\d+......\d+\d+
+(1234567)(8)(9)!</code></pre>
+<p> The first number has 6 digits, and then a number of 3 digits:</p>
+<pre><code>             X
+\d+.......\d+
+(123456)(789)!</code></pre>
+<p> The first number has 6 digits, and then 2 numbers:</p>
+<pre><code>               X
+\d+.....\d+ \d+
+(123456)(78)(9)!</code></pre>
+<p> ...And so on.</p>
+</li>
+</ol>
+<p>There are many ways to split a set of digits <code>123456789</code> into numbers. To be precise, there are <code>2<sup>n</sup>-1</code>, where <code>n</code> is the length of the set.</p>
+<p>For <code>n=20</code> there are about 1 million combinations, for <code>n=30</code> - a thousand times more. Trying each of them is exactly the reason why the search takes so long.</p>
+<p>What to do?</p>
+<p>Should we turn on the lazy mode?</p>
+<p>Unfortunately, that won&#39;t help: if we replace <code>pattern:\d+</code> with <code>pattern:\d+?</code>, the regexp will still hang. The order of combinations will change, but not their total count.</p>
+<p>Some regular expression engines have tricky tests and finite automations that allow to avoid going through all combinations or make it much faster, but not all engines, and not in all cases.</p>
+<h2 id="back-to-words-and-strings">Back to words and strings</h2>
+<p>The similar thing happens in our first example, when we look words by pattern <code>pattern:^(\w+\s?)*$</code> in the string <code>subject:An input that hangs!</code>.</p>
+<p>The reason is that a word can be represented as one <code>pattern:\w+</code> or many:</p>
+<pre><code>(input)
+(inpu)(t)
+(inp)(u)(t)
+(in)(p)(ut)
+...</code></pre>
+<p>For a human, it&#39;s obvious that there may be no match, because the string ends with an exclamation sign <code>!</code>, but the regular expression expects a wordly character <code>pattern:\w</code> or a space <code>pattern:\s</code> at the end. But the engine doesn&#39;t know that.</p>
+<p>It tries all combinations of how the regexp <code>pattern:(\w+\s?)*</code> can &quot;consume&quot; the string, including variants with spaces <code>pattern:(\w+\s)*</code> and without them <code>pattern:(\w+)*</code> (because spaces <code>pattern:\s?</code> are optional). As there are many such combinations, the search takes a lot of time.</p>
+<h2 id="how-to-fix">How to fix?</h2>
+<p>There are two main approaches to fixing the problem.</p>
+<p>The first is to lower the number of possible combinations.</p>
+<p>Let&#39;s rewrite the regular expression as <code>pattern:^(\w+\s)*\w*</code> - we&#39;ll look for any number of words followed by a space <code>pattern:(\w+\s)*</code>, and then (optionally) a word <code>pattern:\w*</code>.</p>
+<p>This regexp is equivalent to the previous one (matches the same) and works well:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^(\w+\s)*\w*$/</span>;
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;An input string that takes a long time or even makes this regex to hang!&quot;</span>;
+
+alert( regexp.test(str) ); <span class="hljs-comment">// false</span></code></pre>
+<p>Why did the problem disappear?</p>
+<p>Now the star <code>pattern:*</code> goes after <code>pattern:\w+\s</code> instead of <code>pattern:\w+\s?</code>. It became impossible to represent one word of the string with multiple successive <code>pattern:\w+</code>. The time needed to try such combinations is now saved.</p>
+<p>For example, the previous pattern <code>pattern:(\w+\s?)*</code> could match the word <code>subject:string</code> as two <code>pattern:\w+</code>:</p>
+<pre><code class="language-js">\w+\w+
+string</code></pre>
+<p>The previous pattern, due to the optional <code>pattern:\s</code> allowed variants <code>pattern:\w+</code>, <code>pattern:\w+\s</code>, <code>pattern:\w+\w+</code> and so on.</p>
+<p>With the rewritten pattern <code>pattern:(\w+\s)*</code>, that&#39;s impossible: there may be  <code>pattern:\w+\s</code> or <code>pattern:\w+\s\w+\s</code>, but not <code>pattern:\w+\w+</code>. So the overall combinations count is greatly decreased.</p>
+<h2 id="preventing-backtracking">Preventing backtracking</h2>
+<p>It&#39;s not always convenient to rewrite a regexp. And it&#39;s not always obvious how to do it.</p>
+<p>The alternative approach is to forbid backtracking for the quantifier.</p>
+<p>The regular expressions engine tries many combinations that are obviously wrong for a human.</p>
+<p>E.g. in the regexp <code>pattern:(\d+)*$</code> it&#39;s obvious for a human, that <code>pattern:+</code> shouldn&#39;t backtrack. If we replace one <code>pattern:\d+</code> with two separate <code>pattern:\d+\d+</code>, nothing changes:</p>
+<pre><code>\d+........
+(123456789)!
+
+\d+...\d+....
+(1234)(56789)!</code></pre>
+<p>And in the original example <code>pattern:^(\w+\s?)*$</code> we may want to forbid backtracking in <code>pattern:\w+</code>. That is: <code>pattern:\w+</code> should match a whole word, with the maximal possible length. There&#39;s no need to lower the repetitions count in <code>pattern:\w+</code>, try to split it into two words <code>pattern:\w+\w+</code> and so on.</p>
+<p>Modern regular expression engines support possessive quantifiers for that. They are like greedy ones, but don&#39;t backtrack (so they are actually simpler than regular quantifiers).</p>
+<p>There are also so-called &quot;atomic capturing groups&quot; - a way to disable backtracking inside parentheses.</p>
+<p>Unfortunately, in JavaScript they are not supported. But there&#39;s another way.</p>
+<h3 id="lookahead-to-the-rescue">Lookahead to the rescue!</h3>
+<p>We can prevent backtracking using lookahead.</p>
+<p>The pattern to take as much repetitions of <code>pattern:\w</code> as possible without backtracking is: <code>pattern:(?=(\w+))\1</code>.</p>
+<p>Let&#39;s decipher it:</p>
+<ul>
+<li>Lookahead <code>pattern:?=</code> looks forward for the longest word <code>pattern:\w+</code> starting at the current position.</li>
+<li>The contents of parentheses with <code>pattern:?=...</code> isn&#39;t memorized by the engine, so wrap <code>pattern:\w+</code> into parentheses. Then the engine will memorize their contents</li>
+<li>...And allow us to reference it in the pattern as <code>pattern:\1</code>.</li>
+</ul>
+<p>That is: we look ahead - and if there&#39;s a word <code>pattern:\w+</code>, then match it as <code>pattern:\1</code>.</p>
+<p>Why? That&#39;s because the lookahead finds a word <code>pattern:\w+</code> as a whole and we capture it into the pattern with <code>pattern:\1</code>. So we essentially implemented a possessive plus <code>pattern:+</code> quantifier. It captures only the whole word <code>pattern:\w+</code>, not a part of it.</p>
+<p>For instance, in the word <code>subject:JavaScript</code> it may not only match <code>match:Java</code>, but leave out <code>match:Script</code> to match the rest of the pattern.</p>
+<p>Here&#39;s the comparison of two patterns:</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;JavaScript&quot;</span>.match(<span class="hljs-regexp">/\w+Script/</span>)); <span class="hljs-comment">// JavaScript</span>
+alert( <span class="hljs-string">&quot;JavaScript&quot;</span>.match(<span class="hljs-regexp">/(?=(\w+))\1Script/</span>)); <span class="hljs-comment">// null</span></code></pre>
+<ol>
+<li>In the first variant <code>pattern:\w+</code> first captures the whole word <code>subject:JavaScript</code> but then <code>pattern:+</code> backtracks character by character, to try to match the rest of the pattern, until it finally succeeds (when <code>pattern:\w+</code> matches <code>match:Java</code>).</li>
+<li>In the second variant <code>pattern:(?=(\w+))</code> looks ahead and finds the word  <code>subject:JavaScript</code>, that is included into the pattern as a whole by <code>pattern:\1</code>, so there remains no way to find <code>subject:Script</code> after it.</li>
+</ol>
+<p>We can put a more complex regular expression into <code>pattern:(?=(\w+))\1</code> instead of <code>pattern:\w</code>, when we need to forbid backtracking for <code>pattern:+</code> after it.</p>
+<pre><code class="language-smart">There&#x27;s more about the relation between possessive quantifiers and lookahead in articles [Regex: Emulate Atomic Grouping (and Possessive Quantifiers) with LookAhead](http://instanceof.me/post/52245507631/regex-emulate-atomic-grouping-with-lookahead) and [Mimicking Atomic Groups](http://blog.stevenlevithan.com/archives/mimic-atomic-groups).</code></pre>
+<p>Let&#39;s rewrite the first example using lookahead to prevent backtracking:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^((?=(\w+))\2\s?)*$/</span>;
+
+alert( regexp.test(<span class="hljs-string">&quot;A good string&quot;</span>) ); <span class="hljs-comment">// true</span>
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;An input string that takes a long time or even makes this regex to hang!&quot;</span>;
+
+alert( regexp.test(str) ); <span class="hljs-comment">// false, works and fast!</span></code></pre>
+<p>Here <code>pattern:\2</code> is used instead of <code>pattern:\1</code>, because there are additional outer parentheses. To avoid messing up with the numbers, we can give the parentheses a name, e.g. <code>pattern:(?&lt;word&gt;\w+)</code>.</p>
+<pre><code class="language-js"><span class="hljs-comment">// parentheses are named ?&lt;word&gt;, referenced as \k&lt;word&gt;</span>
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^((?=(?&lt;word&gt;\w+))\k&lt;word&gt;\s?)*$/</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;An input string that takes a long time or even makes this regex to hang!&quot;</span>;
+
+alert( regexp.test(str) ); <span class="hljs-comment">// false</span>
+
+alert( regexp.test(<span class="hljs-string">&quot;A correct string&quot;</span>) ); <span class="hljs-comment">// true</span></code></pre>
+<p>The problem described in this article is called &quot;catastrophic backtracking&quot;.</p>
+<p>We covered two ways how to solve it:</p>
+<ul>
+<li>Rewrite the regexp to lower the possible combinations count.</li>
+<li>Prevent backtracking.</li>
+</ul>
+
       </fieldset>
       
-      <fieldset id='_QOgpqO'>
+      <fieldset id='_tAFAfH'>
       <legend>article</legend>
-      
+      <h1 id="粘性标志-y，在位置处搜索">粘性标志 &quot;y&quot;，在位置处搜索</h1>
+<p><code>pattern:y</code> 标志允许在源字符串中的指定位置执行搜索。</p>
+<p>为了掌握 <code>pattern:y</code> 标志的用例，看看它有多好，让我们来探讨一个实际的用例。</p>
+<p>regexps 的常见任务之一是＂词法分析＂：比如我们在程序设计语言中得到一个文本，然后分析它的结构元素。</p>
+<p>例如，HTML 有标签和属性，JavaScript 代码有函数、变量等。</p>
+<p>编写词法分析器是一个特殊的领域，有自己的工具和算法，所以我们就不深究了，但有一个共同的任务：在给定的位置读出一些东西。</p>
+<p>例如，我们有一个代码字符串 <code>subject:let varName = &quot;value&quot;</code>，我们需要从其中读取变量名，这个变量名从位置 <code>4</code> 开始。</p>
+<p>我们用 regexp <code>pattern:\w+</code> 来查找变量名。实际上，JavaScript 的变量名需要更复杂的 regexp 来进行准确的匹配，但在这里并不重要。</p>
+<p>调用 <code>str.match(/\w+/)</code> 将只找到该行中的第一个单词。或者是所有带标记 <code>pattern:g</code> 的单词。但我们只需要在位置 <code>4</code> 的一个词。</p>
+<p>要从给定位置搜索，我们可以使用方法 <code>regexp.exec(str)</code>。</p>
+<p>如果 <code>regexp</code> 没有标志 <code>pattern:g</code> 或 <code>pattern:y</code>，那么这个方法就可以寻找字符串 <code>str</code> 中的第一个匹配，就像 <code>str.match(regexp)</code> 一样。这种简单的无标志的情况我们在这里并不感兴趣。</p>
+<p>如果有标志 <code>pattern:g</code>，那么它就会在字符串 <code>str</code> 中执行搜索，从存储在 <code>regexp.lastIndex</code> 属性中的位置开始。如果发现匹配，则将 <code>regexp.lastIndex</code> 设置为匹配后的索引。</p>
+<p>当一个 regexp 被创建时，它的 <code>lastIndex</code> 是 <code>0</code>。</p>
+<p>因此，连续调用 <code>regexp.exec(str)</code> 会一个接一个地返回匹配。</p>
+<p>一个例子（用标志 <code>pattern:g</code> ）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;let varName&#x27;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/g</span>;
+alert(regexp.lastIndex); <span class="hljs-comment">// 0（最初 lastIndex=0）</span>
+
+<span class="hljs-keyword">let</span> word1 = regexp.exec(str);
+alert(word1[<span class="hljs-number">0</span>]); <span class="hljs-comment">// let（第一个单词）</span>
+alert(regexp.lastIndex); <span class="hljs-comment">// 3（匹配后的位置）</span>
+
+<span class="hljs-keyword">let</span> word2 = regexp.exec(str);
+alert(word2[<span class="hljs-number">0</span>]); <span class="hljs-comment">// varName (第二个单词)</span>
+alert(regexp.lastIndex); <span class="hljs-comment">// 11（匹配后的位置）</span>
+
+<span class="hljs-keyword">let</span> word3 = regexp.exec(str);
+alert(word3); <span class="hljs-comment">// null（没有更多的匹配）</span>
+alert(regexp.lastIndex); <span class="hljs-comment">// 0（搜索结束时重置）</span></code></pre>
+<p>每个匹配都会以数组形式返回，包含分组和附加属性。</p>
+<p>我们可以在循环中得到所有的匹配。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;let varName&#x27;</span>;
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/g</span>;
+
+<span class="hljs-keyword">let</span> result;
+
+<span class="hljs-keyword">while</span> (result = regexp.exec(str)) {
+  alert( <span class="hljs-string">`Found <span class="hljs-subst">${result[<span class="hljs-number">0</span>]}</span>} at position <span class="hljs-subst">${result.index}</span>`</span> );
+  <span class="hljs-comment">// 在位置 0 发现 let, 然后</span>
+  <span class="hljs-comment">// 在位置 4 发现 varName</span>
+}</code></pre>
+<p><code>regexp.exec</code> 是 <code>str.matchAll</code> 方法的替代方法。</p>
+<p>与其他方法不同，我们可以设置自己的 <code>lastIndex</code>，从给定位置开始搜索。</p>
+<p>例如，让我们从位置 <code>4</code> 开始寻找一个单词。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;let varName = &quot;value&quot;&#x27;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/g</span>; <span class="hljs-comment">// 如果没有标志 &quot;g&quot;，属性 lastIndex 会被忽略</span>
+
+*!*
+regexp.lastIndex = <span class="hljs-number">4</span>;
+*/!*
+
+<span class="hljs-keyword">let</span> word = regexp.exec(str);
+alert(word); <span class="hljs-comment">// varName</span></code></pre>
+<p>我们从位置 <code>regexp.lastIndex = 4</code> 开始搜索 <code>pattern:w+</code>。</p>
+<p>请注意：搜索从位置 <code>lastIndex</code> 开始，然后再往前走。如果在 <code>lastIndex</code> 位置上没有词，但它在后面的某个地方，那么它就会被找到：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;let varName = &quot;value&quot;&#x27;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/g</span>;
+
+*!*
+regexp.lastIndex = <span class="hljs-number">3</span>;
+*/!*
+
+<span class="hljs-keyword">let</span> word = regexp.exec(str);
+alert(word[<span class="hljs-number">0</span>]); <span class="hljs-comment">// varName</span>
+alert(word.index); <span class="hljs-comment">// 4</span></code></pre>
+<p>……所以，用标志 <code>pattern:g</code> 属性 <code>lastIndex</code> 设置搜索的起始位置。</p>
+<p>**标记 <code>pattern:y</code> 使 <code>regexp.exec</code> 正好在 <code>lastIndex</code> 位置，而不是在它之前，也不是在它之后。</p>
+<p>下面是使用标志 <code>pattern:y</code> 进行同样的搜索。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;let varName = &quot;value&quot;&#x27;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/y</span>;
+
+regexp.lastIndex = <span class="hljs-number">3</span>;
+alert( regexp.exec(str) ); <span class="hljs-comment">// null（位置 3 有一个空格，不是单词）</span>
+
+regexp.lastIndex = <span class="hljs-number">4</span>;
+alert( regexp.exec(str) ); <span class="hljs-comment">// varName（在位置 4 的单词）</span></code></pre>
+<p>我们可以看到，regexp <code>pattern:/\w+/y</code> 在位置 <code>3</code> 处不匹配(不同于标志 <code>pattern:g</code> )，而是在位置 <code>4</code> 处匹配。</p>
+<p>想象一下，我们有一个长的文本，而里面根本没有匹配。那么用标志 <code>pattern:g</code> 搜索将一直到文本的最后，这将比用标志 <code>pattern:y</code> 搜索要花费更多的时间。</p>
+<p>在像词法分析这样的任务中，通常在一个确切的位置会有很多搜索。使用标志 <code>pattern:y</code> 是获得良好性能的关键。</p>
+
       </fieldset>
       
-      <fieldset id='_BriPDn'>
+      <fieldset id='_kCBhLS'>
       <legend>article</legend>
-      
+      <h1 id="正则表达式（regexp）和字符串（string）的方法">正则表达式（RegExp）和字符串（String）的方法</h1>
+<p>在本文中，我们将深入探讨与正则表达式配合使用的各种方法。</p>
+<h2 id="strmatchregexp">str.match(regexp)</h2>
+<p><code>str.match(regexp)</code> 方法在字符串 <code>str</code> 中找到匹配 <code>regexp</code> 的字符。</p>
+<p>它有 3 种模式：</p>
+<ol>
+<li><p>如果 <code>regexp</code> 不带有 <code>pattern:g</code> 标记，则它以数组的形式返回第一个匹配项，其中包含分组和属性 <code>index</code>（匹配项的位置）、<code>input</code>（输入字符串，等于 <code>str </code>）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;I love JavaScript&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.match(<span class="hljs-regexp">/Java(Script)/</span>);
+
+alert( result[<span class="hljs-number">0</span>] );     <span class="hljs-comment">// JavaScript（完全匹配）</span>
+alert( result[<span class="hljs-number">1</span>] );     <span class="hljs-comment">// Script（第一个分组）</span>
+alert( result.length ); <span class="hljs-comment">// 2</span>
+
+<span class="hljs-comment">// 其他信息：</span>
+alert( result.index );  <span class="hljs-comment">// 7（匹配位置）</span>
+alert( result.input );  <span class="hljs-comment">// I love JavaScript（源字符串）</span></code></pre>
+</li>
+<li><p>如果 <code>regexp</code> 带有 <code>pattern:g</code> 标记，则它将所有匹配项的数组作为字符串返回，而不包含分组和其他详细信息。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;I love JavaScript&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.match(<span class="hljs-regexp">/Java(Script)/g</span>);
+
+alert( result[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// JavaScript</span>
+alert( result.length ); <span class="hljs-comment">// 1</span></code></pre>
+</li>
+<li><p>如果没有匹配项，则无论是否带有标记 <code>pattern:g</code> ，都将返回 <code>null</code>。</p>
+<p> 这是一个重要的细微差别。如果没有匹配项，我们得到的不是一个空数组，而是 <code>null</code>。忘记这一点很容易出错，例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;I love JavaScript&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.match(<span class="hljs-regexp">/HTML/</span>);
+
+alert(result); <span class="hljs-comment">// null</span>
+alert(result.length); <span class="hljs-comment">// Error: Cannot read property &#x27;length&#x27; of null</span></code></pre>
+<p> 如果我们希望结果是一个数组，我们可以这样写：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> result = str.match(regexp) || [];</code></pre>
+</li>
+</ol>
+<h2 id="strmatchallregexp">str.matchAll(regexp)</h2>
+<p>[recent browser=&quot;new&quot;]</p>
+<p>方法 <code>str.matchAll(regexp)</code> 是 <code>str.match</code> “新改进的”变体。</p>
+<p>它主要用来搜索所有组的所有匹配项。</p>
+<p>与 <code>match</code> 相比有 3 个区别：</p>
+<ol>
+<li>它返回包含匹配项的可迭代对象，而不是数组。我们可以用 <code>Array.from</code> 从中得到一个常规数组。</li>
+<li>每个匹配项均以包含分组的数组形式返回（返回格式与不带 <code>pattern:g</code> 标记的 <code>str.match</code> 相同）。</li>
+<li>如果没有结果，则返回的不是 <code>null</code>，而是一个空的可迭代对象。</li>
+</ol>
+<p>用法示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&lt;h1&gt;Hello, world!&lt;/h1&gt;&#x27;</span>;
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/&lt;(.*?)&gt;/g</span>;
+
+<span class="hljs-keyword">let</span> matchAll = str.matchAll(regexp);
+
+alert(matchAll); <span class="hljs-comment">// [object RegExp String Iterator]，不是数组，而是一个可迭代对象</span>
+
+matchAll = <span class="hljs-built_in">Array</span>.from(matchAll); <span class="hljs-comment">// 现在返回的是数组</span>
+
+<span class="hljs-keyword">let</span> firstMatch = matchAll[<span class="hljs-number">0</span>];
+alert( firstMatch[<span class="hljs-number">0</span>] );  <span class="hljs-comment">// &lt;h1&gt;</span>
+alert( firstMatch[<span class="hljs-number">1</span>] );  <span class="hljs-comment">// h1</span>
+alert( firstMatch.index );  <span class="hljs-comment">// 0</span>
+alert( firstMatch.input );  <span class="hljs-comment">// &lt;h1&gt;Hello, world!&lt;/h1&gt;</span></code></pre>
+<p>如果我们用 <code>for..of</code> 来循环 <code>matchAll</code> 的匹配项，那么我们就不需要 <code>Array.from</code> 了。</p>
+<h2 id="strsplitregexpsubstr-limit">str.split(regexp|substr, limit)</h2>
+<p>使用正则表达式（或子字符串）作为分隔符来分割字符串。</p>
+<p>我们可以用 <code>split</code> 来分割字符串，如下所示：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&#x27;12-34-56&#x27;</span>.split(<span class="hljs-string">&#x27;-&#x27;</span>)) <span class="hljs-comment">// 数组 [&#x27;12&#x27;, &#x27;34&#x27;, &#x27;56&#x27;]</span></code></pre>
+<p>但同样，我们也可以用正则表达式来做：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&#x27;12, 34, 56&#x27;</span>.split(<span class="hljs-regexp">/,\s*/</span>)) <span class="hljs-comment">// 数组 [&#x27;12&#x27;, &#x27;34&#x27;, &#x27;56&#x27;]</span></code></pre>
+<h2 id="strsearchregexp">str.search(regexp)</h2>
+<p>方法 <code>str.search(regexp)</code> 返回第一个匹配项的位置，如果未找到，则返回 <code>-1</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;A drop of ink may make a million think&quot;</span>;
+
+alert( str.search( <span class="hljs-regexp">/ink/i</span> ) ); <span class="hljs-comment">// 10（第一个匹配位置）</span></code></pre>
+<p><strong>重要限制：<code>search</code> 仅查找第一个匹配项。</strong></p>
+<p>如果需要其他匹配项的位置，则应使用其他方法，例如用 <code>str.matchAll(regexp)</code> 查找所有位置。</p>
+<h2 id="strreplacestrregexp-strfunc">str.replace(str|regexp, str|func)</h2>
+<p>这是用于搜索和替换的通用方法，是最有用的方法之一。它是搜索和替换字符串的瑞士军刀。  </p>
+<p>我们可以不用正则表达式来搜索和替换子字符串：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 用冒号替换连字符</span>
+alert(<span class="hljs-string">&#x27;12-34-56&#x27;</span>.replace(<span class="hljs-string">&quot;-&quot;</span>, <span class="hljs-string">&quot;:&quot;</span>)) <span class="hljs-comment">// 12:34-56</span></code></pre>
+<p>不过有一个陷阱。</p>
+<p><strong>当 <code>replace</code> 的第一个参数是字符串时，它仅替换第一个匹配项。</strong></p>
+<p>您可以在上面的示例中看到：只有第一个 <code>&quot;-&quot;</code> 被 <code>&quot;:&quot;</code> 替换了。</p>
+<p>如要找到所有的连字符，我们不应该用字符串 <code>&quot;-&quot;</code>，而应使用带 <code>pattern:g</code> 标记的正则表达式 <code>pattern:/-/g</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 将连字符替换为冒号</span>
+alert( <span class="hljs-string">&#x27;12-34-56&#x27;</span>.replace( *!*<span class="hljs-regexp">/-/g</span>*<span class="hljs-regexp">/!*, &quot;:&quot; ) )  /</span><span class="hljs-regexp">/ 12:34:56</span></code></pre>
+<p>第二个参数是一个替代字符串。我们可以在其中使用特殊字符：</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>替换字符串中的操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$&amp;</code></td>
+<td>插入整个匹配项</td>
+</tr>
+<tr>
+<td><code>$&#096;</code></td>
+<td>在匹配项之前插入字符串的一部分</td>
+</tr>
+<tr>
+<td><code>$&#39;</code></td>
+<td>在匹配项之后插入字符串的一部分</td>
+</tr>
+<tr>
+<td><code>$n</code></td>
+<td>如果 <code>n</code> 是一个 1 到 2 位的数字，则插入第 n 个分组的内容，详见 <a href="info:regexp-groups">info:regexp-groups</a></td>
+</tr>
+<tr>
+<td><code>$&lt;name&gt;</code></td>
+<td>插入带有给定 <code>name</code> 的括号内的内容，详见 <a href="info:regexp-groups">info:regexp-groups</a></td>
+</tr>
+<tr>
+<td><code>$$</code></td>
+<td>插入字符 <code>$</code></td>
+</tr>
+</tbody></table>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;John Smith&quot;</span>;
+
+<span class="hljs-comment">// 交换名字和姓氏</span>
+alert(str.replace(<span class="hljs-regexp">/(john) (smith)/i</span>, <span class="hljs-string">&#x27;$2, $1&#x27;</span>)) <span class="hljs-comment">// Smith, John</span></code></pre>
+<p><strong>对于需要“智能”替换的场景，第二个参数可以是一个函数。</strong></p>
+<p>每次匹配都会调用这个函数，并且返回的值将作为替换字符串插入。</p>
+<p>该函数 <code>func(match, p1, p2, ..., pn, offset, input, groups)</code> 带参数调用：</p>
+<ol>
+<li><code>match</code> － 匹配项，</li>
+<li><code>p1, p2, ..., pn</code> － 分组的内容（如有），</li>
+<li><code>offset</code> － 匹配项的位置，</li>
+<li><code>input</code> － 源字符串，</li>
+<li><code>groups</code> － 所指定分组的对象。</li>
+</ol>
+<p>如果正则表达式中没有括号，则只有 3 个参数：<code>func(str, offset, input)</code>。</p>
+<p>例如，将所有匹配项都大写：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;html and css&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.replace(<span class="hljs-regexp">/html|css/gi</span>, <span class="hljs-function"><span class="hljs-params">str</span> =&gt;</span> str.toUpperCase());
+
+alert(result); <span class="hljs-comment">// HTML and CSS</span></code></pre>
+<p>按其在字符串中的位置来替换每个匹配项：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&quot;Ho-Ho-ho&quot;</span>.replace(<span class="hljs-regexp">/ho/gi</span>, <span class="hljs-function">(<span class="hljs-params">match, offset</span>) =&gt;</span> offset)); <span class="hljs-comment">// 0-3-6</span></code></pre>
+<p>在下面的示例中，有两对括号，因此将使用 5 个参数调用替换函数：第一个是完全匹配项，然后是 2 对括号，然后是匹配位置（在示例中未使用）和源字符串：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;John Smith&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.replace(<span class="hljs-regexp">/(\w+) (\w+)/</span>, <span class="hljs-function">(<span class="hljs-params">match, name, surname</span>) =&gt;</span> <span class="hljs-string">`<span class="hljs-subst">${surname}</span>, <span class="hljs-subst">${name}</span>`</span>);
+
+alert(result); <span class="hljs-comment">// Smith, John</span></code></pre>
+<p>如果有许多组，用 rest 参数（...）可以很方便的访问：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;John Smith&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.replace(<span class="hljs-regexp">/(\w+) (\w+)/</span>, <span class="hljs-function">(<span class="hljs-params">...match</span>) =&gt;</span> <span class="hljs-string">`<span class="hljs-subst">${match[<span class="hljs-number">2</span>]}</span>, <span class="hljs-subst">${match[<span class="hljs-number">1</span>]}</span>`</span>);
+
+alert(result); <span class="hljs-comment">// Smith, John</span></code></pre>
+<p>或者，如果我们使用的是命名组，则带有它们的 <code>groups</code> 对象始终是最后一个对象，因此我们可以这样获得它：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;John Smith&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.replace(<span class="hljs-regexp">/(?&lt;name&gt;\w+) (?&lt;surname&gt;\w+)/</span>, <span class="hljs-function">(<span class="hljs-params">...match</span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> groups = match.pop();
+
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${groups.surname}</span>, <span class="hljs-subst">${groups.name}</span>`</span>;
+});
+
+alert(result); <span class="hljs-comment">// Smith, John</span></code></pre>
+<p>使用函数可以为我们提供终极替代功能，因为它可以获取匹配项的所有信息，可以访问外部变量，可以做任何事。</p>
+<h2 id="regexpexecstr">regexp.exec(str)</h2>
+<p><code>regexp.exec(str)</code> 方法返回字符串 <code>str</code> 中的 <code>regexp</code> 匹配项。与以前的方法不同，它是在正则表达式而不是字符串上调用的。</p>
+<p>根据正则表达式是否带有标志 <code>pattern:g</code>，它的行为有所不同。</p>
+<p>如果没有 <code>pattern:g</code>，那么 <code>regexp.exec(str)</code> 返回的第一个匹配与 <code>str.match(regexp)</code> 完全相同。这没什么新的变化。</p>
+<p>但是，如果有标记 <code>pattern:g</code>，那么：</p>
+<ul>
+<li>调用 <code>regexp.exec(str)</code> 会返回第一个匹配项，并将紧随其后的位置保存在属性 <code>regexp.lastIndex</code> 中。</li>
+<li>下一次同样的调用会从位置 <code>regexp.lastIndex</code> 开始搜索，返回下一个匹配项，并将其后的位置保存在 <code>regexp.lastIndex</code> 中。</li>
+<li>...以此类推。</li>
+<li>如果没有匹配项，则 <code>regexp.exec</code> 返回 <code>null</code>，并将 <code>regexp.lastIndex</code> 重置为 <code>0</code>。</li>
+</ul>
+<p>因此，重复调用会挨个返回所有的匹配项，属性 <code>regexp.lastIndex</code> 用来跟踪当前的搜索位置。</p>
+<p>过去，在将 <code>str.matchAll</code> 方法添加到 <code>JavaScript</code> 之前，在循环中是通过调用 <code>regexp.exec</code> 来获取分组的所有匹配项：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;More about JavaScript at https://javascript.info&#x27;</span>;
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/javascript/ig</span>;
+
+<span class="hljs-keyword">let</span> result;
+
+<span class="hljs-keyword">while</span> (result = regexp.exec(str)) {
+  alert( <span class="hljs-string">`Found <span class="hljs-subst">${result[<span class="hljs-number">0</span>]}</span> at position <span class="hljs-subst">${result.index}</span>`</span> );
+  <span class="hljs-comment">// Found JavaScript at position 11，然后</span>
+  <span class="hljs-comment">// Found javascript at position 33</span>
+}</code></pre>
+<p>这个现在也可以使用，尽管对于较新的浏览器来说，<code>str.matchAll</code> 通常更方便。</p>
+<p><strong>我们可以通过手动设置 <code>lastIndex</code>，用 <code>regexp.exec</code> 从给定位置进行搜索。</strong></p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;Hello, world!&#x27;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/g</span>; <span class="hljs-comment">// 带有标记 &quot;g&quot;，lastIndex 属性被忽略</span>
+regexp.lastIndex = <span class="hljs-number">5</span>; <span class="hljs-comment">// 从第 5 个位置搜索（从逗号开始）</span>
+
+alert( regexp.exec(str) ); <span class="hljs-comment">// world</span></code></pre>
+<p>如果正则表达式带有标记 <code>pattern:y</code>，则搜索将精确地在 <code>regexp.lastIndex</code> 位置执行，不会再继续了。</p>
+<p>让我们将上例中的 <code>pattern:g</code> 标记替换为 <code>pattern:y</code>。现在没有找到匹配项了，因为在位置 <code>5</code> 处没有单词：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;Hello, world!&#x27;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/y</span>;
+regexp.lastIndex = <span class="hljs-number">5</span>; <span class="hljs-comment">// 在位置 5 精确查找</span>
+
+alert( regexp.exec(str) ); <span class="hljs-comment">// null</span></code></pre>
+<p>这个方法在某些场景下很方便，例如需要用正则表达式从字符串的精确位置来“读取”字符串（而不是其后的某处）。</p>
+<h2 id="regexpteststr">regexp.test(str)</h2>
+<p>方法 <code>regexp.test(str)</code> 查找匹配项，然后返回 <code>true/false</code> 表示是否存在。</p>
+<p>例如：</p>
+<pre><code class="language-js">let str = &quot;I love JavaScript&quot;;
+
+// 这两个测试相同
+alert( *!*/love/i*/!*.test(str) ); // true
+alert( str.search(*!*/love/i*/!*) != -1 ); // true</code></pre>
+<p>一个反例：</p>
+<pre><code class="language-js">let str = &quot;Bla-bla-bla&quot;;
+
+alert( *!*/love/i*/!*.test(str) ); // false
+alert( str.search(*!*/love/i*/!*) != -1 ); // false</code></pre>
+<p>如果正则表达式带有标记 <code>pattern:g</code>，则 <code>regexp.test</code> 从  <code>regexp.lastIndex</code> 属性中查找，并更新此属性，就像 <code>regexp.exec</code> 一样。</p>
+<p>因此，我们可以用它从给定位置进行搜索：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/love/gi</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;I love JavaScript&quot;</span>;
+
+<span class="hljs-comment">// 从位置 10 开始：</span>
+regexp.lastIndex = <span class="hljs-number">10</span>;
+alert( regexp.test(str) ); <span class="hljs-comment">// false（无匹配）</span></code></pre>
+<pre><code class="language-warn">如果我们在不同的源字符串上应用相同的全局表达式，可能会出现错误的结果，因为 `regexp.test` 的调用会增加 `regexp.lastIndex` 属性值，因此在另一个字符串中的搜索可能是从非 0 位置开始的。
+
+例如，这里我们在同一文本上调用 `regexp.test` 两次，而第二次调用失败了：
+
+```js run
+let regexp = /javascript/g;  // （新建 regexp：regexp.lastIndex=0)
+
+alert( regexp.test(&quot;javascript&quot;) ); // true（现在 regexp.lastIndex=10）
+alert( regexp.test(&quot;javascript&quot;) ); // false
+```
+
+这正是因为在第二个测试中 `regexp.lastIndex` 不为零。
+
+如要解决这个问题，我们可以在每次搜索之前设置 `regexp.lastIndex = 0`。或者，不调用正则表达式的方法，而是使用字符串方法 `str.match/search/...`，这些方法不用 `lastIndex`。</code></pre>
+
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>regexp-introduction</strong><br/></div><div style="margin-left:1em"><a href="#_Flk2Ar">article</a><br/></div><div style="margin-left:0em"><strong>regexp-character-classes</strong><br/></div><div style="margin-left:1em"><a href="#_h34dst">article</a><br/></div><div style="margin-left:0em"><strong>regexp-unicode</strong><br/></div><div style="margin-left:1em"><a href="#_3B1vHA">article</a><br/></div><div style="margin-left:0em"><strong>regexp-anchors</strong><br/></div><div style="margin-left:1em"><strong>start-end</strong><br/></div><div style="margin-left:2em"><a href="#_IITte9">solution</a><br/></div><div style="margin-left:2em"><a href="#_xhNFTJ">task</a><br/></div><div style="margin-left:1em"><a href="#_0Q7gCe">article</a><br/></div><div style="margin-left:0em"><strong>regexp-multiline-mode</strong><br/></div><div style="margin-left:1em"><a href="#_IG0FUI">article</a><br/></div><div style="margin-left:0em"><strong>regexp-boundary</strong><br/></div><div style="margin-left:1em"><strong>find-time-hh-mm</strong><br/></div><div style="margin-left:2em"><a href="#_DeO8i5">solution</a><br/></div><div style="margin-left:2em"><a href="#_qDB6jB">task</a><br/></div><div style="margin-left:1em"><a href="#_ILYdyJ">article</a><br/></div><div style="margin-left:0em"><strong>regexp-escaping</strong><br/></div><div style="margin-left:1em"><a href="#_oYPMJp">article</a><br/></div><div style="margin-left:0em"><strong>regexp-character-sets-and-ranges</strong><br/></div><div style="margin-left:1em"><strong>find-range-1</strong><br/></div><div style="margin-left:2em"><a href="#_65HtVP">solution</a><br/></div><div style="margin-left:2em"><a href="#_uosdf0">task</a><br/></div><div style="margin-left:1em"><strong>find-time-formats</strong><br/></div><div style="margin-left:2em"><a href="#_lzUBRM">solution</a><br/></div><div style="margin-left:2em"><a href="#_gxPg60">task</a><br/></div><div style="margin-left:1em"><a href="#_MmadNu">article</a><br/></div><div style="margin-left:0em"><strong>regexp-quantifiers</strong><br/></div><div style="margin-left:1em"><strong>find-text-manydots</strong><br/></div><div style="margin-left:2em"><a href="#_IKWb5O">solution</a><br/></div><div style="margin-left:2em"><a href="#_3746iG">task</a><br/></div><div style="margin-left:1em"><strong>find-html-colors-6hex</strong><br/></div><div style="margin-left:2em"><a href="#_OQjOc8">solution</a><br/></div><div style="margin-left:2em"><a href="#_atBe9M">task</a><br/></div><div style="margin-left:1em"><a href="#_cRhQnh">article</a><br/></div><div style="margin-left:0em"><strong>regexp-greedy-and-lazy</strong><br/></div><div style="margin-left:1em"><strong>lazy-greedy</strong><br/></div><div style="margin-left:2em"><a href="#_HroW30">solution</a><br/></div><div style="margin-left:2em"><a href="#_OjkkAM">task</a><br/></div><div style="margin-left:1em"><strong>find-html-comments</strong><br/></div><div style="margin-left:2em"><a href="#_bxdsik">solution</a><br/></div><div style="margin-left:2em"><a href="#_5Me50s">task</a><br/></div><div style="margin-left:1em"><strong>find-html-tags-greedy-lazy</strong><br/></div><div style="margin-left:2em"><a href="#_jZT5Gj">solution</a><br/></div><div style="margin-left:2em"><a href="#_K8cVUc">task</a><br/></div><div style="margin-left:1em"><a href="#_oQxnQL">article</a><br/></div><div style="margin-left:0em"><strong>regexp-groups</strong><br/></div><div style="margin-left:1em"><strong>test-mac</strong><br/></div><div style="margin-left:2em"><a href="#_xMNys2">solution</a><br/></div><div style="margin-left:2em"><a href="#_P4Vmze">task</a><br/></div><div style="margin-left:1em"><strong>find-webcolor-or-6</strong><br/></div><div style="margin-left:2em"><a href="#_cmj4vZ">solution</a><br/></div><div style="margin-left:2em"><a href="#_cur5Rn">task</a><br/></div><div style="margin-left:1em"><strong>find-decimal-numbers</strong><br/></div><div style="margin-left:2em"><a href="#_CmT3gu">solution</a><br/></div><div style="margin-left:2em"><a href="#_DGmxS3">task</a><br/></div><div style="margin-left:1em"><strong>parse-expression</strong><br/></div><div style="margin-left:2em"><a href="#_XJ48yW">solution</a><br/></div><div style="margin-left:2em"><a href="#_jG9kpk">task</a><br/></div><div style="margin-left:1em"><a href="#_zkFW5B">article</a><br/></div><div style="margin-left:0em"><strong>regexp-backreferences</strong><br/></div><div style="margin-left:1em"><a href="#_Lk5ZVx">article</a><br/></div><div style="margin-left:0em"><strong>regexp-alternation</strong><br/></div><div style="margin-left:1em"><strong>find-programming-language</strong><br/></div><div style="margin-left:2em"><a href="#_Dnpcxb">solution</a><br/></div><div style="margin-left:2em"><a href="#_weDcfV">task</a><br/></div><div style="margin-left:1em"><strong>find-matching-bbtags</strong><br/></div><div style="margin-left:2em"><a href="#_vcv5ao">solution</a><br/></div><div style="margin-left:2em"><a href="#_9gt3M3">task</a><br/></div><div style="margin-left:1em"><strong>match-quoted-string</strong><br/></div><div style="margin-left:2em"><a href="#_INLAoE">solution</a><br/></div><div style="margin-left:2em"><a href="#_DLvrhN">task</a><br/></div><div style="margin-left:1em"><strong>match-exact-tag</strong><br/></div><div style="margin-left:2em"><a href="#_WbQVhf">solution</a><br/></div><div style="margin-left:2em"><a href="#_xDjYw6">task</a><br/></div><div style="margin-left:1em"><a href="#_GNog0H">article</a><br/></div><div style="margin-left:0em"><strong>regexp-lookahead-lookbehind</strong><br/></div><div style="margin-left:1em"><strong>find-non-negative-integers</strong><br/></div><div style="margin-left:2em"><a href="#_hqzvxd">solution</a><br/></div><div style="margin-left:2em"><a href="#_FF1aXc">task</a><br/></div><div style="margin-left:1em"><strong>insert-after-head</strong><br/></div><div style="margin-left:2em"><a href="#_En7NUm">solution</a><br/></div><div style="margin-left:2em"><a href="#_iT9LXQ">task</a><br/></div><div style="margin-left:1em"><a href="#_YdkFJk">article</a><br/></div><div style="margin-left:0em"><strong>regexp-catastrophic-backtracking</strong><br/></div><div style="margin-left:1em"><a href="#_OtmzXj">article</a><br/></div><div style="margin-left:0em"><strong>regexp-sticky</strong><br/></div><div style="margin-left:1em"><a href="#_QOgpqO">article</a><br/></div><div style="margin-left:0em"><strong>regexp-methods</strong><br/></div><div style="margin-left:1em"><a href="#_BriPDn">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>regexp-introduction</strong><br/></div><div style="margin-left:1em"><a href="#_mgsSqV">article</a><br/></div><div style="margin-left:0em"><strong>regexp-character-classes</strong><br/></div><div style="margin-left:1em"><a href="#_EmdOAF">article</a><br/></div><div style="margin-left:0em"><strong>regexp-unicode</strong><br/></div><div style="margin-left:1em"><a href="#_HPp3RU">article</a><br/></div><div style="margin-left:0em"><strong>regexp-anchors</strong><br/></div><div style="margin-left:1em"><strong>start-end</strong><br/></div><div style="margin-left:2em"><a href="#_zzLIai">solution</a><br/></div><div style="margin-left:2em"><a href="#_ATvnR1">task</a><br/></div><div style="margin-left:1em"><a href="#_WFiB4T">article</a><br/></div><div style="margin-left:0em"><strong>regexp-multiline-mode</strong><br/></div><div style="margin-left:1em"><a href="#_AfHTjZ">article</a><br/></div><div style="margin-left:0em"><strong>regexp-boundary</strong><br/></div><div style="margin-left:1em"><strong>find-time-hh-mm</strong><br/></div><div style="margin-left:2em"><a href="#_1N4CMQ">solution</a><br/></div><div style="margin-left:2em"><a href="#_mInNQ7">task</a><br/></div><div style="margin-left:1em"><a href="#_eYc4iR">article</a><br/></div><div style="margin-left:0em"><strong>regexp-escaping</strong><br/></div><div style="margin-left:1em"><a href="#_YV52Ht">article</a><br/></div><div style="margin-left:0em"><strong>regexp-character-sets-and-ranges</strong><br/></div><div style="margin-left:1em"><strong>find-range-1</strong><br/></div><div style="margin-left:2em"><a href="#_VpmnFm">solution</a><br/></div><div style="margin-left:2em"><a href="#_Y2UQPW">task</a><br/></div><div style="margin-left:1em"><strong>find-time-formats</strong><br/></div><div style="margin-left:2em"><a href="#_51t5jJ">solution</a><br/></div><div style="margin-left:2em"><a href="#_wyf3mn">task</a><br/></div><div style="margin-left:1em"><a href="#_qK5O1D">article</a><br/></div><div style="margin-left:0em"><strong>regexp-quantifiers</strong><br/></div><div style="margin-left:1em"><strong>find-text-manydots</strong><br/></div><div style="margin-left:2em"><a href="#_ML74b9">solution</a><br/></div><div style="margin-left:2em"><a href="#_aNykmQ">task</a><br/></div><div style="margin-left:1em"><strong>find-html-colors-6hex</strong><br/></div><div style="margin-left:2em"><a href="#_i2VxFJ">solution</a><br/></div><div style="margin-left:2em"><a href="#_Fr47hy">task</a><br/></div><div style="margin-left:1em"><a href="#_ynny3c">article</a><br/></div><div style="margin-left:0em"><strong>regexp-greedy-and-lazy</strong><br/></div><div style="margin-left:1em"><strong>lazy-greedy</strong><br/></div><div style="margin-left:2em"><a href="#_YMUvys">solution</a><br/></div><div style="margin-left:2em"><a href="#_0bk4vl">task</a><br/></div><div style="margin-left:1em"><strong>find-html-comments</strong><br/></div><div style="margin-left:2em"><a href="#_ndccCF">solution</a><br/></div><div style="margin-left:2em"><a href="#_S6cb73">task</a><br/></div><div style="margin-left:1em"><strong>find-html-tags-greedy-lazy</strong><br/></div><div style="margin-left:2em"><a href="#_94aaIH">solution</a><br/></div><div style="margin-left:2em"><a href="#_84bn6Y">task</a><br/></div><div style="margin-left:1em"><a href="#_bC3fmn">article</a><br/></div><div style="margin-left:0em"><strong>regexp-groups</strong><br/></div><div style="margin-left:1em"><strong>test-mac</strong><br/></div><div style="margin-left:2em"><a href="#_0DcW1S">solution</a><br/></div><div style="margin-left:2em"><a href="#_2eI9KA">task</a><br/></div><div style="margin-left:1em"><strong>find-webcolor-or-6</strong><br/></div><div style="margin-left:2em"><a href="#_9dsqYX">solution</a><br/></div><div style="margin-left:2em"><a href="#_cDeB0u">task</a><br/></div><div style="margin-left:1em"><strong>find-decimal-numbers</strong><br/></div><div style="margin-left:2em"><a href="#_tNmtXI">solution</a><br/></div><div style="margin-left:2em"><a href="#_rFRyGT">task</a><br/></div><div style="margin-left:1em"><strong>parse-expression</strong><br/></div><div style="margin-left:2em"><a href="#_oERCrA">solution</a><br/></div><div style="margin-left:2em"><a href="#_RE2GaW">task</a><br/></div><div style="margin-left:1em"><a href="#_fsR4qp">article</a><br/></div><div style="margin-left:0em"><strong>regexp-backreferences</strong><br/></div><div style="margin-left:1em"><a href="#_4N1wdY">article</a><br/></div><div style="margin-left:0em"><strong>regexp-alternation</strong><br/></div><div style="margin-left:1em"><strong>find-programming-language</strong><br/></div><div style="margin-left:2em"><a href="#_rvy9Xk">solution</a><br/></div><div style="margin-left:2em"><a href="#_JzIUAi">task</a><br/></div><div style="margin-left:1em"><strong>find-matching-bbtags</strong><br/></div><div style="margin-left:2em"><a href="#_a2smzj">solution</a><br/></div><div style="margin-left:2em"><a href="#_TrFFNb">task</a><br/></div><div style="margin-left:1em"><strong>match-quoted-string</strong><br/></div><div style="margin-left:2em"><a href="#_rF31od">solution</a><br/></div><div style="margin-left:2em"><a href="#_g8iZqK">task</a><br/></div><div style="margin-left:1em"><strong>match-exact-tag</strong><br/></div><div style="margin-left:2em"><a href="#_W8DVRG">solution</a><br/></div><div style="margin-left:2em"><a href="#_n5crwV">task</a><br/></div><div style="margin-left:1em"><a href="#_kK1HTh">article</a><br/></div><div style="margin-left:0em"><strong>regexp-lookahead-lookbehind</strong><br/></div><div style="margin-left:1em"><strong>find-non-negative-integers</strong><br/></div><div style="margin-left:2em"><a href="#_Nd7jDo">solution</a><br/></div><div style="margin-left:2em"><a href="#_kspaBl">task</a><br/></div><div style="margin-left:1em"><strong>insert-after-head</strong><br/></div><div style="margin-left:2em"><a href="#_FM2WpC">solution</a><br/></div><div style="margin-left:2em"><a href="#_DPJMss">task</a><br/></div><div style="margin-left:1em"><a href="#_SMJ9jP">article</a><br/></div><div style="margin-left:0em"><strong>regexp-catastrophic-backtracking</strong><br/></div><div style="margin-left:1em"><a href="#_NGO3Hd">article</a><br/></div><div style="margin-left:0em"><strong>regexp-sticky</strong><br/></div><div style="margin-left:1em"><a href="#_tAFAfH">article</a><br/></div><div style="margin-left:0em"><strong>regexp-methods</strong><br/></div><div style="margin-left:1em"><a href="#_kCBhLS">article</a><br/></div></div>
 </body></html>

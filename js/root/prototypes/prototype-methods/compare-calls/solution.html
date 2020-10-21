@@ -1,0 +1,15 @@
+<p>第一个调用中 <code>this == rabbit</code>，其他的 <code>this</code> 等同于 <code>Rabbit.prototype</code>，因为 <code>this</code> 就是点符号前面的对象。</p>
+<p>所以，只有第一个调用显示 <code>Rabbit</code>，其他的都显示的是 <code>undefined</code>：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-built_in">this</span>.name = name;
+}
+Rabbit.prototype.sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert( <span class="hljs-built_in">this</span>.name );
+}
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;Rabbit&quot;</span>);
+
+rabbit.sayHi();                        <span class="hljs-comment">// Rabbit</span>
+Rabbit.prototype.sayHi();              <span class="hljs-comment">// undefined</span>
+<span class="hljs-built_in">Object</span>.getPrototypeOf(rabbit).sayHi(); <span class="hljs-comment">// undefined</span>
+rabbit.__proto__.sayHi();              <span class="hljs-comment">// undefined</span></code></pre>

@@ -1,0 +1,6 @@
+<ol>
+<li>是的，这是真的。<code>elem.lastChild</code> 就是最后一个元素，它没有 <code>nextSibling</code>。</li>
+<li>不，这是错的，因为  <code>elem.children[0]</code> 是元素中的第一个子元素。但是在它前面可能存在非元素的节点。所以 <code>previousSibling</code> 可能是一个文本节点。</li>
+</ol>
+<p>请注意，对于这两种情况，如果没有子节点，那么就会报错。</p>
+<p>如果这里没有子节点，那么 <code>elem.lastChild</code> 是 <code>null</code>，所以我们就访问不到 <code>elem.lastChild.nextSibling</code>。并且 <code>elem.children</code> 是空的（像一个空数组一样 <code>[]</code>）。</p>

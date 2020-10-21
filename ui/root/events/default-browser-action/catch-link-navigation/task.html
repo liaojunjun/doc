@@ -1,0 +1,11 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="捕获元素中的链接">捕获元素中的链接</h1>
+<p>使所有包含 <code>id=&quot;contents&quot;</code> 的元素内的链接询问用户是否真的要离开。如果用户不想离开，那就不离开。</p>
+<p>像这样：</p>
+<p>[iframe height=100 border=1 src=&quot;solution&quot;]</p>
+<p>细节：</p>
+<ul>
+<li>元素内的 HTML 可以被随时动态加载或重新生成，因此，我们无法找到所有链接并为其添加处理程序。这里使用事件委托。</li>
+<li>内容中可能有嵌套的标签。链接中也是，例如 <code>&lt;a href=&quot;..&quot;&gt;&lt;i&gt;...&lt;/i&gt;&lt;/a&gt;</code>。</li>
+</ul>

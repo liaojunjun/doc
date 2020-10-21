@@ -1,0 +1,9 @@
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">debounce</span>(<span class="hljs-params">func, ms</span>) </span>{
+  <span class="hljs-keyword">let</span> timeout;
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">clearTimeout</span>(timeout);
+    timeout = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> func.apply(<span class="hljs-built_in">this</span>, <span class="hljs-built_in">arguments</span>), ms);
+  };
+}
+</code></pre>
+<p>A call to <code>debounce</code> returns a wrapper. When called, it schedules the original function call after given <code>ms</code> and cancels the previous such timeout.</p>

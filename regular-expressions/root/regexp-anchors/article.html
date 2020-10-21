@@ -1,0 +1,27 @@
+<h1 id="锚点（anchors：字符串开始--和末尾-">锚点（Anchors)：字符串开始 ^ 和末尾 $</h1>
+<p>插入符号 <code>pattern:^</code> 和美元符号 <code>pattern:$</code> 在正则表达式中具有特殊的意义。它们被称为“锚点”。</p>
+<p>插入符号 <code>pattern:^</code> 匹配文本开头，而美元符号 <code>pattern:$</code> － 则匹配文本末尾。</p>
+<p>举个例子，让我们测试一下文本是否以 <code>Mary</code> 开头：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str1 = <span class="hljs-string">&quot;Mary had a little lamb&quot;</span>;
+alert( <span class="hljs-regexp">/^Mary/</span>.test(str1) ); <span class="hljs-comment">// true</span></code></pre>
+<p>该模式 <code>pattern:^Mary</code> 的意思是：字符串开始，接着是 “Mary”。</p>
+<p>与此类似，我们可以用 <code>pattern:snow$</code> 来测试文本是否以 <code>snow</code> 结尾:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str1 = <span class="hljs-string">&quot;it&#x27;s fleece was white as snow&quot;</span>;
+alert( <span class="hljs-regexp">/snow$/</span>.test(str1) ); <span class="hljs-comment">// true</span></code></pre>
+<p>在以上这些具体的例子中我们实际上可以用 <code>startsWith/endsWith</code> 来代替。正则表达式应该被用于更加复杂的测试中。</p>
+<h2 id="测试完全匹配">测试完全匹配</h2>
+<p>这两个锚点 <code>pattern:^...$</code> 放在一起常常被用于测试一个字符串是否完全匹配一个模式。比如，测试用户的输入是否符合正确的格式。</p>
+<p>让我们测试一下一个字符串是否属于 <code>12:34</code> 格式的时间。即，两个数字，然后一个冒号，接着是另外两个数字。</p>
+<p>用正则表达式来表示就是 <code>pattern:\d\d:\d\d</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> goodInput = <span class="hljs-string">&quot;12:34&quot;</span>;
+<span class="hljs-keyword">let</span> badInput = <span class="hljs-string">&quot;12:345&quot;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^\d\d:\d\d$/</span>;
+alert( regexp.test(goodInput) ); <span class="hljs-comment">// true</span>
+alert( regexp.test(badInput) ); <span class="hljs-comment">// false</span></code></pre>
+<p>在这个例子中 <code>pattern:\d\d:\d\d</code> 所对应的匹配文本必须正好在文本开头 <code>pattern:^</code> 之后，而在这之后必须紧跟文本末尾 <code>pattern:$</code>。</p>
+<p>整个字符串必须准确地符合这一个格式。如果其中有任何偏差或者额外的字符，结果将为 <code>false</code>。</p>
+<p>当修饰符 <code>pattern:m</code> 出现时，锚点将会有不同的行为。我们将在后面学习到。</p>
+<pre><code class="language-smart">锚点 `pattern:^` 和 `pattern:$` 属于测试。它们的宽度为零。
+
+换句话来说，它们并不匹配一个具体的字符，而是让正则引擎测试所表示的条件（文本开头/文本末尾）。</code></pre>

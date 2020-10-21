@@ -1,0 +1,10 @@
+<p>任何 <code>setTimeout</code> 都只会在当前代码执行完毕之后才会执行。</p>
+<p>所以 <code>i</code> 的取值为：<code>100000000</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> alert(i), <span class="hljs-number">100</span>); <span class="hljs-comment">// 100000000</span>
+
+<span class="hljs-comment">// 假设这段代码的运行时间 &gt;100ms</span>
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">100000000</span>; j++) {
+  i++; 
+}</code></pre>

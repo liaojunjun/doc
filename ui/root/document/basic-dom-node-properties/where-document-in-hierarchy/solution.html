@@ -1,0 +1,17 @@
+<p>我们可以通过输出它，来看看它是属于哪个类的，像这样：</p>
+<pre><code class="language-js">alert(<span class="hljs-built_in">document</span>); <span class="hljs-comment">// [object HTMLDocument]</span></code></pre>
+<p>或者：</p>
+<pre><code class="language-js">alert(<span class="hljs-built_in">document</span>.constructor.name); <span class="hljs-comment">// HTMLDocument</span></code></pre>
+<p>因此，<code>document</code> 是 <code>HTMLDocument</code> 类的一个实例。</p>
+<p>它位于 DOM 层次结构（hierarchy）中的什么位置？</p>
+<p>是的，我们可以浏览规范，但是手动找出它会更快。</p>
+<p>我们通过 <code>__proto__</code> 来遍历原型链。</p>
+<p>正如我们所知道的，类的方法在 constructor 的 <code>prototype</code> 中。例如，<code>HTMLDocument.prototype</code> 有用于文档（document）的方法。</p>
+<p>此外，在 <code>prototype</code> 中还有一个对构造函数的引用：</p>
+<pre><code class="language-js">alert(HTMLDocument.prototype.constructor === HTMLDocument); <span class="hljs-comment">// true</span></code></pre>
+<p>为了以字符串的形式获取一个类的 name，我们可以使用 <code>constructor.name</code>。让我们对整个 <code>document</code> 的原型链执行该操作，直到 class <code>Node</code>：</p>
+<pre><code class="language-js">alert(HTMLDocument.prototype.constructor.name); <span class="hljs-comment">// HTMLDocument</span>
+alert(HTMLDocument.prototype.__proto__.constructor.name); <span class="hljs-comment">// Document</span>
+alert(HTMLDocument.prototype.__proto__.__proto__.constructor.name); <span class="hljs-comment">// Node</span></code></pre>
+<p>这就是层次结构。</p>
+<p>我们还可以使用 <code>console.dir(document)</code> 来检查对象，并通过打开 <code>__proto__</code> 来查看这些名称。控制台将它们从 <code>constructor</code> 内部取出来。</p>

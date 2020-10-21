@@ -1,0 +1,15 @@
+<p>importance: 4</p>
+<hr>
+<h1 id="计算阶乘">计算阶乘</h1>
+<p>自然数的 <a href="https://en.wikipedia.org/wiki/Factorial">阶乘</a> 是指，一个数乘以 <code>数字减去 1</code>，然后乘以 <code>数字减去 2</code>，以此类推直到乘以 <code>1</code>。<code>n</code> 的阶乘被记作 <code>n!</code>。</p>
+<p>我们可以将阶乘的定义写成这样：</p>
+<pre><code class="language-js">n! = n * (n - <span class="hljs-number">1</span>) * (n - <span class="hljs-number">2</span>) * ...*<span class="hljs-number">1</span></code></pre>
+<p>不同 <code>n</code> 的阶乘的值：</p>
+<pre><code class="language-js"><span class="hljs-number">1</span>! = <span class="hljs-number">1</span>
+<span class="hljs-number">2</span>! = <span class="hljs-number">2</span> * <span class="hljs-number">1</span> = <span class="hljs-number">2</span>
+<span class="hljs-number">3</span>! = <span class="hljs-number">3</span> * <span class="hljs-number">2</span> * <span class="hljs-number">1</span> = <span class="hljs-number">6</span>
+<span class="hljs-number">4</span>! = <span class="hljs-number">4</span> * <span class="hljs-number">3</span> * <span class="hljs-number">2</span> * <span class="hljs-number">1</span> = <span class="hljs-number">24</span>
+<span class="hljs-number">5</span>! = <span class="hljs-number">5</span> * <span class="hljs-number">4</span> * <span class="hljs-number">3</span> * <span class="hljs-number">2</span> * <span class="hljs-number">1</span> = <span class="hljs-number">120</span></code></pre>
+<p>任务是编写一个函数 <code>factorial(n)</code> 使用递归调用计算 <code>n!</code>。</p>
+<pre><code class="language-js">alert( factorial(<span class="hljs-number">5</span>) ); <span class="hljs-comment">// 120</span></code></pre>
+<p>P.S. 提示：<code>n!</code> 可以被写成 <code>n * (n-1)!</code>，比如 <code>3! = 3*2! = 3*2*1! = 6</code>。</p>

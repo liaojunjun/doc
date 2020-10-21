@@ -1,0 +1,16 @@
+<pre><code class="language-js"><span class="hljs-keyword">let</span> array = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+
+array = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(array, {
+  get(target, prop, receiver) {
+    <span class="hljs-keyword">if</span> (prop &lt; <span class="hljs-number">0</span>) {
+      <span class="hljs-comment">// 即使我们像 arr[1] 这样访问它</span>
+      <span class="hljs-comment">// prop 是一个字符串，所以我们需要将其转换成数字</span>
+      prop = +prop + target.length;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Reflect</span>.get(target, prop, receiver);
+  }
+});
+
+
+alert(array[<span class="hljs-number">-1</span>]); <span class="hljs-comment">// 3</span>
+alert(array[<span class="hljs-number">-2</span>]); <span class="hljs-comment">// 2</span></code></pre>

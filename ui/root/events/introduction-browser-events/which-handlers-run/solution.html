@@ -1,0 +1,10 @@
+<p>答案：<code>1</code> 和 <code>2</code>。</p>
+<p>第一个处理程序会触发，因为它没有被 <code>removeEventListener</code> 移除。要移除处理程序，我们需要传递正确的所分配的函数。在代码中，传递了一个新的函数，该函数看起来相同，但仍然是另一个函数。</p>
+<p>要移除一个函数对象，我们需要存储对它的引用，像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handler</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-number">1</span>);
+}
+
+button.addEventListener(<span class="hljs-string">&quot;click&quot;</span>, handler);
+button.removeEventListener(<span class="hljs-string">&quot;click&quot;</span>, handler);</code></pre>
+<p>无论 <code>addEventListener</code> 怎样，<code>button.onclick</code> 处理程序都会触发。</p>

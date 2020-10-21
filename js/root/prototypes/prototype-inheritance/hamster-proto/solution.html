@@ -1,0 +1,70 @@
+<p>我们仔细研究一下在调用 <code>speedy.eat(&quot;apple&quot;)</code> 的时候，发生了什么。</p>
+<ol>
+<li><p><code>speedy.eat</code> 方法在原型（<code>=hamster</code>）中被找到，然后执行 <code>this=speedy</code>（在点符号前面的对象）。</p>
+</li>
+<li><p><code>this.stomach.push()</code> 需要找到 <code>stomach</code> 属性，然后对其调用 <code>push</code>。它在 <code>this</code>（<code>=speedy</code>）中查找 <code>stomach</code>，但并没有找到。</p>
+</li>
+<li><p>然后它顺着原型链，在 <code>hamster</code> 中找到 <code>stomach</code>。</p>
+</li>
+<li><p>然后它对 <code>stomach</code> 调用 <code>push</code>，将食物添加到 <strong><code>stomach</code> 的原型</strong> 中。</p>
+</li>
+</ol>
+<p>因此，所有的仓鼠共享了同一个胃！</p>
+<p>对于 <code>lazy.stomach.push(...)</code> 和 <code>speedy.stomach.push()</code> 而言，属性 <code>stomach</code> 被在原型中找到（不是在对象自身），然后向其中 <code>push</code> 了新数据。</p>
+<p>请注意，在简单的赋值 <code>this.stomach=</code> 的情况下不会出现这种情况：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> hamster = {
+  <span class="hljs-attr">stomach</span>: [],
+
+  eat(food) {
+*!*
+    <span class="hljs-comment">// 分配给 this.stomach 而不是 this.stomach.push</span>
+    <span class="hljs-built_in">this</span>.stomach = [food];
+*/!*
+  }
+};
+
+<span class="hljs-keyword">let</span> speedy = {
+   <span class="hljs-attr">__proto__</span>: hamster
+};
+
+<span class="hljs-keyword">let</span> lazy = {
+  <span class="hljs-attr">__proto__</span>: hamster
+};
+
+<span class="hljs-comment">// 仓鼠 Speedy 找到了食物</span>
+speedy.eat(<span class="hljs-string">&quot;apple&quot;</span>);
+alert( speedy.stomach ); <span class="hljs-comment">// apple</span>
+
+<span class="hljs-comment">// 仓鼠 Lazy 的胃是空的</span>
+alert( lazy.stomach ); <span class="hljs-comment">// &lt;nothing&gt;</span></code></pre>
+<p>现在，一切都运行正常，因为 <code>this.stomach=</code> 不会执行对 <code>stomach</code> 的查找。该值会被直接写入 <code>this</code> 对象。</p>
+<p>此外，我们还可以通过确保每只仓鼠都有自己的胃来完全回避这个问题：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> hamster = {
+  <span class="hljs-attr">stomach</span>: [],
+
+  eat(food) {
+    <span class="hljs-built_in">this</span>.stomach.push(food);
+  }
+};
+
+<span class="hljs-keyword">let</span> speedy = {
+  <span class="hljs-attr">__proto__</span>: hamster,
+*!*
+  stomach: []
+*/!*
+};
+
+<span class="hljs-keyword">let</span> lazy = {
+  <span class="hljs-attr">__proto__</span>: hamster,
+*!*
+  stomach: []
+*/!*
+};
+
+<span class="hljs-comment">// 仓鼠 Speedy 找到了食物</span>
+speedy.eat(<span class="hljs-string">&quot;apple&quot;</span>);
+alert( speedy.stomach ); <span class="hljs-comment">// apple</span>
+
+<span class="hljs-comment">// 仓鼠 Lazy 的胃是空的</span>
+alert( lazy.stomach ); <span class="hljs-comment">// &lt;nothing&gt;</span></code></pre>
+<p>作为一种常见的解决方案，所有描述特定对象状态的属性，例如上面的 <code>stomach</code>，都应该被写入该对象中。这样可以避免此类问题。</p>

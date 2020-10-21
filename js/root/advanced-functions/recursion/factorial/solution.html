@@ -1,0 +1,13 @@
+<p>根据定义，阶乘 <code>n!</code> 可以被写成 <code>n * (n-1)!</code>。</p>
+<p>换句话说，<code>factorial(n)</code> 的结果可以用 <code>n</code> 乘以 <code>factorial(n-1)</code> 的结果来获得。对 <code>n-1</code> 的调用同理可以依次地递减，直到 <code>1</code>。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">factorial</span>(<span class="hljs-params">n</span>) </span>{
+  <span class="hljs-keyword">return</span> (n != <span class="hljs-number">1</span>) ? n * factorial(n - <span class="hljs-number">1</span>) : <span class="hljs-number">1</span>;
+}
+
+alert( factorial(<span class="hljs-number">5</span>) ); <span class="hljs-comment">// 120</span></code></pre>
+<p>递归的基础是数值 <code>1</code>。我们也可以用 <code>0</code> 作为基础，不影响，除了会多一次递归步骤：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">factorial</span>(<span class="hljs-params">n</span>) </span>{
+  <span class="hljs-keyword">return</span> n ? n * factorial(n - <span class="hljs-number">1</span>) : <span class="hljs-number">1</span>;
+}
+
+alert( factorial(<span class="hljs-number">5</span>) ); <span class="hljs-comment">// 120</span></code></pre>

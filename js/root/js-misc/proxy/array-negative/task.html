@@ -1,0 +1,21 @@
+<h1 id="访问-array-1">访问 array[-1]</h1>
+<p>在某些编程语言中，我们可以使用从尾端算起的负值索引访问数组元素。</p>
+<p>像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> array = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+
+array[<span class="hljs-number">-1</span>]; <span class="hljs-comment">// 3，最后一个元素</span>
+array[<span class="hljs-number">-2</span>]; <span class="hljs-comment">// 2，从尾端开始向前移动一步</span>
+array[<span class="hljs-number">-3</span>]; <span class="hljs-comment">// 1，从尾端开始向前移动两步</span></code></pre>
+<p>换句话说，<code>array[-N]</code> 与 <code>array[array.length - N]</code> 相同。</p>
+<p>创建一个 proxy 来实现该行为。</p>
+<p>其工作方式应如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> array = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+
+array = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(array, {
+  <span class="hljs-comment">/* 你的代码 */</span>
+});
+
+alert( array[<span class="hljs-number">-1</span>] ); <span class="hljs-comment">// 3</span>
+alert( array[<span class="hljs-number">-2</span>] ); <span class="hljs-comment">// 2</span>
+
+<span class="hljs-comment">// 其他数组功能应保持“原样”</span></code></pre>

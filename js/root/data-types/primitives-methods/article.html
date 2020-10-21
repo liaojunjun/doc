@@ -1,0 +1,87 @@
+<h1 id="原始类型的方法">原始类型的方法</h1>
+<p>JavaScript 允许我们像使用对象一样使用原始类型（字符串，数字等）。JavaScript 还提供了这样的调用方法。我们很快就会学习它们，但是首先我们将了解它的工作原理，毕竟原始类型不是对象（在这里我们会分析地更加清楚）。</p>
+<p>我们来看看原始类型和对象之间的关键区别。</p>
+<p>一个原始值：</p>
+<ul>
+<li>是原始类型中的一种值。</li>
+<li>在 JavaScript 中有 7 种原始类型：<code>string</code>，<code>number</code>，<code>bigint</code>，<code>boolean</code>，<code>symbol</code>，<code>null</code> 和 <code>undefined</code>。</li>
+</ul>
+<p>一个对象：</p>
+<ul>
+<li>能够存储多个值作为属性。</li>
+<li>可以使用大括号 <code>{}</code> 创建对象，例如：<code>{name: &quot;John&quot;, age: 30}</code>。JavaScript 中还有其他种类的对象，例如函数就是对象。</li>
+</ul>
+<p>关于对象的最好的事儿之一是，我们可以把一个函数作为对象的属性存储到对象中。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> john = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">sayHi</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    alert(<span class="hljs-string">&quot;Hi buddy!&quot;</span>);
+  }
+};
+
+john.sayHi(); <span class="hljs-comment">// Hi buddy!</span></code></pre>
+<p>所以我们在这里创建了一个包含 <code>sayHi</code> 方法的对象 <code>john</code>。</p>
+<p>许多内建对象已经存在，例如那些处理日期、错误、HTML 元素等的内建对象。它们具有不同的属性和方法。</p>
+<p>但是，这些特性（feature）都是有成本的！</p>
+<p>对象比原始类型“更重”。它们需要额外的资源来支持运作。</p>
+<h2 id="当作对象的原始类型">当作对象的原始类型</h2>
+<p>以下是 JavaScript 创建者面临的悖论：</p>
+<ul>
+<li>人们可能想对诸如字符串或数字之类的原始类型执行很多操作。最好将它们作为方法来访问。</li>
+<li>原始类型必须尽可能的简单轻量。</li>
+</ul>
+<p>而解决方案看起来多少有点尴尬，如下：</p>
+<ol>
+<li>原始类型仍然是原始的。与预期相同，提供单个值</li>
+<li>JavaScript 允许访问字符串，数字，布尔值和 symbol 的方法和属性。</li>
+<li>为了使它们起作用，创建了提供额外功能的特殊“对象包装器”，使用后即被销毁。</li>
+</ol>
+<p>“对象包装器”对于每种原始类型都是不同的，它们被称为 <code>String</code>、<code>Number</code>、<code>Boolean</code> 和 <code>Symbol</code>。因此，它们提供了不同的方法。</p>
+<p>例如，字符串方法 <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase">str.toUpperCase()</a> 返回一个大写化处理的字符串。</p>
+<p>用法演示如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Hello&quot;</span>;
+
+alert( str.toUpperCase() ); <span class="hljs-comment">// HELLO</span></code></pre>
+<p>很简单，对吧？以下是 <code>str.toUpperCase()</code> 中实际发生的情况：</p>
+<ol>
+<li>字符串 <code>str</code> 是一个原始值。因此，在访问其属性时，会创建一个包含字符串字面值的特殊对象，并且具有有用的方法，例如 <code>toUpperCase()</code>。</li>
+<li>该方法运行并返回一个新的字符串（由 <code>alert</code> 显示）。</li>
+<li>特殊对象被销毁，只留下原始值 <code>str</code>。</li>
+</ol>
+<p>所以原始类型可以提供方法，但它们依然是轻量级的。</p>
+<p>JavaScript 引擎高度优化了这个过程。它甚至可能跳过创建额外的对象。但是它仍然必须遵守规范，并且表现得好像它创建了一样。</p>
+<p>数字有其自己的方法，例如，<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed">toFixed(n)</a> 将数字舍入到给定的精度：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> n = <span class="hljs-number">1.23456</span>;
+
+alert( n.toFixed(<span class="hljs-number">2</span>) ); <span class="hljs-comment">// 1.23</span></code></pre>
+<p>我们将在后面 <a href="info:number">info:number</a> 和 <a href="info:string">info:string</a> 章节中看到更多具体的方法。</p>
+<p>````warn header=&quot;构造器 <code>String/Number/Boolean</code> 仅供内部使用&quot;
+像 Java 这样的一些语言允许我们使用 <code>new Number(1)</code> 或 <code>new Boolean(false)</code> 等语法，明确地为原始类型创建“对象包装器”。</p>
+<p>在 JavaScript 中，由于历史原因，这也是可以的，但极其 <strong>不推荐</strong>。因为这样会出问题。</p>
+<p>例如：</p>
+<pre><code class="language-js">alert( <span class="hljs-keyword">typeof</span> <span class="hljs-number">0</span> ); <span class="hljs-comment">// &quot;number&quot;</span>
+
+alert( <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Number</span>(<span class="hljs-number">0</span>) ); <span class="hljs-comment">// &quot;object&quot;!</span></code></pre>
+<p>对象在 <code>if</code> 中始终是 <code>true</code>，因此此处的 alert 将显示：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> zero = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Number</span>(<span class="hljs-number">0</span>);
+
+<span class="hljs-keyword">if</span> (zero) { <span class="hljs-comment">// zero 为 true，因为它是一个对象</span>
+  alert( <span class="hljs-string">&quot;zero is truthy?!?&quot;</span> );
+}</code></pre>
+<p>另一方面，调用不带 <code>new</code>（关键字）的 <code>String/Number/Boolean</code> 函数是完全理智和有用的。它们将一个值转换为相应的类型：转成字符串、数字或布尔值（原始类型）。</p>
+<p>例如，下面完全是有效的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> num = <span class="hljs-built_in">Number</span>(<span class="hljs-string">&quot;123&quot;</span>); <span class="hljs-comment">// 将字符串转成数字</span></code></pre>
+<pre><code>
+
+````warn header=&quot;null/undefined 没有任何方法&quot;
+特殊的原始类型 `null` 和 `undefined` 是例外。它们没有对应的“对象包装器”，也没有提供任何方法。从某种意义上说，它们是“最原始的”。
+
+尝试访问这种值的属性会导致错误：
+
+```js run
+alert(null.test); // error</code></pre>
+<h2 id="总结">总结</h2>
+<ul>
+<li>除 <code>null</code> 和 <code>undefined</code> 以外的原始类型都提供了许多有用的方法。我们后面的章节中学习这些内容。</li>
+<li>从形式上讲，这些方法通过临时对象工作，但 JavaScript 引擎可以很好地调整，以在内部对其进行优化，因此调用它们并不需要太高的成本。</li>
+</ul>

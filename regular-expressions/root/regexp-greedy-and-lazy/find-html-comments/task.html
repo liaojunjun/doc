@@ -1,0 +1,9 @@
+<h1 id="查找-html-注释">查找 HTML 注释</h1>
+<p>找出文本中的所有注释：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/你的正则表达式/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">`... &lt;!-- My -- comment
+ test --&gt; ..  &lt;!----&gt; .. 
+`</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;!-- My -- comment \n test --&gt;&#x27;, &#x27;&lt;!----&gt;&#x27;</span></code></pre>

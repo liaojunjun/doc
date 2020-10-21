@@ -1,0 +1,20 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="输出一个单链表">输出一个单链表</h1>
+<p>假设我们有一个单链表（在 <a href="info:recursion">info:recursion</a> 那章有讲过）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> list = {
+  <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">next</span>: {
+    <span class="hljs-attr">value</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">next</span>: {
+      <span class="hljs-attr">value</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">next</span>: {
+        <span class="hljs-attr">value</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">next</span>: <span class="hljs-literal">null</span>
+      }
+    }
+  }
+};</code></pre>
+<p>编写一个可以逐个输出链表元素的函数 <code>printList(list)</code>。</p>
+<p>使用两种方式实现：循环和递归。</p>
+<p>哪个更好：用递归还是不用递归的？</p>

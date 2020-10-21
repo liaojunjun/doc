@@ -1,0 +1,12 @@
+<p>importance: 4</p>
+<hr>
+<h1 id="大写的常量？">大写的常量？</h1>
+<p>检查下面的代码：</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> birthday = <span class="hljs-string">&#x27;18.04.1982&#x27;</span>;
+
+<span class="hljs-keyword">const</span> age = someCode(birthday);</code></pre>
+<p>这里我们有一个 <code>birthday</code> 日期常量和通过一些代码（为了保持简短这里没有提供，因为这些细节在这无关紧要）从 <code>birthday</code> 计算出的 <code>age</code> 常量。</p>
+<p>对于 <code>birthday</code> 使用大写方式正确吗？那么 <code>age</code> 呢？或者两者都用？</p>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> BIRTHDAY = <span class="hljs-string">&#x27;18.04.1982&#x27;</span>; <span class="hljs-comment">// 使用大写？</span>
+
+<span class="hljs-keyword">const</span> AGE = someCode(BIRTHDAY); <span class="hljs-comment">// 使用大写？</span></code></pre>

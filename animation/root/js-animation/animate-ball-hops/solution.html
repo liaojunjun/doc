@@ -1,0 +1,25 @@
+<p>在任务 <a href="info:task/animate-ball">info:task/animate-ball</a> 中，我们只有一个需要添加动画的属性。现在多了一个 <code>elem.style.left</code>。</p>
+<p>水平坐标由另一个定律改变：它不会“反弹”，而是逐渐增加使球逐渐向右移动。</p>
+<p>我们可以为它多写一个 <code>animate</code>。</p>
+<p>至于时序函数，我们可以使用 <code>linear</code>，但像 <code>makeEaseOut(quad)</code> 这样的函数看起来要好得多。</p>
+<p>代码：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> height = field.clientHeight - ball.clientHeight;
+<span class="hljs-keyword">let</span> width = <span class="hljs-number">100</span>;
+
+<span class="hljs-comment">// 设置 top 动画（弹跳）</span>
+animate({
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2000</span>,
+  <span class="hljs-attr">timing</span>: makeEaseOut(bounce),
+  <span class="hljs-attr">draw</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">progress</span>) </span>{
+    ball.style.top = height * progress + <span class="hljs-string">&#x27;px&#x27;</span>
+  }
+});
+
+<span class="hljs-comment">// 设置 left 动画（向右移动）</span>
+animate({
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">2000</span>,
+  <span class="hljs-attr">timing</span>: makeEaseOut(quad),
+  <span class="hljs-attr">draw</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">progress</span>) </span>{
+    ball.style.left = width * progress + <span class="hljs-string">&quot;px&quot;</span>
+  }
+});</code></pre>

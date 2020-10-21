@@ -1,0 +1,141 @@
+<h1 id="点击劫持攻击">点击劫持攻击</h1>
+<p>“点击劫持”攻击允许恶意页面 <strong>以用户的名义</strong> 点击“受害网站”。</p>
+<p>许多网站都被黑客以这种方式攻击过，包括 Twitter、Facebook 和 Paypal 等许多网站。当然，它们都已经被修复了。</p>
+<h2 id="原理">原理</h2>
+<p>原理十分简单。</p>
+<p>我们以 Facebook 为例，解释点击劫持是如何完成的：</p>
+<ol>
+<li>访问者被恶意页面吸引。怎样吸引的不重要。</li>
+<li>页面上有一个看起来无害的链接（例如：“变得富有”或者“点我，超好玩！”）。</li>
+<li>恶意页面在该链接上方放置了一个透明的 <code>&lt;iframe&gt;</code>，其 <code>src</code> 来自于 facebook.com，这使得“点赞”按钮恰好位于该链接上面。这通常是通过 <code>z-index</code> 实现的。</li>
+<li>用户尝试点击该链接时，实际上点击的是“点赞”按钮。</li>
+</ol>
+<h2 id="示例">示例</h2>
+<p>这是恶意页面看起来的样子。为了清楚起见，我们将 <code>&lt;iframe&gt;</code> 设置成了半透明的（在真正的恶意页面中，它是全透明的）：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+iframe { /* 来自受害网站的 iframe */
+  width: 400px;
+  height: 100px;
+  position: absolute;
+  top:0; left:-20px;
+*!*
+  opacity: 0.5; /* 在实际中为 opacity:0 */
+*/!*
+  z-index: 1;
+}
+<span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>点击即可变得富有：<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-comment">&lt;!-- 来自受害网站的 url --&gt;</span>
+*!*
+<span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/clickjacking/facebook.html&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>点这里！<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+*/!*
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>……你很酷（我实际上是一名帅气的黑客）！<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<p>完整的攻击示例如下：</p>
+<p>[codetabs src=&quot;clickjacking-visible&quot; height=160]</p>
+<p>在上面这个示例中，我们有一个半透明的 <code>&lt;iframe src=&quot;facebook.html&quot;&gt;</code>，我们可以看到，它位于按钮之上。点击按钮实际上会点击在 iframe 上，但这对用户不可见，因为 iframe 是透明的。</p>
+<p>结果，如果访问者登陆了 Facebook（“记住我”通常是打开的），那么这个行为就会点一个“赞”。Twitter 上是 &quot;Follow&quot; 按钮。</p>
+<p>下面是相同的示例，但 <code>iframe</code> 的透明度设置为了 <code>opacity:0</code>，更符合实际情况：</p>
+<p>[codetabs src=&quot;clickjacking&quot; height=160]</p>
+<p>我们进行攻击所需要做的 —— 就是将 <code>&lt;iframe&gt;</code> 放置在恶意页面中，使得按钮恰好位于链接的正上方。这样当用户点击链接时，他们实际上点击的是按钮。这通常可以通过 CSS 实现。</p>
+<pre><code class="language-smart">此攻击仅影响鼠标行为（或者类似的行为，例如在手机上的点击）。
+
+键盘输入很难重定向。从技术上讲，我们可以用 iframe 的文本区域覆盖原有的文本区域实现攻击。因此，当访问者试图聚焦页面中的输入时，实际上聚焦的是 iframe 中的输入。
+
+但是这里有个问题。访问者键入的所有内容都会被隐藏，因为该 iframe 是不可见的。
+
+当用户无法在屏幕上看到自己输入的字符时，通常会停止打字。</code></pre>
+<h2 id="传统防御（弱-👎）">传统防御（弱 👎）</h2>
+<p>最古老的防御措施是一段用于禁止在 frame 中打开页面的 JavaScript 代码（所谓的 “framebusting”）。</p>
+<p>它看起来像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (top != <span class="hljs-built_in">window</span>) {
+  top.location = <span class="hljs-built_in">window</span>.location;
+}</code></pre>
+<p>意思是说：如果 window 发现它不在顶部，那么它将自动使其自身位于顶部。</p>
+<p>这个方法并不可靠，因为有许多方式可以绕过这个限制。下面我们就介绍几个。</p>
+<h3 id="阻止顶级导航">阻止顶级导航</h3>
+<p>我们可以阻止因更改 <a href="info:onload-ondomcontentloaded#window.onbeforeunload">beforeunload</a> 事件处理程序中的 <code>top.location</code> 而引起的过渡（transition）。</p>
+<p>顶级页面（从属于黑客）在 <code>beforeunload</code> 上设置了一个用于阻止的处理程序，像这样：</p>
+<pre><code class="language-js"><span class="hljs-built_in">window</span>.onbeforeunload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+};</code></pre>
+<p>当 <code>iframe</code> 试图更改 <code>top.location</code> 时，访问者会收到一条消息，询问他们是否要离开页面。</p>
+<p>在大多数情况下，访问者会做出否定的回答，因为他们并不知道还有这么一个 iframe，他们所看到的只有顶级页面，他们没有理由离开。所以 <code>top.location</code> 不会变化！</p>
+<p>演示示例：</p>
+<p>[codetabs src=&quot;top-location&quot;]</p>
+<h3 id="sandbox-特性">Sandbox 特性</h3>
+<p><code>sandbox</code> 特性的限制之一就是导航。沙箱化的 iframe 不能更改 <code>top.location</code>。</p>
+<p>但我们可以添加具有 <code>sandbox=&quot;allow-scripts allow-forms&quot;</code> 的 iframe。从而放开限制，允许脚本和表单。但我们没添加 <code>allow-top-navigation</code>，因此更改 <code>top.location</code> 是被禁止的。</p>
+<p>代码如下：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> *!*<span class="hljs-attr">sandbox</span>=<span class="hljs-string">&quot;allow-scripts allow-forms&quot;</span>*/!* <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;facebook.html&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></code></pre>
+<p>还有其他方式可以绕过这个弱鸡防御。</p>
+<h2 id="x-frame-options">X-Frame-Options</h2>
+<p>服务器端 header <code>X-Frame-Options</code> 可以允许或禁止在 frame 中显示页面。</p>
+<p>它必须被完全作为 HTTP-header 发送：如果浏览器在 HTML <code>&lt;meta&gt;</code> 标签中找到它，则会忽略它。因此，<code>&lt;meta http-equiv=&quot;X-Frame-Options&quot;...&gt;</code> 没有任何作用。</p>
+<p>这个 header 可能包含 3 个值：</p>
+<p><code>DENY</code>
+: 始终禁止在 frame 中显示此页面。</p>
+<p><code>SAMEORIGIN</code>
+: 允许在和父文档同源的 frame 中显示此页面。</p>
+<p><code>ALLOW-FROM domain</code>
+: 允许在来自给定域的父文档的 frame 中显示此页面。</p>
+<p>例如，Twitter 使用的是 <code>X-Frame-Options: SAMEORIGIN</code>。</p>
+<pre><code class="language-online">结果如下：
+
+```html
+&lt;iframe src=&quot;https://twitter.com&quot;&gt;&lt;/iframe&gt;
+```
+
+&lt;!-- ebook: prerender/ chrome headless dies and timeouts on this iframe --&gt;
+&lt;iframe src=&quot;https://twitter.com&quot;&gt;&lt;/iframe&gt;
+
+上面这个 `iframe` 可能为空，或者通过 alert 告知你浏览器不允许以这种方式导航至该页面，这取决于你的浏览器。</code></pre>
+<h2 id="显示禁用的功能">显示禁用的功能</h2>
+<p><code>X-Frame-Options</code> 有一个副作用。其他的网站即使有充分的理由也无法在 frame 中显示我们的页面。</p>
+<p>因此，还有其他解决方案……例如，我们可以用一个样式为 <code>height: 100%; width: 100%;</code> 的 <code>&lt;div&gt;</code> “覆盖”页面，这样它就能拦截所有点击。如果 <code>window == top</code> 或者我们确定不需要保护时，再将该 <code>&lt;div&gt;</code> 移除。</p>
+<p>像这样：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+  <span class="hljs-selector-id">#protector</span> {
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;
+    <span class="hljs-attribute">position</span>: absolute;
+    <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
+    <span class="hljs-attribute">z-index</span>: <span class="hljs-number">99999999</span>;
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;protector&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;_blank&quot;</span>&gt;</span>前往网站<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 如果顶级窗口来自其他源，这里则会出现一个 error</span>
+  <span class="hljs-comment">// 但是在本例中没有问题</span>
+  <span class="hljs-keyword">if</span> (top.document.domain == <span class="hljs-built_in">document</span>.domain) {
+    protector.remove();
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>演示示例：</p>
+<p>[codetabs src=&quot;protector&quot;]</p>
+<h2 id="samesite-cookie-特性">Samesite cookie 特性</h2>
+<p><code>samesite</code> cookie 特性也可以阻止点击劫持攻击。</p>
+<p>具有 <code>samesite</code> 特性的 cookie 仅在网站是通过直接方式打开（而不是通过 frame 或其他方式）的情况下才发送到网站。更多细节请见 <a href="info:cookie#samesite">info:cookie#samesite</a>。</p>
+<p>如果网站，例如 Facebook，在其身份验证 cookie 中具有 <code>samesite</code> 特性，像这样：</p>
+<pre><code>Set-Cookie: authorization=secret; samesite</code></pre>
+<p>……那么，当在另一个网站中的 iframe 中打开 Facebook 时，此类 cookie 将不会被发送。因此，攻击将失败。</p>
+<p>当不实用 cookie 时，<code>samesite</code> cookie 特性将不会有任何影响。这可以使其他网站能够轻松地在 iframe 中显示我们公开的、未进行身份验证的页面。</p>
+<p>然而，这也可能会使得劫持攻击在少数情况下起作用。例如，通过检查 IP 地址来防止重复投票的匿名投票网站仍然会受到点击劫持的攻击，因为它不使用 cookie 对用户身份进行验证。</p>
+<h2 id="总结">总结</h2>
+<p>点击劫持是一种“诱骗”用户在不知情的情况下点击恶意网站的方式。如果是重要的点击操作，这是非常危险的。</p>
+<p>黑客可以通过信息发布指向他的恶意页面的链接，或者通过某些手段引诱访问者访问他的页面。当然还有很多其他变体。</p>
+<p>一方面 —— 这种攻击方式是“浅层”的：黑客所做的只是拦截一次点击。但另一方面，如果黑客知道在点击之后将出现另一个控件，则他们可能还会使用狡猾的消息来迫使用户也点击它们。</p>
+<p>这种攻击相当危险，因为在设计交互界面时，我们通常不会考虑到可能会有黑客代表用户点击界面。所以，在许多意想不到的地方可能发现攻击漏洞。</p>
+<ul>
+<li>建议在那些不希望被在 frame 中查看的页面上（或整个网站上）使用 <code>X-Frame-Options: SAMEORIGIN</code>。</li>
+<li>如果我们希望允许在 frame 中显示我们的页面，那我们使用一个 <code>&lt;div&gt;</code> 对整个页面进行遮盖，这样也是安全的。</li>
+</ul>

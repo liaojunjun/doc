@@ -1,0 +1,338 @@
+<h1 id="对象">对象</h1>
+<p>正如我们在 <a href="info:types">info:types</a> 一章学到的，JavaScript 中有八种数据类型。有七种原始类型，因为它们的值只包含一种东西（字符串，数字或者其他）。</p>
+<p>相反，对象则用来存储键值对和更复杂的实体。在 JavaScript 中，对象几乎渗透到了这门编程语言的方方面面。所以，在我们深入理解这门语言之前，必须先理解对象。</p>
+<p>我们可以通过使用带有可选 <strong>属性列表</strong> 的花括号 <code>{…}</code> 来创建对象。一个属性就是一个键值对（&quot;key: value&quot;），其中键（<code>key</code>）是一个字符串（也叫做属性名），值（<code>value</code>）可以是任何值。</p>
+<p>我们可以把对象想象成一个带有签名文件的文件柜。每一条数据都基于键（<code>key</code>）存储在文件中。这样我们就可以很容易根据文件名（也就是“键”）查找文件或添加/删除文件了。</p>
+<p><img src="object.svg" alt=""></p>
+<p>我们可以用下面两种语法中的任一种来创建一个空的对象（“空柜子”）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Object</span>(); <span class="hljs-comment">// “构造函数” 的语法</span>
+<span class="hljs-keyword">let</span> user = {};  <span class="hljs-comment">// “字面量” 的语法</span></code></pre>
+<p><img src="object-user-empty.svg" alt=""></p>
+<p>通常，我们用花括号。这种方式我们叫做<strong>字面量</strong>。</p>
+<h2 id="文本和属性">文本和属性</h2>
+<p>我们可以在创建对象的时候，立即将一些属性以键值对的形式放到 <code>{...}</code> 中。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {     <span class="hljs-comment">// 一个对象</span>
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,  <span class="hljs-comment">// 键 &quot;name&quot;，值 &quot;John&quot;</span>
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>        <span class="hljs-comment">// 键 &quot;age&quot;，值 30</span>
+};</code></pre>
+<p>属性有键（或者也可以叫做“名字”或“标识符”），位于冒号 <code>&quot;:&quot;</code> 的前面，值在冒号的右边。</p>
+<p>在 <code>user</code> 对象中，有两个属性：</p>
+<ol>
+<li>第一个的键是 <code>&quot;name&quot;</code>，值是 <code>&quot;John&quot;</code>。</li>
+<li>第二个的键是 <code>&quot;age&quot;</code>，值是 <code>30</code>。</li>
+</ol>
+<p>生成的 <code>user</code> 对象可以被想象为一个放置着两个标记有 &quot;name&quot; 和 &quot;age&quot; 的文件的柜子。</p>
+<p><img src="object-user.svg" alt="user object"></p>
+<p>我们可以随时添加、删除和读取文件。</p>
+<p>可以使用点符号访问属性值：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 读取文件的属性：</span>
+alert( user.name ); <span class="hljs-comment">// John</span>
+alert( user.age ); <span class="hljs-comment">// 30</span></code></pre>
+<p>属性的值可以是任意类型，让我们加个布尔类型：</p>
+<pre><code class="language-js">user.isAdmin = <span class="hljs-literal">true</span>;</code></pre>
+<p><img src="object-user-isadmin.svg" alt="user object 2"></p>
+<p>我们可以用 <code>delete</code> 操作符移除属性：</p>
+<pre><code class="language-js"><span class="hljs-keyword">delete</span> user.age;</code></pre>
+<p><img src="object-user-delete.svg" alt="user object 3"></p>
+<p>我们也可以用多字词语来作为属性名，但必须给它们加上引号：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>,
+  <span class="hljs-string">&quot;likes birds&quot;</span>: <span class="hljs-literal">true</span>  <span class="hljs-comment">// 多词属性名必须加引号</span>
+};</code></pre>
+<p><img src="object-user-props.svg" alt=""></p>
+<p>列表中的最后一个属性应以逗号结尾：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>*!*,*/!*
+}</code></pre>
+<p>这叫做尾随（trailing）或悬挂（hanging）逗号。这样便于我们添加、删除和移动属性，因为所有的行都是相似的。</p>
+<pre><code class="language-smart">请注意：用 `const` 声明的对象 **能** 被修改。
+
+例如：
+
+```js run
+const user = {
+  name: &quot;John&quot;
+};
+
+*!*
+user.name = &quot;Pete&quot;; // (*)
+*/!*
+
+alert(user.name); // Pete
+```
+
+`(*)` 行似乎会触发一个错误，但实际并没有。`const` 声明仅固定了 `user` 的值，而不是值（该对象）里面的内容。
+
+仅当我们尝试将 `user=...` 作为一个整体进行赋值时，`const` 会抛出错误。
+
+有另一种将对象属性变为常量的方式，我们将在后面的 &lt;info:property-descriptors&gt; 一章中学习它。</code></pre>
+<h2 id="方括号">方括号</h2>
+<p>对于多词属性，点操作就不能用了：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 这将提示有语法错误</span>
+user.likes birds = <span class="hljs-literal">true</span></code></pre>
+<p>JavaScript 理解不了。它认为我们在处理 <code>user.likes</code>，然后在遇到意外的 <code>birds</code> 时给出了语法错误。</p>
+<p>点符号要求 <code>key</code> 是有效的变量标识符。这意味着：不包含空格，不以数字开头，也不包含特殊字符（允许使用 <code>$</code> 和 <code>_</code>）。</p>
+<p>有另一种方法，就是使用方括号，可用于任何字符串：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {};
+
+<span class="hljs-comment">// 设置</span>
+user[<span class="hljs-string">&quot;likes birds&quot;</span>] = <span class="hljs-literal">true</span>;
+
+<span class="hljs-comment">// 读取</span>
+alert(user[<span class="hljs-string">&quot;likes birds&quot;</span>]); <span class="hljs-comment">// true</span>
+
+<span class="hljs-comment">// 删除</span>
+<span class="hljs-keyword">delete</span> user[<span class="hljs-string">&quot;likes birds&quot;</span>];</code></pre>
+<p>现在一切都可行了。请注意方括号中的字符串要放在引号中，单引号或双引号都可以。</p>
+<p>方括号同样提供了一种可以通过任意表达式来获取属性名的方法 —— 跟语义上的字符串不同 —— 比如像类似于下面的变量：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> key = <span class="hljs-string">&quot;likes birds&quot;</span>;
+
+<span class="hljs-comment">// 跟 user[&quot;likes birds&quot;] = true; 一样</span>
+user[key] = <span class="hljs-literal">true</span>;</code></pre>
+<p>在这里，变量 <code>key</code> 可以是程序运行时计算得到的，也可以是根据用户的输入得到的。然后我们可以用它来访问属性。这给了我们很大的灵活性。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>
+};
+
+<span class="hljs-keyword">let</span> key = prompt(<span class="hljs-string">&quot;What do you want to know about the user?&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>);
+
+<span class="hljs-comment">// 访问变量</span>
+alert( user[key] ); <span class="hljs-comment">// John（如果输入 &quot;name&quot;）</span></code></pre>
+<p>点符号不能以类似的方式使用：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>
+};
+
+<span class="hljs-keyword">let</span> key = <span class="hljs-string">&quot;name&quot;</span>;
+alert( user.key ) <span class="hljs-comment">// undefined</span></code></pre>
+<h3 id="计算属性">计算属性</h3>
+<p>当创建一个对象时，我们可以在对象字面量中使用方括号。这叫做 <strong>计算属性</strong>。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruit = prompt(<span class="hljs-string">&quot;Which fruit to buy?&quot;</span>, <span class="hljs-string">&quot;apple&quot;</span>);
+
+<span class="hljs-keyword">let</span> bag = {
+*!*
+  [fruit]: <span class="hljs-number">5</span>, <span class="hljs-comment">// 属性名是从 fruit 变量中得到的</span>
+*/!*
+};
+
+alert( bag.apple ); <span class="hljs-comment">// 5 如果 fruit=&quot;apple&quot;</span></code></pre>
+<p>计算属性的含义很简单：<code>[fruit]</code> 含义是属性名应该从 <code>fruit</code> 变量中获取。</p>
+<p>所以，如果一个用户输入 <code>&quot;apple&quot;</code>，<code>bag</code> 将变为 <code>{apple: 5}</code>。</p>
+<p>本质上，这跟下面的语法效果相同：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruit = prompt(<span class="hljs-string">&quot;Which fruit to buy?&quot;</span>, <span class="hljs-string">&quot;apple&quot;</span>);
+<span class="hljs-keyword">let</span> bag = {};
+
+<span class="hljs-comment">// 从 fruit 变量中获取值</span>
+bag[fruit] = <span class="hljs-number">5</span>;</code></pre>
+<p>……但是看起来更好。</p>
+<p>我们可以在方括号中使用更复杂的表达式：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruit = <span class="hljs-string">&#x27;apple&#x27;</span>;
+<span class="hljs-keyword">let</span> bag = {
+  [fruit + <span class="hljs-string">&#x27;Computers&#x27;</span>]: <span class="hljs-number">5</span> <span class="hljs-comment">// bag.appleComputers = 5</span>
+};</code></pre>
+<p>方括号比点符号更强大。它允许任何属性名和变量，但写起来也更加麻烦。</p>
+<p>所以，大部分时间里，当属性名是已知且简单的时候，就使用点符号。如果我们需要一些更复杂的内容，那么就用方括号。</p>
+<h2 id="属性值简写">属性值简写</h2>
+<p>在实际开发中，我们通常用已存在的变量当做属性名。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeUser</span>(<span class="hljs-params">name, age</span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">name</span>: name,
+    <span class="hljs-attr">age</span>: age,
+    <span class="hljs-comment">// ……其他的属性</span>
+  };
+}
+
+<span class="hljs-keyword">let</span> user = makeUser(<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-number">30</span>);
+alert(user.name); <span class="hljs-comment">// John</span></code></pre>
+<p>在上面的例子中，属性名跟变量名一样。这种通过变量生成属性的应用场景很常见，在这有一种特殊的 <strong>属性值缩写</strong> 方法，使属性名变得更短。</p>
+<p>可以用 <code>name</code> 来代替 <code>name:name</code> 像下面那样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeUser</span>(<span class="hljs-params">name, age</span>) </span>{
+*!*
+  <span class="hljs-keyword">return</span> {
+    name, <span class="hljs-comment">// 与 name: name 相同</span>
+    age,  <span class="hljs-comment">// 与 age: age 相同</span>
+    <span class="hljs-comment">// ...</span>
+  };
+*/!*
+}</code></pre>
+<p>我们可以把属性名简写方式和正常方式混用：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  name,  <span class="hljs-comment">// 与 name:name 相同</span>
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>
+};</code></pre>
+<h2 id="属性名称限制">属性名称限制</h2>
+<p>我们已经知道，变量名不能是编程语言的某个保留字，如 &quot;for&quot;、&quot;let&quot;、&quot;return&quot; 等……</p>
+<p>但对象的属性名并不受此限制：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 这些属性都没问题</span>
+<span class="hljs-keyword">let</span> obj = {
+  <span class="hljs-attr">for</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">let</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-attr">return</span>: <span class="hljs-number">3</span>
+};
+
+alert( obj.for + obj.let + obj.return );  <span class="hljs-comment">// 6</span></code></pre>
+<p>简而言之，属性命名没有限制。属性名可以是任何字符串或者 symbol（一种特殊的标志符类型，将在后面介绍）。</p>
+<p>其他类型会被自动地转换为字符串。</p>
+<p>例如，当数字 <code>0</code> 被用作对象的属性的键时，会被转换为字符串 <code>&quot;0&quot;</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {
+  <span class="hljs-number">0</span>: <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-comment">// 等同于 &quot;0&quot;: &quot;test&quot;</span>
+};
+
+<span class="hljs-comment">// 都会输出相同的属性（数字 0 被转为字符串 &quot;0&quot;）</span>
+alert( obj[<span class="hljs-string">&quot;0&quot;</span>] ); <span class="hljs-comment">// test</span>
+alert( obj[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// test (相同的属性)</span></code></pre>
+<p>这里有个小陷阱：一个名为 <code>__proto__</code> 的属性。我们不能将它设置为一个非对象的值：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {};
+obj.__proto__ = <span class="hljs-number">5</span>; <span class="hljs-comment">// 分配一个数字</span>
+alert(obj.__proto__); <span class="hljs-comment">// [object Object] — 值为对象，与预期结果不同</span></code></pre>
+<p>我们从代码中可以看出来，把它赋值为 <code>5</code> 的操作被忽略了。</p>
+<p>我们将在 <a href="info:prototype-inheritance">后续章节</a> 中学习 <code>__proto__</code> 的特殊性质，并给出了 <a href="info:prototype-methods">解决此问题的方法</a>。</p>
+<h2 id="属性存在性测试，in-操作符">属性存在性测试，&quot;in&quot; 操作符</h2>
+<p>相比于其他语言，JavaScript 的对象有一个需要注意的特性：能够被访问任何属性。即使属性不存在也不会报错！</p>
+<p>读取不存在的属性只会得到 <code>undefined</code>。所以我们可以很容易地判断一个属性是否存在：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {};
+
+alert( user.noSuchProperty === <span class="hljs-literal">undefined</span> ); <span class="hljs-comment">// true 意思是没有这个属性</span></code></pre>
+<p>这里还有一个特别的，检查属性是否存在的操作符 <code>&quot;in&quot;</code>。</p>
+<p>语法是：</p>
+<pre><code class="language-js"><span class="hljs-string">&quot;key&quot;</span> <span class="hljs-keyword">in</span> object</code></pre>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">30</span> };
+
+alert( <span class="hljs-string">&quot;age&quot;</span> <span class="hljs-keyword">in</span> user ); <span class="hljs-comment">// true，user.age 存在</span>
+alert( <span class="hljs-string">&quot;blabla&quot;</span> <span class="hljs-keyword">in</span> user ); <span class="hljs-comment">// false，user.blabla 不存在。</span></code></pre>
+<p>请注意，<code>in</code> 的左边必须是 <strong>属性名</strong>。通常是一个带引号的字符串。</p>
+<p>如果我们省略引号，就意味着左边是一个变量，它应该包含要判断的实际属性名。例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-attr">age</span>: <span class="hljs-number">30</span> };
+
+<span class="hljs-keyword">let</span> key = <span class="hljs-string">&quot;age&quot;</span>;
+alert( *!*key*<span class="hljs-regexp">/!* in user ); /</span><span class="hljs-regexp">/ true，属性 &quot;age&quot; 存在</span></code></pre>
+<p>为何会有 <code>in</code> 运算符呢？与 <code>undefined</code> 进行比较来判断还不够吗？</p>
+<p>确实，大部分情况下与 <code>undefined</code> 进行比较来判断就可以了。但有一个例外情况，这种比对方式会有问题，但 <code>in</code> 运算符的判断结果仍是对的。</p>
+<p>那就是属性存在，但存储的值是 <code>undefined</code> 的时候：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {
+  <span class="hljs-attr">test</span>: <span class="hljs-literal">undefined</span>
+};
+
+alert( obj.test ); <span class="hljs-comment">// 显示 undefined，所以属性不存在？</span>
+
+alert( <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-keyword">in</span> obj ); <span class="hljs-comment">// true，属性存在！</span></code></pre>
+<p>在上面的代码中，属性 <code>obj.test</code> 事实上是存在的，所以 <code>in</code> 操作符检查通过。</p>
+<p>这种情况很少发生，因为通常情况下不应该给对象赋值 <code>undefined</code>。我们通常会用 <code>null</code> 来表示未知的或者空的值。因此，<code>in</code> 运算符是代码中的特殊来宾。</p>
+<h2 id="forin-循环">&quot;for..in&quot; 循环</h2>
+<p>为了遍历一个对象的所有键（key），可以使用一个特殊形式的循环：<code>for..in</code>。这跟我们在前面学到的 <code>for(;;)</code> 循环是完全不一样的东西。</p>
+<p>语法：</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> object) {
+  <span class="hljs-comment">// 对此对象属性中的每个键执行的代码</span>
+}</code></pre>
+<p>例如，让我们列出 <code>user</code> 所有的属性：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>,
+  <span class="hljs-attr">isAdmin</span>: <span class="hljs-literal">true</span>
+};
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> user) {
+  <span class="hljs-comment">// keys</span>
+  alert( key );  <span class="hljs-comment">// name, age, isAdmin</span>
+  <span class="hljs-comment">// 属性键的值</span>
+  alert( user[key] ); <span class="hljs-comment">// John, 30, true</span>
+}</code></pre>
+<p>注意，所有的 &quot;for&quot; 结构体都允许我们在循环中定义变量，像这里的 <code>let key</code>。</p>
+<p>同样，我们可以用其他属性名来替代 <code>key</code>。例如 <code>&quot;for(let prop in obj)&quot;</code> 也很常用。</p>
+<h3 id="像对象一样排序">像对象一样排序</h3>
+<p>对象有顺序吗？换句话说，如果我们遍历一个对象，我们获取属性的顺序是和属性添加时的顺序相同吗？这靠谱吗？</p>
+<p>简短的回答是：“有特别的顺序”：整数属性会被进行排序，其他属性则按照创建的顺序显示。详情如下：</p>
+<p>例如，让我们考虑一个带有电话号码的对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> codes = {
+  <span class="hljs-string">&quot;49&quot;</span>: <span class="hljs-string">&quot;Germany&quot;</span>,
+  <span class="hljs-string">&quot;41&quot;</span>: <span class="hljs-string">&quot;Switzerland&quot;</span>,
+  <span class="hljs-string">&quot;44&quot;</span>: <span class="hljs-string">&quot;Great Britain&quot;</span>,
+  <span class="hljs-comment">// ..,</span>
+  <span class="hljs-string">&quot;1&quot;</span>: <span class="hljs-string">&quot;USA&quot;</span>
+};
+
+*!*
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> code <span class="hljs-keyword">in</span> codes) {
+  alert(code); <span class="hljs-comment">// 1, 41, 44, 49</span>
+}
+*/!*</code></pre>
+<p>对象可用于面向用户的建议选项列表。如果我们的网站主要面向德国观众，那么我们可能希望 <code>49</code> 排在第一。</p>
+<p>但如果我们执行代码，会看到完全不同的现象：</p>
+<ul>
+<li>USA (1) 排在了最前面</li>
+<li>然后是 Switzerland (41) 及其它。</li>
+</ul>
+<p>因为这些电话号码是整数，所以它们以升序排列。所以我们看到的是 <code>1, 41, 44, 49</code>。</p>
+<pre><code class="language-smart">这里的“整数属性”指的是一个可以在不做任何更改的情况下与一个整数进行相互转换的字符串。
+
+所以，&quot;49&quot; 是一个整数属性名，因为我们把它转换成整数，再转换回来，它还是一样的。但是 &quot;+49&quot; 和 &quot;1.2&quot; 就不行了：
+
+```js run
+// Math.trunc 是内置的去除小数部分的方法。
+alert( String(Math.trunc(Number(&quot;49&quot;))) ); // &quot;49&quot;，相同，整数属性
+alert( String(Math.trunc(Number(&quot;+49&quot;))) ); // &quot;49&quot;，不同于 &quot;+49&quot; ⇒ 不是整数属性
+alert( String(Math.trunc(Number(&quot;1.2&quot;))) ); // &quot;1&quot;，不同于 &quot;1.2&quot; ⇒ 不是整数属性
+```</code></pre>
+<p>……此外，如果属性名不是整数，那它们就按照创建时的顺序来排序，例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Smith&quot;</span>
+};
+user.age = <span class="hljs-number">25</span>; <span class="hljs-comment">// 增加一个</span>
+
+*!*
+<span class="hljs-comment">// 非整数属性是按照创建的顺序来排列的</span>
+*/!*
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> prop <span class="hljs-keyword">in</span> user) {
+  alert( prop ); <span class="hljs-comment">// name, surname, age</span>
+}</code></pre>
+<p>所以，为了解决电话号码的问题，我们可以使用非整数属性名来 <strong>欺骗</strong> 程序。只需要给每个键名加一个加号 <code>&quot;+&quot;</code> 前缀就行了。</p>
+<p>像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> codes = {
+  <span class="hljs-string">&quot;+49&quot;</span>: <span class="hljs-string">&quot;Germany&quot;</span>,
+  <span class="hljs-string">&quot;+41&quot;</span>: <span class="hljs-string">&quot;Switzerland&quot;</span>,
+  <span class="hljs-string">&quot;+44&quot;</span>: <span class="hljs-string">&quot;Great Britain&quot;</span>,
+  <span class="hljs-comment">// ..,</span>
+  <span class="hljs-string">&quot;+1&quot;</span>: <span class="hljs-string">&quot;USA&quot;</span>
+};
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> code <span class="hljs-keyword">in</span> codes) {
+  alert( +code ); <span class="hljs-comment">// 49, 41, 44, 1</span>
+}</code></pre>
+<p>现在跟预想的一样了。</p>
+<h2 id="总结">总结</h2>
+<p>对象是具有一些特殊特性的关联数组。</p>
+<p>它们存储属性（键值对），其中：</p>
+<ul>
+<li>属性的键必须是字符串或者 symbol（通常是字符串）。</li>
+<li>值可以是任何类型。</li>
+</ul>
+<p>我们可以用下面的方法访问属性：</p>
+<ul>
+<li>点符号: <code>obj.property</code>。</li>
+<li>方括号 <code>obj[&quot;property&quot;]</code>，方括号允许从变量中获取键，例如 <code>obj[varWithKey]</code>。</li>
+</ul>
+<p>其他操作：</p>
+<ul>
+<li>删除属性：<code>delete obj.prop</code>。</li>
+<li>检查是否存在给定键的属性：<code>&quot;key&quot; in obj</code>。</li>
+<li>遍历对象：<code>for(let key in obj)</code> 循环。</li>
+</ul>
+<p>我们在这一章学习的叫做“普通对象（plain object）”，或者就叫对象。</p>
+<p>JavaScript 中还有很多其他类型的对象：</p>
+<ul>
+<li><code>Array</code> 用于存储有序数据集合，</li>
+<li><code>Date</code> 用于存储时间日期，</li>
+<li><code>Error</code> 用于存储错误信息。</li>
+<li>……等等。</li>
+</ul>
+<p>它们有着各自特别的特性，我们将在后面学习到。有时候大家会说“Array 类型”或“Date 类型”，但其实它们并不是自身所属的类型，而是属于一个对象类型即 &quot;object&quot;。它们以不同的方式对 &quot;object&quot; 做了一些扩展。</p>
+<p>JavaScript 中的对象非常强大。这里我们只接触了其冰山一角。在后面的章节中，我们将频繁使用对象进行编程，并学习更多关于对象的知识。</p>

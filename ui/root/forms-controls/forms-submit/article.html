@@ -1,0 +1,50 @@
+<h1 id="表单：事件和方法提交">表单：事件和方法提交</h1>
+<p>提交表单时，会触发 <code>submit</code> 事件，它通常用于在将表单发送到服务器之前对表单进行校验，或者中止提交，并使用 JavaScript 来处理表单。</p>
+<p><code>form.submit()</code> 方法允许从 JavaScript 启动表单发送。我们可以使用此方法动态地创建表单，并将其发送到服务器。</p>
+<p>让我们看看它们的更多细节。</p>
+<h2 id="事件：submit">事件：submit</h2>
+<p>提交表单主要有两种方式：</p>
+<ol>
+<li>第一种 —— 点击 <code>&lt;input type=&quot;submit&quot;&gt;</code> 或 <code>&lt;input type=&quot;image&quot;&gt;</code>。</li>
+<li>第二种 —— 在 <code>input</code> 字段中按下 <code>key:Enter</code> 键。</li>
+</ol>
+<p>这两个行为都会触发表单的 <code>submit</code> 事件。处理程序可以检查数据，如果有错误，就显示出来，并调用 <code>event.preventDefault()</code>，这样表单就不会被发送到服务器了。</p>
+<p>在下面的表单中：</p>
+<ol>
+<li>在文本字段中按下 <code>key:Enter</code> 键。</li>
+<li>点击 <code>&lt;input type=&quot;submit&quot;&gt;</code>。</li>
+</ol>
+<p>这两种行为都会显示 <code>alert</code>，而因为代码中的 <code>return false</code>，表单不会被发送到别处：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onsubmit</span>=<span class="hljs-string">&quot;alert(&#x27;submit!&#x27;);return false&quot;</span>&gt;</span>
+  First: Enter in the input field <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;text&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>
+  Second: Click &quot;submit&quot;: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></code></pre>
+<p>````smart header=&quot;<code>submit</code> 和 <code>click</code> 的关系&quot;
+在输入框中使用 <code>key:Enter</code> 发送表单时，会在 <code>&lt;input type=&quot;submit&quot;&gt;</code> 上触发一次 <code>click</code> 事件。</p>
+<p>这很有趣，因为实际上根本没有点击。</p>
+<p>这是一个示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onsubmit</span>=<span class="hljs-string">&quot;return false&quot;</span>&gt;</span>
+ <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;30&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Focus here and press enter&quot;</span>&gt;</span>
+ <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> *!*<span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;click&#x27;)&quot;</span>*/!*&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></code></pre>
+<pre><code>
+## 方法：submit
+
+如果要手动将表单提交到服务器，我们可以调用 `form.submit()`。
+
+这样就不会产生 `submit` 事件。这里假设如果开发人员调用 `form.submit()`，就意味着此脚本已经进行了所有相关处理。
+
+有时该方法被用来手动创建和发送表单，如下所示：
+
+```js run
+let form = document.createElement(&#x27;form&#x27;);
+form.action = &#x27;https://google.com/search&#x27;;
+form.method = &#x27;GET&#x27;;
+
+form.innerHTML = &#x27;&lt;input name=&quot;q&quot; value=&quot;test&quot;&gt;&#x27;;
+
+// 该表单必须在文档中才能提交
+document.body.append(form);
+
+form.submit();
+```</code></pre>

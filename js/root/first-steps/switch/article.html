@@ -1,0 +1,144 @@
+<h1 id="switch-语句">&quot;switch&quot; 语句</h1>
+<p><code>switch</code> 语句可以替代多个 <code>if</code> 判断。</p>
+<p><code>switch</code> 语句为多分支选择的情况提供了一个更具描述性的方式。</p>
+<h2 id="语法">语法</h2>
+<p><code>switch</code> 语句有至少一个 <code>case</code> 代码块和一个可选的 <code>default</code> 代码块。</p>
+<p>就像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">switch</span>(x) {
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;value1&#x27;</span>:  <span class="hljs-comment">// if (x === &#x27;value1&#x27;)</span>
+    ...
+    [<span class="hljs-keyword">break</span>]
+
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;value2&#x27;</span>:  <span class="hljs-comment">// if (x === &#x27;value2&#x27;)</span>
+    ...
+    [<span class="hljs-keyword">break</span>]
+
+  <span class="hljs-attr">default</span>:
+    ...
+    [<span class="hljs-keyword">break</span>]
+}</code></pre>
+<ul>
+<li>比较 <code>x</code> 值与第一个 <code>case</code>（也就是 <code>value1</code>）是否严格相等，然后比较第二个 <code>case</code>（<code>value2</code>）以此类推。</li>
+<li>如果相等，<code>switch</code> 语句就执行相应 <code>case</code> 下的代码块，直到遇到最靠近的 <code>break</code> 语句（或者直到 <code>switch</code> 语句末尾）。</li>
+<li>如果没有符合的 case，则执行 <code>default</code> 代码块（如果 <code>default</code> 存在）。</li>
+</ul>
+<h2 id="举个例子">举个例子</h2>
+<p><code>switch</code> 的例子（高亮的部分是执行的 <code>case</code> 部分）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = <span class="hljs-number">2</span> + <span class="hljs-number">2</span>;
+
+<span class="hljs-keyword">switch</span> (a) {
+  <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:
+    alert( <span class="hljs-string">&#x27;Too small&#x27;</span> );
+    <span class="hljs-keyword">break</span>;
+*!*
+  <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:
+    alert( <span class="hljs-string">&#x27;Exactly!&#x27;</span> );
+    <span class="hljs-keyword">break</span>;
+*/!*
+  <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>:
+    alert( <span class="hljs-string">&#x27;Too large&#x27;</span> );
+    <span class="hljs-keyword">break</span>;
+  <span class="hljs-keyword">default</span>:
+    alert( <span class="hljs-string">&quot;I don&#x27;t know such values&quot;</span> );
+}</code></pre>
+<p>这里的 <code>switch</code> 从第一个 <code>case</code> 分支开始将 <code>a</code> 的值与 <code>case</code> 后的值进行比较，第一个 <code>case</code> 后的值为 <code>3</code> 匹配失败。</p>
+<p>然后比较 <code>4</code>。匹配，所以从 <code>case 4</code> 开始执行直到遇到最近的 <code>break</code>。</p>
+<p><strong>如果没有 <code>break</code>，程序将不经过任何检查就会继续执行下一个 <code>case</code>。</strong></p>
+<p>无 <code>break</code> 的例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = <span class="hljs-number">2</span> + <span class="hljs-number">2</span>;
+
+<span class="hljs-keyword">switch</span> (a) {
+  <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:
+    alert( <span class="hljs-string">&#x27;Too small&#x27;</span> );
+*!*
+  <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:
+    alert( <span class="hljs-string">&#x27;Exactly!&#x27;</span> );
+  <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>:
+    alert( <span class="hljs-string">&#x27;Too big&#x27;</span> );
+  <span class="hljs-keyword">default</span>:
+    alert( <span class="hljs-string">&quot;I don&#x27;t know such values&quot;</span> );
+*/!*
+}</code></pre>
+<p>在上面的例子中我们会看到连续执行的三个 <code>alert</code>：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;Exactly!&#x27;</span> );
+alert( <span class="hljs-string">&#x27;Too big&#x27;</span> );
+alert( <span class="hljs-string">&quot;I don&#x27;t know such values&quot;</span> );</code></pre>
+<p>````smart header=&quot;任何表达式都可以成为 <code>switch/case</code> 的参数&quot;
+<code>switch</code> 和 <code>case</code> 都允许任意表达式。</p>
+<p>比如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = <span class="hljs-string">&quot;1&quot;</span>;
+<span class="hljs-keyword">let</span> b = <span class="hljs-number">0</span>;
+
+<span class="hljs-keyword">switch</span> (+a) {
+*!*
+  <span class="hljs-keyword">case</span> b + <span class="hljs-number">1</span>:
+    alert(<span class="hljs-string">&quot;this runs, because +a is 1, exactly equals b+1&quot;</span>);
+    <span class="hljs-keyword">break</span>;
+*/!*
+
+  <span class="hljs-keyword">default</span>:
+    alert(<span class="hljs-string">&quot;this doesn&#x27;t run&quot;</span>);
+}</code></pre>
+<p>这里 <code>+a</code> 返回 <code>1</code>，这个值跟 <code>case</code> 中 <code>b + 1</code> 相比较，然后执行对应的代码。</p>
+<pre><code>
+## &quot;case&quot; 分组
+
+共享同一段代码的几个 `case` 分支可以被分为一组：
+
+比如，如果我们想让 `case 3` 和 `case 5` 执行同样的代码：
+
+```js run no-beautify
+let a = 3;
+
+switch (a) {
+  case 4:
+    alert(&#x27;Right!&#x27;);
+    break;
+
+*!*
+  case 3: // (*) 下面这两个 case 被分在一组
+  case 5:
+    alert(&#x27;Wrong!&#x27;);
+    alert(&quot;Why don&#x27;t you take a math class?&quot;);
+    break;
+*/!*
+
+  default:
+    alert(&#x27;The result is strange. Really.&#x27;);
+}
+```
+
+现在 `3` 和 `5` 都显示相同的信息。
+
+`switch/case` 有通过 case 进行“分组”的能力，其实是 switch 语句没有 `break` 时的副作用。因为没有 `break`，`case 3` 会从 `(*)` 行执行到 `case 5`。
+
+## 类型很关键
+
+强调一下，这里的相等是严格相等。被比较的值必须是相同的类型才能进行匹配。
+
+比如，我们来看下面的代码：
+
+```js run
+let arg = prompt(&quot;Enter a value?&quot;)
+switch (arg) {
+  case &#x27;0&#x27;:
+  case &#x27;1&#x27;:
+    alert( &#x27;One or zero&#x27; );
+    break;
+
+  case &#x27;2&#x27;:
+    alert( &#x27;Two&#x27; );
+    break;
+
+  case 3:
+    alert( &#x27;Never executes!&#x27; );
+    break;
+  default:
+    alert( &#x27;An unknown value&#x27; )
+}
+```
+
+1. 在 `prompt` 对话框输入 `0`、`1`，第一个 `alert` 弹出。
+2. 输入 `2`，第二个 `alert` 弹出。 
+3. 但是输入 `3`，因为 `prompt` 的结果是字符串类型的 `&quot;3&quot;`，不严格相等 `===` 于数字类型的 `3`，所以 `case 3` 不会执行！因此 `case 3` 部分是一段无效代码。所以会执行 `default` 分支。
+</code></pre>

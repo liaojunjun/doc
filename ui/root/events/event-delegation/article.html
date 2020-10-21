@@ -1,0 +1,195 @@
+<h1 id="事件委托">事件委托</h1>
+<p>捕获和冒泡允许我们实现一种被称为 <strong>事件委托</strong> 的强大的事件处理模式。</p>
+<p>这个想法是，如果我们有许多以类似方式处理的元素，那么就不必为每个元素分配一个处理程序 —— 而是将单个处理程序放在它们的共同祖先上。</p>
+<p>在处理程序中，我们获得 <code>event.target</code>，查看事件实际发生的位置并进行处理。</p>
+<p>让我们看一个示例 —— 反映中国古代哲学的 <a href="http://en.wikipedia.org/wiki/Ba_gua">八卦图</a>。</p>
+<p>如下所示：</p>
+<p>[iframe height=350 src=&quot;bagua&quot; edit link]</p>
+<p>其 HTML 如下所示：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">colspan</span>=<span class="hljs-string">&quot;3&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>Bagua<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span> Chart: Direction, Element, Color, Meaning<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;nw&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Northwest<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>Metal<span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>Silver<span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>Elders<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;n&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;ne&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>...2 more lines of this kind...<span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>...2 more lines of this kind...<span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></code></pre>
+<p>该表格有 9 个单元格（cell），但可以有 99 个或 9999 个单元格，这都不重要。</p>
+<p><strong>我们的任务是在点击时高亮显示被点击的单元格 <code>&lt;td&gt;</code>。</strong></p>
+<p>与其为每个 <code>&lt;td&gt;</code>（可能有很多）分配一个 <code>onclick</code> 处理程序 —— 我们可以在 <code>&lt;table&gt;</code> 元素上设置一个“捕获所有”的处理程序。</p>
+<p>它将使用 <code>event.target</code> 来获取点击的元素并高亮显示它。</p>
+<p>代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> selectedTd;
+
+*!*
+table.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">let</span> target = event.target; <span class="hljs-comment">// 在哪里点击的？</span>
+
+  <span class="hljs-keyword">if</span> (target.tagName != <span class="hljs-string">&#x27;TD&#x27;</span>) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// 不在 TD 上？那么我们就不会在意</span>
+
+  highlight(target); <span class="hljs-comment">// 高亮显示它</span>
+};
+*/!*
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">highlight</span>(<span class="hljs-params">td</span>) </span>{
+  <span class="hljs-keyword">if</span> (selectedTd) { <span class="hljs-comment">// 移除现有的高亮显示，如果有的话</span>
+    selectedTd.classList.remove(<span class="hljs-string">&#x27;highlight&#x27;</span>);
+  }
+  selectedTd = td;
+  selectedTd.classList.add(<span class="hljs-string">&#x27;highlight&#x27;</span>); <span class="hljs-comment">// 高亮显示新的 td</span>
+}</code></pre>
+<p>此代码不会关心在表格中有多少个单元格。我们可以随时动态添加/移除 <code>&lt;td&gt;</code>，高亮显示仍然有效。</p>
+<p>尽管如此，但还是存在缺陷。</p>
+<p>点击可能不是发生在 <code>&lt;td&gt;</code> 上，而是发生在其内部。</p>
+<p>在我们的例子中，如果我们看一下 HTML 内部，我们可以看到 <code>&lt;td&gt;</code> 内还有嵌套的标签，例如 <code>&lt;strong&gt;</code>：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>
+*!*
+  <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Northwest<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
+*/!*
+  ...
+<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></code></pre>
+<p>自然地，如果在该 <code>&lt;strong&gt;</code> 上点击，那么它将成为 <code>event.target</code> 的值。</p>
+<p><img src="bagua-bubble.svg" alt=""></p>
+<p>在处理程序 <code>table.onclick</code> 中，我们应该接受这样的 <code>event.target</code>，并确定该点击是否在 <code>&lt;td&gt;</code> 内。</p>
+<p>下面是改进后的代码：</p>
+<pre><code class="language-js">table.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">let</span> td = event.target.closest(<span class="hljs-string">&#x27;td&#x27;</span>); <span class="hljs-comment">// (1)</span>
+
+  <span class="hljs-keyword">if</span> (!td) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// (2)</span>
+
+  <span class="hljs-keyword">if</span> (!table.contains(td)) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// (3)</span>
+
+  highlight(td); <span class="hljs-comment">// (4)</span>
+};</code></pre>
+<p>解释：</p>
+<ol>
+<li><code>elem.closest(selector)</code> 方法返回与 <code>selector</code> 匹配的最近的祖先。在我们的例子中，我们从源元素开始向上寻找 <code>&lt;td&gt;</code>。</li>
+<li>如果 <code>event.target</code> 不在任何 <code>&lt;td&gt;</code> 中，那么调用将立即返回，因为这里没有什么事儿可做。</li>
+<li>对于嵌套的表格，<code>event.target</code> 可能是一个 <code>&lt;td&gt;</code>，但位于当前表格之外。因此我们需要检查它是否是 <strong>我们的表格中的</strong> <code>&lt;td&gt;</code>。</li>
+<li>如果是的话，就高亮显示它。</li>
+</ol>
+<p>最终，我们得到了一个快速、高效的用于高亮显示的代码，该代码与表格中的 <code>&lt;td&gt;</code> 的数量无关。</p>
+<h2 id="委托示例：标记中的行为">委托示例：标记中的行为</h2>
+<p>事件委托还有其他用途。（译注：本节标题中的“标记中的行为”即 action in markup）</p>
+<p>例如，我们想要编写一个有“保存”、“加载”和“搜索”等按钮的菜单。并且，这里有一个具有 <code>save</code>、<code>load</code> 和 <code>search</code> 等方法的对象。如何匹配它们？</p>
+<p>第一个想法可能是为每个按钮分配一个单独的处理程序。但是有一个更优雅的解决方案。我们可以为整个菜单添加一个处理程序，并为具有方法调用的按钮添加 <code>data-action</code> 特性（attribute）：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> *!*<span class="hljs-attr">data-action</span>=<span class="hljs-string">&quot;save&quot;</span>*/!*&gt;</span>Click to Save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre>
+<p>处理程序读取特性（attribute）并执行该方法。工作示例如下：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;menu&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-action</span>=<span class="hljs-string">&quot;save&quot;</span>&gt;</span>Save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-action</span>=<span class="hljs-string">&quot;load&quot;</span>&gt;</span>Load<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-action</span>=<span class="hljs-string">&quot;search&quot;</span>&gt;</span>Search<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Menu</span> </span>{
+    <span class="hljs-keyword">constructor</span>(elem) {
+      <span class="hljs-built_in">this</span>._elem = elem;
+      elem.onclick = <span class="hljs-built_in">this</span>.onClick.bind(<span class="hljs-built_in">this</span>); <span class="hljs-comment">// (*)</span>
+    }
+
+    save() {
+      alert(<span class="hljs-string">&#x27;saving&#x27;</span>);
+    }
+
+    load() {
+      alert(<span class="hljs-string">&#x27;loading&#x27;</span>);
+    }
+
+    search() {
+      alert(<span class="hljs-string">&#x27;searching&#x27;</span>);
+    }
+
+    onClick(event) {
+*!*
+      <span class="hljs-keyword">let</span> action = event.target.dataset.action;
+      <span class="hljs-keyword">if</span> (action) {
+        <span class="hljs-built_in">this</span>[action]();
+      }
+*/!*
+    };
+  }
+
+  <span class="hljs-keyword">new</span> Menu(menu);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>请注意，<code>this.onClick</code> 在 <code>(*)</code> 行中被绑定到了 <code>this</code>。这很重要，因为否则内部的 <code>this</code> 将引用 DOM 元素（<code>elem</code>），而不是 <code>Menu</code> 对象，那样的话，<code>this[action]</code> 将不是我们所需要的。</p>
+<p>那么，这里的委托给我们带来了什么好处？</p>
+<pre><code class="language-compare">+ 我们不需要编写代码来为每个按钮分配一个处理程序。只需要创建一个方法并将其放入标记（markup）中即可。
++ HTML 结构非常灵活，我们可以随时添加/移除按钮。</code></pre>
+<p>我们也可以使用 <code>.action-save</code>，<code>.action-load</code> 类，但 <code>data-action</code> 特性（attribute）在语义上更好。我们也可以在 CSS 规则中使用它。</p>
+<h2 id="行为模式">“行为”模式</h2>
+<p>我们还可以使用事件委托将“行为（behavior）”以 <strong>声明方式</strong> 添加到具有特殊特性（attribute）和类的元素中。</p>
+<p>行为模式分为两个部分：</p>
+<ol>
+<li>我们将自定义特性添加到描述其行为的元素。</li>
+<li>用文档范围级的处理程序追踪事件，如果事件发生在具有特定特性的元素上 —— 则执行行为（action）。</li>
+</ol>
+<h3 id="行为：计数器">行为：计数器</h3>
+<p>例如，这里的特性 <code>data-counter</code> 给按钮添加了一个“点击增加”的行为。</p>
+<pre><code class="language-html">Counter: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;1&quot;</span> <span class="hljs-attr">data-counter</span>&gt;</span>
+One more counter: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;2&quot;</span> <span class="hljs-attr">data-counter</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+
+    <span class="hljs-keyword">if</span> (event.target.dataset.counter != <span class="hljs-literal">undefined</span>) { <span class="hljs-comment">// 如果这个特性存在...</span>
+      event.target.value++;
+    }
+
+  });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>如果我们点击按钮 —— 它的值就会增加。但不仅仅是按钮，一般的方法在这里也很重要。</p>
+<p>我们可以根据需要使用 <code>data-counter</code> 特性，多少都可以。我们可以随时向 HTML 添加新的特性。使用事件委托，我们属于对 HTML 进行了“扩展”，添加了描述新行为的特性。</p>
+<p>```warn header=&quot;对于文档级的处理程序 —— 始终使用的是 <code>addEventListener</code>&quot;
+当我们将事件处理程序分配给 <code>document</code> 对象时，我们应该始终使用 <code>addEventListener</code>，而不是 <code>document.on&lt;event&gt;</code>，因为后者会引起冲突：新的处理程序会覆盖旧的处理程序。</p>
+<p>对于实际项目来说。在 <code>document</code> 上有许多由代码的不同部分设置的处理程序，这是很正常的。</p>
+<pre><code>
+### 行为：切换器
+
+再举一个例子。点击一个具有 `data-toggle-id` 特性的元素将显示/隐藏具有给定 `id` 的元素：
+
+```html autorun run height=60
+&lt;button *!*data-toggle-id=&quot;subscribe-mail&quot;*/!*&gt;
+  Show the subscription form
+&lt;/button&gt;
+
+&lt;form id=&quot;subscribe-mail&quot; hidden&gt;
+  Your mail: &lt;input type=&quot;email&quot;&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+*!*
+  document.addEventListener(&#x27;click&#x27;, function(event) {
+    let id = event.target.dataset.toggleId;
+    if (!id) return;
+
+    let elem = document.getElementById(id);
+
+    elem.hidden = !elem.hidden;
+  });
+*/!*
+&lt;/script&gt;</code></pre>
+<p>让我们再次注意我们做了什么。现在，要向元素添加切换功能 —— 无需了解 JavaScript，只需要使用特性 <code>data-toggle-id</code> 即可。</p>
+<p>这可能变得非常方便 —— 无需为每个这样的元素编写 JavaScript。只需要使用行为。文档级处理程序使其适用于页面的任意元素。</p>
+<p>我们也可以组合单个元素上的多个行为。</p>
+<p>“行为”模式可以替代 JavaScript 的小片段。</p>
+<h2 id="总结">总结</h2>
+<p>事件委托真的很酷！这是 DOM 事件最有用的模式之一。</p>
+<p>它通常用于为许多相似的元素添加相同的处理，但不仅限于此。</p>
+<p>算法：</p>
+<ol>
+<li>在容器（container）上放一个处理程序。</li>
+<li>在处理程序中 —— 检查源元素 <code>event.target</code>。</li>
+<li>如果事件发生在我们感兴趣的元素内，那么处理该事件。</li>
+</ol>
+<p>好处：</p>
+<pre><code class="language-compare">+ 简化初始化并节省内存：无需添加许多处理程序。
++ 更少的代码：添加或移除元素时，无需添加/移除处理程序。
++ DOM 修改 ：我们可以使用 `innerHTML` 等，来批量添加/移除元素。</code></pre>
+<p>事件委托也有其局限性：</p>
+<pre><code class="language-compare">- 首先，事件必须冒泡。而有些事件不会冒泡。此外，低级别的处理程序不应该使用 `event.stopPropagation()`。
+- 其次，委托可能会增加 CPU 负载，因为容器级别的处理程序会对容器中任意位置的事件做出反应，而不管我们是否对该事件感兴趣。但是，通常负载可以忽略不计，所以我们不考虑它。</code></pre>

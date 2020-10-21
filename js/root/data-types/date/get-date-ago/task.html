@@ -1,0 +1,12 @@
+<p>importance: 4</p>
+<hr>
+<h1 id="许多天之前是哪个月几号？">许多天之前是哪个月几号？</h1>
+<p>写一个函数 <code>getDateAgo(date, days)</code>，返回特定日期 <code>date</code> 往前 <code>days</code> 天是哪个月的哪一天。</p>
+<p>例如，假设今天是 20 号，那么 <code>getDateAgo(new Date(), 1)</code> 的结果应该是 19 号，<code>getDateAgo(new Date(), 2)</code> 的结果应该是 18 号。</p>
+<p>跨月、年也应该是正确输出：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2015</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>);
+
+alert( getDateAgo(date, <span class="hljs-number">1</span>) ); <span class="hljs-comment">// 1, (1 Jan 2015)</span>
+alert( getDateAgo(date, <span class="hljs-number">2</span>) ); <span class="hljs-comment">// 31, (31 Dec 2014)</span>
+alert( getDateAgo(date, <span class="hljs-number">365</span>) ); <span class="hljs-comment">// 2, (2 Jan 2014)</span></code></pre>
+<p>P.S. 函数不应该修改给定的 <code>date</code> 值。</p>

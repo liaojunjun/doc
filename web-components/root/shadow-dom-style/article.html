@@ -1,0 +1,260 @@
+<h1 id="给-shadow-dom-添加样式">给 Shadow DOM 添加样式</h1>
+<p>shadow DOM 可以包含 <code>&lt;style&gt;</code> 和 <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;…&quot;&gt;</code> 标签。在后一种情况下，样式表是 HTTP 缓存的，因此不会为使用同一模板的多个组件重新下载样式表。</p>
+<p>一般来说，局部样式只在 shadow 树内起作用，文档样式在 shadow 树外起作用。但也有少数例外。</p>
+<h2 id="host">:host</h2>
+<p> <code>:host</code> 选择器允许选择 shadow 宿主（包含 shadow 树的元素）。</p>
+<p>例如，我们正在创建 <code>&lt;custom-dialog&gt;</code> 元素，并且想使它居中。为此，我们需要对 <code>&lt;custom-dialog&gt;</code> 元素本身设置样式。</p>
+<p>这正是 <code>:host</code> 所能做的：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+    <span class="hljs-comment">/* 这些样式将从内部应用到 custom-dialog 元素上 */</span>
+    <span class="hljs-selector-pseudo">:host</span> {
+      <span class="hljs-attribute">position</span>: fixed;
+      <span class="hljs-attribute">left</span>: <span class="hljs-number">50%</span>;
+      <span class="hljs-attribute">top</span>: <span class="hljs-number">50%</span>;
+      <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translate</span>(-<span class="hljs-number">50%</span>, -<span class="hljs-number">50%</span>);
+      <span class="hljs-attribute">display</span>: inline-block;
+      <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid red;
+      <span class="hljs-attribute">padding</span>: <span class="hljs-number">10px</span>;
+    }
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;custom-dialog&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>}).append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>));
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">custom-dialog</span>&gt;</span>
+  Hello!
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-dialog</span>&gt;</span></code></pre>
+<h2 id="级联">级联</h2>
+<p>shadow 宿主（ <code>&lt;custom-dialog&gt;</code> 本身）驻留在 light DOM 中，因此它受到文档 CSS 规则的影响。</p>
+<p>如果在局部的 <code>:host</code> 和文档中都给一个属性设置样式，那么文档样式优先。</p>
+<p>例如，如果在文档中我们有如下样式：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+<span class="hljs-selector-tag">custom-dialog</span> {
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></code></pre>
+<p>……那么 <code>&lt;custom-dialog&gt;</code> 将没有 padding。</p>
+<p>这是非常有利的，因为我们可以在其 <code>:host</code> 规则中设置 “默认” 组件样式，然后在文档中轻松地覆盖它们。</p>
+<p>唯一的例外是当局部属性被标记 <code>!important</code> 时，对于这样的属性，局部样式优先。</p>
+<h2 id="hostselector">:host(selector)</h2>
+<p>与 <code>:host</code> 相同，但仅在 shadow 宿主与 <code>selector</code> 匹配时才应用样式。</p>
+<p>例如，我们希望仅当 <code>&lt;custom-dialog&gt;</code> 具有 <code>centered</code> 属性时才将其居中:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+*!*
+    :host([centered]) {
+*/!*
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-color: blue;
+    }
+
+    :host {
+      display: inline-block;
+      border: 1px solid red;
+      padding: 10px;
+    }
+  <span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;custom-dialog&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>}).append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>));
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+
+<span class="hljs-tag">&lt;<span class="hljs-name">custom-dialog</span> <span class="hljs-attr">centered</span>&gt;</span>
+  Centered!
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-dialog</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">custom-dialog</span>&gt;</span>
+  Not centered.
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-dialog</span>&gt;</span></code></pre>
+<p>现在附加的居中样式只应用于第一个对话框：<code>&lt;custom-dialog centered&gt;</code>。</p>
+<h2 id="host-contextselector">:host-context(selector)</h2>
+<p>与 <code>:host</code> 相同，但仅当外部文档中的 shadow 宿主或它的任何祖先节点与 <code>selector</code> 匹配时才应用样式。</p>
+<p>例如，<code>:host-context(.dark-theme)</code> 只有在 <code>&lt;custom-dialog&gt;</code> 或者 <code>&lt;custom-dialog&gt;</code> 的任何祖先节点上有 <code>dark-theme</code> 类时才匹配：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;dark-theme&quot;</span>&gt;</span>
+  <span class="hljs-comment">&lt;!--
+    :host-context(.dark-theme) 只应用于 .dark-theme 内部的 custom-dialog
+  --&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">custom-dialog</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">custom-dialog</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
+<p>总之，我们可以使用 <code>:host</code>-family 系列的选择器来对组件的主元素进行样式设置，具体取决于上下文。这些样式（除 <code>!important</code> 外）可以被文档样式覆盖。</p>
+<h2 id="给占槽（-slotted-）内容添加样式">给占槽（ slotted ）内容添加样式</h2>
+<p>现在让我们考虑有插槽的情况。</p>
+<p>占槽元素来自 light DOM，所以它们使用文档样式。局部样式不会影响占槽内容。</p>
+<p>在下面的例子中，按照文档样式，占槽的 <code>&lt;span&gt;</code> 是粗体，但是它不从局部样式中获取 <code>background</code>：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+*!*
+  span { font-weight: bold }
+*/!*
+<span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>*!*<span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>*/!*<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
+      &lt;style&gt;
+*!*
+      span { background: red; }
+*/!*
+      &lt;/style&gt;
+      Name: &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
+    `</span>;
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>结果是粗体，但不是红色。</p>
+<p>如果我们想要在我们的组件中设置占槽元素的样式，有两种选择。</p>
+<p>首先，我们可以对 <code>&lt;slot&gt;</code> 本身进行样式化，并借助 CSS 继承：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>*!*<span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>*/!*<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
+      &lt;style&gt;
+*!*
+      slot[name=&quot;username&quot;] { font-weight: bold; }
+*/!*
+      &lt;/style&gt;
+      Name: &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
+    `</span>;
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>这里 <code>&lt;p&gt;John Smith&lt;/p&gt;</code> 变成粗体，因为 CSS 继承在 <code>&lt;slot&gt;</code> 和它的内容之间有效。但是在 CSS 中，并不是所有的属性都是继承的。</p>
+<p>另一个选项是使用 <code>::slotted(selector)</code> 伪类。它根据两个条件来匹配元素：</p>
+<ol>
+<li>这是一个占槽元素，来自于 light DOM。插槽名并不重要，任何占槽元素都可以，但只能是元素本身，而不是它的子元素 。</li>
+<li>该元素与 <code>selector</code> 匹配。</li>
+</ol>
+<p>在我们的例子中，<code>::slotted(div)</code> 正好选择了 <code>&lt;div slot=&quot;username&quot;&gt;</code> ，但是没有选择它的子元素：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
+      &lt;style&gt;
+*!*
+      ::slotted(div) { border: 1px solid red; }
+*/!*
+      &lt;/style&gt;
+      Name: &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
+    `</span>;
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>请注意，<code>::slotted</code> 选择器不能用于任何插槽中更深层的内容。下面这些选择器是无效的：</p>
+<pre><code class="language-css"><span class="hljs-selector-pseudo">::slotted(div</span> <span class="hljs-selector-tag">span</span>) {
+  <span class="hljs-comment">/* 我们插入的 &lt;div&gt; 不会匹配这个选择器 */</span>
+}
+
+<span class="hljs-selector-pseudo">::slotted(div)</span> <span class="hljs-selector-tag">p</span> {
+  <span class="hljs-comment">/* 不能进入 light DOM 中选择元素 */</span>
+}</code></pre>
+<p>此外，<code>::sloated</code> 只能在 CSS 中使用，不能在 <code>querySelector</code> 中使用。</p>
+<h2 id="用自定义-css-属性作为勾子">用自定义 CSS 属性作为勾子</h2>
+<p>如何在主文档中设置组件的内建元素的样式?</p>
+<p>像 <code>:host</code> 这样的选择器应用规则到 <code>&lt;custom-dialog&gt;</code> 元素或 <code>&lt;user-card&gt;</code>，但是如何设置在它们内部的 shadow DOM 元素的样式呢？</p>
+<p>没有选择器可以从文档中直接影响 shadow DOM 样式。但是，正如我们暴露用来与组件交互的方法那样，我们也可以暴露 CSS 变量（自定义 CSS 属性）来对其进行样式设置。</p>
+<p><strong>自定义 CSS 属性存在于所有层次，包括 light DOM 和 shadow DOM。</strong></p>
+<p>例如，在 shadow DOM 中，我们可以使用 <code>--user-card-field-color</code> CSS 变量来设置字段的样式，而外部文档可以设置它的值：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+  <span class="hljs-selector-class">.field</span> {
+    <span class="hljs-attribute">color</span>: <span class="hljs-built_in">var</span>(--user-card-field-color, black);
+    <span class="hljs-comment">/* 如果 --user-card-field-color 没有被声明过，则取值为 black */</span>
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;field&quot;</span>&gt;</span>Name: <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;field&quot;</span>&gt;</span>Birthday: <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></code></pre>
+<p>然后，我们可以在外部文档中为 <code>&lt;user-card&gt;</code> 声明此属性：</p>
+<pre><code class="language-css"><span class="hljs-selector-tag">user-card</span> {
+  <span class="hljs-attribute">--user-card-field-color</span>: green;
+}</code></pre>
+<p>自定义 CSS 属性穿透 shadow DOM，它们在任何地方都可见，因此内部的 <code>.field</code> 规则将使用它。</p>
+<p>以下是完整的示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+*!*
+  user-card {
+    --user-card-field-color: green;
+  }
+*/!*
+<span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+*!*
+    .field {
+      color: var(--user-card-field-color, black);
+    }
+*/!*
+  <span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;field&quot;</span>&gt;</span>Name: <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;field&quot;</span>&gt;</span>Birthday: <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.append(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;tmpl&#x27;</span>).content.cloneNode(<span class="hljs-literal">true</span>));
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span>01.01.2001<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<h2 id="小结">小结</h2>
+<p>shadow DOM 可以引入样式，如 <code>&lt;style&gt;</code> 或 <code>&lt;link rel=&quot;stylesheet&quot;&gt;</code>。</p>
+<p>局部样式可以影响：</p>
+<ul>
+<li>shadow 树,</li>
+<li>shadow 宿主（通过 <code>:host</code>-family 系列伪类），</li>
+<li>占槽元素（来自 light DOM），<code>::slotted(selector)</code> 允许选择占槽元素本身，但不能选择它们的子元素。</li>
+</ul>
+<p>文档样式可以影响：</p>
+<ul>
+<li>shadow 宿主（因为它位于外部文档中）</li>
+<li>占槽元素及占槽元素的内容（因为它们同样位于外部文档中）</li>
+</ul>
+<p>当 CSS 属性冲突时，通常文档样式具有优先级，除非属性被标记为 <code>!important</code>，那么局部样式优先。</p>
+<p>CSS 自定义属性穿透 shadow DOM。它们被用作 “勾子” 来设计组件的样式：</p>
+<ol>
+<li>组件使用自定义 CSS 属性对关键元素进行样式设置，比如 <code>var(--component-name-title, &lt;default value&gt;)</code> 。</li>
+<li>组件作者为开发人员发布这些属性，它们和其他公共的组件方法一样重要。</li>
+<li>当开发人员想要对一个标题进行样式设计时，他们会为 shadow 宿主或宿主上层的元素赋值 <code>--component-name-title</code> CSS 属性。</li>
+<li>奥力给！</li>
+</ol>

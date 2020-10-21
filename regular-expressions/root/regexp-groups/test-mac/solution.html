@@ -1,0 +1,14 @@
+<p>A two-digit hex number is <code>pattern:[0-9a-f]{2}</code> (assuming the flag <code>pattern:i</code> is set).</p>
+<p>We need that number <code>NN</code>, and then <code>:NN</code> repeated 5 times (more numbers);</p>
+<p>The regexp is: <code>pattern:[0-9a-f]{2}(:[0-9a-f]{2}){5}</code></p>
+<p>Now let&#39;s show that the match should capture all the text: start at the beginning and end at the end. That&#39;s done by wrapping the pattern in <code>pattern:^...$</code>.</p>
+<p>Finally:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}$/i</span>;
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89:AB&#x27;</span>) ); <span class="hljs-comment">// true</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;0132546789AB&#x27;</span>) ); <span class="hljs-comment">// false (no colons)</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89&#x27;</span>) ); <span class="hljs-comment">// false (5 numbers, need 6)</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89:ZZ&#x27;</span>) ) <span class="hljs-comment">// false (ZZ in the end)</span></code></pre>

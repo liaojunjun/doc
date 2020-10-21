@@ -1,0 +1,16 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="bind-后的函数属性">bind 后的函数属性</h1>
+<p>函数的属性中有一个值。<code>bind</code> 之后它会改变吗？为什么，阐述一下？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
+  alert( <span class="hljs-built_in">this</span>.name );
+}
+sayHi.test = <span class="hljs-number">5</span>;
+
+*!*
+<span class="hljs-keyword">let</span> bound = sayHi.bind({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+});
+
+alert( bound.test ); <span class="hljs-comment">// 输出将会是什么？为什么？</span>
+*/!*</code></pre>

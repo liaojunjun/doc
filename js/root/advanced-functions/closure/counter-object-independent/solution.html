@@ -1,0 +1,19 @@
+<p>当然行得通。</p>
+<p>这两个嵌套函数都是在同一个词法环境中创建的，所以它们可以共享对同一个 count 变量的访问：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Counter</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+
+  <span class="hljs-built_in">this</span>.up = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> ++count;
+  };
+
+  <span class="hljs-built_in">this</span>.down = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> --count;
+  };
+}
+
+<span class="hljs-keyword">let</span> counter = <span class="hljs-keyword">new</span> Counter();
+
+alert( counter.up() ); <span class="hljs-comment">// 1</span>
+alert( counter.up() ); <span class="hljs-comment">// 2</span>
+alert( counter.down() ); <span class="hljs-comment">// 1</span></code></pre>

@@ -1,0 +1,264 @@
+<h1 id="表单属性和方法">表单属性和方法</h1>
+<p>表单（form）以及例如 <code>&lt;input&gt;</code> 的控件（control）元素有许多特殊的属性和事件。</p>
+<p>当我们学习了这些相关内容后，处理表单会变得更加方便。</p>
+<h2 id="导航：表单和元素">导航：表单和元素</h2>
+<p>文档中的表单是特殊集合 <code>document.forms</code> 的成员。</p>
+<p>这就是所谓的“命名的集合”：既是被命名了的，也是有序的。我们既可以使用名字，也可以使用在文档中的编号来获取表单。</p>
+<pre><code class="language-js"><span class="hljs-built_in">document</span>.forms.my - name=<span class="hljs-string">&quot;my&quot;</span> 的表单
+<span class="hljs-built_in">document</span>.forms[<span class="hljs-number">0</span>] - 文档中的第一个表单</code></pre>
+<p>当我们有了一个表单时，其中的任何元素都可以通过命名的集合 <code>form.elements</code> 来获取到。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;my&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;one&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;two&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;2&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 获取表单</span>
+  <span class="hljs-keyword">let</span> form = <span class="hljs-built_in">document</span>.forms.my; <span class="hljs-comment">// &lt;form name=&quot;my&quot;&gt; 元素</span>
+
+  <span class="hljs-comment">// 获取表单中的元素</span>
+  <span class="hljs-keyword">let</span> elem = form.elements.one; <span class="hljs-comment">// &lt;input name=&quot;one&quot;&gt; 元素</span>
+
+  alert(elem.value); <span class="hljs-comment">// 1</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>可能会有多个名字相同的元素，这种情况经常在处理单选按钮中出现。</p>
+<p>在这种情况下，<code>form.elements[name]</code> 将会是一个集合，例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> *!*<span class="hljs-attr">name</span>=<span class="hljs-string">&quot;age&quot;</span>*/!* <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;10&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> *!*<span class="hljs-attr">name</span>=<span class="hljs-string">&quot;age&quot;</span>*/!* <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;20&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">let</span> form = <span class="hljs-built_in">document</span>.forms[<span class="hljs-number">0</span>];
+
+<span class="hljs-keyword">let</span> ageElems = form.elements.age;
+
+*!*
+alert(ageElems[<span class="hljs-number">0</span>]); <span class="hljs-comment">// [object HTMLInputElement]</span>
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>这些导航（navigation）属性并不依赖于标签的结构。所有的控件元素，无论它们在表单中有多深，都可以通过 <code>form.elements</code> 获取到。</p>
+<pre><code class="language-smart">一个表单内会有一个或多个 `&lt;fieldset&gt;` 元素。它们也具有 `elements` 属性，该属性列出了 `&lt;fieldset&gt;` 中的表单控件。
+
+例如：
+
+```html run height=80
+&lt;body&gt;
+  &lt;form id=&quot;form&quot;&gt;
+    &lt;fieldset name=&quot;userFields&quot;&gt;
+      &lt;legend&gt;info&lt;/legend&gt;
+      &lt;input name=&quot;login&quot; type=&quot;text&quot;&gt;
+    &lt;/fieldset&gt;
+  &lt;/form&gt;
+
+  &lt;script&gt;
+    alert(form.elements.login); // &lt;input name=&quot;login&quot;&gt;
+
+*!*
+    let fieldset = form.elements.userFields;
+    alert(fieldset); // HTMLFieldSetElement
+
+    // 我们可以通过名字从表单和 fieldset 中获取 input
+    alert(fieldset.elements.login == form.elements.login); // true
+*/!*
+  &lt;/script&gt;
+&lt;/body&gt;
+```</code></pre>
+<p>````warn header=&quot;更简短的表示方式：<code>form.name</code>&quot;
+还有一个更简短的表示方式：我们可以通过 <code>form[index/name]</code> 来访问元素。</p>
+<p>换句话说，我们可以将 <code>form.elements.login</code> 写成 <code>form.login</code>。</p>
+<p>这也有效，但是会有一个小问题：如果我们访问一个元素，然后修改它的 <code>name</code>，之后它仍然可以被通过旧的 <code>name</code> 访问到（当然也能通过新的 <code>name</code> 访问）。</p>
+<p>我们可以很直观地通过一个例子看到这个情况：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;form&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;login&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  alert(form.elements.login == form.login); <span class="hljs-comment">// true，与 &lt;input&gt; 相同</span>
+
+  form.login.name = <span class="hljs-string">&quot;username&quot;</span>; <span class="hljs-comment">// 修改 input 的 name</span>
+
+  <span class="hljs-comment">// form.elements 更新了 name：</span>
+  alert(form.elements.login); <span class="hljs-comment">// undefined</span>
+  alert(form.elements.username); <span class="hljs-comment">// input</span>
+
+*!*
+  <span class="hljs-comment">// form 允许我们使用两个名字：新的名字和旧的名字</span>
+  alert(form.username == form.login); <span class="hljs-comment">// true</span>
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>这通常来说并不是一个问题，因为我们很少修改表单元素的名字。</p>
+<pre><code>
+## 反向引用：element.form
+
+对于任何元素，其对应的表单都可以通过 `element.form` 访问到。因此，表单引用了所有元素，元素也引用了表单。
+
+这是一张示意图：
+
+![](form-navigation.svg)
+
+例如：
+
+```html run height=40
+&lt;form id=&quot;form&quot;&gt;
+  &lt;input type=&quot;text&quot; name=&quot;login&quot;&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+*!*
+  // form -&gt; element
+  let login = form.login;
+
+  // element -&gt; form
+  alert(login.form); // HTMLFormElement
+*/!*
+&lt;/script&gt;
+```
+
+## 表单元素
+
+让我们来谈谈表单控件。
+
+### input 和 textarea
+
+我们可以通过 `input.value`（字符串）或 `input.checked`（布尔值）来访问复选框（checkbox）中的它们的 `value`。
+
+像这样：
+
+```js
+input.value = &quot;New value&quot;;
+textarea.value = &quot;New text&quot;;
+
+input.checked = true; // 对于复选框（checkbox）或单选按钮（radio button）
+```
+
+```warn header=&quot;使用 `textarea.value` 而不是 `textarea.innerHTML`&quot;
+请注意，即使 `&lt;textarea&gt;...&lt;/textarea&gt;` 将它们的 `value` 作为嵌套的 HTML 标签来保存，我们也绝不应该使用 `textarea.innerHTML` 来访问它。
+
+它仅存储最初在页面上的 HTML，而不是存储的当前 `value`。
+```
+
+### select 和 option
+
+一个 `&lt;select&gt;` 元素有 3 个重要的属性：
+
+1. `select.options` —— `&lt;option&gt;` 的子元素的集合，
+2. `select.value` —— 当前所选择的 `&lt;option&gt;` 的 `value`，
+3. `select.selectedIndex` —— 当前所选择的 `&lt;option&gt;` 的编号。
+
+它们提供了三种为 `&lt;select&gt;` 设置 `value` 的不同方式：
+
+1. 找到对应的 `&lt;option&gt;` 元素，并将 `option.selected` 设置为 `true`。
+2. 将 `select.value` 设置为对应的 `value`。
+3. 将 `select.selectedIndex` 设置为对应 `&lt;option&gt;` 的编号。
+
+第一个方式最明显，但是 `(2)` 和 `(3)` 通常来说会更方便。
+
+下面是一个例子：
+
+```html run
+&lt;select id=&quot;select&quot;&gt;
+  &lt;option value=&quot;apple&quot;&gt;Apple&lt;/option&gt;
+  &lt;option value=&quot;pear&quot;&gt;Pear&lt;/option&gt;
+  &lt;option value=&quot;banana&quot;&gt;Banana&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;script&gt;
+  // 所有这三行做的是同一件事
+  select.options[2].selected = true;
+  select.selectedIndex = 2;
+  select.value = &#x27;banana&#x27;;
+&lt;/script&gt;
+```
+
+和大多数其它控件不同，如果 `&lt;select&gt;` 具有 `multiple` 特性（attribute），则允许多选。这个功能很少使用。在这种情况下，我们需要使用第一种方式：从 `&lt;option&gt;` 的子元素中添加/移除 `selected` 属性。
+
+我们可以通过 `select.options` 来获取它们的集合，例如：
+
+```html run
+&lt;select id=&quot;select&quot; *!*multiple*/!*&gt;
+  &lt;option value=&quot;blues&quot; selected&gt;Blues&lt;/option&gt;
+  &lt;option value=&quot;rock&quot; selected&gt;Rock&lt;/option&gt;
+  &lt;option value=&quot;classic&quot;&gt;Classic&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;script&gt;
+  // 从 multi-select 中获取所有选定的 `value`
+  let selected = Array.from(select.options)
+    .filter(option =&gt; option.selected)
+    .map(option =&gt; option.value);
+
+  alert(selected); // blues,rock  
+&lt;/script&gt;
+```
+
+`&lt;select&gt;` 元素的完整规范可以在规范 &lt;https://html.spec.whatwg.org/multipage/forms.html#the-select-element&gt; 中找到。
+
+### new Option
+
+这很少单独使用。但它仍然是一个有趣的东西。
+
+在 [规范](https://html.spec.whatwg.org/multipage/forms.html#the-option-element) 中，有一个很好的简短语法可以创建 `&lt;option&gt;` 元素：
+
+```js
+option = new Option(text, value, defaultSelected, selected);
+```
+
+参数：
+
+- `text` —— `&lt;option&gt;` 中的文本，
+- `value` —— `&lt;option&gt;` 的 `value`，
+- `defaultSelected` —— 如果为 `true`，那么 `selected` HTML-特性（attribute）就会被创建，
+- `selected` —— 如果为 `true`，那么这个 `&lt;option&gt;` 就会被选中。
+
+你可能会对 `defaultSelected` 和 `selected` 有一些疑惑。这很简单：`defaultSelected` 设置的是 HTML-特性（attribute），我们可以使用 `option.getAttribute(&#x27;selected&#x27;)` 来获得。而 `selected` —— 无论这个 `option` 是否被选则，它都很重要。通常，这两个值都设置为 `true`，或者都不设置（与设置为 `false` 是一样的）。
+
+例如：
+
+```js
+let option = new Option(&quot;Text&quot;, &quot;value&quot;);
+// 创建 &lt;option value=&quot;value&quot;&gt;Text&lt;/option&gt;
+```
+
+选择相同的元素：
+
+```js
+let option = new Option(&quot;Text&quot;, &quot;value&quot;, true, true);
+```
+
+`&lt;option&gt;` 元素具有以下属性：
+
+`option.selected`
+: `&lt;option&gt;` 是否被选择。
+
+`option.index`
+: `&lt;option&gt;` 在其所属的 `&lt;select&gt;` 中的编号。
+
+`option.text`
+: `&lt;option&gt;` 的文本内容（可以被访问者看到）。
+
+## 参考资料
+
+- 规范：&lt;https://html.spec.whatwg.org/multipage/forms.html&gt;.
+
+## 总结
+
+表单导航：
+
+`document.forms`
+: 一个表单元素可以通过 `document.forms[name/index]` 访问到。
+
+`form.elements`  
+: 表单元素可以通过 `form.elements[name/index]` 的方式访问，或者也可以使用 `form[name/index]`。`elements` 属性也适用于 `&lt;fieldset&gt;`。
+
+`element.form`
+: 元素通过 `form` 属性来引用它们所属的表单。
+
+`value` 可以被通过 `input.value`，`textarea.value`，`select.value` 等来获取到，对于单选按钮和复选框来说可以使用 `input.checked`。
+
+对于 `&lt;select&gt;` 元素，们可以通过索引 `select.selectedIndex` 来获取它的 `value`，也可以通过 `&lt;option&gt;` 集合 `select.options`。
+
+这些是开始使用表单的基础。我们将在本教程中进一步介绍更多示例。
+
+在下一章中，我们将介绍可能在任何元素上出现，但主要在表单上处理的 `focus` 和 `blur` 事件。</code></pre>

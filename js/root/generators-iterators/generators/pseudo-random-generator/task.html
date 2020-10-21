@@ -1,0 +1,21 @@
+<h1 id="伪随机-generator">伪随机 generator</h1>
+<p>在很多地方我们都需要随机数据。</p>
+<p>其中之一就是测试。我们可能需要随机数据：文本，数字等，以便很好地进行测试。</p>
+<p>在 JavaScript 中，我们可以使用 <code>Math.random()</code>。但是如果什么地方出现了问题，我们希望能使用完全相同的数据进行重复测试。</p>
+<p>为此，我们可以使用所谓的“种子伪随机（seeded pseudo-random）generator”。它们将“种子（seed）”作为第一个值，然后使用公式生成下一个值。以便相同的种子（seed）可以产出（yield）相同的序列，因此整个数据流很容易复现。我们只需要记住种子并重复它即可。</p>
+<p>这样的公式的一个示例如下，它可以生成一些均匀分布的值：</p>
+<pre><code>next = previous * 16807 % 2147483647</code></pre>
+<p>如果我们使用 <code>1</code> 作为种子，生成的值将会是：</p>
+<ol>
+<li><code>16807</code></li>
+<li><code>282475249</code></li>
+<li><code>1622650073</code></li>
+<li>……等……</li>
+</ol>
+<p>这里的任务是创建一个 generator 函数 <code>pseudoRandom(seed)</code>，它将 <code>seed</code> 作为参数并使用此公式创建 generator。</p>
+<p>使用范例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> generator = pseudoRandom(<span class="hljs-number">1</span>);
+
+alert(generator.next().value); <span class="hljs-comment">// 16807</span>
+alert(generator.next().value); <span class="hljs-comment">// 282475249</span>
+alert(generator.next().value); <span class="hljs-comment">// 1622650073</span></code></pre>

@@ -1,0 +1,21 @@
+<p>前两个检查为前两个 <code>case</code>，第三个检查分为两种情况：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = +prompt(<span class="hljs-string">&#x27;a?&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+
+<span class="hljs-keyword">switch</span> (a) {
+  <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:
+    alert( <span class="hljs-number">0</span> );
+    <span class="hljs-keyword">break</span>;
+
+  <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:
+    alert( <span class="hljs-number">1</span> );
+    <span class="hljs-keyword">break</span>;
+
+  <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:
+    alert( <span class="hljs-string">&#x27;2,3&#x27;</span> );
+*!*
+    <span class="hljs-keyword">break</span>;
+*/!*
+}</code></pre>
+<p>请注意：最后的 <code>break</code> 不是必须的。但是为了让代码可扩展我们要把它加上。</p>
+<p>有可能之后我们想要再添加一个 <code>case</code>，例如 <code>case 4</code>。如果我们忘记在它之前添加一个 break，那么在 case 3 执行结束后可能会出现错误。所以这是一种自我保险。</p>

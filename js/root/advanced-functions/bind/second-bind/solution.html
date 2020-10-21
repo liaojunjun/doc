@@ -1,0 +1,10 @@
+<p>答案：<strong>John</strong>。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-built_in">this</span>.name);
+}
+
+f = f.bind( {<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>} ).bind( {<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pete&quot;</span>} );
+
+f(); <span class="hljs-comment">// John</span></code></pre>
+<p><code>f.bind(...)</code> 返回的外来（exotic）<a href="https://tc39.github.io/ecma262/#sec-bound-function-exotic-objects">绑定函数</a> 对象仅在创建的时候记忆上下文（以及参数，如果提供了的话）。</p>
+<p>一个函数不能被重绑定（re-bound）。</p>

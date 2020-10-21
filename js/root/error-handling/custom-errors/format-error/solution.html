@@ -1,0 +1,14 @@
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FormatError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">SyntaxError</span> </span>{
+  <span class="hljs-keyword">constructor</span>(message) {
+    <span class="hljs-built_in">super</span>(message);
+    <span class="hljs-built_in">this</span>.name = <span class="hljs-built_in">this</span>.constructor.name;
+  }
+}
+
+<span class="hljs-keyword">let</span> err = <span class="hljs-keyword">new</span> FormatError(<span class="hljs-string">&quot;formatting error&quot;</span>);
+
+alert( err.message ); <span class="hljs-comment">// formatting error</span>
+alert( err.name ); <span class="hljs-comment">// FormatError</span>
+alert( err.stack ); <span class="hljs-comment">// stack</span>
+
+alert( err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span> ); <span class="hljs-comment">// true</span></code></pre>

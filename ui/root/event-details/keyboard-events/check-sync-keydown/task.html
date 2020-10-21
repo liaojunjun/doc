@@ -1,0 +1,11 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="扩展热键">扩展热键</h1>
+<p>创建一个 <code>runOnKeys(func, code1, code2, ... code_n)</code> 函数，在同时按下 <code>code1, code2, ... code_n</code> 键时运行函数 <code>func</code>。</p>
+<p>例如，当按键 <code>&quot;Q&quot;</code> 和 <code>&quot;W&quot;</code> 被一起按下时（任何语言中，无论是否 CapsLock），下面的代码将显示 <code>alert</code>：</p>
+<pre><code class="language-js">runOnKeys(
+  <span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;Hello!&quot;</span>),
+  <span class="hljs-string">&quot;KeyQ&quot;</span>,
+  <span class="hljs-string">&quot;KeyW&quot;</span>
+);</code></pre>
+<p>[demo src=&quot;solution&quot;]</p>

@@ -1,0 +1,31 @@
+<p>发生了错误是因为 <code>ask</code> 获得的是没有绑定对象的 <code>loginOk/loginFail</code> 函数。</p>
+<p>当 <code>ask</code> 调用这两个函数时，它们自然会认定 <code>this=undefined</code>。</p>
+<p>让我们 <code>bind</code> 上下文：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">askPassword</span>(<span class="hljs-params">ok, fail</span>) </span>{
+  <span class="hljs-keyword">let</span> password = prompt(<span class="hljs-string">&quot;Password?&quot;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">if</span> (password == <span class="hljs-string">&quot;rockstar&quot;</span>) ok();
+  <span class="hljs-keyword">else</span> fail();
+}
+
+<span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span>,
+
+  loginOk() {
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> logged in`</span>);
+  },
+
+  loginFail() {
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> failed to log in`</span>);
+  },
+
+};
+
+*!*
+askPassword(user.loginOk.bind(user), user.loginFail.bind(user));
+*/!*</code></pre>
+<p>现在它能正常工作了。</p>
+<p>另一个可替换解决方案是：</p>
+<pre><code class="language-js"><span class="hljs-comment">//...</span>
+askPassword(<span class="hljs-function">() =&gt;</span> user.loginOk(), <span class="hljs-function">() =&gt;</span> user.loginFail());</code></pre>
+<p>通常这也能正常工作，也看起来挺好的。</p>
+<p>但是可能会在更复杂的场景下失效，例如变量 <code>user</code> 在调用 <code>askPassword</code> 之后但在访问者应答和调用 <code>() =&gt; user.loginOk()</code> 之前被修改。</p>

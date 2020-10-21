@@ -1,0 +1,4 @@
+<p><strong>答案：<code>rabbit</code>。</strong></p>
+<p>这是因为 <code>this</code> 是点符号前面的这个对象，因此 <code>rabbit.eat()</code> 修改了 <code>rabbit</code>。</p>
+<p>属性查找和执行是两回事儿。</p>
+<p>首先在原型中找到 <code>rabbit.eat</code> 方法，然后在 <code>this=rabbit</code> 的情况下执行。</p>

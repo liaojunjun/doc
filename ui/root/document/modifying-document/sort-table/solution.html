@@ -1,0 +1,13 @@
+<p>这个解决方案虽然很短，但可能看起来有点难理解，因此，在这里我提供了一些扩展性的注释：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> sortedRows = <span class="hljs-built_in">Array</span>.from(table.tBodies[<span class="hljs-number">0</span>].rows) <span class="hljs-comment">// 1</span>
+  .sort(<span class="hljs-function">(<span class="hljs-params">rowA, rowB</span>) =&gt;</span> rowA.cells[<span class="hljs-number">0</span>].innerHTML.localeCompare(rowB.cells[<span class="hljs-number">0</span>].innerHTML));
+
+table.tBodies[<span class="hljs-number">0</span>].append(...sortedRows); <span class="hljs-comment">// (3)</span></code></pre>
+<p>对此算法一步一步进行讲解：</p>
+<ol>
+<li>从 <code>&lt;tbody&gt;</code> 获取所有 <code>&lt;tr&gt;</code>。</li>
+<li>然后将它们按第一个 <code>&lt;td&gt;</code>（<code>name</code> 字段）中的内容进行比较。</li>
+<li>然后使用 <code>.append(...sortedRows)</code> 按正确的顺序插入节点。</li>
+</ol>
+<p>我们不必删除行元素，只需要“重新插入”，它们就会自动离开原来的位置。</p>
+<p>P.S. 在我们的例子中，表格中有一个明确的 <code>&lt;tbody&gt;</code>，但即使 HTML 中的表格没有 <code>&lt;tbody&gt;</code>，DOM 结构也总是具有它。</p>

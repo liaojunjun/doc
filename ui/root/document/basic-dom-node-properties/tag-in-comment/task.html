@@ -1,0 +1,11 @@
+<p>importance: 3</p>
+<hr>
+<h1 id="注释中的标签">注释中的标签</h1>
+<p>这段代码会显示什么？</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
+  let body = document.body;
+
+  body.innerHTML = &quot;<span class="hljs-comment">&lt;!--&quot; + body.tagName + &quot;--&gt;</span>&quot;;
+
+  alert( body.firstChild.data ); // 这里会显示什么？
+</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>

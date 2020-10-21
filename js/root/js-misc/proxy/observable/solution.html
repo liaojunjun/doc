@@ -1,0 +1,38 @@
+<p>该解决方案包括两部分：</p>
+<ol>
+<li>无论 <code>.observe(handler)</code> 何时被调用，我们都需要在某个地方记住 handler，以便以后可以调用它。我们可以使用 Symbol 作为属性键，将 handler 直接存储在对象中。</li>
+<li>我们需要一个带有 <code>set</code> 陷阱的 proxy 来在发生任何更改时调用 handler。 </li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> handlers = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&#x27;handlers&#x27;</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeObservable</span>(<span class="hljs-params">target</span>) </span>{
+  <span class="hljs-comment">// 1. 初始化 handler 存储</span>
+  target[handlers] = [];
+
+  <span class="hljs-comment">// 将 handler 函数存储到数组中，以便于之后调用</span>
+  target.observe = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">handler</span>) </span>{
+    <span class="hljs-built_in">this</span>[handlers].push(handler);
+  };
+
+  <span class="hljs-comment">// 2. 创建一个 proxy 以处理更改</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(target, {
+    set(target, property, value, receiver) {
+      <span class="hljs-keyword">let</span> success = <span class="hljs-built_in">Reflect</span>.set(...arguments); <span class="hljs-comment">// 将操作转发给对象</span>
+      <span class="hljs-keyword">if</span> (success) { <span class="hljs-comment">// 如果在设置属性时没有出现 error</span>
+        <span class="hljs-comment">// 调用所有 handler</span>
+        target[handlers].forEach(<span class="hljs-function"><span class="hljs-params">handler</span> =&gt;</span> handler(property, value));
+      }
+      <span class="hljs-keyword">return</span> success;
+    }
+  });
+}
+
+<span class="hljs-keyword">let</span> user = {};
+
+user = makeObservable(user);
+
+user.observe(<span class="hljs-function">(<span class="hljs-params">key, value</span>) =&gt;</span> {
+  alert(<span class="hljs-string">`SET <span class="hljs-subst">${key}</span>=<span class="hljs-subst">${value}</span>`</span>);
+});
+
+user.name = <span class="hljs-string">&quot;John&quot;</span>;</code></pre>

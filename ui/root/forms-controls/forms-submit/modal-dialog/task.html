@@ -1,0 +1,23 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="模态框表单">模态框表单</h1>
+<p>创建一个函数 <code>showPrompt(html, callback)</code>，该函数显示一个表单，里面有消息 <code>html</code>，一个 <code>input</code> 字段和 <code>OK/CANCEL</code> 按钮。</p>
+<ul>
+<li>用户应该在文本字段中输入一些内容，然后按下 <code>key:Enter</code> 键或点击 OK 按钮，然后 <code>callback(value)</code> 就会被调用，参数为输入的值。</li>
+<li>否则，如果用户按下 <code>key:Esc</code> 键或点击 CANCEL 按钮，那么 <code>callback(null)</code> 就会被调用。</li>
+</ul>
+<p>在这两种情况下，输入过程都会结束，并移除表单。</p>
+<p>要求：</p>
+<ul>
+<li>表单应该在窗口的正中心。</li>
+<li>表单是 <strong>模态框（modal）</strong>。换句话说，在用户关闭模态框之前，用户无法与页面的其它部分进行任何交互。</li>
+<li>当表单显示后，焦点应该在用户需要进行输入的 <code>&lt;input&gt;</code> 输入框中。</li>
+<li>按键 <code>key:Tab</code>/<code>key:Shift+Tab</code> 应该能在表单字段之间切换焦点，不允许焦点离开表单字段到页面的其它元素上。</li>
+</ul>
+<p>使用示例：</p>
+<pre><code class="language-js">showPrompt(<span class="hljs-string">&quot;Enter something&lt;br&gt;...smart :)&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">value</span>) </span>{
+  alert(value);
+});</code></pre>
+<p>使用 iframe 嵌入的一个示例：</p>
+<p>[iframe src=&quot;solution&quot; height=160 border=1]</p>
+<p>P.S. 源文档有给表单设定了固定位置的 HTML/CSS，但是做成模态框的方式取决于你。</p>

@@ -1,0 +1,72 @@
+<p>我们可以尝试的第一种解法是递归。</p>
+<p>斐波那契数根据定义是递归的：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fib</span>(<span class="hljs-params">n</span>) </span>{
+  <span class="hljs-keyword">return</span> n &lt;= <span class="hljs-number">1</span> ? n : fib(n - <span class="hljs-number">1</span>) + fib(n - <span class="hljs-number">2</span>);
+}
+
+alert( fib(<span class="hljs-number">3</span>) ); <span class="hljs-comment">// 2</span>
+alert( fib(<span class="hljs-number">7</span>) ); <span class="hljs-comment">// 13</span>
+<span class="hljs-comment">// fib(77); // 超级慢！</span></code></pre>
+<p>……但是 <code>n</code> 比较大时会很慢。比如 <code>fib(77)</code> 会挂起引擎一段时间，并且消耗所有 CPU 资源。</p>
+<p>因为函数产生了太多的子调用。同样的值被一遍又一遍地计算。</p>
+<p>例如，我们看下计算 <code>fib(5)</code> 的片段：</p>
+<pre><code class="language-js">...
+fib(<span class="hljs-number">5</span>) = fib(<span class="hljs-number">4</span>) + fib(<span class="hljs-number">3</span>)
+fib(<span class="hljs-number">4</span>) = fib(<span class="hljs-number">3</span>) + fib(<span class="hljs-number">2</span>)
+...</code></pre>
+<p>可以看到，<code>fib(5)</code> 和 <code>fib(4)</code> 都需要 <code>fib(3)</code> 的值，所以 <code>fib(3)</code> 被独立计算了两次。</p>
+<p>这是完整的递归树：</p>
+<p><img src="fibonacci-recursion-tree.svg" alt="斐波那契递归树"></p>
+<p>我们可以清楚的看到 <code>fib(3)</code> 被计算了两次，<code>fib(2)</code> 被计算了三次。总计算量远远超过了 <code>n</code>，这造成仅仅对于计算 <code>n=77</code> 来讲，计算量就是巨量的。</p>
+<p>我们可以通过记录已经计算过的值来进行优化：如果一个值比如 <code>fib(3)</code> 已经被计算过一次，那么我们可以在后面的计算中重复使用它。</p>
+<p>另一个选择就是不使用递归，而是使用完全不同的基于循环的算法。</p>
+<p>与从 <code>n</code> 到降到更小的值相反，我们可以使用循环从 <code>1</code> 和 <code>2</code> 开始，然后得到它们的和 <code>fib(3)</code>，然后再通过前两个数的和得到 <code>fib(4)</code>，然后 <code>fib(5)</code>，以此类推，直至达到所需要的值。在每一步，我们只需要记录前两个值就可以。</p>
+<p>下面是新算法的细节步骤：</p>
+<p>开始：</p>
+<pre><code class="language-js"><span class="hljs-comment">// a = fib(1), b = fib(2)，这些值是根据定义 1 得到的</span>
+<span class="hljs-keyword">let</span> a = <span class="hljs-number">1</span>, b = <span class="hljs-number">1</span>;
+
+<span class="hljs-comment">// 求两者的和得到 c = fib(3)</span>
+<span class="hljs-keyword">let</span> c = a + b;
+
+<span class="hljs-comment">/* 现在我们有 fib(1)，fib(2) 和 fib(3)
+a  b  c
+1, 1, 2
+*/</span></code></pre>
+<p>现在我们想要得到 <code>fib(4) = fib(2) + fib(3)</code>。</p>
+<p>我们移动变量：<code>a,b</code> 将得到 <code>fib(2),fib(3)</code>，<code>c</code> 将得到两者的和：</p>
+<pre><code class="language-js">a = b; <span class="hljs-comment">// 现在 a = fib(2)</span>
+b = c; <span class="hljs-comment">// 现在 b = fib(3)</span>
+c = a + b; <span class="hljs-comment">// c = fib(4)</span>
+
+<span class="hljs-comment">/* 现在我们有这样的序列
+   a  b  c
+1, 1, 2, 3
+*/</span></code></pre>
+<p>下一步得到另一个序列数：</p>
+<pre><code class="language-js">a = b; <span class="hljs-comment">// 现在 a = fib(3)</span>
+b = c; <span class="hljs-comment">// 现在 b = fib(4)</span>
+c = a + b; <span class="hljs-comment">// c = fib(5)</span>
+
+<span class="hljs-comment">/* 现在序列是（又加了一个数）：
+      a  b  c
+1, 1, 2, 3, 5
+*/</span></code></pre>
+<p>……依次类推，直到我们得到需要的值。这比递归快很多，而且没有重复计算。</p>
+<p>完整代码：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fib</span>(<span class="hljs-params">n</span>) </span>{
+  <span class="hljs-keyword">let</span> a = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">let</span> b = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">3</span>; i &lt;= n; i++) {
+    <span class="hljs-keyword">let</span> c = a + b;
+    a = b;
+    b = c;
+  }
+  <span class="hljs-keyword">return</span> b;
+}
+
+alert( fib(<span class="hljs-number">3</span>) ); <span class="hljs-comment">// 2</span>
+alert( fib(<span class="hljs-number">7</span>) ); <span class="hljs-comment">// 13</span>
+alert( fib(<span class="hljs-number">77</span>) ); <span class="hljs-comment">// 5527939700884757</span></code></pre>
+<p>循环从 <code>i=3</code> 开始，因为前两个序列值被硬编码到变量 <code>a=1</code>，<code>b=1</code>。</p>
+<p>这种方式称为 <a href="https://en.wikipedia.org/wiki/Dynamic_programming">自下而上的动态规划</a>。</p>

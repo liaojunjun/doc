@@ -1,0 +1,15 @@
+<p>起始标签是 <code>pattern:\[(b|url|quote)\]</code>。</p>
+<p>匹配字符串直到遇到结束标签 —— 模式 <code>pattern:[\s\S]*?</code> 匹配任意字符，包括换行和用于结束标记的反向引用。</p>
+<p>完整模式为：<code>pattern:\[(b|url|quote)\][\s\S]*?\[/\1\]</code>。</p>
+<p>运行代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/\[(b|url|quote)\][\s\S]*?\[\/\1\]/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">`
+  [b]hello![/b]
+  [quote]
+    [url]http://google.com[/url]
+  [/quote]
+`</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// [b]hello![/b],[quote][url]http://google.com[/url][/quote]</span></code></pre>
+<p>请注意我们要转义结束标签 <code>pattern:[/\1]</code> 中的斜杠，通常斜杠会关闭模式。</p>

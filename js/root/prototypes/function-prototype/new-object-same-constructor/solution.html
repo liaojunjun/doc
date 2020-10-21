@@ -1,0 +1,32 @@
+<p>如果我们确信 <code>&quot;constructor&quot;</code> 属性具有正确的值，那么就可以使用这种方法。</p>
+<p>例如，如果我们不触碰默认的 <code>&quot;prototype&quot;</code>，那么这段代码肯定可以正常运行：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-built_in">this</span>.name = name;
+}
+
+<span class="hljs-keyword">let</span> user = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&#x27;John&#x27;</span>);
+<span class="hljs-keyword">let</span> user2 = <span class="hljs-keyword">new</span> user.constructor(<span class="hljs-string">&#x27;Pete&#x27;</span>);
+
+alert( user2.name ); <span class="hljs-comment">// Pete (worked!)</span></code></pre>
+<p>它起作用了，因为 <code>User.prototype.constructor == User</code>。</p>
+<p>……但是如果有人，重写了 <code>User.prototype</code>，并忘记可重新创建 <code>constructor</code> 以引用 <code>User</code>，那么上面这段代码就会运行失败。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-built_in">this</span>.name = name;
+}
+*!*
+User.prototype = {}; <span class="hljs-comment">// (*)</span>
+*/!*
+
+<span class="hljs-keyword">let</span> user = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&#x27;John&#x27;</span>);
+<span class="hljs-keyword">let</span> user2 = <span class="hljs-keyword">new</span> user.constructor(<span class="hljs-string">&#x27;Pete&#x27;</span>);
+
+alert( user2.name ); <span class="hljs-comment">// undefined</span></code></pre>
+<p>为什么 <code>user2.name</code> 是 <code>undefined</code>？</p>
+<p>这是 <code>new user.constructor(&#39;Pete&#39;)</code> 的工作流程：</p>
+<ol>
+<li>首先，它在 <code>user</code> 中寻找 <code>constructor</code>。没找到。</li>
+<li>然后它追溯原型链。<code>user</code> 的原型是 <code>User.prototype</code>，它也什么都没有。</li>
+<li><code>User.prototype</code> 的值是一个普通对象 <code>{}</code>，该对象的原型是 <code>Object.prototype</code>。并且 <code>Object.prototype.constructor == Object</code>。所以就用它了。</li>
+</ol>
+<p>最后，我们有 <code>let user2 = new Object(&#39;Pete&#39;)</code>。内建的 <code>Object</code> 构造函数会忽略参数，它总是创建一个类似于 <code>let user2 = {}</code> 的空对象，这就是最后我们在 <code>user2</code> 中拥有的东西。</p>

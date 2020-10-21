@@ -1,0 +1,20 @@
+<p>为获取秒数，我们可以使用今天的日期和 00:00:00 这个时间创建一个日期，然后使用当前时间减去该时间。</p>
+<p>不同之处在于，从今天之初开始算起的时间是以毫秒计算的，我们应该将其处以 1000，进而得到秒数：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getSecondsToday</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> now = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
+
+  <span class="hljs-comment">// 使用当前的 day/month/year 创建一个对象</span>
+  <span class="hljs-keyword">let</span> today = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(now.getFullYear(), now.getMonth(), now.getDate());
+
+  <span class="hljs-keyword">let</span> diff = now - today; <span class="hljs-comment">// ms difference</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.round(diff / <span class="hljs-number">1000</span>); <span class="hljs-comment">// make seconds</span>
+}
+
+alert( getSecondsToday() );</code></pre>
+<p>另一种解决方法是获取 hours/minutes/seconds，然后把它们转换为秒数：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getSecondsToday</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> d = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
+  <span class="hljs-keyword">return</span> d.getHours() * <span class="hljs-number">3600</span> + d.getMinutes() * <span class="hljs-number">60</span> + d.getSeconds();
+};
+
+alert( getSecondsToday() );</code></pre>

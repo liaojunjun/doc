@@ -1,0 +1,251 @@
+<h1 id="模块-module-简介">模块 (Module) 简介</h1>
+<p>随着我们的应用越来越大，我们想要将其拆分成多个文件，即所谓的“模块（module）”。一个模块可以包含用于特定目的的类或函数库。</p>
+<p>很长一段时间，JavaScript 都没有语言级（language-level）的模块语法。这不是一个问题，因为最初的脚本又小又简单，所以没必要将其模块化。</p>
+<p>但是最终脚本变得越来越复杂，因此社区发明了许多种方法来将代码组织到模块中，使用特殊的库按需加载模块。</p>
+<p>列举一些（出于历史原因）：</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Asynchronous_module_definition">AMD</a> —— 最古老的模块系统之一，最初由 <a href="http://requirejs.org/">require.js</a> 库实现。</li>
+<li><a href="http://wiki.commonjs.org/wiki/Modules/1.1">CommonJS</a> —— 为 Node.js 服务器创建的模块系统。</li>
+<li><a href="https://github.com/umdjs/umd">UMD</a> —— 另外一个模块系统，建议作为通用的模块系统，它与 AMD 和 CommonJS 都兼容。</li>
+</ul>
+<p>现在，它们都在慢慢成为历史的一部分，但我们仍然可以在旧脚本中找到它们。</p>
+<p>语言级的模块系统在 2015 年的时候出现在了标准（ES6）中，此后逐渐发展，现在已经得到了所有主流浏览器和 Node.js 的支持。因此，我们将从现在开始学习现代 JavaScript 模块（module）。</p>
+<h2 id="什么是模块？">什么是模块？</h2>
+<p>一个模块（module）就是一个文件。一个脚本就是一个模块。就这么简单。</p>
+<p>模块可以相互加载，并可以使用特殊的指令 <code>export</code> 和 <code>import</code> 来交换功能，从另一个模块调用一个模块的函数：</p>
+<ul>
+<li><code>export</code> 关键字标记了可以从当前模块外部访问的变量和函数。</li>
+<li><code>import</code> 关键字允许从其他模块导入功能。</li>
+</ul>
+<p>例如，我们有一个 <code>sayHi.js</code> 文件导出了一个函数：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 sayHi.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">user</span>) </span>{
+  alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${user}</span>!`</span>);
+}</code></pre>
+<p>……然后另一个文件可能导入并使用了这个函数：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 main.js</span>
+<span class="hljs-keyword">import</span> {sayHi} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./sayHi.js&#x27;</span>;
+
+alert(sayHi); <span class="hljs-comment">// function...</span>
+sayHi(<span class="hljs-string">&#x27;John&#x27;</span>); <span class="hljs-comment">// Hello, John!</span></code></pre>
+<p><code>import</code> 指令通过相对于当前文件的路径 <code>./sayHi.js</code> 加载模块，并将导入的函数 <code>sayHi</code> 分配（assign）给相应的变量。</p>
+<p>让我们在浏览器中运行一下这个示例。</p>
+<p>由于模块支持特殊的关键字和功能，因此我们必须通过使用 <code>&lt;script type=&quot;module&quot;&gt;</code> 特性（attribute）来告诉浏览器，此脚本应该被当作模块（module）来对待。</p>
+<p>像这样：</p>
+<p>[codetabs src=&quot;say&quot; height=&quot;140&quot; current=&quot;index.html&quot;]</p>
+<p>浏览器会自动获取并解析（evaluate）导入的模块（如果需要，还可以分析该模块的导入），然后运行该脚本。</p>
+<pre><code class="language-warn">如果你尝试通过 `file://` 协议在本地打开一个网页，你会发现 `import/export` 指令不起作用。你可以使用本地 Web 服务器，例如 [static-server](https://www.npmjs.com/package/static-server#getting-started)，或者使用编辑器的“实时服务器”功能，例如 VS Code 的 [Live Server Extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) 来测试模块。</code></pre>
+<h2 id="模块核心功能">模块核心功能</h2>
+<p>与“常规”脚本相比，模块有什么不同呢？</p>
+<p>下面是一些核心的功能，对浏览器和服务端的 JavaScript 来说都有效。</p>
+<h3 id="始终使用-use-strict">始终使用 &quot;use strict&quot;</h3>
+<p>模块始终默认使用 <code>use strict</code>，例如，对一个未声明的变量赋值将产生错误（译注：在浏览器控制台可以看到 error 信息）。</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
+  a = <span class="hljs-number">5</span>; <span class="hljs-comment">// error</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h3 id="模块级作用域">模块级作用域</h3>
+<p>每个模块都有自己的顶级作用域（top-level scope）。换句话说，一个模块中的顶级作用域变量和函数在其他脚本中是不可见的。</p>
+<p>在下面这个例子中，我们导入了两个脚本，<code>hello.js</code> 尝试使用在 <code>user.js</code> 中声明的变量 <code>user</code>，失败了：</p>
+<p>[codetabs src=&quot;scopes&quot; height=&quot;140&quot; current=&quot;index.html&quot;]</p>
+<p>模块期望 <code>export</code> 它们想要被外部访问的内容，并 <code>import</code> 它们所需要的内容。</p>
+<p>所以，我们应该将 <code>user.js</code> 导入到 <code>hello.js</code> 中，并从中获取所需的功能，而不要依赖于全局变量。</p>
+<p>这是正确的变体：</p>
+<p>[codetabs src=&quot;scopes-working&quot; height=&quot;140&quot; current=&quot;hello.js&quot;]</p>
+<p>在浏览器中，每个 <code>&lt;script type=&quot;module&quot;&gt;</code> 也存在独立的顶级作用域（译注：在浏览器控制台可以看到 error 信息）。</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 变量仅在这个 module script 内可见</span>
+  <span class="hljs-keyword">let</span> user = <span class="hljs-string">&quot;John&quot;</span>;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
+  *!*
+  alert(user); <span class="hljs-comment">// Error: user is not defined</span>
+  */!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>如果我们真的需要创建一个 window-level 的全局变量，我们可以将其明确地赋值给 <code>window</code>，并以 <code>window.user</code> 来访问它。但是这需要你有足够充分的理由，否则就不要这样做。</p>
+<h3 id="模块代码仅在第一次导入时被解析">模块代码仅在第一次导入时被解析</h3>
+<p>如果同一个模块被导入到多个其他位置，那么它的代码仅会在第一次导入时执行，然后将导出（export）的内容提供给所有的导入（importer）。</p>
+<p>这有很重要的影响。让我们通过示例来看一下：</p>
+<p>首先，如果执行一个模块中的代码会带来副作用（side-effect），例如显示一条消息，那么多次导入它只会触发一次显示 —— 即第一次：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 alert.js</span>
+alert(<span class="hljs-string">&quot;Module is evaluated!&quot;</span>);</code></pre>
+<pre><code class="language-js"><span class="hljs-comment">// 在不同的文件中导入相同的模块</span>
+
+<span class="hljs-comment">// 📁 1.js</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">`./alert.js`</span>; <span class="hljs-comment">// Module is evaluated!</span>
+
+<span class="hljs-comment">// 📁 2.js</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">`./alert.js`</span>; <span class="hljs-comment">// (什么都不显示)</span></code></pre>
+<p>在实际开发中，顶级模块代码主要用于初始化，内部数据结构的创建，并且如果我们希望某些东西可以重用 — 请导出它。</p>
+<p>下面是一个高级点的例子。</p>
+<p>我们假设一个模块导出了一个对象：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 admin.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> admin = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+};</code></pre>
+<p>如果这个模块被导入到多个文件中，模块仅在第一次被导入时被解析，并创建 <code>admin</code> 对象，然后将其传入到所有的导入。</p>
+<p>所有的导入都只获得了一个唯一的 <code>admin</code> 对象：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 1.js</span>
+<span class="hljs-keyword">import</span> {admin} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./admin.js&#x27;</span>;
+admin.name = <span class="hljs-string">&quot;Pete&quot;</span>;
+
+<span class="hljs-comment">// 📁 2.js</span>
+<span class="hljs-keyword">import</span> {admin} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./admin.js&#x27;</span>;
+alert(admin.name); <span class="hljs-comment">// Pete</span>
+
+*!*
+<span class="hljs-comment">// 1.js 和 2.js 导入的是同一个对象</span>
+<span class="hljs-comment">// 在 1.js 中对对象做的更改，在 2.js 中也是可见的</span>
+*/!*</code></pre>
+<p>所以，让我们重申一下 —— 模块只被执行一次。生成导出，然后它被分享给所有对其的导入，所以如果某个地方修改了 <code>admin</code> 对象，其他的模块也能看到这个修改。</p>
+<p>这种行为让我们可以在首次导入时 <strong>设置</strong> 模块。我们只需要设置其属性一次，然后在进一步的导入中就都可以直接使用了。</p>
+<p>例如，下面的 <code>admin.js</code> 模块可能提供了特定的功能，但是希望凭证（credential）从外部进入 <code>admin</code> 对象：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 admin.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> admin = { };
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">`Ready to serve, <span class="hljs-subst">${admin.name}</span>!`</span>);
+}</code></pre>
+<p>在 <code>init.js</code> 中 —— 我们 APP 的第一个脚本，设置了 <code>admin.name</code>。现在每个位置都能看到它，包括在 <code>admin.js</code> 内部的调用。</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 init.js</span>
+<span class="hljs-keyword">import</span> {admin} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./admin.js&#x27;</span>;
+admin.name = <span class="hljs-string">&quot;Pete&quot;</span>;</code></pre>
+<p>另一个模块也可以看到 <code>admin.name</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 other.js</span>
+<span class="hljs-keyword">import</span> {admin, sayHi} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./admin.js&#x27;</span>;
+
+alert(admin.name); <span class="hljs-comment">// *!*Pete*/!*</span>
+
+sayHi(); <span class="hljs-comment">// Ready to serve, *!*Pete*/!*!</span></code></pre>
+<h3 id="importmeta">import.meta</h3>
+<p><code>import.meta</code> 对象包含关于当前模块的信息。</p>
+<p>它的内容取决于其所在的环境。在浏览器环境中，它包含当前脚本的 URL，或者如果它是在 HTML 中的话，则包含当前页面的 URL。</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
+  alert(<span class="hljs-keyword">import</span>.meta.url); <span class="hljs-comment">// 脚本的 URL（对于内嵌脚本来说，则是当前 HTML 页面的 URL）</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h3 id="在一个模块中，this-是-undefined">在一个模块中，&quot;this&quot; 是 undefined</h3>
+<p>这是一个小功能，但为了完整性，我们应该提到它。</p>
+<p>在一个模块中，顶级 <code>this</code> 是 undefined。</p>
+<p>将其与非模块脚本进行比较会发现，非模块脚本的顶级 <code>this</code> 是全局对象：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  alert(<span class="hljs-built_in">this</span>); <span class="hljs-comment">// window</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
+  alert(<span class="hljs-built_in">this</span>); <span class="hljs-comment">// undefined</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="浏览器特定功能">浏览器特定功能</h2>
+<p>与常规脚本相比，拥有 <code>type=&quot;module&quot;</code> 标识的脚本有一些特定于浏览器的差异。</p>
+<p>如果你是第一次阅读或者你不打算在浏览器中使用 JavaScript，那么你可以跳过本节内容。</p>
+<h3 id="模块脚本是延迟的">模块脚本是延迟的</h3>
+<p>模块脚本 <strong>总是</strong> 被延迟的，与 <code>defer</code> 特性（在 <a href="info:script-async-defer"></a> 一章中描述的）对外部脚本和内联脚本（inline script）的影响相同。</p>
+<p>也就是说：</p>
+<ul>
+<li>下载外部模块脚本 <code>&lt;script type=&quot;module&quot; src=&quot;...&quot;&gt;</code> 不会阻塞 HTML 的处理，它们会与其他资源并行加载。</li>
+<li>模块脚本会等到 HTML 文档完全准备就绪（即使它们很小并且比 HTML 加载速度更快），然后才会运行。</li>
+<li>保持脚本的相对顺序：在文档中排在前面的脚本先执行。</li>
+</ul>
+<p>它的一个副作用是，模块脚本总是会“看到”已完全加载的 HTML 页面，包括在它们下方的 HTML 元素。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
+*!*
+  alert(<span class="hljs-keyword">typeof</span> button); <span class="hljs-comment">// object：脚本可以“看见”下面的 button</span>
+*/!*
+  <span class="hljs-comment">// 因为模块是被延迟的（deferred，所以模块脚本会在整个页面加载完成后才运行</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+相较于下面这个常规脚本：
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+*!*
+  alert(<span class="hljs-keyword">typeof</span> button); <span class="hljs-comment">// Error: button is undefined，脚本看不到下面的元素</span>
+*/!*
+  <span class="hljs-comment">// 常规脚本会立即运行，常规脚本的运行是在在处理页面的其余部分之前进行的</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>Button<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre>
+<p>请注意：上面的第二个脚本实际上要先于前一个脚本运行！所以我们会先看到 <code>undefined</code>，然后才是 <code>object</code>。</p>
+<p>这是因为模块脚本是被延迟的，所以要等到 HTML 文档被处理完成才会执行它。而常规脚本则会立即运行，所以我们会先看到常规脚本的输出。</p>
+<p>当使用模块脚本时，我们应该知道 HTML 页面在加载时就会显示出来，在 HTML 页面加载完成后才会执行 JavaScript 模块，因此用户可能会在 JavaScript 应用程序准备好之前看到该页面。某些功能那时可能还无法正使用。我们应该放置“加载指示器（loading indicator）”，否则，请确保不会使用户感到困惑。</p>
+<h3 id="async-适用于内联脚本（inline-script）">Async 适用于内联脚本（inline script）</h3>
+<p>对于非模块脚本，<code>async</code> 特性（attribute）仅适用于外部脚本。异步脚本会在准备好后立即运行，独立于其他脚本或 HTML 文档。</p>
+<p>对于模块脚本，它也适用于内联脚本。</p>
+<p>例如，下面的内联脚本具有 <code>async</code> 特性，因此它不会等待任何东西。</p>
+<p>它执行导入（fetch <code>./analytics.js</code>），并在准备导入完成时运行，即使 HTML 文档还未完成，或者其他脚本仍在等待处理中。</p>
+<p>这对于不依赖任何其他东西的功能来说是非常棒的，例如计数器，广告，文档级事件监听器。</p>
+<pre><code class="language-html"><span class="hljs-comment">&lt;!-- 所有依赖都获取完成（analytics.js）然后脚本开始运行 --&gt;</span>
+<span class="hljs-comment">&lt;!-- 不会等待 HTML 文档或者其他 &lt;script&gt; 标签 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> *!*<span class="hljs-attr">async</span>*/!* <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">import</span> {counter} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./analytics.js&#x27;</span>;
+
+  counter.count();
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h3 id="外部脚本">外部脚本</h3>
+<p>具有 <code>type=&quot;module&quot;</code> 的外部脚本（external script）在两个方面有所不同：</p>
+<ol>
+<li><p>具有相同 <code>src</code> 的外部脚本仅运行一次：</p>
+<pre><code class="language-html"><span class="hljs-comment">&lt;!-- 脚本 my.js 被加载完成（fetched）并只被运行一次 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;my.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;my.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+</li>
+<li><p>从另一个源（例如另一个网站）获取的外部脚本需要 <a href="mdn:Web/HTTP/CORS">CORS</a> header，如我们在 <a href="info:fetch-crossorigin">info:fetch-crossorigin</a> 一章中所讲的那样。换句话说，如果一个模块脚本是从另一个源获取的，则远程服务器必须提供表示允许获取的 header <code>Access-Control-Allow-Origin</code>。</p>
+<pre><code class="language-html"><span class="hljs-comment">&lt;!-- another-site.com 必须提供 Access-Control-Allow-Origin --&gt;</span>
+<span class="hljs-comment">&lt;!-- 否则，脚本将无法执行 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;*!*http://another-site.com/their.js*/!*&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p> 默认这样做可以确保更好的安全性。</p>
+</li>
+</ol>
+<h3 id="不允许裸模块（bare-module）">不允许裸模块（&quot;bare&quot; module）</h3>
+<p>在浏览器中，<code>import</code> 必须给出相对或绝对的 URL 路径。没有任何路径的模块被称为“裸（bare）”模块。在 <code>import</code> 中不允许这种模块。</p>
+<p>例如，下面这个 <code>import</code> 是无效的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> {sayHi} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;sayHi&#x27;</span>; <span class="hljs-comment">// Error，“裸”模块</span>
+<span class="hljs-comment">// 模块必须有一个路径，例如 &#x27;./sayHi.js&#x27; 或者其他任何路径</span></code></pre>
+<p>某些环境，像 Node.js 或者打包工具（bundle tool）允许没有任何路径的裸模块，因为它们有自己的查找模块的方法和钩子（hook）来对它们进行微调。但是浏览器尚不支持裸模块。</p>
+<h3 id="兼容性，nomodule">兼容性，&quot;nomodule&quot;</h3>
+<p>旧时的浏览器不理解 <code>type=&quot;module&quot;</code>。未知类型的脚本会被忽略。对此，我们可以使用 <code>nomodule</code> 特性来提供一个后备：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
+  alert(<span class="hljs-string">&quot;Runs in modern browsers&quot;</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">nomodule</span>&gt;</span><span class="javascript">
+  alert(<span class="hljs-string">&quot;Modern browsers know both type=module and nomodule, so skip this&quot;</span>)
+  alert(<span class="hljs-string">&quot;Old browsers ignore script with unknown type=module, but execute this.&quot;</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="构建工具">构建工具</h2>
+<p>在实际开发中，浏览器模块很少被以“原始”形式进行使用。通常，我们会使用一些特殊工具，例如 <a href="https://webpack.js.org/">Webpack</a>，将它们打包在一起，然后部署到生产环境的服务器。</p>
+<p>使用打包工具的一个好处是 —— 它们可以更好地控制模块的解析方式，允许我们使用裸模块和更多的功能，例如 CSS/HTML 模块等。</p>
+<p>构建工具做以下这些事儿：</p>
+<ol>
+<li>从一个打算放在 HTML 中的 <code>&lt;script type=&quot;module&quot;&gt;</code> “主”模块开始。</li>
+<li>分析它的依赖：它的导入，以及它的导入的导入等。</li>
+<li>使用所有模块构建一个文件（或者多个文件，这是可调的），并用打包函数（bundler function）替代原生的 <code>import</code> 调用，以使其正常工作。还支持像 HTML/CSS 模块等“特殊”的模块类型。</li>
+<li>在处理过程中，可能会应用其他转换和优化：<ul>
+<li>删除无法访问的代码。</li>
+<li>删除未使用的导出（&quot;tree-shaking&quot;）。</li>
+<li>删除特定于开发的像 <code>console</code> 和 <code>debugger</code> 这样的语句。</li>
+<li>可以使用 <a href="https://babeljs.io/">Babel</a> 将前沿的现代的 JavaScript 语法转换为具有类似功能的旧的 JavaScript 语法。</li>
+<li>压缩生成的文件（删除空格，用短的名字替换变量等）。</li>
+</ul>
+</li>
+</ol>
+<p>如果我们使用打包工具，那么脚本会被打包进一个单一文件（或者几个文件），在这些脚本中的 <code>import/export</code> 语句会被替换成特殊的打包函数（bundler function）。因此，最终打包好的脚本中不包含任何 <code>import/export</code>，它也不需要 <code>type=&quot;module&quot;</code>，我们可以将其放入常规的 <code>&lt;script&gt;</code>：</p>
+<pre><code class="language-html"><span class="hljs-comment">&lt;!-- 假设我们从诸如 Webpack 这类的打包工具中获得了 &quot;bundle.js&quot; 脚本 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;bundle.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>也就是说，原生模块也是可以使用的。所以，我们在这儿将不会使用 Webpack：你可以稍后再配置它。</p>
+<h2 id="总结">总结</h2>
+<p>下面总结一下模块的核心概念：</p>
+<ol>
+<li>一个模块就是一个文件。浏览器需要使用 <code>&lt;script type=&quot;module&quot;&gt;</code> 以使 <code>import/export</code> 可以工作。模块（译注：相较于常规脚本）有几点差别：<ul>
+<li>默认是延迟解析的（deferred）。</li>
+<li>Async 可用于内联脚本。</li>
+<li>要从另一个源（域/协议/端口）加载外部脚本，需要 CORS header。</li>
+<li>重复的外部脚本会被忽略</li>
+</ul>
+</li>
+<li>模块具有自己的本地顶级作用域，并可以通过 <code>import/export</code> 交换功能。</li>
+<li>模块始终使用 <code>use strict</code>。</li>
+<li>模块代码只执行一次。导出仅创建一次，然后会在导入之间共享。</li>
+</ol>
+<p>当我们使用模块时，每个模块都会实现特定功能并将其导出。然后我们使用 <code>import</code> 将其直接导入到需要的地方即可。浏览器会自动加载并解析脚本。</p>
+<p>在生产环境中，出于性能和其他原因，开发者经常使用诸如 <a href="https://webpack.js.org">Webpack</a> 之类的打包工具将模块打包到一起。</p>
+<p>在下一章里，我们将会看到更多关于模块的例子，以及如何进行导入/导出。</p>

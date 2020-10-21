@@ -1,0 +1,16 @@
+<p>importance: 3</p>
+<hr>
+<h1 id="登陆验证">登陆验证</h1>
+<p>实现使用 <code>prompt</code> 进行登陆校验的代码。</p>
+<p>如果访问者输入 <code>&quot;Admin&quot;</code>，那么使用 <code>prompt</code> 引导获取密码，如果输入的用户名为空或者按下了 <code>key:Esc</code> 键 —— 显示 &quot;Canceled&quot;，如果是其他字符串 —— 显示 &quot;I don&#39;t know you&quot;。</p>
+<p>密码的校验规则如下：</p>
+<ul>
+<li>如果输入的是 &quot;TheMaster&quot;，显示 &quot;Welcome!&quot;，</li>
+<li>其他字符串 —— 显示 &quot;Wrong password&quot;，</li>
+<li>空字符串或取消了输入，显示 &quot;Canceled.&quot;。</li>
+</ul>
+<p>流程图：</p>
+<p><img src="ifelse_task.svg" alt=""></p>
+<p>请使用嵌套的 <code>if</code> 块。注意代码整体的可读性。</p>
+<p>提示：将空字符串输入，prompt 会获取到一个空字符串 <code>&#39;&#39;</code>。Prompt 运行过程中，按下 <code>key:ESC</code> 键会得到 <code>null</code>。</p>
+<p>[demo]</p>

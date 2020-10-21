@@ -1,0 +1,31 @@
+<p>importance: 4</p>
+<hr>
+<h1 id="可排序的表格">可排序的表格</h1>
+<p>使表格可排序：点击 <code>&lt;th&gt;</code> 元素，应按对应的列对表格进行排序。</p>
+<p>每个 <code>&lt;th&gt;</code> 的特性（attribute）中都有类型，如下所示：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;grid&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+*!*
+      <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-type</span>=<span class="hljs-string">&quot;number&quot;</span>&gt;</span>Age<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-type</span>=<span class="hljs-string">&quot;string&quot;</span>&gt;</span>Name<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+*/!*
+    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>5<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>John<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>10<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>Ann<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+    ...
+  <span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></code></pre>
+<p>在上面的示例中，第一列为数字，第二列为字符串。排序函数应根据类型进行排序。</p>
+<p>应该只支持 <code>&quot;string&quot;</code> 和 <code>&quot;number&quot;</code> 类型。</p>
+<p>运行示例：</p>
+<p>[iframe border=1 src=&quot;solution&quot; height=190]</p>
+<p>P.S. 表格可以更大，有任意数量的行和列。</p>

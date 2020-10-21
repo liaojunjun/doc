@@ -1,0 +1,12 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="保存阅读日期">保存阅读日期</h1>
+<p>这儿有一个和 <a href="info:task/recipients-read">上一个任务</a> 类似的 <code>messages</code> 数组。场景也相似。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> messages = [
+  {<span class="hljs-attr">text</span>: <span class="hljs-string">&quot;Hello&quot;</span>, <span class="hljs-attr">from</span>: <span class="hljs-string">&quot;John&quot;</span>},
+  {<span class="hljs-attr">text</span>: <span class="hljs-string">&quot;How goes?&quot;</span>, <span class="hljs-attr">from</span>: <span class="hljs-string">&quot;John&quot;</span>},
+  {<span class="hljs-attr">text</span>: <span class="hljs-string">&quot;See you soon&quot;</span>, <span class="hljs-attr">from</span>: <span class="hljs-string">&quot;Alice&quot;</span>}
+];</code></pre>
+<p>现在的问题是：你建议采用什么数据结构来保存信息：“消息是什么时候被阅读的？”。</p>
+<p>在前一个任务中我们只需要保存“是/否”。现在我们需要保存日期，并且它应该在消息被垃圾回收时也被从内存中清除。</p>
+<p>P.S. 日期可以存储为内建的 <code>Date</code> 类的对象，稍后我们将进行介绍。</p>

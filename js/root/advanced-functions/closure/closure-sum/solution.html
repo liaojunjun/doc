@@ -1,0 +1,12 @@
+<p>为了使第二个括号有效，第一个（括号）必须返回一个函数。</p>
+<p>就像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a</span>) </span>{
+
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">b</span>) </span>{
+    <span class="hljs-keyword">return</span> a + b; <span class="hljs-comment">// 从外部词法环境获得 &quot;a&quot;</span>
+  };
+
+}
+
+alert( sum(<span class="hljs-number">1</span>)(<span class="hljs-number">2</span>) ); <span class="hljs-comment">// 3</span>
+alert( sum(<span class="hljs-number">5</span>)(<span class="hljs-number">-1</span>) ); <span class="hljs-comment">// 4</span></code></pre>

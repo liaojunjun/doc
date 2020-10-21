@@ -1,0 +1,16 @@
+<p>答案：</p>
+<ol>
+<li><p><code>true</code>。</p>
+<p> <code>Rabbit.prototype</code> 的赋值操作为新对象设置了 <code>[[Prototype]]</code>，但它不影响已有的对象。</p>
+</li>
+<li><p><code>false</code>。</p>
+<p> 对象通过引用被赋值。来自 <code>Rabbit.prototype</code> 的对象并没有被复制，它仍然是被 <code>Rabbit.prototype</code> 和 <code>rabbit</code> 的 <code>[[Prototype]]</code> 引用的单个对象。</p>
+<p> 所以当我们通过一个引用更改其内容时，它对其他引用也是可见的。</p>
+</li>
+<li><p><code>true</code>。</p>
+<p> 所有 <code>delete</code> 操作都直接应用于对象。这里的 <code>delete rabbit.eats</code> 试图从 <code>rabbit</code> 中删除 <code>eats</code> 属性，但 <code>rabbit</code> 对象并没有 <code>eats</code> 属性。所以这个操作不会有任何影响。</p>
+</li>
+<li><p><code>undefined</code>。</p>
+<p> 属性 <code>eats</code> 被从 prototype 中删除，prototype 中就没有这个属性了。</p>
+</li>
+</ol>

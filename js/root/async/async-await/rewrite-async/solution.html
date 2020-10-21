@@ -1,0 +1,29 @@
+<p>解析在代码下面：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadJson</span>(<span class="hljs-params">url</span>) </span>{ <span class="hljs-comment">// (1)</span>
+  <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(url); <span class="hljs-comment">// (2)</span>
+
+  <span class="hljs-keyword">if</span> (response.status == <span class="hljs-number">200</span>) {
+    <span class="hljs-keyword">let</span> json = <span class="hljs-keyword">await</span> response.json(); <span class="hljs-comment">// (3)</span>
+    <span class="hljs-keyword">return</span> json;
+  }
+
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(response.status);
+}
+
+loadJson(<span class="hljs-string">&#x27;no-such-user.json&#x27;</span>)
+  .catch(alert); <span class="hljs-comment">// Error: 404 (4)</span></code></pre>
+<p>解析：</p>
+<ol>
+<li><p>将函数 <code>loadJson</code> 变为 <code>async</code>。</p>
+</li>
+<li><p>将函数中所有的 <code>.then</code> 都替换为 <code>await</code>。</p>
+</li>
+<li><p>我们可以返回 <code>return response.json()</code> 而不用等待它，像这样:</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (response.status == <span class="hljs-number">200</span>) {
+  <span class="hljs-keyword">return</span> response.json(); <span class="hljs-comment">// (3)</span>
+}</code></pre>
+<p> 然后外部的代码就必须 <code>await</code> 这个 promise resolve。在本例中它无关紧要。</p>
+</li>
+<li><p><code>loadJson</code> 抛出的 error 被 <code>.catch</code> 处理了。在这儿我们我们不能使用 <code>await loadJson(…)</code>，因为我们不是在一个 <code>async</code> 函数中。</p>
+</li>
+</ol>

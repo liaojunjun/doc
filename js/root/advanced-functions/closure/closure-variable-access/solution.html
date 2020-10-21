@@ -1,0 +1,5 @@
+<p>答案：<strong>Pete</strong>.</p>
+<p>下方代码中的函数 <code>work()</code> 在其被创建的位置通过外部词法环境引用获取 <code>name</code>：</p>
+<p><img src="lexenv-nested-work.svg" alt=""></p>
+<p>所以这里的结果是 <code>&quot;Pete&quot;</code>。</p>
+<p>但如果在 <code>makeWorker()</code> 中没有 <code>let name</code>，那么将继续向外搜索并最终找到全局变量，正如我们可以从上图中看到的那样。在这种情况下，结果将是 <code>&quot;John&quot;</code>。</p>

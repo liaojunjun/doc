@@ -1,0 +1,10 @@
+<p>让我们使用下个月创建日期，但将零作为天数（day）传递：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getLastDayOfMonth</span>(<span class="hljs-params">year, month</span>) </span>{
+  <span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(year, month + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+  <span class="hljs-keyword">return</span> date.getDate();
+}
+
+alert( getLastDayOfMonth(<span class="hljs-number">2012</span>, <span class="hljs-number">0</span>) ); <span class="hljs-comment">// 31</span>
+alert( getLastDayOfMonth(<span class="hljs-number">2012</span>, <span class="hljs-number">1</span>) ); <span class="hljs-comment">// 29</span>
+alert( getLastDayOfMonth(<span class="hljs-number">2013</span>, <span class="hljs-number">1</span>) ); <span class="hljs-comment">// 28</span></code></pre>
+<p>通常，日期从 1 开始，但从技术上讲，我们可以传递任何数字，日期会自动进行调整。因此，当我们传递 0 时，它的意思是“一个月的第一天的前一天”，换句话说：“上个月的最后一天”。</p>

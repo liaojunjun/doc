@@ -1,0 +1,20 @@
+<pre><code class="language-js"><span class="hljs-keyword">let</span> userName = prompt(<span class="hljs-string">&quot;Who&#x27;s there?&quot;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+
+<span class="hljs-keyword">if</span> (userName == <span class="hljs-string">&#x27;Admin&#x27;</span>) {
+
+  <span class="hljs-keyword">let</span> pass = prompt(<span class="hljs-string">&#x27;Password?&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+
+  <span class="hljs-keyword">if</span> (pass == <span class="hljs-string">&#x27;TheMaster&#x27;</span>) {
+    alert( <span class="hljs-string">&#x27;Welcome!&#x27;</span> );
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (pass == <span class="hljs-string">&#x27;&#x27;</span> || pass == <span class="hljs-literal">null</span>) {
+    alert( <span class="hljs-string">&#x27;Canceled&#x27;</span> );
+  } <span class="hljs-keyword">else</span> {
+    alert( <span class="hljs-string">&#x27;Wrong password&#x27;</span> );
+  }
+
+} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (userName == <span class="hljs-string">&#x27;&#x27;</span> || userName == <span class="hljs-literal">null</span>) {
+  alert( <span class="hljs-string">&#x27;Canceled&#x27;</span> );
+} <span class="hljs-keyword">else</span> {
+  alert( <span class="hljs-string">&quot;I don&#x27;t know you&quot;</span> );
+}</code></pre>
+<p>请注意 <code>if</code> 块中水平方向的缩进。技术上是非必需的，但会增加代码的可读性。</p>

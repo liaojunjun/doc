@@ -1,0 +1,23 @@
+<p>请注意这个解决方案的细微但是很重要的细节。我们没有在 <code>prompt</code> 后立即把 <code>value</code> 转换成数字，因为在执行 <code>value = +value</code> 之后，就没办法区分出空字符串（中断标志）和数字 0（合法输入）了，所以要放到后面再处理。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sumInput</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-keyword">let</span> numbers = [];
+
+  <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+
+    <span class="hljs-keyword">let</span> value = prompt(<span class="hljs-string">&quot;A number please?&quot;</span>, <span class="hljs-number">0</span>);
+
+    <span class="hljs-comment">// 应该结束了吗？</span>
+    <span class="hljs-keyword">if</span> (value === <span class="hljs-string">&quot;&quot;</span> || value === <span class="hljs-literal">null</span> || !<span class="hljs-built_in">isFinite</span>(value)) <span class="hljs-keyword">break</span>;
+
+    numbers.push(+value);
+  }
+
+  <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> number <span class="hljs-keyword">of</span> numbers) {
+    sum += number;
+  }
+  <span class="hljs-keyword">return</span> sum;
+}
+
+alert( sumInput() ); </code></pre>

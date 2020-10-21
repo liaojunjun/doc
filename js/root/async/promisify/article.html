@@ -1,0 +1,86 @@
+<h1 id="promisification">Promisification</h1>
+<p>&quot;Promisification&quot; 是用于一个简单转换的一个长单词。它指将一个接受回调的函数转换为一个返回 promise 的函数。</p>
+<p>由于许多函数和库都是基于回调的，因此，在实际开发中经常会需要进行这种转换。因为使用 promise 更加方便，所以将基于回调的函数和库 promisify 是有意义的。（译注：promisify 即指 promise 化）</p>
+<p>例如，在 <a href="info:callbacks">info:callbacks</a> 一章中我们有 <code>loadScript(src, callback)</code>。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadScript</span>(<span class="hljs-params">src, callback</span>) </span>{
+  <span class="hljs-keyword">let</span> script = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;script&#x27;</span>);
+  script.src = src;
+
+  script.onload = <span class="hljs-function">() =&gt;</span> callback(<span class="hljs-literal">null</span>, script);
+  script.onerror = <span class="hljs-function">() =&gt;</span> callback(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`Script load error for <span class="hljs-subst">${src}</span>`</span>));
+
+  <span class="hljs-built_in">document</span>.head.append(script);
+}
+
+<span class="hljs-comment">// 用法：</span>
+<span class="hljs-comment">// loadScript(&#x27;path/script.js&#x27;, (err, script) =&gt; {...})</span></code></pre>
+<p>让我们将其 promisify 吧。新的 <code>loadScriptPromise(src)</code> 将会达到同样的结果，但它只接受 <code>src</code>（没有回调）并返回 promise。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> loadScriptPromise = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">src</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    loadScript(src, <span class="hljs-function">(<span class="hljs-params">err, script</span>) =&gt;</span> {
+      <span class="hljs-keyword">if</span> (err) reject(err)
+      <span class="hljs-keyword">else</span> resolve(script);
+    });
+  })
+}
+
+<span class="hljs-comment">// 用法：</span>
+<span class="hljs-comment">// loadScriptPromise(&#x27;path/script.js&#x27;).then(...)</span></code></pre>
+<p>现在，<code>loadScriptPromise</code> 非常适合基于 promise 的代码。</p>
+<p>正如我们所看到的，它将所有工作都委托给原始的 <code>loadScript</code>，并提供了转换成 promise <code>resolve/reject</code> 的自己的回调。</p>
+<p>在实际开发中，我们可能需要 promisify 很多函数，所以使用一个 helper 很有意义。我们将其称为 <code>promisify(f)</code>：它接受一个需要被 promisify 的函数 <code>f</code>，并返回一个包装（wrapper）函数。</p>
+<p>该包装（wrapper）函数的功能和上面的代码相同：返回一个 promise，将调用传递给原始的函数 <code>f</code>，并在自定义的回调中跟踪结果：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">promisify</span>(<span class="hljs-params">f</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) </span>{ <span class="hljs-comment">// 返回一个包装函数（wrapper-function）</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+      <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callback</span>(<span class="hljs-params">err, result</span>) </span>{ <span class="hljs-comment">// 我们对 f 的自定义的回调</span>
+        <span class="hljs-keyword">if</span> (err) {
+          reject(err);
+        } <span class="hljs-keyword">else</span> {
+          resolve(result);
+        }
+      }
+
+      args.push(callback); <span class="hljs-comment">// 将我们的自定义的回调附加到 f 参数（arguments）的末尾</span>
+
+      f.call(<span class="hljs-built_in">this</span>, ...args); <span class="hljs-comment">// 调用原始的函数</span>
+    });
+  };
+};
+
+<span class="hljs-comment">// 用法：</span>
+<span class="hljs-keyword">let</span> loadScriptPromise = promisify(loadScript);
+loadScriptPromise(...).then(...);</code></pre>
+<p>这里我们假设，原始的函数期望一个带有两个参数 <code>(err, result)</code> 的回调。这就是我们最常遇到的形式。那么我们的自定义回调的格式完全正确，并且 <code>promisify</code> 在这种情况下非常有用。</p>
+<p>但是如果原始的 <code>f</code> 期望一个带有更多参数的回调 <code>callback(err, res1, res2, ...)</code>，该怎么办呢？</p>
+<p>下面是 <code>promisify</code> 的更高级的版本：如果像这样进行调用 <code>promisify(f, true)</code>，那么 promise 的结果将是回调结果的数组 <code>[res1, res2, ...]</code>：</p>
+<pre><code class="language-js">// promisify(f, true) 来获取结果数组
+function promisify(f, manyArgs = false) {
+  return function (...args) {
+    return new Promise((resolve, reject) =&gt; {
+      function *!*callback(err, ...results*/!*) { // 我们自定义的 f 的回调
+        if (err) {
+          reject(err);
+        } else {
+          // 如果 manyArgs 被指定，则使用所有回调的结果 resolve
+          *!*resolve(manyArgs ? results : results[0]);*/!*
+        }
+      }
+
+      args.push(callback);
+
+      f.call(this, ...args);
+    });
+  };
+};
+
+// 用法：
+f = promisify(f, true);
+f(...).then(arrayOfResults =&gt; ..., err =&gt; ...)</code></pre>
+<p>对于一些更奇特的回调格式，例如根本没有 <code>err</code> 的格式：<code>callback(result)</code>，我们可以手动 promisify 这样的函数，而不使用 helper。</p>
+<p>也有一些具有更灵活一点的 promisification 函数的模块（module），例如 <a href="https://github.com/digitaldesignlabs/es6-promisify">es6-promisify</a>。在 Node.js 中，有一个内建的 promisify 函数 <code>util.promisify</code>。</p>
+<pre><code class="language-smart">Promisification 是一种很好的方法，特别是在你使用 `async/await` 的时候（请看下一章），但不是回调的完全替代。
+
+请记住，一个 promise 可能只有一个结果，但从技术上讲，一个回调可能被调用很多次。
+
+因此，promisification 仅适用于调用一次回调的函数。进一步的调用将被忽略。</code></pre>

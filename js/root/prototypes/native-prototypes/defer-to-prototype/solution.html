@@ -1,0 +1,9 @@
+<pre><code class="language-js"><span class="hljs-built_in">Function</span>.prototype.defer = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">ms</span>) </span>{
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-built_in">this</span>, ms);
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">&quot;Hello!&quot;</span>);
+}
+
+f.defer(<span class="hljs-number">1000</span>); <span class="hljs-comment">// shows &quot;Hello!&quot; after 1 sec</span></code></pre>

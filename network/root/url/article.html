@@ -1,0 +1,140 @@
+<h1 id="url-对象">URL 对象</h1>
+<p>内建的 <a href="https://url.spec.whatwg.org/#api">URL</a> 类提供了用于创建和解析 URL 的便捷接口。</p>
+<p>没有任何一个网络方法一定需要使用 <code>URL</code> 对象，字符串就足够了。所以从技术上讲，我们并不是必须使用 <code>URL</code>。但是有些时候 <code>URL</code> 对象真的很有用。</p>
+<h2 id="创建-url-对象">创建 URL 对象</h2>
+<p>创建一个新 <code>URL</code> 对象的语法：</p>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> URL(url, [base])</code></pre>
+<ul>
+<li><strong><code>url</code></strong> —— 完整的 URL，或者仅路径（如果设置了 base），</li>
+<li><strong><code>base</code></strong> —— 可选的 base URL：如果设置了此参数，且参数 <code>url</code> 只有路径，则会根据这个 <code>base</code> 生成 URL。</li>
+</ul>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://javascript.info/profile/admin&#x27;</span>);</code></pre>
+<p>下面这两个 URL 是一样的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url1 = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://javascript.info/profile/admin&#x27;</span>);
+<span class="hljs-keyword">let</span> url2 = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;/profile/admin&#x27;</span>, <span class="hljs-string">&#x27;https://javascript.info&#x27;</span>);
+
+alert(url1); <span class="hljs-comment">// https://javascript.info/profile/admin</span>
+alert(url2); <span class="hljs-comment">// https://javascript.info/profile/admin</span></code></pre>
+<p>我们可以根据相对于现有 URL 的路径轻松创建一个新的 URL：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://javascript.info/profile/admin&#x27;</span>);
+<span class="hljs-keyword">let</span> newUrl = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;tester&#x27;</span>, url);
+
+alert(newUrl); <span class="hljs-comment">// https://javascript.info/profile/tester</span></code></pre>
+<p><code>URL</code> 对象立即允许我们访问其组件，因此这是一个解析 url 的好方法，例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://javascript.info/url&#x27;</span>);
+
+alert(url.protocol); <span class="hljs-comment">// https:</span>
+alert(url.host);     <span class="hljs-comment">// javascript.info</span>
+alert(url.pathname); <span class="hljs-comment">// /url</span></code></pre>
+<p>这是 URL 组件的备忘单：</p>
+<p><img src="url-object.svg" alt=""></p>
+<ul>
+<li><code>href</code> 是完整的 URL，与 <code>url.toString()</code> 相同</li>
+<li><code>protocol</code> 以冒号字符 <code>:</code> 结尾</li>
+<li><code>search</code> —— 以问号 <code>?</code> 开头的一串参数</li>
+<li><code>hash</code> 以哈希字符 <code>#</code> 开头</li>
+<li>如果存在 HTTP 身份验证，则这里可能还会有 <code>user</code> 和 <code>password</code> 属性：<code>http://login:password@site.com</code>（图片上没有，很少被用到）。</li>
+</ul>
+<p>```smart header=&quot;我们可以将 <code>URL</code> 对象传递给网络（和大多数其他）方法，而不是字符串&quot;
+我们可以在 <code>fetch</code> 或 <code>XMLHttpRequest</code> 中使用 <code>URL</code> 对象，几乎可以在任何需要 URL 字符串的地方都能使用 <code>URL</code> 对象。</p>
+<p>通常，<code>URL</code> 对象可以替代字符串传递给任何方法，因为大多数方法都会执行字符串转换，这会将 <code>URL</code> 对象转换为具有完整 URL 的字符串。</p>
+<pre><code>
+## SearchParams &quot;?...&quot;
+
+假设，我们想要创建一个具有给定搜索参数的 url，例如：`https://google.com/search?query=JavaScript`。
+
+我们可以在 URL 字符串中提供它们：
+
+```js
+new URL(&#x27;https://google.com/search?query=JavaScript&#x27;)</code></pre>
+<p>……但是，如果参数中包含空格，非拉丁字母等（具体参见下文），参数就需要被编码。</p>
+<p>因此，有一个 URL 属性用于解决这个问题：<code>url.searchParams</code>，<a href="https://url.spec.whatwg.org/#urlsearchparams">URLSearchParams</a> 类型的对象。</p>
+<p>它为搜索参数提供了简便的方法：</p>
+<ul>
+<li><strong><code>append(name, value)</code></strong> —— 按照 <code>name</code> 添加参数，</li>
+<li><strong><code>delete(name)</code></strong> —— 按照 <code>name</code> 移除参数，</li>
+<li><strong><code>get(name)</code></strong> —— 按照 <code>name</code> 获取参数，</li>
+<li><strong><code>getAll(name)</code></strong> —— 获取相同 <code>name</code> 的所有参数（这是可行的，例如 <code>?user=John&amp;user=Pete</code>），</li>
+<li><strong><code>has(name)</code></strong> —— 按照 <code>name</code> 检查参数是否存在，</li>
+<li><strong><code>set(name, value)</code></strong> —— set/replace 参数，</li>
+<li><strong><code>sort()</code></strong> —— 按 name 对参数进行排序，很少使用，</li>
+<li>……并且它是可迭代的，类似于 <code>Map</code>。</li>
+</ul>
+<p>包含空格和标点符号的参数的示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://google.com/search&#x27;</span>);
+
+url.searchParams.set(<span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;test me!&#x27;</span>); <span class="hljs-comment">// 添加带有一个空格和一个 ! 的参数</span>
+
+alert(url); <span class="hljs-comment">// https://google.com/search?q=test+me%21</span>
+
+url.searchParams.set(<span class="hljs-string">&#x27;tbs&#x27;</span>, <span class="hljs-string">&#x27;qdr:y&#x27;</span>); <span class="hljs-comment">// 添加带有一个冒号 : 的参数</span>
+
+<span class="hljs-comment">// 参数会被自动编码</span>
+alert(url); <span class="hljs-comment">// https://google.com/search?q=test+me%21&amp;tbs=qdr%3Ay</span>
+
+<span class="hljs-comment">// 遍历搜索参数（被解码）</span>
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> [name, value] <span class="hljs-keyword">of</span> url.searchParams) {
+  alert(<span class="hljs-string">`<span class="hljs-subst">${name}</span>=<span class="hljs-subst">${value}</span>`</span>); <span class="hljs-comment">// q=test me!，然后是 tbs=qdr:y</span>
+}</code></pre>
+<h2 id="编码（encoding）">编码（encoding）</h2>
+<p><a href="https://tools.ietf.org/html/rfc3986">RFC3986</a> 标准定义了 URL 中允许哪些字符，不允许哪些字符。</p>
+<p>那些不被允许的字符必须被编码，例如非拉丁字母和空格 —— 用其 UTF-8 代码代替，前缀为 <code>%</code>，例如 <code>%20</code>（由于历史原因，空格可以用 <code>+</code> 编码，但这是一个例外）。</p>
+<p>好消息是 <code>URL</code> 对象会自动处理这些。我们仅需提供未编码的参数，然后将 <code>URL</code> 转换为字符串：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 在此示例中使用一些西里尔字符</span>
+
+<span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://ru.wikipedia.org/wiki/Тест&#x27;</span>);
+
+url.searchParams.set(<span class="hljs-string">&#x27;key&#x27;</span>, <span class="hljs-string">&#x27;ъ&#x27;</span>);
+alert(url); <span class="hljs-comment">//https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D1%81%D1%82?key=%D1%8A</span></code></pre>
+<p>正如你所看到的，url 路径中的 <code>Тест</code> 和 <code>ъ</code> 参数都被编码了。</p>
+<p>URL 变长了，因为每个西里尔字母用 UTF-8 编码的两个字节表示，因此这里有两个 <code>%..</code> 实体（entities）。</p>
+<h3 id="编码字符串">编码字符串</h3>
+<p>在过去，在出现 <code>URL</code> 对象之前，人们使用字符串作为 URL。</p>
+<p>而现在，<code>URL</code> 对象通常更方便，但是仍然可以使用字符串。在很多情况下，使用字符串可以使代码更短。</p>
+<p>如果使用字符串，则需要手动编码/解码特殊字符。</p>
+<p>下面是用于编码/解码 URL 的内建函数：</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURI">encodeURI</a> —— 编码整个 URL。</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURI">decodeURI</a> —— 解码为编码前的状态。</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent">encodeURIComponent</a> —— 编码 URL 组件，例如搜索参数，或者 hash，或者 pathname。</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent">decodeURIComponent</a> —— 解码为编码前的状态。</li>
+</ul>
+<p>一个自然的问题：“<code>encodeURIComponent</code> 和 <code>encodeURI</code> 之间有什么区别？我们什么时候应该使用哪个？”</p>
+<p>如果我们看一个 URL，就容易理解了，它被分解为本文上面图中所示的组件形式：</p>
+<pre><code>https://site.com:8080/path/page?p1=v1&amp;p2=v2#hash</code></pre>
+<p>正如我们所看到的，在 URL 中 <code>:</code>，<code>?</code>，<code>=</code>，<code>&amp;</code>，<code>#</code> 这类字符是被允许的。</p>
+<p>……另一方面，对于 URL 的单个组件，例如一个搜索参数，则必须对这些字符进行编码，以免破坏 URL 的格式。</p>
+<ul>
+<li><code>encodeURI</code> 仅编码 URL 中完全禁止的字符。</li>
+<li><code>encodeURIComponent</code> 也编码这类字符，此外，还编码 <code>#</code>，<code>$</code>，<code>&amp;</code>，<code>+</code>，<code>,</code>，<code>/</code>，<code>:</code>，<code>;</code>，<code>=</code>，<code>?</code> 和 <code>@</code> 字符。</li>
+</ul>
+<p>所以，对于一个 URL 整体，我们可以使用 <code>encodeURI</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 在 url 路径中使用西里尔字符</span>
+<span class="hljs-keyword">let</span> url = <span class="hljs-built_in">encodeURI</span>(<span class="hljs-string">&#x27;http://site.com/привет&#x27;</span>);
+
+alert(url); <span class="hljs-comment">// http://site.com/%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82</span></code></pre>
+<p>……而对于 URL 参数，我们应该改用 <code>encodeURIComponent</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> music = <span class="hljs-built_in">encodeURIComponent</span>(<span class="hljs-string">&#x27;Rock&amp;Roll&#x27;</span>);
+
+<span class="hljs-keyword">let</span> url = <span class="hljs-string">`https://google.com/search?q=<span class="hljs-subst">${music}</span>`</span>;
+alert(url); <span class="hljs-comment">// https://google.com/search?q=Rock%26Roll</span></code></pre>
+<p>将其与 <code>encodeURI</code> 进行比较：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> music = <span class="hljs-built_in">encodeURI</span>(<span class="hljs-string">&#x27;Rock&amp;Roll&#x27;</span>);
+
+<span class="hljs-keyword">let</span> url = <span class="hljs-string">`https://google.com/search?q=<span class="hljs-subst">${music}</span>`</span>;
+alert(url); <span class="hljs-comment">// https://google.com/search?q=Rock&amp;Roll</span></code></pre>
+<p>我们可以看到，<code>encodeURI</code> 没有对 <code>&amp;</code> 进行编码，因为它对于整个 URL 来说是合法的字符。</p>
+<p>但是，我们应该编码在搜索参数中的 <code>&amp;</code> 字符，否则，我们将得到 <code>q=Rock&amp;Roll</code> —— 实际上是 <code>q=Rock</code> 加上某个晦涩的参数 <code>Roll</code>。不符合预期。</p>
+<p>因此，对于每个搜索参数，我们应该使用 <code>encodeURIComponent</code>，以将其正确地插入到 URL 字符串中。最安全的方式是对 name 和 value 都进行编码，除非我们能够绝对确保它只包含允许的字符。</p>
+<p>````smart header=&quot;<code>encode*</code> 与 <code>URL</code> 之间的编码差异&quot;
+类 <a href="https://url.spec.whatwg.org/#url-class">URL</a> 和 <a href="https://url.spec.whatwg.org/#interface-urlsearchparams">URLSearchParams</a> 基于最新的 URL 规范：<a href="https://tools.ietf.org/html/rfc3986">RFC3986</a>，而 <code>encode*</code> 函数是基于过时的 <a href="https://www.ietf.org/rfc/rfc2396.txt">RFC2396</a>。</p>
+<p>它们之间有一些区别，例如对 IPv6 地址的编码方式不同：</p>
+<pre><code class="language-js"><span class="hljs-comment">// IPv6 地址的合法 url</span>
+<span class="hljs-keyword">let</span> url = <span class="hljs-string">&#x27;http://[2607:f8b0:4005:802::1007]/&#x27;</span>;
+
+alert(<span class="hljs-built_in">encodeURI</span>(url)); <span class="hljs-comment">// http://%5B2607:f8b0:4005:802::1007%5D/</span>
+alert(<span class="hljs-keyword">new</span> URL(url)); <span class="hljs-comment">// http://[2607:f8b0:4005:802::1007]/</span></code></pre>
+<p>正如我们所看到的，<code>encodeURI</code> 替换了方括号 <code>[...]</code>，这是不正确的，原因是：在 RFC2396 (August 1998) 时代，还不存在 IPv6 url。</p>
+<p>这种情况很少见，<code>encode*</code> 函数在大多数情况下都能正常工作。</p>
+<pre><code></code></pre>

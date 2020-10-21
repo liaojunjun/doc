@@ -1,0 +1,12 @@
+<p>我们使用循环遍历 <code>&lt;li&gt;</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> li <span class="hljs-keyword">of</span> <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;li&#x27;</span>)) {
+  ...
+}</code></pre>
+<p>循环时，我们需要获取每个 <code>li</code> 中的文本。</p>
+<p>我们可以从 <code>li</code> 的第一个子节点读取文本，即文本节点：</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> li <span class="hljs-keyword">of</span> <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;li&#x27;</span>)) {
+  <span class="hljs-keyword">let</span> title = li.firstChild.data;
+
+  <span class="hljs-comment">// title 是在 &lt;li&gt; 中的任何其他节点之前的文本</span>
+}</code></pre>
+<p>然后我们就可以使用 <code>li.getElementsByTagName(&#39;li&#39;)</code> 来获取后代的数目了。</p>

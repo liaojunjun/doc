@@ -1,0 +1,246 @@
+<h1 id="正则表达式（regexp）和字符串（string）的方法">正则表达式（RegExp）和字符串（String）的方法</h1>
+<p>在本文中，我们将深入探讨与正则表达式配合使用的各种方法。</p>
+<h2 id="strmatchregexp">str.match(regexp)</h2>
+<p><code>str.match(regexp)</code> 方法在字符串 <code>str</code> 中找到匹配 <code>regexp</code> 的字符。</p>
+<p>它有 3 种模式：</p>
+<ol>
+<li><p>如果 <code>regexp</code> 不带有 <code>pattern:g</code> 标记，则它以数组的形式返回第一个匹配项，其中包含分组和属性 <code>index</code>（匹配项的位置）、<code>input</code>（输入字符串，等于 <code>str </code>）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;I love JavaScript&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.match(<span class="hljs-regexp">/Java(Script)/</span>);
+
+alert( result[<span class="hljs-number">0</span>] );     <span class="hljs-comment">// JavaScript（完全匹配）</span>
+alert( result[<span class="hljs-number">1</span>] );     <span class="hljs-comment">// Script（第一个分组）</span>
+alert( result.length ); <span class="hljs-comment">// 2</span>
+
+<span class="hljs-comment">// 其他信息：</span>
+alert( result.index );  <span class="hljs-comment">// 7（匹配位置）</span>
+alert( result.input );  <span class="hljs-comment">// I love JavaScript（源字符串）</span></code></pre>
+</li>
+<li><p>如果 <code>regexp</code> 带有 <code>pattern:g</code> 标记，则它将所有匹配项的数组作为字符串返回，而不包含分组和其他详细信息。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;I love JavaScript&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.match(<span class="hljs-regexp">/Java(Script)/g</span>);
+
+alert( result[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// JavaScript</span>
+alert( result.length ); <span class="hljs-comment">// 1</span></code></pre>
+</li>
+<li><p>如果没有匹配项，则无论是否带有标记 <code>pattern:g</code> ，都将返回 <code>null</code>。</p>
+<p> 这是一个重要的细微差别。如果没有匹配项，我们得到的不是一个空数组，而是 <code>null</code>。忘记这一点很容易出错，例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;I love JavaScript&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.match(<span class="hljs-regexp">/HTML/</span>);
+
+alert(result); <span class="hljs-comment">// null</span>
+alert(result.length); <span class="hljs-comment">// Error: Cannot read property &#x27;length&#x27; of null</span></code></pre>
+<p> 如果我们希望结果是一个数组，我们可以这样写：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> result = str.match(regexp) || [];</code></pre>
+</li>
+</ol>
+<h2 id="strmatchallregexp">str.matchAll(regexp)</h2>
+<p>[recent browser=&quot;new&quot;]</p>
+<p>方法 <code>str.matchAll(regexp)</code> 是 <code>str.match</code> “新改进的”变体。</p>
+<p>它主要用来搜索所有组的所有匹配项。</p>
+<p>与 <code>match</code> 相比有 3 个区别：</p>
+<ol>
+<li>它返回包含匹配项的可迭代对象，而不是数组。我们可以用 <code>Array.from</code> 从中得到一个常规数组。</li>
+<li>每个匹配项均以包含分组的数组形式返回（返回格式与不带 <code>pattern:g</code> 标记的 <code>str.match</code> 相同）。</li>
+<li>如果没有结果，则返回的不是 <code>null</code>，而是一个空的可迭代对象。</li>
+</ol>
+<p>用法示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&lt;h1&gt;Hello, world!&lt;/h1&gt;&#x27;</span>;
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/&lt;(.*?)&gt;/g</span>;
+
+<span class="hljs-keyword">let</span> matchAll = str.matchAll(regexp);
+
+alert(matchAll); <span class="hljs-comment">// [object RegExp String Iterator]，不是数组，而是一个可迭代对象</span>
+
+matchAll = <span class="hljs-built_in">Array</span>.from(matchAll); <span class="hljs-comment">// 现在返回的是数组</span>
+
+<span class="hljs-keyword">let</span> firstMatch = matchAll[<span class="hljs-number">0</span>];
+alert( firstMatch[<span class="hljs-number">0</span>] );  <span class="hljs-comment">// &lt;h1&gt;</span>
+alert( firstMatch[<span class="hljs-number">1</span>] );  <span class="hljs-comment">// h1</span>
+alert( firstMatch.index );  <span class="hljs-comment">// 0</span>
+alert( firstMatch.input );  <span class="hljs-comment">// &lt;h1&gt;Hello, world!&lt;/h1&gt;</span></code></pre>
+<p>如果我们用 <code>for..of</code> 来循环 <code>matchAll</code> 的匹配项，那么我们就不需要 <code>Array.from</code> 了。</p>
+<h2 id="strsplitregexpsubstr-limit">str.split(regexp|substr, limit)</h2>
+<p>使用正则表达式（或子字符串）作为分隔符来分割字符串。</p>
+<p>我们可以用 <code>split</code> 来分割字符串，如下所示：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&#x27;12-34-56&#x27;</span>.split(<span class="hljs-string">&#x27;-&#x27;</span>)) <span class="hljs-comment">// 数组 [&#x27;12&#x27;, &#x27;34&#x27;, &#x27;56&#x27;]</span></code></pre>
+<p>但同样，我们也可以用正则表达式来做：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&#x27;12, 34, 56&#x27;</span>.split(<span class="hljs-regexp">/,\s*/</span>)) <span class="hljs-comment">// 数组 [&#x27;12&#x27;, &#x27;34&#x27;, &#x27;56&#x27;]</span></code></pre>
+<h2 id="strsearchregexp">str.search(regexp)</h2>
+<p>方法 <code>str.search(regexp)</code> 返回第一个匹配项的位置，如果未找到，则返回 <code>-1</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;A drop of ink may make a million think&quot;</span>;
+
+alert( str.search( <span class="hljs-regexp">/ink/i</span> ) ); <span class="hljs-comment">// 10（第一个匹配位置）</span></code></pre>
+<p><strong>重要限制：<code>search</code> 仅查找第一个匹配项。</strong></p>
+<p>如果需要其他匹配项的位置，则应使用其他方法，例如用 <code>str.matchAll(regexp)</code> 查找所有位置。</p>
+<h2 id="strreplacestrregexp-strfunc">str.replace(str|regexp, str|func)</h2>
+<p>这是用于搜索和替换的通用方法，是最有用的方法之一。它是搜索和替换字符串的瑞士军刀。  </p>
+<p>我们可以不用正则表达式来搜索和替换子字符串：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 用冒号替换连字符</span>
+alert(<span class="hljs-string">&#x27;12-34-56&#x27;</span>.replace(<span class="hljs-string">&quot;-&quot;</span>, <span class="hljs-string">&quot;:&quot;</span>)) <span class="hljs-comment">// 12:34-56</span></code></pre>
+<p>不过有一个陷阱。</p>
+<p><strong>当 <code>replace</code> 的第一个参数是字符串时，它仅替换第一个匹配项。</strong></p>
+<p>您可以在上面的示例中看到：只有第一个 <code>&quot;-&quot;</code> 被 <code>&quot;:&quot;</code> 替换了。</p>
+<p>如要找到所有的连字符，我们不应该用字符串 <code>&quot;-&quot;</code>，而应使用带 <code>pattern:g</code> 标记的正则表达式 <code>pattern:/-/g</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 将连字符替换为冒号</span>
+alert( <span class="hljs-string">&#x27;12-34-56&#x27;</span>.replace( *!*<span class="hljs-regexp">/-/g</span>*<span class="hljs-regexp">/!*, &quot;:&quot; ) )  /</span><span class="hljs-regexp">/ 12:34:56</span></code></pre>
+<p>第二个参数是一个替代字符串。我们可以在其中使用特殊字符：</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>替换字符串中的操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$&amp;</code></td>
+<td>插入整个匹配项</td>
+</tr>
+<tr>
+<td><code>$&#096;</code></td>
+<td>在匹配项之前插入字符串的一部分</td>
+</tr>
+<tr>
+<td><code>$&#39;</code></td>
+<td>在匹配项之后插入字符串的一部分</td>
+</tr>
+<tr>
+<td><code>$n</code></td>
+<td>如果 <code>n</code> 是一个 1 到 2 位的数字，则插入第 n 个分组的内容，详见 <a href="info:regexp-groups">info:regexp-groups</a></td>
+</tr>
+<tr>
+<td><code>$&lt;name&gt;</code></td>
+<td>插入带有给定 <code>name</code> 的括号内的内容，详见 <a href="info:regexp-groups">info:regexp-groups</a></td>
+</tr>
+<tr>
+<td><code>$$</code></td>
+<td>插入字符 <code>$</code></td>
+</tr>
+</tbody></table>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;John Smith&quot;</span>;
+
+<span class="hljs-comment">// 交换名字和姓氏</span>
+alert(str.replace(<span class="hljs-regexp">/(john) (smith)/i</span>, <span class="hljs-string">&#x27;$2, $1&#x27;</span>)) <span class="hljs-comment">// Smith, John</span></code></pre>
+<p><strong>对于需要“智能”替换的场景，第二个参数可以是一个函数。</strong></p>
+<p>每次匹配都会调用这个函数，并且返回的值将作为替换字符串插入。</p>
+<p>该函数 <code>func(match, p1, p2, ..., pn, offset, input, groups)</code> 带参数调用：</p>
+<ol>
+<li><code>match</code> － 匹配项，</li>
+<li><code>p1, p2, ..., pn</code> － 分组的内容（如有），</li>
+<li><code>offset</code> － 匹配项的位置，</li>
+<li><code>input</code> － 源字符串，</li>
+<li><code>groups</code> － 所指定分组的对象。</li>
+</ol>
+<p>如果正则表达式中没有括号，则只有 3 个参数：<code>func(str, offset, input)</code>。</p>
+<p>例如，将所有匹配项都大写：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;html and css&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.replace(<span class="hljs-regexp">/html|css/gi</span>, <span class="hljs-function"><span class="hljs-params">str</span> =&gt;</span> str.toUpperCase());
+
+alert(result); <span class="hljs-comment">// HTML and CSS</span></code></pre>
+<p>按其在字符串中的位置来替换每个匹配项：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&quot;Ho-Ho-ho&quot;</span>.replace(<span class="hljs-regexp">/ho/gi</span>, <span class="hljs-function">(<span class="hljs-params">match, offset</span>) =&gt;</span> offset)); <span class="hljs-comment">// 0-3-6</span></code></pre>
+<p>在下面的示例中，有两对括号，因此将使用 5 个参数调用替换函数：第一个是完全匹配项，然后是 2 对括号，然后是匹配位置（在示例中未使用）和源字符串：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;John Smith&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.replace(<span class="hljs-regexp">/(\w+) (\w+)/</span>, <span class="hljs-function">(<span class="hljs-params">match, name, surname</span>) =&gt;</span> <span class="hljs-string">`<span class="hljs-subst">${surname}</span>, <span class="hljs-subst">${name}</span>`</span>);
+
+alert(result); <span class="hljs-comment">// Smith, John</span></code></pre>
+<p>如果有许多组，用 rest 参数（...）可以很方便的访问：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;John Smith&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.replace(<span class="hljs-regexp">/(\w+) (\w+)/</span>, <span class="hljs-function">(<span class="hljs-params">...match</span>) =&gt;</span> <span class="hljs-string">`<span class="hljs-subst">${match[<span class="hljs-number">2</span>]}</span>, <span class="hljs-subst">${match[<span class="hljs-number">1</span>]}</span>`</span>);
+
+alert(result); <span class="hljs-comment">// Smith, John</span></code></pre>
+<p>或者，如果我们使用的是命名组，则带有它们的 <code>groups</code> 对象始终是最后一个对象，因此我们可以这样获得它：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;John Smith&quot;</span>;
+
+<span class="hljs-keyword">let</span> result = str.replace(<span class="hljs-regexp">/(?&lt;name&gt;\w+) (?&lt;surname&gt;\w+)/</span>, <span class="hljs-function">(<span class="hljs-params">...match</span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> groups = match.pop();
+
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${groups.surname}</span>, <span class="hljs-subst">${groups.name}</span>`</span>;
+});
+
+alert(result); <span class="hljs-comment">// Smith, John</span></code></pre>
+<p>使用函数可以为我们提供终极替代功能，因为它可以获取匹配项的所有信息，可以访问外部变量，可以做任何事。</p>
+<h2 id="regexpexecstr">regexp.exec(str)</h2>
+<p><code>regexp.exec(str)</code> 方法返回字符串 <code>str</code> 中的 <code>regexp</code> 匹配项。与以前的方法不同，它是在正则表达式而不是字符串上调用的。</p>
+<p>根据正则表达式是否带有标志 <code>pattern:g</code>，它的行为有所不同。</p>
+<p>如果没有 <code>pattern:g</code>，那么 <code>regexp.exec(str)</code> 返回的第一个匹配与 <code>str.match(regexp)</code> 完全相同。这没什么新的变化。</p>
+<p>但是，如果有标记 <code>pattern:g</code>，那么：</p>
+<ul>
+<li>调用 <code>regexp.exec(str)</code> 会返回第一个匹配项，并将紧随其后的位置保存在属性 <code>regexp.lastIndex</code> 中。</li>
+<li>下一次同样的调用会从位置 <code>regexp.lastIndex</code> 开始搜索，返回下一个匹配项，并将其后的位置保存在 <code>regexp.lastIndex</code> 中。</li>
+<li>...以此类推。</li>
+<li>如果没有匹配项，则 <code>regexp.exec</code> 返回 <code>null</code>，并将 <code>regexp.lastIndex</code> 重置为 <code>0</code>。</li>
+</ul>
+<p>因此，重复调用会挨个返回所有的匹配项，属性 <code>regexp.lastIndex</code> 用来跟踪当前的搜索位置。</p>
+<p>过去，在将 <code>str.matchAll</code> 方法添加到 <code>JavaScript</code> 之前，在循环中是通过调用 <code>regexp.exec</code> 来获取分组的所有匹配项：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;More about JavaScript at https://javascript.info&#x27;</span>;
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/javascript/ig</span>;
+
+<span class="hljs-keyword">let</span> result;
+
+<span class="hljs-keyword">while</span> (result = regexp.exec(str)) {
+  alert( <span class="hljs-string">`Found <span class="hljs-subst">${result[<span class="hljs-number">0</span>]}</span> at position <span class="hljs-subst">${result.index}</span>`</span> );
+  <span class="hljs-comment">// Found JavaScript at position 11，然后</span>
+  <span class="hljs-comment">// Found javascript at position 33</span>
+}</code></pre>
+<p>这个现在也可以使用，尽管对于较新的浏览器来说，<code>str.matchAll</code> 通常更方便。</p>
+<p><strong>我们可以通过手动设置 <code>lastIndex</code>，用 <code>regexp.exec</code> 从给定位置进行搜索。</strong></p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;Hello, world!&#x27;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/g</span>; <span class="hljs-comment">// 带有标记 &quot;g&quot;，lastIndex 属性被忽略</span>
+regexp.lastIndex = <span class="hljs-number">5</span>; <span class="hljs-comment">// 从第 5 个位置搜索（从逗号开始）</span>
+
+alert( regexp.exec(str) ); <span class="hljs-comment">// world</span></code></pre>
+<p>如果正则表达式带有标记 <code>pattern:y</code>，则搜索将精确地在 <code>regexp.lastIndex</code> 位置执行，不会再继续了。</p>
+<p>让我们将上例中的 <code>pattern:g</code> 标记替换为 <code>pattern:y</code>。现在没有找到匹配项了，因为在位置 <code>5</code> 处没有单词：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;Hello, world!&#x27;</span>;
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/y</span>;
+regexp.lastIndex = <span class="hljs-number">5</span>; <span class="hljs-comment">// 在位置 5 精确查找</span>
+
+alert( regexp.exec(str) ); <span class="hljs-comment">// null</span></code></pre>
+<p>这个方法在某些场景下很方便，例如需要用正则表达式从字符串的精确位置来“读取”字符串（而不是其后的某处）。</p>
+<h2 id="regexpteststr">regexp.test(str)</h2>
+<p>方法 <code>regexp.test(str)</code> 查找匹配项，然后返回 <code>true/false</code> 表示是否存在。</p>
+<p>例如：</p>
+<pre><code class="language-js">let str = &quot;I love JavaScript&quot;;
+
+// 这两个测试相同
+alert( *!*/love/i*/!*.test(str) ); // true
+alert( str.search(*!*/love/i*/!*) != -1 ); // true</code></pre>
+<p>一个反例：</p>
+<pre><code class="language-js">let str = &quot;Bla-bla-bla&quot;;
+
+alert( *!*/love/i*/!*.test(str) ); // false
+alert( str.search(*!*/love/i*/!*) != -1 ); // false</code></pre>
+<p>如果正则表达式带有标记 <code>pattern:g</code>，则 <code>regexp.test</code> 从  <code>regexp.lastIndex</code> 属性中查找，并更新此属性，就像 <code>regexp.exec</code> 一样。</p>
+<p>因此，我们可以用它从给定位置进行搜索：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/love/gi</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;I love JavaScript&quot;</span>;
+
+<span class="hljs-comment">// 从位置 10 开始：</span>
+regexp.lastIndex = <span class="hljs-number">10</span>;
+alert( regexp.test(str) ); <span class="hljs-comment">// false（无匹配）</span></code></pre>
+<pre><code class="language-warn">如果我们在不同的源字符串上应用相同的全局表达式，可能会出现错误的结果，因为 `regexp.test` 的调用会增加 `regexp.lastIndex` 属性值，因此在另一个字符串中的搜索可能是从非 0 位置开始的。
+
+例如，这里我们在同一文本上调用 `regexp.test` 两次，而第二次调用失败了：
+
+```js run
+let regexp = /javascript/g;  // （新建 regexp：regexp.lastIndex=0)
+
+alert( regexp.test(&quot;javascript&quot;) ); // true（现在 regexp.lastIndex=10）
+alert( regexp.test(&quot;javascript&quot;) ); // false
+```
+
+这正是因为在第二个测试中 `regexp.lastIndex` 不为零。
+
+如要解决这个问题，我们可以在每次搜索之前设置 `regexp.lastIndex = 0`。或者，不调用正则表达式的方法，而是使用字符串方法 `str.match/search/...`，这些方法不用 `lastIndex`。</code></pre>

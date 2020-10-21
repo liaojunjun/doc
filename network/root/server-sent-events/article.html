@@ -1,0 +1,186 @@
+<h1 id="server-sent-events">Server Sent Events</h1>
+<p><a href="https://html.spec.whatwg.org/multipage/comms.html#the-eventsource-interface">Server-Sent Events</a> 规范描述了一个内建的类 <code>EventSource</code>，它能保持与服务器的连接，并允许从中接收事件。</p>
+<p>与 <code>WebSocket</code> 类似，其连接是持久的。</p>
+<p>但是两者之间有几个重要的区别：</p>
+<table>
+<thead>
+<tr>
+<th><code>WebSocket</code></th>
+<th><code>EventSource</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>双向：客户端和服务端都能交换消息</td>
+<td>单向：仅服务端能发送消息</td>
+</tr>
+<tr>
+<td>二进制和文本数据</td>
+<td>仅文本数据</td>
+</tr>
+<tr>
+<td>WebSocket 协议</td>
+<td>常规 HTTP 协议</td>
+</tr>
+</tbody></table>
+<p>与 <code>WebSocket</code> 相比，<code>EventSource</code> 是与服务器通信的一种不那么强大的方式。</p>
+<p>我们为什么要使用它？</p>
+<p>主要原因：简单。在很多应用中，<code>WebSocket</code> 有点大材小用。</p>
+<p>我们需要从服务器接收一个数据流：可能是聊天消息或者市场价格等。这正是 <code>EventSource</code> 所擅长的。它还支持自动重新连接，而在 <code>WebSocket</code> 中这个功能需要我们手动实现。此外，它是一个普通的旧的 HTTP，不是一个新协议。</p>
+<h2 id="获取消息">获取消息</h2>
+<p>要开始接收消息，我们只需要创建 <code>new EventSource(url)</code> 即可。</p>
+<p>浏览器将会连接到 <code>url</code> 并保持连接打开，等待事件。</p>
+<p>服务器响应状态码应该为 200，header 为 <code>Content-Type: text/event-stream</code>，然后保持此连接并以一种特殊的格式写入消息，就像这样：</p>
+<pre><code>data: Message 1
+
+data: Message 2
+
+data: Message 3
+data: of two lines</code></pre>
+<ul>
+<li><code>data:</code> 后为消息文本，冒号后面的空格是可选的。</li>
+<li>消息以双换行符 <code>\n\n</code> 分隔。</li>
+<li>要发送一个换行 <code>\n</code>，我们可以在要换行的位置立即再发送一个 <code>data:</code>（上面的第三条消息）。</li>
+</ul>
+<p>在实际开发中，复杂的消息通常是用 JSON 编码后发送。换行符在其中编码为 <code>\n</code>，因此不需要多行 <code>data:</code> 消息。</p>
+<p>例如：</p>
+<pre><code class="language-js">data: {<span class="hljs-string">&quot;user&quot;</span>:<span class="hljs-string">&quot;John&quot;</span>,<span class="hljs-string">&quot;message&quot;</span>:<span class="hljs-string">&quot;First line*!*\n*/!* Second line&quot;</span>}</code></pre>
+<p>……因此，我们可以假设一个 <code>data:</code> 只保存了一条消息。</p>
+<p>对于每个这样的消息，都会生成 <code>message</code> 事件：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> eventSource = <span class="hljs-keyword">new</span> EventSource(<span class="hljs-string">&quot;/events/subscribe&quot;</span>);
+
+eventSource.onmessage = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;New message&quot;</span>, event.data);
+  <span class="hljs-comment">// 对于上面的数据流将打印三次</span>
+};
+
+<span class="hljs-comment">// 或 eventSource.addEventListener(&#x27;message&#x27;, ...)</span></code></pre>
+<h3 id="跨源请求">跨源请求</h3>
+<p><code>EventSource</code> 支持跨源请求，就像 <code>fetch</code> 任何其他网络方法。我们可以使用任何 URL：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> source = <span class="hljs-keyword">new</span> EventSource(<span class="hljs-string">&quot;https://another-site.com/events&quot;</span>);</code></pre>
+<p>远程服务器将会获取到 <code>Origin</code> header，并且必须以 <code>Access-Control-Allow-Origin</code> 响应来处理。</p>
+<p>要传递凭证（credentials），我们应该设置附加选项 <code>withCredentials</code>，就像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> source = <span class="hljs-keyword">new</span> EventSource(<span class="hljs-string">&quot;https://another-site.com/events&quot;</span>, {
+  <span class="hljs-attr">withCredentials</span>: <span class="hljs-literal">true</span>
+});</code></pre>
+<p>更多关于跨源 header 的详细内容，请参见 <a href="info:fetch-crossorigin">info:fetch-crossorigin</a>。</p>
+<h2 id="重新连接">重新连接</h2>
+<p>创建之后，<code>new EventSource</code> 连接到服务器，如果连接断开 —— 则重新连接。</p>
+<p>这非常方便，我们不用去关心重新连接的事情。</p>
+<p>每次重新连接之间有一点小的延迟，默认为几秒钟。</p>
+<p>服务器可以使用 <code>retry:</code> 来设置需要的延迟响应时间（以毫秒为单位）。</p>
+<pre><code class="language-js">retry: <span class="hljs-number">15000</span>
+<span class="hljs-attr">data</span>: Hello, I set the reconnection delay to <span class="hljs-number">15</span> seconds</code></pre>
+<p><code>retry:</code> 既可以与某些数据一起出现，也可以作为独立的消息出现。</p>
+<p>在重新连接之前，浏览器需要等待那么多毫秒。甚至更长，例如，如果浏览器知道（从操作系统）此时没有网络连接，它会等到连接出现，然后重试。</p>
+<ul>
+<li>如果服务器想要浏览器停止重新连接，那么它应该使用 HTTP 状态码 204 进行响应。</li>
+<li>如果浏览器想要关闭连接，则应该调用 <code>eventSource.close()</code>：</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> eventSource = <span class="hljs-keyword">new</span> EventSource(...);
+
+eventSource.close();</code></pre>
+<p>并且，如果响应具有不正确的 <code>Content-Type</code> 或者其 HTTP 状态码不是 301，307，200 和 204，则不会进行重新连接。在这种情况下，将会发出 <code>&quot;error&quot;</code> 事件，并且浏览器不会重新连接。</p>
+<pre><code class="language-smart">当连接最终被关闭时，就无法“重新打开”它。如果我们想要再次连接，只需要创建一个新的 `EventSource`。</code></pre>
+<h2 id="消息-id">消息 id</h2>
+<p>当一个连接由于网络问题而中断时，客户端和服务器都无法确定哪些消息已经收到哪些没有收到。</p>
+<p>为了正确地恢复连接，每条消息都应该有一个 <code>id</code> 字段，就像这样：</p>
+<pre><code>data: Message 1
+id: 1
+
+data: Message 2
+id: 2
+
+data: Message 3
+data: of two lines
+id: 3</code></pre>
+<p>当收到具有 <code>id</code> 的消息时，浏览器会：</p>
+<ul>
+<li>将属性 <code>eventSource.lastEventId</code> 设置为其值。</li>
+<li>重新连接后，发送带有 <code>id</code> 的 header <code>Last-Event-ID</code>，以便服务器可以重新发送后面的消息。</li>
+</ul>
+<p>```smart header=&quot;把 <code>id:</code> 放在 <code>data:</code> 后&quot;
+请注意：<code>id</code> 被服务器附加到 <code>data</code> 消息后，以确保在收到消息后 <code>lastEventId</code> 会被更新。</p>
+<pre><code>
+## 连接状态：readyState
+
+`EventSource` 对象有 `readyState` 属性，该属性具有下列值之一：
+
+```js no-beautify
+EventSource.CONNECTING = 0; // 连接中或者重连中
+EventSource.OPEN = 1;       // 已连接
+EventSource.CLOSED = 2;     // 连接已关闭</code></pre>
+<p>对象创建完成或者连接断开后，它始终是 <code>EventSource.CONNECTING</code>（等于 <code>0</code>）。</p>
+<p>我们可以查询该属性以了解 <code>EventSource</code> 的状态。</p>
+<h2 id="event-类型">Event 类型</h2>
+<p>默认情况下 <code>EventSource</code> 对象生成三个事件：</p>
+<ul>
+<li><code>message</code> —— 收到消息，可以用 <code>event.data</code> 访问。</li>
+<li><code>open</code> —— 连接已打开。</li>
+<li><code>error</code> —— 无法建立连接，例如，服务器返回 HTTP 500 状态码。</li>
+</ul>
+<p>服务器可以在事件开始时使用 <code>event: ...</code> 指定另一种类型事件。</p>
+<p>例如：</p>
+<pre><code>event: join
+data: Bob
+
+data: Hello
+
+event: leave
+data: Bob</code></pre>
+<p>要处理自定义事件，我们必须使用 <code>addEventListener</code> 而非 <code>onmessage</code>：</p>
+<pre><code class="language-js">eventSource.addEventListener(<span class="hljs-string">&#x27;join&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+  alert(<span class="hljs-string">`Joined <span class="hljs-subst">${event.data}</span>`</span>);
+});
+
+eventSource.addEventListener(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+  alert(<span class="hljs-string">`Said: <span class="hljs-subst">${event.data}</span>`</span>);
+});
+
+eventSource.addEventListener(<span class="hljs-string">&#x27;leave&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+  alert(<span class="hljs-string">`Left <span class="hljs-subst">${event.data}</span>`</span>);
+});</code></pre>
+<h2 id="完整示例">完整示例</h2>
+<p>服务器依次发送 <code>1</code>，<code>2</code>，<code>3</code>，最后发送 <code>bye</code> 并断开连接。</p>
+<p>然后浏览器会自动重新连接。</p>
+<p>[codetabs src=&quot;eventsource&quot;]</p>
+<h2 id="总结">总结</h2>
+<p><code>EventSource</code> 对象自动建立一个持久的连接，并允许服务器通过这个连接发送消息。</p>
+<p>它提供了：</p>
+<ul>
+<li>在可调的 <code>retry</code> 超时内自动重新连接。</li>
+<li>用于恢复事件的消息 id，重新连接后，最后接收到的标识符被在 <code>Last-Event-ID</code> header 中发送出去。</li>
+<li>当前状态位于 <code>readyState</code> 属性中。</li>
+</ul>
+<p>这使得 <code>EventSource</code> 成为 <code>WebSocket</code> 的一个可行的替代方案，因为 <code>WebSocket</code> 更低级（low-level），且缺乏这样的内建功能（尽管它们可以被实现）。</p>
+<p>在很多实际应用中，<code>EventSource</code> 的功能就已经够用了。</p>
+<p><code>EventSource</code> 在所有现代浏览器（除了 IE）中都得到了支持。</p>
+<p>语法：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> source = <span class="hljs-keyword">new</span> EventSource(url, [credentials]);</code></pre>
+<p>第二个参数只有一个可选项：<code>{ withCredentials: true }</code>，它允许发送跨源凭证。</p>
+<p>总体跨源安全性与 <code>fetch</code> 以及其他网络方法相同。</p>
+<h3 id="eventsource-对象的属性"><code>EventSource</code> 对象的属性</h3>
+<p><code>readyState</code>
+: 当前连接状态：为 <code>EventSource.CONNECTING (=0)</code>，<code>EventSource.OPEN (=1)</code>，<code>EventSource.CLOSED (=2)</code> 三者之一。</p>
+<p><code>lastEventId</code>
+: 最后接收到的 <code>id</code>。重新连接后，浏览器在 header <code>Last-Event-ID</code> 中发送此 id。</p>
+<h3 id="eventsource-对象的方法"><code>EventSource</code> 对象的方法</h3>
+<p><code>close()</code>
+: 关闭连接。</p>
+<h3 id="eventsource-对象的事件"><code>EventSource</code> 对象的事件</h3>
+<p><code>message</code>
+: 接收到的消息，消息数据在 <code>event.data</code> 中。</p>
+<p><code>open</code>
+: 连接已建立。</p>
+<p><code>error</code>
+: 如果发生错误，包括连接丢失（将会自动重连）以及其他致命错误。我们可以检查 <code>readyState</code> 以查看是否正在尝试重新连接。</p>
+<p>服务器可以在 <code>event:</code> 中设置自定义事件名称。应该使用 <code>addEventListener</code> 来处理此类事件，而不是使用 <code>on&lt;event&gt;</code>。</p>
+<h3 id="服务器响应格式">服务器响应格式</h3>
+<p>服务器发送由 <code>\n\n</code> 分隔的消息。</p>
+<p>一条消息可能有以下字段：</p>
+<ul>
+<li><code>data:</code> —— 消息体（body），一系列多个 <code>data</code> 被解释为单个消息，各个部分之间由 <code>\n</code> 分隔。</li>
+<li><code>id:</code> —— 更新 <code>lastEventId</code>，重连时以 <code>Last-Event-ID</code> 发送此 id。</li>
+<li><code>retry:</code> —— 建议重连的延迟，以 ms 为单位。无法通过 JavaScript 进行设置。</li>
+<li><code>event:</code> —— 事件名，必须在 <code>data:</code> 之前。</li>
+</ul>
+<p>一条消息可以按任何顺序包含一个或多个字段，但是 <code>id:</code> 通常排在最后。</p>

@@ -1,0 +1,16 @@
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readNumber</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> num;
+
+  <span class="hljs-keyword">do</span> {
+    num = prompt(<span class="hljs-string">&quot;Enter a number please?&quot;</span>, <span class="hljs-number">0</span>);
+  } <span class="hljs-keyword">while</span> ( !<span class="hljs-built_in">isFinite</span>(num) );
+
+  <span class="hljs-keyword">if</span> (num === <span class="hljs-literal">null</span> || num === <span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+
+  <span class="hljs-keyword">return</span> +num;
+}
+
+alert(<span class="hljs-string">`Read: <span class="hljs-subst">${readNumber()}</span>`</span>);</code></pre>
+<p>该解决方案有点复杂，因为我们需要处理 <code>null</code> 和空行。</p>
+<p>所以，我们实际上接受输入，直到输入的是一个“常规数字”。<code>null</code>（取消）和空行都符合该条件，因为在数字形式中它们是 <code>0</code>。</p>
+<p>在我们停止之后，我们需要专门处理 <code>null</code> 和空行（返回 <code>null</code>），因为将它们转换为数字将返回 <code>0</code>。</p>

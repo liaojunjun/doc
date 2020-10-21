@@ -1,0 +1,24 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="偏函数在登录中的应用">偏函数在登录中的应用</h1>
+<p>这个任务是比 <a href="info:task/question-use-bind">info:task/question-use-bind</a> 略微复杂的变体。</p>
+<p><code>user</code> 对象被修改了。现在不是两个函数 <code>loginOk/loginFail</code>，现在只有一个函数 <code>user.login(true/false)</code>。</p>
+<p>在下面的代码中，我们应该向 <code>askPassword</code> 传入什么参数，以使得 <code>user.login(true)</code> 结果是 <code>ok</code>，<code>user.login(fasle)</code> 结果是 <code>fail</code>？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">askPassword</span>(<span class="hljs-params">ok, fail</span>) </span>{
+  <span class="hljs-keyword">let</span> password = prompt(<span class="hljs-string">&quot;Password?&quot;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">if</span> (password == <span class="hljs-string">&quot;rockstar&quot;</span>) ok();
+  <span class="hljs-keyword">else</span> fail();
+}
+
+<span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span>,
+
+  login(result) {
+    alert( <span class="hljs-built_in">this</span>.name + (result ? <span class="hljs-string">&#x27; logged in&#x27;</span> : <span class="hljs-string">&#x27; failed to log in&#x27;</span>) );
+  }
+};
+
+*!*
+askPassword(?, ?); <span class="hljs-comment">// ?</span>
+*/!*</code></pre>
+<p>你只能修改高亮部分的代码。</p>

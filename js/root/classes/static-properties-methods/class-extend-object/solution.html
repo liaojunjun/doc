@@ -1,0 +1,67 @@
+<p>首先，让我们看看为什么之前的代码无法运行。</p>
+<p>如果我们尝试运行它，就会发现原因其实很明显。派生类的 constructor 必须调用 <code>super()</code>。否则 <code>&quot;this&quot;</code> 不会被定义。</p>
+<p>下面是修复后的代码：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Object</span> </span>{
+  <span class="hljs-keyword">constructor</span>(name) {
+*!*
+    <span class="hljs-built_in">super</span>(); <span class="hljs-comment">// 需要在继承时调用父类的 constructor</span>
+*/!*
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+}
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;Rab&quot;</span>);
+
+alert( rabbit.hasOwnProperty(<span class="hljs-string">&#x27;name&#x27;</span>) ); <span class="hljs-comment">// true</span></code></pre>
+<p>但这还不是全部原因。</p>
+<p>即便修复了它，<code>&quot;class Rabbit extends Object&quot;</code> 和 <code>class Rabbit</code> 之间仍存在着重要差异。</p>
+<p>我们知道，&quot;extends&quot; 语法会设置两个原型：</p>
+<ol>
+<li>在构造函数的 <code>&quot;prototype&quot;</code> 之间设置原型（为了获取实例方法）。</li>
+<li>在构造函数之间会设置原型（为了获取静态方法）。</li>
+</ol>
+<p>在我们的例子里，对于 <code>class Rabbit extends Object</code>，它意味着：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Object</span> </span>{}
+
+alert( Rabbit.prototype.__proto__ === <span class="hljs-built_in">Object</span>.prototype ); <span class="hljs-comment">// (1) true</span>
+alert( Rabbit.__proto__ === <span class="hljs-built_in">Object</span> ); <span class="hljs-comment">// (2) true</span></code></pre>
+<p>所以，现在 <code>Rabbit</code> 可以通过 <code>Rabbit</code> 访问 <code>Object</code> 的静态方法，像这样：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Object</span> </span>{}
+
+*!*
+<span class="hljs-comment">// 通常我们调用 Object.getOwnPropertyNames</span>
+alert ( Rabbit.getOwnPropertyNames({<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">b</span>: <span class="hljs-number">2</span>})); <span class="hljs-comment">// a,b</span>
+*/!*</code></pre>
+<p>但是如果我们没有 <code>extends Object</code>，那么 <code>Rabbit.__proto__</code> 将不会被设置为 <code>Object</code>。</p>
+<p>下面是示例：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> </span>{}
+
+alert( Rabbit.prototype.__proto__ === <span class="hljs-built_in">Object</span>.prototype ); <span class="hljs-comment">// (1) true</span>
+alert( Rabbit.__proto__ === <span class="hljs-built_in">Object</span> ); <span class="hljs-comment">// (2) false (!)</span>
+alert( Rabbit.__proto__ === <span class="hljs-built_in">Function</span>.prototype ); <span class="hljs-comment">// true，所有函数都是默认如此</span>
+
+*!*
+<span class="hljs-comment">// error，Rabbit 中没有这样的函数</span>
+alert ( Rabbit.getOwnPropertyNames({<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">b</span>: <span class="hljs-number">2</span>})); <span class="hljs-comment">// Error</span>
+*/!*</code></pre>
+<p>所以，在这种情况下，<code>Rabbit</code> 没有提供对 <code>Object</code> 的静态方法的访问。</p>
+<p>顺便说一下，<code>Function.prototype</code> 有一些“通用”函数方法，例如 <code>call</code> 和 <code>bind</code> 等。在上述的两种情况下它们都是可用的，因为对于内建的 <code>Object</code> 构造函数而言，<code>Object.__proto__ === Function.prototype</code>。</p>
+<p>我们用一张图来解释：</p>
+<p><img src="rabbit-extends-object.svg" alt=""></p>
+<p>所以，简而言之，这里有两点区别：</p>
+<table>
+<thead>
+<tr>
+<th>class Rabbit</th>
+<th>class Rabbit extends Object</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>--</td>
+<td>needs to call <code>super()</code> in constructor</td>
+</tr>
+<tr>
+<td><code>Rabbit.__proto__ === Function.prototype</code></td>
+<td><code>Rabbit.__proto__ === Object</code></td>
+</tr>
+</tbody></table>

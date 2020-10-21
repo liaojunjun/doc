@@ -1,0 +1,9 @@
+<h1 id="寻找-html-标签">寻找 HTML 标签</h1>
+<p>创建一个正则表达式语句来寻找所有具有其属性的（闭合或非闭合）HTML 标签。</p>
+<p>用例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/你的正则表达式/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&lt;&gt; &lt;a href=&quot;/&quot;&gt; &lt;input type=&quot;radio&quot; checked&gt; &lt;b&gt;&#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;a href=&quot;/&quot;&gt;&#x27;, &#x27;&lt;input type=&quot;radio&quot; checked&gt;&#x27;, &#x27;&lt;b&gt;&#x27;</span></code></pre>
+<p>假设不包含 <code>&lt;</code> 和 <code>&gt;</code>（也包括引号），这将会简单许多。</p>

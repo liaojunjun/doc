@@ -1,0 +1,118 @@
+<h1 id="fprototype">F.prototype</h1>
+<p>我们还记得，可以使用诸如 <code>new F()</code> 这样的构造函数来创建一个新对象。</p>
+<p>如果 <code>F.prototype</code> 是一个对象，那么 <code>new</code> 操作符会使用它为新对象设置 <code>[[Prototype]]</code>。</p>
+<pre><code class="language-smart">JavaScript 从一开始就有了原型继承。这是 JavaScript 编程语言的核心特性之一。
+
+但是在过去，没有直接对其进行访问的方式。唯一可靠的方法是本章中会介绍的构造函数的 `&quot;prototype&quot;` 属性。目前仍有许多脚本仍在使用它。</code></pre>
+<p>请注意，这里的 <code>F.prototype</code> 指的是 <code>F</code> 的一个名为 <code>&quot;prototype&quot;</code> 的常规属性。这听起来与“原型”这个术语很类似，但这里我们实际上指的是具有该名字的常规属性。</p>
+<p>下面是一个例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-built_in">this</span>.name = name;
+}
+
+*!*
+Rabbit.prototype = animal;
+*/!*
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;White Rabbit&quot;</span>); <span class="hljs-comment">//  rabbit.__proto__ == animal</span>
+
+alert( rabbit.eats ); <span class="hljs-comment">// true</span></code></pre>
+<p>设置 <code>Rabbit.prototype = animal</code> 的字面意思是：“当创建了一个 <code>new Rabbit</code> 时，把它的 <code>[[Prototype]]</code> 赋值为 <code>animal</code>”。</p>
+<p>这是结果示意图：</p>
+<p><img src="proto-constructor-animal-rabbit.svg" alt=""></p>
+<p>在上图中，<code>&quot;prototype&quot;</code> 是一个水平箭头，表示一个常规属性，<code>[[Prototype]]</code> 是垂直的，表示 <code>rabbit</code> 继承自 <code>animal</code>。</p>
+<p>```smart header=&quot;<code>F.prototype</code> 仅用在 <code>new F</code> 时&quot;
+<code>F.prototype</code> 属性仅在 <code>new F</code> 被调用时使用，它为新对象的 <code>[[Prototype]]</code> 赋值。</p>
+<p>如果在创建之后，<code>F.prototype</code> 属性有了变化（<code>F.prototype = &lt;another object&gt;</code>），那么通过 <code>new F</code> 创建的新对象也将随之拥有新的对象作为 <code>[[Prototype]]</code>，但已经存在的对象将保持旧有的值。</p>
+<pre><code>
+##  默认的 F.prototype，构造器属性
+
+每个函数都有 `&quot;prototype&quot;` 属性，即使我们没有提供它。
+
+默认的 `&quot;prototype&quot;` 是一个只有属性 `constructor` 的对象，属性 `constructor` 指向函数自身。
+
+像这样：
+
+```js
+function Rabbit() {}
+
+/* default prototype
+Rabbit.prototype = { constructor: Rabbit };
+*/</code></pre>
+<p><img src="function-prototype-constructor.svg" alt=""></p>
+<p>我们可以检查一下：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+<span class="hljs-comment">// by default:</span>
+<span class="hljs-comment">// Rabbit.prototype = { constructor: Rabbit }</span>
+
+alert( Rabbit.prototype.constructor == Rabbit ); <span class="hljs-comment">// true</span></code></pre>
+<p>通常，如果我们什么都不做，<code>constructor</code> 属性可以通过 <code>[[Prototype]]</code> 给所有 rabbits 使用：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+<span class="hljs-comment">// by default:</span>
+<span class="hljs-comment">// Rabbit.prototype = { constructor: Rabbit }</span>
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(); <span class="hljs-comment">// inherits from {constructor: Rabbit}</span>
+
+alert(rabbit.constructor == Rabbit); <span class="hljs-comment">// true (from prototype)</span></code></pre>
+<p><img src="rabbit-prototype-constructor.svg" alt=""></p>
+<p>我们可以使用 <code>constructor</code> 属性来创建一个新对象，该对象使用与现有对象相同的构造器。</p>
+<p>像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-built_in">this</span>.name = name;
+  alert(name);
+}
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;White Rabbit&quot;</span>);
+
+*!*
+<span class="hljs-keyword">let</span> rabbit2 = <span class="hljs-keyword">new</span> rabbit.constructor(<span class="hljs-string">&quot;Black Rabbit&quot;</span>);
+*/!*</code></pre>
+<p>当我们有一个对象，但不知道它使用了哪个构造器（例如它来自第三方库），并且我们需要创建另一个类似的对象时，用这种方法就很方便。</p>
+<p>但是，关于 <code>&quot;constructor&quot;</code> 最重要的是……</p>
+<p><strong>……JavaScript 自身并不能确保正确的 <code>&quot;constructor&quot;</code> 函数值。</strong></p>
+<p>是的，它存在于函数的默认 <code>&quot;prototype&quot;</code> 中，但仅此而已。之后会发生什么 —— 完全取决于我们。</p>
+<p>特别是，如果我们将整个默认 prototype 替换掉，那么其中就不会有 <code>&quot;constructor&quot;</code> 了。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+Rabbit.prototype = {
+  <span class="hljs-attr">jumps</span>: <span class="hljs-literal">true</span>
+};
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
+*!*
+alert(rabbit.constructor === Rabbit); <span class="hljs-comment">// false</span>
+*/!*</code></pre>
+<p>因此，为了确保正确的 <code>&quot;constructor&quot;</code>，我们可以选择添加/删除属性到默认 <code>&quot;prototype&quot;</code>，而不是将其整个覆盖：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+
+<span class="hljs-comment">// 不要将 Rabbit.prototype 整个覆盖</span>
+<span class="hljs-comment">// 可以向其中添加内容 </span>
+Rabbit.prototype.jumps = <span class="hljs-literal">true</span>
+<span class="hljs-comment">// 默认的 Rabbit.prototype.constructor 被保留了下来</span></code></pre>
+<p>或者，也可以手动重新创建 <code>constructor</code> 属性：</p>
+<pre><code class="language-js">Rabbit.prototype = {
+  <span class="hljs-attr">jumps</span>: <span class="hljs-literal">true</span>,
+*!*
+  <span class="hljs-keyword">constructor</span>: Rabbit
+*/!*
+};
+
+// 这样的 <span class="hljs-keyword">constructor</span> 也是正确的，因为我们手动添加了它</code></pre>
+<h2 id="总结">总结</h2>
+<p>在本章中，我们简要介绍了为通过构造函数创建的对象设置 <code>[[Prototype]]</code> 的方法。稍后我们将看到更多依赖于此的高级编程模式。</p>
+<p>一切都很简单，只需要记住几条重点就可以清晰地掌握了：</p>
+<ul>
+<li><code>F.prototype</code> 属性（不要把它与 <code>[[Prototype]]</code> 弄混了）在 <code>new F</code> 被调用时为新对象的 <code>[[Prototype]]</code> 赋值。</li>
+<li><code>F.prototype</code> 的值要么是一个对象，要么就是 <code>null</code>：其他值都不起作用。</li>
+<li><code>&quot;prototype&quot;</code> 属性仅在设置了一个构造函数（constructor function），并通过 <code>new</code> 调用时，才具有这种特殊的影响。</li>
+</ul>
+<p>在常规对象上，<code>prototype</code> 没什么特别的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">prototype</span>: <span class="hljs-string">&quot;Bla-bla&quot;</span> <span class="hljs-comment">// 这里只是普通的属性</span>
+};</code></pre>
+<p>默认情况下，所有函数都有 <code>F.prototype = {constructor：F}</code>，所以我们可以通过访问它的 <code>&quot;constructor&quot;</code> 属性来获取一个对象的构造器。</p>

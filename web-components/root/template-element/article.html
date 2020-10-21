@@ -1,0 +1,84 @@
+<h1 id="模板元素">模板元素</h1>
+<p>内建的 <code>&lt;template&gt;</code> 元素用来存储 HTML 模板。浏览器将忽略它的内容，仅检查语法的有效性，但是我们可以在 JavaScript 中访问和使用它来创建其他元素。</p>
+<p>从理论上讲，我们可以在 HTML 中的任何位置创建不可见元素来储存 HTML 模板。那 <code>&lt;template&gt;</code> 元素有什么优势？</p>
+<p>首先，其内容可以是任何有效的HTML，即使它通常需要特定的封闭标签。</p>
+<p>例如，我们可以在其中放置一行表格 <code>&lt;tr&gt;</code> ：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>Contents<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre>
+<p>通常，如果我们在 <code>&lt;tr&gt;</code> 内放置类似 <code>&lt;div&gt;</code> 的元素，浏览器会检测到无效的 DOM 结构并对其进行“修复”，然后用 <code>&lt;table&gt;</code> 封闭 <code>&lt;tr&gt;</code> ，那不是我们想要的。而 <code>&lt;template&gt;</code> 则完全保留我们储存的内容。</p>
+<p>我们也可以将样式和脚本放入 <code>&lt;template&gt;</code> 元素中：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+    <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">font-weight</span>: bold; }
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    alert(<span class="hljs-string">&quot;Hello&quot;</span>);
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre>
+<p>浏览器认为 <code>&lt;template&gt;</code> 的内容“不在文档中”：样式不会被应用，脚本也不会被执行， <code>&lt;video autoplay&gt;</code> 也不会运行，等。</p>
+<p>当我们将内容插入文档时，该内容将变为活动状态（应用样式，运行脚本等）。</p>
+<h2 id="插入模板">插入模板</h2>
+<p>模板的 <code>content</code> 属性可看作<a href="info:modifying-document#document-fragment">DocumentFragment</a> —— 一种特殊的 DOM 节点。</p>
+<p>我们可以将其视为普通的DOM节点，除了它有一个特殊属性：将其插入某个位置时，会被插入的则是其子节点。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    alert(<span class="hljs-string">&quot;Hello&quot;</span>);
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;message&quot;</span>&gt;</span>Hello, world!<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> elem = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
+
+*!*
+  <span class="hljs-comment">// Clone the template content to reuse it multiple times</span>
+  elem.append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>));
+*/!*
+
+  <span class="hljs-built_in">document</span>.body.append(elem);
+  <span class="hljs-comment">// Now the script from &lt;template&gt; runs</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>让我们用 <code>&lt;template&gt;</code> 重写上一章的 Shadow DOM 示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">font-weight</span>: bold; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;message&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span>Click me<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  elem.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    elem.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+
+*!*
+    elem.shadowRoot.append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>)); <span class="hljs-comment">// (*)</span>
+*/!*
+
+    elem.shadowRoot.getElementById(<span class="hljs-string">&#x27;message&#x27;</span>).innerHTML = <span class="hljs-string">&quot;Hello from the shadows!&quot;</span>;
+  };
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>在 <code>(*)</code> 行，我们将 <code>tmpl.content</code> 作为 <code>DocumentFragment</code> 克隆和插入，它的子节点（<code>&lt;style&gt;</code>，<code>&lt;p&gt;</code>）将代为插入。</p>
+<p>它们会变成一个 Shadow DOM：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span>
+  #shadow-root
+    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">font-weight</span>: bold; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;message&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<h2 id="总结">总结</h2>
+<p>总结一下：</p>
+<ul>
+<li><code>&lt;template&gt;</code> 的内容可以是任何语法正确的 HTML。</li>
+<li><code>&lt;template&gt; </code> 内容被视为“超出文档范围”，因此它不会产生任何影响。</li>
+<li>我们可以在JavaScript 中访问 <code>template.content</code> ，将其克隆以在新组件中重复使用。</li>
+</ul>
+<p><code>&lt;template&gt;</code> 标签非常独特，因为：</p>
+<ul>
+<li>浏览器将检查其中的HTML语法（与在脚本中使用模板字符串不同）。</li>
+<li>但允许使用任何顶级 HTML 标签，即使没有适当包装元素的无意义的元素（例如 <code>&lt;tr&gt;</code> ）。</li>
+<li>其内容是交互式的：插入其文档后，脚本会运行， <code>&lt;video autoplay&gt;</code> 会自动播放。</li>
+</ul>
+<p><code>&lt;template&gt;</code> 元素不具有任何迭代机制，数据绑定或变量替换的功能，但我们可以在其基础上实现这些功能。</p>

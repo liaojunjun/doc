@@ -1,0 +1,13 @@
+<p>使用 CSS 为 <code>width</code> 和 <code>height</code> 属性生成动效：</p>
+<pre><code class="language-css"><span class="hljs-comment">/* 原始类 */</span>
+
+<span class="hljs-selector-id">#flyjet</span> {
+  <span class="hljs-attribute">transition</span>: all <span class="hljs-number">3s</span>;
+}
+
+<span class="hljs-comment">/* JS 添加的 .growing */</span>
+<span class="hljs-selector-id">#flyjet</span><span class="hljs-selector-class">.growing</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">400px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">240px</span>;
+}</code></pre>
+<p>请注意，<code>transitionend</code> 会被触发两次 —— 每个属性触发一次。因此，如果我们不进行额外检查的话，这条信息会显示两次。</p>

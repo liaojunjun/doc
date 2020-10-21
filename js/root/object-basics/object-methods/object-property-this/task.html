@@ -1,0 +1,15 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="在对象字面量中使用-this">在对象字面量中使用 &quot;this&quot;</h1>
+<p>这里 <code>makeUser</code> 函数返回了一个对象。</p>
+<p>访问 <code>ref</code> 的结果是什么？为什么？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeUser</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+    <span class="hljs-attr">ref</span>: <span class="hljs-built_in">this</span>
+  };
+};
+
+<span class="hljs-keyword">let</span> user = makeUser();
+
+alert( user.ref.name ); <span class="hljs-comment">// 结果是什么？</span></code></pre>

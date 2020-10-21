@@ -1,0 +1,30 @@
+<p>让我们先遍历数字：</p>
+<ul>
+<li>对于每个元素，我们将检查结果数组是否已经有该元素。</li>
+<li>如果有，则忽略，否则将其添加到结果中。</li>
+</ul>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unique</span>(<span class="hljs-params">arr</span>) </span>{
+  <span class="hljs-keyword">let</span> result = [];
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> str <span class="hljs-keyword">of</span> arr) {
+    <span class="hljs-keyword">if</span> (!result.includes(str)) {
+      result.push(str);
+    }
+  }
+
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">let</span> strings = [<span class="hljs-string">&quot;Hare&quot;</span>, <span class="hljs-string">&quot;Krishna&quot;</span>, <span class="hljs-string">&quot;Hare&quot;</span>, <span class="hljs-string">&quot;Krishna&quot;</span>,
+  <span class="hljs-string">&quot;Krishna&quot;</span>, <span class="hljs-string">&quot;Krishna&quot;</span>, <span class="hljs-string">&quot;Hare&quot;</span>, <span class="hljs-string">&quot;Hare&quot;</span>, <span class="hljs-string">&quot;:-O&quot;</span>
+];
+
+alert( unique(strings) ); <span class="hljs-comment">// Hare, Krishna, :-O</span></code></pre>
+<p>代码有效，但其中存在潜在的性能问题。</p>
+<p>方法 <code>result.includes(str)</code> 在内部遍历数组 <code>result</code>，并将每个元素与 <code>str</code> 进行比较以找到匹配项。</p>
+<p>所以如果 <code>result</code> 中有 <code>100</code> 个元素，并且没有任何一项与 <code>str</code> 匹配，那么它将遍历整个 <code>result</code> 并进行 <code>100</code> 次比较。如果 <code>result</code> 很大，比如 <code>10000</code>，那么就会有 <code>10000</code> 次的比较。</p>
+<p>这本身并不是问题，因为 JavaScript 引擎速度非常快，所以遍历一个有 <code>10000</code> 个元素的数组只需要几微秒。</p>
+<p>但是我们在 <code>for </code>循环中对 <code>arr</code> 的每个元素都进行了一次检测。</p>
+<p>因此，如果 <code>arr.length</code> 是 <code>10000</code>，我们会有 <code>10000 * 10000</code> = 1 亿次的比较。那真的太多了。</p>
+<p>所以该解决方案仅适用于小型数组。</p>
+<p>进一步，在后面的 <a href="info:map-set">info:map-set</a> 一章中，我们将看到如何对该方法进行优化。</p>

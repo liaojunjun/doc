@@ -1,0 +1,17 @@
+<h1 id="查询引用字符串">查询引用字符串</h1>
+<p>构建一个正则表达式用于匹配双引号内的字符串 <code>subject:&quot;...&quot;</code>。</p>
+<p>最重要的部分是字符串应该支持转义，正如 JavaScript 字符串的行为一样。例如，引号可以插入为 <code>subject:\&quot;</code>，换行符为 <code>subject:\n</code>，斜杠本身为 <code>subject:\\</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Just like \&quot;here\&quot;.&quot;</span>;</code></pre>
+<p>对我们来说，重要的是转义的引号 <code>subject:\&quot;</code> 不会结束字符串匹配。</p>
+<p>所以，我们应该匹配两个引号之间的内容，且忽略中间转义的引号。</p>
+<p>这是任务的关键部分，否则这个任务就没什么意思了。</p>
+<p>匹配字符串示例：</p>
+<pre><code class="language-js">.. *!*<span class="hljs-string">&quot;test me&quot;</span>*/!* ..  
+.. *!*<span class="hljs-string">&quot;Say \&quot;Hello\&quot;!&quot;</span>*/!* ... (escaped quotes inside)
+.. *!*<span class="hljs-string">&quot;\\&quot;</span>*/!* ..  (double slash inside)
+.. *!*<span class="hljs-string">&quot;\\ \&quot;&quot;</span>*/!* ..  (double slash and an escaped quote inside)</code></pre>
+<p>在 JavaScript 中，双斜杠用于把斜杠转义为字符串，如下所示：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27; .. &quot;test me&quot; .. &quot;Say \\&quot;Hello\\&quot;!&quot; .. &quot;\\\\ \\&quot;&quot; .. &#x27;</span>;
+
+<span class="hljs-comment">// the in-memory string</span>
+alert(str); <span class="hljs-comment">//  .. &quot;test me&quot; .. &quot;Say \&quot;Hello\&quot;!&quot; .. &quot;\\ \&quot;&quot; ..</span></code></pre>

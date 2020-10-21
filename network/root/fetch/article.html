@@ -1,0 +1,241 @@
+<h1 id="fetch">Fetch</h1>
+<p>JavaScript 可以将网络请求发送到服务器，并在需要时加载新信息。</p>
+<p>例如，我们可以使用网络请求来：</p>
+<ul>
+<li>提交订单，</li>
+<li>加载用户信息，</li>
+<li>从服务器接收最新的更新，</li>
+<li>……等。</li>
+</ul>
+<p>……所有这些都没有重新加载页面！</p>
+<p>对于来自 JavaScript 的网络请求，有一个总称术语 &quot;AJAX&quot;（<b>A</b>synchronous <b>J</b>avaScript <b>A</b>nd <b>X</b>ML 的简称）。但是，我们不必使用 XML：这个术语诞生于很久以前，所以这个词一直在那儿。</p>
+<p>有很多方式可以向服务器发送网络请求，并从服务器获取信息。</p>
+<p><code>fetch()</code> 方法是一种现代通用的方法，那么我们就从它开始吧。旧版本的浏览器不支持它（可以 polyfill），但是它在现代浏览器中的支持情况很好。</p>
+<p>基本语法：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> promise = fetch(url, [options])</code></pre>
+<ul>
+<li><strong><code>url</code></strong> —— 要访问的 URL。</li>
+<li><strong><code>options</code></strong> —— 可选参数：method，header 等。</li>
+</ul>
+<p>没有 <code>options</code>，那就是一个简单的 GET 请求，下载 <code>url</code> 的内容。</p>
+<p>浏览器立即启动请求，并返回一个该调用代码应该用来获取结果的 <code>promise</code>。</p>
+<p>获取响应通常需要经过两个阶段。</p>
+<p><strong>第一阶段，当服务器发送了响应头（response header），<code>fetch</code> 返回的 <code>promise</code> 就使用内建的 <a href="https://fetch.spec.whatwg.org/#response-class">Response</a> class 对象来对响应头进行解析。</strong></p>
+<p>在这个阶段，我们可以通过检查响应头，来检查 HTTP 状态以确定请求是否成功，当前还没有响应体（response body）。</p>
+<p>如果 <code>fetch</code> 无法建立一个 HTTP 请求，例如网络问题，亦或是请求的网址不存在，那么 promise 就会 reject。异常的 HTTP 状态，例如 404 或 500，不会导致出现 error。</p>
+<p>我们可以在 response 的属性中看到 HTTP 状态：</p>
+<ul>
+<li><strong><code>status</code></strong> —— HTTP 状态码，例如 200。</li>
+<li><strong><code>ok</code></strong> —— 布尔值，如果 HTTP 状态码为 200-299，则为 <code>true</code>。</li>
+</ul>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(url);
+
+<span class="hljs-keyword">if</span> (response.ok) { <span class="hljs-comment">// 如果 HTTP 状态码为 200-299</span>
+  <span class="hljs-comment">// 获取 response body（此方法会在下面解释）</span>
+  <span class="hljs-keyword">let</span> json = <span class="hljs-keyword">await</span> response.json();
+} <span class="hljs-keyword">else</span> {
+  alert(<span class="hljs-string">&quot;HTTP-Error: &quot;</span> + response.status);
+}</code></pre>
+<p><strong>第二阶段，为了获取 response body，我们需要使用一个其他的方法调用。</strong></p>
+<p><code>Response</code> 提供了多种基于 promise 的方法，来以不同的格式访问 body：</p>
+<ul>
+<li><strong><code>response.text()</code></strong> —— 读取 response，并以文本形式返回 response，</li>
+<li><strong><code>response.json()</code></strong> —— 将 response 解析为 JSON，</li>
+<li><strong><code>response.formData()</code></strong> —— 以 <code>FormData</code> 对象（在 <a href="info:formdata">下一章</a> 有解释）的形式返回 response，</li>
+<li><strong><code>response.blob()</code></strong> —— 以 <a href="info:blob">Blob</a>（具有类型的二进制数据）形式返回 response，</li>
+<li><strong><code>response.arrayBuffer()</code></strong> —— 以 <a href="info:arraybuffer-binary-arrays">ArrayBuffer</a>（低级别的二进制数据）形式返回 response，</li>
+<li>另外，<code>response.body</code> 是 <a href="https://streams.spec.whatwg.org/#rs-class">ReadableStream</a> 对象，它允许你逐块读取 body，我们稍后会用一个例子解释它。</li>
+</ul>
+<p>例如，我们从 GitHub 获取最新 commits 的 JSON 对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-string">&#x27;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&#x27;</span>;
+<span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(url);
+
+*!*
+<span class="hljs-keyword">let</span> commits = <span class="hljs-keyword">await</span> response.json(); <span class="hljs-comment">// 读取 response body，并将其解析为 JSON</span>
+*/!*
+
+alert(commits[<span class="hljs-number">0</span>].author.login);</code></pre>
+<p>也可以使用纯 promise 语法，不使用 <code>await</code>：</p>
+<pre><code class="language-js">fetch(<span class="hljs-string">&#x27;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&#x27;</span>)
+  .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
+  .then(<span class="hljs-function"><span class="hljs-params">commits</span> =&gt;</span> alert(commits[<span class="hljs-number">0</span>].author.login));</code></pre>
+<p>要获取响应文本，可以使用 <code>await response.text()</code> 代替 <code>.json()</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&#x27;</span>);
+
+<span class="hljs-keyword">let</span> text = <span class="hljs-keyword">await</span> response.text(); <span class="hljs-comment">// 将 response body 读取为文本</span>
+
+alert(text.slice(<span class="hljs-number">0</span>, <span class="hljs-number">80</span>) + <span class="hljs-string">&#x27;...&#x27;</span>);</code></pre>
+<p>作为一个读取为二进制格式的演示示例，让我们 fetch 并显示一张 <a href="https://fetch.spec.whatwg.org">&quot;fetch&quot; 规范</a> 中的图片（<code>Blob</code> 操作的有关内容请见 <a href="info:blob">Blob</a>）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch/logo-fetch.svg&#x27;</span>);
+
+*!*
+<span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">await</span> response.blob(); <span class="hljs-comment">// 下载为 Blob 对象</span>
+*/!*
+
+<span class="hljs-comment">// 为其创建一个 &lt;img&gt;</span>
+<span class="hljs-keyword">let</span> img = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;img&#x27;</span>);
+img.style = <span class="hljs-string">&#x27;position:fixed;top:10px;left:10px;width:100px&#x27;</span>;
+<span class="hljs-built_in">document</span>.body.append(img);
+
+<span class="hljs-comment">// 显示它</span>
+img.src = URL.createObjectURL(blob);
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> { <span class="hljs-comment">// 3 秒后将其隐藏</span>
+  img.remove();
+  URL.revokeObjectURL(img.src);
+}, <span class="hljs-number">3000</span>);</code></pre>
+<pre><code class="language-warn">我们只能选择一种读取 body 的方法。
+
+如果我们已经使用了 `response.text()` 方法来获取 response，那么如果再用 `response.json()`，则不会生效，因为 body 内容已经被处理过了。
+
+```js
+let text = await response.text(); // response body 被处理了
+let parsed = await response.json(); // 失败（已经被处理过了）
+```</code></pre>
+<h2 id="response-header">Response header</h2>
+<p>Response header 位于 <code>response.headers</code> 中的一个类似于 Map 的 header 对象。</p>
+<p>它不是真正的 Map，但是它具有类似的方法，我们可以按名称（name）获取各个 header，或迭代它们：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&#x27;</span>);
+
+<span class="hljs-comment">// 获取一个 header</span>
+alert(response.headers.get(<span class="hljs-string">&#x27;Content-Type&#x27;</span>)); <span class="hljs-comment">// application/json; charset=utf-8</span>
+
+<span class="hljs-comment">// 迭代所有 header</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> [key, value] <span class="hljs-keyword">of</span> response.headers) {
+  alert(<span class="hljs-string">`<span class="hljs-subst">${key}</span> = <span class="hljs-subst">${value}</span>`</span>);
+}</code></pre>
+<h2 id="request-header">Request header</h2>
+<p>要在 <code>fetch</code> 中设置 request header，我们可以使用 <code>headers</code> 选项。它有一个带有输出 header 的对象，如下所示：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = fetch(protectedUrl, {
+  <span class="hljs-attr">headers</span>: {
+    <span class="hljs-attr">Authentication</span>: <span class="hljs-string">&#x27;secret&#x27;</span>
+  }
+});</code></pre>
+<p>……但是有一些我们无法设置的 header（详见 <a href="https://fetch.spec.whatwg.org/#forbidden-header-name">forbidden HTTP headers</a>）：</p>
+<ul>
+<li><code>Accept-Charset</code>, <code>Accept-Encoding</code></li>
+<li><code>Access-Control-Request-Headers</code></li>
+<li><code>Access-Control-Request-Method</code></li>
+<li><code>Connection</code></li>
+<li><code>Content-Length</code></li>
+<li><code>Cookie</code>, <code>Cookie2</code></li>
+<li><code>Date</code></li>
+<li><code>DNT</code></li>
+<li><code>Expect</code></li>
+<li><code>Host</code></li>
+<li><code>Keep-Alive</code></li>
+<li><code>Origin</code></li>
+<li><code>Referer</code></li>
+<li><code>TE</code></li>
+<li><code>Trailer</code></li>
+<li><code>Transfer-Encoding</code></li>
+<li><code>Upgrade</code></li>
+<li><code>Via</code></li>
+<li><code>Proxy-*</code></li>
+<li><code>Sec-*</code></li>
+</ul>
+<p>这些 header 保证了 HTTP 的正确性和安全性，所以它们仅由浏览器控制。</p>
+<h2 id="post-请求">POST 请求</h2>
+<p>要创建一个 <code>POST</code> 请求，或者其他方法的请求，我们需要使用 <code>fetch</code> 选项：</p>
+<ul>
+<li><strong><code>method</code></strong> —— HTTP 方法，例如 <code>POST</code>，</li>
+<li><strong><code>body</code></strong> —— request body，其中之一：<ul>
+<li>字符串（例如 JSON 编码的），</li>
+<li><code>FormData</code> 对象，以 <code>form/multipart</code> 形式发送数据，</li>
+<li><code>Blob</code>/<code>BufferSource</code> 发送二进制数据，</li>
+<li><a href="info:url">URLSearchParams</a>，以 <code>x-www-form-urlencoded</code> 编码形式发送数据，很少使用。</li>
+</ul>
+</li>
+</ul>
+<p>JSON 形式是最常用的。</p>
+<p>例如，下面这段代码以 JSON 形式发送 <code>user</code> 对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span>,
+  <span class="hljs-attr">surname</span>: <span class="hljs-string">&#x27;Smith&#x27;</span>
+};
+
+*!*
+<span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch/post/user&#x27;</span>, {
+  <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+  <span class="hljs-attr">headers</span>: {
+    <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json;charset=utf-8&#x27;</span>
+  },
+  <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify(user)
+});
+*/!*
+
+<span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
+alert(result.message);</code></pre>
+<p>请注意，如果请求的 <code>body</code> 是字符串，则 <code>Content-Type</code> 会默认设置为 <code>text/plain;charset=UTF-8</code>。</p>
+<p>但是，当我们要发送 JSON 时，我们会使用 <code>headers</code> 选项来发送 <code>application/json</code>，这是 JSON 编码的数据的正确的 <code>Content-Type</code>。</p>
+<h2 id="发送图片">发送图片</h2>
+<p>我们同样可以使用 <code>Blob</code> 或 <code>BufferSource</code> 对象通过 <code>fetch</code> 提交二进制数据。</p>
+<p>例如，这里有一个 <code>&lt;canvas&gt;</code>，我们可以通过在其上移动鼠标来进行绘制。点击 &quot;submit&quot; 按钮将图片发送到服务器：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin:0&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;canvasElem&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;100&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;80&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;border:1px solid&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;submit()&quot;</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    canvasElem.onmousemove = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+      <span class="hljs-keyword">let</span> ctx = canvasElem.getContext(<span class="hljs-string">&#x27;2d&#x27;</span>);
+      ctx.lineTo(e.clientX, e.clientY);
+      ctx.stroke();
+    };
+
+    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">submit</span>(<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> canvasElem.toBlob(resolve, <span class="hljs-string">&#x27;image/png&#x27;</span>));
+      <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch/post/image&#x27;</span>, {
+        <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+        <span class="hljs-attr">body</span>: blob
+      });
+
+      <span class="hljs-comment">// 服务器给出确认信息和图片大小作为响应</span>
+      <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
+      alert(result.message);
+    }
+
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
+<p>请注意，这里我们没有手动设置 <code>Content-Type</code> header，因为 <code>Blob</code> 对象具有内建的类型（这里是 <code>image/png</code>，通过 <code>toBlob</code> 生成的）。对于 <code>Blob</code> 对象，这个类型就变成了 <code>Content-Type</code> 的值。</p>
+<p>可以在不使用 <code>async/await</code> 的情况下重写 <code>submit()</code> 函数，像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">submit</span>(<span class="hljs-params"></span>) </span>{
+  canvasElem.toBlob(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">blob</span>) </span>{        
+    fetch(<span class="hljs-string">&#x27;/article/fetch/post/image&#x27;</span>, {
+      <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+      <span class="hljs-attr">body</span>: blob
+    })
+      .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
+      .then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> alert(<span class="hljs-built_in">JSON</span>.stringify(result, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>)))
+  }, <span class="hljs-string">&#x27;image/png&#x27;</span>);
+}</code></pre>
+<h2 id="总结">总结</h2>
+<p>典型的 fetch 请求由两个 <code>await</code> 调用组成：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(url, options); <span class="hljs-comment">// 解析 response header</span>
+<span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json(); <span class="hljs-comment">// 将 body 读取为 json</span></code></pre>
+<p>或者以 promise 形式：</p>
+<pre><code class="language-js">fetch(url, options)
+  .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
+  .then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> <span class="hljs-comment">/* process result */</span>)</code></pre>
+<p>响应的属性：</p>
+<ul>
+<li><code>response.status</code> —— response 的 HTTP 状态码，</li>
+<li><code>response.ok</code> —— HTTP 状态码为 200-299，则为 <code>true</code>。</li>
+<li><code>response.headers</code> —— 类似于 Map 的带有 HTTP header 的对象。</li>
+</ul>
+<p>获取 response body 的方法：</p>
+<ul>
+<li><strong><code>response.text()</code></strong> —— 读取 response，并以文本形式返回 response，</li>
+<li><strong><code>response.json()</code></strong> —— 将 response 解析为 JSON 对象形式，</li>
+<li><strong><code>response.formData()</code></strong> —— 以 <code>FormData</code> 对象（form/multipart 编码，参见下一章）的形式返回 response，</li>
+<li><strong><code>response.blob()</code></strong> —— 以 <a href="info:blob">Blob</a>（具有类型的二进制数据）形式返回 response，</li>
+<li><strong><code>response.arrayBuffer()</code></strong> —— 以 <a href="info:arraybuffer-binary-arrays">ArrayBuffer</a>（低级别的二进制数据）形式返回 response。</li>
+</ul>
+<p>到目前为止我们了解到的 fetch 选项：</p>
+<ul>
+<li><code>method</code> —— HTTP 方法，</li>
+<li><code>headers</code> —— 具有 request header 的对象（不是所有 header 都是被允许的）</li>
+<li><code>body</code> —— 要以 <code>string</code>，<code>FormData</code>，<code>BufferSource</code>，<code>Blob</code> 或 <code>UrlSearchParams</code> 对象的形式发送的数据（request body）。</li>
+</ul>
+<p>在下一章，我们将会看到更多 <code>fetch</code> 的选项和用例。</p>

@@ -1,0 +1,28 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="debounce-decorator">Debounce decorator</h1>
+<p>The result of <code>debounce(f, ms)</code> decorator is a wrapper that suspends calls to <code>f</code> until there&#39;s <code>ms</code> milliseconds of inactivity (no calls, &quot;cooldown period&quot;), then invokes <code>f</code> once with the latest arguments.</p>
+<p>For instance, we had a function <code>f</code> and replaced it with <code>f = debounce(f, 1000)</code>.</p>
+<p>Then if the wrapped function is called at 0ms, 200ms and 500ms, and then there are no calls, then the actual <code>f</code> will be only called once, at 1500ms. That is: after the cooldown period of 1000ms from the last call.</p>
+<p><img src="debounce.svg" alt=""></p>
+<p>...And it will get the arguments of the very last call, other calls are ignored.</p>
+<p>Here&#39;s the code for it (uses the debounce decorator from the <a href="https://lodash.com/docs/4.17.15#debounce">Lodash library</a>:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> f = _.debounce(alert, <span class="hljs-number">1000</span>);
+
+f(<span class="hljs-string">&quot;a&quot;</span>); 
+<span class="hljs-built_in">setTimeout</span>( <span class="hljs-function">() =&gt;</span> f(<span class="hljs-string">&quot;b&quot;</span>), <span class="hljs-number">200</span>);
+<span class="hljs-built_in">setTimeout</span>( <span class="hljs-function">() =&gt;</span> f(<span class="hljs-string">&quot;c&quot;</span>), <span class="hljs-number">500</span>); 
+<span class="hljs-comment">// debounced function waits 1000ms after the last call and then runs: alert(&quot;c&quot;)</span></code></pre>
+<p>Now a practical example. Let&#39;s say, the user types something, and we&#39;d like to send a request to the server when the input is finished.</p>
+<p>There&#39;s no point in sending the request for every character typed. Instead we&#39;d like to wait, and then process the whole result.</p>
+<p>In a web-browser, we can setup an event handler -- a function that&#39;s called on every change of an input field. Normally, an event handler is called very often, for every typed key. But if we <code>debounce</code> it by 1000ms, then it will be only called once, after 1000ms after the last input.</p>
+<pre><code class="language-online">
+In this live example, the handler puts the result into a box below, try it:
+
+[iframe border=1 src=&quot;debounce&quot; height=200]
+
+See? The second input calls the debounced function, so its content is processed after 1000ms from the last input.</code></pre>
+<p>So, <code>debounce</code> is a great way to process a sequence of events: be it a sequence of key presses, mouse movements or something else.</p>
+<p>It waits the given time after the last call, and then runs its function, that can process the result.</p>
+<p>The task is to implement <code>debounce</code> decorator.</p>
+<p>Hint: that&#39;s just a few lines if you think about it :)</p>

@@ -1,0 +1,435 @@
+<h1 id="解构赋值">解构赋值</h1>
+<p>JavaScript 中最常用的两种数据结构是 <code>Object</code> 和 <code>Array</code>。</p>
+<p>对象让我们能够创建通过键来存储数据项的单个实体，数组则让我们能够将数据收集到一个有序的集合中。</p>
+<p>但是，当我们把它们传递给函数时，它可能不需要一个整体的对象/数组，而是需要单个块。</p>
+<p><strong>解构赋值</strong> 是一种特殊的语法，它使我们可以将数组或对象“拆包”为到一系列变量中，因为有时候使用变量更加方便。解构操作对那些具有很多参数和默认值等的函数也很奏效。</p>
+<h2 id="数组解构">数组解构</h2>
+<p>下面是一个将数组解构到变量中的例子：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 我们有一个存放了名字和姓氏的数组</span>
+<span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;Ilya&quot;</span>, <span class="hljs-string">&quot;Kantor&quot;</span>]
+
+*!*
+<span class="hljs-comment">// 解构赋值</span>
+<span class="hljs-comment">// sets firstName = arr[0]</span>
+<span class="hljs-comment">// and surname = arr[1]</span>
+<span class="hljs-keyword">let</span> [firstName, surname] = arr;
+*/!*
+
+alert(firstName); <span class="hljs-comment">// Ilya</span>
+alert(surname);  <span class="hljs-comment">// Kantor</span></code></pre>
+<p>现在我们就可以针对这些变量进行操作，而不是针对原来的数组元素。</p>
+<p>当与 <code>split</code> 函数（或其他返回值是数组的函数）结合使用时，看起来就更优雅了：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> [firstName, surname] = <span class="hljs-string">&quot;Ilya Kantor&quot;</span>.split(<span class="hljs-string">&#x27; &#x27;</span>);</code></pre>
+<pre><code class="language-smart">这种语法叫做“解构赋值”，因为它通过将结构中的各元素复制到变量中来达到“解构”的目的。但数组本身是没有被修改的。
+
+这只是下面这些代码的更精简的写法而已：
+```js
+// let [firstName, surname] = arr;
+let firstName = arr[0];
+let surname = arr[1];
+```</code></pre>
+<pre><code class="language-smart">数组中不想要的元素也可以通过添加额外的逗号来把它丢弃：
+
+```js run
+*!*
+// 不需要第二个元素
+let [firstName, , title] = [&quot;Julius&quot;, &quot;Caesar&quot;, &quot;Consul&quot;, &quot;of the Roman Republic&quot;];
+*/!*
+
+alert( title ); // Consul
+```
+
+在上面的代码中，数组的第二个元素被跳过了，第三个元素被赋值给了 `title` 变量，数组中剩下的元素也都被跳过了（因为在这没有对应给它们的变量）。</code></pre>
+<pre><code class="language-smart">
+……实际上，我们可以将其与任何可迭代对象一起使用，而不仅限于数组：
+
+```js
+let [a, b, c] = &quot;abc&quot;; // [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
+let [one, two, three] = new Set([1, 2, 3]);
+```
+</code></pre>
+<pre><code class="language-smart">
+我们可以在等号左侧使用任何“可以被赋值的”东西。
+
+例如，一个对象的属性：
+```js run
+let user = {};
+[user.name, user.surname] = &quot;Ilya Kantor&quot;.split(&#x27; &#x27;);
+
+alert(user.name); // Ilya
+```
+</code></pre>
+<pre><code class="language-smart">
+在前面的章节中我们已经见过了 [Object.entries(obj)](mdn:js/Object/entries) 方法。
+
+我们可以将 .entries() 方法与解构语法一同使用，来遍历一个对象的“键—值”对：
+
+```js run
+let user = {
+  name: &quot;John&quot;,
+  age: 30
+};
+
+// 循环遍历键—值对
+*!*
+for (let [key, value] of Object.entries(user)) {
+*/!*
+  alert(`${key}:${value}`); // name:John, then age:30
+}
+```
+
+……对于 map 对象也类似：
+
+```js run
+let user = new Map();
+user.set(&quot;name&quot;, &quot;John&quot;);
+user.set(&quot;age&quot;, &quot;30&quot;);
+
+*!*
+for (let [key, value] of user) {
+*/!*
+  alert(`${key}:${value}`); // name:John, then age:30
+}
+```</code></pre>
+<pre><code class="language-smart">一个用于交换变量值的典型技巧：
+
+```js run
+let guest = &quot;Jane&quot;;
+let admin = &quot;Pete&quot;;
+
+// 交换值：让 guest=Pete, admin=Jane
+[guest, admin] = [admin, guest];
+
+alert(`${guest} ${admin}`); // Pete Jane（成功交换！）</code></pre>
+<p>这里我们创建了一个由两个变量组成的临时数组，并且立即以交换了的顺序对其进行了解构。</p>
+<p>我们可以用这种方式交换两个以上的变量。</p>
+<h3 id="剩余的-">剩余的 &#39;...&#39;</h3>
+<p>如果我们不只是要获得第一个值，还要将后续的所有元素都收集起来 — 我们可以使用三个点 <code>&quot;...&quot;</code> 来再加一个参数来接收“剩余的”元素：</p>
+<pre><code class="language-js">let [name1, name2, *!*...rest*/!*] = [&quot;Julius&quot;, &quot;Caesar&quot;, *!*&quot;Consul&quot;, &quot;of the Roman Republic&quot;*/!*];
+
+alert(name1); // Julius
+alert(name2); // Caesar
+
+*!*
+// 请注意，`rest` 的类型是数组
+alert(rest[0]); // Consul
+alert(rest[1]); // of the Roman Republic
+alert(rest.length); // 2
+*/!*</code></pre>
+<p><code>rest</code> 的值就是数组中剩下的元素组成的数组。不一定要使用变量名 <code>rest</code>，我们也可以使用其他的变量名，只要确保它前面有三个点，并且在解构赋值的最后一个参数位置上就行了。</p>
+<h3 id="默认值">默认值</h3>
+<p>如果赋值语句中，变量的数量多于数组中实际元素的数量，赋值不会报错。未赋值的变量被认为是 <code>undefined</code>：</p>
+<pre><code class="language-js">*!*
+<span class="hljs-keyword">let</span> [firstName, surname] = [];
+*/!*
+
+alert(firstName); <span class="hljs-comment">// undefined</span>
+alert(surname); <span class="hljs-comment">// undefined</span></code></pre>
+<p>如果我们想要一个“默认”值给未赋值的变量，我们可以使用 <code>=</code> 来提供：</p>
+<pre><code class="language-js">*!*
+<span class="hljs-comment">// 默认值</span>
+<span class="hljs-keyword">let</span> [name = <span class="hljs-string">&quot;Guest&quot;</span>, surname = <span class="hljs-string">&quot;Anonymous&quot;</span>] = [<span class="hljs-string">&quot;Julius&quot;</span>];
+*/!*
+
+alert(name);    <span class="hljs-comment">// Julius（来自数组的值）</span>
+alert(surname); <span class="hljs-comment">// Anonymous（默认值被使用了）</span></code></pre>
+<p>默认值可以是更加复杂的表达式甚至可以是函数调用，这些表达式或函数只会在这个变量未被赋值的时候才会被计算。</p>
+<p>举个例子，我们使用了 <code>prompt</code> 函数来提供两个默认值，但它只会在未被赋值的那个变量上进行调用：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 只会提示输入姓氏</span>
+<span class="hljs-keyword">let</span> [name = prompt(<span class="hljs-string">&#x27;name?&#x27;</span>), surname = prompt(<span class="hljs-string">&#x27;surname?&#x27;</span>)] = [<span class="hljs-string">&quot;Julius&quot;</span>];
+
+alert(name);    <span class="hljs-comment">// Julius（来自数组）</span>
+alert(surname); <span class="hljs-comment">// 你输入的值</span></code></pre>
+<h2 id="对象解构">对象解构</h2>
+<p>解构赋值同样适用于对象。</p>
+<p>基本语法是：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> {var1, var2} = {<span class="hljs-attr">var1</span>:…, <span class="hljs-attr">var2</span>:…}</code></pre>
+<p>在等号右侧有一个已经存在的对象，我们想把它拆开到变量中。等号左侧包含了对象相应属性的一个“模式（pattern）”。在简单的情况下，等号左侧的就是 <code>{...}</code> 中的变量名列表。</p>
+<p>举个例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> options = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Menu&quot;</span>,
+  <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-number">200</span>
+};
+
+*!*
+<span class="hljs-keyword">let</span> {title, width, height} = options;
+*/!*
+
+alert(title);  <span class="hljs-comment">// Menu</span>
+alert(width);  <span class="hljs-comment">// 100</span>
+alert(height); <span class="hljs-comment">// 200</span></code></pre>
+<p>属性 <code>options.title</code>、<code>options.width</code> 和 <code>options.height</code> 值被赋给了对应的变量。变量的顺序并不重要，下面这个代码也奏效：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 改变 let {...} 中元素的顺序</span>
+<span class="hljs-keyword">let</span> {height, width, title} = { <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Menu&quot;</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">200</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">100</span> }</code></pre>
+<p>等号左侧的模式（pattern）可以更加复杂，并且指定了属性和变量之间的映射关系。</p>
+<p>如果我们想把一个属性赋值给另一个名字的变量，比如把 <code>options.width</code> 属性赋值给变量 <code>w</code>，那么我们可以使用冒号来指定：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> options = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Menu&quot;</span>,
+  <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-number">200</span>
+};
+
+*!*
+<span class="hljs-comment">// { sourceProperty: targetVariable }</span>
+<span class="hljs-keyword">let</span> {<span class="hljs-attr">width</span>: w, <span class="hljs-attr">height</span>: h, title} = options;
+*/!*
+
+<span class="hljs-comment">// width -&gt; w</span>
+<span class="hljs-comment">// height -&gt; h</span>
+<span class="hljs-comment">// title -&gt; title</span>
+
+alert(title);  <span class="hljs-comment">// Menu</span>
+alert(w);      <span class="hljs-comment">// 100</span>
+alert(h);      <span class="hljs-comment">// 200</span></code></pre>
+<p>冒号表示“什么值：赋值给谁”。上面的例子中，属性 <code>width</code> 被赋值给了 <code>w</code>，属性 <code>height</code> 被赋值给了 <code>h</code>，属性 <code>title</code> 被赋值给了同名变量。</p>
+<p>对于可能缺失的属性，我们可以使用 <code>&quot;=&quot;</code> 设置默认值，如下所示：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> options = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Menu&quot;</span>
+};
+
+*!*
+<span class="hljs-keyword">let</span> {width = <span class="hljs-number">100</span>, height = <span class="hljs-number">200</span>, title} = options;
+*/!*
+
+alert(title);  <span class="hljs-comment">// Menu</span>
+alert(width);  <span class="hljs-comment">// 100</span>
+alert(height); <span class="hljs-comment">// 200</span></code></pre>
+<p>就像数组或函数参数一样，默认值可以是任意表达式甚至可以是函数调用。它们只会在未提供对应的值时才会被计算/调用。</p>
+<p>在下面的代码中，<code>prompt</code> 提示输入 <code>width</code> 值，但不会提示输入 <code>title</code> 值：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> options = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Menu&quot;</span>
+};
+
+*!*
+<span class="hljs-keyword">let</span> {width = prompt(<span class="hljs-string">&quot;width?&quot;</span>), title = prompt(<span class="hljs-string">&quot;title?&quot;</span>)} = options;
+*/!*
+
+alert(title);  <span class="hljs-comment">// Menu</span>
+alert(width);  <span class="hljs-comment">//（无论 prompt 的结果是什么）</span></code></pre>
+<p>我们还可以将冒号和等号结合起来：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> options = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Menu&quot;</span>
+};
+
+*!*
+<span class="hljs-keyword">let</span> {<span class="hljs-attr">width</span>: w = <span class="hljs-number">100</span>, <span class="hljs-attr">height</span>: h = <span class="hljs-number">200</span>, title} = options;
+*/!*
+
+alert(title);  <span class="hljs-comment">// Menu</span>
+alert(w);      <span class="hljs-comment">// 100</span>
+alert(h);      <span class="hljs-comment">// 200</span></code></pre>
+<p>如果我们有一个具有很多属性的复杂对象，那么我们可以只提取所需的内容：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> options = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Menu&quot;</span>,
+  <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-number">200</span>
+};
+
+<span class="hljs-comment">// 仅提取 title 作为变量</span>
+<span class="hljs-keyword">let</span> { title } = options;
+
+alert(title); <span class="hljs-comment">// Menu</span></code></pre>
+<h3 id="剩余模式（pattern）">剩余模式（pattern）&quot;...&quot;</h3>
+<p>如果对象拥有的属性数量比我们提供的变量数量还多，该怎么办？我们可以只取其中的某一些属性，然后把“剩余的”赋值到其他地方吗？</p>
+<p>我们可以使用剩余模式（pattern），就像我们对数组那样。一些较旧的浏览器不支持此功能（例如，使用 Babel 对其进行填充），但可以在现代浏览器中使用。</p>
+<p>看起来就像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> options = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Menu&quot;</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>
+};
+
+*!*
+<span class="hljs-comment">// title = 名为 title 的属性</span>
+<span class="hljs-comment">// rest = 存有剩余属性的对象</span>
+<span class="hljs-keyword">let</span> {title, ...rest} = options;
+*/!*
+
+<span class="hljs-comment">// 现在 title=&quot;Menu&quot;, rest={height: 200, width: 100}</span>
+alert(rest.height);  <span class="hljs-comment">// 200</span>
+alert(rest.width);   <span class="hljs-comment">// 100</span></code></pre>
+<p>````smart header=&quot;不使用 <code>let</code> 时的陷阱&quot;
+在上面的示例中，变量都是在赋值中通过正确方式声明的：<code>let {…} = {…}</code>。当然，我们也可以使用已有的变量，而不用 <code>let</code>，但这里有一个陷阱。</p>
+<p>以下代码无法正常运行：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> title, width, height;
+
+<span class="hljs-comment">// 这一行发生了错误</span>
+{title, width, height} = {<span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Menu&quot;</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">100</span>};</code></pre>
+<p>问题在于 JavaScript 把主代码流（即不在其他表达式中）的 <code>{...}</code> 当做一个代码块。这样的代码块可以用于对语句分组，如下所示：</p>
+<pre><code class="language-js">{
+  <span class="hljs-comment">// 一个代码块</span>
+  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&quot;Hello&quot;</span>;
+  <span class="hljs-comment">// ...</span>
+  alert( message );
+}</code></pre>
+<p>因此，这里 JavaScript 假定我们有一个代码块，这就是报错的原因。我们需要解构它。</p>
+<p>为了告诉 JavaScript 这不是一个代码块，我们可以把整个赋值表达式用括号 <code>(...)</code> 包起来：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> title, width, height;
+
+<span class="hljs-comment">// 现在就可以了</span>
+*!*(*<span class="hljs-regexp">/!*{title, width, height} = {title: &quot;Menu&quot;, width: 200, height: 100}*!*)*/</span>!*;
+
+alert( title ); <span class="hljs-comment">// Menu</span></code></pre>
+<pre><code>
+## 嵌套解构
+
+如果一个对象或数组嵌套了其他的对象和数组，我们可以在等号左侧使用更复杂的模式（pattern）来提取更深层的数据。
+
+在下面的代码中，`options` 的属性 `size` 是另一个对象，属性 `items` 是另一个数组。赋值语句中等号左侧的模式（pattern）具有相同的结构以从中提取值：
+
+```js run
+let options = {
+  size: {
+    width: 100,
+    height: 200
+  },
+  items: [&quot;Cake&quot;, &quot;Donut&quot;],
+  extra: true   
+};
+
+// 为了清晰起见，解构赋值语句被写成多行的形式
+let {
+  size: { // 把 size 赋值到这里
+    width,
+    height
+  },
+  items: [item1, item2], // 把 items 赋值到这里
+  title = &quot;Menu&quot; // 在对象中不存在（使用默认值）
+} = options;
+
+alert(title);  // Menu
+alert(width);  // 100
+alert(height); // 200
+alert(item1);  // Cake
+alert(item2);  // Donut
+```
+
+对象 `options` 的所有属性，除了 `extra` 属性在等号左侧不存在，都被赋值给了对应的变量：
+
+![](destructuring-complex.svg)
+
+最终，我们得到了 `width`、`height`、`item1`、`item2` 和具有默认值的 `title` 变量。
+
+注意，`size` 和 `items` 没有对应的变量，因为我们取的是它们的内容。
+
+## 智能函数参数
+
+有时，一个函数有很多参数，其中大部分的参数都是可选的。对用户界面来说更是如此。想象一个创建菜单的函数。它可能具有宽度参数，高度参数，标题参数和项目列表等。
+
+下面是实现这种函数的一个很不好的写法：
+
+```js
+function showMenu(title = &quot;Untitled&quot;, width = 200, height = 100, items = []) {
+  // ...
+}
+```
+
+在实际开发中存在一个问题就是你怎么记得住这么多参数的顺序。通常集成开发环境工具（IDE）会尽力帮助我们，特别是当代码有良好的文档注释的时候，但是…… 另一个问题就是，当大部分的参数采用默认值就好的情况下，怎么调用这个函数。
+
+难道像这样？
+
+```js
+// 在采用默认值就可以的位置设置 undefined
+showMenu(&quot;My Menu&quot;, undefined, undefined, [&quot;Item1&quot;, &quot;Item2&quot;])
+```
+
+这太难看了。而且，当我们处理更多参数的时候可读性会变得很差。
+
+解构赋值语法前来救援！
+
+我们可以把所有参数当作一个对象来传递，然后函数马上把这个对象解构成多个变量：
+
+```js run
+// 我们传递一个对象给函数
+let options = {
+  title: &quot;My menu&quot;,
+  items: [&quot;Item1&quot;, &quot;Item2&quot;]
+};
+
+// ……然后函数马上把对象展开成变量
+function showMenu(*!*{title = &quot;Untitled&quot;, width = 200, height = 100, items = []}*/!*) {
+  // title, items – 提取于 options，
+  // width, height – 使用默认值
+  alert( `${title} ${width} ${height}` ); // My Menu 200 100
+  alert( items ); // Item1, Item2
+}
+
+showMenu(options);
+```
+
+我们同样可以使用带有嵌套对象和冒号映射的更加复杂的解构：
+
+```js run
+let options = {
+  title: &quot;My menu&quot;,
+  items: [&quot;Item1&quot;, &quot;Item2&quot;]
+};
+
+*!*
+function showMenu({
+  title = &quot;Untitled&quot;,
+  width: w = 100,  // width goes to w
+  height: h = 200, // height goes to h
+  items: [item1, item2] // items first element goes to item1, second to item2
+}) {
+*/!*
+  alert( `${title} ${w} ${h}` ); // My Menu 100 200
+  alert( item1 ); // Item1
+  alert( item2 ); // Item2
+}
+
+showMenu(options);
+```
+
+完整语法和解构赋值是一样的：
+```js
+function({
+  incomingProperty: varName = defaultValue
+  ...
+})
+```
+
+对于参数对象，属性 `incomingProperty` 对应的变量是 `varName`，默认值是 `defaultValue`。
+
+请注意，这种解构假定了 `showMenu()` 函数确实存在参数。如果我们想让所有的参数都使用默认值，那我们应该传递一个空对象：
+
+```js
+showMenu({}); // 不错，所有值都取默认值
+
+showMenu(); // 这样会导致错误
+```
+
+我们可以通过指定空对象 `{}` 为整个参数对象的默认值来解决这个问题：
+
+```js run
+function showMenu({ title = &quot;Menu&quot;, width = 100, height = 200 }*!* = {}*/!*) {
+  alert( `${title} ${width} ${height}` );
+}
+
+showMenu(); // Menu 100 200
+```
+
+在上面的代码中，整个参数对象的默认是 `{}`，因此总会有内容可以用来解构。
+
+## 总结
+
+- 解构赋值可以立即将一个对象或数组映射到多个变量上。
+- 解构对象的完整语法：
+    ```js
+    let {prop : varName = default, ...rest} = object
+    ```
+
+    这表示属性 `prop` 会被赋值给变量 `varName`，如果没有这个属性的话，就会使用默认值 `default`。
+
+    没有对应映射的对象属性会被复制到 `rest` 对象。
+
+- 解构数组的完整语法：
+
+    ```js
+    let [item1 = default, item2, ...rest] = array
+    ```
+
+    数组的第一个元素被赋值给 `item1`，第二个元素被赋值给 `item2`，剩下的所有元素被复制到另一个数组 `rest`。
+
+- 从嵌套数组/对象中提取数据也是可以的，此时等号左侧必须和等号右侧有相同的结构。</code></pre>

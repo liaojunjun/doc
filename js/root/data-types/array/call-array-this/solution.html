@@ -1,0 +1,10 @@
+<p><code>arr[2]()</code> 调用从句法来看可以类比于 <code>obj[method]()</code>，与 <code>obj</code> 对应的是 <code>arr</code>，与 <code>method</code> 对应的是 <code>2</code>。</p>
+<p>所以调用 <code>arr[2]</code> 函数也就是调用对象函数。自然地，它接收 <code>this</code> 引用的对象 <code>arr</code> 然后输出该数组：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>];
+
+arr.push(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert( <span class="hljs-built_in">this</span> );
+})
+
+arr[<span class="hljs-number">2</span>](); <span class="hljs-comment">// a,b,function(){...}</span></code></pre>
+<p>该数组有 3 项：最开始有两个，后来添加进来一个函数。</p>

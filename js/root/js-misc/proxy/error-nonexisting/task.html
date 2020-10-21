@@ -1,0 +1,24 @@
+<h1 id="读取不存在的属性时出错">读取不存在的属性时出错</h1>
+<p>通常，尝试读取不存在的属性会返回 <code>undefined</code>。</p>
+<p>创建一个代理，在尝试读取不存在的属性时，该代理抛出一个错误。</p>
+<p>这可以帮助及早发现编程错误。</p>
+<p>编写一个函数 <code>wrap(target)</code>，该函数接受一个 <code>target</code> 对象，并返回添加此方面功能的代理（proxy）。</p>
+<p>其工作方式应如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">wrap</span>(<span class="hljs-params">target</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(target, {
+*!*
+      <span class="hljs-comment">/* 你的代码 */</span>
+*/!*
+  });
+}
+
+user = wrap(user);
+
+alert(user.name); <span class="hljs-comment">// John</span>
+*!*
+alert(user.age); <span class="hljs-comment">// ReferenceError: Property doesn&#x27;t exist &quot;age&quot;</span>
+*/!*</code></pre>

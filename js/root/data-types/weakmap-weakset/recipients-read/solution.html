@@ -1,0 +1,32 @@
+<p>让我们将已读消息存储在 <code>WeakSet</code> 中：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> messages = [
+  {<span class="hljs-attr">text</span>: <span class="hljs-string">&quot;Hello&quot;</span>, <span class="hljs-attr">from</span>: <span class="hljs-string">&quot;John&quot;</span>},
+  {<span class="hljs-attr">text</span>: <span class="hljs-string">&quot;How goes?&quot;</span>, <span class="hljs-attr">from</span>: <span class="hljs-string">&quot;John&quot;</span>},
+  {<span class="hljs-attr">text</span>: <span class="hljs-string">&quot;See you soon&quot;</span>, <span class="hljs-attr">from</span>: <span class="hljs-string">&quot;Alice&quot;</span>}
+];
+
+<span class="hljs-keyword">let</span> readMessages = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakSet</span>();
+
+<span class="hljs-comment">// 两个消息已读</span>
+readMessages.add(messages[<span class="hljs-number">0</span>]);
+readMessages.add(messages[<span class="hljs-number">1</span>]);
+<span class="hljs-comment">// readMessages 包含两个元素</span>
+
+<span class="hljs-comment">// ……让我们再读一遍第一条消息！</span>
+readMessages.add(messages[<span class="hljs-number">0</span>]);
+<span class="hljs-comment">// readMessages 仍然有两个不重复的元素</span>
+
+<span class="hljs-comment">// 回答：message[0] 已读？</span>
+alert(<span class="hljs-string">&quot;Read message 0: &quot;</span> + readMessages.has(messages[<span class="hljs-number">0</span>])); <span class="hljs-comment">// true</span>
+
+messages.shift();
+<span class="hljs-comment">// 现在 readMessages 有一个元素（技术上来讲，内存可能稍后才会被清理）</span></code></pre>
+<p><code>WeakSet</code> 允许存储一系列的消息，并且很容易就能检查它是否包含某个消息。</p>
+<p>它会自动清理自身。代价是，我们不能对它进行迭代，也不能直接从中获取“所有已读消息”。但是，我们可以通过遍历所有消息，然后找出存在于 set 的那些消息来完成这个功能。</p>
+<p>另一种不同的解决方案可以是，在读取消息后向消息添加诸如 <code>message.isRead=true</code> 之类的属性。由于 <code>messages</code> 对象是由另一个代码管理的，因此通常不建议这样做，但是我们可以使用 symbol 属性来避免冲突。</p>
+<p>像这样：</p>
+<pre><code class="language-js"><span class="hljs-comment">// symbol 属性仅对于我们的代码是已知的</span>
+<span class="hljs-keyword">let</span> isRead = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;isRead&quot;</span>);
+messages[<span class="hljs-number">0</span>][isRead] = <span class="hljs-literal">true</span>;</code></pre>
+<p>现在，第三方代码可能看不到我们的额外属性。</p>
+<p>尽管 symbol 可以降低出现问题的可能性，但从架构的角度来看，还是使用 <code>WeakSet</code> 更好。</p>

@@ -1,0 +1,123 @@
+<h1 id="影子-dom（shadow-dom）">影子 DOM（Shadow DOM）</h1>
+<p>Shadow DOM 为封装而生。它可以让一个组件拥有自己的「影子」DOM 树，这个 DOM 树不能在主文档中被任意访问，可能拥有局部样式规则，还有其他特性。</p>
+<h2 id="内建-shadow-dom">内建 shadow DOM</h2>
+<p>你是否曾经思考过复杂的浏览器控件是如何被创建和添加样式的？</p>
+<p>比如 <code>&lt;input type=&quot;range&quot;&gt;</code>：</p>
+<p>
+<input type="range">
+</p>
+
+<p>浏览器在内部使用 DOM/CSS 来绘制它们。这个 DOM 结构一般来说对我们是隐藏的，但我们可以在开发者工具里面看见它。比如，在 Chrome 里，我们需要打开「Show user agent shadow DOM」选项。</p>
+<p>然后 <code>&lt;input type=&quot;range&quot;&gt;</code> 看起来会像这样：</p>
+<p><img src="shadow-dom-range.png" alt=""></p>
+<p>你在 <code>#shadow-root</code> 下看到的就是被称为「shadow DOM」的东西。</p>
+<p>我们不能使用一般的 JavaScript 调用或者选择器来获取内建 shadow DOM 元素。它们不是常规的子元素，而是一个强大的封装手段。</p>
+<p>在上面的例子中，我们可以看到一个有用的属性 <code>pseudo</code>。这是一个因为历史原因而存在的属性，并不在标准中。我们可以使用它来给子元素加上 CSS 样式，像这样：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+<span class="hljs-comment">/* 让滑块轨道变红 */</span>
+<span class="hljs-selector-tag">input</span><span class="hljs-selector-pseudo">::-webkit-slider-runnable-track</span> {
+  <span class="hljs-attribute">background</span>: red;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;range&quot;</span>&gt;</span></code></pre>
+<p>重申一次，<code>pseudo</code> 是一个非标准的属性。按照时间顺序来说，浏览器首先实验了使用内部 DOM 结构来实现控件，然后，在一段时间之后，shadow DOM 才被标准化来让我们，开发者们，做类似的事。</p>
+<p>接下来，我们将要使用现代 shadow DOM 标准，它在 <a href="https://dom.spec.whatwg.org/#shadow-trees">DOM spec</a> 和其他相关标准中可以被找到。</p>
+<h2 id="shadow-tree">Shadow tree</h2>
+<p>一个 DOM 元素可以有以下两类 DOM 子树：</p>
+<ol>
+<li>Light tree（光明树） —— 一个常规 DOM 子树，由 HTML 子元素组成。我们在之前章节看到的所有子树都是「光明的」。</li>
+<li>Shadow tree（影子树） —— 一个隐藏的 DOM 子树，不在 HTML 中反映，无法被察觉。</li>
+</ol>
+<p>如果一个元素同时有以上两种子树，那么浏览器只渲染 shadow tree。但是我们同样可以设置两种树的组合。我们将会在后面的章节 <a href="info:slots-composition">info:slots-composition</a> 中看到更多细节。</p>
+<p>影子树可以在自定义元素中被使用，其作用是隐藏组件内部结构和添加只在组件内有效的样式。</p>
+<p>比如，这个 <code>&lt;show-hello&gt;</code> 元素将它的内部 DOM 隐藏在了影子里面：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;show-hello&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-keyword">const</span> shadow = <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    shadow.innerHTML = <span class="hljs-string">`&lt;p&gt;
+      Hello, <span class="hljs-subst">${<span class="hljs-built_in">this</span>.getAttribute(<span class="hljs-string">&#x27;name&#x27;</span>)}</span>
+    &lt;/p&gt;`</span>;
+  }  
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">show-hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;John&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">show-hello</span>&gt;</span></code></pre>
+<p>这就是在 Chrome 开发者工具中看到的最终样子，所有的内容都在「#shadow-root」下：</p>
+<p><img src="shadow-dom-say-hello.png" alt=""></p>
+<p>首先，调用 <code>elem.attachShadow({mode: …})</code> 可以创建一个 shadow tree。</p>
+<p>这里有两个限制：</p>
+<ol>
+<li>在每个元素中，我们只能创建一个 shadow root。</li>
+<li><code>elem</code> 必须是自定义元素，或者是以下元素的其中一个：「article」、「aside」、「blockquote」、「body」、「div」、「footer」、「h1..h6」、「header」、「main」、「nav」、「p」、「section」或者「span」。其他元素，比如 <code>&lt;img&gt;</code>，不能容纳 shadow tree。</li>
+</ol>
+<p><code>mode</code> 选项可以设定封装层级。他必须是以下两个值之一：</p>
+<ul>
+<li><p><code>「open」</code> —— shadow root 可以通过 <code>elem.shadowRoot</code> 访问。</p>
+<p>  任何代码都可以访问 <code>elem</code> 的 shadow tree。</p>
+</li>
+<li><p><code>「closed」</code> —— <code>elem.shadowRoot</code> 永远是 <code>null</code>。</p>
+<p>  我们只能通过 <code>attachShadow</code> 返回的指针来访问 shadow DOM（并且可能隐藏在一个 class 中）。浏览器原生的 shadow tree，比如 <code>&lt;input type=&quot;range&quot;&gt;</code>，是封闭的。没有任何方法可以访问它们。</p>
+</li>
+</ul>
+<p><code>attachShadow</code> 返回的 <a href="https://dom.spec.whatwg.org/#shadowroot">shadow root</a>，和任何元素一样：我们可以使用 <code>innerHTML</code> 或者 DOM 方法，比如 <code>append</code> 来扩展它。</p>
+<p>我们称有 shadow root 的元素叫做「shadow tree host」，可以通过 shadow root 的 <code>host</code> 属性访问：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 假设 {mode: &quot;open&quot;}，否则 elem.shadowRoot 是 null</span>
+alert(elem.shadowRoot.host === elem); <span class="hljs-comment">// true</span></code></pre>
+<h2 id="封装">封装</h2>
+<p>Shadow DOM 被非常明显地和主文档分开：</p>
+<ol>
+<li>Shadow DOM 元素对于 light DOM 中的 <code>querySelector</code> 不可见。实际上，Shadow DOM 中的元素可能与 light DOM 中某些元素的 id 冲突。这些元素必须在 shadow tree 中独一无二。</li>
+<li>Shadow DOM 有自己的样式。外部样式规则在 shadow DOM 中不产生作用。</li>
+</ol>
+<p>比如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+*!*
+  /* 文档样式对 #elem 内的 shadow tree 无作用 (1) */
+*/!*
+  p { color: red; }
+<span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
+  elem.attachShadow({mode: &#x27;open&#x27;});
+*!*
+    // shadow tree 有自己的样式 (2)
+*/!*
+  elem.shadowRoot.innerHTML = `
+    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">font-weight</span>: bold; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello, John!<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  `;
+
+*!*
+  // <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span> 只对 shadow tree 里面的查询可见 (3)
+*/!*
+  alert(document.querySelectorAll(&#x27;p&#x27;).length); // 0
+  alert(elem.shadowRoot.querySelectorAll(&#x27;p&#x27;).length); // 1
+</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>  </code></pre>
+<ol>
+<li>文档里面的样式对 shadow tree 没有任何效果。</li>
+<li>……但是内部的样式是有效的。</li>
+<li>为了获取 shadow tree 内部的元素，我们可以从树的内部查询。</li>
+</ol>
+<h2 id="参考">参考</h2>
+<ul>
+<li>DOM：<a href="https://dom.spec.whatwg.org/#shadow-trees">https://dom.spec.whatwg.org/#shadow-trees</a></li>
+<li>兼容性：<a href="https://caniuse.com/#feat=shadowdomv1">https://caniuse.com/#feat=shadowdomv1</a></li>
+<li>Shadow DOM 在很多其他标准中被提到，比如：<a href="https://w3c.github.io/DOM-Parsing/#the-innerhtml-mixin">DOM Parsing</a> 指定了 shadow root 有 <code>innerHTML</code>。</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>Shadow DOM 是创建组件级别 DOM 的一种方法。</p>
+<ol>
+<li><code>shadowRoot = elem.attachShadow({mode: open|closed})</code> —— 为 <code>elem</code> 创建 shadow DOM。如果 <code>mode=&quot;open&quot;</code>，那么它通过 <code>elem.shadowRoot</code> 属性被访问。</li>
+<li>我们可以使用 <code>innerHTML</code> 或者其他 DOM 方法来扩展 <code>shadowRoot</code>。</li>
+</ol>
+<p>Shadow DOM 元素：</p>
+<ul>
+<li>有自己的 id 空间。</li>
+<li>对主文档的 JavaScript 选择器隐身，比如 <code>querySelector</code>。</li>
+<li>只使用 shadow tree 内部的样式，不使用主文档的样式。</li>
+</ul>
+<p>Shadow DOM，如果存在的话，会被浏览器渲染而不是所谓的 「light DOM」（普通子元素）。在 <a href="info:slots-composition">info:slots-composition</a> 章节中我们将会看到如何组织它们。</p>

@@ -1,0 +1,13 @@
+<p>算法看起来很简单：</p>
+<ol>
+<li>将 <code>onmouseover/out</code> 处理程序放在元素上。在这里也可以使用 <code>onmouseenter/leave</code>，但是它们的通用性较差，如果我们想引入事件委托时，它则无法使用。</li>
+<li>当鼠标指针进入元素时，开始测量 <code>mousemove</code> 上的速度。</li>
+<li>如果速度慢，则运行 <code>over</code>。</li>
+<li>当我们的鼠标指针要移出元素，并且 <code>over</code> 也执行了，则会运行 <code>out</code>。</li>
+</ol>
+<p>但是如何测量速度？</p>
+<p>第一个想法是：每 <code>100ms</code> 运行一次函数，并测量前坐标和新坐标之间的距离。如果很小，那么速度就很小。</p>
+<p>不幸的是，在 JavaScript 中无法获取“鼠标当前坐标”。没有像 <code>getCurrentMouseCoordinates()</code> 这样的函数。</p>
+<p>获取坐标的唯一方法是监听例如 <code>mousemove</code> 这样的鼠标事件。</p>
+<p>因此，我们可以在 <code>mousemove</code> 上设置一个处理程序来跟踪坐标并记住它们。然后我每 <code>100ms</code> 比较一次。</p>
+<p>P.S. 请注意：解决方案测试使用 <code>dispatchEvent</code> 来检查工具提示是否正确。</p>

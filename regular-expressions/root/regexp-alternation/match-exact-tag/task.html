@@ -1,0 +1,7 @@
+<h1 id="查找完整标签">查找完整标签</h1>
+<p>写出一个正则表达式，用于查找 <code>&lt;style...&gt;</code> 标签。它应该匹配完整的标签：该标签可能是没有属性的标签 <code>&lt;style&gt;</code> 或是有很多属性的标签 <code>&lt;style type=&quot;...&quot; id=&quot;...&quot;&gt;</code>。</p>
+<p>...同时正则表达式不应该匹配 <code>&lt;styler&gt;</code>！</p>
+<p>举例如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/your regexp/g</span>;
+
+alert( <span class="hljs-string">&#x27;&lt;style&gt; &lt;styler&gt; &lt;style test=&quot;...&quot;&gt;&#x27;</span>.match(reg) ); <span class="hljs-comment">// &lt;style&gt;, &lt;style test=&quot;...&quot;&gt;</span></code></pre>

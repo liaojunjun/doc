@@ -1,0 +1,14 @@
+<p>答案：**<code>BODY</code>**。</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
+  let body = document.body;
+
+  body.innerHTML = &quot;<span class="hljs-comment">&lt;!--&quot; + body.tagName + &quot;--&gt;</span>&quot;;
+
+  alert( body.firstChild.data ); // BODY
+</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>让我们一步一步来看看发生了什么：</p>
+<ol>
+<li><code>&lt;body&gt;</code> 中的内容被注释所取代。注释为 <code>&lt;!--BODY--&gt;</code>，因为 <code>body.tagName == &quot;BODY&quot;</code>。正如我们所记得的，在 HTML 模式下，<code>tagName</code> 总是大写的。</li>
+<li>现在这个注释是唯一的子节点，所以我们在 <code>body.firstChild</code> 中获取了它。</li>
+<li>注释的 <code>data</code> 属性是它的内容（在 <code>&lt;!--...--&gt;</code> 内的)：<code>&quot;BODY&quot;</code>。</li>
+</ol>

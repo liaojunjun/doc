@@ -1,0 +1,51 @@
+<h1 id="转义，特殊字符">转义，特殊字符</h1>
+<p>正如我们所看到的，一个反斜杠 <code>&quot;\&quot;</code> 是用来表示匹配字符类的。所以它是一个特殊字符。</p>
+<p>还存在其它的特殊字符，这些字符在正则表达式中有特殊的含义。它们可以被用来做更加强大的搜索。</p>
+<p>这里是包含所有特殊字符的列表：<code>pattern:[ \ ^ $ . | ? * + ( )</code>。</p>
+<p>现在并不需要尝试去记住它们 —— 当我们分别处理其中的每一个时，你自然而然就会记住它们。</p>
+<h2 id="转义">转义</h2>
+<p>如果要把特殊字符作为常规字符来使用，只需要在它前面加个反斜杠。</p>
+<p>这种方式也被叫做“转义一个字符”。</p>
+<p>比如说，我们需要找到一个点号 <code>pattern:&#39;.&#39;</code>。在一个正则表达式中一个点号意味着“除了换行符以外的任意字符”，所以如果我们想真正表示对“一个点号”查询的时候，可以在点号前加一个反斜杠。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(<span class="hljs-regexp">/\d\.\d/</span>) ); <span class="hljs-comment">// 5.1</span></code></pre>
+<p>括号也是特殊字符，所以如果我们想要在正则中查找它们，我们应该使用 <code>pattern:\(</code>。下面的例子会查找一个字符串 <code>&quot;g()&quot;</code>：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;function g()&quot;</span>.match(<span class="hljs-regexp">/g\(\)/</span>) ); <span class="hljs-comment">// &quot;g()&quot;</span></code></pre>
+<p>如果我们想查找反斜杠 <code>\</code>，我们就应该使用两个反斜杠来查找：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;1\\2&quot;</span>.match(<span class="hljs-regexp">/\\/</span>) ); <span class="hljs-comment">// &#x27;\&#x27;</span></code></pre>
+<h2 id="一个斜杠">一个斜杠</h2>
+<p>斜杠符号 <code>&#39;/&#39;</code> 并不是一个特殊符号，但是它被用于在 Javascript 中开启和关闭正则匹配：<code>pattern:/...pattern.../</code>，所以我们也应该转义它。</p>
+<p>下面是查询斜杠 <code>&#39;/&#39;</code> 的表达式：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;/&quot;</span>.match(<span class="hljs-regexp">/\//</span>) ); <span class="hljs-comment">// &#x27;/&#x27;</span></code></pre>
+<p>从另一个方面看，如果使用另一种 <code>new RegExp</code> 方式就不需要转义斜杠：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;/&quot;</span>.match(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">&quot;/&quot;</span>)) ); <span class="hljs-comment">// &#x27;/&#x27;</span></code></pre>
+<h2 id="使用-new-regexp-创建正则实例">使用 new RegExp 创建正则实例</h2>
+<p>如果我们使用 <code>new RegExp</code> 来创建一个正则表达式实例，那么我们需要对其做一些额外的转义。</p>
+<p>比如说，考虑下面的示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">&quot;\d\.\d&quot;</span>);
+
+alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(reg) ); <span class="hljs-comment">// null</span></code></pre>
+<p>它并没有正常发挥作用，但是为什么呢？</p>
+<p>原因就在于字符串转义规则。看下面的例子：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&quot;\d\.\d&quot;</span>); <span class="hljs-comment">// d.d</span></code></pre>
+<p>在字符串中的反斜杠表示转义或者类似 <code>\n</code> 这种只能在字符串中使用的特殊字符。这个引用会“消费”并且解释这些字符，比如说：</p>
+<ul>
+<li><code>\n</code> —— 变成一个换行字符，</li>
+<li><code>\u1234</code> —— 变成包含该码位的 Unicode 字符，</li>
+<li>。。。其它有些并没有特殊的含义，就像 <code>\d</code> 或者 <code>\z</code>，碰到这种情况的话会把反斜杠移除。</li>
+</ul>
+<p>所以调用 <code>new RegExp</code> 会获得一个没有反斜杠的字符串。</p>
+<p>如果要修复这个问题，我们需要双斜杠，因为引用会把 <code>\\</code> 变为 <code>\</code>：</p>
+<pre><code class="language-js">*!*
+<span class="hljs-keyword">let</span> regStr = <span class="hljs-string">&quot;\\d\\.\\d&quot;</span>;
+*/!*
+alert(regStr); <span class="hljs-comment">// \d\.\d (correct now)</span>
+
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(regStr);
+
+alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(regexp) ); <span class="hljs-comment">// 5.1</span></code></pre>
+<h2 id="summary">Summary</h2>
+<ul>
+<li>要在字面（意义）上搜索特殊字符 <code>pattern:[ \ ^ $ . | ? * + ( )</code>，我们需要在它们前面加上反斜杠 <code>\</code>（&quot;转义它们&quot;）。</li>
+<li>如果我们在 <code>pattern:/.../</code> 内部（但不在 <code>new RegExp</code> 内部），还需要转义 <code>/</code>。</li>
+<li>传递一个字符串（参数）给 <code>new RegExp</code> 时，我们需要双倍反斜杠 <code>\\</code>，因为字符串引号会消费其中的一个。</li>
+</ul>

@@ -1,0 +1,6 @@
+<p>答案是 <code>pattern:&lt;[^&lt;&gt;]+&gt;</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;[^&lt;&gt;]+&gt;/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&lt;&gt; &lt;a href=&quot;/&quot;&gt; &lt;input type=&quot;radio&quot; checked&gt; &lt;b&gt;&#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &#x27;&lt;a href=&quot;/&quot;&gt;&#x27;, &#x27;&lt;input type=&quot;radio&quot; checked&gt;&#x27;, &#x27;&lt;b&gt;&#x27;</span></code></pre>

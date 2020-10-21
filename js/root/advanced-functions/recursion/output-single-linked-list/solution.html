@@ -1,0 +1,69 @@
+<h1 id="循环解法">循环解法</h1>
+<p>基于循环的解法：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> list = {
+  <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">next</span>: {
+    <span class="hljs-attr">value</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">next</span>: {
+      <span class="hljs-attr">value</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">next</span>: {
+        <span class="hljs-attr">value</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">next</span>: <span class="hljs-literal">null</span>
+      }
+    }
+  }
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printList</span>(<span class="hljs-params">list</span>) </span>{
+  <span class="hljs-keyword">let</span> tmp = list;
+
+  <span class="hljs-keyword">while</span> (tmp) {
+    alert(tmp.value);
+    tmp = tmp.next;
+  }
+
+}
+
+printList(list);</code></pre>
+<p>请注意，我们使用了一个临时变量 <code>tmp</code> 来遍历链表。从技术上讲，我们可以使用函数的入参 <code>list</code> 来代替：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printList</span>(<span class="hljs-params">list</span>) </span>{
+
+  <span class="hljs-keyword">while</span>(*!*list*/!*) {
+    alert(list.value);
+    list = list.next;
+  }
+
+}</code></pre>
+<p>……但是这不够明智。未来我们可能想要扩展这个函数，使用这个链表做其他的事儿，如果我们修改了 <code>list</code>，那么我们就失去了这个能力。</p>
+<p>说到好的变量命名，<code>list</code> 在这里是链表本身。代表它的第一个元素。它应该保持原样，这是清晰可靠的。</p>
+<p>从另一个方面来说，<code>tmp</code> 是充当了完全遍历链表的角色，就像 <code>for</code> 循环中的 <code>i</code> 一样。</p>
+<h1 id="递归解法">递归解法</h1>
+<p><code>printList(list)</code> 的递归实现遵循一个简单的逻辑：为了输出链表，我们应该输出 <code>list</code> 的当前的元素，<code>list.next</code> 同理：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> list = {
+  <span class="hljs-attr">value</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">next</span>: {
+    <span class="hljs-attr">value</span>: <span class="hljs-number">2</span>,
+    <span class="hljs-attr">next</span>: {
+      <span class="hljs-attr">value</span>: <span class="hljs-number">3</span>,
+      <span class="hljs-attr">next</span>: {
+        <span class="hljs-attr">value</span>: <span class="hljs-number">4</span>,
+        <span class="hljs-attr">next</span>: <span class="hljs-literal">null</span>
+      }
+    }
+  }
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printList</span>(<span class="hljs-params">list</span>) </span>{
+
+  alert(list.value); <span class="hljs-comment">// 输出当前元素</span>
+
+  <span class="hljs-keyword">if</span> (list.next) {
+    printList(list.next); <span class="hljs-comment">// 链表中其余部分同理</span>
+  }
+
+}
+
+printList(list);</code></pre>
+<p>哪个更好呢？</p>
+<p>从技术上讲，循环更有效。这两种解法的做了同样的事儿，但循环不会为嵌套函数调用消耗资源。</p>
+<p>另一方面，递归解法更简洁，有时更容易理解。</p>

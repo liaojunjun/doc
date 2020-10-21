@@ -1,0 +1,16 @@
+<p>这里是解析。</p>
+<ol>
+<li><p>它是一个常规的方法调用。</p>
+</li>
+<li><p>同样，括号没有改变执行的顺序，点符号总是先执行。</p>
+</li>
+<li><p>这里我们有一个更复杂的 <code>(expression).method()</code> 调用。这个调用就像被分成了两行（代码）一样：</p>
+<pre><code class="language-js">f = obj.go; <span class="hljs-comment">// 计算函数表达式</span>
+f();        <span class="hljs-comment">// 调用</span></code></pre>
+<p>   这里的 <code>f()</code> 是作为一个没有（设定）<code>this</code> 的函数执行的。</p>
+</li>
+<li><p>与 <code>(3)</code> 相类似，在点符号 <code>.</code> 的左边也有一个表达式。</p>
+</li>
+</ol>
+<p>要解释 <code>(3)</code> 和 <code>(4)</code> 得到这种结果的原因，我们需要回顾一下属性访问器（点符号或方括号）返回的是引用类型的值。</p>
+<p>除了方法调用之外的任何操作（如赋值 <code>=</code> 或 <code>||</code>），都会把它转换为一个不包含允许设置 <code>this</code> 信息的普通值。</p>

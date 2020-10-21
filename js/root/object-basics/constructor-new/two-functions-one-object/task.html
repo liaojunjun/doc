@@ -1,0 +1,12 @@
+<p>importance: 2</p>
+<hr>
+<h1 id="两个函数--一个对象">两个函数 — 一个对象</h1>
+<p>是否可以创建像 <code>new A()==new B()</code> 这样的函数 <code>A</code> 和 <code>B</code>？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">A</span>(<span class="hljs-params"></span>) </span>{ ... }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">B</span>(<span class="hljs-params"></span>) </span>{ ... }
+
+<span class="hljs-keyword">let</span> a = <span class="hljs-keyword">new</span> A;
+<span class="hljs-keyword">let</span> b = <span class="hljs-keyword">new</span> B;
+
+alert( a == b ); <span class="hljs-comment">// true</span></code></pre>
+<p>如果可以，请提供一个它们的代码示例。</p>

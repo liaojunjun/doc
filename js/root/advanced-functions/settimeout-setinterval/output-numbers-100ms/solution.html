@@ -1,0 +1,50 @@
+<p>使用 <code>setInterval</code>：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printNumbers</span>(<span class="hljs-params">from, to</span>) </span>{
+  <span class="hljs-keyword">let</span> current = <span class="hljs-keyword">from</span>;
+
+  <span class="hljs-keyword">let</span> timerId = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    alert(current);
+    <span class="hljs-keyword">if</span> (current == to) {
+      <span class="hljs-built_in">clearInterval</span>(timerId);
+    }
+    current++;
+  }, <span class="hljs-number">1000</span>);
+}
+
+<span class="hljs-comment">// 用例：</span>
+printNumbers(<span class="hljs-number">5</span>, <span class="hljs-number">10</span>);</code></pre>
+<p>使用嵌套的 <code>setTimeout</code>：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printNumbers</span>(<span class="hljs-params">from, to</span>) </span>{
+  <span class="hljs-keyword">let</span> current = <span class="hljs-keyword">from</span>;
+
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">go</span>(<span class="hljs-params"></span>) </span>{
+    alert(current);
+    <span class="hljs-keyword">if</span> (current &lt; to) {
+      <span class="hljs-built_in">setTimeout</span>(go, <span class="hljs-number">1000</span>);
+    }
+    current++;
+  }, <span class="hljs-number">1000</span>);
+}
+
+<span class="hljs-comment">// 用例：</span>
+printNumbers(<span class="hljs-number">5</span>, <span class="hljs-number">10</span>);</code></pre>
+<p>请注意，在这两种解决方案中，在第一个输出之前都有一个初始延迟。函数在 <code>1000ms</code> 之后才被第一次调用。</p>
+<p>如果我们还希望函数立即运行，那么我们可以在单独的一行上添加一个额外的调用，像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printNumbers</span>(<span class="hljs-params">from, to</span>) </span>{
+  <span class="hljs-keyword">let</span> current = <span class="hljs-keyword">from</span>;
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">go</span>(<span class="hljs-params"></span>) </span>{
+    alert(current);
+    <span class="hljs-keyword">if</span> (current == to) {
+      <span class="hljs-built_in">clearInterval</span>(timerId);
+    }
+    current++;
+  }
+
+*!*
+  go();
+*/!*
+  <span class="hljs-keyword">let</span> timerId = <span class="hljs-built_in">setInterval</span>(go, <span class="hljs-number">1000</span>);
+}
+
+printNumbers(<span class="hljs-number">5</span>, <span class="hljs-number">10</span>);</code></pre>

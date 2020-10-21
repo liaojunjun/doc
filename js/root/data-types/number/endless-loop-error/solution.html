@@ -1,0 +1,10 @@
+<p>那是因为 <code>i</code> 永远不会等于 <code>10</code>。</p>
+<p>运行下面这段代码来查看 <code>i</code> 的 <strong>实际</strong> 值：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">while</span> (i &lt; <span class="hljs-number">11</span>) {
+  i += <span class="hljs-number">0.2</span>;
+  <span class="hljs-keyword">if</span> (i &gt; <span class="hljs-number">9.8</span> &amp;&amp; i &lt; <span class="hljs-number">10.2</span>) alert( i );
+}</code></pre>
+<p>它们中没有一个恰好是 <code>10</code>。</p>
+<p>之所以发生这种情况，是因为对 <code>0.2</code> 这样的小数时进行加法运算时出现了精度损失。</p>
+<p>结论：在处理小数时避免相等性检查。</p>

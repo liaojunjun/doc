@@ -1,0 +1,21 @@
+<p>这个题目有很多解法。</p>
+<p>我们使用一个嵌套循环：</p>
+<pre><code class="language-js">对于间隔中的每个 i {
+  检查在 <span class="hljs-number">1</span>~i 之间，是否有 i 的除数
+  如果有 =&gt; 这个 i 不是素数
+  如果没有 =&gt; 这个 i 是素数，输出出来
+}</code></pre>
+<p>使用标签的代码：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> n = <span class="hljs-number">10</span>;
+
+nextPrime:
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">2</span>; i &lt;= n; i++) { <span class="hljs-comment">// 对每个自然数 i</span>
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">2</span>; j &lt; i; j++) { <span class="hljs-comment">// 寻找一个除数……</span>
+    <span class="hljs-keyword">if</span> (i % j == <span class="hljs-number">0</span>) <span class="hljs-keyword">continue</span> nextPrime; <span class="hljs-comment">// 不是素数，则继续检查下一个</span>
+  }
+
+  alert( i ); <span class="hljs-comment">// 输出素数</span>
+}</code></pre>
+<p>这段代码有很大的优化空间。例如，我们可以从 <code>2</code> 到 <code>i</code> 的平方根之间的数中寻找除数。无论怎样，如果我们想要在很大的数字范围内实现高效率，我们需要改变实现方法，依赖高等数学和复杂算法，如<a href="https://en.wikipedia.org/wiki/Quadratic_sieve">二次筛选法（Quadratic sieve）</a>，<a href="https://en.wikipedia.org/wiki/General_number_field_sieve">普通数域筛选法（General number field sieve）</a>等。</p>
+<p>译注：素数也称为质数，对本答案的代码进一步优化，其实就是一道 LeetCode 算法题，感兴趣的可以点击链接查看如何通过 <a href="https://dingxuewen.com/leetcode-js-leviding/easy/204.count-primes/204.count-primes.html">埃拉托斯特尼筛法筛选素数</a>。</p>

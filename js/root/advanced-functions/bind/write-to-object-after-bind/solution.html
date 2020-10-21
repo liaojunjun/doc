@@ -1,0 +1,12 @@
+<p>答案：<code>null</code>。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  alert( <span class="hljs-built_in">this</span> ); <span class="hljs-comment">// null</span>
+}
+
+<span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">g</span>: f.bind(<span class="hljs-literal">null</span>)
+};
+
+user.g();</code></pre>
+<p>绑定函数的上下文是硬绑定（hard-fixed）的。没有办法再修改它。</p>
+<p>所以即使我们执行 <code>user.g()</code>，源方法调用时还是 <code>this=null</code>。</p>

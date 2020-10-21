@@ -1,0 +1,12 @@
+<p>在内部，<code>6.35</code> 的小数部分是一个无限的二进制。在这种情况下，它的存储会造成精度损失。</p>
+<p>让我们来看看：</p>
+<pre><code class="language-js">alert( <span class="hljs-number">6.35</span>.toFixed(<span class="hljs-number">20</span>) ); <span class="hljs-comment">// 6.34999999999999964473</span></code></pre>
+<p>精度损失可能会导致数字的增加和减小。在这种特殊的情况下，数字变小了一点，这就是它向下舍入的原因。</p>
+<p>那么 <code>1.35</code> 会怎样呢？</p>
+<pre><code class="language-js">alert( <span class="hljs-number">1.35</span>.toFixed(<span class="hljs-number">20</span>) ); <span class="hljs-comment">// 1.35000000000000008882</span></code></pre>
+<p>在这里，精度损失使得这个数字稍微大了一些，因此其向上舍入。</p>
+<p><strong>如果我们希望以正确的方式进行舍入，我们应该如何解决 <code>6.35</code> 的舍入问题呢？</strong></p>
+<p>在进行舍入前，我们应该使其更接近整数：</p>
+<pre><code class="language-js">alert( (<span class="hljs-number">6.35</span> * <span class="hljs-number">10</span>).toFixed(<span class="hljs-number">20</span>) ); <span class="hljs-comment">// 63.50000000000000000000</span></code></pre>
+<p>请注意，<code>63.5</code> 完全没有精度损失。这是因为小数部分 <code>0.5</code> 实际上是 <code>1/2</code>。以 2 的整数次幂为分母的小数在二进制数字系统中可以被精确地表示，现在我们可以对它进行舍入：</p>
+<pre><code class="language-js">alert( <span class="hljs-built_in">Math</span>.round(<span class="hljs-number">6.35</span> * <span class="hljs-number">10</span>) / <span class="hljs-number">10</span>); <span class="hljs-comment">// 6.35 -&gt; 63.5 -&gt; 64(rounded) -&gt; 6.4</span></code></pre>

@@ -1,0 +1,14 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="改进的工具提示行为">改进的工具提示行为</h1>
+<p>编写 JavaScript，在带有 <code>data-tooltip</code> 特性（attribute）的元素上显示一个工具提示。该特性的值应该成为工具提示的文本。</p>
+<p>与任务 <a href="info:task/behavior-tooltip">info:task/behavior-tooltip</a> 类似，但这里可以嵌套带有注解（annotated）的元素。并且显示的是嵌套最深的工具提示。</p>
+<p>同一时间只能显示一个工具提示。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-tooltip</span>=<span class="hljs-string">&quot;Here – is the house interior&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;house&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-tooltip</span>=<span class="hljs-string">&quot;Here – is the roof&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;roof&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  ...
+  <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://en.wikipedia.org/wiki/The_Three_Little_Pigs&quot;</span> <span class="hljs-attr">data-tooltip</span>=<span class="hljs-string">&quot;Read on…&quot;</span>&gt;</span>Hover over me<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<p>在 iframe 中的结果：</p>
+<p>[iframe src=&quot;solution&quot; height=300 border=1]</p>

@@ -1,0 +1,14 @@
+<p>为了精确实现 <code>switch</code> 的功能，<code>if</code> 必须使用严格相等 <code>&#39;===&#39;</code>。</p>
+<p>对于给定的字符串，一个简单的 <code>&#39;==&#39;</code> 也可以。</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span>(browser == <span class="hljs-string">&#x27;Edge&#x27;</span>) {
+  alert(<span class="hljs-string">&quot;You&#x27;ve got the Edge!&quot;</span>);
+} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (browser == <span class="hljs-string">&#x27;Chrome&#x27;</span>
+ || browser == <span class="hljs-string">&#x27;Firefox&#x27;</span>
+ || browser == <span class="hljs-string">&#x27;Safari&#x27;</span>
+ || browser == <span class="hljs-string">&#x27;Opera&#x27;</span>) {
+  alert( <span class="hljs-string">&#x27;Okay we support these browsers too&#x27;</span> );
+} <span class="hljs-keyword">else</span> {
+  alert( <span class="hljs-string">&#x27;We hope that this page looks ok!&#x27;</span> );
+}</code></pre>
+<p>请注意：将 <code>browser == &#39;Chrome&#39; || browser == &#39;Firefox&#39; …</code> 结构分成多行可读性更高。</p>
+<p>但 <code>switch</code> 结构更清晰明了。</p>

@@ -1,0 +1,13 @@
+<h1 id="带回调的圆形动画">带回调的圆形动画</h1>
+<p>在 <a href="info:task/animate-circle">info:task/animate-circle</a> 任务中，显示了一个逐渐变大的圆形动画。</p>
+<p>现在假设我们不仅需要一个圆圈，还需要在其中显示一条消息。该消息应在动画完成后（圆已经完全长大了）<strong>出现</strong>，否则它看起来会很难看。</p>
+<p>在此任务的解决方案中，<code>showCircle(cx, cy, radius)</code> 函数画了一个圆，但是无法跟踪圆形是否已经准备好。 </p>
+<p>添加一个回调参数：当动画完成时，可以调用 <code>showCircle(cx, cy, radius, callback)</code>。<code>callback</code> 应该接受圆形的 <code>&lt;div&gt;</code> 作为参数。</p>
+<p>这是示例：</p>
+<pre><code class="language-js">showCircle(<span class="hljs-number">150</span>, <span class="hljs-number">150</span>, <span class="hljs-number">100</span>, <span class="hljs-function"><span class="hljs-params">div</span> =&gt;</span> {
+  div.classList.add(<span class="hljs-string">&#x27;message-ball&#x27;</span>);
+  div.append(<span class="hljs-string">&quot;Hello, world!&quot;</span>);
+});</code></pre>
+<p>Demo：</p>
+<p>[iframe src=&quot;solution&quot; height=260]</p>
+<p>以 <a href="info:task/animate-circle">info:task/animate-circle</a> 任务的答案作为解决本任务的基础。</p>

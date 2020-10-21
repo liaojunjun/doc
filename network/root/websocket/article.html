@@ -1,0 +1,285 @@
+<h1 id="websocket">WebSocket</h1>
+<p>在 <a href="http://tools.ietf.org/html/rfc6455">RFC 6455</a> 规范中描述的 <code>WebSocket</code> 协议提供了一种在浏览器和服务器之间建立持久连接来交换数据的方法。数据可以作为“数据包”在两个方向上传递，而不会断开连接和其他 HTTP 请求。</p>
+<p>对于需要连续数据交换的服务，例如网络游戏，实时交易系统等，WebSocket 尤其有用。</p>
+<h2 id="一个简单例子">一个简单例子</h2>
+<p>要打开一个 WebSocket 连接，我们需要在 url 中使用特殊的协议 <code>ws</code> 创建 <code>new WebSocket</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> socket = <span class="hljs-keyword">new</span> WebSocket(<span class="hljs-string">&quot;*!*ws*/!*://javascript.info&quot;</span>);</code></pre>
+<p>同样也有一个加密的 <code>wss://</code> 协议。类似于 WebSocket 中的 HTTPS。</p>
+<p>```smart header=&quot;始终使用 <code>wss://</code>&quot;
+<code>wss://</code> 协议不仅是被加密的，而且更可靠。</p>
+<p>因为 <code>ws://</code> 数据不是加密的，对于任何中间人来说其数据都是可见的。并且，旧的代理服务器不了解 WebSocket，它们可能会因为看到“奇怪的” header 而中止连接。</p>
+<p>另一方面，<code>wss://</code> 是基于 TLS 的 WebSocket，类似于 HTTPS 是基于 TLS 的 HTTP），传输安全层在发送方对数据进行了加密，在接收方进行解密。因此，数据包是通过代理加密传输的。它们看不到传输的里面的内容，且会让这些数据通过。</p>
+<pre><code>
+一旦 socket 被建立，我们就应该监听 socket 上的事件。一共有 4 个事件：
+- **`open`** —— 连接已建立，
+- **`message`** —— 接收到数据，
+- **`error`** —— WebSocket 错误，
+- **`close`** —— 连接已关闭。
+
+……如果我们想发送一些东西，那么可以使用 `socket.send(data)`。
+
+这是一个示例：
+
+```js run
+let socket = new WebSocket(&quot;wss://javascript.info/article/websocket/demo/hello&quot;);
+
+socket.onopen = function(e) {
+  alert(&quot;[open] Connection established&quot;);
+  alert(&quot;Sending to server&quot;);
+  socket.send(&quot;My name is John&quot;);
+};
+
+socket.onmessage = function(event) {
+  alert(`[message] Data received from server: ${event.data}`);
+};
+
+socket.onclose = function(event) {
+  if (event.wasClean) {  
+    alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+  } else {
+    // 例如服务器进程被杀死或网络中断
+    // 在这种情况下，event.code 通常为 1006
+    alert(&#x27;[close] Connection died&#x27;);
+  }
+};
+
+socket.onerror = function(error) {
+  alert(`[error] ${error.message}`);
+};</code></pre>
+<p>出于演示目的，在上面的示例中，运行着一个用 Node.js 写的小型服务器 <a href="demo/server.js">server.js</a>。它响应为 &quot;Hello from server, John&quot;，然后等待 5 秒，关闭连接。</p>
+<p>所以你看到的事件顺序为：<code>open</code> -&gt; <code>message</code> -&gt; <code>close</code>。</p>
+<p>这就是 WebSocket，我们已经可以使用 WebSocket 通信了。很简单，不是吗？</p>
+<p>现在让我们更深入地学习它。</p>
+<h2 id="建立-websocket">建立 WebSocket</h2>
+<p>当 <code>new WebSocket(url)</code> 被创建后，它将立即开始连接。</p>
+<p>在连接期间，浏览器（使用 header）问服务器：“你支持 WebSocket 吗？”如果服务器回复说“我支持”，那么通信就以 WebSocket 协议继续进行，该协议根本不是 HTTP。</p>
+<p><img src="websocket-handshake.svg" alt=""></p>
+<p>这是由 <code>new WebSocket(&quot;wss://javascript.info/chat&quot;)</code> 发出的请求的浏览器 header 示例。</p>
+<pre><code>GET /chat
+Host: javascript.info
+Origin: https://javascript.info
+Connection: Upgrade
+Upgrade: websocket
+Sec-WebSocket-Key: Iv8io/9s+lYFgZWcXczP8Q==
+Sec-WebSocket-Version: 13</code></pre>
+<ul>
+<li><code>Origin</code> —— 客户端页面的源，例如 <code>https://javascript.info</code>。WebSocket 对象是原生支持跨源的。没有特殊的 header 或其他限制。旧的服务器无法处理 WebSocket，因此不存在兼容性问题。但是 <code>Origin</code> header 很重要，因为它允许服务器决定是否使用 WebSocket 与该网站通信。</li>
+<li><code>Connection: Upgrade</code> —— 表示客户端想要更改协议。</li>
+<li><code>Upgrade: websocket</code> —— 请求的协议是 &quot;websocket&quot;。</li>
+<li><code>Sec-WebSocket-Key</code> —— 浏览器随机生成的安全密钥。</li>
+<li><code>Sec-WebSocket-Version</code> —— WebSocket 协议版本，当前为 13。</li>
+</ul>
+<pre><code class="language-smart">我们不能使用 `XMLHttpRequest` 或 `fetch` 来进行这种 HTTP 请求，因为不允许 JavaScript 设置这些 header。</code></pre>
+<p>如果服务器同意切换为 WebSocket 协议，服务器应该返回响应码 101：</p>
+<pre><code>101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=</code></pre>
+<p>这里 <code>Sec-WebSocket-Accept</code> 是 <code>Sec-WebSocket-Key</code>，是使用特殊的算法重新编码的。浏览器使用它来确保响应与请求相对应。</p>
+<p>然后，就使用 WebSocket 协议传输数据，我们很快就会看到它的结构（&quot;frames&quot;）。它根本不是 HTTP。</p>
+<h3 id="扩展和子协议">扩展和子协议</h3>
+<p>WebSocket 可能还有其他 header，<code>Sec-WebSocket-Extensions</code> 和 <code>Sec-WebSocket-Protocol</code>，它们描述了扩展和子协议。</p>
+<p>例如：</p>
+<ul>
+<li><p><code>Sec-WebSocket-Extensions: deflate-frame</code> 表示浏览器支持数据压缩。扩展与传输数据有关，扩展了 WebSocket 协议的功能。<code>Sec-WebSocket-Extensions</code> header 有浏览器自动发送，其中包含其支持的所有扩展的列表。</p>
+</li>
+<li><p><code>Sec-WebSocket-Protocol: soap, wamp</code> 表示我们不仅要传输任何数据，还要传输 <a href="http://en.wikipedia.org/wiki/SOAP">SOAP</a> 或 WAMP（&quot;The WebSocket Application Messaging Protocol&quot;）协议中的数据。WebSocket 子协议已经在 <a href="http://www.iana.org/assignments/websocket/websocket.xml">IANA catalogue</a> 中注册。</p>
+<p>  这个可选的 header 是使用 <code>new WebSocket</code> 的第二个参数设置的。它是子协议数组，例如，如果我们想使用 SOAP 或 WAMP：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> socket = <span class="hljs-keyword">new</span> WebSocket(<span class="hljs-string">&quot;wss://javascript.info/chat&quot;</span>, [<span class="hljs-string">&quot;soap&quot;</span>, <span class="hljs-string">&quot;wamp&quot;</span>]);</code></pre>
+</li>
+</ul>
+<p>服务器应该使用同意使用的协议和扩展的列表进行响应。</p>
+<p>例如，这个请求：</p>
+<pre><code>GET /chat
+Host: javascript.info
+Upgrade: websocket
+Connection: Upgrade
+Origin: https://javascript.info
+Sec-WebSocket-Key: Iv8io/9s+lYFgZWcXczP8Q==
+Sec-WebSocket-Version: 13
+*!*
+Sec-WebSocket-Extensions: deflate-frame
+Sec-WebSocket-Protocol: soap, wamp
+*/!*</code></pre>
+<p>响应：</p>
+<pre><code>101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=
+*!*
+Sec-WebSocket-Extensions: deflate-frame
+Sec-WebSocket-Protocol: soap
+*/!*</code></pre>
+<p>在这里服务器响应 —— 它支持扩展 &quot;deflate-frame&quot;，并且仅支持所请求的子协议中的 SOAP。</p>
+<h2 id="数据传输">数据传输</h2>
+<p>WebSocket 通信由 &quot;frames&quot;（即数据片段）组成，可以从任何一方发送，并且有以下几种类型：</p>
+<ul>
+<li>&quot;text frames&quot; —— 包含各方发送给彼此的文本数据。</li>
+<li>&quot;binary data frames&quot; —— 包含各方发送给彼此的二进制数据。</li>
+<li>&quot;ping/pong frames&quot; 被用于检查从服务器发送的连接，浏览器会自动响应它们。</li>
+<li>还有 &quot;connection close frame&quot; 以及其他服务 frames。</li>
+</ul>
+<p>在浏览器里，我们仅直接使用文本或二进制 frames。</p>
+<p><strong>WebSocket <code>.send()</code> 方法可以发送文本或二进制数据。</strong></p>
+<p><code>socket.send(body)</code> 调用允许 <code>body</code> 是字符串或二进制格式，包括 <code>Blob</code>，<code>ArrayBuffer</code> 等。不需要额外的设置：直接发送它们就可以了。</p>
+<p><strong>当我们收到数据时，文本总是以字符串形式呈现。而对于二进制数据，我们可以在 <code>Blob</code> 和 <code>ArrayBuffer</code> 格式之间进行选择。</strong></p>
+<p>它是由 <code>socket.bufferType</code> 属性设置的，默认为 <code>&quot;blob&quot;</code>，因此二进制数据通常以 <code>Blob</code> 对象呈现。</p>
+<p><a href="info:blob">Blob</a> 是高级的二进制对象，它直接与 <code>&lt;a&gt;</code>，<code>&lt;img&gt;</code> 及其他标签集成在一起，因此，默认以 <code>Blob</code> 格式是一个明智的选择。但是对于二进制处理，要访问单个数据字节，我们可以将其改为 <code>&quot;arraybuffer&quot;</code>：</p>
+<pre><code class="language-js">socket.bufferType = <span class="hljs-string">&quot;arraybuffer&quot;</span>;
+socket.onmessage = <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-comment">// event.data 可以是文本（如果是文本），也可以是 arraybuffer（如果是二进制数据）</span>
+};</code></pre>
+<h2 id="限速">限速</h2>
+<p>想象一下：我们的应用程序正在生成大量要发送的数据。但是用户的网速却很慢，可能是在乡下的移动设备上。</p>
+<p>我们可以反复地调用 <code>socket.send(data)</code>。但是数据将会缓冲（储存）在内存中，并且只能在网速允许的情况下尽快将数据发送出去。</p>
+<p><code>socket.bufferedAmount</code> 属性储存目前已缓冲的字节数，等待通过网络发送。</p>
+<p>我们可以检查它以查看 socket 是否真的可用于传输。</p>
+<pre><code class="language-js"><span class="hljs-comment">// 每 100ms 检查一次 socket</span>
+<span class="hljs-comment">// 仅当所有现有的数据都已被发送出去时，再发送更多数据</span>
+<span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">if</span> (socket.bufferedAmount == <span class="hljs-number">0</span>) {
+    socket.send(moreData());
+  }
+}, <span class="hljs-number">100</span>);</code></pre>
+<h2 id="连接关闭">连接关闭</h2>
+<p>通常，当一方想要关闭连接时（浏览器和服务器都具有相同的权限），它们会发送一个带有数字码（numeric code）和文本形式的原因的 &quot;connection close frame&quot;。</p>
+<p>它的方法是：</p>
+<pre><code class="language-js">socket.close([code], [reason]);</code></pre>
+<ul>
+<li><code>code</code> 是一个特殊的 WebSocket 关闭码（可选）</li>
+<li><code>reason</code> 是一个描述关闭原因的字符串（可选）</li>
+</ul>
+<p>然后，另外一方通过 <code>close</code> 事件处理器获取了关闭码和关闭原因，例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 关闭方：</span>
+socket.close(<span class="hljs-number">1000</span>, <span class="hljs-string">&quot;Work complete&quot;</span>);
+
+<span class="hljs-comment">// 另一方</span>
+socket.onclose = <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+  <span class="hljs-comment">// event.code === 1000</span>
+  <span class="hljs-comment">// event.reason === &quot;Work complete&quot;</span>
+  <span class="hljs-comment">// event.wasClean === true (clean close)</span>
+};</code></pre>
+<p>最常见的数字码：</p>
+<ul>
+<li><code>1000</code> —— 默认，正常关闭（如果没有指明 <code>code</code> 时使用它），</li>
+<li><code>1006</code> —— 没有办法手动设定这个数字码，表示连接丢失（没有 close frame）。</li>
+</ul>
+<p>还有其他数字码，例如：</p>
+<ul>
+<li><code>1001</code> —— 一方正在离开，例如服务器正在关闭，或者浏览器离开了该页面，</li>
+<li><code>1009</code> —— 消息太大，无法处理，</li>
+<li><code>1011</code> —— 服务器上发生意外错误，</li>
+<li>……等。</li>
+</ul>
+<p>完整列表请见 <a href="https://tools.ietf.org/html/rfc6455#section-7.4.1">RFC6455, §7.4.1</a>。</p>
+<p>WebSocket 码有点像 HTTP 码，但它们是不同的。特别是，小于 <code>1000</code> 的码都是被保留的，如果我们尝试设置这样的码，将会出现错误。</p>
+<pre><code class="language-js"><span class="hljs-comment">// 在连接断开的情况下</span>
+socket.onclose = <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+  <span class="hljs-comment">// event.code === 1006</span>
+  <span class="hljs-comment">// event.reason === &quot;&quot;</span>
+  <span class="hljs-comment">// event.wasClean === false（未关闭 frame）</span>
+};</code></pre>
+<h2 id="连接状态">连接状态</h2>
+<p>要获取连接状态，可以通过带有值的 <code>socket.readyState</code> 属性：</p>
+<ul>
+<li><strong><code>0</code></strong> —— “CONNECTING”：连接还未建立，</li>
+<li><strong><code>1</code></strong> —— “OPEN”：通信中，</li>
+<li><strong><code>2</code></strong> —— “CLOSING”：连接关闭中，</li>
+<li><strong><code>3</code></strong> —— “CLOSED”：连接已关闭。</li>
+</ul>
+<h2 id="聊天示例">聊天示例</h2>
+<p>让我们来看一个使用浏览器 WebSocket API 和 Node.js 的 WebSocket 模块 <a href="https://github.com/websockets/ws">https://github.com/websockets/ws</a> 的聊天示例。我们将主要精力放在客户端上，但是服务端也很简单。</p>
+<p>HTML：我们需要一个 <code>&lt;form&gt;</code> 来发送消息，并且需要一个 <code>&lt;div&gt;</code> 来接收消息：</p>
+<pre><code class="language-html"><span class="hljs-comment">&lt;!-- 消息表单 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;publish&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;message&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Send&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+
+<span class="hljs-comment">&lt;!-- 带有消息的 div --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;messages&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<p>在 JavaScript 中，我们想要做三件事：</p>
+<ol>
+<li>打开连接。</li>
+<li>在表单提交中 —— <code>socket.send(message)</code> 用于消息。</li>
+<li>对于传入的消息 —— 将其附加（append）到 <code>div#messages</code> 上。</li>
+</ol>
+<p>代码如下</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> socket = <span class="hljs-keyword">new</span> WebSocket(<span class="hljs-string">&quot;wss://javascript.info/article/websocket/chat/ws&quot;</span>);
+
+<span class="hljs-comment">// 从表单发送消息</span>
+<span class="hljs-built_in">document</span>.forms.publish.onsubmit = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> outgoingMessage = <span class="hljs-built_in">this</span>.message.value;
+
+  socket.send(outgoingMessage);
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-comment">// 收到消息 —— 在 div#messages 中显示消息</span>
+socket.onmessage = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">let</span> message = event.data;
+
+  <span class="hljs-keyword">let</span> messageElem = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
+  messageElem.textContent = message;
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;messages&#x27;</span>).prepend(messageElem);
+}</code></pre>
+<p>服务端代码有点超出我们的范围。在这里，我们将使用 Node.js，但你不必这样做。其他平台也有使用 WebSocket 的方法。</p>
+<p>服务器端的算法为：</p>
+<ol>
+<li>创建 <code>clients = new Set()</code> —— 一系列 socket。</li>
+<li>对于每个被接受的 WebSocket，将其添加到 <code>clients.add(socket)</code>，并为其设置 <code>message</code> 事件侦听器以获取其消息。</li>
+<li>当接收到消息：遍历客户端，并将消息发送给所有人。</li>
+<li>当连接被关闭：<code>clients.delete(socket)</code>。</li>
+</ol>
+<pre><code class="language-js"><span class="hljs-keyword">const</span> ws = <span class="hljs-keyword">new</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;ws&#x27;</span>);
+<span class="hljs-keyword">const</span> wss = <span class="hljs-keyword">new</span> ws.Server({<span class="hljs-attr">noServer</span>: <span class="hljs-literal">true</span>});
+
+<span class="hljs-keyword">const</span> clients = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>();
+
+http.createServer(<span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+  <span class="hljs-comment">// 在这里，我们仅处理 WebSocket 连接</span>
+  <span class="hljs-comment">// 在实际项目中，我们在这里还会有其他代码，来处理非 WebSocket 请求</span>
+  wss.handleUpgrade(req, req.socket, Buffer.alloc(<span class="hljs-number">0</span>), onSocketConnect);
+});
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onSocketConnect</span>(<span class="hljs-params">ws</span>) </span>{
+  clients.add(ws);
+
+  ws.on(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message</span>) </span>{
+    message = message.slice(<span class="hljs-number">0</span>, <span class="hljs-number">50</span>); <span class="hljs-comment">// message 的最大长度为 50</span>
+
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> client <span class="hljs-keyword">of</span> clients) {
+      client.send(message);
+    }
+  });
+
+  ws.on(<span class="hljs-string">&#x27;close&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    clients.delete(ws);
+  });
+}</code></pre>
+<p>这是运行示例：</p>
+<p>[iframe src=&quot;chat&quot; height=&quot;100&quot; zip]</p>
+<p>你也可以下载它（点击 iframe 右上角的按钮）然后在本地运行。运行之前请记得安装 <a href="https://nodejs.org/en/">Node.js</a> 和 <code>npm install ws</code>。</p>
+<h2 id="总结">总结</h2>
+<p>WebSocket 是一种在浏览器和服务器之间建立持久连接的现代方式。</p>
+<ul>
+<li>WebSocket 没有跨源限制。</li>
+<li>浏览器对 WebSocket 支持很好。</li>
+<li>可以发送/接收字符串和二进制数据。</li>
+</ul>
+<p>WebSocket 的 API 很简单。</p>
+<p>WebSocket 方法：</p>
+<ul>
+<li><code>socket.send(data)</code>，</li>
+<li><code>socket.close([code], [reason])</code>。</li>
+</ul>
+<p>WebSocket 事件：</p>
+<ul>
+<li><code>open</code>，</li>
+<li><code>message</code>，</li>
+<li><code>error</code>，</li>
+<li><code>close</code>。</li>
+</ul>
+<p>WebSocket 自身并不包含重新连接（reconnection），身份验证（authentication）和很多其他高级机制。因此，有针对于此的客户端/服务端的库，并且也可以手动实现这些功能。</p>
+<p>有时为了将 WebSocket 集成到现有项目中，人们将主 HTTP 服务器与 WebSocket 服务器并行运行，并且它们之间共享同一个数据库。对于 WebSocket 请求使用一个通向 WebSocket 服务器的子域 <code>wss://ws.site.com</code>，而 <code>https://site.com</code> 则通向主 HTTP 服务器。</p>
+<p>当然，其他集成方式也是可行的。</p>

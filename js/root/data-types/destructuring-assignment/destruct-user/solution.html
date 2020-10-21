@@ -1,0 +1,10 @@
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">years</span>: <span class="hljs-number">30</span>
+};
+
+<span class="hljs-keyword">let</span> {name, <span class="hljs-attr">years</span>: age, isAdmin = <span class="hljs-literal">false</span>} = user;
+
+alert( name ); <span class="hljs-comment">// John</span>
+alert( age ); <span class="hljs-comment">// 30</span>
+alert( isAdmin ); <span class="hljs-comment">// false</span></code></pre>

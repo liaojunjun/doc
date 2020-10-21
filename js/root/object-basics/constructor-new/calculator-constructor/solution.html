@@ -1,0 +1,21 @@
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Calculator</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-built_in">this</span>.read = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">this</span>.a = +prompt(<span class="hljs-string">&#x27;a?&#x27;</span>, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">this</span>.b = +prompt(<span class="hljs-string">&#x27;b?&#x27;</span>, <span class="hljs-number">0</span>);
+  };
+
+  <span class="hljs-built_in">this</span>.sum = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.a + <span class="hljs-built_in">this</span>.b;
+  };
+
+  <span class="hljs-built_in">this</span>.mul = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.a * <span class="hljs-built_in">this</span>.b;
+  };
+}
+
+<span class="hljs-keyword">let</span> calculator = <span class="hljs-keyword">new</span> Calculator();
+calculator.read();
+
+alert( <span class="hljs-string">&quot;Sum=&quot;</span> + calculator.sum() );
+alert( <span class="hljs-string">&quot;Mul=&quot;</span> + calculator.mul() );</code></pre>

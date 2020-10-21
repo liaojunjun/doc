@@ -1,0 +1,45 @@
+<p>这里没有什么技巧。只需要将 <code>demoGithubUser</code> 中的 <code>.catch</code> 替换为 <code>try...catch</code>，然后在需要的地方加上 <code>async/await</code> 即可：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HttpError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span> </span>{
+  <span class="hljs-keyword">constructor</span>(response) {
+    <span class="hljs-built_in">super</span>(<span class="hljs-string">`<span class="hljs-subst">${response.status}</span> for <span class="hljs-subst">${response.url}</span>`</span>);
+    <span class="hljs-built_in">this</span>.name = <span class="hljs-string">&#x27;HttpError&#x27;</span>;
+    <span class="hljs-built_in">this</span>.response = response;
+  }
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadJson</span>(<span class="hljs-params">url</span>) </span>{
+  <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(url);
+  <span class="hljs-keyword">if</span> (response.status == <span class="hljs-number">200</span>) {
+    <span class="hljs-keyword">return</span> response.json();
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> HttpError(response);
+  }
+}
+
+<span class="hljs-comment">// 询问用户名，直到 github 返回一个合法的用户</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">demoGithubUser</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-keyword">let</span> user;
+  <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {
+    <span class="hljs-keyword">let</span> name = prompt(<span class="hljs-string">&quot;Enter a name?&quot;</span>, <span class="hljs-string">&quot;iliakan&quot;</span>);
+
+    <span class="hljs-keyword">try</span> {
+      user = <span class="hljs-keyword">await</span> loadJson(<span class="hljs-string">`https://api.github.com/users/<span class="hljs-subst">${name}</span>`</span>);
+      <span class="hljs-keyword">break</span>; <span class="hljs-comment">// 没有 error，退出循环</span>
+    } <span class="hljs-keyword">catch</span>(err) {
+      <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> HttpError &amp;&amp; err.response.status == <span class="hljs-number">404</span>) {
+        <span class="hljs-comment">// 循环将在 alert 后继续</span>
+        alert(<span class="hljs-string">&quot;No such user, please reenter.&quot;</span>);
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">// 未知的 error，再次抛出（rethrow）</span>
+        <span class="hljs-keyword">throw</span> err;
+      }
+    }      
+  }
+
+
+  alert(<span class="hljs-string">`Full name: <span class="hljs-subst">${user.name}</span>.`</span>);
+  <span class="hljs-keyword">return</span> user;
+}
+
+demoGithubUser();</code></pre>

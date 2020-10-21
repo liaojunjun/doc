@@ -1,0 +1,17 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="延时装饰者">延时装饰者</h1>
+<p>创建一个装饰者 <code>delay(f, ms)</code>，该装饰者将 <code>f</code> 的每次调用延时 <code>ms</code> 毫秒。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x</span>) </span>{
+  alert(x);
+}
+
+<span class="hljs-comment">// create wrappers</span>
+<span class="hljs-keyword">let</span> f1000 = delay(f, <span class="hljs-number">1000</span>);
+<span class="hljs-keyword">let</span> f1500 = delay(f, <span class="hljs-number">1500</span>);
+
+f1000(<span class="hljs-string">&quot;test&quot;</span>); <span class="hljs-comment">// 在 1000ms 后显示 &quot;test&quot;</span>
+f1500(<span class="hljs-string">&quot;test&quot;</span>); <span class="hljs-comment">// 在 1500ms 后显示 &quot;test&quot;</span></code></pre>
+<p>换句话说，<code>delay(f, ms)</code> 返回的是延迟 <code>ms</code> 后的 <code>f</code> 的变体。</p>
+<p>在上面的代码中，<code>f</code> 是单个参数的函数，但是你的解决方案应该传递所有参数和上下文 <code>this</code>。</p>

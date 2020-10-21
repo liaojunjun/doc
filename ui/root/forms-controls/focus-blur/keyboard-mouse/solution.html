@@ -1,0 +1,3 @@
+<p>我们可以使用 <code>mouse.onclick</code> 来处理点击，并将老鼠设置为 <code>position:fixed</code>，然后使用 <code>mouse.onkeydown</code> 来处理键盘的方向键。</p>
+<p>唯一的缺陷是 <code>keydown</code> 仅会在聚焦的元素上触发。因此，我们需要向元素添加 <code>tabindex</code>。因为我们禁止更改 HTML，所以我们可以使用 <code>mouse.tabIndex</code> 属性。</p>
+<p>P.S. 我们也可以使用 <code>mouse.onfocus</code> 代替 <code>mouse.onclick</code>。</p>

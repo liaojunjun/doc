@@ -1,0 +1,22 @@
+<h1 id="parse-an-expression">Parse an expression</h1>
+<p>An arithmetical expression consists of 2 numbers and an operator between them, for instance:</p>
+<ul>
+<li><code>1 + 2</code></li>
+<li><code>1.2 * 3.4</code></li>
+<li><code>-3 / -6</code></li>
+<li><code>-2 - 2</code></li>
+</ul>
+<p>The operator is one of: <code>&quot;+&quot;</code>, <code>&quot;-&quot;</code>, <code>&quot;*&quot;</code> or <code>&quot;/&quot;</code>.</p>
+<p>There may be extra spaces at the beginning, at the end or between the parts.</p>
+<p>Create a function <code>parse(expr)</code> that takes an expression and returns an array of 3 items:</p>
+<ol>
+<li>The first number.</li>
+<li>The operator.</li>
+<li>The second number.</li>
+</ol>
+<p>For example:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> [a, op, b] = parse(<span class="hljs-string">&quot;1.2 * 3.4&quot;</span>);
+
+alert(a); <span class="hljs-comment">// 1.2</span>
+alert(op); <span class="hljs-comment">// *</span>
+alert(b); <span class="hljs-comment">// 3.4</span></code></pre>

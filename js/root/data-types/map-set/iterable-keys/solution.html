@@ -1,0 +1,13 @@
+<p>这是因为 <code>map.keys()</code> 返回的是可迭代对象而非数组。</p>
+<p>我们可以使用方法 <code>Array.from</code> 来将它转换为数组：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> map = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
+
+map.set(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;John&quot;</span>);
+
+*!*
+<span class="hljs-keyword">let</span> keys = <span class="hljs-built_in">Array</span>.from(map.keys());
+*/!*
+
+keys.push(<span class="hljs-string">&quot;more&quot;</span>);
+
+alert(keys); <span class="hljs-comment">// name, more</span></code></pre>

@@ -1,0 +1,25 @@
+<p>解决方案：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">delay</span>(<span class="hljs-params">f, ms</span>) </span>{
+
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> f.apply(<span class="hljs-built_in">this</span>, <span class="hljs-built_in">arguments</span>), ms);
+  };
+
+}
+
+<span class="hljs-keyword">let</span> f1000 = delay(alert, <span class="hljs-number">1000</span>);
+
+f1000(<span class="hljs-string">&quot;test&quot;</span>); <span class="hljs-comment">// shows &quot;test&quot; after 1000ms</span></code></pre>
+<p>注意这里是如何使用箭头函数的。我们知道，箭头函数没有自己的 <code>this</code> 和 <code>arguments</code>，所以 <code>f.apply(this, arguments)</code> 从包装器中获取 <code>this</code> 和 <code>arguments</code>。</p>
+<p>如果我们传递一个常规函数，<code>setTimeout</code> 将调用它且不带参数和 <code>this=window</code>（假设我们在浏览器环境）。</p>
+<p>我们仍然可以通过使用中间变量来传递正确的 <code>this</code>，但这有点麻烦：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">delay</span>(<span class="hljs-params">f, ms</span>) </span>{
+
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">...args</span>) </span>{
+    <span class="hljs-keyword">let</span> savedThis = <span class="hljs-built_in">this</span>; <span class="hljs-comment">// 将 this 存储到中间变量</span>
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+      f.apply(savedThis, args); <span class="hljs-comment">// 在这儿使用它</span>
+    }, ms);
+  };
+
+}</code></pre>

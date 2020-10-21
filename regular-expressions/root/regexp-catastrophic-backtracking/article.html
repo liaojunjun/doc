@@ -1,0 +1,176 @@
+<h1 id="catastrophic-backtracking">Catastrophic backtracking</h1>
+<p>Some regular expressions are looking simple, but can execute veeeeeery long time, and even &quot;hang&quot; the JavaScript engine.</p>
+<p>Sooner or later most developers occasionally face such behavior, because it&#39;s quite easy to create such a regexp.</p>
+<p>The typical symptom -- a regular expression works fine sometimes, but for certain strings it &quot;hangs&quot;, consuming 100% of CPU.</p>
+<p>In such case a web-browser suggests to kill the script and reload the page. Not a good thing for sure.</p>
+<p>For server-side JavaScript it may become a vulnerability if regular expressions process user data.</p>
+<h2 id="example">Example</h2>
+<p>Let&#39;s say we have a string, and we&#39;d like to check if it consists of words  <code>pattern:\w+</code> with an optional space <code>pattern:\s?</code> after each.</p>
+<p>We&#39;ll use a regexp <code>pattern:^(\w+\s?)*$</code>, it specifies 0 or more such words.</p>
+<p>In action:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^(\w+\s?)*$/</span>;
+
+alert( regexp.test(<span class="hljs-string">&quot;A good string&quot;</span>) ); <span class="hljs-comment">// true</span>
+alert( regexp.test(<span class="hljs-string">&quot;Bad characters: $@#&quot;</span>) ); <span class="hljs-comment">// false</span></code></pre>
+<p>It seems to work. The result is correct. Although, on certain strings it takes a lot of time. So long that JavaScript engine &quot;hangs&quot; with 100% CPU consumption.</p>
+<p>If you run the example below, you probably won&#39;t see anything, as JavaScript will just &quot;hang&quot;. A web-browser will stop reacting on events, the UI will stop working. After some time it will suggest to reloaad the page. So be careful with this:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^(\w+\s?)*$/</span>;
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;An input string that takes a long time or even makes this regexp to hang!&quot;</span>;
+
+<span class="hljs-comment">// will take a very long time</span>
+alert( regexp.test(str) );</code></pre>
+<p>Some regular expression engines can handle such search, but most of them can&#39;t.</p>
+<h2 id="simplified-example">Simplified example</h2>
+<p>What&#39;s the matter? Why the regular expression &quot;hangs&quot;?</p>
+<p>To understand that, let&#39;s simplify the example: remove spaces <code>pattern:\s?</code>. Then it becomes <code>pattern:^(\w+)*$</code>.</p>
+<p>And, to make things more obvious, let&#39;s replace <code>pattern:\w</code> with <code>pattern:\d</code>. The resulting regular expression still hangs, for instance:</p>
+<!-- let str = `AnInputStringThatMakesItHang!`; -->
+
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^(\d+)*$/</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;012345678901234567890123456789!&quot;</span>;
+
+<span class="hljs-comment">// will take a very long time</span>
+alert( regexp.test(str) );</code></pre>
+<p>So what&#39;s wrong with the regexp?</p>
+<p>First, one may notice that the regexp <code>pattern:(\d+)*</code> is a little bit strange. The quantifier <code>pattern:*</code> looks extraneous. If we want a number, we can use <code>pattern:\d+</code>.</p>
+<p>Indeed, the regexp is artificial. But the reason why it is slow is the same as those we saw above. So let&#39;s understand it, and then the previous example will become obvious.</p>
+<p>What happens during the search of <code>pattern:^(\d+)*$</code> in the line <code>subject:123456789!</code> (shortened a bit for clarity), why does it take so long?</p>
+<ol>
+<li><p>First, the regexp engine tries to find a number <code>pattern:\d+</code>. The plus <code>pattern:+</code> is greedy by default, so it consumes all digits:</p>
+<pre><code>\d+.......
+(123456789)z</code></pre>
+<p> Then it tries to apply the star quantifier, but there are no more digits, so it the star doesn&#39;t give anything.</p>
+<p> The next in the pattern is the string end <code>pattern:$</code>, but in the text we have <code>subject:!</code>, so there&#39;s no match:</p>
+<pre><code>           X
+\d+........$
+(123456789)!</code></pre>
+</li>
+<li><p>As there&#39;s no match, the greedy quantifier <code>pattern:+</code> decreases the count of repetitions, backtracks one character back.</p>
+<p> Now <code>pattern:\d+</code> takes all digits except the last one:</p>
+<pre><code>\d+.......
+(12345678)9!</code></pre>
+</li>
+<li><p>Then the engine tries to continue the search from the new position (<code>9</code>).</p>
+<p> The star <code>pattern:(\d+)*</code> can be applied -- it gives the number <code>match:9</code>:</p>
+<pre><code>
+\d+.......\d+
+(12345678)(9)!</code></pre>
+<p> The engine tries to match <code>pattern:$</code> again, but fails, because meets <code>subject:!</code>:</p>
+<pre><code>             X
+\d+.......\d+
+(12345678)(9)z</code></pre>
+</li>
+</ol>
+<ol start="4">
+<li><p>There&#39;s no match, so the engine will continue backtracking, decreasing the number of repetitions. Backtracking generally works like this: the last greedy quantifier decreases the number of repetitions until it can. Then the previous greedy quantifier decreases, and so on.</p>
+<p> All possible combinations are attempted. Here are their examples.</p>
+<p> The first number <code>pattern:\d+</code> has 7 digits, and then a number of 2 digits:</p>
+<pre><code>             X
+\d+......\d+
+(1234567)(89)!</code></pre>
+<p> The first number has 7 digits, and then two numbers of 1 digit each:</p>
+<pre><code>               X
+\d+......\d+\d+
+(1234567)(8)(9)!</code></pre>
+<p> The first number has 6 digits, and then a number of 3 digits:</p>
+<pre><code>             X
+\d+.......\d+
+(123456)(789)!</code></pre>
+<p> The first number has 6 digits, and then 2 numbers:</p>
+<pre><code>               X
+\d+.....\d+ \d+
+(123456)(78)(9)!</code></pre>
+<p> ...And so on.</p>
+</li>
+</ol>
+<p>There are many ways to split a set of digits <code>123456789</code> into numbers. To be precise, there are <code>2<sup>n</sup>-1</code>, where <code>n</code> is the length of the set.</p>
+<p>For <code>n=20</code> there are about 1 million combinations, for <code>n=30</code> - a thousand times more. Trying each of them is exactly the reason why the search takes so long.</p>
+<p>What to do?</p>
+<p>Should we turn on the lazy mode?</p>
+<p>Unfortunately, that won&#39;t help: if we replace <code>pattern:\d+</code> with <code>pattern:\d+?</code>, the regexp will still hang. The order of combinations will change, but not their total count.</p>
+<p>Some regular expression engines have tricky tests and finite automations that allow to avoid going through all combinations or make it much faster, but not all engines, and not in all cases.</p>
+<h2 id="back-to-words-and-strings">Back to words and strings</h2>
+<p>The similar thing happens in our first example, when we look words by pattern <code>pattern:^(\w+\s?)*$</code> in the string <code>subject:An input that hangs!</code>.</p>
+<p>The reason is that a word can be represented as one <code>pattern:\w+</code> or many:</p>
+<pre><code>(input)
+(inpu)(t)
+(inp)(u)(t)
+(in)(p)(ut)
+...</code></pre>
+<p>For a human, it&#39;s obvious that there may be no match, because the string ends with an exclamation sign <code>!</code>, but the regular expression expects a wordly character <code>pattern:\w</code> or a space <code>pattern:\s</code> at the end. But the engine doesn&#39;t know that.</p>
+<p>It tries all combinations of how the regexp <code>pattern:(\w+\s?)*</code> can &quot;consume&quot; the string, including variants with spaces <code>pattern:(\w+\s)*</code> and without them <code>pattern:(\w+)*</code> (because spaces <code>pattern:\s?</code> are optional). As there are many such combinations, the search takes a lot of time.</p>
+<h2 id="how-to-fix">How to fix?</h2>
+<p>There are two main approaches to fixing the problem.</p>
+<p>The first is to lower the number of possible combinations.</p>
+<p>Let&#39;s rewrite the regular expression as <code>pattern:^(\w+\s)*\w*</code> - we&#39;ll look for any number of words followed by a space <code>pattern:(\w+\s)*</code>, and then (optionally) a word <code>pattern:\w*</code>.</p>
+<p>This regexp is equivalent to the previous one (matches the same) and works well:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^(\w+\s)*\w*$/</span>;
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;An input string that takes a long time or even makes this regex to hang!&quot;</span>;
+
+alert( regexp.test(str) ); <span class="hljs-comment">// false</span></code></pre>
+<p>Why did the problem disappear?</p>
+<p>Now the star <code>pattern:*</code> goes after <code>pattern:\w+\s</code> instead of <code>pattern:\w+\s?</code>. It became impossible to represent one word of the string with multiple successive <code>pattern:\w+</code>. The time needed to try such combinations is now saved.</p>
+<p>For example, the previous pattern <code>pattern:(\w+\s?)*</code> could match the word <code>subject:string</code> as two <code>pattern:\w+</code>:</p>
+<pre><code class="language-js">\w+\w+
+string</code></pre>
+<p>The previous pattern, due to the optional <code>pattern:\s</code> allowed variants <code>pattern:\w+</code>, <code>pattern:\w+\s</code>, <code>pattern:\w+\w+</code> and so on.</p>
+<p>With the rewritten pattern <code>pattern:(\w+\s)*</code>, that&#39;s impossible: there may be  <code>pattern:\w+\s</code> or <code>pattern:\w+\s\w+\s</code>, but not <code>pattern:\w+\w+</code>. So the overall combinations count is greatly decreased.</p>
+<h2 id="preventing-backtracking">Preventing backtracking</h2>
+<p>It&#39;s not always convenient to rewrite a regexp. And it&#39;s not always obvious how to do it.</p>
+<p>The alternative approach is to forbid backtracking for the quantifier.</p>
+<p>The regular expressions engine tries many combinations that are obviously wrong for a human.</p>
+<p>E.g. in the regexp <code>pattern:(\d+)*$</code> it&#39;s obvious for a human, that <code>pattern:+</code> shouldn&#39;t backtrack. If we replace one <code>pattern:\d+</code> with two separate <code>pattern:\d+\d+</code>, nothing changes:</p>
+<pre><code>\d+........
+(123456789)!
+
+\d+...\d+....
+(1234)(56789)!</code></pre>
+<p>And in the original example <code>pattern:^(\w+\s?)*$</code> we may want to forbid backtracking in <code>pattern:\w+</code>. That is: <code>pattern:\w+</code> should match a whole word, with the maximal possible length. There&#39;s no need to lower the repetitions count in <code>pattern:\w+</code>, try to split it into two words <code>pattern:\w+\w+</code> and so on.</p>
+<p>Modern regular expression engines support possessive quantifiers for that. They are like greedy ones, but don&#39;t backtrack (so they are actually simpler than regular quantifiers).</p>
+<p>There are also so-called &quot;atomic capturing groups&quot; - a way to disable backtracking inside parentheses.</p>
+<p>Unfortunately, in JavaScript they are not supported. But there&#39;s another way.</p>
+<h3 id="lookahead-to-the-rescue">Lookahead to the rescue!</h3>
+<p>We can prevent backtracking using lookahead.</p>
+<p>The pattern to take as much repetitions of <code>pattern:\w</code> as possible without backtracking is: <code>pattern:(?=(\w+))\1</code>.</p>
+<p>Let&#39;s decipher it:</p>
+<ul>
+<li>Lookahead <code>pattern:?=</code> looks forward for the longest word <code>pattern:\w+</code> starting at the current position.</li>
+<li>The contents of parentheses with <code>pattern:?=...</code> isn&#39;t memorized by the engine, so wrap <code>pattern:\w+</code> into parentheses. Then the engine will memorize their contents</li>
+<li>...And allow us to reference it in the pattern as <code>pattern:\1</code>.</li>
+</ul>
+<p>That is: we look ahead - and if there&#39;s a word <code>pattern:\w+</code>, then match it as <code>pattern:\1</code>.</p>
+<p>Why? That&#39;s because the lookahead finds a word <code>pattern:\w+</code> as a whole and we capture it into the pattern with <code>pattern:\1</code>. So we essentially implemented a possessive plus <code>pattern:+</code> quantifier. It captures only the whole word <code>pattern:\w+</code>, not a part of it.</p>
+<p>For instance, in the word <code>subject:JavaScript</code> it may not only match <code>match:Java</code>, but leave out <code>match:Script</code> to match the rest of the pattern.</p>
+<p>Here&#39;s the comparison of two patterns:</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;JavaScript&quot;</span>.match(<span class="hljs-regexp">/\w+Script/</span>)); <span class="hljs-comment">// JavaScript</span>
+alert( <span class="hljs-string">&quot;JavaScript&quot;</span>.match(<span class="hljs-regexp">/(?=(\w+))\1Script/</span>)); <span class="hljs-comment">// null</span></code></pre>
+<ol>
+<li>In the first variant <code>pattern:\w+</code> first captures the whole word <code>subject:JavaScript</code> but then <code>pattern:+</code> backtracks character by character, to try to match the rest of the pattern, until it finally succeeds (when <code>pattern:\w+</code> matches <code>match:Java</code>).</li>
+<li>In the second variant <code>pattern:(?=(\w+))</code> looks ahead and finds the word  <code>subject:JavaScript</code>, that is included into the pattern as a whole by <code>pattern:\1</code>, so there remains no way to find <code>subject:Script</code> after it.</li>
+</ol>
+<p>We can put a more complex regular expression into <code>pattern:(?=(\w+))\1</code> instead of <code>pattern:\w</code>, when we need to forbid backtracking for <code>pattern:+</code> after it.</p>
+<pre><code class="language-smart">There&#x27;s more about the relation between possessive quantifiers and lookahead in articles [Regex: Emulate Atomic Grouping (and Possessive Quantifiers) with LookAhead](http://instanceof.me/post/52245507631/regex-emulate-atomic-grouping-with-lookahead) and [Mimicking Atomic Groups](http://blog.stevenlevithan.com/archives/mimic-atomic-groups).</code></pre>
+<p>Let&#39;s rewrite the first example using lookahead to prevent backtracking:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^((?=(\w+))\2\s?)*$/</span>;
+
+alert( regexp.test(<span class="hljs-string">&quot;A good string&quot;</span>) ); <span class="hljs-comment">// true</span>
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;An input string that takes a long time or even makes this regex to hang!&quot;</span>;
+
+alert( regexp.test(str) ); <span class="hljs-comment">// false, works and fast!</span></code></pre>
+<p>Here <code>pattern:\2</code> is used instead of <code>pattern:\1</code>, because there are additional outer parentheses. To avoid messing up with the numbers, we can give the parentheses a name, e.g. <code>pattern:(?&lt;word&gt;\w+)</code>.</p>
+<pre><code class="language-js"><span class="hljs-comment">// parentheses are named ?&lt;word&gt;, referenced as \k&lt;word&gt;</span>
+<span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^((?=(?&lt;word&gt;\w+))\k&lt;word&gt;\s?)*$/</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;An input string that takes a long time or even makes this regex to hang!&quot;</span>;
+
+alert( regexp.test(str) ); <span class="hljs-comment">// false</span>
+
+alert( regexp.test(<span class="hljs-string">&quot;A correct string&quot;</span>) ); <span class="hljs-comment">// true</span></code></pre>
+<p>The problem described in this article is called &quot;catastrophic backtracking&quot;.</p>
+<p>We covered two ways how to solve it:</p>
+<ul>
+<li>Rewrite the regexp to lower the possible combinations count.</li>
+<li>Prevent backtracking.</li>
+</ul>

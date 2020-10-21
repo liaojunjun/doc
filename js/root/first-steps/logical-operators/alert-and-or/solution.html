@@ -1,0 +1,6 @@
+<p>答案：<code>3</code>。</p>
+<pre><code class="language-js">alert( <span class="hljs-literal">null</span> || <span class="hljs-number">2</span> &amp;&amp; <span class="hljs-number">3</span> || <span class="hljs-number">4</span> );</code></pre>
+<p>与运算 <code>&amp;&amp;</code> 的优先级比 <code>||</code> 高，所以它第一个被执行。</p>
+<p>结果是 <code>2 &amp;&amp; 3 = 3</code>，所以表达式变成了：</p>
+<pre><code>null || 3 || 4</code></pre>
+<p>现在的结果就是第一个真值：<code>3</code>。</p>

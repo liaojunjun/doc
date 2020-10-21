@@ -1,0 +1,13 @@
+<p>我们可以使用 <code>slice()</code> 来创建一个副本并对其进行排序：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">copySorted</span>(<span class="hljs-params">arr</span>) </span>{
+  <span class="hljs-keyword">return</span> arr.slice().sort();
+}
+
+<span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;HTML&quot;</span>, <span class="hljs-string">&quot;JavaScript&quot;</span>, <span class="hljs-string">&quot;CSS&quot;</span>];
+
+*!*
+<span class="hljs-keyword">let</span> sorted = copySorted(arr);
+*/!*
+
+alert( sorted );
+alert( arr );</code></pre>

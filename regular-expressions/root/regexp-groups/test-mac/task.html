@@ -1,0 +1,14 @@
+<h1 id="check-mac-address">Check MAC-address</h1>
+<p><a href="https://en.wikipedia.org/wiki/MAC_address">MAC-address</a> of a network interface consists of 6 two-digit hex numbers separated by a colon.</p>
+<p>For instance: <code>subject:&#39;01:32:54:67:89:AB&#39;</code>.</p>
+<p>Write a regexp that checks whether a string is MAC-address.</p>
+<p>Usage:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/your regexp/</span>;
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89:AB&#x27;</span>) ); <span class="hljs-comment">// true</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;0132546789AB&#x27;</span>) ); <span class="hljs-comment">// false (no colons)</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89&#x27;</span>) ); <span class="hljs-comment">// false (5 numbers, must be 6)</span>
+
+alert( regexp.test(<span class="hljs-string">&#x27;01:32:54:67:89:ZZ&#x27;</span>) ) <span class="hljs-comment">// false (ZZ ad the end)</span></code></pre>

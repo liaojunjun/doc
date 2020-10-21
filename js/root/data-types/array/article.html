@@ -1,0 +1,291 @@
+<h1 id="数组">数组</h1>
+<p>对象允许存储键值集合，这很好。</p>
+<p>但很多时候我们发现还需要 <strong>有序集合</strong>，里面的元素都是按顺序排列的。例如，我们可能需要存储一些列表，比如用户、商品以及 HTML 元素等。</p>
+<p>这里使用对象就不是很方便了，因为对象不能提供能够管理元素顺序的方法。我们不能在已有的元素“之间”插入一个新的属性。这种场景下对象就不太适用了。</p>
+<p>这时一个特殊的数据结构数组（<code>Array</code>）就派上用场了，它能存储有序的集合。</p>
+<h2 id="声明">声明</h2>
+<p>创建一个空数组有两种语法：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>();
+<span class="hljs-keyword">let</span> arr = [];</code></pre>
+<p>绝大多数情况下使用的都是第二种语法。我们可以在方括号中添加初始元素：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruits = [<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Orange&quot;</span>, <span class="hljs-string">&quot;Plum&quot;</span>];</code></pre>
+<p>数组元素从 0 开始编号。</p>
+<p>我们可以通过方括号中的数字获取元素：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruits = [<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Orange&quot;</span>, <span class="hljs-string">&quot;Plum&quot;</span>];
+
+alert( fruits[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// Apple</span>
+alert( fruits[<span class="hljs-number">1</span>] ); <span class="hljs-comment">// Orange</span>
+alert( fruits[<span class="hljs-number">2</span>] ); <span class="hljs-comment">// Plum</span></code></pre>
+<p>可以替换元素：</p>
+<pre><code class="language-js">fruits[<span class="hljs-number">2</span>] = <span class="hljs-string">&#x27;Pear&#x27;</span>; <span class="hljs-comment">// 现在变成了 [&quot;Apple&quot;, &quot;Orange&quot;, &quot;Pear&quot;]</span></code></pre>
+<p>……或者向数组新加一个元素：</p>
+<pre><code class="language-js">fruits[<span class="hljs-number">3</span>] = <span class="hljs-string">&#x27;Lemon&#x27;</span>; <span class="hljs-comment">// 现在变成 [&quot;Apple&quot;, &quot;Orange&quot;, &quot;Pear&quot;, &quot;Lemon&quot;]</span></code></pre>
+<p><code>length</code> 属性的值是数组中元素的总个数：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruits = [<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Orange&quot;</span>, <span class="hljs-string">&quot;Plum&quot;</span>];
+
+alert( fruits.length ); <span class="hljs-comment">// 3</span></code></pre>
+<p>也可以用 <code>alert</code> 来显示整个数组。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruits = [<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Orange&quot;</span>, <span class="hljs-string">&quot;Plum&quot;</span>];
+
+alert( fruits ); <span class="hljs-comment">// Apple,Orange,Plum</span></code></pre>
+<p>数组可以存储任何类型的元素。</p>
+<p>例如:</p>
+<pre><code class="language-js"><span class="hljs-comment">// 混合值</span>
+<span class="hljs-keyword">let</span> arr = [ <span class="hljs-string">&#x27;Apple&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span> }, <span class="hljs-literal">true</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-string">&#x27;hello&#x27;</span>); } ];
+
+<span class="hljs-comment">// 获取索引为 1 的对象然后显示它的 name</span>
+alert( arr[<span class="hljs-number">1</span>].name ); <span class="hljs-comment">// John</span>
+
+<span class="hljs-comment">// 获取索引为 3 的函数并执行</span>
+arr[<span class="hljs-number">3</span>](); <span class="hljs-comment">// hello</span></code></pre>
+<pre><code class="language-smart">数组就像对象一样，可以以逗号结尾：
+```js 
+let fruits = [
+  &quot;Apple&quot;, 
+  &quot;Orange&quot;, 
+  &quot;Plum&quot;*!*,*/!*
+];
+```
+
+因为每一行都是相似的，所以这种以“逗号结尾”的方式使得插入/移除项变得更加简单。</code></pre>
+<h2 id="poppush-shiftunshift-方法">pop/push, shift/unshift 方法</h2>
+<p><a href="https://en.wikipedia.org/wiki/Queue_(abstract_data_type)">队列（queue）</a>是最常见的使用数组的方法之一。在计算机科学中，这表示支持两个操作的一个有序元素的集合：</p>
+<ul>
+<li><code>push</code> 在末端添加一个元素.</li>
+<li><code>shift</code> 取出队列首端的一个元素，整个队列往前移，这样原先排第二的元素现在排在了第一。</li>
+</ul>
+<p><img src="queue.svg" alt=""></p>
+<p>这两种操作数组都支持。</p>
+<p>队列的应用在实践中经常会碰到。例如需要在屏幕上显示消息队列。</p>
+<p>数组还有另一个用例，就是数据结构 <a href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">栈</a>。</p>
+<p>它支持两种操作：</p>
+<ul>
+<li><code>push</code> 在末端添加一个元素.</li>
+<li><code>pop</code> 从末端取出一个元素.</li>
+</ul>
+<p>所以新元素的添加和取出都是从“末端”开始的。</p>
+<p>栈通常被被形容成一叠卡片：要么在最上面添加卡片，要么从最上面拿走卡片：</p>
+<p><img src="stack.svg" alt=""></p>
+<p>对于栈来说，最后放进去的内容是最先接收的，也叫做 LIFO（Last-In-First-Out），即后进先出法则。而与队列相对应的叫做 FIFO（First-In-First-Out），即先进先出。</p>
+<p>JavaScript 中的数组既可以用作队列，也可以用作栈。它们允许你从首端/末端来添加/删除元素。</p>
+<p>这在计算机科学中，允许这样的操作的数据结构被称为 <a href="https://en.wikipedia.org/wiki/Double-ended_queue">双端队列（deque）</a>。</p>
+<p><strong>作用于数组末端的方法：</strong></p>
+<p><code>pop</code>
+: 取出并返回数组的最后一个元素：</p>
+<pre><code>```js run
+let fruits = [&quot;Apple&quot;, &quot;Orange&quot;, &quot;Pear&quot;];
+
+alert( fruits.pop() ); // 移除 &quot;Pear&quot; 然后 alert 显示出来
+
+alert( fruits ); // Apple, Orange
+```</code></pre>
+<p><code>push</code>
+: 在数组末端添加元素：</p>
+<pre><code>```js run
+let fruits = [&quot;Apple&quot;, &quot;Orange&quot;];
+
+fruits.push(&quot;Pear&quot;);
+
+alert( fruits ); // Apple, Orange, Pear
+```
+
+调用 `fruits.push(...)` 与 `fruits[fruits.length] = ...` 是一样的。</code></pre>
+<p><strong>作用于数组首端的方法：</strong></p>
+<p><code>shift</code>
+: 取出数组的第一个元素并返回它：</p>
+<pre><code>```js run
+let fruits = [&quot;Apple&quot;, &quot;Orange&quot;, &quot;Pear&quot;];
+
+alert( fruits.shift() ); // 移除 Apple 然后 alert 显示出来
+
+alert( fruits ); // Orange, Pear
+```</code></pre>
+<p><code>unshift</code>
+: 在数组的首端添加元素：</p>
+<pre><code>```js run
+let fruits = [&quot;Orange&quot;, &quot;Pear&quot;];
+
+fruits.unshift(&#x27;Apple&#x27;);
+
+alert( fruits ); // Apple, Orange, Pear
+```</code></pre>
+<p><code>push</code> 和 <code>unshift</code> 方法都可以一次添加多个元素：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruits = [<span class="hljs-string">&quot;Apple&quot;</span>];
+
+fruits.push(<span class="hljs-string">&quot;Orange&quot;</span>, <span class="hljs-string">&quot;Peach&quot;</span>);
+fruits.unshift(<span class="hljs-string">&quot;Pineapple&quot;</span>, <span class="hljs-string">&quot;Lemon&quot;</span>);
+
+<span class="hljs-comment">// [&quot;Pineapple&quot;, &quot;Lemon&quot;, &quot;Apple&quot;, &quot;Orange&quot;, &quot;Peach&quot;]</span>
+alert( fruits );</code></pre>
+<h2 id="内部">内部</h2>
+<p>数组是一种特殊的对象。使用方括号来访问属性 <code>arr[0]</code> 实际上是来自于对象的语法。它其实与 <code>obj[key]</code> 相同，其中 <code>arr</code> 是对象，而数字用作键（key）。</p>
+<p>它们扩展了对象，提供了特殊的方法来处理有序的数据集合以及 <code>length</code> 属性。但从本质上讲，它仍然是一个对象。</p>
+<p>记住，在 JavaScript 中只有 7 种基本类型。数组是一个对象，因此其行为也像一个对象。</p>
+<p>例如，它是通过引用来复制的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruits = [<span class="hljs-string">&quot;Banana&quot;</span>]
+
+<span class="hljs-keyword">let</span> arr = fruits; <span class="hljs-comment">// 通过引用复制 (两个变量引用的是相同的数组)</span>
+
+alert( arr === fruits ); <span class="hljs-comment">// true</span>
+
+arr.push(<span class="hljs-string">&quot;Pear&quot;</span>); <span class="hljs-comment">// 通过引用修改数组</span>
+
+alert( fruits ); <span class="hljs-comment">// Banana, Pear — 现在有 2 项了</span></code></pre>
+<p>……但是数组真正特殊的是它们的内部实现。JavaScript 引擎尝试把这些元素一个接一个地存储在连续的内存区域，就像本章的插图显示的一样，而且还有一些其它的优化，以使数组运行得非常快。</p>
+<p>但是，如果我们不像“有序集合”那样使用数组，而是像常规对象那样使用数组，这些就都不生效了。</p>
+<p>例如，从技术上讲，我们可以这样做:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruits = []; <span class="hljs-comment">// 创建一个数组</span>
+
+fruits[<span class="hljs-number">99999</span>] = <span class="hljs-number">5</span>; <span class="hljs-comment">// 分配索引远大于数组长度的属性</span>
+
+fruits.age = <span class="hljs-number">25</span>; <span class="hljs-comment">// 创建一个具有任意名称的属性</span></code></pre>
+<p>这是可以的，因为数组是基于对象的。我们可以给它们添加任何属性。</p>
+<p>但是 Javascript 引擎会发现，我们在像使用常规对象一样使用数组，那么针对数组的优化就不再适用了，然后对应的优化就会被关闭，这些优化所带来的优势也就荡然无存了。</p>
+<p>数组误用的几种方式:</p>
+<ul>
+<li>添加一个非数字的属性，比如 <code>arr.test = 5</code>。</li>
+<li>制造空洞，比如：添加 <code>arr[0]</code>，然后添加 <code>arr[1000]</code> (它们中间什么都没有)。</li>
+<li>以倒序填充数组，比如 <code>arr[1000]</code>，<code>arr[999]</code> 等等。</li>
+</ul>
+<p>请将数组视为作用于 <strong>有序数据</strong> 的特殊结构。它们为此提供了特殊的方法。数组在 JavaScript 引擎内部是经过特殊调整的，使得更好地作用于连续的有序数据，所以请以正确的方式使用数组。如果你需要任意键值，那很有可能实际上你需要的是常规对象 <code>{}</code>。</p>
+<h2 id="性能">性能</h2>
+<p><code>push/pop</code> 方法运行的比较快，而 <code>shift/unshift</code> 比较慢。</p>
+<p><img src="array-speed.svg" alt=""></p>
+<p>为什么作用于数组的末端会比首端快呢？让我们看看在执行期间都发生了什么：</p>
+<pre><code class="language-js">fruits.shift(); <span class="hljs-comment">// 从首端取出一个元素</span></code></pre>
+<p>只获取并移除数字 <code>0</code> 对应的元素是不够的。其它元素也需要被重新编号。</p>
+<p><code>shift</code> 操作必须做三件事:</p>
+<ol>
+<li>移除索引为 <code>0</code> 的元素。</li>
+<li>把所有的元素向左移动，把索引 <code>1</code> 改成 <code>0</code>，<code>2</code> 改成 <code>1</code> 以此类推，对其重新编号。</li>
+<li>更新 <code>length</code> 属性。</li>
+</ol>
+<p><img src="array-shift.svg" alt=""></p>
+<p><strong>数组里的元素越多，移动它们就要花越多的时间，也就意味着越多的内存操作。</strong></p>
+<p><code>unshift</code> 也是一样：为了在数组的首端添加元素，我们首先需要将现有的元素向右移动，增加它们的索引值。</p>
+<p>那 <code>push/pop</code> 是什么样的呢？它们不需要移动任何东西。如果从末端移除一个元素，<code>pop</code> 方法只需要清理索引值并缩短 <code>length</code> 就可以了。</p>
+<p><code>pop</code> 操作的行为：</p>
+<pre><code class="language-js">fruits.pop(); <span class="hljs-comment">// 从末端取走一个元素</span></code></pre>
+<p><img src="array-pop.svg" alt=""></p>
+<p><strong><code>pop</code> 方法不需要移动任何东西，因为其它元素都保留了各自的索引。这就是为什么 <code>pop</code> 会特别快。</strong></p>
+<p><code>push</code> 方法也是一样的。</p>
+<h2 id="循环">循环</h2>
+<p>遍历数组最古老的方式就是 <code>for</code> 循环：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Orange&quot;</span>, <span class="hljs-string">&quot;Pear&quot;</span>];
+
+*!*
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; arr.length; i++) {
+*/!*
+  alert( arr[i] );
+}</code></pre>
+<p>但对于数组来说还有另一种循环方式，<code>for..of</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruits = [<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Orange&quot;</span>, <span class="hljs-string">&quot;Plum&quot;</span>];
+
+<span class="hljs-comment">// 遍历数组元素</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> fruit <span class="hljs-keyword">of</span> fruits) {
+  alert( fruit ); 
+}</code></pre>
+<p><code>for..of</code> 不能获取当前元素的索引，只是获取元素值，但大多数情况是够用的。而且这样写更短。</p>
+<p>技术上来讲，因为数组也是对象，所以使用 <code>for..in</code> 也是可以的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Orange&quot;</span>, <span class="hljs-string">&quot;Pear&quot;</span>];
+
+*!*
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> arr) {
+*/!*
+  alert( arr[key] ); <span class="hljs-comment">// Apple, Orange, Pear</span>
+}</code></pre>
+<p>但这其实是一个很不好的想法。会有一些潜在问题存在：</p>
+<ol>
+<li><p><code>for..in</code> 循环会遍历 <strong>所有属性</strong>，不仅仅是这些数字属性。</p>
+<p> 在浏览器和其它环境中有一种称为“类数组”的对象，它们 <strong>看似是数组</strong>。也就是说，它们有 <code>length</code> 和索引属性，但是也可能有其它的非数字的属性和方法，这通常是我们不需要的。<code>for..in</code> 循环会把它们都列出来。所以如果我们需要处理类数组对象，这些“额外”的属性就会存在问题。</p>
+</li>
+<li><p><code>for..in</code> 循环适用于普通对象，并且做了对应的优化。但是不适用于数组，因此速度要慢 10-100 倍。当然即使是这样也依然非常快。只有在遇到瓶颈时可能会有问题。但是我们仍然应该了解这其中的不同。</p>
+</li>
+</ol>
+<p>通常来说，我们不应该用 <code>for..in</code> 来处理数组。</p>
+<h2 id="关于-length">关于 &quot;length&quot;</h2>
+<p>当我们修改数组的时候，<code>length</code> 属性会自动更新。准确来说，它实际上不是数组里元素的个数，而是最大的数字索引值加一。</p>
+<p>例如，一个数组只有一个元素，但是这个元素的索引值很大，那么这个数组的 <code>length</code> 也会很大：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruits = [];
+fruits[<span class="hljs-number">123</span>] = <span class="hljs-string">&quot;Apple&quot;</span>;
+
+alert( fruits.length ); <span class="hljs-comment">// 124</span></code></pre>
+<p>要知道的是我们通常不会这样使用数组。</p>
+<p><code>length</code> 属性的另一个有意思的点是它是可写的。</p>
+<p>如果我们手动增加它，则不会发生任何有趣的事儿。但是如果我们减少它，数组就会被截断。该过程是不可逆的，下面是例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+
+arr.length = <span class="hljs-number">2</span>; <span class="hljs-comment">// 截断到只剩 2 个元素</span>
+alert( arr ); <span class="hljs-comment">// [1, 2]</span>
+
+arr.length = <span class="hljs-number">5</span>; <span class="hljs-comment">// 又把 length 加回来</span>
+alert( arr[<span class="hljs-number">3</span>] ); <span class="hljs-comment">// undefined：被截断的那些数值并没有回来</span></code></pre>
+<p>所以，清空数组最简单的方法就是：<code>arr.length = 0;</code>。</p>
+<h2 id="new-array-new-array">new Array() [#new-array]</h2>
+<p>这是创建数组的另一种语法：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = *!*<span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>*/!*(<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Pear&quot;</span>, <span class="hljs-string">&quot;etc&quot;</span>);</code></pre>
+<p>它很少被使用，因为方括号 <code>[]</code> 更短更简洁。而且这种语法还存在一些诡异的特性。</p>
+<p>如果使用单个参数（即数字）调用 <code>new Array</code>，那么它会创建一个 <strong>指定了长度，却没有任何项</strong> 的数组。</p>
+<p>让我们看看如何搬起石头砸自己的脚:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(<span class="hljs-number">2</span>); <span class="hljs-comment">// 会创建一个 [2] 的数组吗？</span>
+
+alert( arr[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// undefined！没有元素。</span>
+
+alert( arr.length ); <span class="hljs-comment">// length 2</span></code></pre>
+<p>在上面的代码中，<code>new Array(number)</code> 创建的数组的所有元素都是 <code>undefined</code>。</p>
+<p>为了避免这种乌龙事件，我们通常都是使用方括号的，除非我们清楚地知道自己正在做什么。</p>
+<h2 id="多维数组">多维数组</h2>
+<p>数组里的项也可以是数组。我们可以将其用于多维数组，例如存储矩阵：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> matrix = [
+  [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],
+  [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>],
+  [<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>]
+];
+
+alert( matrix[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] ); <span class="hljs-comment">// 最中间的那个数</span></code></pre>
+<h2 id="tostring">toString</h2>
+<p>数组有自己的 <code>toString</code> 方法的实现，会返回以逗号隔开的元素列表。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+
+alert( arr ); <span class="hljs-comment">// 1,2,3</span>
+alert( <span class="hljs-built_in">String</span>(arr) === <span class="hljs-string">&#x27;1,2,3&#x27;</span> ); <span class="hljs-comment">// true</span></code></pre>
+<p>此外，我们试试运行一下这个：</p>
+<pre><code class="language-js">alert( [] + <span class="hljs-number">1</span> ); <span class="hljs-comment">// &quot;1&quot;</span>
+alert( [<span class="hljs-number">1</span>] + <span class="hljs-number">1</span> ); <span class="hljs-comment">// &quot;11&quot;</span>
+alert( [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>] + <span class="hljs-number">1</span> ); <span class="hljs-comment">// &quot;1,21&quot;</span></code></pre>
+<p>数组没有 <code>Symbol.toPrimitive</code>，也没有 <code>valueOf</code>，它们只能执行 <code>toString</code> 进行转换，所以这里 <code>[]</code> 就变成了一个空字符串，<code>[1]</code> 变成了 <code>&quot;1&quot;</code>，<code>[1,2]</code> 变成了 <code>&quot;1,2&quot;</code>。</p>
+<p>当 <code>&quot;+&quot;</code> 运算符把一些项加到字符串后面时，加号后面的项也会被转换成字符串，所以下一步就会是这样：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;&quot;</span> + <span class="hljs-number">1</span> ); <span class="hljs-comment">// &quot;1&quot;</span>
+alert( <span class="hljs-string">&quot;1&quot;</span> + <span class="hljs-number">1</span> ); <span class="hljs-comment">// &quot;11&quot;</span>
+alert( <span class="hljs-string">&quot;1,2&quot;</span> + <span class="hljs-number">1</span> ); <span class="hljs-comment">// &quot;1,21&quot;</span></code></pre>
+<h2 id="总结">总结</h2>
+<p>数组是一种特殊的对象，适用于存储和管理有序的数据项。</p>
+<ul>
+<li><p>声明:</p>
+<pre><code class="language-js"><span class="hljs-comment">// 方括号 (常见用法)</span>
+<span class="hljs-keyword">let</span> arr = [item1, item2...];
+
+<span class="hljs-comment">// new Array (极其少见)</span>
+<span class="hljs-keyword">let</span> arr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(item1, item2...);</code></pre>
+<p>  调用 <code>new Array(number)</code> 会创建一个给定长度的数组，但不含有任何项。</p>
+</li>
+<li><p><code>length</code> 属性是数组的长度，准确地说，它是数组最后一个数字索引值加一。它由数组方法自动调整。</p>
+</li>
+<li><p>如果我们手动缩短 <code>length</code>，那么数组就会被截断。</p>
+</li>
+</ul>
+<p>我们可以通过下列操作以双端队列的方式使用数组：</p>
+<ul>
+<li><code>push(...items)</code> 在末端添加 <code>items</code> 项。</li>
+<li><code>pop()</code> 从末端移除并返回该元素。</li>
+<li><code>shift()</code> 从首端移除并返回该元素。</li>
+<li><code>unshift(...items)</code> 从首端添加 <code>items</code> 项。</li>
+</ul>
+<p>遍历数组的元素：</p>
+<ul>
+<li><code>for (let i=0; i&lt;arr.length; i++)</code> — 运行得最快，可兼容旧版本浏览器。</li>
+<li><code>for (let item of arr)</code> — 现代语法，只能访问 items。</li>
+<li><code>for (let i in arr)</code> — 永远不要用这个。</li>
+</ul>
+<p>在下一章节 <a href="info:array-methods">info:array-methods</a> 中，我们会继续学习数组，学习更多添加、移除、提取元素和数组排序的方法。 </p>

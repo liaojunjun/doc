@@ -1,0 +1,35 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="智能工具提示">“智能”工具提示</h1>
+<p>编写一个函数，该函数仅在访问者将鼠标 <strong>移至</strong> 元素而不是 <strong>移过</strong> 元素的情况下，在该元素上显示工具提示。</p>
+<p>换句话说，如果访问者将鼠标移至元素上，并停下来 —— 显示工具提示。如果他们只是将鼠标移过元素，那就没必要显示，谁想要多余的闪烁呢？</p>
+<p>从技术上说，我们可以测量元素上的鼠标移动速度，如果速度很慢，那么我们就假定它 <strong>在元素上</strong>，并显示工具提示，如果速度很快 —— 那么我们就忽略它。</p>
+<p>为此，我们创建一个通用对象 <code>new HoverIntent(options)</code>。</p>
+<p>其 <code>options</code>：</p>
+<ul>
+<li><code>elem</code> —— 要跟踪的元素。</li>
+<li><code>over</code> —— 鼠标移动到元素上时要调用的函数：即，鼠标在元素上的移动速度很慢，或者停在该元素上。</li>
+<li><code>out</code> —— 当鼠标离开元素时调用的函数（如果 <code>over</code> 已经被调用过了）。</li>
+</ul>
+<p>在工具提示中使用此类对象的示例：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 一个简单的工具提示</span>
+<span class="hljs-keyword">let</span> tooltip = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
+tooltip.className = <span class="hljs-string">&quot;tooltip&quot;</span>;
+tooltip.innerHTML = <span class="hljs-string">&quot;Tooltip&quot;</span>;
+
+<span class="hljs-comment">// 该对象将跟踪鼠标，并调用 over/out</span>
+<span class="hljs-keyword">new</span> HoverIntent({
+  elem,
+  over() {
+    tooltip.style.left = elem.getBoundingClientRect().left + <span class="hljs-string">&#x27;px&#x27;</span>;
+    tooltip.style.top = elem.getBoundingClientRect().bottom + <span class="hljs-number">5</span> + <span class="hljs-string">&#x27;px&#x27;</span>;
+    <span class="hljs-built_in">document</span>.body.append(tooltip);
+  },
+  out() {
+    tooltip.remove();
+  }
+});</code></pre>
+<p>示例：</p>
+<p>[iframe src=&quot;solution&quot; height=140]</p>
+<p>如果你将鼠标快速地从“时钟”上移动过去，那么什么都不会发生，如果你使用鼠标在“时钟”上慢慢移动，或者停在“时钟”上，则会出现一个工具提示。</p>
+<p>请注意：当鼠标指针在“时钟”的元素之间移动时，工具提示不会“闪烁”</p>

@@ -1,0 +1,30 @@
+<p>要获取一个用户，我们需要：<code>fetch(&#39;https://api.github.com/users/USERNAME&#39;)</code>.</p>
+<p>如果响应的状态码是 <code>200</code>，则调用 <code>.json()</code> 来读取 JS 对象。</p>
+<p>否则，如果 <code>fetch</code> 失败，或者响应的状态码不是 <code>200</code>，我们只需要向结果数组返回 <code>null</code> 即可。</p>
+<p>代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getUsers</span>(<span class="hljs-params">names</span>) </span>{
+  <span class="hljs-keyword">let</span> jobs = [];
+
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> name <span class="hljs-keyword">of</span> names) {
+    <span class="hljs-keyword">let</span> job = fetch(<span class="hljs-string">`https://api.github.com/users/<span class="hljs-subst">${name}</span>`</span>).then(
+      <span class="hljs-function"><span class="hljs-params">successResponse</span> =&gt;</span> {
+        <span class="hljs-keyword">if</span> (successResponse.status != <span class="hljs-number">200</span>) {
+          <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">return</span> successResponse.json();
+        }
+      },
+      <span class="hljs-function"><span class="hljs-params">failResponse</span> =&gt;</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+      }
+    );
+    jobs.push(job);
+  }
+
+  <span class="hljs-keyword">let</span> results = <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.all(jobs);
+
+  <span class="hljs-keyword">return</span> results;
+}</code></pre>
+<p>请注意：<code>.then</code> 调用紧跟在 <code>fetch</code> 后面，这样，当我们收到响应时，它不会等待其他的 fetch，而是立即开始读取 <code>.json()</code>。</p>
+<p>如果我们使用 <code>await Promise.all(names.map(name =&gt; fetch(...)))</code>，并在 <code>results</code> 上调用 <code>.json()</code> 方法，那么它将会等到所有 fetch 都获取到响应数据才开始解析。通过将 <code>.json()</code> 直接添加到每个 <code>fetch</code> 中，我们就能确保每个 fetch 在收到响应时都会立即开始以 JSON 格式读取数据，而不会彼此等待。</p>
+<p>这个例子表明，即使我们主要使用 <code>async/await</code>，低级别的 Promise API 仍然很有用。</p>

@@ -1,0 +1,12 @@
+<pre><code class="language-js"><span class="hljs-keyword">let</span> salaries = {
+  <span class="hljs-attr">John</span>: <span class="hljs-number">100</span>,
+  <span class="hljs-attr">Ann</span>: <span class="hljs-number">160</span>,
+  <span class="hljs-attr">Pete</span>: <span class="hljs-number">130</span>
+};
+
+<span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> salaries) {
+  sum += salaries[key];
+}
+
+alert(sum); <span class="hljs-comment">// 390</span></code></pre>

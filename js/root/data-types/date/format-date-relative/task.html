@@ -1,0 +1,19 @@
+<p>importance: 4</p>
+<hr>
+<h1 id="格式化相对日期">格式化相对日期</h1>
+<p>写一个函数 <code>formatDate(date)</code>，能够对 <code>date</code> 进行如下格式化：</p>
+<ul>
+<li>如果 <code>date</code> 距离现在不到 1 秒，输出 <code>&quot;right now&quot;</code>。</li>
+<li>否则，如果 <code>date</code> 距离现在不到 1 分钟，输出 <code>&quot;n sec. ago&quot;</code>。</li>
+<li>否则，如果不到 1 小时，输出 <code>&quot;m min. ago&quot;</code>。</li>
+<li>否则，以 <code>&quot;DD.MM.YY HH:mm&quot;</code> 格式输出完整日期。即：<code>&quot;day.month.year hours:minutes&quot;</code>，全部以两位数格式表示，例如：<code>31.12.16 10:00</code>。</li>
+</ul>
+<p>举个例子：</p>
+<pre><code class="language-js">alert( formatDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> - <span class="hljs-number">1</span>)) ); <span class="hljs-comment">// &quot;right now&quot;</span>
+
+alert( formatDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> - <span class="hljs-number">30</span> * <span class="hljs-number">1000</span>)) ); <span class="hljs-comment">// &quot;30 sec. ago&quot;</span>
+
+alert( formatDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> - <span class="hljs-number">5</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>)) ); <span class="hljs-comment">// &quot;5 min. ago&quot;</span>
+
+<span class="hljs-comment">// 昨天的日期，例如 31.12.16 20:00</span>
+alert( formatDate(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span> - <span class="hljs-number">86400</span> * <span class="hljs-number">1000</span>)) );</code></pre>

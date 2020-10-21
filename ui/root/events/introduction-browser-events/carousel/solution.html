@@ -1,0 +1,9 @@
+<p>图像带可以表示为图像 <code>&lt;img&gt;</code> 的 <code>ul/li</code> 列表。</p>
+<p>通常，这样的图像带是很宽的，但我们在其周围放置了一个固定大小的 <code>&lt;div&gt;</code> 来“剪切”它，因此，只有图像带的一部分是可见的：</p>
+<p><img src="carousel1.svg" alt=""></p>
+<p>为了使列表水平显示，我们需要为 <code>&lt;li&gt;</code> 应用正确的 CSS 属性，例如 <code>display: inline-block</code>。</p>
+<p>对于 <code>&lt;img&gt;</code> 来说，我们应该调整 <code>display</code>，因为默认情况下它是 <code>inline</code>。在 <code>inline</code> 元素下方为 &quot;letter tails&quot; 保留了额外的空间，因此，我们可以使用 <code>display:block</code> 来将其删除。</p>
+<p>我们可以移动 <code>&lt;ul&gt;</code> 来进行滚动。有很多方法可以实现这一点，例如，通过修改 <code>margin-left</code> 或者使用 <code>transform: translateX()</code>（性能更好）：</p>
+<p><img src="carousel2.svg" alt=""></p>
+<p>外部的 <code>&lt;div&gt;</code> 具有固定的宽度，因此，会裁剪掉“多余”的图像。</p>
+<p>整个轮播图是页面上的一个独立的“图形组件”，因此我们最好将其包装到一个单独的 <code>&lt;div class=&quot;carousel&quot;&gt;</code> 中，并在其中对其进行样式设置。</p>

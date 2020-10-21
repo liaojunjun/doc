@@ -1,0 +1,21 @@
+<p>第一个解法是列出所有语言，中间加上 <code>|</code> 符号。</p>
+<p>但是运行不如所愿：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/Java|JavaScript|PHP|C|C\+\+/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Java, JavaScript, PHP, C, C++&quot;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// Java,Java,PHP,C,C</span></code></pre>
+<p>正则表达式引擎查找选择模式的时是挨个查找的。意思是：它先匹配是否存在 <code>match:Java</code>，否则 —— 接着匹配 <code>match:JavaScript</code> 及其后的字符串。</p>
+<p>结果，<code>match:JavaScript</code> 永远匹配不到，因为 <code>match:Java</code> 先被匹配了。</p>
+<p><code>match:C</code> 和 <code>match:C++</code> 同理。</p>
+<p>这个问题有两个解决办法：</p>
+<ol>
+<li>变更匹配顺序，长的字符串优先匹配：<code>pattern:JavaScript|Java|C\+\+|C|PHP</code>。</li>
+<li>合并相同前缀：<code>pattern:Java(Script)?|C(\+\+)?|PHP</code>。</li>
+</ol>
+<p>运行代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/Java(Script)?|C(\+\+)?|PHP/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Java, JavaScript, PHP, C, C++&quot;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// Java,JavaScript,PHP,C,C++</span></code></pre>

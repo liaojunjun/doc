@@ -1,0 +1,23 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="对数字求和到给定值">对数字求和到给定值</h1>
+<p>编写一个函数 <code>sumTo(n)</code> 计算 <code>1 + 2 + ... + n</code> 的和。</p>
+<p>举个例子：</p>
+<pre><code class="language-js">sumTo(<span class="hljs-number">1</span>) = <span class="hljs-number">1</span>
+sumTo(<span class="hljs-number">2</span>) = <span class="hljs-number">2</span> + <span class="hljs-number">1</span> = <span class="hljs-number">3</span>
+sumTo(<span class="hljs-number">3</span>) = <span class="hljs-number">3</span> + <span class="hljs-number">2</span> + <span class="hljs-number">1</span> = <span class="hljs-number">6</span>
+sumTo(<span class="hljs-number">4</span>) = <span class="hljs-number">4</span> + <span class="hljs-number">3</span> + <span class="hljs-number">2</span> + <span class="hljs-number">1</span> = <span class="hljs-number">10</span>
+...
+sumTo(<span class="hljs-number">100</span>) = <span class="hljs-number">100</span> + <span class="hljs-number">99</span> + ... + <span class="hljs-number">2</span> + <span class="hljs-number">1</span> = <span class="hljs-number">5050</span></code></pre>
+<p>用三种方式实现：</p>
+<ol>
+<li>使用循环。</li>
+<li>使用递归，对 <code>n &gt; 1</code> 执行 <code>sumTo(n) = n + sumTo(n-1)</code>。</li>
+<li>使用 <a href="https://en.wikipedia.org/wiki/Arithmetic_progression">等差数列</a> 求和公式.</li>
+</ol>
+<p>结果示例：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sumTo</span>(<span class="hljs-params">n</span>) </span>{ <span class="hljs-comment">/*... 你的代码 ... */</span> }
+
+alert( sumTo(<span class="hljs-number">100</span>) ); <span class="hljs-comment">// 5050</span></code></pre>
+<p>P.S. 哪种解决方式最快？哪种最慢？为什么？</p>
+<p>P.P.S. 我们可以使用递归来计算 <code>sumTo(100000)</code> 吗？</p>

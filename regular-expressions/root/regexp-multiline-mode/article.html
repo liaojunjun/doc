@@ -1,0 +1,44 @@
+<h1 id="flag-m--多行模式">Flag &quot;m&quot; — 多行模式</h1>
+<p>通过 flag <code>/.../m</code> 可以开启多行模式。</p>
+<p>这仅仅会影响 <code>^</code> 和 <code>$</code> 锚符的行为。</p>
+<p>在多行模式下，它们不仅仅匹配文本的开始与结束，还匹配每一行的开始与结束。</p>
+<h2 id="行的开头-">行的开头 ^</h2>
+<p>在这个有多行文本的例子中，正则表达式 <code>/^\d+/gm</code> 将匹配每一行的开头数字：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`1st place: Winnie
+2nd place: Piglet
+33rd place: Eeyore`</span>;
+
+*!*
+alert( str.match(<span class="hljs-regexp">/^\d+/gm</span>) ); <span class="hljs-comment">// 1, 2, 33</span>
+*/!*</code></pre>
+<p>没有 flag  <code>/.../m</code> 时，仅仅是第一个数字被匹配到：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`1st place: Winnie
+2nd place: Piglet
+33rd place: Eeyore`</span>;
+
+*!*
+alert( str.match(<span class="hljs-regexp">/^\d+/g</span>) ); <span class="hljs-comment">// 1</span>
+*/!*</code></pre>
+<p>这是因为默认情况下，锚符 <code>^</code> 仅仅匹配文本的开头，在多行模式下，它匹配行的开头。</p>
+<p>正则表达式引擎将会在文本中查找以锚符 <code>^</code> 开始的字符串，我们找到之后继续匹配 <code>\d+</code> 模式。</p>
+<h2 id="行的结尾-">行的结尾 $</h2>
+<p>美元符 <code>$</code> 行为也相似。</p>
+<p>正则表达式 `\w+$ 会找到每一行的最后一个单词：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`1st place: Winnie
+2nd place: Piglet
+33rd place: Eeyore`</span>;
+
+alert( str.match(<span class="hljs-regexp">/\w+$/gim</span>) ); <span class="hljs-comment">// Winnie,Piglet,Eeyore</span></code></pre>
+<p>没有 <code>/.../m</code> flag 的话，美元符 <code>$</code> 将会仅仅匹配整个文本的结尾，所以只有最后的一个单词会被找到。</p>
+<h2 id="锚符--对比-n">锚符 ^$ 对比 \n</h2>
+<p>要寻找新的一行的话，我们不仅可以使用锚符 <code>^</code> 和 <code>$</code>，也可以使用换行符 <code>\n</code>。</p>
+<p>它和锚符 <code>^</code> 和 <code>$</code> 的第一个不同点是它不像锚符那样，它会“消耗”掉 <code>\n</code> 并且将其（<code>\n</code>）加入到匹配结果中。</p>
+<p>举个例子，我们在下面的代码中用它来替代 <code>$</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`1st place: Winnie
+2nd place: Piglet
+33rd place: Eeyore`</span>;
+
+alert( str.match(<span class="hljs-regexp">/\w+\n/gim</span>) ); <span class="hljs-comment">// Winnie\n,Piglet\n</span></code></pre>
+<p>这里，我们每次匹配到的时候都会被添加一个换行符。</p>
+<p>还有一个不同点——换行符 <code>\n</code> 不会匹配字符串结尾。这就是为什么在上面的例子中 <code>Eeyore</code> 没有匹配到。</p>
+<p>所以，通常情况下使用锚符更棒，用它匹配出来的结果更加接近我们想要的结果。</p>

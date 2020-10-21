@@ -1,0 +1,307 @@
+<h1 id="class-基本语法">Class 基本语法</h1>
+<pre><code class="language-quote">在面向对象的编程中，*class* 是用于创建对象的可扩展的程序代码模版，它为对象提供了状态（成员变量）的初始值和行为（成员函数或方法）的实现。</code></pre>
+<p>在日常开发中，我们经常需要创建许多相同类型的对象，例如用户（users）、商品（goods）或者任何其他东西。</p>
+<p>正如我们在 <a href="info:constructor-new">info:constructor-new</a> 一章中已经学到的，<code>new function</code> 可以帮助我们实现这种需求。</p>
+<p>但在现代 JavaScript 中，还有一个更高级的“类（class）”构造方式，它引入许多非常棒的新功能，这些功能对于面向对象编程很有用。</p>
+<h2 id="class-语法">&quot;class&quot; 语法</h2>
+<p>基本语法是：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyClass</span> </span>{
+  <span class="hljs-comment">// class 方法</span>
+  <span class="hljs-keyword">constructor</span>() { ... }
+  method1() { ... }
+  method2() { ... }
+  method3() { ... }
+  ...
+}</code></pre>
+<p>然后使用 <code>new MyClass()</code> 来创建具有上述列出的所有方法的新对象。</p>
+<p><code>new</code> 会自动调用 <code>constructor()</code> 方法，因此我们可以在 <code>constructor()</code> 中初始化对象。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+
+  <span class="hljs-keyword">constructor</span>(name) {
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+
+  sayHi() {
+    alert(<span class="hljs-built_in">this</span>.name);
+  }
+
+}
+
+<span class="hljs-comment">// 用法：</span>
+<span class="hljs-keyword">let</span> user = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&quot;John&quot;</span>);
+user.sayHi();</code></pre>
+<p>当 <code>new User(&quot;John&quot;)</code> 被调用：</p>
+<ol>
+<li>一个新对象被创建。</li>
+<li><code>constructor</code> 使用给定的参数运行，并为其分配 <code>this.name</code>。</li>
+</ol>
+<p>……然后我们就可以调用对象方法了，例如 <code>user.sayHi</code>。</p>
+<pre><code class="language-warn">对于新手开发人员来说，常见的陷阱是在类的方法之间放置逗号，这会导致语法错误。
+
+不要把这里的符号与对象字面量相混淆。在类中，不需要逗号。</code></pre>
+<h2 id="什么是-class？">什么是 class？</h2>
+<p>所以，<code>class</code> 到底是什么？正如人们可能认为的那样，这不是一个全新的语言级实体。</p>
+<p>让我们揭开其神秘面纱，看看类究竟是什么。这将有助于我们理解许多复杂的方面。</p>
+<p>在 JavaScript 中，类是一种函数。</p>
+<p>看看下面这段代码：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+  <span class="hljs-keyword">constructor</span>(name) { <span class="hljs-built_in">this</span>.name = name; }
+  sayHi() { alert(<span class="hljs-built_in">this</span>.name); }
+}
+
+<span class="hljs-comment">// 佐证：User 是一个函数</span>
+*!*
+alert(<span class="hljs-keyword">typeof</span> User); <span class="hljs-comment">// function</span>
+*/!*</code></pre>
+<p><code>class User {...}</code> 构造实际上做了如下的事儿：</p>
+<ol>
+<li>创建一个名为 <code>User</code> 的函数，该函数成为类声明的结果。该函数的代码来自于 <code>constructor</code> 方法（如果我们不编写这种方法，那么它就被假定为空）。</li>
+<li>存储类中的方法，例如 <code>User.prototype</code> 中的 <code>sayHi</code>。</li>
+</ol>
+<p>当 <code>new User</code> 对象被创建后，当我们调用其方法时，它会从原型中获取对应的方法，正如我们在 <a href="info:function-prototype">info:function-prototype</a> 一章中所讲的那样。因此，对象 <code>new User</code> 可以访问类中的方法。</p>
+<p>我们可以将 <code>class User</code> 声明的结果解释为：</p>
+<p><img src="class-user.svg" alt=""></p>
+<p>下面这些代码很好地解释了它们：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+  <span class="hljs-keyword">constructor</span>(name) { <span class="hljs-built_in">this</span>.name = name; }
+  sayHi() { alert(<span class="hljs-built_in">this</span>.name); }
+}
+
+<span class="hljs-comment">// class 是一个函数</span>
+alert(<span class="hljs-keyword">typeof</span> User); <span class="hljs-comment">// function</span>
+
+<span class="hljs-comment">// ...或者，更确切地说，是 constructor 方法</span>
+alert(User === User.prototype.constructor); <span class="hljs-comment">// true</span>
+
+<span class="hljs-comment">// 方法在 User.prototype 中，例如：</span>
+alert(User.prototype.sayHi); <span class="hljs-comment">// alert(this.name);</span>
+
+<span class="hljs-comment">// 在原型中实际上有两个方法</span>
+alert(<span class="hljs-built_in">Object</span>.getOwnPropertyNames(User.prototype)); <span class="hljs-comment">// constructor, sayHi</span></code></pre>
+<h2 id="不仅仅是语法糖">不仅仅是语法糖</h2>
+<p>人们常说 <code>class</code> 是一个语法糖（旨在使内容更易阅读，但不引入任何新内容的语法），因为我们实际上可以在没有 <code>class</code> 的情况下声明相同的内容：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 用纯函数重写 class User</span>
+
+<span class="hljs-comment">// 1. 创建构造器函数</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-built_in">this</span>.name = name;
+}
+<span class="hljs-comment">// 函数的原型（prototype）默认具有 &quot;constructor&quot; 属性，</span>
+<span class="hljs-comment">// 所以，我们不需要创建它</span>
+
+<span class="hljs-comment">// 2. 将方法添加到原型</span>
+User.prototype.sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-built_in">this</span>.name);
+};
+
+<span class="hljs-comment">// 用法：</span>
+<span class="hljs-keyword">let</span> user = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&quot;John&quot;</span>);
+user.sayHi();</code></pre>
+<p>这个定义的结果与使用类得到的结果基本相同。因此，这确实是将 <code>class</code> 视为一种定义构造器及其原型方法的语法糖的理由。</p>
+<p>尽管，它们之间存在着重大差异：</p>
+<ol>
+<li><p>首先，通过 <code>class</code> 创建的函数具有特殊的内部属性标记 <code>[[FunctionKind]]:&quot;classConstructor&quot;</code>。因此，它与手动创建并不完全相同。</p>
+<p> 编程语言会在许多地方检查该属性。例如，与普通函数不同，必须使用 <code>new</code> 来调用它：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {}
+}
+
+alert(<span class="hljs-keyword">typeof</span> User); <span class="hljs-comment">// function</span>
+User(); <span class="hljs-comment">// Error: Class constructor User cannot be invoked without &#x27;new&#x27;</span></code></pre>
+<p> 此外，大多数 JavaScript 引擎中的类构造器的字符串表示形式都以 &quot;class...&quot; 开头</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {}
+}
+
+alert(User); <span class="hljs-comment">// class User { ... }</span></code></pre>
+<p> 还有其他的不同之处，我们很快就会看到。</p>
+</li>
+<li><p>类方法不可枚举。
+ 类定义将 <code>&quot;prototype&quot;</code> 中的所有方法的 <code>enumerable</code> 标志设置为 <code>false</code>。</p>
+<p> 这很好，因为如果我们对一个对象调用 <code>for..in</code> 方法，我们通常不希望 class 方法出现。</p>
+</li>
+<li><p>类总是使用 <code>use strict</code>。
+ 在类构造中的所有代码都将自动进入严格模式。</p>
+</li>
+</ol>
+<p>此外，<code>class</code> 语法还带来了许多其他功能，我们稍后将会探索它们。</p>
+<h2 id="类表达式">类表达式</h2>
+<p>就像函数一样，类可以在另外一个表达式中被定义，被传递，被返回，被赋值等。</p>
+<p>这是一个类表达式的例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> User = <span class="hljs-class"><span class="hljs-keyword">class</span> </span>{
+  sayHi() {
+    alert(<span class="hljs-string">&quot;Hello&quot;</span>);
+  }
+};</code></pre>
+<p>类似于命名函数表达式（Named Function Expressions），类表达式可能也应该有一个名字。</p>
+<p>如果类表达式有名字，那么该名字仅在类内部可见：</p>
+<pre><code class="language-js"><span class="hljs-comment">// “命名类表达式（Named Class Expression）”</span>
+<span class="hljs-comment">// (规范中没有这样的术语，但是它和命名函数表达式类似)</span>
+<span class="hljs-keyword">let</span> User = <span class="hljs-class"><span class="hljs-keyword">class</span> *!*<span class="hljs-title">MyClass</span>*/!* </span>{
+  sayHi() {
+    alert(MyClass); <span class="hljs-comment">// MyClass 这个名字仅在类内部可见</span>
+  }
+};
+
+<span class="hljs-keyword">new</span> User().sayHi(); <span class="hljs-comment">// 正常运行，显示 MyClass 中定义的内容</span>
+
+alert(MyClass); <span class="hljs-comment">// error，MyClass 在外部不可见</span></code></pre>
+<p>我们甚至可以动态地“按需”创建类，就像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeClass</span>(<span class="hljs-params">phrase</span>) </span>{
+  <span class="hljs-comment">// 声明一个类并返回它</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-class"><span class="hljs-keyword">class</span> </span>{
+    sayHi() {
+      alert(phrase);
+    };
+  };
+}
+
+<span class="hljs-comment">// 创建一个新的类</span>
+<span class="hljs-keyword">let</span> User = makeClass(<span class="hljs-string">&quot;Hello&quot;</span>);
+
+<span class="hljs-keyword">new</span> User().sayHi(); <span class="hljs-comment">// Hello</span></code></pre>
+<h2 id="getterssetters">Getters/setters</h2>
+<p>就像对象字面量，类可能包括 getters/setters，计算属性（computed properties）等。</p>
+<p>这是一个使用 <code>get/set</code> 实现 <code>user.name</code> 的示例：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+
+  <span class="hljs-keyword">constructor</span>(name) {
+    <span class="hljs-comment">// 调用 setter</span>
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+
+*!*
+  <span class="hljs-keyword">get</span> <span class="hljs-title">name</span>() {
+*/!*
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>._name;
+  }
+
+*!*
+  <span class="hljs-keyword">set</span> <span class="hljs-title">name</span>(<span class="hljs-params">value</span>) {
+*/!*
+    <span class="hljs-keyword">if</span> (value.length &lt; <span class="hljs-number">4</span>) {
+      alert(<span class="hljs-string">&quot;Name is too short.&quot;</span>);
+      <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-built_in">this</span>._name = value;
+  }
+
+}
+
+<span class="hljs-keyword">let</span> user = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&quot;John&quot;</span>);
+alert(user.name); <span class="hljs-comment">// John</span>
+
+user = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&quot;&quot;</span>); <span class="hljs-comment">// Name is too short.</span></code></pre>
+<p>从技术上来讲，这样的类声明可以通过在 <code>User.prototype</code> 中创建 getters 和 setters 来实现。</p>
+<h2 id="计算属性名称-">计算属性名称 [...]</h2>
+<p>这里有一个使用中括号 <code>[...]</code> 的计算方法名称示例：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+
+*!*
+  [<span class="hljs-string">&#x27;say&#x27;</span> + <span class="hljs-string">&#x27;Hi&#x27;</span>]() {
+*/!*
+    alert(<span class="hljs-string">&quot;Hello&quot;</span>);
+  }
+
+}
+
+<span class="hljs-keyword">new</span> User().sayHi();</code></pre>
+<p>这种特性很容易记住，因为它们和对象字面量类似。</p>
+<h2 id="class-字段">Class 字段</h2>
+<pre><code class="language-warn">类字段（field）是最近才添加到语言中的。</code></pre>
+<p>之前，我们的类仅具有方法。</p>
+<p>“类字段”是一种允许添加任何属性的语法。</p>
+<p>例如，让我们在 <code>class User</code> 中添加一个 <code>name</code> 属性：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+*!*
+  name = <span class="hljs-string">&quot;John&quot;</span>;
+*/!*
+
+  sayHi() {
+    alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span>!`</span>);
+  }
+}
+
+<span class="hljs-keyword">new</span> User().sayHi(); <span class="hljs-comment">// Hello, John!</span></code></pre>
+<p>所以，我们就只需在表达式中写 &quot;<property name> = <value>&quot;，就这样。</p>
+<p>类字段重要的不同之处在于，它们会在每个独立对象中被设好，而不是设在 <code>User.prototype</code>：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+*!*
+  name = <span class="hljs-string">&quot;John&quot;</span>;
+*/!*
+}
+
+<span class="hljs-keyword">let</span> user = <span class="hljs-keyword">new</span> User();
+alert(user.name); <span class="hljs-comment">// John</span>
+alert(User.prototype.name); <span class="hljs-comment">// undefined</span></code></pre>
+<p>我们也可以在赋值时使用更复杂的表达式和函数调用：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+*!*
+  name = prompt(<span class="hljs-string">&quot;Name, please?&quot;</span>, <span class="hljs-string">&quot;John&quot;</span>);
+*/!*
+}
+
+<span class="hljs-keyword">let</span> user = <span class="hljs-keyword">new</span> User();
+alert(user.name); <span class="hljs-comment">// John</span></code></pre>
+<h3 id="使用类字段制作绑定方法">使用类字段制作绑定方法</h3>
+<p>正如 <a href="info:bind">info:bind</a> 一章中所讲的，JavaScript 中的函数具有动态的 <code>this</code>。它取决于调用上下文。</p>
+<p>因此，如果一个对象方法被传递到某处，或者在另一个上下文中被调用，则 <code>this</code> 将不再是对其对象的引用。</p>
+<p>例如，此代码将显示 <code>undefined</code>：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Button</span> </span>{
+  <span class="hljs-keyword">constructor</span>(value) {
+    <span class="hljs-built_in">this</span>.value = value;
+  }
+
+  click() {
+    alert(<span class="hljs-built_in">this</span>.value);
+  }
+}
+
+<span class="hljs-keyword">let</span> button = <span class="hljs-keyword">new</span> Button(<span class="hljs-string">&quot;hello&quot;</span>);
+
+*!*
+<span class="hljs-built_in">setTimeout</span>(button.click, <span class="hljs-number">1000</span>); <span class="hljs-comment">// undefined</span>
+*/!*</code></pre>
+<p>这个问题被称为“丢失 <code>this</code>”。</p>
+<p>我们在 <a href="info:bind">info:bind</a> 一章中讲过，有两种可以修复它的方式：</p>
+<ol>
+<li>传递一个包装函数，例如 <code>setTimeout(() =&gt; button.click(), 1000)</code>。</li>
+<li>将方法绑定到对象，例如在 constructor 中。</li>
+</ol>
+<p>类字段提供了另一种非常优雅的语法：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Button</span> </span>{
+  <span class="hljs-keyword">constructor</span>(value) {
+    <span class="hljs-built_in">this</span>.value = value;
+  }
+*!*
+  click = <span class="hljs-function">() =&gt;</span> {
+    alert(<span class="hljs-built_in">this</span>.value);
+  }
+*/!*
+}
+
+<span class="hljs-keyword">let</span> button = <span class="hljs-keyword">new</span> Button(<span class="hljs-string">&quot;hello&quot;</span>);
+
+<span class="hljs-built_in">setTimeout</span>(button.click, <span class="hljs-number">1000</span>); <span class="hljs-comment">// hello</span></code></pre>
+<p>类字段 <code>click = () =&gt; {...}</code> 是基于每一个对象被创建的，在这里对于每一个 <code>Button</code> 对象都有一个独立的方法，在内部都有一个指向此对象的 <code>this</code>。我们可以把 <code>button.click</code> 传递到任何地方，而且 <code>this</code> 的值总是正确的。</p>
+<p>在浏览器环境中，它对于进行事件监听尤为有用。</p>
+<h2 id="总结">总结</h2>
+<p>基本的类语法看起来像这样：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyClass</span> </span>{
+  prop = value; <span class="hljs-comment">// 属性</span>
+
+  <span class="hljs-keyword">constructor</span>(...) { <span class="hljs-comment">// 构造器</span>
+    <span class="hljs-comment">// ...</span>
+  }
+
+  method(...) {} <span class="hljs-comment">// method</span>
+
+  <span class="hljs-keyword">get</span> <span class="hljs-title">something</span>(<span class="hljs-params">...</span>) {} <span class="hljs-comment">// getter 方法</span>
+  <span class="hljs-keyword">set</span> <span class="hljs-title">something</span>(<span class="hljs-params">...</span>) {} <span class="hljs-comment">// setter 方法 </span>
+
+  [<span class="hljs-built_in">Symbol</span>.iterator]() {} <span class="hljs-comment">// 有计算名称（computed name）的方法（此处为 symbol）</span>
+  <span class="hljs-comment">// ...</span>
+}</code></pre>
+<p>技术上来说，<code>MyClass</code> 是一个函数（我们提供作为 <code>constructor</code> 的那个），而 methods、getters 和 settors 都被写入了 <code>MyClass.prototype</code>。</p>
+<p>在下一章，我们将会进一步学习类的相关知识，包括继承和其他功能。</p>

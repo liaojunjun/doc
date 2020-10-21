@@ -1,0 +1,12 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="存款计算器">存款计算器</h1>
+<p>创建一个界面，允许输入银行存款总额以及存款利率，然后计算在给定时间段后，钱会变成多少。</p>
+<p>这是示例：</p>
+<p>[iframe src=&quot;solution&quot; height=&quot;350&quot; border=&quot;1&quot;]</p>
+<p>当输入有变化时，应立即进行处理。</p>
+<p>公式如下：</p>
+<pre><code class="language-js"><span class="hljs-comment">// initial: 总存款的初始值</span>
+<span class="hljs-comment">// interest: 例如 0.05 意味着每年涨幅 5% </span>
+<span class="hljs-comment">// years: 要等待多少年</span>
+<span class="hljs-keyword">let</span> result = <span class="hljs-built_in">Math</span>.round(initial * (<span class="hljs-number">1</span> + interest * years));</code></pre>

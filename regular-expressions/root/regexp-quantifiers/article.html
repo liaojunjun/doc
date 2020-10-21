@@ -1,0 +1,98 @@
+<h1 id="量词--和-n">量词 <code>+,*,?</code> 和 <code>{n}</code></h1>
+<p>假设我们有一个字符串 <code>+7(903)-123-45-67</code>，并且想要找到它包含的所有数字。但与之前不同的是，我们对单个数字不感兴趣，只对全数感兴趣：<code>7, 903, 123, 45, 67</code>。</p>
+<p>数字是一个或多个 <code>\d</code> 的序列。用来形容我们所需要的数量的词被称为<strong>量词</strong>。</p>
+<h2 id="数量-n">数量 {n}</h2>
+<p>最明显的量词便是一对引号间的数字：<code>pattern:{n}</code>。在一个字符（或一个字符类等等）后跟着一个量词，用来指出我们具体需要的数量。</p>
+<p>它有更高级的格式，用一个例子来说明：</p>
+<p>确切的位数：<code>{5}</code>
+: <code>pattern:\d{5}</code> 表示 5 位的数字，如同 <code>pattern:\d\d\d\d\d</code>。</p>
+<pre><code>接下来的例子将会查找一个五位数的数字：
+
+```js run
+alert( &quot;I&#x27;m 12345 years old&quot;.match(/\d{5}/) ); //  &quot;12345&quot;
+```
+
+我们可以添加 `\b` 来排除更多位数的数字：`pattern:\b\d{5}\b`。</code></pre>
+<p>某个范围的位数：<code>{3,5}</code>
+: 我们可以将限制范围的数字放入括号中，来查找位数为 3 至 5 位的数字：<code>pattern:\d{3,5}</code></p>
+<pre><code>```js run
+alert( &quot;I&#x27;m not 12, but 1234 years old&quot;.match(/\d{3,5}/) ); // &quot;1234&quot;
+```
+
+我们可以省略上限。那么正则表达式 `pattern:\d{3,}` 就会查找位数大于或等于 3 的数字：
+
+```js run
+alert( &quot;I&#x27;m not 12, but 345678 years old&quot;.match(/\d{3,}/) ); // &quot;345678&quot;
+```</code></pre>
+<p>对于字符串 <code>+7(903)-123-45-67</code> 来说，我们如果需要一个或多个连续的数字，就使用 <code>pattern:\d{1,}</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;+7(903)-123-45-67&quot;</span>;
+
+<span class="hljs-keyword">let</span> numbers = str.match(<span class="hljs-regexp">/\d{1,}/g</span>);
+
+alert(numbers); <span class="hljs-comment">// 7,903,123,45,67</span></code></pre>
+<h2 id="缩写">缩写</h2>
+<p>大多数常用的量词都可以有缩写：</p>
+<p><code>+</code>
+: 代表“一个或多个”，相当于 <code>{1,}</code>。</p>
+<pre><code>例如，`pattern:\d+` 用来查找所有数字：
+
+```js run
+let str = &quot;+7(903)-123-45-67&quot;;
+
+alert( str.match(/\d+/g) ); // 7,903,123,45,67
+```</code></pre>
+<p><code>?</code>
+: 代表“零个或一个”，相当于 <code>{0,1}</code>。换句话说，它使得符号变得可选。</p>
+<pre><code>例如，模式 `pattern:ou?r` 查找 `match:o`，后跟零个或一个 `match:u`，然后是 `match:r`。
+
+所以他能够在 `subject:color` 中找到 `match:or`，以及在 `subject:colour` 中找到 `match:our`：
+
+```js run
+let str = &quot;Should I write color or colour?&quot;;
+
+alert( str.match(/colou?r/g) ); // color, colour
+```</code></pre>
+<p><code>*</code>
+: 代表着“零个或多个”，相当于 <code>{0,}</code>。也就是说，这个字符可以多次出现或不出现。</p>
+<pre><code>接下来的例子将要寻找一个后跟任意数量的 0 的数字：
+
+```js run
+alert( &quot;100 10 1&quot;.match(/\d0*/g) ); // 100, 10, 1
+```
+
+将它与 `&#x27;+&#x27;`（一个或多个）作比较：
+
+```js run
+alert( &quot;100 10 1&quot;.match(/\d0+/g) ); // 100, 10
+```</code></pre>
+<h2 id="更多示例">更多示例</h2>
+<p>量词是经常被使用的。它们是构成复杂的正则表达式的主要模块之一，我们接着来看更多的例子。</p>
+<p>正则表达式“浮点数”（带浮点的数字）：<code>pattern:\d+\.\d+</code>
+: 实现：
+    <code>js run     alert( &quot;0 1 12.345 7890&quot;.match(/\d+\.\d+/g) ); // 12.345     </code></p>
+<p>正则表达式“打开没有属性的 HTML 标记”，比如 <code>&lt;span&gt;</code> 或 <code>&lt;p&gt;</code>：<code>pattern:/&lt;[a-z]+&gt;/i</code>
+: 实现：</p>
+<pre><code>```js run
+alert( &quot;&lt;body&gt; ... &lt;/body&gt;&quot;.match(/&lt;[a-z]+&gt;/gi) ); // &lt;body&gt;
+```
+
+我们查找字符 `pattern:&#x27;&lt;&#x27;` 后跟一个或多个英文字母，然后是 `pattern:&#x27;&gt;&#x27;`。</code></pre>
+<p>正则表达式“打开没有属性的HTML标记”（改进版）：<code>pattern:/&lt;[a-z][a-z0-9]*&gt;/i</code>
+: 更好的表达式：根据标准，HTML 标记名称可以在除了第一个位置以外的任意一个位置有一个数字，比如 <code>&lt;h1&gt;</code>。</p>
+<pre><code>```js run
+alert( &quot;&lt;h1&gt;Hi!&lt;/h1&gt;&quot;.match(/&lt;[a-z][a-z0-9]*&gt;/gi) ); // &lt;h1&gt;
+```</code></pre>
+<p>正则表达式“打开没有属性的HTML标记”：<code>pattern:/&lt;\/?[a-z][a-z0-9]*&gt;/i</code>
+: 我们在标记前加上了一个可选的斜杆 <code>pattern:/?</code>。必须用一个反斜杠来转义它，否则 JavaScript 就会认为它是这个模式的结束符。</p>
+<pre><code>```js run
+alert( &quot;&lt;h1&gt;Hi!&lt;/h1&gt;&quot;.match(/&lt;\/?[a-z][a-z0-9]*&gt;/gi) ); // &lt;h1&gt;, &lt;/h1&gt;
+```</code></pre>
+<pre><code class="language-smart">我们能够从这些例子中看到一个共同的规则：正则表达式越精确 —— 它就越长且越复杂。
+
+例如，HTML 标记能用一个简单的正则表达式：`pattern:&lt;\w+&gt;`。
+
+因为 `pattern:\w` 代表任意英文字母或数字或 `&#x27;_&#x27;`，这个正则表达式也能够匹配非标注的内容，比如 `match:&lt;_&gt;`。但它要比 `pattern:&lt;[a-z][a-z0-9]*&gt;` 简单很多。
+
+我们能够接受 `pattern:&lt;\w+&gt;` 或者我们需要 `pattern:&lt;[a-z][a-z0-9]*&gt;`？
+
+在现实生活中，两种方式都能接受。取决于我们对于“额外”匹配的宽容程度以及是否难以通过其他方式来过滤掉它们。</code></pre>

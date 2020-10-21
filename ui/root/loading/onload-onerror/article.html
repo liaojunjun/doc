@@ -1,0 +1,128 @@
+<h1 id="资源加载：onload，onerror">资源加载：onload，onerror</h1>
+<p>浏览器允许我们跟踪外部资源的加载 —— 脚本，iframe，图片等。</p>
+<p>这里有两个事件：</p>
+<ul>
+<li><code>onload</code> —— 成功加载，</li>
+<li><code>onerror</code> —— 出现 error。</li>
+</ul>
+<h2 id="加载脚本">加载脚本</h2>
+<p>假设我们需要加载第三方脚本，并调用其中的函数。</p>
+<p>我们可以像这样动态加载它：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> script = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;script&#x27;</span>);
+script.src = <span class="hljs-string">&quot;my.js&quot;</span>;
+
+<span class="hljs-built_in">document</span>.head.append(script);</code></pre>
+<p>……但如何运行在该脚本中声明的函数？我们需要等到该脚本加载完成，之后才能调用它。</p>
+<pre><code class="language-smart">对于我们自己的脚本，可以使用 [JavaScript module](info:modules)，但是它们并未被广泛应用于第三方库。</code></pre>
+<h3 id="scriptonload">script.onload</h3>
+<p>我们的得力助手是 <code>load</code> 事件。它会在脚本加载并执行完成时触发。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> script = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;script&#x27;</span>);
+
+<span class="hljs-comment">// 可以从任意域（domain），加载任意脚本</span>
+script.src = <span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js&quot;</span>
+<span class="hljs-built_in">document</span>.head.append(script);
+
+*!*
+script.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// 该脚本创建了一个辅助函数 &quot;_&quot;</span>
+  alert(_); <span class="hljs-comment">// 该函数可用</span>
+};
+*/!*</code></pre>
+<p>因此，在 <code>onload</code> 中我们可以使用脚本中的变量，运行函数等。</p>
+<p>……如果加载失败怎么办？例如，这里没有这样的脚本（error 404）或者服务器宕机（不可用）。</p>
+<h3 id="scriptonerror">script.onerror</h3>
+<p>发生在脚本加载期间的 error 会被 <code>error</code> 事件跟踪到。</p>
+<p>例如，我们请求一个不存在的脚本：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> script = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;script&#x27;</span>);
+script.src = <span class="hljs-string">&quot;https://example.com/404.js&quot;</span>; <span class="hljs-comment">// 没有这个脚本</span>
+<span class="hljs-built_in">document</span>.head.append(script);
+
+*!*
+script.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">&quot;Error loading &quot;</span> + <span class="hljs-built_in">this</span>.src); <span class="hljs-comment">// Error loading https://example.com/404.js</span>
+};
+*/!*</code></pre>
+<p>请注意，在这里我们无法获取更多 HTTP error 的详细信息。我们不知道 error 是 404 还是 500 或者其他情况。只知道是加载失败了。</p>
+<pre><code class="language-warn">`onload`/`onerror` 事件仅跟踪加载本身。
+
+在脚本处理和执行期间可能发生的 error 超出了这些事件跟踪的范围。也就是说：如果脚本成功加载，则即使脚本中有编程 error，也会触发 `onload` 事件。如果要跟踪脚本 error，可以使用 `window.onerror` 全局处理程序。</code></pre>
+<h2 id="其他资源">其他资源</h2>
+<p><code>load</code> 和 <code>error</code> 事件也适用于其他资源，基本上（basically）适用于具有外部 <code>src</code> 的任何资源。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> img = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;img&#x27;</span>);
+img.src = <span class="hljs-string">&quot;https://js.cx/clipart/train.gif&quot;</span>; <span class="hljs-comment">// (*)</span>
+
+img.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">`Image loaded, size <span class="hljs-subst">${img.width}</span>x<span class="hljs-subst">${img.height}</span>`</span>);
+};
+
+img.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">&quot;Error occurred while loading image&quot;</span>);
+};</code></pre>
+<p>但是有一些注意事项：</p>
+<ul>
+<li>大多数资源在被添加到文档中后，便开始加载。但是 <code>&lt;img&gt;</code> 是个例外。它要等到获得 src <code>(*)</code> 后才开始加载。</li>
+<li>对于 <code>&lt;iframe&gt;</code> 来说，iframe 加载完成时会触发 <code>iframe.onload</code> 事件，无论是成功加载还是出现 error。</li>
+</ul>
+<p>这是出于历史原因。</p>
+<h2 id="跨源策略">跨源策略</h2>
+<p>这里有一条规则：来自一个网站的脚本无法访问其他网站的内容。例如，位于 <code>https://facebook.com</code> 的脚本无法读取位于 <code>https://gmail.com</code> 的用户邮箱。</p>
+<p>或者，更确切地说，一个源（域/端口/协议三者）无法获取另一个源（origin）的内容。因此，即使我们有一个子域，或者仅仅是另一个端口，这都是不同的源，彼此无法相互访问。</p>
+<p>这个规则还影响其他域的资源。</p>
+<p>如果我们使用的是来自其他域的脚本，并且该脚本中存在 error，那么我们无法获取 error 的详细信息。</p>
+<p>例如，让我们使用一个脚本 <code>error.js</code>，该脚本只包含一个（错误）函数调用：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 📁 error.js</span>
+noSuchFunction();</code></pre>
+<p>现在从它所在的同一个网站加载它：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-built_in">window</span>.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message, url, line, col, errorObj</span>) </span>{
+  alert(<span class="hljs-string">`<span class="hljs-subst">${message}</span>\n<span class="hljs-subst">${url}</span>, <span class="hljs-subst">${line}</span>:<span class="hljs-subst">${col}</span>`</span>);
+};
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/article/onload-onerror/crossorigin/error.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>我们可以看到一个很好的 error 报告，就像这样：</p>
+<pre><code>Uncaught ReferenceError: noSuchFunction is not defined
+https://javascript.info/article/onload-onerror/crossorigin/error.js, 1:1</code></pre>
+<p>现在，让我们从另一个域中加载相同的脚本：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-built_in">window</span>.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message, url, line, col, errorObj</span>) </span>{
+  alert(<span class="hljs-string">`<span class="hljs-subst">${message}</span>\n<span class="hljs-subst">${url}</span>, <span class="hljs-subst">${line}</span>:<span class="hljs-subst">${col}</span>`</span>);
+};
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cors.javascript.info/article/onload-onerror/crossorigin/error.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>此报告与上面那个示例中的不同，就像这样：</p>
+<pre><code>Script error.
+, 0:0</code></pre>
+<p>error 的详细信息可能因浏览器而异，但是原理是相同的：有关脚本内部的任何信息（包括 error 堆栈跟踪）都被隐藏了。正是因为它来自于另一个域。</p>
+<p>为什么我们需要 error 的详细信息？</p>
+<p>因为有很多服务（我们也可以构建自己的服务）使用 <code>window.onerror</code> 监听全局 error，保存 error 并提供访问和分析 error 的接口。这很好，因为我们可以看到由用户触发的实际中的 error。但是，如果一个脚本来自于另一个源（origin），那么正如我们刚刚看到的那样，其中没有太多有关 error 的信息。</p>
+<p>对其他类型的资源也执行类似的跨源策略（CORS）。</p>
+<p><strong>要允许跨源访问，<code>&lt;script&gt;</code> 标签需要具有 <code>crossorigin</code> 特性（attribute），并且远程服务器必须提供特殊的 header。</strong></p>
+<p>这里有三个级别的跨源访问：</p>
+<ol>
+<li><strong>无 <code>crossorigin</code> 特性</strong> —— 禁止访问。</li>
+<li><strong><code>crossorigin=&quot;anonymous&quot;</code></strong> —— 如果服务器的响应带有包含 <code>*</code> 或我们的源（origin）的 header <code>Access-Control-Allow-Origin</code>，则允许访问。浏览器不会将授权信息和 cookie 发送到远程服务器。</li>
+<li><strong><code>crossorigin=&quot;use-credentials&quot;</code></strong> —— 如果服务器发送回带有我们的源的 header <code>Access-Control-Allow-Origin</code> 和 <code>Access-Control-Allow-Credentials: true</code>，则允许访问。浏览器会将授权信息和 cookie 发送到远程服务器。</li>
+</ol>
+<pre><code class="language-smart">你可以在 &lt;info:fetch-crossorigin&gt; 一章中了解有关跨源访问的更多信息。这一章描述了用于网络请求的 `fetch` 方法，但策略是完全相同的。
+
+诸如 &quot;cookie&quot; 之类的内容超出了本章的范围，但你可以在 &lt;info:cookie&gt; 一章学习它们。</code></pre>
+<p>在我们的示例中没有任何跨源特性（attribute）。因此，跨源访问被禁止。让我们来添加它吧。</p>
+<p>我们可以在 <code>&quot;anonymous&quot;</code>（不会发送 cookie，需要一个服务器端的 header）和 <code>&quot;use-credentials&quot;</code>（会发送 cookie，需要两个服务器端的 header）之间进行选择。</p>
+<p>如果我们不关心 cookie，那么可以选择 <code>&quot;anonymous&quot;</code>：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-built_in">window</span>.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message, url, line, col, errorObj</span>) </span>{
+  alert(<span class="hljs-string">`<span class="hljs-subst">${message}</span>\n<span class="hljs-subst">${url}</span>, <span class="hljs-subst">${line}</span>:<span class="hljs-subst">${col}</span>`</span>);
+};
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> *!*<span class="hljs-attr">crossorigin</span>=<span class="hljs-string">&quot;anonymous&quot;</span>*/!* <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cors.javascript.info/article/onload-onerror/crossorigin/error.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>现在，假设服务器提供了 <code>Access-Control-Allow-Origin</code> header，一切都正常。我们有了完整的 error 报告。</p>
+<h2 id="总结">总结</h2>
+<p>图片 <code>&lt;img&gt;</code>，外部样式，脚本和其他资源都提供了 <code>load</code> 和 <code>error</code> 事件以跟踪它们的加载：</p>
+<ul>
+<li><code>load</code> 在成功加载时被触发。</li>
+<li><code>error</code> 在加载失败时被触发。</li>
+</ul>
+<p>唯一的例外是 <code>&lt;iframe&gt;</code>：出于历史原因，不管加载成功还是失败，即使页面没有被找到，它都会触发 <code>load</code> 事件。</p>
+<p><code>readystatechange</code> 事件也适用于资源，但很少被使用，因为 <code>load/error</code> 事件更简单。</p>

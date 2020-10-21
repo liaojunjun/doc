@@ -1,0 +1,146 @@
+<h1 id="对象拷贝，引用">对象拷贝，引用</h1>
+<p>对象与原始类型其中一个基本的区别是：对象“通过引用的形式”被存储和拷贝。</p>
+<p>原始类型值：字符串，数字，布尔值 —— 被“作为整体”赋值/拷贝。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> message = <span class="hljs-string">&quot;Hello!&quot;</span>;
+<span class="hljs-keyword">let</span> phrase = message;</code></pre>
+<p>结果我们就有了两个独立的变量，每个都存储着字符串 <code>&quot;Hello!&quot;</code>。</p>
+<p><img src="variable-copy-value.svg" alt=""></p>
+<p>对象不是这样的。</p>
+<p><strong>变量存储的不是对象自身，而是该对象的“内存地址”，换句话说就是一个对该对象的“引用”。</strong></p>
+<p>下面是这个对象的示意图：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+};</code></pre>
+<p><img src="variable-contains-reference.svg" alt=""></p>
+<p>这里，该对象被存储在内存中的某处。而变量 <code>user</code> 保存的是对此处的“引用”。</p>
+<p><strong>当一个对象变量被拷贝 —— 引用则被拷贝，而该对象并没有被复制。</strong></p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
+
+<span class="hljs-keyword">let</span> admin = user; <span class="hljs-comment">// 拷贝引用</span></code></pre>
+<p>现在我们有了两个变量，它们保存的都是对同一个对象的引用：</p>
+<p><img src="variable-copy-reference.svg" alt=""></p>
+<p>我们可以用任何变量来访问该对象并修改它的内容：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span> };
+
+<span class="hljs-keyword">let</span> admin = user;
+
+*!*
+admin.name = <span class="hljs-string">&#x27;Pete&#x27;</span>; <span class="hljs-comment">// 通过 &quot;admin&quot; 引用来修改</span>
+*/!*
+
+alert(*!*user.name*<span class="hljs-regexp">/!*); /</span><span class="hljs-regexp">/ &#x27;Pete&#x27;，修改能通过 &quot;user&quot; 引用看到</span></code></pre>
+<p>上面的例子说明这里只有一个对象。就像我们有个带两把钥匙的锁柜，并使用其中一把钥匙（<code>admin</code>）来打开它。那么，我们如果之后用另外一把钥匙（<code>user</code>），就也能看到所作的改变。</p>
+<h2 id="通过引用来比较">通过引用来比较</h2>
+<p>对于对象来说，普通相等 <code>==</code> 和严格相等 <code>===</code> 是两个作用结果完全一样的运算符。</p>
+<p><strong>仅当两个对象为同一对象时，两者才相等。</strong></p>
+<p>这里两个变量都引用同一个对象，所以它们相等：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = {};
+<span class="hljs-keyword">let</span> b = a; <span class="hljs-comment">// 拷贝引用</span>
+
+alert( a == b ); <span class="hljs-comment">// true，都引用同一对象</span>
+alert( a === b ); <span class="hljs-comment">// true</span></code></pre>
+<p>而这里两个独立的对象则并不相等，即使它们都为空：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = {};
+<span class="hljs-keyword">let</span> b = {}; <span class="hljs-comment">// 两个独立的对象</span>
+
+alert( a == b ); <span class="hljs-comment">// false</span></code></pre>
+<p>对于类似 <code>obj1 &gt; obj2</code> 的比较，或者跟一个原始类型值的比较 <code>obj == 5</code>，对象都会被转换为原始值。我们很快就会学到对象是如何转换的，但是说实话，类似的比较很少出现，通常是在编程错误的时候才会出现这种情况。</p>
+<h2 id="克隆与合并，objectassign">克隆与合并，Object.assign</h2>
+<p>那么，拷贝一个对象变量会又创建一个对相同对象的引用。</p>
+<p>但是，如果我们想要复制一个对象，那该怎么做呢？创建一个独立的拷贝，克隆？</p>
+<p>这也是可行的，但稍微有点困难，因为 JavaScript 没有提供对此操作的内建的方法。实际上，也很少需要这样做。通过引用进行拷贝在大多数情况下已经很好了。</p>
+<p>但是，如果我们真的想要这样做，那么就需要创建一个新对象，并通过遍历现有属性的结构，在原始类型值的层面，将其复制到新对象，以复制已有对象的结构。</p>
+<p>就像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>
+};
+
+*!*
+<span class="hljs-keyword">let</span> clone = {}; <span class="hljs-comment">// 新的空对象</span>
+
+<span class="hljs-comment">// 将 user 中所有的属性拷贝到其中</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> user) {
+  clone[key] = user[key];
+}
+*/!*
+
+<span class="hljs-comment">// 现在 clone 是带有相同内容的完全独立的对象</span>
+clone.name = <span class="hljs-string">&quot;Pete&quot;</span>; <span class="hljs-comment">// 改变了其中的数据</span>
+
+alert( user.name ); <span class="hljs-comment">// 原来的对象中的 name 属性依然是 John</span></code></pre>
+<p>我们也可以使用 <a href="mdn:js/Object/assign">Object.assign</a> 方法来达成同样的效果。</p>
+<p>语法是：</p>
+<pre><code class="language-js"><span class="hljs-built_in">Object</span>.assign(dest, [src1, src2, src3...])</code></pre>
+<ul>
+<li>第一个参数 <code>dest</code> 是指目标对象。</li>
+<li>更后面的参数 <code>src1, ..., srcN</code>（可按需传递多个参数）是源对象。</li>
+<li>该方法将所有源对象的属性拷贝到目标对象 <code>dest</code> 中。换句话说，从第二个开始的所有参数的属性都被拷贝到第一个参数的对象中。</li>
+<li>调用结果返回 <code>dest</code>。</li>
+</ul>
+<p>例如，我们可以用它来合并多个对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
+
+<span class="hljs-keyword">let</span> permissions1 = { <span class="hljs-attr">canView</span>: <span class="hljs-literal">true</span> };
+<span class="hljs-keyword">let</span> permissions2 = { <span class="hljs-attr">canEdit</span>: <span class="hljs-literal">true</span> };
+
+*!*
+<span class="hljs-comment">// 将 permissions1 和 permissions2 中的所有属性都拷贝到 user 中</span>
+<span class="hljs-built_in">Object</span>.assign(user, permissions1, permissions2);
+*/!*
+
+<span class="hljs-comment">// 现在 user = { name: &quot;John&quot;, canView: true, canEdit: true }</span></code></pre>
+<p>如果被拷贝的属性的属性名已经存在，那么它会被覆盖：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
+
+<span class="hljs-built_in">Object</span>.assign(user, { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pete&quot;</span> });
+
+alert(user.name); <span class="hljs-comment">// 现在 user = { name: &quot;Pete&quot; }</span></code></pre>
+<p>我们也可以用 <code>Object.assign</code> 代替 <code>for..in</code> 循环来进行简单克隆：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>
+};
+
+*!*
+<span class="hljs-keyword">let</span> clone = <span class="hljs-built_in">Object</span>.assign({}, user);
+*/!*</code></pre>
+<p>它将 <code>user</code> 中的所有属性拷贝到了一个空对象中，并返回这个新的对象。</p>
+<h2 id="深层克隆">深层克隆</h2>
+<p>到现在为止，我们都假设 <code>user</code> 的所有属性均为原始类型。但属性可以是对其他对象的引用。那应该怎样处理它们呢？</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">sizes</span>: {
+    <span class="hljs-attr">height</span>: <span class="hljs-number">182</span>,
+    <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>
+  }
+};
+
+alert( user.sizes.height ); <span class="hljs-comment">// 182</span></code></pre>
+<p>现在这样拷贝 <code>clone.sizes = user.sizes</code> 已经不足够了，因为 <code>user.sizes</code> 是个对象，它会以引用形式被拷贝。因此 <code>clone</code> 和 <code>user</code> 会共用一个 sizes：</p>
+<p>就像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">sizes</span>: {
+    <span class="hljs-attr">height</span>: <span class="hljs-number">182</span>,
+    <span class="hljs-attr">width</span>: <span class="hljs-number">50</span>
+  }
+};
+
+<span class="hljs-keyword">let</span> clone = <span class="hljs-built_in">Object</span>.assign({}, user);
+
+alert( user.sizes === clone.sizes ); <span class="hljs-comment">// true，同一个对象</span>
+
+<span class="hljs-comment">// user 和 clone 分享同一个 sizes</span>
+user.sizes.width++;       <span class="hljs-comment">// 通过其中一个改变属性值</span>
+alert(clone.sizes.width); <span class="hljs-comment">// 51，能从另外一个看到变更的结果</span></code></pre>
+<p>为了解决此问题，我们应该使用会检查每个 <code>user[key]</code> 的值的克隆循环，如果值是一个对象，那么也要复制它的结构。这就叫“深拷贝”。</p>
+<p>这里有一个标准的深拷贝算法，它不仅能处理上面的例子，还能应对更多复杂的情况，它被称为 <a href="https://html.spec.whatwg.org/multipage/structured-data.html#safe-passing-of-structured-data">结构化拷贝算法</a>。</p>
+<p>我们可以用递归来实现。或者不自己造轮子，使用现成的实现，例如 JavaScript 库 <a href="https://lodash.com">lodash</a> 中的 <a href="https://lodash.com/docs#cloneDeep">_.cloneDeep(obj)</a>。</p>
+<h2 id="总结">总结</h2>
+<p>对象通过引用被赋值和拷贝。换句话说，一个变量存储的不是“对象的值”，而是一个对值的“引用”（内存地址）。因此，拷贝此类变量或将其作为函数参数传递时，所拷贝的是引用，而不是对象本身。</p>
+<p>所有通过被拷贝的引用的操作（如添加、删除属性）都作用在同一个对象上。</p>
+<p>为了创建“真正的拷贝”（一个克隆），我们可以使用 <code>Object.assign</code> 来做所谓的“浅拷贝”（嵌套对象被通过引用进行拷贝）或者使用“深拷贝”函数，例如 <a href="https://lodash.com/docs#cloneDeep">_.cloneDeep(obj)</a>。</p>

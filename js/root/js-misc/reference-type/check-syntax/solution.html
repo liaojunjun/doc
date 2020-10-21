@@ -1,0 +1,21 @@
+<p><strong>错误</strong>!</p>
+<p>试一下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">go</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-built_in">this</span>.name) }
+}
+
+(user.go)() <span class="hljs-comment">// error!</span></code></pre>
+<p>大多数浏览器中的错误信息并不能说明是什么出现了问题。</p>
+<p><strong>出现此错误是因为在 <code>user = {...}</code> 后面漏了一个分号。</strong></p>
+<p>JavaScript 不会在括号 <code>(user.go)()</code> 前自动插入分号，所以解析的代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-attr">go</span>:... }(user.go)()</code></pre>
+<p>然后我们还可以看到，这样的联合表达式在语法上是将对象 <code>{ go: ... }</code> 作为参数为 <code>(user.go)</code> 的函数。这发生在 <code>let user</code> 的同一行上，因此 <code>user</code> 对象是甚至还没有被定义，因此出现了错误。</p>
+<p>如果我们插入该分号，一切都变得正常：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">go</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-built_in">this</span>.name) }
+}*!*;*/!*
+
+(user.go)() <span class="hljs-comment">// John</span></code></pre>
+<p>要注意的是，<code>(user.go)</code> 外边这层括号在这没有任何作用。通常用它们来设置操作的顺序，但在这里点符号 <code>.</code> 总是会先执行，所以并没有什么影响。分号是唯一重要的。</p>

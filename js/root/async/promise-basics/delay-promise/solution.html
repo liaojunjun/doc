@@ -1,0 +1,6 @@
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">delay</span>(<span class="hljs-params">ms</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, ms));
+}
+
+delay(<span class="hljs-number">3000</span>).then(<span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&#x27;runs after 3 seconds&#x27;</span>));</code></pre>
+<p>请注意，在此任务中 <code>resolve</code> 是不带参数调用的。我们不从 <code>delay</code> 中返回任何值，只是确保延迟即可。</p>

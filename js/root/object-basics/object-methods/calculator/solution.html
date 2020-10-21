@@ -1,0 +1,18 @@
+<pre><code class="language-js"><span class="hljs-keyword">let</span> calculator = {
+  sum() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.a + <span class="hljs-built_in">this</span>.b;
+  },
+
+  mul() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.a * <span class="hljs-built_in">this</span>.b;
+  },
+
+  read() {
+    <span class="hljs-built_in">this</span>.a = +prompt(<span class="hljs-string">&#x27;a?&#x27;</span>, <span class="hljs-number">0</span>);
+    <span class="hljs-built_in">this</span>.b = +prompt(<span class="hljs-string">&#x27;b?&#x27;</span>, <span class="hljs-number">0</span>);
+  }
+};
+
+calculator.read();
+alert( calculator.sum() );
+alert( calculator.mul() );</code></pre>

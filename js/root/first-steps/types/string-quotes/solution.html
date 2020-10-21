@@ -1,0 +1,11 @@
+<p>反引号将包装在 <code>${...}</code> 中的表达式嵌入到了字符串。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> name = <span class="hljs-string">&quot;Ilya&quot;</span>;
+
+<span class="hljs-comment">// 表达式为数字 1</span>
+alert( <span class="hljs-string">`hello <span class="hljs-subst">${<span class="hljs-number">1</span>}</span>`</span> ); <span class="hljs-comment">// hello 1</span>
+
+<span class="hljs-comment">// 表达式是一个字符串 &quot;name&quot;</span>
+alert( <span class="hljs-string">`hello <span class="hljs-subst">${<span class="hljs-string">&quot;name&quot;</span>}</span>`</span> ); <span class="hljs-comment">// hello name</span>
+
+<span class="hljs-comment">// 表达式是一个变量，嵌入进去了。</span>
+alert( <span class="hljs-string">`hello <span class="hljs-subst">${name}</span>`</span> ); <span class="hljs-comment">// hello Ilya</span></code></pre>

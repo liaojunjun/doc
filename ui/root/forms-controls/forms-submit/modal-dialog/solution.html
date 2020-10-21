@@ -1,0 +1,14 @@
+<p>可以使用一个覆盖整个窗口的半透明 <code>&lt;div id=&quot;cover-div&quot;&gt;</code> 来实现模态框窗口，如下所示：</p>
+<pre><code class="language-css"><span class="hljs-selector-id">#cover-div</span> {
+  <span class="hljs-attribute">position</span>: fixed;
+  <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">z-index</span>: <span class="hljs-number">9000</span>;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">background-color</span>: gray;
+  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0.3</span>;
+}</code></pre>
+<p>由于 <code>&lt;div&gt;</code> 遮盖了所有的元素，所以它会获取到所有的点击，而它下面的元素就无法获取这些点击了。</p>
+<p>我们也可以设置 <code>body.style.overflowY=&#39;hidden&#39;</code> 来阻止页面的滚动。</p>
+<p>表单元素不应该在 <code>&lt;div&gt;</code> 中，而应在它下边，因为我们不想让表单具有 <code>opacity</code> 属性。</p>

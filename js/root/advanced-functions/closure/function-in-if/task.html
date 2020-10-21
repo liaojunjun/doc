@@ -1,0 +1,15 @@
+<h1 id="if-内的函数">if 内的函数</h1>
+<p>看看下面这个代码。最后一行代码的执行结果是什么？</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> phrase = <span class="hljs-string">&quot;Hello&quot;</span>;
+
+<span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
+  <span class="hljs-keyword">let</span> user = <span class="hljs-string">&quot;John&quot;</span>;
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
+    alert(<span class="hljs-string">`<span class="hljs-subst">${phrase}</span>, <span class="hljs-subst">${user}</span>`</span>);
+  }
+}
+
+*!*
+sayHi();
+*/!*</code></pre>

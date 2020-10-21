@@ -1,0 +1,12 @@
+<p>importance: 3</p>
+<hr>
+<h1 id="数组被拷贝了吗">数组被拷贝了吗?</h1>
+<p>下面的代码将会显示什么？</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fruits = [<span class="hljs-string">&quot;Apples&quot;</span>, <span class="hljs-string">&quot;Pear&quot;</span>, <span class="hljs-string">&quot;Orange&quot;</span>];
+
+<span class="hljs-comment">// 在“副本”里 push 了一个新的值</span>
+<span class="hljs-keyword">let</span> shoppingCart = fruits;
+shoppingCart.push(<span class="hljs-string">&quot;Banana&quot;</span>);
+
+<span class="hljs-comment">// fruits 里面是什么？</span>
+alert( fruits.length ); <span class="hljs-comment">// ?</span></code></pre>

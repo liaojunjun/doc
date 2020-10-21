@@ -1,0 +1,24 @@
+<p>importance: 2</p>
+<hr>
+<h1 id="链式（调用）">链式（调用）</h1>
+<p>有一个可以上下移动的 <code>ladder</code> 对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> ladder = {
+  <span class="hljs-attr">step</span>: <span class="hljs-number">0</span>,
+  up() { 
+    <span class="hljs-built_in">this</span>.step++;
+  },
+  down() { 
+    <span class="hljs-built_in">this</span>.step--;
+  },
+  <span class="hljs-attr">showStep</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// 显示当前的 step</span>
+    alert( <span class="hljs-built_in">this</span>.step );
+  }
+};</code></pre>
+<p>现在，如果我们要按顺序执行几次调用，可以这样做：</p>
+<pre><code class="language-js">ladder.up();
+ladder.up();
+ladder.down();
+ladder.showStep(); <span class="hljs-comment">// 1</span></code></pre>
+<p>修改 <code>up</code>，<code>down</code> 和 <code>showStep</code> 的代码，让调用可以链接，就像这样：</p>
+<pre><code class="language-js">ladder.up().up().down().showStep(); <span class="hljs-comment">// 1</span></code></pre>
+<p>这种方法在 JavaScript 库中被广泛使用。</p>

@@ -1,0 +1,18 @@
+<p>原因是 prompt 以字符串的形式返回用户的输入。</p>
+<p>所以变量的值分别为 <code>&quot;1&quot;</code> 和 <code>&quot;2&quot;</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = <span class="hljs-string">&quot;1&quot;</span>; <span class="hljs-comment">// prompt(&quot;First number?&quot;, 1);</span>
+<span class="hljs-keyword">let</span> b = <span class="hljs-string">&quot;2&quot;</span>; <span class="hljs-comment">// prompt(&quot;Second number?&quot;, 2);</span>
+
+alert(a + b); <span class="hljs-comment">// 12</span></code></pre>
+<p>我们应该做的是，在 <code>+</code> 之前将字符串转换为数字。例如，使用 <code>Number()</code> 或在 <code>prompt</code> 前加 <code>+</code>。</p>
+<p>例如，就在 <code>prompt</code> 之前加 <code>+</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = +prompt(<span class="hljs-string">&quot;First number?&quot;</span>, <span class="hljs-number">1</span>);
+<span class="hljs-keyword">let</span> b = +prompt(<span class="hljs-string">&quot;Second number?&quot;</span>, <span class="hljs-number">2</span>);
+
+alert(a + b); <span class="hljs-comment">// 3</span></code></pre>
+<p>或在 <code>alert</code> 中：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = prompt(<span class="hljs-string">&quot;First number?&quot;</span>, <span class="hljs-number">1</span>);
+<span class="hljs-keyword">let</span> b = prompt(<span class="hljs-string">&quot;Second number?&quot;</span>, <span class="hljs-number">2</span>);
+
+alert(+a + +b); <span class="hljs-comment">// 3</span></code></pre>
+<p>在最新的代码中，同时使用一元和二元的 <code>+</code>。看起来很有趣，不是吗？</p>

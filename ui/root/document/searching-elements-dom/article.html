@@ -1,0 +1,302 @@
+<h1 id="搜索：getelement，queryselector">搜索：getElement<em>，querySelector</em></h1>
+<p>当元素彼此靠得近时，DOM 导航属性（navigation property）非常有用。如果不是，那该怎么办？如何去获取页面上的任意元素？</p>
+<p>还有其他搜索方法。</p>
+<h2 id="documentgetelementbyid-或者只使用-id">document.getElementById 或者只使用 id</h2>
+<p>如果一个元素有 <code>id</code> 特性（attribute），那我们就可以使用 <code>document.getElementById(id)</code> 方法获取该元素，无论它在哪里。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem-content&quot;</span>&gt;</span>Element<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 获取该元素</span>
+*!*
+  <span class="hljs-keyword">let</span> elem = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;elem&#x27;</span>);
+*/!*
+
+  <span class="hljs-comment">// 将该元素背景改为红色</span>
+  elem.style.background = <span class="hljs-string">&#x27;red&#x27;</span>;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>此外，还有一个通过 <code>id</code> 命名的全局变量，它引用了元素：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;*!*elem*/!*&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;*!*elem-content*/!*&quot;</span>&gt;</span>Element<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// elem 是对带有 id=&quot;elem&quot; 的 DOM 元素的引用 </span>
+  elem.style.background = <span class="hljs-string">&#x27;red&#x27;</span>;
+
+  <span class="hljs-comment">// id=&quot;elem-content&quot; 内有连字符，所以它不能成为一个变量</span>
+  <span class="hljs-comment">// ...但是我们可以通过使用方括号 window[&#x27;elem-content&#x27;] 来访问它</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>……除非我们声明一个具有相同名称的 JavaScript 变量，否则它具有优先权：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> elem = <span class="hljs-number">5</span>; <span class="hljs-comment">// 现在 elem 是 5，而不是对 &lt;div id=&quot;elem&quot;&gt; 的引用</span>
+
+  alert(elem); <span class="hljs-comment">// 5</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<pre><code class="language-warn">[在规范中](http://www.whatwg.org/specs/web-apps/current-work/#dom-window-nameditem) 对此行为进行了描述，所以它是一种标准。但这是注意考虑到兼容性才支持的。
+
+浏览器尝试通过混合 JavaScript 和 DOM 的命名空间来帮助我们。对于内联到 HTML 中的简单脚本来说，这还行，但是通常来说，这不是一件好事。因为这可能会造成命名冲突。另外，当人们阅读 JavaScript 代码且看不到对应的 HTML 时，变量的来源就会不明显。
+
+在本教程中，我们只会在元素来源非常明显时，为了简洁起见，才会使用 `id` 直接引用对应的元素。
+
+在实际开发中，`document.getElementById` 是首选方法。</code></pre>
+<p>```smart header=&quot;<code>id</code> 必须是唯一的&quot;
+<code>id</code> 必须是唯一的。在文档中，只能有一个元素带有给定的 <code>id</code>。</p>
+<p>如果有多个元素都带有同一个 <code>id</code>，那么使用它的方法的行为是不可预测的，例如 <code>document.getElementById</code> 可能会随机返回其中一个元素。因此，请遵守规则，保持 <code>id</code> 的唯一性。</p>
+<pre><code>
+```warn header=&quot;只有 `document.getElementById`，没有 `anyElem.getElementById`&quot;
+`getElementById` 方法只能被在 `document` 对象上调用。它会在整个文档中查找给定的 `id`。</code></pre>
+<h2 id="queryselectorall-queryselectorall">querySelectorAll [#querySelectorAll]</h2>
+<p>到目前为止，最通用的方法是 <code>elem.querySelectorAll(css)</code>，它返回 <code>elem</code> 中与给定 CSS 选择器匹配的所有元素。</p>
+<p>在这里，我们查找所有为最后一个子元素的 <code>&lt;li&gt;</code> 元素：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>The<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>has<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>passed<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+*!*
+  <span class="hljs-keyword">let</span> elements = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;ul &gt; li:last-child&#x27;</span>);
+*/!*
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> elem <span class="hljs-keyword">of</span> elements) {
+    alert(elem.innerHTML); <span class="hljs-comment">// &quot;test&quot;, &quot;passed&quot;</span>
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>这个方法确实功能强大，因为可以使用任何 CSS 选择器。</p>
+<pre><code class="language-smart">CSS 选择器的伪类，例如 `:hover` 和 `:active` 也都是被支持的。例如，`document.querySelectorAll(&#x27;:hover&#x27;)` 将会返回鼠标指针现在已经结束的元素的集合（按嵌套顺序：从最外层 `&lt;html&gt;` 到嵌套最多的元素）。</code></pre>
+<h2 id="queryselector-queryselector">querySelector [#querySelector]</h2>
+<p><code>elem.querySelector(css)</code> 调用会返回给定 CSS 选择器的第一个元素。</p>
+<p>换句话说，结果与 <code>elem.querySelectorAll(css)[0]</code> 相同，但是后者会查找 <strong>所有</strong> 元素，并从中选取一个，而 <code>elem.querySelector</code> 只会查找一个。因此它在速度上更快，并且写起来更短。</p>
+<h2 id="matches">matches</h2>
+<p>之前的方法是搜索 DOM。</p>
+<p><a href="http://dom.spec.whatwg.org/#dom-element-matches">elem.matches(css)</a> 不会查找任何内容，它只会检查 <code>elem</code> 是否与给定的 CSS 选择器匹配。它返回 <code>true</code> 或 <code>false</code>。</p>
+<p>当我们遍历元素（例如数组或其他内容）并试图过滤那些我们感兴趣的元素时，这个方法会很有用。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;http://example.com/file.zip&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;http://ya.ru&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 不一定是 document.body.children，还可以是任何集合</span>
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> elem <span class="hljs-keyword">of</span> <span class="hljs-built_in">document</span>.body.children) {
+*!*
+    <span class="hljs-keyword">if</span> (elem.matches(<span class="hljs-string">&#x27;a[href$=&quot;zip&quot;]&#x27;</span>)) {
+*/!*
+      alert(<span class="hljs-string">&quot;The archive reference: &quot;</span> + elem.href );
+    }
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="closest">closest</h2>
+<p>元素的祖先（ancestor）是：父级，父级的父级，它的父级等。祖先们一起组成了从元素到顶端的父级链。</p>
+<p><code>elem.closest(css)</code> 方法会查找与 CSS 选择器匹配的最近的祖先。<code>elem</code> 自己也会被搜索。</p>
+<p>换句话说，方法 <code>closest</code> 在元素中得到了提升，并检查每个父级。如果它与选择器匹配，则停止搜索并返回该祖先。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Contents<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;contents&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;book&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;chapter&quot;</span>&gt;</span>Chapter 1<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;chapter&quot;</span>&gt;</span>Chapter 1<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> chapter = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&#x27;.chapter&#x27;</span>); <span class="hljs-comment">// LI</span>
+
+  alert(chapter.closest(<span class="hljs-string">&#x27;.book&#x27;</span>)); <span class="hljs-comment">// UL</span>
+  alert(chapter.closest(<span class="hljs-string">&#x27;.contents&#x27;</span>)); <span class="hljs-comment">// DIV</span>
+
+  alert(chapter.closest(<span class="hljs-string">&#x27;h1&#x27;</span>)); <span class="hljs-comment">// null（因为 h1 不是祖先）</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="getelementsby">getElementsBy*</h2>
+<p>还有其他通过标签，类等查找节点的方法。</p>
+<p>如今，它们大多已经成为了历史，因为 <code>querySelector</code> 功能更强大，写起来更短。</p>
+<p>因此，这里我们介绍它们只是为了完整起见，而你仍然可以在就脚本中找到这些方法。</p>
+<ul>
+<li><code>elem.getElementsByTagName(tag)</code> 查找具有给定标签的元素，并返回它们的集合。<code>tag</code> 参数也可以是对于“任何标签”的星号 <code>&quot;*&quot;</code>。</li>
+<li><code>elem.getElementsByClassName(className)</code> 返回具有给定CSS类的元素。</li>
+<li><code>document.getElementsByName(name)</code> 返回在文档范围内具有给定 <code>name</code> 特性的元素。很少使用。</li>
+</ul>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 获取文档中的所有 div</span>
+<span class="hljs-keyword">let</span> divs = <span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">&#x27;div&#x27;</span>);</code></pre>
+<p>让我们查找 table 中的所有 <code>input</code> 标签：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;table&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>Your age:<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;age&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;young&quot;</span> <span class="hljs-attr">checked</span>&gt;</span> less than 18
+      <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;age&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;mature&quot;</span>&gt;</span> from 18 to 50
+      <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;age&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;senior&quot;</span>&gt;</span> more than 60
+      <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+*!*
+  <span class="hljs-keyword">let</span> inputs = table.getElementsByTagName(<span class="hljs-string">&#x27;input&#x27;</span>);
+*/!*
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> input <span class="hljs-keyword">of</span> inputs) {
+    alert( input.value + <span class="hljs-string">&#x27;: &#x27;</span> + input.checked );
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>```warn header=&quot;不要忘记字母 <code>\&quot;s\&quot;</code>！&quot;
+新手开发者有时会忘记字符 <code>&quot;s&quot;</code>。也就是说，他们会调用 <code>getElementByTagName</code> 而不是 <code>getElement<b>s</b>ByTagName</code>。</p>
+<p><code>getElementById</code> 中没有字母 <code>&quot;s&quot;</code>，是因为它只返回单个元素。但是 <code>getElementsByTagName</code> 返回的是元素的集合，所以里面有 <code>&quot;s&quot;</code>。</p>
+<pre><code>
+````warn header=&quot;它返回的是一个集合，不是一个元素！&quot;
+新手的另一个普遍的错误是写：
+
+```js
+// 行不通
+document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
+<p>这是行不通的，因为它需要的是一个 input 的 <strong>集合</strong>，并将值赋（assign）给它，而不是赋值给其中的一个元素。</p>
+<p>我们应该遍历集合或通过对应的索引来获取元素，然后赋值，如下所示：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 应该可以运行（如果有 input）</span>
+<span class="hljs-built_in">document</span>.getElementsByTagName(<span class="hljs-string">&#x27;input&#x27;</span>)[<span class="hljs-number">0</span>].value = <span class="hljs-number">5</span>;</code></pre>
+<pre><code>
+查找 `.article` 元素：
+
+```html run height=50
+&lt;form name=&quot;my-form&quot;&gt;
+  &lt;div class=&quot;article&quot;&gt;Article&lt;/div&gt;
+  &lt;div class=&quot;long article&quot;&gt;Long article&lt;/div&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+  // 按 name 特性查找
+  let form = document.getElementsByName(&#x27;my-form&#x27;)[0];
+
+  // 在 form 中按 class 查找
+  let articles = form.getElementsByClassName(&#x27;article&#x27;);
+  alert(articles.length); // 2, found two elements with class &quot;article&quot;
+&lt;/script&gt;
+```
+
+## 实时的集合
+
+所有的 `&quot;getElementsBy*&quot;` 方法都会返回一个 **实时的（live）** 集合。这样的集合始终反映的是文档的当前状态，并且在文档发生更改时会“自动更新”。
+
+在下面的例子中，有两个脚本。
+
+1. 第一个创建了对 `&lt;div&gt;` 的集合的引用。截至目前，它的长度是 `1`。
+2. 第二个脚本在浏览器再遇到一个 `&lt;div&gt;` 时运行，所以它的长度是 `2`。
+
+```html run
+&lt;div&gt;First div&lt;/div&gt;
+
+&lt;script&gt;
+  let divs = document.getElementsByTagName(&#x27;div&#x27;);
+  alert(divs.length); // 1
+&lt;/script&gt;
+
+&lt;div&gt;Second div&lt;/div&gt;
+
+&lt;script&gt;
+*!*
+  alert(divs.length); // 2
+*/!*
+&lt;/script&gt;
+```
+
+相反，`querySelectorAll` 返回的是一个 **静态的** 集合。就像元素的固定数组。
+
+如果我们使用它，那么两个脚本都会输出 `1`：
+
+
+```html run
+&lt;div&gt;First div&lt;/div&gt;
+
+&lt;script&gt;
+  let divs = document.querySelectorAll(&#x27;div&#x27;);
+  alert(divs.length); // 1
+&lt;/script&gt;
+
+&lt;div&gt;Second div&lt;/div&gt;
+
+&lt;script&gt;
+*!*
+  alert(divs.length); // 1
+*/!*
+&lt;/script&gt;
+```
+
+现在我们可以很容易地看到不同之处。在文档中出现新的 `div` 后，静态集合并没有增加。
+
+## 总结
+
+有 6 种主要的方法，可以在 DOM 中搜素节点：
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;td&gt;Method&lt;/td&gt;
+&lt;td&gt;Searches by...&lt;/td&gt;
+&lt;td&gt;Can call on an element?&lt;/td&gt;
+&lt;td&gt;Live?&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;querySelector&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;CSS-selector&lt;/td&gt;
+&lt;td&gt;✔&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;querySelectorAll&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;CSS-selector&lt;/td&gt;
+&lt;td&gt;✔&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;getElementById&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;id&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;getElementsByName&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;name&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;✔&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;getElementsByTagName&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;tag or &lt;code&gt;&#x27;*&#x27;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;✔&lt;/td&gt;
+&lt;td&gt;✔&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;getElementsByClassName&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;class&lt;/td&gt;
+&lt;td&gt;✔&lt;/td&gt;
+&lt;td&gt;✔&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+目前为止，最常用的是 `querySelector` 和 `querySelectorAll`，但是 `getElementBy*` 可能会偶尔有用，或者可以在旧脚本中找到。
+
+此外：
+
+- `elem.matches(css)` 用于检查 `elem` 与给定的 CSS 选择器是否匹配。
+- `elem.closest(css)` 用于查找与给定 CSS 选择器相匹配的最近的祖先。`elem` 本身也会被检查。
+
+让我们在这里提一下另一种用来检查子级与父级之间关系的方法，因为它有时很有用：
+- 如果 `elemB` 在 `elemA` 内（`elemA` 的后代）或者 `elemA==elemB`，`elemA.contains(elemB)` 将返回 true。</code></pre>

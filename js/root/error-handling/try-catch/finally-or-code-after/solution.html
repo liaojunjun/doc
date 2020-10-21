@@ -1,0 +1,37 @@
+<p>当我们看函数中的代码时，差异就变得很明显了。</p>
+<p>如果在这儿有“跳出” <code>try..catch</code> 的行为，那么这两种方式的表现就不同了。</p>
+<p>例如，当 <code>try..catch</code> 中有 <code>return</code> 时。<code>finally</code> 子句会在 <code>try..catch</code> 的 <strong>任意</strong> 出口处起作用，即使是通过 <code>return</code> 语句退出的也是如此：在 <code>try..catch</code> 刚刚执行完成后，但在调用代码获得控制权之前。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">try</span> {
+    alert(<span class="hljs-string">&#x27;start&#x27;</span>);
+*!*
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;result&quot;</span>;
+*/!*
+  } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-comment">/// ...</span>
+  } <span class="hljs-keyword">finally</span> {
+    alert(<span class="hljs-string">&#x27;cleanup!&#x27;</span>);
+  }
+}
+
+f(); <span class="hljs-comment">// cleanup!</span></code></pre>
+<p>……或者当有 <code>throw</code> 时，如下所示：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">try</span> {
+    alert(<span class="hljs-string">&#x27;start&#x27;</span>);
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;an error&quot;</span>);
+  } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-comment">// ...</span>
+    <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;can&#x27;t handle the error&quot;</span>) {
+*!*
+      <span class="hljs-keyword">throw</span> e;
+*/!*
+    }
+
+  } <span class="hljs-keyword">finally</span> {
+    alert(<span class="hljs-string">&#x27;cleanup!&#x27;</span>)
+  }
+}
+
+f(); <span class="hljs-comment">// cleanup!</span></code></pre>
+<p>正是这里的 <code>finally</code> 保证了 cleanup。如果我们只是将代码放在函数 <code>f</code> 的末尾，则在这些情况下它不会运行。</p>

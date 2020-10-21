@@ -1,0 +1,265 @@
+<h1 id="自定义-error，扩展-error">自定义 Error，扩展 Error</h1>
+<p>当我们在开发某些东西时，经常会需要我们自己的 error 类来反映在我们的任务中可能出错的特定任务。对于网络操作中的 error，我们需要 <code>HttpError</code>，对于数据库操作中的 error，我们需要 <code>DbError</code>，对于搜索操作中的 error，我们需要 <code>NotFoundError</code>，等等。</p>
+<p>我们自定义的 error 应该支持基本的 error 的属性，例如 <code>message</code>，<code>name</code>，并且最好还有 <code>stack</code>。但是它们也可能会有其他属于它们自己的属性，例如，<code>HttpError</code> 对象可能会有一个 <code>statusCode</code> 属性，属性值可能为 <code>404</code>、<code>403</code> 或 <code>500</code> 等。</p>
+<p>JavaScript 允许将 <code>throw</code> 与任何参数一起使用，所以从技术上讲，我们自定义的 error 不需要从 <code>Error</code> 中继承。但是，如果我们继承，那么就可以使用 <code>obj instanceof Error</code> 来识别 error 对象。因此，最好继承它。</p>
+<p>随着虽开发的应用程序的增长，我们自己的 error 自然会形成形成一个层次结构（hierarchy）。例如，<code>HttpTimeoutError</code> 可能继承自 <code>HttpError</code>，等等。</p>
+<h2 id="扩展-error">扩展 Error</h2>
+<p>例如，让我们考虑一个函数 <code>readUser(json)</code>，该函数应该读取带有用户数据的 JSON。</p>
+<p>这里是一个可用的 <code>json</code> 的例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> json = <span class="hljs-string">`{ &quot;name&quot;: &quot;John&quot;, &quot;age&quot;: 30 }`</span>;</code></pre>
+<p>在函数内部，我们将使用 <code>JSON.parse</code>。如果它接收到格式不正确的 <code>json</code>，就会抛出 <code>SyntaxError</code>。但是，即使 <code>json</code> 在语法上是正确的，也不意味着该数据是有效的用户数据，对吧？因为它可能丢失了某些必要的数据。例如，对用户来说，必不可少的是 <code>name</code> 和 <code>age</code> 属性。</p>
+<p>我们的函数 <code>readUser(json)</code> 不仅会读取 JSON，还会检查（“验证”）数据。如果没有所必须的字段，或者（字段的）格式错误，那么就会出现一个 error。并且这些并不是 <code>SyntaxError</code>，因为这些数据在语法上是正确的，这些是另一种错误。我们称之为 <code>ValidationError</code>，并为之创建一个类。这种类型的错误也应该包含有关违规字段的信息。</p>
+<p>我们的 <code>ValidationError</code> 类应该继承自内建的 <code>Error</code> 类。</p>
+<p><code>Error</code> 类是内建的，但这是其近似代码，所以我们可以了解我们要扩展的内容：</p>
+<pre><code class="language-js"><span class="hljs-comment">// JavaScript 自身定义的内建的 Error 类的“伪代码”</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Error</span> </span>{
+  <span class="hljs-keyword">constructor</span>(message) {
+    <span class="hljs-built_in">this</span>.message = message;
+    <span class="hljs-built_in">this</span>.name = <span class="hljs-string">&quot;Error&quot;</span>; <span class="hljs-comment">// (不同的内建 error 类有不同的名字)</span>
+    <span class="hljs-built_in">this</span>.stack = <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">call</span> <span class="hljs-attr">stack</span>&gt;</span>; // 非标准的，但大多数环境都支持它
+  }
+}</span></code></pre>
+<p>现在让我们从其中继承 <code>ValidationError</code>，并尝试进行运行：</p>
+<pre><code class="language-js">*!*
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ValidationError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span> </span>{
+*/!*
+  <span class="hljs-keyword">constructor</span>(message) {
+    <span class="hljs-built_in">super</span>(message); <span class="hljs-comment">// (1)</span>
+    <span class="hljs-built_in">this</span>.name = <span class="hljs-string">&quot;ValidationError&quot;</span>; <span class="hljs-comment">// (2)</span>
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">test</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ValidationError(<span class="hljs-string">&quot;Whoops!&quot;</span>);
+}
+
+<span class="hljs-keyword">try</span> {
+  test();
+} <span class="hljs-keyword">catch</span>(err) {
+  alert(err.message); <span class="hljs-comment">// Whoops!</span>
+  alert(err.name); <span class="hljs-comment">// ValidationError</span>
+  alert(err.stack); <span class="hljs-comment">// 一个嵌套调用的列表，每个调用都有对应的行号</span>
+}</code></pre>
+<p>请注意：在 <code>(1)</code> 行中我们调用了父类的 constructor。JavaScript 要求我们在子类的 constructor 中调用 <code>super</code>，所以这是必须的。父类的 constructor 设置了 <code>message</code> 属性。</p>
+<p>父类的 constructor 还将 <code>name</code> 属性的值设置为了 <code>&quot;Error&quot;</code>，所以在 <code>(2)</code> 行中，我们将其重置为了右边的值。</p>
+<p>让我们尝试在 <code>readUser(json)</code> 中使用它吧：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ValidationError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span> </span>{
+  <span class="hljs-keyword">constructor</span>(message) {
+    <span class="hljs-built_in">super</span>(message);
+    <span class="hljs-built_in">this</span>.name = <span class="hljs-string">&quot;ValidationError&quot;</span>;
+  }
+}
+
+<span class="hljs-comment">// 用法</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readUser</span>(<span class="hljs-params">json</span>) </span>{
+  <span class="hljs-keyword">let</span> user = <span class="hljs-built_in">JSON</span>.parse(json);
+
+  <span class="hljs-keyword">if</span> (!user.age) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ValidationError(<span class="hljs-string">&quot;No field: age&quot;</span>);
+  }
+  <span class="hljs-keyword">if</span> (!user.name) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ValidationError(<span class="hljs-string">&quot;No field: name&quot;</span>);
+  }
+
+  <span class="hljs-keyword">return</span> user;
+}
+
+<span class="hljs-comment">// try..catch 的工作示例</span>
+
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">let</span> user = readUser(<span class="hljs-string">&#x27;{ &quot;age&quot;: 25 }&#x27;</span>);
+} <span class="hljs-keyword">catch</span> (err) {
+  <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> ValidationError) {
+*!*
+    alert(<span class="hljs-string">&quot;Invalid data: &quot;</span> + err.message); <span class="hljs-comment">// Invalid data: No field: name</span>
+*/!*
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span>) { <span class="hljs-comment">// (*)</span>
+    alert(<span class="hljs-string">&quot;JSON Syntax Error: &quot;</span> + err.message);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">throw</span> err; <span class="hljs-comment">// 未知的 error，再次抛出 (**)</span>
+  }
+}</code></pre>
+<p>上面代码中的 <code>try..catch</code> 块既处理我们的 <code>ValidationError</code> 又处理来自 <code>JSON.parse</code> 的内建 <code>SyntaxError</code>。</p>
+<p>请看一下我们是如何使用 <code>instanceof</code> 来检查 <code>(*)</code> 行中的特定错误类型的。</p>
+<p>我们也可以看看 <code>err.name</code>，像这样：</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...</span>
+<span class="hljs-comment">// instead of (err instanceof SyntaxError)</span>
+} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (err.name == <span class="hljs-string">&quot;SyntaxError&quot;</span>) { <span class="hljs-comment">// (*)</span>
+<span class="hljs-comment">// ...</span></code></pre>
+<p>使用 <code>instanceof</code> 的版本要好得多，因为将来我们会对 <code>ValidationError</code> 进行扩展，创建它的子类型，例如 <code>PropertyRequiredError</code>。而 <code>instanceof</code> 检查对于新的继承类也适用。所以这是面向未来的做法。</p>
+<p>还有一点很重要，在 <code>catch</code> 遇到了未知的错误，它会在 <code>(**)</code> 行将该错误再次抛出。<code>catch</code> 块只知道如何处理 validation 错误和语法错误，而其他错误（由于代码中的错字或其他未知的错误）应该被扔出（fall through）。</p>
+<h2 id="深入继承">深入继承</h2>
+<p><code>ValidationError</code> 类是非常通用的。很多东西都可能出错。对象的属性可能缺失或者属性可能有格式错误（例如 <code>age</code> 属性的值为一个字符串）。让我们针对缺少属性的错误来制作一个更具体的 <code>PropertyRequiredError</code> 类。它将携带有关缺少的属性的相关信息。</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ValidationError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span> </span>{
+  <span class="hljs-keyword">constructor</span>(message) {
+    <span class="hljs-built_in">super</span>(message);
+    <span class="hljs-built_in">this</span>.name = <span class="hljs-string">&quot;ValidationError&quot;</span>;
+  }
+}
+
+*!*
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropertyRequiredError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ValidationError</span> </span>{
+  <span class="hljs-keyword">constructor</span>(property) {
+    <span class="hljs-built_in">super</span>(<span class="hljs-string">&quot;No property: &quot;</span> + property);
+    <span class="hljs-built_in">this</span>.name = <span class="hljs-string">&quot;PropertyRequiredError&quot;</span>;
+    <span class="hljs-built_in">this</span>.property = property;
+  }
+}
+*/!*
+
+<span class="hljs-comment">// 用法</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readUser</span>(<span class="hljs-params">json</span>) </span>{
+  <span class="hljs-keyword">let</span> user = <span class="hljs-built_in">JSON</span>.parse(json);
+
+  <span class="hljs-keyword">if</span> (!user.age) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PropertyRequiredError(<span class="hljs-string">&quot;age&quot;</span>);
+  }
+  <span class="hljs-keyword">if</span> (!user.name) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PropertyRequiredError(<span class="hljs-string">&quot;name&quot;</span>);
+  }
+
+  <span class="hljs-keyword">return</span> user;
+}
+
+<span class="hljs-comment">// try..catch 的工作示例</span>
+
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">let</span> user = readUser(<span class="hljs-string">&#x27;{ &quot;age&quot;: 25 }&#x27;</span>);
+} <span class="hljs-keyword">catch</span> (err) {
+  <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> ValidationError) {
+*!*
+    alert(<span class="hljs-string">&quot;Invalid data: &quot;</span> + err.message); <span class="hljs-comment">// Invalid data: No property: name</span>
+    alert(err.name); <span class="hljs-comment">// PropertyRequiredError</span>
+    alert(err.property); <span class="hljs-comment">// name</span>
+*/!*
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span>) {
+    alert(<span class="hljs-string">&quot;JSON Syntax Error: &quot;</span> + err.message);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">throw</span> err; <span class="hljs-comment">// 为止 error，将其再次抛出</span>
+  }
+}</code></pre>
+<p>这个新的类 <code>PropertyRequiredError</code> 使用起来很简单：我们只需要传递属性名：<code>new PropertyRequiredError(property)</code>。人类可读的 <code>message</code> 是由 constructor 生成的。</p>
+<p>请注意，在 <code>PropertyRequiredError</code> constructor 中的 <code>this.name</code> 是通过手动重新赋值的。这可能会变得有些乏味 — 在每个自定义 error 类中都要进行 <code>this.name = &lt;class name&gt;</code> 赋值操作。我们可以通过创建自己的“基础错误（basic error）”类来避免这种情况，该类进行了 <code>this.name = this.constructor.name</code> 赋值。然后让所有我们自定义的 error 都从这个“基础错误”类进行继承。</p>
+<p>让我们称之为 <code>MyError</code>。</p>
+<p>这是带有 <code>MyError</code> 以及其他自定义的 error 类的代码，已进行简化：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span> </span>{
+  <span class="hljs-keyword">constructor</span>(message) {
+    <span class="hljs-built_in">super</span>(message);
+*!*
+    <span class="hljs-built_in">this</span>.name = <span class="hljs-built_in">this</span>.constructor.name;
+*/!*
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ValidationError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">MyError</span> </span>{ }
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropertyRequiredError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ValidationError</span> </span>{
+  <span class="hljs-keyword">constructor</span>(property) {
+    <span class="hljs-built_in">super</span>(<span class="hljs-string">&quot;No property: &quot;</span> + property);
+    <span class="hljs-built_in">this</span>.property = property;
+  }
+}
+
+<span class="hljs-comment">// name 是对的</span>
+alert( <span class="hljs-keyword">new</span> PropertyRequiredError(<span class="hljs-string">&quot;field&quot;</span>).name ); <span class="hljs-comment">// PropertyRequiredError</span></code></pre>
+<p>现在自定义的 error 短了很多，特别是 <code>ValidationError</code>，因为我们摆脱了 constructor 中的 <code>&quot;this.name = ...&quot;</code> 这一行。</p>
+<h2 id="包装异常">包装异常</h2>
+<p>在上面代码中的函数 <code>readUser</code> 的目的就是“读取用户数据”。在这个过程中可能会出现不同类型的 error。目前我们有了 <code>SyntaxError</code> 和 <code>ValidationError</code>，但是将来，函数 <code>readUser</code> 可能会不断壮大，并可能会产生其他类型的 error。</p>
+<p>调用 <code>readUser</code> 的代码应该处理这些 error。现在它在 <code>catch</code> 块中使用了多个 <code>if</code> 语句来检查 error 类，处理已知的 error，并再次抛出未知的 error。</p>
+<p>该方案是这样的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">try</span> {
+  ...
+  readUser()  <span class="hljs-comment">// 潜在的 error 源</span>
+  ...
+} <span class="hljs-keyword">catch</span> (err) {
+  <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> ValidationError) {
+    <span class="hljs-comment">// 处理 validation error</span>
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span>) {
+    <span class="hljs-comment">// 处理 syntax error</span>
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">throw</span> err; <span class="hljs-comment">// 未知 error，再次抛出它</span>
+  }
+}</code></pre>
+<p>在上面的代码中，我们可以看到两种类型的 error，但是可以有更多。</p>
+<p>如果 <code>readUser</code> 函数会产生多种 error，那么我们应该问问自己：我们是否真的想每次都一一检查所有的 error 类型？</p>
+<p>通常答案是 &quot;No&quot;：我们希望能够“比它高一个级别”。我们只想知道这里是否是“数据读取异常” — 为什么发生了这样的 error 通常是无关紧要的（error 信息描述了它）。或者，如果我们有一种方法能够获取 error 的详细信息那就更好了，但前提是我们需要。</p>
+<p>我们所描述的这项技术被称为“包装异常”。</p>
+<ol>
+<li>我们将创建一个新的类 <code>ReadError</code> 来表示一般的“数据读取” error。</li>
+<li>函数<code>readUser</code> 将捕获内部发生的数据读取 error，例如 <code>ValidationError</code> 和 <code>SyntaxError</code>，并生成一个 <code>ReadError</code> 来进行替代。</li>
+<li>对象 <code>ReadError</code> 会把对原始 error 的引用保存在其 <code>cause</code> 属性中。</li>
+</ol>
+<p>之后，调用 <code>readUser</code> 的代码只需要检查 <code>ReadError</code>，而不必检查每种数据读取 error。并且，如果需要更多 error 细节，那么可以检查 <code>readUser</code> 的 <code>cause</code> 属性。</p>
+<p>下面的代码定义了 <code>ReadError</code>，并在 <code>readUser</code> 和 <code>try..catch</code> 中演示了其用法：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReadError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span> </span>{
+  <span class="hljs-keyword">constructor</span>(message, cause) {
+    <span class="hljs-built_in">super</span>(message);
+    <span class="hljs-built_in">this</span>.cause = cause;
+    <span class="hljs-built_in">this</span>.name = <span class="hljs-string">&#x27;ReadError&#x27;</span>;
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ValidationError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span> </span>{ <span class="hljs-comment">/*...*/</span> }
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropertyRequiredError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ValidationError</span> </span>{ <span class="hljs-comment">/* ... */</span> }
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">validateUser</span>(<span class="hljs-params">user</span>) </span>{
+  <span class="hljs-keyword">if</span> (!user.age) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PropertyRequiredError(<span class="hljs-string">&quot;age&quot;</span>);
+  }
+
+  <span class="hljs-keyword">if</span> (!user.name) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PropertyRequiredError(<span class="hljs-string">&quot;name&quot;</span>);
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readUser</span>(<span class="hljs-params">json</span>) </span>{
+  <span class="hljs-keyword">let</span> user;
+
+  <span class="hljs-keyword">try</span> {
+    user = <span class="hljs-built_in">JSON</span>.parse(json);
+  } <span class="hljs-keyword">catch</span> (err) {
+*!*
+    <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span>) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ReadError(<span class="hljs-string">&quot;Syntax Error&quot;</span>, err);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">throw</span> err;
+    }
+*/!*
+  }
+
+  <span class="hljs-keyword">try</span> {
+    validateUser(user);
+  } <span class="hljs-keyword">catch</span> (err) {
+*!*
+    <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> ValidationError) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ReadError(<span class="hljs-string">&quot;Validation Error&quot;</span>, err);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">throw</span> err;
+    }
+*/!*
+  }
+
+}
+
+<span class="hljs-keyword">try</span> {
+  readUser(<span class="hljs-string">&#x27;{bad json}&#x27;</span>);
+} <span class="hljs-keyword">catch</span> (e) {
+  <span class="hljs-keyword">if</span> (e <span class="hljs-keyword">instanceof</span> ReadError) {
+*!*
+    alert(e);
+    <span class="hljs-comment">// Original error: SyntaxError: Unexpected token b in JSON at position 1</span>
+    alert(<span class="hljs-string">&quot;Original error: &quot;</span> + e.cause);
+*/!*
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">throw</span> e;
+  }
+}</code></pre>
+<p>在上面的代码中，<code>readUser</code> 正如所描述的那样正常工作 — 捕获语法和验证（validation）错误，并抛出 <code>ReadError</code>（对于未知错误将照常再次抛出）。</p>
+<p>所以外部代码检查 <code>instanceof ReadError</code>，并且它的确是。不必列出所有可能的 error 类型。</p>
+<p>这种方法被称为“包装异常（wrapping exceptions）”，因为我们将“低级别”的异常“包装”到了更抽象的 <code>ReadError</code> 中。它被广泛应用于面向对象的编程中。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>我们可以正常地从 <code>Error</code> 和其他内建的 error 类中进行继承，。我们只需要注意 <code>name</code> 属性以及不要忘了调用 <code>super</code>。</li>
+<li>我们可以使用 <code>instanceof</code> 来检查特定的 error。但有时我们有来自第三方库的 error 对象，并且在这儿没有简单的方法来获取它的类。那么可以将 <code>name</code> 属性用于这一类的检查。</li>
+<li>包装异常是一项广泛应用的技术：用于处理低级别异常并创建高级别 error 而不是各种低级别 error 的函数。在上面的示例中，低级别异常有时会成为该对象的属性，例如 <code>err.cause</code>，但这不是严格要求的。</li>
+</ul>

@@ -1,0 +1,58 @@
+<h1 id="扩展内建类">扩展内建类</h1>
+<p>内建的类，例如 <code>Array</code>，<code>Map</code> 等也都是可以扩展的（extendable）。</p>
+<p>例如，这里有一个继承自原生 <code>Array</code> 的类 <code>PowerArray</code>： </p>
+<pre><code class="language-js"><span class="hljs-comment">// 给 PowerArray 新增了一个方法（可以增加更多）</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PowerArray</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{
+  isEmpty() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.length === <span class="hljs-number">0</span>;
+  }
+}
+
+<span class="hljs-keyword">let</span> arr = <span class="hljs-keyword">new</span> PowerArray(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">10</span>, <span class="hljs-number">50</span>);
+alert(arr.isEmpty()); <span class="hljs-comment">// false</span>
+
+<span class="hljs-keyword">let</span> filteredArr = arr.filter(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> item &gt;= <span class="hljs-number">10</span>);
+alert(filteredArr); <span class="hljs-comment">// 10, 50</span>
+alert(filteredArr.isEmpty()); <span class="hljs-comment">// false</span></code></pre>
+<p>请注意一个非常有趣的事儿。内建的方法例如 <code>filter</code>，<code>map</code> 等 — 返回的正是子类 <code>PowerArray</code> 的新对象。它们内部使用了对象的 <code>constructor</code> 属性来实现这一功能。</p>
+<p>在上面的例子中，</p>
+<pre><code class="language-js">arr.constructor === PowerArray</code></pre>
+<p>当 <code>arr.filter()</code> 被调用时，它的内部使用的是 <code>arr.constructor</code> 来创建新的结果数组，而不是使用原生的 <code>Array</code>。这真的很酷，因为我们可以在结果数组上继续使用 <code>PowerArray</code> 的方法。</p>
+<p>甚至，我们可以定制这种行为。</p>
+<p>我们可以给这个类添加一个特殊的静态 getter <code>Symbol.species</code>。如果存在，则应返回 JavaScript 在内部用来在 <code>map</code> 和 <code>filter</code> 等方法中创建新实体的 <code>constructor</code>。</p>
+<p>如果我们希望像 <code>map</code> 或 <code>filter</code> 这样的内建方法返回常规数组，我们可以在 <code>Symbol.species</code> 中返回 <code>Array</code>，就像这样：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PowerArray</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Array</span> </span>{
+  isEmpty() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.length === <span class="hljs-number">0</span>;
+  }
+
+*!*
+  <span class="hljs-comment">// 内建方法将使用这个作为 constructor</span>
+  <span class="hljs-keyword">static</span> get [<span class="hljs-built_in">Symbol</span>.species]() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>;
+  }
+*/!*
+}
+
+<span class="hljs-keyword">let</span> arr = <span class="hljs-keyword">new</span> PowerArray(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">10</span>, <span class="hljs-number">50</span>);
+alert(arr.isEmpty()); <span class="hljs-comment">// false</span>
+
+<span class="hljs-comment">// filter 使用 arr.constructor[Symbol.species] 作为 constructor 创建新数组</span>
+<span class="hljs-keyword">let</span> filteredArr = arr.filter(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> item &gt;= <span class="hljs-number">10</span>);
+
+*!*
+<span class="hljs-comment">// filteredArr 不是 PowerArray，而是 Array</span>
+*/!*
+alert(filteredArr.isEmpty()); <span class="hljs-comment">// Error: filteredArr.isEmpty is not a function</span></code></pre>
+<p>正如你所看到的，现在 <code>.filter</code> 返回 <code>Array</code>。所以扩展的功能不再传递。</p>
+<pre><code class="language-smart">其他集合，例如 `Map` 和 `Set` 的工作方式类似。它们也使用 `Symbol.species`。</code></pre>
+<h3 id="内建类没有静态方法继承">内建类没有静态方法继承</h3>
+<p>内建对象有它们自己的静态方法，例如 <code>Object.keys</code>，<code>Array.isArray</code> 等。</p>
+<p>如我们所知道的，原生的类互相扩展。例如，<code>Array</code> 扩展自 <code>Object</code>。</p>
+<p>通常，当一个类扩展另一个类时，静态方法和非静态方法都会被继承。这已经在 <a href="info:static-properties-methods#statics-and-inheritance"></a> 中详细地解释过了。</p>
+<p>但内建类却是一个例外。它们相互间不继承静态方法。</p>
+<p>例如，<code>Array</code> 和 <code>Date</code> 都继承自 <code>Object</code>，所以它们的实例都有来自 <code>Object.prototype</code> 的方法。但 <code>Array.[[Prototype]]</code> 并不指向 <code>Object</code>，所以它们没有例如 <code>Array.keys()</code>（或 <code>Date.keys()</code>）这些静态方法。</p>
+<p>这里有一张 <code>Date</code> 和 <code>Object</code> 的结构关系图：</p>
+<p><img src="object-date-inheritance.svg" alt=""></p>
+<p>正如你所看到的，<code>Date</code> 和 <code>Object</code> 之间没有连结。它们是独立的，只有 <code>Date.prototype</code> 继承自 <code>Object.prototype</code>，仅此而已。</p>
+<p>与我们所了解的通过 <code>extends</code> 获得的继承相比，这是内建对象之间继承的一个重要区别。</p>

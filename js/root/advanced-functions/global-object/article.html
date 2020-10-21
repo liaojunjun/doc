@@ -1,0 +1,58 @@
+<h1 id="全局对象">全局对象</h1>
+<p>全局对象提供可在任何地方使用的变量和函数。默认情况下，这些全局变量内置于语言或环境中。</p>
+<p>在浏览器中，它的名字是 &quot;window&quot;，对 Node.js 而言，它的名字是 &quot;global&quot;，其它环境可能用的是别的名字。</p>
+<p>最近，<code>globalThis</code> 被作为全局对象的标准名称加入到了 JavaScript 中，所有环境都应该支持该名称。在有些浏览器中，即 non-Chromium Edge，尚不支持 <code>globalThis</code>，但可以很容易地对其进行填充（polyfilled）。</p>
+<p>假设我们的环境是浏览器，我们将在这儿使用 &quot;window&quot;。如果你的脚本可能会用来在其他环境中运行，则最好使用 <code>globalThis</code>。</p>
+<p>全局对象的所有属性都可以被直接访问：</p>
+<pre><code class="language-js">alert(<span class="hljs-string">&quot;Hello&quot;</span>);
+<span class="hljs-comment">// 等同于</span>
+<span class="hljs-built_in">window</span>.alert(<span class="hljs-string">&quot;Hello&quot;</span>);</code></pre>
+<p>在浏览器中，使用 <code>var</code>（而不是 <code>let/const</code>！）声明的全局函数和变量会成为全局对象的属性。</p>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> gVar = <span class="hljs-number">5</span>;
+
+alert(<span class="hljs-built_in">window</span>.gVar); <span class="hljs-comment">// 5（成为了全局对象的属性）</span></code></pre>
+<p>请不要依赖它！这种行为是出于兼容性而存在的。现代脚本通过使用 <a href="info:modules">JavaScript modules</a> 来避免这种情况的发生。</p>
+<p>如果我们使用 <code>let</code>，就不会发生这种情况：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> gLet = <span class="hljs-number">5</span>;
+
+alert(<span class="hljs-built_in">window</span>.gLet); <span class="hljs-comment">// undefined（不会成为全局对象的属性）</span></code></pre>
+<p>如果一个值非常重要，以至于你想使它在全局范围内可用，那么可以直接将其作为属性写入：</p>
+<pre><code class="language-js">*!*
+<span class="hljs-comment">// 将当前用户信息全局化，以允许所有脚本访问它</span>
+<span class="hljs-built_in">window</span>.currentUser = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+};
+*/!*
+
+<span class="hljs-comment">// 代码中的另一个位置</span>
+alert(currentUser.name);  <span class="hljs-comment">// John</span>
+
+<span class="hljs-comment">// 或者，如果我们有一个名为 &quot;currentUser&quot; 的局部变量</span>
+<span class="hljs-comment">// 从 window 显示地获取它（这是安全的！）</span>
+alert(<span class="hljs-built_in">window</span>.currentUser.name); <span class="hljs-comment">// John</span></code></pre>
+<p>也就是说，一般不建议使用全局变量。全局变量应尽可能的少。与使用外部变量或全局变量相比，函数获取“输入”变量并产生特定“输出”的代码设计更加清晰，不易出错且更易于测试。</p>
+<h2 id="使用-polyfills">使用 polyfills</h2>
+<p>我们使用全局对象来测试对现代语言功能的支持。</p>
+<p>例如，测试是否存在内建的 <code>Promise</code> 对象（在版本特别旧的浏览器中不存在）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (!<span class="hljs-built_in">window</span>.Promise) {
+  alert(<span class="hljs-string">&quot;Your browser is really old!&quot;</span>);
+}</code></pre>
+<p>如果没有（例如，我们使用的是旧版浏览器），那么我们可以创建 &quot;polyfills&quot;：添加环境不支持但在现代标准中存在的功能。</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (!<span class="hljs-built_in">window</span>.Promise) {
+  <span class="hljs-built_in">window</span>.Promise = ... <span class="hljs-comment">// 定制实现现代语言功能</span>
+}</code></pre>
+<h2 id="总结">总结</h2>
+<ul>
+<li><p>全局对象包含应该在任何位置都可见的变量。</p>
+<p>  其中包括 JavaScript 的内建方法，例如 &quot;Array&quot; 和环境特定（environment-specific）的值，例如 <code>window.innerHeight</code> — 浏览器中的窗口高度。</p>
+</li>
+<li><p>全局对象有一个通用名称 <code>globalThis</code>。</p>
+<p>  ……但是更常见的是使用“老式”的环境特定（environment-specific）的名字，例如 <code>window</code>（浏览器）和 <code>global</code>（Node.js）。由于 <code>globalThis</code> 是最近的提议，因此在 non-Chromium Edge 中不受支持（但可以进行 polyfills）。</p>
+</li>
+<li><p>仅当值对于我们的项目而言确实是全局的时，才应将其存储在全局对象中。并保持其数量最少。</p>
+</li>
+<li><p>在浏览器中，除非我们使用 <a href="info:modules">modules</a>，否则使用 <code>var</code> 声明的全局函数和变量会成为全局对象的属性。</p>
+</li>
+<li><p>为了使我们的代码面向未来并更易于理解，我们应该使用直接的方式访问全局对象的属性，如 <code>window.x</code>。</p>
+</li>
+</ul>

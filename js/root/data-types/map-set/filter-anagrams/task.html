@@ -1,0 +1,14 @@
+<p>importance: 4</p>
+<hr>
+<h1 id="过滤字谜（anagrams）">过滤字谜（anagrams）</h1>
+<p><a href="https://en.wikipedia.org/wiki/Anagram">Anagrams</a> 是具有相同数量相同字母但是顺序不同的单词。</p>
+<p>例如：</p>
+<pre><code>nap - pan
+ear - are - era
+cheaters - hectares - teachers</code></pre>
+<p>写一个函数 <code>aclean(arr)</code>，它返回被清除了字谜（anagrams）的数组。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;nap&quot;</span>, <span class="hljs-string">&quot;teachers&quot;</span>, <span class="hljs-string">&quot;cheaters&quot;</span>, <span class="hljs-string">&quot;PAN&quot;</span>, <span class="hljs-string">&quot;ear&quot;</span>, <span class="hljs-string">&quot;era&quot;</span>, <span class="hljs-string">&quot;hectares&quot;</span>];
+
+alert( aclean(arr) ); <span class="hljs-comment">// &quot;nap,teachers,ear&quot; or &quot;PAN,cheaters,era&quot;</span></code></pre>
+<p>对于所有的字谜（anagram）组，都应该保留其中一个词，但保留的具体是哪一个并不重要。</p>

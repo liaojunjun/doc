@@ -1,0 +1,165 @@
+<h1 id="构造器和操作符-new">构造器和操作符 &quot;new&quot;</h1>
+<p>常规的 <code>{...}</code> 语法允许创建一个对象。但是我们经常需要创建许多类似的对象，例如多个用户或菜单项等。</p>
+<p>这可以使用构造函数和 <code>&quot;new&quot;</code> 操作符来实现。</p>
+<h2 id="构造函数">构造函数</h2>
+<p>构造函数在技术上是常规函数。不过有两个约定：</p>
+<ol>
+<li>它们的命名以大写字母开头。</li>
+<li>它们只能由 <code>&quot;new&quot;</code> 操作符来执行。</li>
+</ol>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-built_in">this</span>.name = name;
+  <span class="hljs-built_in">this</span>.isAdmin = <span class="hljs-literal">false</span>;
+}
+
+*!*
+<span class="hljs-keyword">let</span> user = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&quot;Jack&quot;</span>);
+*/!*
+
+alert(user.name); <span class="hljs-comment">// Jack</span>
+alert(user.isAdmin); <span class="hljs-comment">// false</span></code></pre>
+<p>当一个函数被使用 <code>new</code> 操作符执行时，它按照以下步骤：</p>
+<ol>
+<li>一个新的空对象被创建并分配给 <code>this</code>。</li>
+<li>函数体执行。通常它会修改 <code>this</code>，为其添加新的属性。</li>
+<li>返回 <code>this</code> 的值。</li>
+</ol>
+<p>换句话说，<code>new User(...)</code> 做的就是类似的事情：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User</span>(<span class="hljs-params">name</span>) </span>{
+*!*
+  <span class="hljs-comment">// this = {};（隐式创建）</span>
+*/!*
+
+  <span class="hljs-comment">// 添加属性到 this</span>
+  <span class="hljs-built_in">this</span>.name = name;
+  <span class="hljs-built_in">this</span>.isAdmin = <span class="hljs-literal">false</span>;
+
+*!*
+  <span class="hljs-comment">// return this;（隐式返回）</span>
+*/!*
+}</code></pre>
+<p>所以 <code>new User(&quot;Jack&quot;)</code> 的结果是相同的对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Jack&quot;</span>,
+  <span class="hljs-attr">isAdmin</span>: <span class="hljs-literal">false</span>
+};</code></pre>
+<p>现在，如果我们想创建其他用户，我们可以调用 <code>new User(&quot;Ann&quot;)</code>，<code>new User(&quot;Alice&quot;)</code> 等。比每次都使用字面量创建要短得多，而且更易于阅读。</p>
+<p>这是构造器的主要目的 —— 实现可重用的对象创建代码。</p>
+<p>让我们再强调一遍 —— 从技术上讲，任何函数都可以用作构造器。即：任何函数都可以通过 <code>new</code> 来运行，它会执行上面的算法。“首字母大写”是一个共同的约定，以明确表示一个函数将被使用 <code>new</code> 来运行。</p>
+<pre><code class="language-smart">如果我们有许多行用于创建单个复杂对象的代码，我们可以将它们封装在构造函数中，像这样：
+
+```js
+let user = new function() {
+  this.name = &quot;John&quot;;
+  this.isAdmin = false;
+
+  // ……用于用户创建的其他代码
+  // 也许是复杂的逻辑和语句
+  // 局部变量等
+};
+```
+
+构造器不能被再次调用，因为它不保存在任何地方，只是被创建和调用。因此，这个技巧旨在封装构建单个对象的代码，而无需将来重用。</code></pre>
+<h2 id="构造器模式测试：newtarget">构造器模式测试：new.target</h2>
+<pre><code class="language-smart">本节涉及的语法内容很少使用，除非你想了解所有内容，否则你可以直接跳过该语法。</code></pre>
+<p>在一个函数内部，我们可以使用 <code>new.target</code> 属性来检查它是否被使用 <code>new</code> 进行调用了。</p>
+<p>对于常规调用，它为空，对于使用 <code>new</code> 的调用，则等于该函数：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-keyword">new</span>.target);
+}
+
+<span class="hljs-comment">// 不带 &quot;new&quot;：</span>
+*!*
+User(); <span class="hljs-comment">// undefined</span>
+*/!*
+
+<span class="hljs-comment">// 带 &quot;new&quot;：</span>
+*!*
+<span class="hljs-keyword">new</span> User(); <span class="hljs-comment">// function User { ... }</span>
+*/!*</code></pre>
+<p>它可以被用在函数内部，来判断该函数是被通过 <code>new</code> 调用的“构造器模式”，还是没被通过 <code>new</code> 调用的“常规模式”。</p>
+<p>我们也可以让 <code>new</code> 调用和常规调用做相同的工作，像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">new</span>.target) { <span class="hljs-comment">// 如果你没有通过 new 运行我</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User(name); <span class="hljs-comment">// ……我会给你添加 new</span>
+  }
+
+  <span class="hljs-built_in">this</span>.name = name;
+}
+
+<span class="hljs-keyword">let</span> john = User(<span class="hljs-string">&quot;John&quot;</span>); <span class="hljs-comment">// 将调用重定向到新用户</span>
+alert(john.name); <span class="hljs-comment">// John</span></code></pre>
+<p>这种方法有时被用在库中以使语法更加灵活。这样人们在调用函数时，无论是否使用了 <code>new</code>，程序都能工作。</p>
+<p>不过，到处都使用它并不是一件好事，因为省略了 <code>new</code> 使得很难观察到代码中正在发生什么。而通过 <code>new</code> 我们都可以知道这创建了一个新对象。</p>
+<h2 id="构造器的-return">构造器的 return</h2>
+<p>通常，构造器没有 <code>return</code> 语句。它们的任务是将所有必要的东西写入 <code>this</code>，并自动转换为结果。</p>
+<p>但是，如果这有一个 <code>return</code> 语句，那么规则就简单了：</p>
+<ul>
+<li>如果 <code>return</code> 返回的是一个对象，则返回这个对象，而不是 <code>this</code>。</li>
+<li>如果 <code>return</code> 返回的是一个原始类型，则忽略。</li>
+</ul>
+<p>换句话说，带有对象的 <code>return</code> 返回该对象，在所有其他情况下返回 <code>this</code>。</p>
+<p>例如，这里 <code>return</code> 通过返回一个对象覆盖 <code>this</code>：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">BigUser</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-built_in">this</span>.name = <span class="hljs-string">&quot;John&quot;</span>;
+
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Godzilla&quot;</span> };  <span class="hljs-comment">// &lt;-- 返回这个对象</span>
+}
+
+alert( <span class="hljs-keyword">new</span> BigUser().name );  <span class="hljs-comment">// Godzilla，得到了那个对象</span></code></pre>
+<p>这里有一个 <code>return</code> 为空的例子（或者我们可以在它之后放置一个原始类型，没有什么影响）：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">SmallUser</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-built_in">this</span>.name = <span class="hljs-string">&quot;John&quot;</span>;
+
+  <span class="hljs-keyword">return</span>; <span class="hljs-comment">// &lt;-- 返回 this</span>
+}
+
+alert( <span class="hljs-keyword">new</span> SmallUser().name );  <span class="hljs-comment">// John</span></code></pre>
+<p>通常构造器没有 <code>return</code> 语句。这里我们主要为了完整性而提及返回对象的特殊行为。</p>
+<pre><code class="language-smart">顺便说一下，如果没有参数，我们可以省略 `new` 后的括号：
+
+```js
+let user = new User; // &lt;-- 没有参数
+// 等同于
+let user = new User();
+```
+
+这里省略括号不被认为是一种“好风格”，但是规范允许使用该语法。</code></pre>
+<h2 id="构造器中的方法">构造器中的方法</h2>
+<p>使用构造函数来创建对象会带来很大的灵活性。构造函数可能有一些参数，这些参数定义了如何构造对象以及要放入什么。</p>
+<p>当然，我们不仅可以将属性添加到 <code>this</code> 中，还可以添加方法。</p>
+<p>例如，下面的 <code>new User(name)</code> 用给定的 <code>name</code> 和方法 <code>sayHi</code> 创建了一个对象：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-built_in">this</span>.name = name;
+
+  <span class="hljs-built_in">this</span>.sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    alert( <span class="hljs-string">&quot;My name is: &quot;</span> + <span class="hljs-built_in">this</span>.name );
+  };
+}
+
+*!*
+<span class="hljs-keyword">let</span> john = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&quot;John&quot;</span>);
+
+john.sayHi(); <span class="hljs-comment">// My name is: John</span>
+*/!*
+
+<span class="hljs-comment">/*
+john = {
+   name: &quot;John&quot;,
+   sayHi: function() { ... }
+}
+*/</span></code></pre>
+<p><a href="info:classes">类</a> 是用于创建复杂对象的一个更高级的语法，我们稍后会讲到。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>构造函数，或简称构造器，就是常规函数，但大家对于构造器有个共同的约定，就是其命名首字母要大写。</li>
+<li>构造函数只能使用 <code>new</code> 来调用。这样的调用意味着在开始时创建了空的 <code>this</code>，并在最后返回填充了值的 <code>this</code>。</li>
+</ul>
+<p>我们可以使用构造函数来创建多个类似的对象。</p>
+<p>JavaScript 为许多内置的对象提供了构造函数：比如日期 <code>Date</code>、集合 <code>Set</code> 以及其他我们计划学习的内容。</p>
+<pre><code class="language-smart">在本章中，我们只介绍了关于对象和构造器的基础知识。它们对于我们在下一章中，学习更多关于数据类型和函数的相关知识非常重要。
+
+在我们学习了那些之后，我们将回到对象，在 &lt;info:prototypes&gt; 和 &lt;info:classes&gt; 章节中深入介绍它们。</code></pre>

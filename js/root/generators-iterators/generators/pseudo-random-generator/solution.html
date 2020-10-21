@@ -1,0 +1,31 @@
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">pseudoRandom</span>(<span class="hljs-params">seed</span>) </span>{
+  <span class="hljs-keyword">let</span> value = seed;
+
+  <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {
+    value = value * <span class="hljs-number">16807</span> % <span class="hljs-number">2147483647</span>
+    <span class="hljs-keyword">yield</span> value;
+  }
+
+};
+
+<span class="hljs-keyword">let</span> generator = pseudoRandom(<span class="hljs-number">1</span>);
+
+alert(generator.next().value); <span class="hljs-comment">// 16807</span>
+alert(generator.next().value); <span class="hljs-comment">// 282475249</span>
+alert(generator.next().value); <span class="hljs-comment">// 1622650073</span></code></pre>
+<p>请注意，也可以使用常规函数来完成相同的操作，就像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pseudoRandom</span>(<span class="hljs-params">seed</span>) </span>{
+  <span class="hljs-keyword">let</span> value = seed;
+
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    value = value * <span class="hljs-number">16807</span> % <span class="hljs-number">2147483647</span>;
+    <span class="hljs-keyword">return</span> value;
+  }
+}
+
+<span class="hljs-keyword">let</span> generator = pseudoRandom(<span class="hljs-number">1</span>);
+
+alert(generator()); <span class="hljs-comment">// 16807</span>
+alert(generator()); <span class="hljs-comment">// 282475249</span>
+alert(generator()); <span class="hljs-comment">// 1622650073</span></code></pre>
+<p>这也可以工作。但是这样我们就失去了使用 <code>for..of</code> 来进行迭代以及使用 generator 组合（composition）的能力，这些可能在其他地方很有用。</p>

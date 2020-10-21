@@ -1,0 +1,9 @@
+<p>是的，这是可以的。</p>
+<p>如果一个函数返回一个对象，那么 <code>new</code> 返回那个对象而不是 <code>this</code>。</p>
+<p>所以它们可以，例如，返回相同的外部定义的对象 <code>obj</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">A</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> obj; }
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">B</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> obj; }
+
+alert( <span class="hljs-keyword">new</span> A() == <span class="hljs-keyword">new</span> B() ); <span class="hljs-comment">// true</span></code></pre>

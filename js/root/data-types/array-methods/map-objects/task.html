@@ -1,0 +1,27 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="映射到对象">映射到对象</h1>
+<p>你有一个 <code>user</code> 对象数组，每个对象都有 <code>name</code>，<code>surname</code> 和 <code>id</code>。</p>
+<p>编写代码以该数组为基础，创建另一个具有 <code>id</code> 和 <code>fullName</code> 的对象数组，其中 <code>fullName</code> 由 <code>name</code> 和 <code>surname</code> 生成。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Smith&quot;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> };
+<span class="hljs-keyword">let</span> pete = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pete&quot;</span>, <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Hunt&quot;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">2</span> };
+<span class="hljs-keyword">let</span> mary = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Key&quot;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">3</span> };
+
+<span class="hljs-keyword">let</span> users = [ john, pete, mary ];
+
+*!*
+<span class="hljs-keyword">let</span> usersMapped = <span class="hljs-comment">/* ... your code ... */</span>
+*/!*
+
+<span class="hljs-comment">/*
+usersMapped = [
+  { fullName: &quot;John Smith&quot;, id: 1 },
+  { fullName: &quot;Pete Hunt&quot;, id: 2 },
+  { fullName: &quot;Mary Key&quot;, id: 3 }
+]
+*/</span>
+
+alert( usersMapped[<span class="hljs-number">0</span>].id ) <span class="hljs-comment">// 1</span>
+alert( usersMapped[<span class="hljs-number">0</span>].fullName ) <span class="hljs-comment">// John Smith</span></code></pre>
+<p>所以，实际上你需要将一个对象数组映射到另一个对象数组。在这儿尝试使用箭头函数 <code>=&gt;</code> 来编写。</p>

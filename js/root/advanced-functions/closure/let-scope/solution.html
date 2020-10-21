@@ -1,0 +1,28 @@
+<p>答案：<strong>error</strong>。</p>
+<p>你运行一下试试：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> x = <span class="hljs-number">1</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">func</span>(<span class="hljs-params"></span>) </span>{
+*!*
+  <span class="hljs-built_in">console</span>.log(x); <span class="hljs-comment">// ReferenceError: Cannot access &#x27;x&#x27; before initialization</span>
+*/!*
+  <span class="hljs-keyword">let</span> x = <span class="hljs-number">2</span>;
+}
+
+func();</code></pre>
+<p>在这个例子中，我们可以观察到“不存在”的变量和“未初始化”的变量之间的特殊差异。</p>
+<p>你可能已经在 <a href="info:closure"></a> 中学过了，从程序执行进入代码块（或函数）的那一刻起，变量就开始进入“未初始化”状态。它一直保持未初始化状态，直至程序执行到相应的 <code>let</code> 语句。</p>
+<p>换句话说，一个变量从技术的角度来讲是存在的，但是在 <code>let</code> 之前还不能使用。</p>
+<p>下面的这段代码证实了这一点。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">func</span>(<span class="hljs-params"></span>) </span>{
+*!*
+  <span class="hljs-comment">// 引擎从函数开始就知道局部变量 x，</span>
+  <span class="hljs-comment">// 但是变量 x 一直处于“未初始化”（无法使用）的状态，直到结束 let（“死区”）</span>
+  <span class="hljs-comment">// 因此答案是 error</span>
+*/!*
+
+  <span class="hljs-built_in">console</span>.log(x); <span class="hljs-comment">// ReferenceError: Cannot access &#x27;x&#x27; before initialization</span>
+
+  <span class="hljs-keyword">let</span> x = <span class="hljs-number">2</span>;
+}</code></pre>
+<p>变量暂时无法使用的区域（从代码块的开始到 <code>let</code>）有时被称为“死区”。</p>

@@ -1,0 +1,71 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="修改-prototype">修改 &quot;prototype&quot;</h1>
+<p>在下面的代码中，我们创建了 <code>new Rabbit</code>，然后尝试修改它的 prototype。</p>
+<p>最初，我们有以下代码：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+Rabbit.prototype = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>
+};
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
+
+alert( rabbit.eats ); <span class="hljs-comment">// true</span></code></pre>
+<ol>
+<li><p>我们增加了一个字符串（强调）。现在 <code>alert</code> 会显示什么？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+Rabbit.prototype = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>
+};
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
+
+*!*
+Rabbit.prototype = {};
+*/!*
+
+alert( rabbit.eats ); <span class="hljs-comment">// ?</span></code></pre>
+</li>
+<li><p>……如果代码是这样的（修改了一行）？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+Rabbit.prototype = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>
+};
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
+
+*!*
+Rabbit.prototype.eats = <span class="hljs-literal">false</span>;
+*/!*
+
+alert( rabbit.eats ); <span class="hljs-comment">// ?</span></code></pre>
+</li>
+<li><p>像这样呢（修改了一行）？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+Rabbit.prototype = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>
+};
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
+
+*!*
+<span class="hljs-keyword">delete</span> rabbit.eats;
+*/!*
+
+alert( rabbit.eats ); <span class="hljs-comment">// ?</span></code></pre>
+</li>
+<li><p>最后一种变体：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+Rabbit.prototype = {
+  <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>
+};
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
+
+*!*
+<span class="hljs-keyword">delete</span> Rabbit.prototype.eats;
+*/!*
+
+alert( rabbit.eats ); <span class="hljs-comment">// ?</span></code></pre>
+</li>
+</ol>

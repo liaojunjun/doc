@@ -1,0 +1,25 @@
+<p>首先，我们需要找到所有外部链接。</p>
+<p>这里有两种方式。</p>
+<p>第一种是使用 <code>document.querySelectorAll(&#39;a&#39;)</code> 找到所有链接，然后过滤出我们需要的部分：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> links = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;a&#x27;</span>);
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> link <span class="hljs-keyword">of</span> links) {
+*!*
+  <span class="hljs-keyword">let</span> href = link.getAttribute(<span class="hljs-string">&#x27;href&#x27;</span>);
+*/!*
+  <span class="hljs-keyword">if</span> (!href) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 没有特性</span>
+
+  <span class="hljs-keyword">if</span> (!href.includes(<span class="hljs-string">&#x27;://&#x27;</span>)) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 没有协议</span>
+
+  <span class="hljs-keyword">if</span> (href.startsWith(<span class="hljs-string">&#x27;http://internal.com&#x27;</span>)) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 内部的</span>
+
+  link.style.color = <span class="hljs-string">&#x27;orange&#x27;</span>;
+}</code></pre>
+<p>请注意：我们用的是 <code>link.getAttribute(&#39;href&#39;)</code>。而不是 <code>link.href</code>，因为我们需要的是来自 HTML 的值。</p>
+<p>……另一种更简单的方法，是使用 CSS 选择器进行检查：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 查找所有 href 中包含 :// 的链接</span>
+<span class="hljs-comment">// 但 href 不是以 http://internal.com 开头</span>
+<span class="hljs-keyword">let</span> selector = <span class="hljs-string">&#x27;a[href*=&quot;://&quot;]:not([href^=&quot;http://internal.com&quot;])&#x27;</span>;
+<span class="hljs-keyword">let</span> links = <span class="hljs-built_in">document</span>.querySelectorAll(selector);
+
+links.forEach(<span class="hljs-function"><span class="hljs-params">link</span> =&gt;</span> link.style.color = <span class="hljs-string">&#x27;orange&#x27;</span>);</code></pre>

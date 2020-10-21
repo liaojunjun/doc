@@ -1,0 +1,11 @@
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getAverageAge</span>(<span class="hljs-params">users</span>) </span>{
+  <span class="hljs-keyword">return</span> users.reduce(<span class="hljs-function">(<span class="hljs-params">prev, user</span>) =&gt;</span> prev + user.age, <span class="hljs-number">0</span>) / users.length;
+}
+
+<span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">25</span> };
+<span class="hljs-keyword">let</span> pete = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pete&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">30</span> };
+<span class="hljs-keyword">let</span> mary = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">29</span> };
+
+<span class="hljs-keyword">let</span> arr = [ john, pete, mary ];
+
+alert( getAverageAge(arr) ); <span class="hljs-comment">// 28</span></code></pre>

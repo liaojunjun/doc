@@ -1,0 +1,114 @@
+<h1 id="file-和-filereader">File 和 FileReader</h1>
+<p><a href="https://www.w3.org/TR/FileAPI/#dfn-file">File</a> 对象继承自 <code>Blob</code>，并扩展了与文件系统相关的功能。 </p>
+<p>有两种方式可以获取它。</p>
+<p>第一种，与 <code>Blob</code> 类似，有一个构造器：</p>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> File(fileParts, fileName, [options])</code></pre>
+<ul>
+<li><strong><code>fileParts</code></strong> —— Blob/BufferSource/String 类型值的数组。</li>
+<li><strong><code>fileName</code></strong> —— 文件名字符串。</li>
+<li><strong><code>options</code></strong> —— 可选对象：<ul>
+<li><strong><code>lastModified</code></strong> —— 最后一次修改的时间戳（整数日期）。</li>
+</ul>
+</li>
+</ul>
+<p>第二种，更常见的是，我们从 <code>&lt;input type=&quot;file&quot;&gt;</code> 或拖放或其他浏览器接口来获取文件。在这种情况下，file 将从操作系统（OS）获得 this 信息。</p>
+<p>由于 <code>File</code> 是继承自 <code>Blob</code> 的，所以 <code>File</code> 对象具有相同的属性，附加：</p>
+<ul>
+<li><code>name</code> —— 文件名，</li>
+<li><code>lastModified</code> —— 最后一次修改的时间戳。</li>
+</ul>
+<p>这就是我们从 <code>&lt;input type=&quot;file&quot;&gt;</code> 中获取 <code>File</code> 对象的方式：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;file&quot;</span> <span class="hljs-attr">onchange</span>=<span class="hljs-string">&quot;showFile(this)&quot;</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showFile</span>(<span class="hljs-params">input</span>) </span>{
+  <span class="hljs-keyword">let</span> file = input.files[<span class="hljs-number">0</span>];
+
+  alert(<span class="hljs-string">`File name: <span class="hljs-subst">${file.name}</span>`</span>); <span class="hljs-comment">// 例如 my.png</span>
+  alert(<span class="hljs-string">`Last modified: <span class="hljs-subst">${file.lastModified}</span>`</span>); <span class="hljs-comment">// 例如 1552830408824</span>
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<pre><code class="language-smart">输入（input）可以选择多个文件，因此 `input.files` 是一个类数组对象。这里我们只有一个文件，所以我们只取 `input.files[0]`。</code></pre>
+<h2 id="filereader">FileReader</h2>
+<p><a href="https://www.w3.org/TR/FileAPI/#dfn-filereader">FileReader</a> 是一个对象，其唯一目的是从 <code>Blob</code>（因此也从 <code>File</code>）对象中读取数据。</p>
+<p>它使用事件来传递数据，因为从磁盘读取数据可能比较费时间。</p>
+<p>构造函数：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader(); <span class="hljs-comment">// 没有参数</span></code></pre>
+<p>主要方法:</p>
+<ul>
+<li><strong><code>readAsArrayBuffer(blob)</code></strong> —— 将数据读取为二进制格式的 <code>ArrayBuffer</code>。</li>
+<li><strong><code>readAsText(blob, [encoding])</code></strong> —— 将数据读取为给定编码（默认为 <code>utf-8</code> 编码）的文本字符串。</li>
+<li><strong><code>readAsDataURL(blob)</code></strong> —— 读取二进制数据，并将其编码为 base64 的 data url。</li>
+<li><strong><code>abort()</code></strong> —— 取消操作。</li>
+</ul>
+<p><code>read*</code> 方法的选择，取决于我们喜欢哪种格式，以及如何使用数据。</p>
+<ul>
+<li><code>readAsArrayBuffer</code> —— 用于二进制文件，执行低级别的二进制操作。对于诸如切片（slicing）之类的高级别的操作，<code>File</code> 是继承自 <code>Blob</code> 的，所以我们可以直接调用它们，而无需读取。</li>
+<li><code>readAsText</code> —— 用于文本文件，当我们想要获取字符串时。</li>
+<li><code>readAsDataURL</code> —— 当我们想在 <code>src</code> 中使用此数据，并将其用于 <code>img</code> 或其他标签时。正如我们在  <a href="info:blob">info:blob</a> 一章中所讲的，还有一种用于此的读取文件的替代方案：<code>URL.createObjectURL(file)</code>。</li>
+</ul>
+<p>读取过程中，有以下事件：</p>
+<ul>
+<li><code>loadstart</code> —— 开始加载。</li>
+<li><code>progress</code> —— 在读取过程中出现。</li>
+<li><code>load</code> —— 读取完成，没有 error。</li>
+<li><code>abort</code> —— 调用了 <code>abort()</code>。</li>
+<li><code>error</code> —— 出现 error。</li>
+<li><code>loadend</code> —— 读取完成，无论成功还是失败。</li>
+</ul>
+<p>读取完成后，我们可以通过以下方式访问读取结果：</p>
+<ul>
+<li><code>reader.result</code> 是结果（如果成功）</li>
+<li><code>reader.error</code> 是 error（如果失败）。</li>
+</ul>
+<p>使用最广泛的事件无疑是 <code>load</code> 和 <code>error</code>。</p>
+<p>这是一个读取文件的示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;file&quot;</span> <span class="hljs-attr">onchange</span>=<span class="hljs-string">&quot;readFile(this)&quot;</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readFile</span>(<span class="hljs-params">input</span>) </span>{
+  <span class="hljs-keyword">let</span> file = input.files[<span class="hljs-number">0</span>];
+
+  <span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader();
+
+  reader.readAsText(file);
+
+  reader.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(reader.result);
+  };
+
+  reader.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">console</span>.log(reader.error);
+  };
+
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>```smart header=&quot;<code>FileReader</code> 用于 blob&quot;
+正如我们在 <a href="info:blob">info:blob</a> 一章中所提到的，<code>FileReader</code> 不仅可读取文件，还可读取任何 blob。</p>
+<p>我们可以使用它将 blob 转换为其他格式：</p>
+<ul>
+<li><code>readAsArrayBuffer(blob)</code> —— 转换为 <code>ArrayBuffer</code>，</li>
+<li><code>readAsText(blob, [encoding])</code> —— 转换为字符串（<code>TextDecoder</code> 的一个替代方案），</li>
+<li><code>readAsDataURL(blob)</code> —— 转换为 base64 的 data url。<pre><code>
+</code></pre>
+</li>
+</ul>
+<p>```smart header=&quot;在 Web Workers 中可以使用 <code>FileReaderSync</code>&quot;
+对于 Web Worker，还有一种同步的 <code>FileReader</code> 变体，称为 <a href="https://www.w3.org/TR/FileAPI/#FileReaderSync">FileReaderSync</a>。</p>
+<p>它的读取方法 <code>read*</code> 不会生成事件，但是会像常规函数那样返回一个结果。</p>
+<p>不过，这仅在 Web Worker 中可用，因为在读取文件的时候，同步调用会有延迟，而在 Web Worker 中，这种延迟并不是很重要。它不会影响页面。</p>
+<pre><code>
+## 总结
+
+`File` 对象继承自 `Blob`。
+
+除了 `Blob` 方法和属性外，`File` 对象还有 `name` 和 `lastModified` 属性，以及从文件系统读取的内部功能。我们通常从用户输入如 `&lt;input&gt;` 或拖放事件来获取 `File` 对象。
+
+`FileReader` 对象可以从文件或 blob 中读取数据，可以读取为以下三种格式：
+- 字符串（`readAsText`）。
+- `ArrayBuffer`（`readAsArrayBuffer`）。
+- data url，base-64 编码（`readAsDataURL`）。
+
+但是，在很多情况下，我们不必读取文件内容。就像我们处理 blob 一样，我们可以使用 `URL.createObjectURL(file)` 创建一个短的 url，并将其赋给 `&lt;a&gt;` 或 `&lt;img&gt;`。这样，文件便可以下载文件或者将其呈现为图像，作为 canvas 等的一部分。
+
+而且，如果我们要通过网络发送一个 `File`，那也很容易：像 `XMLHttpRequest` 或 `fetch` 等网络 API 本身就接受 `File` 对象。</code></pre>

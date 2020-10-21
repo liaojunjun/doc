@@ -1,0 +1,11 @@
+<p>我们可以使用 <code>WeakMap</code> 保存日期：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> messages = [
+  {<span class="hljs-attr">text</span>: <span class="hljs-string">&quot;Hello&quot;</span>, <span class="hljs-attr">from</span>: <span class="hljs-string">&quot;John&quot;</span>},
+  {<span class="hljs-attr">text</span>: <span class="hljs-string">&quot;How goes?&quot;</span>, <span class="hljs-attr">from</span>: <span class="hljs-string">&quot;John&quot;</span>},
+  {<span class="hljs-attr">text</span>: <span class="hljs-string">&quot;See you soon&quot;</span>, <span class="hljs-attr">from</span>: <span class="hljs-string">&quot;Alice&quot;</span>}
+];
+
+<span class="hljs-keyword">let</span> readMap = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>();
+
+readMap.set(messages[<span class="hljs-number">0</span>], <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2017</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>));
+<span class="hljs-comment">// 我们稍后将学习 Date 对象</span></code></pre>

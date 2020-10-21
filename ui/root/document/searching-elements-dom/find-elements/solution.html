@@ -1,0 +1,31 @@
+<p>实现的方式有很多种。</p>
+<p>以下列举的是其中一些方法：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 1. 带有 id=&quot;age-table&quot; 的表格。</span>
+<span class="hljs-keyword">let</span> table = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;age-table&#x27;</span>)
+
+<span class="hljs-comment">// 2. 表格内的所有 label 元素</span>
+table.getElementsByTagName(<span class="hljs-string">&#x27;label&#x27;</span>)
+<span class="hljs-comment">// 或</span>
+<span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;#age-table label&#x27;</span>)
+
+<span class="hljs-comment">// 3. 表格中的第一个 td（带有 &quot;Age&quot; 字段）</span>
+table.rows[<span class="hljs-number">0</span>].cells[<span class="hljs-number">0</span>]
+<span class="hljs-comment">// 或</span>
+table.getElementsByTagName(<span class="hljs-string">&#x27;td&#x27;</span>)[<span class="hljs-number">0</span>]
+<span class="hljs-comment">// 或</span>
+table.querySelector(<span class="hljs-string">&#x27;td&#x27;</span>)
+
+<span class="hljs-comment">// 4. 带有 name=&quot;search&quot; 的 form。</span>
+<span class="hljs-comment">// 假设文档中只有一个 name=&quot;search&quot; 的元素</span>
+<span class="hljs-keyword">let</span> form = <span class="hljs-built_in">document</span>.getElementsByName(<span class="hljs-string">&#x27;search&#x27;</span>)[<span class="hljs-number">0</span>]
+<span class="hljs-comment">// 或者，专门对于 form</span>
+<span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&#x27;form[name=&quot;search&quot;]&#x27;</span>)
+
+<span class="hljs-comment">// 5. 表单中的第一个 input</span>
+form.getElementsByTagName(<span class="hljs-string">&#x27;input&#x27;</span>)[<span class="hljs-number">0</span>]
+<span class="hljs-comment">// 或</span>
+form.querySelector(<span class="hljs-string">&#x27;input&#x27;</span>)
+
+<span class="hljs-comment">// 6. 表单中的最后一个 input</span>
+<span class="hljs-keyword">let</span> inputs = form.querySelectorAll(<span class="hljs-string">&#x27;input&#x27;</span>) <span class="hljs-comment">// 查找所有 input</span>
+inputs[inputs.length<span class="hljs-number">-1</span>] <span class="hljs-comment">// 取出最后一个</span></code></pre>

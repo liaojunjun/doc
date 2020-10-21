@@ -1,0 +1,502 @@
+<h1 id="类继承">类继承</h1>
+<p>类继承是一个类扩展另一个类的一种方式。</p>
+<p>因此，我们可以在现有功能之上创建新功能。</p>
+<h2 id="extends-关键字">&quot;extends&quot; 关键字</h2>
+<p>假设我们有 class <code>Animal</code>：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> </span>{
+  <span class="hljs-keyword">constructor</span>(name) {
+    <span class="hljs-built_in">this</span>.speed = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+  run(speed) {
+    <span class="hljs-built_in">this</span>.speed = speed;
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> runs with speed <span class="hljs-subst">${<span class="hljs-built_in">this</span>.speed}</span>.`</span>);
+  }
+  stop() {
+    <span class="hljs-built_in">this</span>.speed = <span class="hljs-number">0</span>;
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> stands still.`</span>);
+  }
+}
+
+<span class="hljs-keyword">let</span> animal = <span class="hljs-keyword">new</span> Animal(<span class="hljs-string">&quot;My animal&quot;</span>);</code></pre>
+<p>这是我们对对象 <code>animal</code> 和 class <code>Animal</code> 的图形化表示：</p>
+<p><img src="rabbit-animal-independent-animal.svg" alt=""></p>
+<p>……然后我们想创建另一个 <code>class Rabbit</code>：</p>
+<p>因为 rabbits 是 animals，所以 class <code>Rabbit</code> 应该是基于 class <code>Animal</code> 的，可以访问 animal 的方法，以便 rabbits 可以做“一般”动物可以做的事儿。</p>
+<p>扩展另一个类的语法是：<code>class Child extends Parent</code>。</p>
+<p>让我们创建一个继承自 <code>Animal</code> 的 <code>class Rabbit</code>：</p>
+<pre><code class="language-js">*!*
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Animal</span> </span>{
+*/!*
+  hide() {
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> hides!`</span>);
+  }
+}
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;White Rabbit&quot;</span>);
+
+rabbit.run(<span class="hljs-number">5</span>); <span class="hljs-comment">// White Rabbit runs with speed 5.</span>
+rabbit.hide(); <span class="hljs-comment">// White Rabbit hides!</span></code></pre>
+<p>Class <code>Rabbit</code> 的对象可以访问例如 <code>rabbit.hide()</code> 等 <code>Rabbit</code> 的方法，还可以访问例如 <code>rabbit.run()</code> 等 <code>Animal</code> 的方法。</p>
+<p>在内部，关键字 <code>extends</code> 使用了很好的旧的原型机制进行工作。它将 <code>Rabbit.prototype.[[Prototype]]</code> 设置为 <code>Animal.prototype</code>。所以，如果在 <code>Rabbit.prototype</code> 中找不到一个方法，JavaScript 就会从 <code>Animal.prototype</code> 中获取该方法。</p>
+<p><img src="animal-rabbit-extends.svg" alt=""></p>
+<p>例如，要查找 <code>rabbit.run</code> 方法，JavaScript 引擎会进行如下检查（如图所示从下到上）：</p>
+<ol>
+<li>查找对象 <code>rabbit</code>（没有 <code>run</code>）。</li>
+<li>查找它的原型，即 <code>Rabbit.prototype</code>（有 <code>hide</code>，但没有 <code>run</code>）。</li>
+<li>查找它的原型，即（由于 <code>extends</code>）<code>Animal.prototype</code>，在这儿找到了 <code>run</code> 方法。</li>
+</ol>
+<p>我们可以回忆一下 <a href="info:native-prototypes">info:native-prototypes</a> 这一章的内容，JavaScript 内建对象同样也使用原型继承。例如，<code>Date.prototype.[[Prototype]]</code> 是 <code>Object.prototype</code>。这就是为什么日期可以访问通用对象的方法。</p>
+<p>````smart header=&quot;在 <code>extends</code> 后允许任意表达式&quot;
+类语法不仅允许指定一个类，在 <code>extends</code> 后可以指定任意表达式。</p>
+<p>例如，一个生成父类的函数调用：</p>
+<pre><code class="language-js">function f(phrase) {
+  return class {
+    sayHi() { alert(phrase) }
+  }
+}
+
+*!*
+class User extends f(&quot;Hello&quot;) {}
+*/!*
+
+new User().sayHi(); // Hello</code></pre>
+<p>这里 <code>class User</code> 继承自 <code>f(&quot;Hello&quot;)</code> 的结果。</p>
+<p>这对于高级编程模式，例如当我们根据许多条件使用函数生成类，并继承它们时来说可能很有用。</p>
+<pre><code>
+## 重写方法
+
+现在，让我们继续前行并尝试重写一个方法。默认情况下，所有未在 `class Rabbit` 中指定的方法均从 `class Animal` 中直接获取。
+
+但是如果我们在 `Rabbit` 中指定了我们自己的方法，例如 `stop()`，那么将会使用它：
+
+```js
+class Rabbit extends Animal {
+  stop() {
+    // ……现在这个将会被用作 rabbit.stop()
+    // 而不是来自于 class Animal 的 stop()
+  }
+}
+```
+
+但是通常来说，我们不希望完全替换父类的方法，而是希望在父类方法的基础上进行调整或扩展其功能。我们在我们的方法中做一些事儿，但是在它之前或之后或在过程中会调用父类方法。
+
+Class 为此提供了 `&quot;super&quot;` 关键字。
+
+- 执行 `super.method(...)` 来调用一个父类方法。
+- 执行 `super(...)` 来调用一个父类 constructor（只能在我们的 constructor 中）。
+
+例如，让我们的 rabbit 在停下来的时候自动 hide：
+
+```js run
+class Animal {
+
+  constructor(name) {
+    this.speed = 0;
+    this.name = name;
+  }
+
+  run(speed) {
+    this.speed = speed;
+    alert(`${this.name} runs with speed ${this.speed}.`);
+  }
+
+  stop() {
+    this.speed = 0;
+    alert(`${this.name} stands still.`);
+  }
+
+}
+
+class Rabbit extends Animal {
+  hide() {
+    alert(`${this.name} hides!`);
+  }
+
+*!*
+  stop() {
+    super.stop(); // 调用父类的 stop
+    this.hide(); // 然后 hide
+  }
+*/!*
+}
+
+let rabbit = new Rabbit(&quot;White Rabbit&quot;);
+
+rabbit.run(5); // White Rabbit 以速度 5 奔跑
+rabbit.stop(); // White Rabbit 停止了。White rabbit hide 了！
+```
+
+现在，`Rabbit` 在执行过程中调用父类的 `super.stop()` 方法，所以 `Rabbit` 也具有了 `stop` 方法。
+
+````smart header=&quot;箭头函数没有 `super`&quot;
+正如我们在 &lt;info:arrow-functions&gt; 一章中所提到的，箭头函数没有 `super`。
+
+如果被访问，它会从外部函数获取。例如：
+```js
+class Rabbit extends Animal {
+  stop() {
+    setTimeout(() =&gt; super.stop(), 1000); // 1 秒后调用父类的 stop
+  }
+}
+```
+
+箭头函数中的 `super` 与 `stop()` 中的是一样的，所以它能按预期工作。如果我们在这里指定一个“普通”函数，那么将会抛出错误：
+
+```js
+// 意料之外的 super
+setTimeout(function() { super.stop() }, 1000);
+```</code></pre>
+<h2 id="重写-constructor">重写 constructor</h2>
+<p>对于重写 constructor 来说，则有点棘手。</p>
+<p>到目前为止，<code>Rabbit</code> 还没有自己的 <code>constructor</code>。</p>
+<p>根据 <a href="https://tc39.github.io/ecma262/#sec-runtime-semantics-classdefinitionevaluation">规范</a>，如果一个类扩展了另一个类并且没有 <code>constructor</code>，那么将生成下面这样的“空” <code>constructor</code>：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Animal</span> </span>{
+  <span class="hljs-comment">// 为没有自己的 constructor 的扩展类生成的</span>
+*!*
+  <span class="hljs-keyword">constructor</span>(...args) {
+    <span class="hljs-built_in">super</span>(...args);
+  }
+*/!*
+}</code></pre>
+<p>正如我们所看到的，它调用了父类的 <code>constructor</code>，并传递了所有的参数。如果我们没有写自己的 constructor，就会出现这种情况。</p>
+<p>现在，我们给 <code>Rabbit</code> 添加一个自定义的 constructor。除了 <code>name</code> 之外，它还会指定 <code>earLength</code>。</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> </span>{
+  <span class="hljs-keyword">constructor</span>(name) {
+    <span class="hljs-built_in">this</span>.speed = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+  <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Animal</span> </span>{
+
+*!*
+  <span class="hljs-keyword">constructor</span>(name, earLength) {
+    <span class="hljs-built_in">this</span>.speed = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">this</span>.name = name;
+    <span class="hljs-built_in">this</span>.earLength = earLength;
+  }
+*/!*
+
+  <span class="hljs-comment">// ...</span>
+}
+
+*!*
+<span class="hljs-comment">// 不工作！</span>
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;White Rabbit&quot;</span>, <span class="hljs-number">10</span>); <span class="hljs-comment">// Error: this is not defined.</span>
+*/!*</code></pre>
+<p>哎呦！我们得到了一个报错。现在我们没法新建 rabbit。是什么地方出错了？</p>
+<p>简短的解释是：</p>
+<p><strong>继承类的 constructor 必须调用 <code>super(...)</code>，并且 (!) 一定要在使用 <code>this</code> 之前调用。</strong></p>
+<p>……但这是为什么呢？这里发生了什么？确实，这个要求看起来很奇怪。</p>
+<p>当然，本文会给出一个解释。让我们深入细节，这样你就可以真正地理解发生了什么。</p>
+<p>在 JavaScript 中，继承类（所谓的“派生构造器”，英文为 &quot;derived constructor&quot;）的构造函数与其他函数之间是有区别的。派生构造器具有特殊的内部属性 <code>[[ConstructorKind]]:&quot;derived&quot;</code>。这是一个特殊的内部标签。</p>
+<p>该标签会影响它的 <code>new</code> 行为：</p>
+<ul>
+<li>当通过 <code>new</code> 执行一个常规函数时，它将创建一个空对象，并将这个空对象赋值给 <code>this</code>。</li>
+<li>但是当继承的 constructor 执行时，它不会执行此操作。它期望父类的 constructor 来完成这项工作。</li>
+</ul>
+<p>因此，派生的 constructor 必须调用 <code>super</code> 才能执行其父类（base）的 constructor，否则 <code>this</code> 指向的那个对象将不会被创建。并且我们会收到一个报错。</p>
+<p>为了让 <code>Rabbit</code> 的 constructor 可以工作，它需要在使用 <code>this</code> 之前调用 <code>super()</code>，就像下面这样：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> </span>{
+
+  <span class="hljs-keyword">constructor</span>(name) {
+    <span class="hljs-built_in">this</span>.speed = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+
+  <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Animal</span> </span>{
+
+  <span class="hljs-keyword">constructor</span>(name, earLength) {
+*!*
+    <span class="hljs-built_in">super</span>(name);
+*/!*
+    <span class="hljs-built_in">this</span>.earLength = earLength;
+  }
+
+  <span class="hljs-comment">// ...</span>
+}
+
+*!*
+<span class="hljs-comment">// 现在可以了</span>
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;White Rabbit&quot;</span>, <span class="hljs-number">10</span>);
+alert(rabbit.name); <span class="hljs-comment">// White Rabbit</span>
+alert(rabbit.earLength); <span class="hljs-comment">// 10</span>
+*/!*</code></pre>
+<h3 id="重写类字段-一个棘手的注意要点">重写类字段: 一个棘手的注意要点</h3>
+<pre><code class="language-warn">这个要点假设你对类已经有了一定的经验，或许是在其他编程语言中。
+
+这里提供了一个更好的视角来窥探这门语言，且解释了它的行为为什么可能会是 bugs 的来源(但不是非常频繁)。
+
+如果你发现这难以理解，什么都别管，继续往下阅读，之后有机会再回来看。</code></pre>
+<p>我们不仅可以重写方法，还可以重写类字段。</p>
+<p>不过，当我们访问在父类构造器中的一个被重写的字段时，这里会有一个诡异的行为，这与绝大多数其他编程语言都很不一样。</p>
+<p>请思考此示例：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> </span>{
+  name = <span class="hljs-string">&#x27;animal&#x27;</span>
+
+  <span class="hljs-keyword">constructor</span>() {
+    alert(<span class="hljs-built_in">this</span>.name); <span class="hljs-comment">// (*)</span>
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Animal</span> </span>{
+  name = <span class="hljs-string">&#x27;rabbit&#x27;</span>;
+}
+
+<span class="hljs-keyword">new</span> Animal(); <span class="hljs-comment">// animal</span>
+*!*
+<span class="hljs-keyword">new</span> Rabbit(); <span class="hljs-comment">// animal</span>
+*/!*</code></pre>
+<p>这里，<code>Rabbit</code> 继承自 <code>Animal</code>，并且用它自己的值重写了 <code>name</code> 字段。</p>
+<p>因为 <code>Rabbit</code> 中没有自己的构造器，所以 <code>Animal</code> 的构造器被调用了。</p>
+<p>有趣的是在这两种情况下：<code>new Animal()</code> 和 <code>new Rabbit()</code>，在 <code>(*)</code> 行的 <code>alert</code> 都打印了 <code>animal</code>。</p>
+<p><strong>换句话说， 父类构造器总是会使用它自己字段的值，而不是被重写的那一个。</strong></p>
+<p>古怪的是什么呢？</p>
+<p>如果这还不清楚，那么让我们用方法来进行比较。</p>
+<p>这里是相同的代码，但是我们调用 <code>this.showName()</code> 方法而不是 <code>this.name</code> 字段：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> </span>{
+  showName() {  <span class="hljs-comment">// 而不是 this.name = &#x27;animal&#x27;</span>
+    alert(<span class="hljs-string">&#x27;animal&#x27;</span>);
+  }
+
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-built_in">this</span>.showName(); <span class="hljs-comment">// 而不是 alert(this.name);</span>
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Animal</span> </span>{
+  showName() {
+    alert(<span class="hljs-string">&#x27;rabbit&#x27;</span>);
+  }
+}
+
+<span class="hljs-keyword">new</span> Animal(); <span class="hljs-comment">// animal</span>
+*!*
+<span class="hljs-keyword">new</span> Rabbit(); <span class="hljs-comment">// rabbit</span>
+*/!*</code></pre>
+<p>请注意：这时的输出是不同的。</p>
+<p>这才是我们本来所期待的结果。当父类构造器在派生的类中被调用时，它会使用被重写的方法。</p>
+<p>……但对于类字段并非如此。正如前文所述，父类构造器总是使用父类的字段。</p>
+<p>这里为什么会有这样的区别呢？</p>
+<p>实际上，原因在于字段初始化的顺序。类字段是这样初始化的：</p>
+<ul>
+<li>对于基类（还未继承任何东西的那种），在构造函数调用前初始化。</li>
+<li>对于派生类，在 <code>super()</code> 后立刻初始化。</li>
+</ul>
+<p>在我们的例子中，<code>Rabbit</code> 是派生类，里面没有 <code>constructor()</code>。正如先前所说，这相当于一个里面只有 <code>super(...args)</code> 的空构造器。</p>
+<p>所以，<code>new Rabbit()</code> 调用了 <code>super()</code>，因此它执行了父类构造器，并且（根据派生类规则）只有在此之后，它的类字段才被初始化。在父类构造器被执行的时候，<code>Rabbit</code> 还没有自己的类字段，这就是为什么 <code>Animal</code> 类字段被使用了。</p>
+<p>这种字段与方法之间微妙的区别只特定于 JavaScript。</p>
+<p>幸运的是，这种行为仅在一个被重写的字段被父类构造器使用时才会显现出来。接下来它会发生的东西可能就比较难理解了，所以我们要在这里对此行为进行解释。</p>
+<p>如果出问题了，我们可以通过使用方法或者 getter/setter 替代类字段，来修复这个问题。</p>
+<h2 id="深入：内部探究和-homeobject">深入：内部探究和 [[HomeObject]]</h2>
+<pre><code class="language-warn">如果你是第一次阅读本教程，那么则可以跳过本节。
+
+这是关于继承和 `super` 背后的内部机制。</code></pre>
+<p>让我们更深入地研究 <code>super</code>。我们将在这个过程中发现一些有趣的事儿。</p>
+<p>首先要说的是，从我们迄今为止学到的知识来看，<code>super</code> 是不可能运行的。</p>
+<p>的确是这样，让我们问问自己，以技术的角度它是如何工作的？当一个对象方法执行时，它会将当前对象作为 <code>this</code>。随后如果我们调用 <code>super.method()</code>，那么引擎需要从当前对象的原型中获取 <code>method</code>。但这是怎么做到的？</p>
+<p>这个任务看起来是挺容易的，但其实并不简单。引擎知道当前对象的 <code>this</code>，所以它可以获取父 <code>method</code> 作为 <code>this.__proto__.method</code>。不幸的是，这个“天真”的解决方法是行不通的。</p>
+<p>让我们演示一下这个问题。简单起见，我们使用普通对象而不使用类。</p>
+<p>如果你不想知道更多的细节知识，你可以跳过此部分，并转到下面的 <code>[[HomeObject]]</code> 小节。这没关系的。但如果你感兴趣，想学习更深入的知识，那就继续阅读吧。</p>
+<p>在下面的例子中，<code>rabbit.__proto__ = animal</code>。现在让我们尝试一下：在 <code>rabbit.eat()</code> 我们将会使用 <code>this.__proto__</code> 调用 <code>animal.eat()</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Animal&quot;</span>,
+  eat() {
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> eats.`</span>);
+  }
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">__proto__</span>: animal,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Rabbit&quot;</span>,
+  eat() {
+*!*
+    <span class="hljs-comment">// 这就是 super.eat() 可以大概工作的方式</span>
+    <span class="hljs-built_in">this</span>.__proto__.eat.call(<span class="hljs-built_in">this</span>); <span class="hljs-comment">// (*)</span>
+*/!*
+  }
+};
+
+rabbit.eat(); <span class="hljs-comment">// Rabbit eats.</span></code></pre>
+<p>在 <code>(*)</code> 这一行，我们从原型（<code>animal</code>）中获取 <code>eat</code>，并在当前对象的上下文中调用它。请注意，<code>.call(this)</code> 在这里非常重要，因为简单的调用 <code>this.__proto__.eat()</code> 将在原型的上下文中执行 <code>eat</code>，而非当前对象。</p>
+<p>在上面的代码中，它确实按照了期望运行：我们获得了正确的 <code>alert</code>。</p>
+<p>现在，让我们在原型链上再添加一个对象。我们将看到这件事是如何被打破的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Animal&quot;</span>,
+  eat() {
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> eats.`</span>);
+  }
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">__proto__</span>: animal,
+  eat() {
+    <span class="hljs-comment">// ...bounce around rabbit-style and call parent (animal) method</span>
+    <span class="hljs-built_in">this</span>.__proto__.eat.call(<span class="hljs-built_in">this</span>); <span class="hljs-comment">// (*)</span>
+  }
+};
+
+<span class="hljs-keyword">let</span> longEar = {
+  <span class="hljs-attr">__proto__</span>: rabbit,
+  eat() {
+    <span class="hljs-comment">// ...do something with long ears and call parent (rabbit) method</span>
+    <span class="hljs-built_in">this</span>.__proto__.eat.call(<span class="hljs-built_in">this</span>); <span class="hljs-comment">// (**)</span>
+  }
+};
+
+*!*
+longEar.eat(); <span class="hljs-comment">// Error: Maximum call stack size exceeded</span>
+*/!*</code></pre>
+<p>代码无法再运行了！我们可以看到，在试图调用 <code>longEar.eat()</code> 时抛出了错误。</p>
+<p>原因可能不那么明显，但是如果我们跟踪 <code>longEar.eat()</code> 调用，就可以发现原因。在 <code>(*)</code> 和 <code>(**)</code> 这两行中，<code>this</code> 的值都是当前对象（<code>longEar</code>）。这是至关重要的一点：所有的对象方法都将当前对象作为 <code>this</code>，而非原型或其他什么东西。</p>
+<p>因此，在 <code>(*)</code> 和 <code>(**)</code> 这两行中，<code>this.__proto__</code> 的值是完全相同的：都是 <code>rabbit</code>。它们俩都调用的是 <code>rabbit.eat</code>，它们在不停地循环调用自己，而不是在原型链上向上寻找方法。</p>
+<p>这张图介绍了发生的情况：</p>
+<p><img src="this-super-loop.svg" alt=""></p>
+<ol>
+<li><p>在 <code>longEar.eat()</code> 中，<code>(**)</code> 这一行调用 <code>rabbit.eat</code> 并为其提供 <code>this=longEar</code>。</p>
+<pre><code class="language-js"><span class="hljs-comment">// 在 longEar.eat() 中我们有 this = longEar</span>
+<span class="hljs-built_in">this</span>.__proto__.eat.call(<span class="hljs-built_in">this</span>) <span class="hljs-comment">// (**)</span>
+<span class="hljs-comment">// 变成了</span>
+longEar.__proto__.eat.call(<span class="hljs-built_in">this</span>)
+<span class="hljs-comment">// 也就是</span>
+rabbit.eat.call(<span class="hljs-built_in">this</span>);</code></pre>
+</li>
+<li><p>之后在 <code>rabbit.eat</code> 的 <code>(*)</code> 行中，我们希望将函数调用在原型链上向更高层传递，但是 <code>this=longEar</code>，所以 <code>this.__proto__.eat</code> 又是 <code>rabbit.eat</code>！</p>
+<pre><code class="language-js"><span class="hljs-comment">// 在 rabbit.eat() 中我们依然有 this = longEar</span>
+<span class="hljs-built_in">this</span>.__proto__.eat.call(<span class="hljs-built_in">this</span>) <span class="hljs-comment">// (*)</span>
+<span class="hljs-comment">// 变成了</span>
+longEar.__proto__.eat.call(<span class="hljs-built_in">this</span>)
+<span class="hljs-comment">// 或（再一次）</span>
+rabbit.eat.call(<span class="hljs-built_in">this</span>);</code></pre>
+</li>
+<li><p>……所以 <code>rabbit.eat</code> 在不停地循环调用自己，因此它无法进一步地提升。</p>
+</li>
+</ol>
+<p>这个问题没法仅仅通过使用 <code>this</code> 来解决。</p>
+<h3 id="homeobject"><code>[[HomeObject]]</code></h3>
+<p>为了提供解决方法，JavaScript 为函数添加了一个特殊的内部属性：<code>[[HomeObject]]</code>。</p>
+<p>当一个函数被定义为类或者对象方法时，它的 <code>[[HomeObject]]</code> 属性就成为了该对象。</p>
+<p>然后 <code>super</code> 使用它来解析（resolve）父原型及其方法。</p>
+<p>让我们看看它是怎么工作的，首先，对于普通对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Animal&quot;</span>,
+  eat() {         <span class="hljs-comment">// animal.eat.[[HomeObject]] == animal</span>
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> eats.`</span>);
+  }
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">__proto__</span>: animal,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Rabbit&quot;</span>,
+  eat() {         <span class="hljs-comment">// rabbit.eat.[[HomeObject]] == rabbit</span>
+    <span class="hljs-built_in">super</span>.eat();
+  }
+};
+
+<span class="hljs-keyword">let</span> longEar = {
+  <span class="hljs-attr">__proto__</span>: rabbit,
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Long Ear&quot;</span>,
+  eat() {         <span class="hljs-comment">// longEar.eat.[[HomeObject]] == longEar</span>
+    <span class="hljs-built_in">super</span>.eat();
+  }
+};
+
+*!*
+<span class="hljs-comment">// 正确执行</span>
+longEar.eat();  <span class="hljs-comment">// Long Ear eats.</span>
+*/!*</code></pre>
+<p>它基于 <code>[[HomeObject]]</code> 运行机制按照预期执行。一个方法，例如 <code>longEar.eat</code>，知道其 <code>[[HomeObject]]</code> 并且从其原型中获取父方法。并没有使用 <code>this</code>。</p>
+<h3 id="方法并不是自由的">方法并不是“自由”的</h3>
+<p>正如我们之前所知道的，函数通常都是“自由”的，并没有绑定到 JavaScript 中的对象。正因如此，它们可以在对象之间复制，并用另外一个 <code>this</code> 调用它。</p>
+<p><code>[[HomeObject]]</code> 的存在违反了这个原则，因为方法记住了它们的对象。<code>[[HomeObject]]</code> 不能被更改，所以这个绑定是永久的。</p>
+<p>在 JavaScript 语言中 <code>[[HomeObject]]</code> 仅被用于 <code>super</code>。所以，如果一个方法不使用 <code>super</code>，那么我们仍然可以视它为自由的并且可在对象之间复制。但是用了 <code>super</code> 再这样做可能就会出错。</p>
+<p>下面是复制后错误的 <code>super</code> 结果的示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  sayHi() {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`I&#x27;m an animal`</span>);
+  }
+};
+
+<span class="hljs-comment">// rabbit 继承自 animal</span>
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">__proto__</span>: animal,
+  sayHi() {
+    <span class="hljs-built_in">super</span>.sayHi();
+  }
+};
+
+<span class="hljs-keyword">let</span> plant = {
+  sayHi() {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;I&#x27;m a plant&quot;</span>);
+  }
+};
+
+<span class="hljs-comment">// tree 继承自 plant</span>
+<span class="hljs-keyword">let</span> tree = {
+  <span class="hljs-attr">__proto__</span>: plant,
+*!*
+  sayHi: rabbit.sayHi <span class="hljs-comment">// (*)</span>
+*/!*
+};
+
+*!*
+tree.sayHi();  <span class="hljs-comment">// I&#x27;m an animal (?!?)</span>
+*/!*</code></pre>
+<p>调用 <code>tree.sayHi()</code> 显示 &quot;I&#39;m an animal&quot;。这绝对是错误的。</p>
+<p>原因很简单：</p>
+<ul>
+<li>在 <code>(*)</code> 行，<code>tree.sayHi</code> 方法是从 <code>rabbit</code> 复制而来。也许我们只是想避免重复代码？</li>
+<li>它的 <code>[[HomeObject]]</code> 是 <code>rabbit</code>，因为它是在 <code>rabbit</code> 中创建的。没有办法修改 <code>[[HomeObject]]</code>。</li>
+<li><code>tree.sayHi()</code> 内具有 <code>super.sayHi()</code>。它从 <code>rabbit</code> 中上溯，然后从 <code>animal</code> 中获取方法。</li>
+</ul>
+<p>这是发生的情况示意图：</p>
+<p><img src="super-homeobject-wrong.svg" alt=""></p>
+<h3 id="方法，不是函数属性">方法，不是函数属性</h3>
+<p><code>[[HomeObject]]</code> 是为类和普通对象中的方法定义的。但是对于对象而言，方法必须确切指定为 <code>method()</code>，而不是 <code>&quot;method: function()&quot;</code>。</p>
+<p>这个差别对我们来说可能不重要，但是对 JavaScript 来说却非常重要。</p>
+<p>在下面的例子中，使用非方法（non-method）语法进行了比较。未设置 <code>[[HomeObject]]</code> 属性，并且继承无效：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  <span class="hljs-attr">eat</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// 这里是故意这样写的，而不是 eat() {...</span>
+    <span class="hljs-comment">// ...</span>
+  }
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">__proto__</span>: animal,
+  <span class="hljs-attr">eat</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">super</span>.eat();
+  }
+};
+
+*!*
+rabbit.eat();  <span class="hljs-comment">// 错误调用 super（因为这里没有 [[HomeObject]]）</span>
+*/!*</code></pre>
+<h2 id="总结">总结</h2>
+<ol>
+<li>想要扩展一个类：<code>class Child extends Parent</code>：<ul>
+<li>这意味着 <code>Child.prototype.__proto__</code> 将是 <code>Parent.prototype</code>，所以方法会被继承。</li>
+</ul>
+</li>
+<li>重写一个 constructor：<ul>
+<li>在使用 <code>this</code> 之前，我们必须在 <code>Child</code> 的 constructor 中将父 constructor 调用为 <code>super()</code>。</li>
+</ul>
+</li>
+<li>重写一个方法：<ul>
+<li>我们可以在一个 <code>Child</code> 方法中使用 <code>super.method()</code> 来调用 <code>Parent</code> 方法。</li>
+</ul>
+</li>
+<li>内部：<ul>
+<li>方法在内部的 <code>[[HomeObject]]</code> 属性中记住了它们的类/对象。这就是 <code>super</code> 如何解析父方法的。</li>
+<li>因此，将一个带有 <code>super</code> 的方法从一个对象复制到另一个对象是不安全的。</li>
+</ul>
+</li>
+</ol>
+<p>补充：</p>
+<ul>
+<li>箭头函数没有自己的 <code>this</code> 或 <code>super</code>，所以它们能融入到就近的上下文中，像透明似的。</li>
+</ul>

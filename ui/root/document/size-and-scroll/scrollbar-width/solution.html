@@ -1,0 +1,16 @@
+<p>为了获得滚动条的宽度，我们可以创建一个带有滚动条的元素，但是没有边框（border）和内边距（padding）。</p>
+<p>然后，它的全宽度 <code>offsetWidth</code> 和内部内容宽度 <code>clientWidth</code> 之间的差值就是滚动条的宽度：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 创建一个包含滚动条的 div</span>
+<span class="hljs-keyword">let</span> div = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
+
+div.style.overflowY = <span class="hljs-string">&#x27;scroll&#x27;</span>;
+div.style.width = <span class="hljs-string">&#x27;50px&#x27;</span>;
+div.style.height = <span class="hljs-string">&#x27;50px&#x27;</span>;
+
+<span class="hljs-comment">// 必须将其放入文档（document）中，否则其大小将为 0</span>
+<span class="hljs-built_in">document</span>.body.append(div);
+<span class="hljs-keyword">let</span> scrollWidth = div.offsetWidth - div.clientWidth;
+
+div.remove();
+
+alert(scrollWidth);</code></pre>

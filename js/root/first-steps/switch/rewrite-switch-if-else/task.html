@@ -1,0 +1,19 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="将-switch-结构重写为-if-结构">将 &quot;switch&quot; 结构重写为 &quot;if&quot; 结构</h1>
+<p>将下面 <code>switch</code> 结构的代码写成 <code>if..else</code> 结构：</p>
+<pre><code class="language-js"><span class="hljs-keyword">switch</span> (browser) {
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;Edge&#x27;</span>:
+    alert( <span class="hljs-string">&quot;You&#x27;ve got the Edge!&quot;</span> );
+    <span class="hljs-keyword">break</span>;
+
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;Chrome&#x27;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;Firefox&#x27;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;Safari&#x27;</span>:
+  <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;Opera&#x27;</span>:
+    alert( <span class="hljs-string">&#x27;Okay we support these browsers too&#x27;</span> );
+    <span class="hljs-keyword">break</span>;
+
+  <span class="hljs-keyword">default</span>:
+    alert( <span class="hljs-string">&#x27;We hope that this page looks ok!&#x27;</span> );
+}</code></pre>

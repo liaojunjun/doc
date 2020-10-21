@@ -1,0 +1,22 @@
+<h1 id="滚动">滚动</h1>
+<p><code>scroll</code> 事件允许对页面或元素滚动作出反应。我们可以在这里做一些有用的事情。</p>
+<p>例如：</p>
+<ul>
+<li>根据用户在文档中的位置显示/隐藏其他控件或信息。</li>
+<li>当用户向下滚动到页面末端时加载更多数据。</li>
+</ul>
+<p>这是一个显示当前滚动的小函数：</p>
+<pre><code class="language-js"><span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&#x27;scroll&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;showScroll&#x27;</span>).innerHTML = <span class="hljs-built_in">window</span>.pageYOffset + <span class="hljs-string">&#x27;px&#x27;</span>;
+});</code></pre>
+<pre><code class="language-online">在运行中：
+
+Current scroll = &lt;b id=&quot;showScroll&quot;&gt;scroll the window&lt;/b&gt;</code></pre>
+<p><code>scroll</code> 事件在 <code>window</code> 和可滚动元素上都可以运行。</p>
+<h2 id="防止滚动">防止滚动</h2>
+<p>我们如何使某些东西变成不可滚动？</p>
+<p>我们不能通过在 <code>onscroll</code> 监听器中使用 <code>event.preventDefault()</code> 来阻止滚动，因为它会在滚动发生 <strong>之后</strong> 才触发。</p>
+<p>但是我们可以在导致滚动的事件上，例如在 <code>key:pageUp</code> 和 <code>key:pageDown</code> 的 <code>keydown</code> 事件上，使用 <code>event.preventDefault()</code> 来阻止滚动。</p>
+<p>如果我们向这些事件中添加事件处理程序，并向其中添加 <code>event.preventDefault()</code>，那么滚动就不会开始。</p>
+<p>启动滚动的方式有很多，使用 CSS 的 <code>overflow</code> 属性更加可靠。</p>
+<p>有几个练习题，你可以解决或者浏览以下几个任务来看一下 <code>onscroll</code> 的应用。</p>

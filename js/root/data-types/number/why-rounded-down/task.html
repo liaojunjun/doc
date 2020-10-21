@@ -1,0 +1,9 @@
+<p>importance: 4</p>
+<hr>
+<h1 id="为什么-635tofixed1--63？">为什么 6.35.toFixed(1) == 6.3？</h1>
+<p>根据文档，<code>Math.round</code> 和 <code>toFixed</code> 都将数字舍入到最接近的数字：<code>0..4</code> 会被舍去，而 <code>5..9</code> 会进一位。</p>
+<p>例如：</p>
+<pre><code class="language-js">alert( <span class="hljs-number">1.35</span>.toFixed(<span class="hljs-number">1</span>) ); <span class="hljs-comment">// 1.4</span></code></pre>
+<p>在下面这个类似的示例中，为什么 <code>6.35</code> 被舍入为 <code>6.3</code> 而不是 <code>6.4</code>？</p>
+<pre><code class="language-js">alert( <span class="hljs-number">6.35</span>.toFixed(<span class="hljs-number">1</span>) ); <span class="hljs-comment">// 6.3</span></code></pre>
+<p>如何以正确的方式来对 <code>6.35</code> 进行舍入？</p>

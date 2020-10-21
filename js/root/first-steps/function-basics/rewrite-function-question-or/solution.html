@@ -1,0 +1,9 @@
+<p>使用问号运算符 <code>&#39;?&#39;</code>：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkAge</span>(<span class="hljs-params">age</span>) </span>{
+  <span class="hljs-keyword">return</span> (age &gt; <span class="hljs-number">18</span>) ? <span class="hljs-literal">true</span> : confirm(<span class="hljs-string">&#x27;Did parents allow you?&#x27;</span>);
+}</code></pre>
+<p>使用或运算符 <code>||</code>（最短的变体）：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkAge</span>(<span class="hljs-params">age</span>) </span>{
+  <span class="hljs-keyword">return</span> (age &gt; <span class="hljs-number">18</span>) || confirm(<span class="hljs-string">&#x27;Did parents allow you?&#x27;</span>);
+}</code></pre>
+<p>请注意此处不需要 <code>age &gt; 18</code> 左右的括号。写上括号是为了提高可读性。</p>

@@ -1,0 +1,28 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="修复丢失了-this-的函数">修复丢失了 &quot;this&quot; 的函数</h1>
+<p>下面代码中对 <code>askPassword()</code> 的调用将会检查 password，然后基于结果调用 <code>user.loginOk/loginFail</code>。</p>
+<p>但是它导致了一个错误。为什么？</p>
+<p>修改高亮的行，以使所有内容都能正常工作（其它行不用修改）。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">askPassword</span>(<span class="hljs-params">ok, fail</span>) </span>{
+  <span class="hljs-keyword">let</span> password = prompt(<span class="hljs-string">&quot;Password?&quot;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">if</span> (password == <span class="hljs-string">&quot;rockstar&quot;</span>) ok();
+  <span class="hljs-keyword">else</span> fail();
+}
+
+<span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span>,
+
+  loginOk() {
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> logged in`</span>);
+  },
+
+  loginFail() {
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> failed to log in`</span>);
+  },
+
+};
+
+*!*
+askPassword(user.loginOk, user.loginFail);
+*/!*</code></pre>

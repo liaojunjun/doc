@@ -1,0 +1,20 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="按字段排序">按字段排序</h1>
+<p>我们有一组要排序的对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> users = [
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">20</span>, <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Johnson&quot;</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pete&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">18</span>, <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Peterson&quot;</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Ann&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">19</span>, <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Hathaway&quot;</span> }
+];</code></pre>
+<p>通常的做法应该是这样的：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 通过 name (Ann, John, Pete)</span>
+users.sort(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.name &gt; b.name ? <span class="hljs-number">1</span> : <span class="hljs-number">-1</span>);
+
+<span class="hljs-comment">// 通过 age (Pete, Ann, John)</span>
+users.sort(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.age &gt; b.age ? <span class="hljs-number">1</span> : <span class="hljs-number">-1</span>);</code></pre>
+<p>我们可以让它更加简洁吗，比如这样？</p>
+<pre><code class="language-js">users.sort(byField(<span class="hljs-string">&#x27;name&#x27;</span>));
+users.sort(byField(<span class="hljs-string">&#x27;age&#x27;</span>));</code></pre>
+<p>这样我们就只需要写 <code>byField(fieldName)</code>，而不是写一个函数。</p>
+<p>编写函数 <code>byField</code> 来实现这个需求。</p>

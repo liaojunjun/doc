@@ -1,0 +1,19 @@
+<p>importance: 1</p>
+<hr>
+<h1 id="为什么留下-aaa？">为什么留下 &quot;aaa&quot;？</h1>
+<p>在下面这个示例中，我们调用 <code>table.remove()</code> 从文档中删除表格。</p>
+<p>但如果运行它，你就会看到文本 <code>&quot;aaa&quot;</code> 并没有被删除。</p>
+<p>这是为什么？</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;table&quot;</span>&gt;</span>
+  aaa
+  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>Test<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  alert(table); <span class="hljs-comment">// 表格，就是它应有的样子</span>
+
+  table.remove();
+  <span class="hljs-comment">// 为什么 aaa 还存在于文档中？</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>

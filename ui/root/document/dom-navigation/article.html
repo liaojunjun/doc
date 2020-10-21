@@ -1,0 +1,288 @@
+<p>libs:</p>
+<ul>
+<li>d3</li>
+<li>domtree</li>
+</ul>
+<hr>
+<h1 id="遍历-dom">遍历 DOM</h1>
+<p>DOM 让我们可以对元素和它们中的内容做任何事，但是首先我们需要获取到对应的 DOM 对象。</p>
+<p>对 DOM 的所有操作都是以 <code>document</code> 对象开始。它是 DOM 的主“入口点”。从它我们可以访问任何节点。</p>
+<p>这里是一张描述对象间链接的图片，通过这些链接我们可以在 DOM 节点之间移动。</p>
+<p><img src="dom-links.svg" alt=""></p>
+<p>让我们更详细地讨论它们吧。</p>
+<h2 id="在最顶层：documentelement-和-body">在最顶层：documentElement 和 body</h2>
+<p>最顶层的树节点可以直接作为 <code>document</code> 的属性来使用：</p>
+<p><code>&lt;html&gt;</code> = <code>document.documentElement</code>
+: 最顶层的 document 节点是 <code>document.documentElement</code>。这是对应 <code>&lt;html&gt;</code> 标签的 DOM 节点。</p>
+<p><code>&lt;body&gt;</code> = <code>document.body</code>
+: 另一个被广泛使用的 DOM 节点是 <code>&lt;body&gt;</code> 元素 — <code>document.body</code>。</p>
+<p><code>&lt;head&gt;</code> = <code>document.head</code>
+: <code>&lt;head&gt;</code> 标签可以通过 <code>document.head</code> 访问。</p>
+<p>````warn header=&quot;这里有个问题：<code>document.body</code> 的值可能是 <code>null</code>&quot;
+脚本无法访问在运行时不存在的元素。</p>
+<p>尤其是，如果一个脚本是在 <code>&lt;head&gt;</code> 中，那么脚本是访问不到 <code>document.body</code> 元素的，因为浏览器还没有读到它。</p>
+<p>所以，下面例子中的第一个 <code>alert</code> 显示 <code>null</code>：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+*!*
+    alert( <span class="hljs-string">&quot;From HEAD: &quot;</span> + <span class="hljs-built_in">document</span>.body ); <span class="hljs-comment">// null，这里目前还没有 &lt;body&gt;</span>
+*/!*
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    alert( <span class="hljs-string">&quot;From BODY: &quot;</span> + <span class="hljs-built_in">document</span>.body ); <span class="hljs-comment">// HTMLBodyElement，现在存在了</span>
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+<pre><code>
+```smart header=&quot;在 DOM 的世界中，`null` 就意味着“不存在”&quot;
+在 DOM 中，`null` 值就意味着“不存在”或者“没有这个节点”。 
+```
+
+## 子节点：childNodes，firstChild，lastChild
+
+从现在开始，我们将使用下面这两个术语：
+
+- **子节点（或者叫作子）** — 对应的是直系的子元素。换句话说，它们被完全嵌套在给定的元素中。例如，`&lt;head&gt;` 和 `&lt;body&gt;` 就是 `&lt;html&gt;` 元素的子元素。
+- **子孙元素** — 嵌套在给定元素中的所有元素，包括子元素，以及子元素的子元素等。
+
+例如，这里 `&lt;body&gt;` 有子元素 `&lt;div&gt;` 和 `&lt;ul&gt;`（以及一些空白的文本节点）：
+
+```html run
+&lt;html&gt;
+&lt;body&gt;
+  &lt;div&gt;Begin&lt;/div&gt;
+
+  &lt;ul&gt;
+    &lt;li&gt;
+      &lt;b&gt;Information&lt;/b&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+```
+
+……`&lt;body&gt;` 元素的子孙元素不仅包含直接的子元素 `&lt;div&gt;` 和 `&lt;ul&gt;`，还包含像 `&lt;li&gt;`（`&lt;ul&gt;` 的子元素）和 `&lt;b&gt;`（`&lt;li&gt;` 的子元素）这样的元素 — 整个子树。
+
+**`childNodes` 集合列出了所有子节点，包括文本节点。**
+
+下面这个例子显示了 `document.body` 的子元素：
+
+```html run
+&lt;html&gt;
+&lt;body&gt;
+  &lt;div&gt;Begin&lt;/div&gt;
+
+  &lt;ul&gt;
+    &lt;li&gt;Information&lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;div&gt;End&lt;/div&gt;
+
+  &lt;script&gt;
+*!*
+    for (let i = 0; i &lt; document.body.childNodes.length; i++) {
+      alert( document.body.childNodes[i] ); // Text, DIV, Text, UL, ..., SCRIPT
+    }
+*/!*
+  &lt;/script&gt;
+  ...more stuff...
+&lt;/body&gt;
+&lt;/html&gt;
+```
+
+请注意这里的一个有趣的细节。如果我们运行上面这个例子，所显示的最后一个元素是 `&lt;script&gt;`。实际上，文档下面还有很多东西，但是在这个脚本运行的时候，浏览器还没有读到下面的内容，所以这个脚本也就看不到它们。
+
+**`firstChild` 和 `lastChild` 属性是访问第一个和最后一个子元素的快捷方式。**
+
+它们只是简写。如果元素存在子节点，那么下面的脚本运行结果将是 true：
+```js
+elem.childNodes[0] === elem.firstChild
+elem.childNodes[elem.childNodes.length - 1] === elem.lastChild
+```
+
+这里还有一个特别的函数 `elem.hasChildNodes()` 用于检查节点是否有子节点。
+
+### DOM 集合
+
+正如我们看到的那样，`childNodes` 看起来就像一个数组。但实际上它并不是一个数组，而是一个 **集合** — 一个类数组的可迭代对象。
+
+这个性质会导致两个重要的结果：
+
+1. 我们可以使用 `for..of` 来迭代它：
+  ```js
+  for (let node of document.body.childNodes) {
+    alert(node); // 显示集合中的所有节点
+  }
+  ```
+  这是因为集合是可迭代的（提供了所需要的 `Symbol.iterator` 属性）。
+
+2. 无法使用数组的方法，因为它不是一个数组：
+  ```js run
+  alert(document.body.childNodes.filter); // undefined（这里没有 filter 方法！）
+  ```
+
+集合的性质所得到的第一个结果很不错。第二个结果也还可以忍受，因为如果我们想要使用数组的方法的话，我们可以使用 `Array.from` 方法来从集合创建一个“真”数组：
+
+  ```js run
+  alert( Array.from(document.body.childNodes).filter ); // function
+  ```
+
+```warn header=&quot;DOM 集合是只读的&quot;
+DOM 集合，甚至可以说本章中列出的 **所有** 导航（navigation）属性都是只读的。
+
+我们不能通过类似 `childNodes[i] = ...` 的操作来替换一个子节点。
+
+修改子节点需要使用其它方法。我们将会在下一章中看到它们。
+```
+
+```warn header=&quot;DOM 集合是实时的&quot;
+除小部分例外，几乎所有的 DOM 集合都是 **实时** 的。换句话说，它们反映了 DOM 的当前状态。
+
+如果我们保留一个对 `elem.childNodes` 的引用，然后向 DOM 中添加/移除节点，那么这些节点的更新会自动出现在集合中。
+```
+
+````warn header=&quot;不要使用 `for..in` 来遍历集合&quot;
+可以使用 `for..of` 对集合进行迭代。但有时候人们会尝试使用 `for..in` 来迭代集合。
+
+请不要这么做。`for..in` 循环遍历的是所有可枚举的（enumerable）属性。集合还有一些“额外的”很少被用到的属性，通常这些属性也是我们不期望得到的：
+
+```html run
+&lt;body&gt;
+&lt;script&gt;
+  // 显示 0，1，length，item，values 及其他。
+  for (let prop in document.body.childNodes) alert(prop);
+&lt;/script&gt;
+&lt;/body&gt;</code></pre>
+<h2 id="兄弟节点和父节点">兄弟节点和父节点</h2>
+<p><strong>兄弟节点（Sibling）</strong> 是指有同一个父节点的节点。</p>
+<p>例如，<code>&lt;head&gt;</code> 和 <code>&lt;body&gt;</code> 就是兄弟节点：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
+<ul>
+<li><code>&lt;body&gt;</code> 可以说是 <code>&lt;head&gt;</code> 的“下一个”或者“右边”兄弟节点。</li>
+<li><code>&lt;head&gt;</code> 可以说是 <code>&lt;body&gt;</code> 的“前一个”或者“左边”兄弟节点。</li>
+</ul>
+<p>下一个兄弟节点在 <code>nextSibling</code> 属性中，上一个是在 <code>previousSibling</code> 属性中。</p>
+<p>可以通过 <code>parentNode</code> 来访问父节点。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">// &lt;body&gt; 的父节点是 &lt;html&gt;</span>
+alert( <span class="hljs-built_in">document</span>.body.parentNode === <span class="hljs-built_in">document</span>.documentElement ); <span class="hljs-comment">// true</span>
+
+<span class="hljs-comment">// &lt;head&gt; 的后一个是 &lt;body&gt;</span>
+alert( <span class="hljs-built_in">document</span>.head.nextSibling ); <span class="hljs-comment">// HTMLBodyElement</span>
+
+<span class="hljs-comment">// &lt;body&gt; 的前一个是 &lt;head&gt;</span>
+alert( <span class="hljs-built_in">document</span>.body.previousSibling ); <span class="hljs-comment">// HTMLHeadElement</span></code></pre>
+<h2 id="纯元素导航">纯元素导航</h2>
+<p>上面列出的导航（navigation）属性引用 <strong>所有</strong> 节点。例如，在 <code>childNodes</code> 中我们可以看到文本节点，元素节点，甚至如果注释节点存在的话，也能访问到。 </p>
+<p>但是对于很多任务来说，我们并不想要文本节点或注释节点。我们希望操纵的是代表标签的和形成页面结构的元素节点。</p>
+<p>所以，让我们看看更多只考虑 <strong>元素节点</strong> 的导航链接（navigation link）：</p>
+<p><img src="dom-links-elements.svg" alt=""></p>
+<p>这些链接和我们在上面提到过的类似，只是在词中间加了 <code>Element</code>：</p>
+<ul>
+<li><code>children</code> — 仅那些作为元素节点的子代的节点。</li>
+<li><code>firstElementChild</code>，<code>lastElementChild</code> — 第一个和最后一个子元素。</li>
+<li><code>previousElementSibling</code>，<code>nextElementSibling</code> — 兄弟元素。</li>
+<li><code>parentElement</code> — 父元素。</li>
+</ul>
+<p>````smart header=&quot;为什么是 <code>parentElement</code>? 父节点可以不是一个元素吗？&quot;
+<code>parentElement</code> 属性返回的是“元素类型”的父节点，而 <code>parentNode</code> 返回的是“任何类型”的父节点。这些属性通常来说是一样的：它们都是用于获取父节点。</p>
+<p>唯一的例外就是 <code>document.documentElement</code>：</p>
+<pre><code class="language-js">alert( <span class="hljs-built_in">document</span>.documentElement.parentNode ); <span class="hljs-comment">// document</span>
+alert( <span class="hljs-built_in">document</span>.documentElement.parentElement ); <span class="hljs-comment">// null</span></code></pre>
+<p>因为根节点 <code>document.documentElement</code>（<code>&lt;html&gt;</code>）的父节点是 <code>document</code>。但 <code>document</code> 不是一个元素节点，所以 <code>parentNode</code> 返回了 <code>document</code>，但 <code>parentElement</code> 返回的是 <code>null</code>。</p>
+<p>当我们想从任意节点 <code>elem</code> 到 <code>&lt;html&gt;</code> 而不是到 <code>document</code> 时，这个细节可能很有用：</p>
+<pre><code class="language-js"><span class="hljs-keyword">while</span>(elem = elem.parentElement) { <span class="hljs-comment">// 向上，直到 &lt;html&gt;</span>
+  alert( elem );
+}</code></pre>
+<pre><code>
+让我们修改上面的一个示例：用 `children` 来替换 `childNodes`。现在它只显示元素：
+
+```html run
+&lt;html&gt;
+&lt;body&gt;
+  &lt;div&gt;Begin&lt;/div&gt;
+
+  &lt;ul&gt;
+    &lt;li&gt;Information&lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;div&gt;End&lt;/div&gt;
+
+  &lt;script&gt;
+*!*
+    for (let elem of document.body.children) {
+      alert(elem); // DIV, UL, DIV, SCRIPT
+    }
+*/!*
+  &lt;/script&gt;
+  ...
+&lt;/body&gt;
+&lt;/html&gt;
+```
+
+## 更多链接：表格 [#dom-navigation-tables]
+
+到现在，我们已经描述了基本的导航（navigation）属性。
+
+方便起见，某些类型的 DOM 元素可能会提供特定于其类型的其他属性。
+
+表格（Table）是一个很好的例子，它代表了一个特别重要的情况：
+
+**`&lt;table&gt;`** 元素支持 (除了上面给出的，之外) 以下这些属性:
+- `table.rows` — `&lt;tr&gt;` 元素的集合。
+- `table.caption/tHead/tFoot` — 引用元素 `&lt;caption&gt;`，`&lt;thead&gt;`，`&lt;tfoot&gt;`。
+- `table.tBodies` — `&lt;tbody&gt;` 元素的集合（根据标准还有很多元素，但是这里至少会有一个 — 即使没有被写在 HTML 源文件中，浏览器也会将其放入 DOM 中）。
+
+**`&lt;thead&gt;`，`&lt;tfoot&gt;`，`&lt;tbody&gt;`** 元素提供了 `rows` 属性：
+- `tbody.rows` — 表格内部 `&lt;tr&gt;` 元素的集合。
+
+**`&lt;tr&gt;`：**
+- `tr.cells` — 在给定 `&lt;tr&gt;` 中的 `&lt;td&gt;` 和 `&lt;th&gt;` 单元格的集合。
+- `tr.sectionRowIndex` — 给定的 `&lt;tr&gt;` 在封闭的 `&lt;thead&gt;/&lt;tbody&gt;/&lt;tfoot&gt;` 中的位置（索引）。
+- `tr.rowIndex` — 在整个表格中 `&lt;tr&gt;` 的编号（包括表格的所有行）。
+
+**`&lt;td&gt;` 和 `&lt;th&gt;`：**
+- `td.cellIndex` — 在封闭的 `&lt;tr&gt;` 中单元格的编号。
+
+用法示例：
+
+```html run height=100
+&lt;table id=&quot;table&quot;&gt;
+  &lt;tr&gt;
+    &lt;td&gt;one&lt;/td&gt;&lt;td&gt;two&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;three&lt;/td&gt;&lt;td&gt;four&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;script&gt;
+  // 获取带有 &quot;two&quot; 的 td（第一行，第二列）
+  let td = table.*!*rows[0].cells[1]*/!*;
+  td.style.backgroundColor = &quot;red&quot;; // highlight it
+&lt;/script&gt;
+```
+
+规范：[tabular data](https://html.spec.whatwg.org/multipage/tables.html)。
+
+HTML 表单（form）还有其它导航（navigation）属性。稍后当我们开始使用表单（form）时，我们将对其进行研究。
+
+## 总结
+
+给定一个 DOM 节点，我们可以使用导航（navigation）属性访问其直接的邻居。
+
+这些属性主要分为两组：
+
+- 对于所有节点：`parentNode`，`childNodes`，`firstChild`，`lastChild`，`previousSibling`，`nextSibling`。
+- 仅对于元素节点：`parentElement`，`children`，`firstElementChild`，`lastElementChild`，`previousElementSibling`，`nextElementSibling`。
+
+某些类型的 DOM 元素，例如 table，提供了用于访问其内容的其他属性和集合。</code></pre>

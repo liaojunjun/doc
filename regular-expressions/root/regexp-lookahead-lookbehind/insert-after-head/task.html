@@ -1,0 +1,21 @@
+<h1 id="вставьте-после-фрагмента">Вставьте после фрагмента</h1>
+<p>Есть строка с HTML-документом.</p>
+<p>Вставьте после тега <code>&lt;body&gt;</code> (у него могут быть атрибуты) строку <code>&lt;h1&gt;Hello&lt;/h1&gt;</code>.</p>
+<p>Например:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/ваше регулярное выражение/</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">`
+&lt;html&gt;
+  &lt;body style=&quot;height: 200px&quot;&gt;
+  ...
+  &lt;/body&gt;
+&lt;/html&gt;
+`</span>;
+
+str = str.replace(regexp, <span class="hljs-string">`&lt;h1&gt;Hello&lt;/h1&gt;`</span>);</code></pre>
+<p>После этого значение <code>str</code>:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;height: 200px&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+  ...
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>

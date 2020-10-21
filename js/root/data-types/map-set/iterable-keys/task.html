@@ -1,0 +1,16 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="迭代键">迭代键</h1>
+<p>我们期望使用 <code>map.keys()</code> 得到一个数组，然后使用特定的方法例如 <code>.push</code> 等，对其进行处理。</p>
+<p>但是运行不了：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> map = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
+
+map.set(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;John&quot;</span>);
+
+<span class="hljs-keyword">let</span> keys = map.keys();
+
+*!*
+<span class="hljs-comment">// Error: keys.push is not a function</span>
+keys.push(<span class="hljs-string">&quot;more&quot;</span>);
+*/!*</code></pre>
+<p>为什么？我们应该如何修改代码让 <code>keys.push</code> 工作？</p>

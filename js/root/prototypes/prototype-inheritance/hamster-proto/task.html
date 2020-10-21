@@ -1,0 +1,27 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="为什么两只仓鼠都饱了？">为什么两只仓鼠都饱了？</h1>
+<p>我们有两只仓鼠：<code>speedy</code> 和 <code>lazy</code> 都继承自普通的 <code>hamster</code> 对象。 </p>
+<p>当我们喂其中一只的时候，另一只也吃饱了。为什么？如何修复它？</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> hamster = {
+  <span class="hljs-attr">stomach</span>: [],
+
+  eat(food) {
+    <span class="hljs-built_in">this</span>.stomach.push(food);
+  }
+};
+
+<span class="hljs-keyword">let</span> speedy = {
+  <span class="hljs-attr">__proto__</span>: hamster
+};
+
+<span class="hljs-keyword">let</span> lazy = {
+  <span class="hljs-attr">__proto__</span>: hamster
+};
+
+<span class="hljs-comment">// 这只仓鼠找到了食物</span>
+speedy.eat(<span class="hljs-string">&quot;apple&quot;</span>);
+alert( speedy.stomach ); <span class="hljs-comment">// apple</span>
+
+<span class="hljs-comment">// 这只仓鼠也找到了食物，为什么？请修复它。</span>
+alert( lazy.stomach ); <span class="hljs-comment">// apple</span></code></pre>

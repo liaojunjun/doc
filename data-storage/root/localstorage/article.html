@@ -1,0 +1,176 @@
+<h1 id="localstorage，sessionstorage">LocalStorage，sessionStorage</h1>
+<p>Web 存储对象 <code>localStorage</code> 和 <code>sessionStorage</code> 允许我们在浏览器上保存键/值对。</p>
+<p>它们有趣的是，在页面刷新后（对于 <code>sessionStorage</code>）甚至浏览器完全重启（对于 <code>localStorage</code>）后，数据仍然保留在浏览器中。我们很快就会看到。</p>
+<p>我们已经有了 cookie。为什么还要其他存储对象呢？</p>
+<ul>
+<li>与 cookie 不同，Web 存储对象不会随每个请求被发送到服务器。因此，我们可以保存更多数据。大多数浏览器都允许保存至少 2MB 的数据（或更多），并且具有用于配置数据的设置。</li>
+<li>还有一点和 cookie 不同，服务器无法通过 HTTP header 操纵存储对象。一切都是在 JavaScript 中完成的。</li>
+<li>存储绑定到源（域/协议/端口三者）。也就是说，不同协议或子域对应不同的存储对象，它们之间无法访问彼此数据。</li>
+</ul>
+<p>两个存储对象都提供相同的方法和属性：</p>
+<ul>
+<li><code>setItem(key, value)</code> —— 存储键/值对。</li>
+<li><code>getItem(key)</code> —— 按照键获取值。</li>
+<li><code>removeItem(key)</code> —— 删除键及其对应的值。</li>
+<li><code>clear()</code> —— 删除所有数据。</li>
+<li><code>key(index)</code> —— 获取该索引下的键名。</li>
+<li><code>length</code> —— 存储的内容的长度。</li>
+</ul>
+<p>正如你所看到的，它就像一个 <code>Map</code> 集合（<code>setItem/getItem/removeItem</code>），但也允许通过 <code>key(index)</code> 来按索引访问。</p>
+<p>让我们看看它是如何工作的吧。</p>
+<h2 id="localstorage-示例">localStorage 示例</h2>
+<p><code>localStorage</code> 最主要的特点是：</p>
+<ul>
+<li>在同源的所有标签页和窗口之间共享数据。</li>
+<li>数据不会过期。它在浏览器重启甚至系统重启后仍然存在。</li>
+</ul>
+<p>例如，如果你运行此代码……</p>
+<pre><code class="language-js"><span class="hljs-built_in">localStorage</span>.setItem(<span class="hljs-string">&#x27;test&#x27;</span>, <span class="hljs-number">1</span>);</code></pre>
+<p>……然后关闭/重新打开浏览器，或者只是在不同的窗口打开同一页面，然后你可以这样获取它：</p>
+<pre><code class="language-js">alert( <span class="hljs-built_in">localStorage</span>.getItem(<span class="hljs-string">&#x27;test&#x27;</span>) ); <span class="hljs-comment">// 1</span></code></pre>
+<p>我们只需要在同一个源（域/端口/协议），URL 路径可以不同。</p>
+<p>在所有同源的窗口之间，<code>localStorage</code> 数据可以共享。因此，如果我们在一个窗口中设置了数据，则在另一个窗口中也可以看到数据变化。</p>
+<h2 id="类对象形式访问">类对象形式访问</h2>
+<p>我们还可以像使用一个普通对象那样，读取/设置键，像这样：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 设置 key</span>
+<span class="hljs-built_in">localStorage</span>.test = <span class="hljs-number">2</span>;
+
+<span class="hljs-comment">// 获取 key</span>
+alert( <span class="hljs-built_in">localStorage</span>.test ); <span class="hljs-comment">// 2</span>
+
+<span class="hljs-comment">// 删除 key</span>
+<span class="hljs-keyword">delete</span> <span class="hljs-built_in">localStorage</span>.test;</code></pre>
+<p>这是历史原因造成的，并且大多数情况下都可行，但通常不建议这样做，因为：</p>
+<ol>
+<li><p>如果键是由用户生成的，那么它可以是任何内容，例如 <code>length</code> 或 <code>toString</code>，也可以是 <code>localStorage</code> 的另一种内建方法。在这种情况下，<code>getItem/setItem</code> 可以正常工作，而类对象访问的方式则会失败：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> key = <span class="hljs-string">&#x27;length&#x27;</span>;
+<span class="hljs-built_in">localStorage</span>[key] = <span class="hljs-number">5</span>; <span class="hljs-comment">// Error，无法对 length 进行赋值</span></code></pre>
+</li>
+<li><p>有一个 <code>storage</code> 事件，在我们更改数据时会触发。但以类对象方式访问时，不会触发该事件。我们将在本章的后面看到。</p>
+</li>
+</ol>
+<h2 id="遍历键">遍历键</h2>
+<p>正如我们所看到的，这些方法提供了“按照键获取/设置/删除”的功能。但我们如何获取所有保存的值或键呢？</p>
+<p>不幸的是，存储对象是不可迭代的。</p>
+<p>一种方法是像遍历数组那样遍历它们：</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">localStorage</span>.length; i++) {
+  <span class="hljs-keyword">let</span> key = <span class="hljs-built_in">localStorage</span>.key(i);
+  alert(<span class="hljs-string">`<span class="hljs-subst">${key}</span>: <span class="hljs-subst">${<span class="hljs-built_in">localStorage</span>.getItem(key)}</span>`</span>);
+}</code></pre>
+<p>另一个方式是使用 <code>for key in localStorage</code> 循环，就像处理常规对象一样。</p>
+<p>它会遍历所有的键，但也会输出一些我们不需要的内建字段。</p>
+<pre><code class="language-js"><span class="hljs-comment">// 不好的尝试</span>
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">localStorage</span>) {
+  alert(key); <span class="hljs-comment">// 显示 getItem，setItem 和其他内建的东西</span>
+}</code></pre>
+<p>……因此，我们需要使用 <code>hasOwnProperty</code> 检查来过滤掉原型中的字段：</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">localStorage</span>) {
+  <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">localStorage</span>.hasOwnProperty(key)) {
+    <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 跳过像 &quot;setItem&quot;，&quot;getItem&quot; 等这样的键</span>
+  }
+  alert(<span class="hljs-string">`<span class="hljs-subst">${key}</span>: <span class="hljs-subst">${<span class="hljs-built_in">localStorage</span>.getItem(key)}</span>`</span>);
+}</code></pre>
+<p>……或者，使用 <code>Object.keys</code> 获取只属于“自己”的键，然后如果需要，可以遍历它们：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> keys = <span class="hljs-built_in">Object</span>.keys(<span class="hljs-built_in">localStorage</span>);
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">of</span> keys) {
+  alert(<span class="hljs-string">`<span class="hljs-subst">${key}</span>: <span class="hljs-subst">${<span class="hljs-built_in">localStorage</span>.getItem(key)}</span>`</span>);
+}</code></pre>
+<p>后者有效，因为 <code>Object.keys</code> 只返回属于对象的键，会忽略原型上的。</p>
+<h2 id="仅字符串">仅字符串</h2>
+<p>请注意，键和值都必须是字符串。</p>
+<p>如果是任何其他类型，例数字或对象，它会被自动转换为字符串。</p>
+<pre><code class="language-js">sessionStorage.user = {<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>};
+alert(sessionStorage.user); <span class="hljs-comment">// [object Object]</span></code></pre>
+<p>我们可以使用 <code>JSON</code> 来存储对象：</p>
+<pre><code class="language-js">sessionStorage.user = <span class="hljs-built_in">JSON</span>.stringify({<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>});
+
+<span class="hljs-comment">// sometime later</span>
+<span class="hljs-keyword">let</span> user = <span class="hljs-built_in">JSON</span>.parse( sessionStorage.user );
+alert( user.name ); <span class="hljs-comment">// John</span></code></pre>
+<p>也可以对整个存储对象进行字符串化处理，例如出于调试目的：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 为 JSON.stringify 增加了格式设置选项，以使对象看起来更美观</span>
+alert( <span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-built_in">localStorage</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>) );</code></pre>
+<h2 id="sessionstorage">sessionStorage</h2>
+<p><code>sessionStorage</code> 对象的使用频率比 <code>localStorage</code> 对象低得多。</p>
+<p>属性和方法是相同的，但是它有更多的限制：</p>
+<ul>
+<li><code>sessionStorage</code> 的数据只存在于当前浏览器标签页。<ul>
+<li>具有相同页面的另一个标签页中将会有不同的存储。</li>
+<li>但是，它在同一标签页下的 iframe 之间是共享的（假如它们来自相同的源）。</li>
+</ul>
+</li>
+<li>数据在页面刷新后仍然保留，但在关闭/重新打开浏览器标签页后不会被保留。</li>
+</ul>
+<p>让我们看看它的运行效果。</p>
+<p>运行此代码……</p>
+<pre><code class="language-js">sessionStorage.setItem(<span class="hljs-string">&#x27;test&#x27;</span>, <span class="hljs-number">1</span>);</code></pre>
+<p>……然后刷新页面。这时你仍然可以获取到数据：</p>
+<pre><code class="language-js">alert( sessionStorage.getItem(<span class="hljs-string">&#x27;test&#x27;</span>) ); <span class="hljs-comment">// after refresh: 1</span></code></pre>
+<p>……但是，如果你在另一个新的标签页中打开此页面，然后在新页面中再次运行上面这行代码，则会得到 <code>null</code>，表示“未找到数据”。</p>
+<p>这是因为 <code>sessionStorage</code> 不仅绑定到源，还绑定在同一浏览器标签页。因此，<code>sessionStorage</code> 很少被使用。</p>
+<h2 id="storage-事件">Storage 事件</h2>
+<p>当 <code>localStorage</code> 或 <code>sessionStorage</code> 中的数据更新后，<a href="https://www.w3.org/TR/webstorage/#the-storage-event">storage</a> 事件就会触发，它具有以下属性：</p>
+<ul>
+<li><code>key</code> —— 发生更改的数据的 <code>key</code>（如果调用的是 <code>.clear()</code> 方法，则为 <code>null</code>）。</li>
+<li><code>oldValue</code> —— 旧值（如果是新增数据，则为 <code>null</code>）。</li>
+<li><code>newValue</code> —— 新值（如果是删除数据，则为 <code>null</code>）。</li>
+<li><code>url</code> —— 发生数据更新的文档的 url。</li>
+<li><code>storageArea</code> —— 发生数据更新的 <code>localStorage</code> 或 <code>sessionStorage</code> 对象。</li>
+</ul>
+<p>重要的是：该事件会在所有可访问到存储对象的 <code>window</code> 对象上触发，导致当前数据改变的 <code>window</code> 对象除外。</p>
+<p>我们来详细解释一下。</p>
+<p>想象一下，你有两个窗口，它们具有相同的页面。所以 <code>localStorage</code> 在它们之间是共享的。</p>
+<pre><code class="language-online">你可以想在浏览器的两个窗口中打开此页面来测试下面的代码。</code></pre>
+<p>如果两个窗口都在监听 <code>window.onstorage</code> 事件，那么每个窗口都会对另一个窗口中发生的更新作出反应。</p>
+<pre><code class="language-js"><span class="hljs-comment">// 在其他文档对同一存储进行更新时触发</span>
+<span class="hljs-built_in">window</span>.onstorage = <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> { <span class="hljs-comment">// 等同于 window.addEventListener(&#x27;storage&#x27;, () =&gt; {</span>
+  <span class="hljs-keyword">if</span> (event.key != <span class="hljs-string">&#x27;now&#x27;</span>) <span class="hljs-keyword">return</span>;
+  alert(event.key + <span class="hljs-string">&#x27;:&#x27;</span> + event.newValue + <span class="hljs-string">&quot; at &quot;</span> + event.url);
+};
+
+<span class="hljs-built_in">localStorage</span>.setItem(<span class="hljs-string">&#x27;now&#x27;</span>, <span class="hljs-built_in">Date</span>.now());</code></pre>
+<p>请注意，该事件还包含：<code>event.url</code> —— 发生数据更新的文档的 url。</p>
+<p>并且，<code>event.storageArea</code> 包含存储对象 —— <code>sessionStorage</code> 和 <code>localStorage</code> 具有相同的事件，所以 <code>event.storageArea</code> 引用了被修改的对象。我们可能会想设置一些东西，以“响应”更改。</p>
+<p><strong>这允许同源的不同窗口交换消息。</strong></p>
+<p>现代浏览器还支持 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API">Broadcast channel API</a>，这是用于同源窗口之间通信的特殊 API，它的功能更全，但被支持的情况不好。有一些库基于 <code>localStorage</code> 来 polyfill 该 API，使其可以用在任何地方。</p>
+<h2 id="总结">总结</h2>
+<p>Web 存储对象 <code>localStorage</code> 和 <code>sessionStorage</code> 允许我们在浏览器中保存键/值对。</p>
+<ul>
+<li><code>key</code> 和 <code>value</code> 都必须为字符串。</li>
+<li>存储大小限制为 5MB+，具体取决于浏览器。</li>
+<li>它们不会过期。</li>
+<li>数据绑定到源（域/端口/协议）。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><code>localStorage</code></th>
+<th><code>sessionStorage</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>在同源的所有标签页和窗口之间共享数据</td>
+<td>在当前浏览器标签页中可见，包括同源的 iframe</td>
+</tr>
+<tr>
+<td>浏览器重启后数据仍然保留</td>
+<td>页面刷新后数据仍然保留（但标签页关闭后数据则不再保留）</td>
+</tr>
+</tbody></table>
+<p>API：</p>
+<ul>
+<li><code>setItem(key, value)</code> —— 存储键/值对。</li>
+<li><code>getItem(key)</code> —— 按照键获取值。</li>
+<li><code>removeItem(key)</code> —— 删除键及其对应的值。</li>
+<li><code>clear()</code> —— 删除所有数据。</li>
+<li><code>key(index)</code> —— 获取该索引下的键名。</li>
+<li><code>length</code> —— 存储的内容的长度。</li>
+<li>使用 <code>Object.keys</code> 来获取所有的键。</li>
+<li>我们将键作为对象属性来访问，在这种情况下，不会触发 <code>storage</code> 事件。</li>
+</ul>
+<p>Storage 事件：</p>
+<ul>
+<li>在调用 <code>setItem</code>，<code>removeItem</code>，<code>clear</code> 方法后触发。</li>
+<li>包含有关操作的所有数据（<code>key/oldValue/newValue</code>），文档 <code>url</code> 和存储对象 <code>storageArea</code>。</li>
+<li>在所有可访问到存储对象的 <code>window</code> 对象上触发，导致当前数据改变的 <code>window</code> 对象除外（对于 <code>sessionStorage</code> 是在当前标签页下，对于 <code>localStorage</code> 是在全局，即所有同源的窗口）。</li>
+</ul>

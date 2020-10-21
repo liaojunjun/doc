@@ -1,0 +1,15 @@
+<p>答案：第一个和第三个将会被执行。</p>
+<p>详解：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 执行。</span>
+<span class="hljs-comment">// -1 || 0 的结果为 -1，真值</span>
+<span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> || <span class="hljs-number">0</span>) alert( <span class="hljs-string">&#x27;first&#x27;</span> );
+
+<span class="hljs-comment">// 不执行。</span>
+<span class="hljs-comment">// -1 &amp;&amp; 0 = 0，假值</span>
+<span class="hljs-keyword">if</span> (<span class="hljs-number">-1</span> &amp;&amp; <span class="hljs-number">0</span>) alert( <span class="hljs-string">&#x27;second&#x27;</span> );
+
+<span class="hljs-comment">// 执行</span>
+<span class="hljs-comment">// &amp;&amp; 运算的优先级比 || 高</span>
+<span class="hljs-comment">// 所以 -1 &amp;&amp; 1 先执行，给出如下运算链：</span>
+<span class="hljs-comment">// null || -1 &amp;&amp; 1  -&gt;  null || 1  -&gt;  1</span>
+<span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> || <span class="hljs-number">-1</span> &amp;&amp; <span class="hljs-number">1</span>) alert( <span class="hljs-string">&#x27;third&#x27;</span> );</code></pre>

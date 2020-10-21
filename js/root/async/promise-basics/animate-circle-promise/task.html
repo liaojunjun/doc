@@ -1,0 +1,8 @@
+<h1 id="带有-promise-的圆形动画">带有 promise 的圆形动画</h1>
+<p>重写任务 <a href="info:task/animate-circle-callback">info:task/animate-circle-callback</a> 的解决方案中的 <code>showCircle</code> 函数，以使其返回一个 promise，而不接受回调。</p>
+<p>新的用法：</p>
+<pre><code class="language-js">showCircle(<span class="hljs-number">150</span>, <span class="hljs-number">150</span>, <span class="hljs-number">100</span>).then(<span class="hljs-function"><span class="hljs-params">div</span> =&gt;</span> {
+  div.classList.add(<span class="hljs-string">&#x27;message-ball&#x27;</span>);
+  div.append(<span class="hljs-string">&quot;Hello, world!&quot;</span>);
+});</code></pre>
+<p>以任务 <a href="info:task/animate-circle-callback">info:task/animate-circle-callback</a> 的解决方案为基础。</p>

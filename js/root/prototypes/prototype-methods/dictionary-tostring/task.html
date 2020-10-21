@@ -1,0 +1,23 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="为-dictionary-添加-tostring-方法">为 dictionary 添加 toString 方法</h1>
+<p>这儿有一个通过 <code>Object.create(null)</code> 创建的，用来存储任意 <code>key/value</code> 对的对象 <code>dictionary</code>。</p>
+<p>为该对象添加 <code>dictionary.toString()</code> 方法，该方法应该返回以逗号分隔的所有键的列表。你的 <code>toString</code> 方法不应该在使用 <code>for...in</code> 循环遍历数组的时候显现出来。</p>
+<p>它的工作方式如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> dictionary = <span class="hljs-built_in">Object</span>.create(<span class="hljs-literal">null</span>);
+
+*!*
+<span class="hljs-comment">// 你的添加 dictionary.toString 方法的代码</span>
+*/!*
+
+<span class="hljs-comment">// 添加一些数据</span>
+dictionary.apple = <span class="hljs-string">&quot;Apple&quot;</span>;
+dictionary.__proto__ = <span class="hljs-string">&quot;test&quot;</span>; <span class="hljs-comment">// 这里 __proto__ 是一个常规的属性键</span>
+
+<span class="hljs-comment">// 在循环中只有 apple 和 __proto__</span>
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> dictionary) {
+  alert(key); <span class="hljs-comment">// &quot;apple&quot;, then &quot;__proto__&quot;</span>
+}  
+
+<span class="hljs-comment">// 你的 toString 方法在发挥作用</span>
+alert(dictionary); <span class="hljs-comment">// &quot;apple,__proto__&quot;</span></code></pre>

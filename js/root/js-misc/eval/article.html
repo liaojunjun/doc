@@ -1,0 +1,66 @@
+<h1 id="eval：执行代码字符串">Eval：执行代码字符串</h1>
+<p>内建函数 <code>eval</code> 函数允许执行一个代码字符串。</p>
+<p>语法如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> result = <span class="hljs-built_in">eval</span>(code);</code></pre>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> code = <span class="hljs-string">&#x27;alert(&quot;Hello&quot;)&#x27;</span>;
+<span class="hljs-built_in">eval</span>(code); <span class="hljs-comment">// Hello</span></code></pre>
+<p>代码字符串可能会比较长，包含换行符、函数声明和变量等。</p>
+<p><code>eval</code> 的结果是最后一条语句的结果。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> value = <span class="hljs-built_in">eval</span>(<span class="hljs-string">&#x27;1+1&#x27;</span>);
+alert(value); <span class="hljs-comment">// 2</span></code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> value = <span class="hljs-built_in">eval</span>(<span class="hljs-string">&#x27;let i = 0; ++i&#x27;</span>);
+alert(value); <span class="hljs-comment">// 1</span></code></pre>
+<p><code>eval</code> 内的代码在当前词法环境（lexical environment）中执行，因此它能访问外部变量：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = <span class="hljs-number">1</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> a = <span class="hljs-number">2</span>;
+
+*!*
+  <span class="hljs-built_in">eval</span>(<span class="hljs-string">&#x27;alert(a)&#x27;</span>); <span class="hljs-comment">// 2</span>
+*/!*
+}
+
+f();</code></pre>
+<p>它也可以更改外部变量：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> x = <span class="hljs-number">5</span>;
+<span class="hljs-built_in">eval</span>(<span class="hljs-string">&quot;x = 10&quot;</span>);
+alert(x); <span class="hljs-comment">// 10，值被更改了</span></code></pre>
+<p>严格模式下，<code>eval</code> 有属于自己的词法环境。因此我们不能从外部访问在 <code>eval</code> 中声明的函数和变量：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 提示：本教程所有可运行的示例都默认启用了严格模式 &#x27;use strict&#x27;</span>
+
+<span class="hljs-built_in">eval</span>(<span class="hljs-string">&quot;let x = 5; function f() {}&quot;</span>);
+
+alert(<span class="hljs-keyword">typeof</span> x); <span class="hljs-comment">// undefined（没有这个变量）</span>
+<span class="hljs-comment">// 函数 f 也不可从外部进行访问</span></code></pre>
+<p>如果不启用严格模式，<code>eval</code> 没有属于自己的词法环境，因此我们可以从外部访问变量 <code>x</code> 和函数 <code>f</code>。</p>
+<h2 id="使用-eval">使用 &quot;eval&quot;</h2>
+<p>现代编程中，已经很少使用 <code>eval</code> 了。人们经常说“eval 是魔鬼”。</p>
+<p>原因很简单：很久很久以前，JavaScript 是一种非常弱的语言，很多东西只能通过 <code>eval</code> 来完成。不过那已经是十年前的事了。</p>
+<p>如今几乎找不到使用 <code>eval</code> 的理由了。如果有人在使用它，那这是一个很好的使用现代语言结构或 <a href="info:modules">JavaScript Module</a> 来替换它们的机会。</p>
+<p>请注意，<code>eval</code> 访问外部变量的能力会产生副作用。</p>
+<p>代码压缩工具（在把 JS 投入生产环境前对其进行压缩的工具）将局部变量重命名为更短的变量（例如 <code>a</code> 和 <code>b</code> 等），以使代码体积更小。这通常是安全的，但在使用了 <code>eval</code> 的情况下就不一样了，因为局部变量可能会被 <code>eval</code> 中的代码访问到。因此压缩工具不会对所有可能会被从 <code>eval</code> 中访问的变量进行重命名。这样会导致代码压缩率降低。</p>
+<p>在 <code>eval</code> 中使用外部局部变量也被认为是一个坏的编程习惯，因为这会使代码维护变得更加困难。</p>
+<p>有两种方法可以完全避免此类问题。</p>
+<p><strong>如果 <code>eval</code> 中的代码没有使用外部变量，请以 <code>window.eval(...)</code> 的形式调用 <code>eval</code>：</strong> </p>
+<p>通过这种方式，该代码便会在全局作用域内执行：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> x = <span class="hljs-number">1</span>;
+{
+  <span class="hljs-keyword">let</span> x = <span class="hljs-number">5</span>;
+  <span class="hljs-built_in">window</span>.eval(<span class="hljs-string">&#x27;alert(x)&#x27;</span>); <span class="hljs-comment">// 1（全局变量）</span>
+}</code></pre>
+<p><strong>如果 <code>eval</code> 中的代码需要访问局部变量，我们可以使用 <code>new Function</code> 替代 <code>eval</code>，并将它们作为参数传递：</strong> </p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> f = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Function</span>(<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;alert(a)&#x27;</span>);
+
+f(<span class="hljs-number">5</span>); <span class="hljs-comment">// 5</span></code></pre>
+<p>我们在 <a href="info:new-function">info:new-function</a> 一章中对 <code>new Function</code> 构造器进行了详细说明。<code>new Function</code> 从字符串创建一个函数，并且也是在全局作用域中的。所以它无法访问局部变量。但是，正如上面的示例一样，将它们作为参数进行显式传递要清晰得多。</p>
+<h2 id="总结">总结</h2>
+<p>调用 <code>eval(code)</code> 会运行代码字符串，并返回最后一条语句的结果。</p>
+<ul>
+<li>在现代 JavaScript 编程中，很少使用它，通常也不需要使用它。</li>
+<li>可以访问外部局部变量。这被认为是一个不好的编程习惯。</li>
+<li>要在全局作用域中 <code>eval</code> 代码，可以使用 <code>window.eval(code)</code> 进行替代。</li>
+<li>此外，如果你的代码需要从外部作用域获取数据，请使用 <code>new Function</code>，并将数据作为参数传递给函数。</li>
+</ul>

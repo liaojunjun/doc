@@ -1,0 +1,91 @@
+<p>让我们检查一下 <code>makeArmy</code> 内部做了什么，那么答案就显而易见了。</p>
+<ol>
+<li><p>它创建了一个空数组 <code>shooters</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> shooters = [];</code></pre>
+</li>
+<li><p>在循环中，通过 <code>shooters.push(function...)</code> 填充它（数组）。</p>
+<p> 每个元素都是函数，所以数组看起来是这样的：</p>
+<pre><code class="language-js">shooters = [
+  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ alert(i); },
+  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ alert(i); },
+  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ alert(i); },
+  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ alert(i); },
+  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ alert(i); },
+  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ alert(i); },
+  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ alert(i); },
+  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ alert(i); },
+  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ alert(i); },
+  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ alert(i); }
+];</code></pre>
+</li>
+<li><p>该数组返回自函数。</p>
+</li>
+</ol>
+<p>随后，<code>army[5]()</code> 从数组中获得元素 <code>army[5]</code>（函数）并调用。</p>
+<p>为什么现在所有函数显示的都一样呢？</p>
+<p>这是因为 <code>shooter</code> 函数内没有局部变量 <code>i</code>。当调用一个这样的函数时，<code>i</code> 是来自于外部词法环境的。</p>
+<p><code>i</code> 的值是什么呢？</p>
+<p>如果我们查看一下源头：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeArmy</span>(<span class="hljs-params"></span>) </span>{
+  ...
+  let i = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (i &lt; <span class="hljs-number">10</span>) {
+    <span class="hljs-keyword">let</span> shooter = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// shooter 函数</span>
+      alert( i ); <span class="hljs-comment">// 应该显示它自己的编号</span>
+    };
+    ...
+  }
+  ...
+}</code></pre>
+<p>……我们可以看到它存在于当前 <code>makeArmy()</code> 运行相关的词法环境中。但调用 <code>army[5]()</code> 时，<code>makeArmy</code> 已经完运行完了，<code>i</code> 现在为结束时的值：<code>10</code>（<code>while</code> 结束时）。</p>
+<p>因此，所有的 <code>shooter</code> 获得的都是外部词法环境中的同一个值，即最后的 <code>i=10</code>。</p>
+<p>我们可以通过将变量定义移动到循环中来修复它：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeArmy</span>(<span class="hljs-params"></span>) </span>{
+
+  <span class="hljs-keyword">let</span> shooters = [];
+
+*!*
+  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
+*/!*
+    <span class="hljs-keyword">let</span> shooter = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// shooter 函数</span>
+      alert( i ); <span class="hljs-comment">// 应该显示它自己的编号</span>
+    };
+    shooters.push(shooter);
+  }
+
+  <span class="hljs-keyword">return</span> shooters;
+}
+
+<span class="hljs-keyword">let</span> army = makeArmy();
+
+army[<span class="hljs-number">0</span>](); <span class="hljs-comment">// 0</span>
+army[<span class="hljs-number">5</span>](); <span class="hljs-comment">// 5</span></code></pre>
+<p>现在正常工作了，因为每次执行代码块 <code>for (let i=0...) {...}</code> 中的代码时，都会为其创建一个新的词法环境，其中具有对应的 <code>i</code> 值。</p>
+<p>所以，现在 <code>i</code> 值的位置更近了（译注：指转到了更内部的词法环境）。现在它不是在 <code>makeArmy()</code> 的词法环境中，而是在与当前循环迭代相对应的词法环境中。这就是它为什么现在可以正常工作了。</p>
+<p><img src="lexenv-makearmy.svg" alt=""></p>
+<p>这里我们把 <code>while</code> 改写为了 <code>for</code>。</p>
+<p>其他技巧也是可以的，让我们了解一下，以便更好地理解这个问题：</p>
+<pre><code class="language-js">function makeArmy() {
+  let shooters = [];
+
+  let i = 0;
+  while (i &lt; 10) {
+*!*
+    let j = i;
+*/!*
+    let shooter = function() { // shooter 函数
+      alert( *!*j*/!* ); // 应该显示当前的编号
+    };
+    shooters.push(shooter);
+    i++;
+  }
+
+  return shooters;
+}
+
+let army = makeArmy();
+
+army[0](); // 0
+army[5](); // 5</code></pre>
+<p><code>while</code> 和 <code>for</code> 循环差不多，每次运行都会创建了一个新的词法环境。所以在这里我们能确保 <code>shooter</code> 能够获取正确的值。</p>
+<p>我们复制 <code>let j = i</code>。这个操作创建了循环体局部变量 <code>j</code>，并将 <code>i</code> 的值复制给了它。原始值是按值传递的，所以实际上，我们获得了属于当前循环迭代的完全独立的 <code>i</code> 的副本。</p>

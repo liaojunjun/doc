@@ -1,0 +1,199 @@
+<h1 id="对象--原始值转换">对象 — 原始值转换</h1>
+<p>当对象相加 <code>obj1 + obj2</code>，相减 <code>obj1 - obj2</code>，或者使用 <code>alert(obj)</code> 打印时会发生什么？</p>
+<p>在这种情况下，对象会被自动转换为原始值，然后执行操作。</p>
+<p>在 <a href="info:type-conversions">info:type-conversions</a> 一章中，我们已经看到了数值，字符串和布尔转换的规则。但是我们没有讲对象的转换规则。现在我们已经掌握了方法（method）和 symbol 的相关知识，可以开始学习对象原始值转换了。</p>
+<ol>
+<li>所有的对象在布尔上下文（context）中均为 <code>true</code>。所以对于对象，不存在 to-boolean 转换，只有字符串和数值转换。</li>
+<li>数值转换发生在对象相减或应用数学函数时。例如，<code>Date</code> 对象（将在 <a href="info:date">info:date</a> 一章中介绍）可以相减，<code>date1 - date2</code> 的结果是两个日期之间的差值。</li>
+<li>至于字符串转换 —— 通常发生在我们像 <code>alert(obj)</code> 这样输出一个对象和类似的上下文中。</li>
+</ol>
+<h2 id="toprimitive">ToPrimitive</h2>
+<p>我们可以使用特殊的对象方法，对字符串和数值转换进行微调。</p>
+<p>下面是三个类型转换的变体，被称为 &quot;hint&quot;，在 <a href="https://tc39.github.io/ecma262/#sec-toprimitive">规范</a> 中有详细介绍（译注：当一个对象被用在需要原始值的上下文中时，例如，在 <code>alert</code> 或数学运算中，对象会被转换为原始值）：</p>
+<p><code>&quot;string&quot;</code>
+: 对象到字符串的转换，当我们对期望一个字符串的对象执行操作时，如 &quot;alert&quot;：</p>
+<pre><code>```js
+// 输出
+alert(obj);
+
+// 将对象作为属性键
+anotherObj[obj] = 123;
+```</code></pre>
+<p><code>&quot;number&quot;</code>
+: 对象到数字的转换，例如当我们进行数学运算时：</p>
+<pre><code>```js
+// 显式转换
+let num = Number(obj);
+
+// 数学运算（除了二进制加法）
+let n = +obj; // 一元加法
+let delta = date1 - date2;
+
+// 小于/大于的比较
+let greater = user1 &gt; user2;
+```</code></pre>
+<p><code>&quot;default&quot;</code>
+: 在少数情况下发生，当运算符“不确定”期望值的类型时。</p>
+<pre><code>例如，二进制加法 `+` 可用于字符串（连接），也可以用于数字（相加），所以字符串和数字这两种类型都可以。因此，当二元加法得到对象类型的参数时，它将依据 `&quot;default&quot;` hint 来对其进行转换。
+
+此外，如果对象被用于与字符串、数字或 symbol 进行 `==` 比较，这时到底应该进行哪种转换也不是很明确，因此使用 `&quot;default&quot;` hint。
+
+```js
+// 二元加法使用默认 hint
+let total = obj1 + obj2;
+
+// obj == number 使用默认 hint
+if (user == 1) { ... };
+```
+
+像 `&lt;` 和 `&gt;` 这样的小于/大于比较运算符，也可以同时用于字符串和数字。不过，它们使用 &quot;number&quot; hint，而不是 &quot;default&quot;。这是历史原因。
+
+实际上，我们没有必要记住这些奇特的细节，除了一种情况（`Date` 对象，我们稍后会学到它）之外，所有内建对象都以和 `&quot;number&quot;` 相同的方式实现 `&quot;default&quot;` 转换。我们也可以这样做。</code></pre>
+<p>```smart header=&quot;没有 <code>\&quot;boolean\&quot;</code> hint&quot;
+请注意 —— 只有三种 hint。就这么简单。</p>
+<p>没有 &quot;boolean&quot; hint（在布尔上下文中所有对象都是 <code>true</code>）或其他任何东西。如果我们将 <code>&quot;default&quot;</code> 和 <code>&quot;number&quot;</code> 视为相同，就像大多数内建函数一样，那么就只有两种转换了。</p>
+<pre><code>
+**为了进行转换，JavaScript 尝试查找并调用三个对象方法：**
+
+1. 调用 `obj[Symbol.toPrimitive](hint)` —— 带有 symbol 键 `Symbol.toPrimitive`（系统 symbol）的方法，如果这个方法存在的话，
+2. 否则，如果 hint 是 `&quot;string&quot;`
+   —— 尝试 `obj.toString()` 和 `obj.valueOf()`，无论哪个存在。
+3. 否则，如果 hint 是 `&quot;number&quot;` 或 `&quot;default&quot;`
+   —— 尝试 `obj.valueOf()` 和 `obj.toString()`，无论哪个存在。
+
+## Symbol.toPrimitive
+
+我们从第一个方法开始。有一个名为 `Symbol.toPrimitive` 的内建 symbol，它被用来给转换方法命名，像这样：
+
+```js
+obj[Symbol.toPrimitive] = function(hint) {
+  // 返回一个原始值
+  // hint = &quot;string&quot;、&quot;number&quot; 和 &quot;default&quot; 中的一个
+}</code></pre>
+<p>例如，这里 <code>user</code> 对象实现了它：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">money</span>: <span class="hljs-number">1000</span>,
+
+  [<span class="hljs-built_in">Symbol</span>.toPrimitive](hint) {
+    alert(<span class="hljs-string">`hint: <span class="hljs-subst">${hint}</span>`</span>);
+    <span class="hljs-keyword">return</span> hint == <span class="hljs-string">&quot;string&quot;</span> ? <span class="hljs-string">`{name: &quot;<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span>&quot;}`</span> : <span class="hljs-built_in">this</span>.money;
+  }
+};
+
+<span class="hljs-comment">// 转换演示：</span>
+alert(user); <span class="hljs-comment">// hint: string -&gt; {name: &quot;John&quot;}</span>
+alert(+user); <span class="hljs-comment">// hint: number -&gt; 1000</span>
+alert(user + <span class="hljs-number">500</span>); <span class="hljs-comment">// hint: default -&gt; 1500</span></code></pre>
+<p>从代码中我们可以看到，根据转换的不同，<code>user</code> 变成一个自描述字符串或者一个金额。单个方法 <code>user[Symbol.toPrimitive]</code> 处理了所有的转换情况。</p>
+<h2 id="tostringvalueof">toString/valueOf</h2>
+<p>方法 <code>toString</code> 和 <code>valueOf</code> 来自上古时代。它们不是 symbol（那时候还没有 symbol 这个概念），而是“常规的”字符串命名的方法。它们提供了一种可选的“老派”的实现转换的方法。</p>
+<p>如果没有 <code>Symbol.toPrimitive</code>，那么 JavaScript 将尝试找到它们，并且按照下面的顺序进行尝试：</p>
+<ul>
+<li>对于 &quot;string&quot; hint，<code>toString -&gt; valueOf</code>。</li>
+<li>其他情况，<code>valueOf -&gt; toString</code>。</li>
+</ul>
+<p>这些方法必须返回一个原始值。如果 <code>toString</code> 或 <code>valueOf</code> 返回了一个对象，那么返回值会被忽略（和这里没有方法的时候相同）。</p>
+<p>默认情况下，普通对象具有 <code>toString</code> 和 <code>valueOf</code> 方法：</p>
+<ul>
+<li><code>toString</code> 方法返回一个字符串 <code>&quot;[object Object]&quot;</code>。</li>
+<li><code>valueOf</code> 方法返回对象自身。</li>
+</ul>
+<p>下面是一个示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>};
+
+alert(user); <span class="hljs-comment">// [object Object]</span>
+alert(user.valueOf() === user); <span class="hljs-comment">// true</span></code></pre>
+<p>所以，如果我们尝试将一个对象当做字符串来使用，例如在 <code>alert</code> 中，那么在默认情况下我们会看到 <code>[object Object]</code>。</p>
+<p>这里提到默认值 <code>valueOf</code> 只是为了完整起见，以避免混淆。正如你看到的，它返回对象本身，因此被忽略。别问我为什么，那是历史原因。所以我们可以假设它根本就不存在。</p>
+<p>让我们实现一下这些方法。</p>
+<p>例如，这里的 <code>user</code> 执行和前面提到的那个 <code>user</code> 一样的操作，使用 <code>toString</code> 和 <code>valueOf</code> 的组合（而不是 <code>Symbol.toPrimitive</code>）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">money</span>: <span class="hljs-number">1000</span>,
+
+  <span class="hljs-comment">// 对于 hint=&quot;string&quot;</span>
+  toString() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`{name: &quot;<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span>&quot;}`</span>;
+  },
+
+  <span class="hljs-comment">// 对于 hint=&quot;number&quot; 或 &quot;default&quot;</span>
+  valueOf() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.money;
+  }
+
+};
+
+alert(user); <span class="hljs-comment">// toString -&gt; {name: &quot;John&quot;}</span>
+alert(+user); <span class="hljs-comment">// valueOf -&gt; 1000</span>
+alert(user + <span class="hljs-number">500</span>); <span class="hljs-comment">// valueOf -&gt; 1500</span></code></pre>
+<p>我们可以看到，执行的动作和前面使用 <code>Symbol.toPrimitive</code> 的那个例子相同。</p>
+<p>通常我们希望有一个“全能”的地方来处理所有原始转换。在这种情况下，我们可以只实现 <code>toString</code>，就像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+
+  toString() {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.name;
+  }
+};
+
+alert(user); <span class="hljs-comment">// toString -&gt; John</span>
+alert(user + <span class="hljs-number">500</span>); <span class="hljs-comment">// toString -&gt; John500</span></code></pre>
+<p>如果没有 <code>Symbol.toPrimitive</code> 和 <code>valueOf</code>，<code>toString</code> 将处理所有原始转换。</p>
+<h2 id="返回类型">返回类型</h2>
+<p>关于所有原始转换方法，有一个重要的点需要知道，就是它们不一定会返回 &quot;hint&quot; 的原始值。</p>
+<p>没有限制 <code>toString()</code> 是否返回字符串，或 <code>Symbol.toPrimitive</code> 方法是否为 hint &quot;number&quot; 返回数字。</p>
+<p>唯一强制性的事情是：这些方法必须返回一个原始值，而不是对象。</p>
+<pre><code class="language-smart">由于历史原因，如果 `toString` 或 `valueOf` 返回一个对象，则不会出现 error，但是这种值会被忽略（就像这种方法根本不存在）。这是因为在 JavaScript 语言发展初期，没有很好的 &quot;error&quot; 的概念。
+
+相反，`Symbol.toPrimitive` **必须** 返回一个原始值，否则就会出现 error。</code></pre>
+<h2 id="进一步的转换">进一步的转换</h2>
+<p>我们已经知道，许多运算符和函数执行类型转换，例如乘法 <code>*</code> 将操作数转换为数字。</p>
+<p>如果我们将对象作为参数传递，则会出现两个阶段：</p>
+<ol>
+<li>对象被转换为原始值（通过前面我们描述的规则）。</li>
+<li>如果生成的原始值的类型不正确，则继续进行转换。</li>
+</ol>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {
+  <span class="hljs-comment">// toString 在没有其他方法的情况下处理所有转换</span>
+  toString() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;2&quot;</span>;
+  }
+};
+
+alert(obj * <span class="hljs-number">2</span>); <span class="hljs-comment">// 4，对象被转换为原始值字符串 &quot;2&quot;，之后它被乘法转换为数字 2。</span></code></pre>
+<ol>
+<li>乘法 <code>obj * 2</code> 首先将对象转换为原始值（字符串 &quot;2&quot;）。</li>
+<li>之后 <code>&quot;2&quot; * 2</code> 变为 <code>2 * 2</code>（字符串被转换为数字）。</li>
+</ol>
+<p>二元加法在同样的情况下会将其连接成字符串，因为它更愿意接受字符串：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {
+  toString() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;2&quot;</span>;
+  }
+};
+
+alert(obj + <span class="hljs-number">2</span>); <span class="hljs-comment">// 22（&quot;2&quot; + 2）被转换为原始值字符串 =&gt; 级联</span></code></pre>
+<h2 id="总结">总结</h2>
+<p>对象到原始值的转换，是由许多期望以原始值作为值的内建函数和运算符自动调用的。</p>
+<p>这里有三种类型（hint）：</p>
+<ul>
+<li><code>&quot;string&quot;</code>（对于 <code>alert</code> 和其他需要字符串的操作）</li>
+<li><code>&quot;number&quot;</code>（对于数学运算）</li>
+<li><code>&quot;default&quot;</code>（少数运算符）</li>
+</ul>
+<p>规范明确描述了哪个运算符使用哪个 hint。很少有运算符“不知道期望什么”并使用 <code>&quot;default&quot;</code> hint。通常对于内建对象，<code>&quot;default&quot;</code> hint 的处理方式与 <code>&quot;number&quot;</code> 相同，因此在实践中，最后两个 hint 常常合并在一起。</p>
+<p>转换算法是：</p>
+<ol>
+<li>调用 <code>obj[Symbol.toPrimitive](hint)</code> 如果这个方法存在，</li>
+<li>否则，如果 hint 是 <code>&quot;string&quot;</code><ul>
+<li>尝试 <code>obj.toString()</code> 和 <code>obj.valueOf()</code>，无论哪个存在。</li>
+</ul>
+</li>
+<li>否则，如果 hint 是 <code>&quot;number&quot;</code> 或者 <code>&quot;default&quot;</code><ul>
+<li>尝试 <code>obj.valueOf()</code> 和 <code>obj.toString()</code>，无论哪个存在。</li>
+</ul>
+</li>
+</ol>
+<p>在实践中，为了便于进行日志记录或调试，对于所有能够返回一种“可读性好”的对象的表达形式的转换，只实现以 <code>obj.toString()</code> 作为全能转换的方法就够了。</p>

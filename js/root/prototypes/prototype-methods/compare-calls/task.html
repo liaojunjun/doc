@@ -1,0 +1,17 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="调用方式的差异">调用方式的差异</h1>
+<p>让我们创建一个新的 <code>rabbit</code> 对象：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params">name</span>) </span>{
+  <span class="hljs-built_in">this</span>.name = name;
+}
+Rabbit.prototype.sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-built_in">this</span>.name);
+};
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;Rabbit&quot;</span>);</code></pre>
+<p>以下调用做的是相同的事儿还是不同的？</p>
+<pre><code class="language-js">rabbit.sayHi();
+Rabbit.prototype.sayHi();
+<span class="hljs-built_in">Object</span>.getPrototypeOf(rabbit).sayHi();
+rabbit.__proto__.sayHi();</code></pre>

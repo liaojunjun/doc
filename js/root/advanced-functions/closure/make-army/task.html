@@ -1,0 +1,26 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="函数大军">函数大军</h1>
+<p>下列的代码创建一个 <code>shooters</code> 数组。</p>
+<p>每个函数都应该输出其编号。但好像出了点问题……</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeArmy</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> shooters = [];
+
+  <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (i &lt; <span class="hljs-number">10</span>) {
+    <span class="hljs-keyword">let</span> shooter = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// shooter 函数</span>
+      alert( i ); <span class="hljs-comment">// 应该显示其编号</span>
+    };
+    shooters.push(shooter);
+    i++;
+  }
+
+  <span class="hljs-keyword">return</span> shooters;
+}
+
+<span class="hljs-keyword">let</span> army = makeArmy();
+
+army[<span class="hljs-number">0</span>](); <span class="hljs-comment">// 编号为 0 的 shooter 值为 10</span>
+army[<span class="hljs-number">5</span>](); <span class="hljs-comment">// 编号为 5 的 shooter 值也是 10……</span>
+<span class="hljs-comment">// ... 所有的 shooter 的值都是 10，而不是他们的编号 0, 1, 2, 3...</span></code></pre>
+<p>为什么所有的 shooter 显示同样的值？修改代码以让代码正常工作。</p>

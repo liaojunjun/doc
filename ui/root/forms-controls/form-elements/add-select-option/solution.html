@@ -1,0 +1,18 @@
+<p>解决方案，分步进行：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;genres&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;rock&quot;</span>&gt;</span>Rock<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;blues&quot;</span> <span class="hljs-attr">selected</span>&gt;</span>Blues<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 1)</span>
+  <span class="hljs-keyword">let</span> selectedOption = genres.options[genres.selectedIndex];
+  alert( selectedOption.value );
+
+  <span class="hljs-comment">// 2)</span>
+  <span class="hljs-keyword">let</span> newOption = <span class="hljs-keyword">new</span> Option(<span class="hljs-string">&quot;Classic&quot;</span>, <span class="hljs-string">&quot;classic&quot;</span>);
+  genres.append(newOption);
+
+  <span class="hljs-comment">// 3)</span>
+  newOption.selected = <span class="hljs-literal">true</span>;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>

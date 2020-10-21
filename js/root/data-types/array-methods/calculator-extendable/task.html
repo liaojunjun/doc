@@ -1,0 +1,28 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="创建一个可扩展的-calculator">创建一个可扩展的 calculator</h1>
+<p>创建一个构造函数 <code>Calculator</code>，以创建“可扩展”的 calculator 对象。</p>
+<p>该任务由两部分组成。</p>
+<ol>
+<li><p>首先，实现 <code>calculate(str)</code> 方法，该方法接受像 <code>&quot;1 + 2&quot;</code> 这样格式为“数字 运算符 数字”（以空格分隔）的字符串，并返回结果。该方法需要能够理解加号 <code>+</code> 和减号 <code>-</code>。</p>
+<p> 用法示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> calc = <span class="hljs-keyword">new</span> Calculator;
+
+alert( calc.calculate(<span class="hljs-string">&quot;3 + 7&quot;</span>) ); <span class="hljs-comment">// 10</span></code></pre>
+</li>
+<li><p>然后添加方法 <code>addMethod(name, func)</code>，该方法教 calculator 进行新操作。它需要运算符 <code>name</code> 和实现它的双参数函数 <code>func(a,b)</code>。</p>
+<p> 例如，我们添加乘法 <code>*</code>，除法 <code>/</code> 和求幂 <code>**</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> powerCalc = <span class="hljs-keyword">new</span> Calculator;
+powerCalc.addMethod(<span class="hljs-string">&quot;*&quot;</span>, <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a * b);
+powerCalc.addMethod(<span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a / b);
+powerCalc.addMethod(<span class="hljs-string">&quot;**&quot;</span>, <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a ** b);
+
+<span class="hljs-keyword">let</span> result = powerCalc.calculate(<span class="hljs-string">&quot;2 ** 3&quot;</span>);
+alert( result ); <span class="hljs-comment">// 8</span></code></pre>
+</li>
+</ol>
+<ul>
+<li>此任务中没有括号或复杂的表达式。</li>
+<li>数字和运算符之间只有一个空格。</li>
+<li>你可以自行选择是否添加错误处理功能。</li>
+</ul>

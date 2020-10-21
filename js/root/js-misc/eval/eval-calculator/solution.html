@@ -1,0 +1,6 @@
+<p>让我们使用 <code>eval</code> 来计算数学表达式：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> expr = prompt(<span class="hljs-string">&quot;Type an arithmetic expression?&quot;</span>, <span class="hljs-string">&#x27;2*3+2&#x27;</span>);
+
+alert( <span class="hljs-built_in">eval</span>(expr) );</code></pre>
+<p>用户可以输入任意文本或代码。</p>
+<p>安全起见，并限制其仅进行算术运算，我们可以使用 <a href="info:regular-expressions">正则表达式</a> 来检查 <code>expr</code>，以限制输入的内容只能包含数字和运算符。</p>

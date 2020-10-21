@@ -1,0 +1,18 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="把-note-放在元素内部（absolute）">把 note 放在元素内部（absolute）</h1>
+<p>扩展上一个任务 <a href="info:task/position-at-absolute">info:task/position-at-absolute</a>：教函数 <code>positionAt(anchor, position, elem)</code> 把 <code>elem</code> 插入到 <code>anchor</code> 内部。</p>
+<p><code>position</code> 的新值：</p>
+<ul>
+<li><code>top-out</code>，<code>right-out</code>，<code>bottom-out</code> — 和之前一样工作，它们把 <code>elem</code> 插入到 <code>anchor</code> 的上方/右侧/下方。</li>
+<li><code>top-in</code>，<code>right-in</code>，<code>bottom-in</code> — 把 <code>elem</code> 插入到 <code>anchor</code> 内部：将其粘贴到上/右/下边缘。</li>
+</ul>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 在 blockquote 上方显示 note</span>
+positionAt(blockquote, <span class="hljs-string">&quot;top-out&quot;</span>, note);
+
+<span class="hljs-comment">// 在 blockquote 内部的上边缘显示 note</span>
+positionAt(blockquote, <span class="hljs-string">&quot;top-in&quot;</span>, note);</code></pre>
+<p>结果：</p>
+<p>[iframe src=&quot;solution&quot; height=&quot;310&quot; border=&quot;1&quot; link]</p>
+<p>可以以上一个任务 <a href="info:task/position-at-absolute">info:task/position-at-absolute</a> 的解决方案为基础。</p>

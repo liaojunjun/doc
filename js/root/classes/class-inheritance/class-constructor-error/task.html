@@ -1,0 +1,24 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="创建实例时出错">创建实例时出错</h1>
+<p>这里有一份 <code>Rabbit</code> 扩展 <code>Animal</code> 的代码。</p>
+<p>不幸的是，<code>Rabbit</code> 对象无法被创建。是哪里出错了呢？请解决它。</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> </span>{
+
+  <span class="hljs-keyword">constructor</span>(name) {
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Animal</span> </span>{
+  <span class="hljs-keyword">constructor</span>(name) {  
+    <span class="hljs-built_in">this</span>.name = name;
+    <span class="hljs-built_in">this</span>.created = <span class="hljs-built_in">Date</span>.now();
+  }
+}
+
+*!*
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;White Rabbit&quot;</span>); <span class="hljs-comment">// Error: this is not defined</span>
+*/!*
+alert(rabbit.name);</code></pre>

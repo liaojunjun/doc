@@ -1,0 +1,184 @@
+<h1 id="symbol-类型">Symbol 类型</h1>
+<p>根据规范，对象的属性键只能是字符串类型或者 Symbol 类型。不是 Number，也不是 Boolean，只有字符串或 Symbol 这两种类型。</p>
+<p>到目前为止，我们只见过字符串。现在我们来看看 Symbol 能给我们带来什么好处。</p>
+<h2 id="symbol">Symbol</h2>
+<p>&quot;Symbol&quot; 值表示唯一的标识符。</p>
+<p>可以使用 <code>Symbol()</code> 来创建这种类型的值：</p>
+<pre><code class="language-js"><span class="hljs-comment">// id 是 symbol 的一个实例化对象</span>
+<span class="hljs-keyword">let</span> id = <span class="hljs-built_in">Symbol</span>();</code></pre>
+<p>创建时，我们可以给 Symbol 一个描述（也称为 Symbol 名），这在代码调试时非常有用：</p>
+<pre><code class="language-js"><span class="hljs-comment">// id 是描述为 &quot;id&quot; 的 Symbol</span>
+<span class="hljs-keyword">let</span> id = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>);</code></pre>
+<p>Symbol 保证是唯一的。即使我们创建了许多具有相同描述的 Symbol，它们的值也是不同。描述只是一个标签，不影响任何东西。</p>
+<p>例如，这里有两个描述相同的 Symbol —— 它们不相等：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> id1 = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>);
+<span class="hljs-keyword">let</span> id2 = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>);
+
+*!*
+alert(id1 == id2); <span class="hljs-comment">// false</span>
+*/!*</code></pre>
+<p>如果你熟悉 Ruby 或者其他有 &quot;Symbol&quot; 的语言 —— 别被误导。JavaScript 的 Symbol 是不同的。</p>
+<pre><code class="language-warn">JavaScript 中的大多数值都支持字符串的隐式转换。例如，我们可以 `alert` 任何值，都可以生效。Symbol 比较特殊，它不会被自动转换。
+
+例如，这个 `alert` 将会提示出错：
+
+```js run
+let id = Symbol(&quot;id&quot;);
+*!*
+alert(id); // 类型错误：无法将 Symbol 值转换为字符串。
+*/!*
+```
+
+这是一种防止混乱的“语言保护”，因为字符串和 Symbol 有本质上的不同，不应该意外地将它们转换成另一个。
+
+如果我们真的想显示一个 Symbol，我们需要在它上面调用 `.toString()`，如下所示：
+```js run
+let id = Symbol(&quot;id&quot;);
+*!*
+alert(id.toString()); // Symbol(id)，现在它有效了
+*/!*
+```
+
+或者获取 `symbol.description` 属性，只显示描述（description）：
+```js run
+let id = Symbol(&quot;id&quot;);
+*!*
+alert(id.description); // id
+*/!*
+```
+</code></pre>
+<h2 id="隐藏属性">“隐藏”属性</h2>
+<p>Symbol 允许我们创建对象的“隐藏”属性，代码的任何其他部分都不能意外访问或重写这些属性。</p>
+<p>例如，如果我们使用的是属于第三方代码的 <code>user</code> 对象，我们想要给它们添加一些标识符。</p>
+<p>我们可以给它们使用 Symbol 键：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-comment">// 属于另一个代码</span>
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+};
+
+<span class="hljs-keyword">let</span> id = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>);
+
+user[id] = <span class="hljs-number">1</span>;
+
+alert( user[id] ); <span class="hljs-comment">// 我们可以使用 Symbol 作为键来访问数据</span></code></pre>
+<p>使用 <code>Symbol(&quot;id&quot;)</code> 作为键，比起用字符串 <code>&quot;id&quot;</code> 来有什么好处呢？</p>
+<p>因为 <code>user</code> 对象属于其他的代码，那些代码也会使用这个对象，所以我们不应该在它上面直接添加任何字段，这样很不安全。但是你添加的 Symbol 属性不会被意外访问到，第三方代码根本不会看到它，所以使用 Symbol 基本上不会有问题。</p>
+<p>另外，假设另一个脚本希望在 <code>user</code> 中有自己的标识符，以实现自己的目的。这可能是另一个 JavaScript 库，因此脚本之间完全不了解彼此。</p>
+<p>然后该脚本可以创建自己的 <code>Symbol(&quot;id&quot;)</code>，像这样：</p>
+<pre><code class="language-js"><span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">let</span> id = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>);
+
+user[id] = <span class="hljs-string">&quot;Their id value&quot;</span>;</code></pre>
+<p>我们的标识符和它们的标识符之间不会有冲突，因为 Symbol 总是不同的，即使它们有相同的名字。</p>
+<p>……但如果我们处于同样的目的，使用字符串 <code>&quot;id&quot;</code> 而不是用 symbol，那么 <strong>就会</strong> 出现冲突：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
+
+<span class="hljs-comment">// 我们的脚本使用了 &quot;id&quot; 属性。</span>
+user.id = <span class="hljs-string">&quot;Our id value&quot;</span>;
+
+<span class="hljs-comment">// ……另一个脚本也想将 &quot;id&quot; 用于它的目的……     </span>
+
+user.id = <span class="hljs-string">&quot;Their id value&quot;</span>
+<span class="hljs-comment">// 砰！无意中被另一个脚本重写了 id！</span></code></pre>
+<h3 id="字面量中的-symbol">字面量中的 Symbol</h3>
+<p>如果我们要在对象字面量 <code>{...}</code> 中使用 Symbol，则需要使用方括号把它括起来。</p>
+<p>就像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> id = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>);
+
+<span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+*!*
+  [id]: <span class="hljs-number">123</span> <span class="hljs-comment">// 而不是 &quot;id&quot;：123</span>
+*/!*
+};</code></pre>
+<p>这是因为我们需要变量 <code>id</code> 的值作为键，而不是字符串 &quot;id&quot;。</p>
+<h3 id="symbol-在-forin-中会被跳过">Symbol 在 for..in 中会被跳过</h3>
+<p>Symbol 属性不参与 <code>for..in</code> 循环。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> id = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>);
+<span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>,
+  [id]: <span class="hljs-number">123</span>
+};
+
+*!*
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> user) alert(key); <span class="hljs-comment">// name, age (no symbols)</span>
+*/!*
+
+<span class="hljs-comment">// 使用 Symbol 任务直接访问</span>
+alert( <span class="hljs-string">&quot;Direct: &quot;</span> + user[id] );</code></pre>
+<p><code>Object.keys(user)</code> 也会忽略它们。这是一般“隐藏符号属性”原则的一部分。如果另一个脚本或库遍历我们的对象，它不会意外地访问到符号属性。</p>
+<p>相反，<a href="mdn:js/Object/assign">Object.assign</a> 会同时复制字符串和 symbol 属性：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> id = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>);
+<span class="hljs-keyword">let</span> user = {
+  [id]: <span class="hljs-number">123</span>
+};
+
+<span class="hljs-keyword">let</span> clone = <span class="hljs-built_in">Object</span>.assign({}, user);
+
+alert( clone[id] ); <span class="hljs-comment">// 123</span></code></pre>
+<p>这里并不矛盾，就是这样设计的。这里的想法是当我们克隆或者合并一个 object 时，通常希望 <strong>所有</strong> 属性被复制（包括像 <code>id</code> 这样的 Symbol）。</p>
+<h2 id="全局-symbol">全局 symbol</h2>
+<p>正如我们所看到的，通常所有的 Symbol 都是不同的，即使它们有相同的名字。但有时我们想要名字相同的 Symbol 具有相同的实体。例如，应用程序的不同部分想要访问的 Symbol <code>&quot;id&quot;</code> 指的是完全相同的属性。</p>
+<p>为了实现这一点，这里有一个 <strong>全局 Symbol 注册表</strong>。我们可以在其中创建 Symbol 并在稍后访问它们，它可以确保每次访问相同名字的 Symbol 时，返回的都是相同的 Symbol。</p>
+<p>要从注册表中读取（不存在则创建）Symbol，请使用 <code>Symbol.for(key)</code>。</p>
+<p>该调用会检查全局注册表，如果有一个描述为 <code>key</code> 的 Symbol，则返回该 Symbol，否则将创建一个新 Symbol（<code>Symbol(key)</code>），并通过给定的 <code>key</code> 将其存储在注册表中。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 从全局注册表中读取</span>
+<span class="hljs-keyword">let</span> id = <span class="hljs-built_in">Symbol</span>.for(<span class="hljs-string">&quot;id&quot;</span>); <span class="hljs-comment">// 如果该 Symbol 不存在，则创建它</span>
+
+<span class="hljs-comment">// 再次读取（可能是在代码中的另一个位置）</span>
+<span class="hljs-keyword">let</span> idAgain = <span class="hljs-built_in">Symbol</span>.for(<span class="hljs-string">&quot;id&quot;</span>);
+
+<span class="hljs-comment">// 相同的 Symbol</span>
+alert( id === idAgain ); <span class="hljs-comment">// true</span></code></pre>
+<p>注册表内的 Symbol 被称为 <strong>全局 Symbol</strong>。如果我们想要一个应用程序范围内的 Symbol，可以在代码中随处访问 —— 这就是它们的用途。</p>
+<pre><code class="language-smart">在一些编程语言中，例如 Ruby，每个名字都有一个 Symbol。
+
+正如我们所看到的，在 JavaScript 中，全局 Symbol 也是这样的。</code></pre>
+<h3 id="symbolkeyfor">Symbol.keyFor</h3>
+<p>对于全局 Symbol，不仅有 <code>Symbol.for(key)</code> 按名字返回一个 Symbol，还有一个反向调用：<code>Symbol.keyFor(sym)</code>，它的作用完全反过来：通过全局 Symbol 返回一个名字。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 通过 name 获取 Symbol</span>
+<span class="hljs-keyword">let</span> sym = <span class="hljs-built_in">Symbol</span>.for(<span class="hljs-string">&quot;name&quot;</span>);
+<span class="hljs-keyword">let</span> sym2 = <span class="hljs-built_in">Symbol</span>.for(<span class="hljs-string">&quot;id&quot;</span>);
+
+<span class="hljs-comment">// 通过 Symbol 获取 name</span>
+alert( <span class="hljs-built_in">Symbol</span>.keyFor(sym) ); <span class="hljs-comment">// name</span>
+alert( <span class="hljs-built_in">Symbol</span>.keyFor(sym2) ); <span class="hljs-comment">// id</span></code></pre>
+<p><code>Symbol.keyFor</code> 内部使用全局 Symbol 注册表来查找 Symbol 的键。所以它不适用于非全局 Symbol。如果 Symbol 不是全局的，它将无法找到它并返回 <code>undefined</code>。</p>
+<p>也就是说，任何 Symbol 都具有 <code>description</code> 属性。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> globalSymbol = <span class="hljs-built_in">Symbol</span>.for(<span class="hljs-string">&quot;name&quot;</span>);
+<span class="hljs-keyword">let</span> localSymbol = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;name&quot;</span>);
+
+alert( <span class="hljs-built_in">Symbol</span>.keyFor(globalSymbol) ); <span class="hljs-comment">// name，全局 Symbol</span>
+alert( <span class="hljs-built_in">Symbol</span>.keyFor(localSymbol) ); <span class="hljs-comment">// undefined，非全局</span>
+
+alert( localSymbol.description ); <span class="hljs-comment">// name</span></code></pre>
+<h2 id="系统-symbol">系统 Symbol</h2>
+<p>JavaScript 内部有很多“系统” Symbol，我们可以使用它们来微调对象的各个方面。 </p>
+<p>它们都被列在了 <a href="https://tc39.github.io/ecma262/#sec-well-known-symbols">众所周知的 Symbol</a> 表的规范中：</p>
+<ul>
+<li><code>Symbol.hasInstance</code></li>
+<li><code>Symbol.isConcatSpreadable</code></li>
+<li><code>Symbol.iterator</code></li>
+<li><code>Symbol.toPrimitive</code></li>
+<li>……等等。</li>
+</ul>
+<p>例如，<code>Symbol.toPrimitive</code> 允许我们将对象描述为原始值转换。我们很快就会看到它的使用。</p>
+<p>当我们研究相应的语言特征时，我们对其他的 Symbol 也会慢慢熟悉起来。</p>
+<h2 id="总结">总结</h2>
+<p><code>Symbol</code> 是唯一标识符的基本类型</p>
+<p>Symbol 是使用带有可选描述（name）的 <code>Symbol()</code> 调用创建的。</p>
+<p>Symbol 总是不同的值，即使它们有相同的名字。如果我们希望同名的 Symbol 相等，那么我们应该使用全局注册表：<code>Symbol.for(key)</code> 返回（如果需要的话则创建）一个以 <code>key</code> 作为名字的全局 Symbol。使用 <code>Symbol.for</code> 多次调用 <code>key</code> 相同的 Symbol 时，返回的就是同一个 Symbol。</p>
+<p>Symbol 有两个主要的使用场景：</p>
+<ol>
+<li><p>“隐藏” 对象属性。
+ 如果我们想要向“属于”另一个脚本或者库的对象添加一个属性，我们可以创建一个 Symbol 并使用它作为属性的键。Symbol 属性不会出现在 <code>for..in</code> 中，因此它不会意外地被与其他属性一起处理。并且，它不会被直接访问，因为另一个脚本没有我们的 symbol。因此，该属性将受到保护，防止被意外使用或重写。</p>
+<p> 因此我们可以使用 Symbol 属性“秘密地”将一些东西隐藏到我们需要的对象中，但其他地方看不到它。</p>
+</li>
+<li><p>JavaScript 使用了许多系统 Symbol，这些 Symbol 可以作为 <code>Symbol.*</code> 访问。我们可以使用它们来改变一些内置行为。例如，在本教程的后面部分，我们将使用 <code>Symbol.iterator</code> 来进行 <a href="info:iterable">迭代</a> 操作，使用 <code>Symbol.toPrimitive</code> 来设置 <a href="info:object-toprimitive">对象原始值的转换</a> 等等。</p>
+</li>
+</ol>
+<p>从技术上说，Symbol 不是 100% 隐藏的。有一个内置方法 <a href="mdn:js/Object/getOwnPropertySymbols">Object.getOwnPropertySymbols(obj)</a> 允许我们获取所有的 Symbol。还有一个名为 <a href="mdn:js/Reflect/ownKeys">Reflect.ownKeys(obj)</a> 的方法可以返回一个对象的 <strong>所有</strong> 键，包括 Symbol。所以它们并不是真正的隐藏。但是大多数库、内置方法和语法结构都没有使用这些方法。</p>

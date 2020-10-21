@@ -1,0 +1,199 @@
+<h1 id="贪婪量词和惰性量词">贪婪量词和惰性量词</h1>
+<p>量词，看上去十分简单，但实际上它可能会很棘手。</p>
+<p>如果我们打算寻找比 <code>pattern:/\d+/</code> 更加复杂的东西，就需要理解搜索工作是如何进行的。</p>
+<p>以接下来的问题为例。</p>
+<p>有一个文本，我们需要用书名号：<code>«...»</code> 来代替所有的引号 <code>&quot;...&quot;</code>。在许多国家，它们是排版的首选。</p>
+<p>例如：<code>&quot;Hello, world&quot;</code> 将会变成 <code>«Hello, world»</code>。</p>
+<p>一些国家偏爱 <code>„Witam, świat!”</code>（波兰语）甚至 <code>「你好，世界」</code>（汉语）引号。对于不同的语言环境，我们可以选择不同的替代方式，但它们都是一样的，那我们就以书名号 <code>«...»</code> 开始。</p>
+<p>为了进行替换，我们首先要找出所有被引号围起来的子串。</p>
+<p>正则表达式看上去可能是这样的：<code>pattern:/&quot;.+&quot;/g</code>。这个表达式的意思是：我们要查找这样一个句子，一个引号后跟一个或多个字符，然后以另一个引号结尾。</p>
+<p>...但如果我们试着在一个如此简单的例子中去应用它...</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&quot;.+&quot;/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;a &quot;witch&quot; and her &quot;broom&quot; is one&#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// &quot;witch&quot; and her &quot;broom&quot;</span></code></pre>
+<p>...我们会发现它的运行结果与预期不同！</p>
+<p>它直接找到了一个匹配结果：<code>match:&quot;witch&quot; and her &quot;broom&quot;</code>，而不是找到两个匹配结果 <code>match:&quot;witch&quot;</code> 和 <code>match:&quot;broom&quot;</code>。</p>
+<p>这可被称为“贪婪是万恶之源”。</p>
+<h2 id="贪婪搜索">贪婪搜索</h2>
+<p>为了查找到一个匹配项，正则表达式引擎采用了以下算法：</p>
+<ul>
+<li>对于字符串中的每一个字符<ul>
+<li>用这个模式来匹配此字符。</li>
+<li>若无匹配，移至下一个字符</li>
+</ul>
+</li>
+</ul>
+<p>这些简单的词语没有说清楚为什么这个正则表达式匹配失败了，因此，让我们详细说明一下模式 <code>pattern:&quot;.+&quot;</code> 是如何进行搜索工作的。</p>
+<ol>
+<li><p>该模式的第一个字符是一个引号 <code>pattern:&quot;</code>。</p>
+<p> 正则表达式引擎企图在字符串 <code>subject:a &quot;witch&quot; and her &quot;broom&quot; is one</code> 的第一个位置就匹配到目标，但这个位置是 subject:a，所以匹配失败。</p>
+<p> 然后它进行下一步：移至字符串中的下一个位置，并试图匹配模式中的第一个字符，最终在第三个位置匹配到了引号：</p>
+<p> <img src="witch_greedy1.svg" alt=""></p>
+</li>
+<li><p>检测到了引号后，引擎就尝试去匹配模式中的剩余字符。它试图查看剩余的字符串主体是否符合 <code>pattern:.+&quot;</code>。</p>
+<p> 在我们的用例中，模式中的下一个字符为 <code>pattern:.</code>（一个点）。它表示匹配除了换行符之外的任意字符，所以将会匹配下一个字符 <code>match:&#39;w&#39;</code>：</p>
+<p> <img src="witch_greedy2.svg" alt=""></p>
+</li>
+<li><p>然后因为量词 <code>pattern:.+</code>，模式中的点（.）将会重复。正则表达式引擎逐一读取字符，当该字符可能匹配时就用它来构建匹配项。</p>
+<p> ...什么时候会不匹配？点（.）能够匹配所有字符，所以只有在移至字符串末尾时才停止匹配：</p>
+<p> <img src="witch_greedy3.svg" alt=""></p>
+</li>
+<li><p>现在引擎完成了对重复模式 <code>pattern:.+</code> 的搜索，并且试图寻找模式中的下一个字符。这个字符是引号 <code>pattern:&quot;</code>。但还有一个问题，对字符串的遍历已经结束，已经没有更多的字符了！</p>
+<p> 正则表达式引擎明白它已经为 <code>pattern:.+</code> 匹配了太多项了，所以开始<strong>回溯</strong>了。</p>
+<p> 换句话说，它去掉了量词的匹配项的最后一个字符：</p>
+<p> <img src="witch_greedy4.svg" alt=""></p>
+<p> 现在它假设在结束前，<code>pattern:.+</code> 会匹配一个字符，并尝试匹配剩余的字符。</p>
+<p> 如果出现了一个引号，就表示到达了末尾，但最后一个字符是 <code>subject:&#39;e&#39;</code>，所以无法匹配。 </p>
+</li>
+<li><p>...所以引擎会再去掉一个字符，以此来减少 <code>pattern:.+</code> 的重复次数：</p>
+<p> <img src="witch_greedy5.svg" alt=""></p>
+<p> <code>pattern:&#39;&quot;&#39;</code> 并不会匹配 <code>subject:&#39;n&#39;</code>。</p>
+</li>
+<li><p>引擎不断进行回溯：它减少了 <code>pattern:&#39;.&#39;</code> 的重复次数，直到模式的其它部分（在我们的用例中是 <code>pattern:&#39;&quot;&#39;</code>）匹配到结果：</p>
+<p> <img src="witch_greedy6.svg" alt=""></p>
+</li>
+<li><p>匹配完成。</p>
+</li>
+<li><p>所以，第一次匹配是 <code>match:&quot;witch&quot; and her &quot;broom&quot;</code>。接下来的搜索的起点位于第一次搜索的终点，但在 <code>subject:is one</code> 中没有更多的引号了，所以没有其它的结果了。</p>
+</li>
+</ol>
+<p>这可能不是我们所想要的，但这就是它的工作原理。</p>
+<p><strong>在贪婪模式下（默认情况下），量词都会尽可能地重复多次。</strong></p>
+<p>正则表达式引擎尝试用 <code>pattern:.+</code> 去获取尽可能多的字符，然后再一步步地筛选它们。</p>
+<p>对于这个问题，我们想要另一种结果，这也就是懒惰量词模式的用途。</p>
+<h2 id="懒惰模式">懒惰模式</h2>
+<p>懒惰模式中的量词与贪婪模式中的是相反的。它想要“重复最少次数”。</p>
+<p>我们能够通过在量词之后添加一个问号 <code>pattern:&#39;?&#39;</code> 来启用它，所以匹配模式变为 <code>pattern:*?</code> 或 <code>pattern:+?</code>，甚至将 <code>pattern:&#39;?&#39;</code> 变为 <code>pattern:??</code>。</p>
+<p>这么说吧：通常，一个问号 <code>pattern:?</code> 就是一个它本身的量词（0 或 1），但如果添加<strong>另一个量词（甚至可以是它自己）</strong>，就会有不同的意思 —— 它将匹配的模式从贪婪转为懒惰。</p>
+<p>正则表达式 <code>pattern:/&quot;.+?&quot;/g</code> 正如预期工作：它找到了 <code>match:&quot;witch&quot;</code> 和 <code>match:&quot;broom&quot;</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&quot;.+?&quot;/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;a &quot;witch&quot; and her &quot;broom&quot; is one&#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// witch, broom</span></code></pre>
+<p>为了更清楚地理解这个变化，我们来一步步解析这个搜索过程。</p>
+<ol>
+<li><p>第一步依然相同：它在第三个位置开始 <code>pattern:&#39;&quot;&#39;</code>：</p>
+<p> <img src="witch_greedy1.svg" alt=""></p>
+</li>
+<li><p>下一步也是类似的：引擎为 <code>pattern:&#39;.&#39;</code> 找到了一个匹配项：</p>
+<p> <img src="witch_greedy2.svg" alt=""></p>
+</li>
+<li><p>接下来就是搜索过程出现不同的时候了。因为我们对 <code>pattern:+?</code> 启用了懒惰模式，引擎不会去尝试多匹配一个点，并且开始了对剩余的 <code>pattern:&#39;&quot;&#39;</code> 的匹配：</p>
+<p> <img src="witch_lazy3.svg" alt=""></p>
+<p> 如果有一个引号，搜索就会停止，但是有一个 <code>&#39;i&#39;</code>，所以没有匹配到引号。</p>
+</li>
+<li><p>接着，正则表达式引擎增加对点的重复搜索次数，并且再次尝试：</p>
+<p> <img src="witch_lazy4.svg" alt=""></p>
+<p> 又失败了。然后重复次数一次又一次的增加...</p>
+</li>
+<li><p>...直到模式中的剩余部分找到匹配项：</p>
+<p> <img src="witch_lazy5.svg" alt=""></p>
+</li>
+<li><p>接下来的搜索工作从当前匹配结束的那一项开始，就会再产生一个结果：</p>
+<p> <img src="witch_lazy6.svg" alt=""></p>
+</li>
+</ol>
+<p>在这个例子中，我们看到了懒惰模式 <code>pattern:+?</code> 是怎样工作的。量词 <code>pattern:*?</code> 和 <code>pattern:??</code> 也有类似的效果 —— 只有在模式的剩余部分无法在给定位置匹配时，正则表达式引擎才会增加重复次数。</p>
+<p><strong>懒惰模式只能够通过带 <code>?</code> 的量词启用</strong></p>
+<p>其它的量词依旧保持贪婪模式。</p>
+<p>例如：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;123 456&quot;</span>.match(<span class="hljs-regexp">/\d+ \d+?/g</span>) ); <span class="hljs-comment">// 123 4</span></code></pre>
+<ol>
+<li><p>模式 <code>pattern:\d+</code> 尝试匹配尽可能多的数字（贪婪模式），因此在它找到 <code>match:123</code> 时停止，因为下一个字符为空格 <code>pattern:&#39; &#39;</code>。</p>
+</li>
+<li><p>匹配到一个空格。</p>
+</li>
+<li><p>由于 <code>pattern:\d+?</code>。量词是出于懒惰模式的，所以它匹配一个数字 <code>match:4</code> 并且尝试去检测模式的剩余部分是否匹配。</p>
+<p> 。。。但是在 <code>pattern:\d+?</code> 之后没有其它的匹配项了。</p>
+<p> 懒惰模式不会在不必要的情况下重复任何事情。模式结束，所以我们找到了匹配项 <code>match:123 4</code>。</p>
+</li>
+<li><p>接下来的搜索工作从字符 <code>5</code> 开始。</p>
+</li>
+</ol>
+<pre><code class="language-smart">当代的正则表达式引擎会通过优化内部算法来提升效率。所以它们的工作流程和所描述的算法可能略有不同。
+
+但如果只是为了理解正则表达式是如何工作以及如何构建的，我们不需要知道这些，它们仅用于内部优化。
+
+复杂的正则表达式是难以优化的，所以搜索的过程可能会完全按照描述进行。</code></pre>
+<h2 id="替代方法">替代方法</h2>
+<p>在正则表达式中，通常有多种方法来达到某个相同目的。</p>
+<p>在用例中，我们能够在不启用懒惰模式的情况下用 <code>pattern:&quot;[^&quot;]+&quot;</code> 找到带引号的字符串：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&quot;[^&quot;]+&quot;/g</span>;
+
+<span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;a &quot;witch&quot; and her &quot;broom&quot; is one&#x27;</span>;
+
+alert( str.match(reg) ); <span class="hljs-comment">// witch, broom</span></code></pre>
+<p><code>pattern:&quot;[^&quot;]+&quot;</code> 得到了正确的答案，因为它查找一个引号 <code>pattern:&#39;&quot;&#39;</code>，后跟一个或多个非引号字符  <code>pattern:[^&quot;]</code>，然后是结束的引号。</p>
+<p>当引擎寻找 <code>pattern:[^&quot;]+</code> 时，它会在匹配到结束的引号时停止重复，这样就完成了。</p>
+<p>请注意，这个逻辑并不能取代惰性量词！</p>
+<p>这是不同的，我们有时需要这一个，有时却需要另一个。</p>
+<p>让我们再来看一个使用惰性量词失败而使用这种方式正确的例子。</p>
+<p>例如，我们想要找到 <code>&lt;a href=&quot;...&quot; class=&quot;doc&quot;&gt;</code> 形式的链接，或是任意 <code>href</code>。</p>
+<p>该使用哪个正则表达式呢？</p>
+<p>首先可能会想到：<code>pattern:/&lt;a href=&quot;.*&quot; class=&quot;doc&quot;&gt;/g</code>。</p>
+<p>验证一下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;a href=&quot;link&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;a href=&quot;.*&quot; class=&quot;doc&quot;&gt;/g</span>;
+
+<span class="hljs-comment">// Works!</span>
+alert( str.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link&quot; class=&quot;doc&quot;&gt;</span></code></pre>
+<p>...但如果文本中有多个链接呢？</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;... &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;a href=&quot;.*&quot; class=&quot;doc&quot;&gt;/g</span>;
+
+<span class="hljs-comment">// Whoops! Two links in one match!</span>
+alert( str.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;... &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;</span></code></pre>
+<p>现在这个结果和我们的 &quot;witches&quot; 用例结果的错误原因是一样的。量词 <code>pattern:.*</code> 占用太多字符了。</p>
+<p>匹配结果如下：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;.....................................&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;link1&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>... <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;link2&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span></code></pre>
+<p>让我们启用惰性量词 <code>pattern:.*?</code> 来修改模式：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;... &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;a href=&quot;.*?&quot; class=&quot;doc&quot;&gt;/g</span>;
+
+<span class="hljs-comment">// 有效！</span>
+alert( str.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;, &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;</span></code></pre>
+<p>现在能成功了，有两个匹配项：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;.....&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;.....&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;link1&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>... <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;link2&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span></code></pre>
+<p>它的工作原理是 —— 在上述的解释之后，这应该是显而易见的。所以我们不停留在这些细节上，来再尝试一个例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;a href=&quot;link1&quot; class=&quot;wrong&quot;&gt;... &lt;p style=&quot;&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;a href=&quot;.*?&quot; class=&quot;doc&quot;&gt;/g</span>;
+
+<span class="hljs-comment">// 错误！</span>
+alert( str.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link1&quot; class=&quot;wrong&quot;&gt;... &lt;p style=&quot;&quot; class=&quot;doc&quot;&gt;</span></code></pre>
+<p>我们会发现，这个正则表达式不仅匹配了一个链接，还匹配了包含 <code>&lt;p...&gt;</code> 的一段文本。</p>
+<p>为什么？</p>
+<ol>
+<li><p>首先，正则表达式发现一个链接标签：<code>match:&lt;a href=&quot;</code>。</p>
+</li>
+<li><p>然后它寻找 <code>pattern:.*?</code>，我们取一个字符，检查其是否与模式的剩余部分匹配，然后再取另一个。。。</p>
+<p> 量词 <code>pattern:.*?</code> 检测字符，直到 <code>match:class=&quot;doc&quot;&gt;</code>。</p>
+<p> ...在哪里可以找到它呢？我们如果查看文本，就可以看到唯一的 <code>match:class=&quot;doc&quot;&gt;</code> 是在链接之后的，在 <code>&lt;p&gt;</code> 中。</p>
+</li>
+<li><p>所以有了如下匹配项：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;...................................&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;link1&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;wrong&quot;</span>&gt;</span>... <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;doc&quot;</span>&gt;</span></code></pre>
+</li>
+</ol>
+<p>所以，懒惰模式在这里不起作用。</p>
+<p>我们需要寻找 <code>&lt;a href=&quot;...something...&quot; class=&quot;doc&quot;&gt;</code>，但贪婪和懒惰模式都有一些问题。</p>
+<p>正确的做法应该是这样的：<code>pattern:href=&quot;[^&quot;]*&quot;</code>。它会获取 href 属性中的所有字符，正好符合我们的需求。</p>
+<p>一个实例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str1 = <span class="hljs-string">&#x27;...&lt;a href=&quot;link1&quot; class=&quot;wrong&quot;&gt;... &lt;p style=&quot;&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> str2 = <span class="hljs-string">&#x27;...&lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;... &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;...&#x27;</span>;
+<span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/&lt;a href=&quot;[^&quot;]*&quot; class=&quot;doc&quot;&gt;/g</span>;
+
+<span class="hljs-comment">// Works!</span>
+alert( str1.match(reg) ); <span class="hljs-comment">// 没有匹配项，是正确的</span>
+alert( str2.match(reg) ); <span class="hljs-comment">// &lt;a href=&quot;link1&quot; class=&quot;doc&quot;&gt;, &lt;a href=&quot;link2&quot; class=&quot;doc&quot;&gt;</span></code></pre>
+<h2 id="总结">总结</h2>
+<p>量词有两种工作模式：</p>
+<p>贪婪模式
+: 默认情况下，正则表达式引擎会尝试尽可能多地重复量词。例如，<code>pattern:\d+</code> 检测所有可能的字符。当不可能检测更多（没有更多的字符或到达字符串末尾）时，然后它再匹配模式的剩余部分。如果没有匹配，则减少重复的次数（回溯），并再次尝试。</p>
+<p>懒惰模式
+: 通过在量词后添加问号 <code>pattern:?</code> 来启用。在每次重复量词之前，引擎会尝试去匹配模式的剩余部分。</p>
+<p>正如我们所见，懒惰模式并不是针对贪婪搜索的灵丹妙药。另一种方式是“微调”贪婪搜索，我们很快就会见到更多的例子。</p>

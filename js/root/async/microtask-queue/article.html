@@ -1,0 +1,64 @@
+<h1 id="微任务（microtask）">微任务（Microtask）</h1>
+<p>Promise 的处理程序（handlers）<code>.then</code>、<code>.catch</code> 和 <code>.finally</code> 都是异步的。</p>
+<p>即便一个 promise 立即被 resolve，<code>.then</code>、<code>.catch</code> 和 <code>.finally</code> <strong>下面</strong> 的代码也会在这些处理程序（handler）之前被执行。</p>
+<p>示例代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> promise = <span class="hljs-built_in">Promise</span>.resolve();
+
+promise.then(<span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;promise done!&quot;</span>));
+
+alert(<span class="hljs-string">&quot;code finished&quot;</span>); <span class="hljs-comment">// 这个 alert 先显示</span></code></pre>
+<p>如果你运行它，你会首先看到 <code>code finished</code>，然后才是 <code>promise done</code>。</p>
+<p>这很奇怪，因为这个 promise 肯定是一开始就完成的。</p>
+<p>为什么 <code>.then</code> 会在之后才被触发？这是怎么回事？</p>
+<h2 id="微任务队列（microtask-queue）">微任务队列（Microtask queue）</h2>
+<p>异步任务需要适当的管理。为此，ECMA 标准规定了一个内部队列 <code>PromiseJobs</code>，通常被称为“微任务队列（microtask queue）”（ES8 术语）。</p>
+<p>如 <a href="https://tc39.github.io/ecma262/#sec-jobs-and-job-queues">规范</a> 中所述：</p>
+<ul>
+<li>队列（queue）是先进先出的：首先进入队列的任务会首先运行。</li>
+<li>只有在 JavaScript 引擎中没有其它任务在运行时，才开始执行任务队列中的任务。</li>
+</ul>
+<p>或者，简单地说，当一个 promise 准备就绪时，它的 <code>.then/catch/finally</code> 处理程序（handler）就会被放入队列中：但是它们不会立即被执行。当 JavaScript 引擎执行完当前的代码，它会从队列中获取任务并执行它。</p>
+<p>这就是为什么在上面那个示例中 &quot;code finished&quot; 会先显示。</p>
+<p><img src="promiseQueue.svg" alt=""></p>
+<p>Promise 的处理程序（handler）总是会经过这个内部队列。</p>
+<p>如果有一个包含多个 <code>.then/catch/finally</code> 的链，那么它们中的每一个都是异步执行的。也就是说，它会首先进入队列，然后在当前代码执行完成并且先前排队的处理程序（handler）都完成时才会被执行。</p>
+<p><strong>如果执行顺序对我们很重要该怎么办？我们怎么才能让 <code>code finished</code> 在 <code>promise done</code> 之后运行呢？</strong></p>
+<p>很简单，只需要像下面这样使用 <code>.then</code> 将其放入队列：</p>
+<pre><code class="language-js"><span class="hljs-built_in">Promise</span>.resolve()
+  .then(<span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;promise done!&quot;</span>))
+  .then(<span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;code finished&quot;</span>));</code></pre>
+<p>现在代码就是按照预期执行的。</p>
+<h2 id="未处理的-rejection">未处理的 rejection</h2>
+<p>还记得 <a href="info:promise-error-handling">info:promise-error-handling</a> 一章中的 <code>unhandledrejection</code> 事件吗？</p>
+<p>现在，我们可以确切地看到 JavaScript 是如何发现未处理的 rejection 的。</p>
+<p><strong>如果一个 promise 的 error 未被在微任务队列的末尾进行处理，则会出现“未处理的 rejection”。</strong></p>
+<p>正常来说，如果我们预期可能会发生错误，我们会在 promise 链上添加 <code>.catch</code> 来处理 error：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> promise = <span class="hljs-built_in">Promise</span>.reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Promise Failed!&quot;</span>));
+*!*
+promise.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> alert(<span class="hljs-string">&#x27;caught&#x27;</span>));
+*/!*
+
+<span class="hljs-comment">// 不会运行：error 已经被处理</span>
+<span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&#x27;unhandledrejection&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> alert(event.reason));</code></pre>
+<p>但是如果我们忘记添加 <code>.catch</code>，那么，微任务队列清空后，JavaScript 引擎会触发下面这事件：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> promise = <span class="hljs-built_in">Promise</span>.reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Promise Failed!&quot;</span>));
+
+<span class="hljs-comment">// Promise Failed!</span>
+<span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&#x27;unhandledrejection&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> alert(event.reason));</code></pre>
+<p>如果我们迟一点再处理这个 error 会怎样？例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> promise = <span class="hljs-built_in">Promise</span>.reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Promise Failed!&quot;</span>));
+*!*
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> promise.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> alert(<span class="hljs-string">&#x27;caught&#x27;</span>)), <span class="hljs-number">1000</span>);
+*/!*
+
+<span class="hljs-comment">// Error: Promise Failed!</span>
+<span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&#x27;unhandledrejection&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> alert(event.reason));</code></pre>
+<p>现在，如果我们运行上面这段代码，我们会先看到 <code>Promise Failed!</code>，然后才是 <code>caught</code>。</p>
+<p>如果我们并不了解微任务队列，我们可能会想：“为什么 <code>unhandledrejection</code> 处理程序（handler）会运行？我们已经捕获（catch）并处理了 error！”</p>
+<p>但是现在我们知道了，当微任务队列中的任务都完成时，才会生成 <code>unhandledrejection</code>：引擎会检查 promise，如果 promise 中的任意一个出现 &quot;rejected&quot; 状态，<code>unhandledrejection</code> 事件就会被触发。</p>
+<p>在上面这个例子中，被添加到 <code>setTimeout</code> 中的 <code>.catch</code> 也会被触发。只是会在 <code>unhandledrejection</code> 事件出现之后才会被触发，所以它并没有改变什么（没有发挥作用）。</p>
+<h2 id="总结">总结</h2>
+<p>Promise 处理始终是异步的，因为所有 promise 行为都会通过内部的 &quot;promise jobs&quot; 队列，也被称为“微任务队列”（ES8 术语）。</p>
+<p>因此，<code>.then/catch/finally</code> 处理程序（handler）总是在当前代码完成后才会被调用。</p>
+<p>如果我们需要确保一段代码在 <code>.then/catch/finally</code> 之后被执行，我们可以将它添加到链式调用的 <code>.then</code> 中。</p>
+<p>在大多数 JavaScript 引擎中（包括浏览器和 Node.js），微任务（microtask）的概念与“事件循环（event loop）”和“宏任务（macrotasks）”紧密相关。由于这些概念跟 promise 没有直接关系，所以我们将在本教程另外一部分的 <a href="info:event-loop">info:event-loop</a> 一章中对它们进行介绍。</p>

@@ -1,0 +1,17 @@
+<p>我们不能“替换”第一个字符，因为在 JavaScript 中字符串是不可变的。</p>
+<p>但是我们可以根据已有字符串创建一个首字母大写的新字符串：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> newStr = str[<span class="hljs-number">0</span>].toUpperCase() + str.slice(<span class="hljs-number">1</span>);</code></pre>
+<p>这里存在一个小问题。如果 <code>str</code> 是空的，那么 <code>str[0]</code> 就是 <code>undefined</code>，但由于 <code>undefined</code> 并没有 <code>toUpperCase()</code> 方法，因此我们会得到一个错误。</p>
+<p>存在如下两种变体：</p>
+<ol>
+<li>使用 <code>str.charAt(0)</code>，因为它总是会返回一个字符串（可能为空）。</li>
+<li>为空字符添加测试。</li>
+</ol>
+<p>这是第二种变体：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ucFirst</span>(<span class="hljs-params">str</span>) </span>{
+  <span class="hljs-keyword">if</span> (!str) <span class="hljs-keyword">return</span> str;
+
+  <span class="hljs-keyword">return</span> str[<span class="hljs-number">0</span>].toUpperCase() + str.slice(<span class="hljs-number">1</span>);
+}
+
+alert( ucFirst(<span class="hljs-string">&quot;john&quot;</span>) ); <span class="hljs-comment">// John</span></code></pre>

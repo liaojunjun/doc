@@ -1,0 +1,12 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="检查空对象">检查空对象</h1>
+<p>写一个 <code>isEmpty(obj)</code> 函数，当对象没有属性的时候返回 <code>true</code>，否则返回 <code>false</code>。</p>
+<p>应该像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> schedule = {};
+
+alert( isEmpty(schedule) ); <span class="hljs-comment">// true</span>
+
+schedule[<span class="hljs-string">&quot;8:30&quot;</span>] = <span class="hljs-string">&quot;get up&quot;</span>;
+
+alert( isEmpty(schedule) ); <span class="hljs-comment">// false</span></code></pre>

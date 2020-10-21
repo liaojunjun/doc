@@ -1,0 +1,91 @@
+<h1 id="深入理解箭头函数">深入理解箭头函数</h1>
+<p>让我们深入研究一下箭头函数。</p>
+<p>箭头函数不仅仅是编写简洁代码的“捷径”。它还具有非常特殊且有用的特性。</p>
+<p>JavaScript 充满了我们需要编写在其他地方执行的小函数的情况。</p>
+<p>例如：</p>
+<ul>
+<li><code>arr.forEach(func)</code> —— <code>forEach</code> 对每个数组元素都执行 <code>func</code>。</li>
+<li><code>setTimeout(func)</code> —— <code>func</code> 由内建调度器执行。</li>
+<li>……还有更多。</li>
+</ul>
+<p>JavaScript 的精髓在于创建一个函数并将其传递到某个地方。</p>
+<p>在这样的函数中，我们通常不想离开当前上下文。这就是箭头函数的主战场啦。</p>
+<h2 id="箭头函数没有-this">箭头函数没有 &quot;this&quot;</h2>
+<p>正如我们在 <a href="info:object-methods">info:object-methods</a> 一章中所学到的，箭头函数没有 <code>this</code>。如果访问 <code>this</code>，则会从外部获取。</p>
+<p>例如，我们可以使用它在对象方法内部进行迭代：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> group = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Our Group&quot;</span>,
+  <span class="hljs-attr">students</span>: [<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;Pete&quot;</span>, <span class="hljs-string">&quot;Alice&quot;</span>],
+
+  showList() {
+*!*
+    <span class="hljs-built_in">this</span>.students.forEach(
+      <span class="hljs-function"><span class="hljs-params">student</span> =&gt;</span> alert(<span class="hljs-built_in">this</span>.title + <span class="hljs-string">&#x27;: &#x27;</span> + student)
+    );
+*/!*
+  }
+};
+
+group.showList();</code></pre>
+<p>这里 <code>forEach</code> 中使用了箭头函数，所以其中的 <code>this.title</code> 其实和外部方法 <code>showList</code> 的完全一样。那就是：<code>group.title</code>。</p>
+<p>如果我们使用正常的函数，则会出现错误：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> group = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Our Group&quot;</span>,
+  <span class="hljs-attr">students</span>: [<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;Pete&quot;</span>, <span class="hljs-string">&quot;Alice&quot;</span>],
+
+  showList() {
+*!*
+    <span class="hljs-built_in">this</span>.students.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">student</span>) </span>{
+      <span class="hljs-comment">// Error: Cannot read property &#x27;title&#x27; of undefined</span>
+      alert(<span class="hljs-built_in">this</span>.title + <span class="hljs-string">&#x27;: &#x27;</span> + student)
+    });
+*/!*
+  }
+};
+
+group.showList();</code></pre>
+<p>报错是因为 <code>forEach</code> 运行它里面的这个函数，但是这个函数的 <code>this</code> 为默认值 <code>this=undefined</code>，因此就出现了尝试访问 <code>undefined.title</code> 的情况。</p>
+<p>但箭头函数就没事，因为它们没有 <code>this</code>。</p>
+<p>```warn header=&quot;不能对箭头函数进行 <code>new</code> 操作&quot;
+不具有 <code>this</code> 自然也就意味着另一个限制：箭头函数不能用作构造器（constructor）。不能用 <code>new</code> 调用它们。</p>
+<pre><code>
+```smart header=&quot;箭头函数 VS bind&quot;
+箭头函数 `=&gt;` 和使用 `.bind(this)` 调用的常规函数之间有细微的差别：
+
+- `.bind(this)` 创建了一个该函数的“绑定版本”。
+- 箭头函数 `=&gt;` 没有创建任何绑定。箭头函数只是没有 `this`。`this` 的查找与常规变量的搜索方式完全相同：在外部词法环境中查找。</code></pre>
+<h2 id="箭头函数没有-arguments">箭头函数没有 &quot;arguments&quot;</h2>
+<p>箭头函数也没有 <code>arguments</code> 变量。</p>
+<p>当我们需要使用当前的 <code>this</code> 和 <code>arguments</code> 转发一个调用时，这对装饰者（decorators）来说非常有用。</p>
+<p>例如，<code>defer(f, ms)</code> 获得了一个函数，并返回一个包装器，该包装器将调用延迟 <code>ms</code> 毫秒：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">defer</span>(<span class="hljs-params">f, ms</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> f.apply(<span class="hljs-built_in">this</span>, <span class="hljs-built_in">arguments</span>), ms)
+  };
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">who</span>) </span>{
+  alert(<span class="hljs-string">&#x27;Hello, &#x27;</span> + who);
+}
+
+<span class="hljs-keyword">let</span> sayHiDeferred = defer(sayHi, <span class="hljs-number">2000</span>);
+sayHiDeferred(<span class="hljs-string">&quot;John&quot;</span>); <span class="hljs-comment">// 2 秒后显示：Hello, John</span></code></pre>
+<p>不用箭头函数的话，可以这么写：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">defer</span>(<span class="hljs-params">f, ms</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">...args</span>) </span>{
+    <span class="hljs-keyword">let</span> ctx = <span class="hljs-built_in">this</span>;
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">return</span> f.apply(ctx, args);
+    }, ms);
+  };
+}</code></pre>
+<p>在这里，我们必须创建额外的变量 <code>args</code> 和 <code>ctx</code>，以便 <code>setTimeout</code> 内部的函数可以获取它们。</p>
+<h2 id="总结">总结</h2>
+<p>箭头函数：</p>
+<ul>
+<li>没有 <code>this</code></li>
+<li>没有 <code>arguments</code></li>
+<li>不能使用 <code>new</code> 进行调用</li>
+<li>它们也没有 <code>super</code>，但目前我们还没有学到它。我们将在 <a href="info:class-inheritance">info:class-inheritance</a> 一章中学习它。</li>
+</ul>
+<p>这是因为，箭头函数是针对那些没有自己的“上下文”，但在当前上下文中起作用的短代码的。并且箭头函数确实在这种使用场景中大放异彩。</p>

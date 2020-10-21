@@ -1,0 +1,18 @@
+<p>首先，让我们看看 <strong>错误</strong> 的做法：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clear</span>(<span class="hljs-params">elem</span>) </span>{
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i=<span class="hljs-number">0</span>; i &lt; elem.childNodes.length; i++) {
+      elem.childNodes[i].remove();
+  }
+}</code></pre>
+<p>这是行不通的，因为调用 <code>remove()</code> 会从首端开始移除 <code>elem.childNodes</code> 集合中的元素，因此，元素每次都从索引 <code>0</code> 开始。但是 <code>i</code> 在增加，所以元素就被跳过了。</p>
+<p>用 <code>for..of</code> 循环的结果也跟上面一样。</p>
+<p>正确的做法是：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clear</span>(<span class="hljs-params">elem</span>) </span>{
+  <span class="hljs-keyword">while</span> (elem.firstChild) {
+    elem.firstChild.remove();
+  }
+}</code></pre>
+<p>还有一种更简单的方法，也可以达到我们所要的效果：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clear</span>(<span class="hljs-params">elem</span>) </span>{
+  elem.innerHTML = <span class="hljs-string">&#x27;&#x27;</span>;
+}</code></pre>

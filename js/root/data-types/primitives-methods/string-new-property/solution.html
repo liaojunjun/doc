@@ -1,0 +1,19 @@
+<p>试试运行一下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Hello&quot;</span>;
+
+str.test = <span class="hljs-number">5</span>; <span class="hljs-comment">// (*)</span>
+
+alert(str.test); </code></pre>
+<p>根据你是否开启了严格模式 <code>use strict</code>，会得到如下结果：</p>
+<ol>
+<li><code>undefined</code>（非严格模式）</li>
+<li>报错（严格模式）。</li>
+</ol>
+<p>为什么？让我们看看在 <code>(*)</code> 那一行到底发生了什么：</p>
+<ol>
+<li>当访问 <code>str</code> 的属性时，一个“对象包装器”被创建了。</li>
+<li>在严格模式下，向其写入内容会报错。</li>
+<li>否则，将继续执行带有属性的操作，该对象将获得 <code>test</code> 属性，但是此后，“对象包装器”将消失，因此在最后一行，<code>str</code> 并没有该属性的踪迹。</li>
+</ol>
+<p><strong>这个例子清楚地表明，原始类型不是对象。</strong></p>
+<p>它们不能存储额外的数据。</p>

@@ -1,0 +1,18 @@
+<h1 id="inbetween-筛选器">inBetween 筛选器</h1>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">inBetween</span>(<span class="hljs-params">a, b</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x</span>) </span>{
+    <span class="hljs-keyword">return</span> x &gt;= a &amp;&amp; x &lt;= b;
+  };
+}
+
+<span class="hljs-keyword">let</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>];
+alert( arr.filter(inBetween(<span class="hljs-number">3</span>, <span class="hljs-number">6</span>)) ); <span class="hljs-comment">// 3,4,5,6</span></code></pre>
+<h1 id="inarray-筛选器">inArray 筛选器</h1>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">inArray</span>(<span class="hljs-params">arr</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">x</span>) </span>{
+    <span class="hljs-keyword">return</span> arr.includes(x);
+  };
+}
+
+<span class="hljs-keyword">let</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>];
+alert( arr.filter(inArray([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">10</span>])) ); <span class="hljs-comment">// 1,2</span></code></pre>

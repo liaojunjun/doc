@@ -1,0 +1,291 @@
+<h1 id="javascript-动画">JavaScript 动画</h1>
+<p>JavaScript 动画可以处理 CSS 无法处理的事情。</p>
+<p>例如，沿着具有与 Bezier 曲线不同的时序函数的复杂路径移动，或者实现画布上的动画。</p>
+<h2 id="使用-setinterval">使用 setInterval</h2>
+<p>从 HTML/CSS 的角度来看，动画是 style 属性的逐渐变化。例如，将 <code>style.left</code> 从 <code>0px</code> 变化到 <code>100px</code> 可以移动元素。</p>
+<p>如果我们用 <code>setInterval</code> 每秒做 50 次小变化，看起来会更流畅。电影也是这样的原理：每秒 24 帧或更多帧足以使其看起来流畅。</p>
+<p>伪代码如下：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> delay = <span class="hljs-number">1000</span> / <span class="hljs-number">50</span>; <span class="hljs-comment">// 每秒 50 帧</span>
+<span class="hljs-keyword">let</span> timer = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (animation complete) <span class="hljs-built_in">clearInterval</span>(timer);
+  <span class="hljs-keyword">else</span> increase style.left
+}, delay)</code></pre>
+<p>更完整的动画示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> start = <span class="hljs-built_in">Date</span>.now(); <span class="hljs-comment">// 保存开始时间</span>
+
+<span class="hljs-keyword">let</span> timer = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// 距开始过了多长时间</span>
+  <span class="hljs-keyword">let</span> timePassed = <span class="hljs-built_in">Date</span>.now() - start;
+
+  <span class="hljs-keyword">if</span> (timePassed &gt;= <span class="hljs-number">2000</span>) {
+    <span class="hljs-built_in">clearInterval</span>(timer); <span class="hljs-comment">// 2 秒后结束动画</span>
+    <span class="hljs-keyword">return</span>;
+  }
+
+  <span class="hljs-comment">// 在 timePassed 时刻绘制动画</span>
+  draw(timePassed);
+
+}, <span class="hljs-number">20</span>);
+
+<span class="hljs-comment">// 随着 timePassed 从 0 增加到 2000</span>
+<span class="hljs-comment">// 将 left 的值从 0px 增加到 400px</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">draw</span>(<span class="hljs-params">timePassed</span>) </span>{
+  train.style.left = timePassed / <span class="hljs-number">5</span> + <span class="hljs-string">&#x27;px&#x27;</span>;
+}</code></pre>
+<p>点击演示：</p>
+<p>[codetabs height=200 src=&quot;move&quot;]</p>
+<h2 id="使用-requestanimationframe">使用 requestAnimationFrame</h2>
+<p>假设我们有几个同时运行的动画。</p>
+<p>如果我们单独运行它们，每个都有自己的 <code>setInterval(..., 20)</code>，那么浏览器必须以比 <code>20ms</code> 更频繁的速度重绘。</p>
+<p>每个 <code>setInterval</code> 每 <code>20ms</code> 触发一次，但它们相互独立，因此 <code>20ms</code> 内将有多个独立运行的重绘。</p>
+<p>这几个独立的重绘应该组合在一起，以使浏览器更加容易处理。</p>
+<p>换句话说，像下面这样：</p>
+<pre><code class="language-js"><span class="hljs-built_in">setInterval</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  animate1();
+  animate2();
+  animate3();
+}, <span class="hljs-number">20</span>)</code></pre>
+<p>……比这样更好：</p>
+<pre><code class="language-js"><span class="hljs-built_in">setInterval</span>(animate1, <span class="hljs-number">20</span>);
+<span class="hljs-built_in">setInterval</span>(animate2, <span class="hljs-number">20</span>);
+<span class="hljs-built_in">setInterval</span>(animate3, <span class="hljs-number">20</span>);</code></pre>
+<p>还有一件事需要记住。有时当 CPU 过载时，或者有其他原因需要降低重绘频率。例如，如果浏览器选项卡被隐藏，那么绘图完全没有意义。</p>
+<p>有一个标准<a href="http://www.w3.org/TR/animation-timing/">动画时序</a>提供了 <code>requestAnimationFrame</code> 函数。</p>
+<p>它解决了所有这些问题，甚至更多其它的问题。</p>
+<p>语法：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> requestId = requestAnimationFrame(callback);</code></pre>
+<p>这会让 <code>callback</code> 函数在浏览器每次重绘的最近时间运行。</p>
+<p>如果我们对 <code>callback</code> 中的元素进行变化，这些变化将与其他 <code>requestAnimationFrame</code> 回调和 CSS 动画组合在一起。因此，只会有一次几何重新计算和重绘，而不是多次。</p>
+<p>返回值 <code>requestId</code> 可用来取消回调：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 取消回调的周期执行</span>
+cancelAnimationFrame(requestId);</code></pre>
+<p><code>callback</code> 得到一个参数 —— 从页面加载开始经过的毫秒数。这个时间也可通过调用 <a href="mdn:api/Performance/now">performance.now()</a> 得到。</p>
+<p>通常 <code>callback</code> 很快就会运行，除非 CPU 过载或笔记本电量消耗殆尽，或者其他原因。</p>
+<p>下面的代码显示了 <code>requestAnimationFrame</code> 的前 10 次运行之间的时间间隔。通常是 10-20ms：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> prev = performance.now();
+  <span class="hljs-keyword">let</span> times = <span class="hljs-number">0</span>;
+
+  requestAnimationFrame(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">measure</span>(<span class="hljs-params">time</span>) </span>{
+    <span class="hljs-built_in">document</span>.body.insertAdjacentHTML(<span class="hljs-string">&quot;beforeEnd&quot;</span>, <span class="hljs-built_in">Math</span>.floor(time - prev) + <span class="hljs-string">&quot; &quot;</span>);
+    prev = time;
+
+    <span class="hljs-keyword">if</span> (times++ &lt; <span class="hljs-number">10</span>) requestAnimationFrame(measure);
+  });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="结构化动画">结构化动画</h2>
+<p>现在我们可以在 <code>requestAnimationFrame</code> 基础上创建一个更通用的动画函数：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animate</span>(<span class="hljs-params">{timing, draw, duration}</span>) </span>{
+
+  <span class="hljs-keyword">let</span> start = performance.now();
+
+  requestAnimationFrame(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animate</span>(<span class="hljs-params">time</span>) </span>{
+    <span class="hljs-comment">// timeFraction 从 0 增加到 1</span>
+    <span class="hljs-keyword">let</span> timeFraction = (time - start) / duration;
+    <span class="hljs-keyword">if</span> (timeFraction &gt; <span class="hljs-number">1</span>) timeFraction = <span class="hljs-number">1</span>;
+
+    <span class="hljs-comment">// 计算当前动画状态</span>
+    <span class="hljs-keyword">let</span> progress = timing(timeFraction);
+
+    draw(progress); <span class="hljs-comment">// 绘制</span>
+
+    <span class="hljs-keyword">if</span> (timeFraction &lt; <span class="hljs-number">1</span>) {
+      requestAnimationFrame(animate);
+    }
+
+  });
+}</code></pre>
+<p><code>animate</code> 函数接受 3 个描述动画的基本参数：</p>
+<p><code>duration</code>
+: 动画总时间，比如 <code>1000</code>。</p>
+<p><code>timing(timeFraction)</code>
+: 时序函数，类似 CSS 属性 <code>transition-timing-function</code>，传入一个已过去的时间与总时间之比的小数（<code>0</code> 代表开始，<code>1</code> 代表结束），返回动画完成度（类似 Bezier 曲线中的 <code>y</code>）。</p>
+<pre><code>例如，线性函数意味着动画以相同的速度均匀地进行：
+
+```js
+function linear(timeFraction) {
+  return timeFraction;
+}
+```
+
+图像如下：
+
+![](linear.svg)
+
+它类似于 `transition-timing-function: linear`。后文有更多有趣的变体。</code></pre>
+<p><code>draw(progress)</code>
+: 获取动画完成状态并绘制的函数。值 <code>progress = 0</code> 表示开始动画状态，<code>progress = 1</code> 表示结束状态。</p>
+<pre><code>这是实际绘制动画的函数。
+
+它可以移动元素：
+```js
+function draw(progress) {
+  train.style.left = progress + &#x27;px&#x27;;
+}
+```
+
+……或者做任何其他事情，我们可以以任何方式为任何事物制作动画。</code></pre>
+<p>让我们使用我们的函数将元素的 <code>width</code> 从 <code>0</code> 变化为 <code>100%</code>。</p>
+<p>点击演示元素：</p>
+<p>[codetabs height=60 src=&quot;width&quot;]</p>
+<p>它的代码如下：</p>
+<pre><code class="language-js">animate({
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">1000</span>,
+  timing(timeFraction) {
+    <span class="hljs-keyword">return</span> timeFraction;
+  },
+  draw(progress) {
+    elem.style.width = progress * <span class="hljs-number">100</span> + <span class="hljs-string">&#x27;%&#x27;</span>;
+  }
+});</code></pre>
+<p>与 CSS 动画不同，我们可以在这里设计任何时序函数和任何绘图函数。时序函数不受 Bezier 曲线的限制。并且 <code>draw</code> 不局限于操作 CSS 属性，还可以为类似烟花动画或其他动画创建新元素。</p>
+<h2 id="时序函数">时序函数</h2>
+<p>上文我们看到了最简单的线性时序函数。</p>
+<p>让我们看看更多。我们将尝试使用不同时序函数的移动动画来查看它们的工作原理。</p>
+<h3 id="n-次幂">n 次幂</h3>
+<p>如果我们想加速动画，我们可以让 <code>progress</code> 为 <code>n</code> 次幂。</p>
+<p>例如，抛物线：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">quad</span>(<span class="hljs-params">timeFraction</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.pow(timeFraction, <span class="hljs-number">2</span>)
+}</code></pre>
+<p>图像如下：</p>
+<p><img src="quad.svg" alt=""></p>
+<p>看看实际效果（点击激活）：</p>
+<p>[iframe height=40 src=&quot;quad&quot; link]</p>
+<p>……或者三次曲线甚至使用更大的 <code>n</code>。增大幂会让动画加速得更快。</p>
+<p>下面是 <code>progress</code> 为 <code>5</code> 次幂的图像:</p>
+<p><img src="quint.svg" alt=""></p>
+<p>实际效果：</p>
+<p>[iframe height=40 src=&quot;quint&quot; link]</p>
+<h3 id="圆弧">圆弧</h3>
+<p>函数：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">circ</span>(<span class="hljs-params">timeFraction</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> - <span class="hljs-built_in">Math</span>.sin(<span class="hljs-built_in">Math</span>.acos(timeFraction));
+}</code></pre>
+<p>图像：</p>
+<p><img src="circ.svg" alt=""></p>
+<p>[iframe height=40 src=&quot;circ&quot; link]</p>
+<h3 id="反弹：弓箭射击">反弹：弓箭射击</h3>
+<p>此函数执行“弓箭射击”。首先，我们“拉弓弦”，然后“射击”。</p>
+<p>与以前的函数不同，它取决于附加参数 <code>x</code>，即“弹性系数”。“拉弓弦”的距离由它定义。</p>
+<p>代码如下：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">back</span>(<span class="hljs-params">x, timeFraction</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.pow(timeFraction, <span class="hljs-number">2</span>) * ((x + <span class="hljs-number">1</span>) * timeFraction - x);
+}</code></pre>
+<p><strong><code>x = 1.5</code> 时的图像：</strong></p>
+<p><img src="back.svg" alt=""></p>
+<p>在动画中我们使用特定的 <code>x</code> 值。下面是 <code>x = 1.5</code> 时的例子：</p>
+<p>[iframe height=40 src=&quot;back&quot; link]</p>
+<h3 id="弹跳">弹跳</h3>
+<p>想象一下，我们正在抛球。球落下之后，弹跳几次然后停下来。</p>
+<p><code>bounce</code> 函数也是如此，但顺序相反：“bouncing”立即启动。它使用了几个特殊的系数：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bounce</span>(<span class="hljs-params">timeFraction</span>) </span>{
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> a = <span class="hljs-number">0</span>, b = <span class="hljs-number">1</span>, result; <span class="hljs-number">1</span>; a += b, b /= <span class="hljs-number">2</span>) {
+    <span class="hljs-keyword">if</span> (timeFraction &gt;= (<span class="hljs-number">7</span> - <span class="hljs-number">4</span> * a) / <span class="hljs-number">11</span>) {
+      <span class="hljs-keyword">return</span> -<span class="hljs-built_in">Math</span>.pow((<span class="hljs-number">11</span> - <span class="hljs-number">6</span> * a - <span class="hljs-number">11</span> * timeFraction) / <span class="hljs-number">4</span>, <span class="hljs-number">2</span>) + <span class="hljs-built_in">Math</span>.pow(b, <span class="hljs-number">2</span>)
+    }
+  }
+}</code></pre>
+<p>演示：</p>
+<p>[iframe height=40 src=&quot;bounce&quot; link]</p>
+<h3 id="伸缩动画">伸缩动画</h3>
+<p>另一个“伸缩”函数接受附加参数 <code>x</code> 作为“初始范围”。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">elastic</span>(<span class="hljs-params">x, timeFraction</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.pow(<span class="hljs-number">2</span>, <span class="hljs-number">10</span> * (timeFraction - <span class="hljs-number">1</span>)) * <span class="hljs-built_in">Math</span>.cos(<span class="hljs-number">20</span> * <span class="hljs-built_in">Math</span>.PI * x / <span class="hljs-number">3</span> * timeFraction)
+}</code></pre>
+<p><strong><code>x=1.5</code> 时的图像：</strong>
+<img src="elastic.svg" alt=""></p>
+<p><code>x=1.5</code> 时的演示</p>
+<p>[iframe height=40 src=&quot;elastic&quot; link]</p>
+<h2 id="逆转：ease">逆转：ease*</h2>
+<p>我们有一组时序函数。它们的直接应用称为“easeIn”。</p>
+<p>有时我们需要以相反的顺序显示动画。这是通过“easeOut”变换完成的。</p>
+<h3 id="easeout">easeOut</h3>
+<p>在“easeOut”模式中，我们将 <code>timing</code> 函数封装到 <code>timingEaseOut</code>中：</p>
+<pre><code class="language-js">timingEaseOut(timeFraction) = <span class="hljs-number">1</span> - timing(<span class="hljs-number">1</span> - timeFraction);</code></pre>
+<p>换句话说，我们有一个“变换”函数 <code>makeEaseOut</code>，它接受一个“常规”时序函数 <code>timing</code> 并返回一个封装器，里面封装了 <code>timing</code> 函数：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 接受时序函数，返回变换后的变体</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeEaseOut</span>(<span class="hljs-params">timing</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">timeFraction</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> - timing(<span class="hljs-number">1</span> - timeFraction);
+  }
+}</code></pre>
+<p>例如，我们可以使用上面描述的 <code>bounce</code> 函数：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> bounceEaseOut = makeEaseOut(bounce);</code></pre>
+<p>这样，弹跳不会在动画开始时执行，而是在动画结束时。这样看起来更好：</p>
+<p>[codetabs src=&quot;bounce-easeout&quot;]</p>
+<p>在这里，我们可以看到变换如何改变函数的行为：</p>
+<p><img src="bounce-inout.svg" alt=""></p>
+<p>如果在开始时有动画效果，比如弹跳 —— 那么它将在最后显示。</p>
+<p>上图中<span style="color:#EE6B47">常规弹跳</span>为红色，<span style="color:#62C0DC">easeOut 弹跳</span>为蓝色。</p>
+<ul>
+<li>常规弹跳 —— 物体在底部弹跳，然后突然跳到顶部。</li>
+<li><code>easeOut</code> 变换之后 —— 物体跳到顶部之后，在那里弹跳。</li>
+</ul>
+<h3 id="easeinout">easeInOut</h3>
+<p>我们还可以在动画的开头和结尾都显示效果。该变换称为“easeInOut”。</p>
+<p>给定时序函数，我们按下面的方式计算动画状态：</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (timeFraction &lt;= <span class="hljs-number">0.5</span>) { <span class="hljs-comment">// 动画前半部分</span>
+  <span class="hljs-keyword">return</span> timing(<span class="hljs-number">2</span> * timeFraction) / <span class="hljs-number">2</span>;
+} <span class="hljs-keyword">else</span> { <span class="hljs-comment">// 动画后半部分</span>
+  <span class="hljs-keyword">return</span> (<span class="hljs-number">2</span> - timing(<span class="hljs-number">2</span> * (<span class="hljs-number">1</span> - timeFraction))) / <span class="hljs-number">2</span>;
+}</code></pre>
+<p>封装器代码：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeEaseInOut</span>(<span class="hljs-params">timing</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">timeFraction</span>) </span>{
+    <span class="hljs-keyword">if</span> (timeFraction &lt; <span class="hljs-number">.5</span>)
+      <span class="hljs-keyword">return</span> timing(<span class="hljs-number">2</span> * timeFraction) / <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">else</span>
+      <span class="hljs-keyword">return</span> (<span class="hljs-number">2</span> - timing(<span class="hljs-number">2</span> * (<span class="hljs-number">1</span> - timeFraction))) / <span class="hljs-number">2</span>;
+  }
+}
+
+bounceEaseInOut = makeEaseInOut(bounce);</code></pre>
+<p><code>bounceEaseInOut</code> 演示如下:</p>
+<p>[codetabs src=&quot;bounce-easeinout&quot;]</p>
+<p>“easeInOut” 变换将两个图像连接成一个：动画的前半部分为“easeIn”（常规），后半部分为“easeOut”（反向）。</p>
+<p>如果我们比较 <code>circ</code> 时序函数的 <code>easeIn</code>、<code>easeOut</code> 和 <code>easeInOut</code> 的图像，就可以清楚地看到效果：</p>
+<p><img src="circ-ease.svg" alt=""></p>
+<ul>
+<li><span style="color:#EE6B47">红色</span>是 <code>circ</code>（<code>easeIn</code>）的常规变体。</li>
+<li><span style="color:#8DB173">绿色</span> —— <code>easeOut</code>。</li>
+<li><span style="color:#62C0DC">蓝色</span> —— <code>easeInOut</code>。</li>
+</ul>
+<p>正如我们所看到的，动画前半部分的图形是缩小的“easeIn”，后半部分是缩小的“easeOut”。结果是动画以相同的效果开始和结束。</p>
+<h2 id="更有趣的-draw">更有趣的 &quot;draw&quot;</h2>
+<p>除了移动元素，我们还可以做其他事情。我们所需要的只是写出合适的 <code>draw</code>。</p>
+<p>这是动画形式的“弹跳”文字输入：</p>
+<p>[codetabs src=&quot;text&quot;]</p>
+<h2 id="总结">总结</h2>
+<p>JavaScript 动画应该通过 <code>requestAnimationFrame</code> 实现。该内置方法允许设置回调函数，以便在浏览器准备重绘时运行。那通常很快，但确切的时间取决于浏览器。</p>
+<p>当页面在后台时，根本没有重绘，因此回调将不会运行：动画将被暂停并且不会消耗资源。那很棒。</p>
+<p>这是设置大多数动画的 helper 函数 <code>animate</code>：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animate</span>(<span class="hljs-params">{timing, draw, duration}</span>) </span>{
+
+  <span class="hljs-keyword">let</span> start = performance.now();
+
+  requestAnimationFrame(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">animate</span>(<span class="hljs-params">time</span>) </span>{
+    <span class="hljs-comment">// timeFraction 从 0 增加到 1</span>
+    <span class="hljs-keyword">let</span> timeFraction = (time - start) / duration;
+    <span class="hljs-keyword">if</span> (timeFraction &gt; <span class="hljs-number">1</span>) timeFraction = <span class="hljs-number">1</span>;
+
+    <span class="hljs-comment">// 计算当前动画状态</span>
+    <span class="hljs-keyword">let</span> progress = timing(timeFraction);
+
+    draw(progress); <span class="hljs-comment">// 绘制</span>
+
+    <span class="hljs-keyword">if</span> (timeFraction &lt; <span class="hljs-number">1</span>) {
+      requestAnimationFrame(animate);
+    }
+
+  });
+}</code></pre>
+<p>参数：</p>
+<ul>
+<li><code>duration</code> —— 动画运行的总毫秒数。</li>
+<li><code>timing</code> —— 计算动画进度的函数。获取从 0 到 1 的小数时间，返回动画进度，通常也是从 0 到 1。</li>
+<li><code>draw</code> —— 绘制动画的函数。</li>
+</ul>
+<p>当然我们可以改进它，增加更多花里胡哨的东西，但 JavaScript 动画不是经常用到。它们用于做一些有趣和不标准的事情。因此，您大可在必要时再添加所需的功能。</p>
+<p>JavaScript 动画可以使用任何时序函数。我们介绍了很多例子和变换，使它们更加通用。与 CSS 不同，我们不仅限于 Bezier 曲线。</p>
+<p><code>draw</code> 也是如此：我们可以将任何东西动画化，而不仅仅是 CSS 属性。</p>

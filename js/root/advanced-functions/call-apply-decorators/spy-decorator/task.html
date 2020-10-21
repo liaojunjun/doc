@@ -1,0 +1,21 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="间谍装饰者">间谍装饰者</h1>
+<p>创建一个装饰者 <code>spy(func)</code>，它应该返回一个包装器，该包装器将所有对函数的调用保存在其 <code>calls</code> 属性中。 </p>
+<p>每个调用都保存为一个参数数组。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">work</span>(<span class="hljs-params">a, b</span>) </span>{
+  alert( a + b ); <span class="hljs-comment">// work 是一个任意的函数或方法</span>
+}
+
+*!*
+work = spy(work);
+*/!*
+
+work(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// 3</span>
+work(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>); <span class="hljs-comment">// 9</span>
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> args <span class="hljs-keyword">of</span> work.calls) {
+  alert( <span class="hljs-string">&#x27;call:&#x27;</span> + args.join() ); <span class="hljs-comment">// &quot;call:1,2&quot;, &quot;call:4,5&quot;</span>
+}</code></pre>
+<p>P.S. 该装饰者有时对于单元测试很有用。它的高级形式是 <a href="http://sinonjs.org/">Sinon.JS</a> 库中的 <code>sinon.spy</code>。</p>

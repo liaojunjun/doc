@@ -1,0 +1,13 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="作为方法的绑定函数">作为方法的绑定函数</h1>
+<p>输出将会是什么？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
+  alert( <span class="hljs-built_in">this</span> ); <span class="hljs-comment">// ?</span>
+}
+
+<span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">g</span>: f.bind(<span class="hljs-literal">null</span>)
+};
+
+user.g();</code></pre>

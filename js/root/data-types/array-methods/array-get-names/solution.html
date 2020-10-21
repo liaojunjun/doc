@@ -1,0 +1,10 @@
+<pre><code class="language-js">
+<span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">25</span> };
+<span class="hljs-keyword">let</span> pete = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pete&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">30</span> };
+<span class="hljs-keyword">let</span> mary = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">28</span> };
+
+<span class="hljs-keyword">let</span> users = [ john, pete, mary ];
+
+<span class="hljs-keyword">let</span> names = users.map(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> item.name);
+
+alert( names ); <span class="hljs-comment">// John, Pete, Mary</span></code></pre>

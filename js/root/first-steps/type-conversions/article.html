@@ -1,0 +1,119 @@
+<h1 id="类型转换">类型转换</h1>
+<p>大多数情况下，运算符和函数会自动将赋予它们的值转换为正确的类型。</p>
+<p>比如，<code>alert</code> 会自动将任何值都转换为字符串以进行显示。算术运算符会将值转换为数字。</p>
+<p>在某些情况下，我们需要将值显式地转换为我们期望的类型。</p>
+<pre><code class="language-smart">在本章中，我们不会讨论 object 类型。目前，我们将只学习原始类型。
+
+之后，在我们学习完 object 类型后，我们会在 &lt;info:object-toprimitive&gt; 一章中学习对象 — 原始值转换。</code></pre>
+<h2 id="字符串转换">字符串转换</h2>
+<p>当我们需要一个字符串形式的值时，就会进行字符串转换。</p>
+<p>比如，<code>alert(value)</code> 将 <code>value</code> 转换为字符串类型，然后显示这个值。</p>
+<p>我们也可以显式地调用 <code>String(value)</code> 来将 <code>value</code> 转换为字符串类型：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> value = <span class="hljs-literal">true</span>;
+alert(<span class="hljs-keyword">typeof</span> value); <span class="hljs-comment">// boolean</span>
+
+*!*
+value = <span class="hljs-built_in">String</span>(value); <span class="hljs-comment">// 现在，值是一个字符串形式的 &quot;true&quot;</span>
+alert(<span class="hljs-keyword">typeof</span> value); <span class="hljs-comment">// string</span>
+*/!*</code></pre>
+<p>字符串转换最明显。<code>false</code> 变成 <code>&quot;false&quot;</code>，<code>null</code> 变成 <code>&quot;null&quot;</code> 等。</p>
+<h2 id="数字型转换">数字型转换</h2>
+<p>在算术函数和表达式中，会自动进行 number 类型转换。</p>
+<p>比如，当把除法 <code>/</code> 用于非 number 类型：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;6&quot;</span> / <span class="hljs-string">&quot;2&quot;</span> ); <span class="hljs-comment">// 3, string 类型的值被自动转换成 number 类型后进行计算</span></code></pre>
+<p>我们也可以使用 <code>Number(value)</code> 显式地将这个 <code>value</code> 转换为 number 类型。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;123&quot;</span>;
+alert(<span class="hljs-keyword">typeof</span> str); <span class="hljs-comment">// string</span>
+
+<span class="hljs-keyword">let</span> num = <span class="hljs-built_in">Number</span>(str); <span class="hljs-comment">// 变成 number 类型 123</span>
+
+alert(<span class="hljs-keyword">typeof</span> num); <span class="hljs-comment">// number</span></code></pre>
+<p>当我们从 string 类型源（如文本表单）中读取一个值，但期望输入一个数字时，通常需要进行显式转换。</p>
+<p>如果该字符串不是一个有效的数字，转换的结果会是 <code>NaN</code>。例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> age = <span class="hljs-built_in">Number</span>(<span class="hljs-string">&quot;an arbitrary string instead of a number&quot;</span>);
+
+alert(age); <span class="hljs-comment">// NaN，转换失败</span></code></pre>
+<p>number 类型转换规则：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>变成……</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>undefined</code></td>
+<td><code>NaN</code></td>
+</tr>
+<tr>
+<td><code>null</code></td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>true&nbsp;和&nbsp;false</code></td>
+<td><code>1</code> and <code>0</code></td>
+</tr>
+<tr>
+<td><code>string</code></td>
+<td>去掉首尾空格后的纯数字字符串中含有的数字。如果剩余字符串为空，则转换结果为 <code>0</code>。否则，将会从剩余字符串中“读取”数字。当类型转换出现 error 时返回 <code>NaN</code>。</td>
+</tr>
+</tbody></table>
+<p>例子：</p>
+<pre><code class="language-js">alert( <span class="hljs-built_in">Number</span>(<span class="hljs-string">&quot;   123   &quot;</span>) ); <span class="hljs-comment">// 123</span>
+alert( <span class="hljs-built_in">Number</span>(<span class="hljs-string">&quot;123z&quot;</span>) );      <span class="hljs-comment">// NaN（从字符串“读取”数字，读到 &quot;z&quot; 时出现错误）</span>
+alert( <span class="hljs-built_in">Number</span>(<span class="hljs-literal">true</span>) );        <span class="hljs-comment">// 1</span>
+alert( <span class="hljs-built_in">Number</span>(<span class="hljs-literal">false</span>) );       <span class="hljs-comment">// 0</span></code></pre>
+<p>请注意 <code>null</code> 和 <code>undefined</code> 在这有点不同：<code>null</code> 变成数字 <code>0</code>，<code>undefined</code> 变成 <code>NaN</code>。</p>
+<p>大多数数学运算符也执行这种转换，我们将在下一节中进行介绍。</p>
+<h2 id="布尔型转换">布尔型转换</h2>
+<p>布尔（boolean）类型转换是最简单的一个。</p>
+<p>它发生在逻辑运算中（稍后我们将进行条件判断和其他类似的东西），但是也可以通过调用 Boolean(value) 显式地进行转换。</p>
+<p>转换规则如下：</p>
+<ul>
+<li>直观上为“空”的值（如 <code>0</code>、空字符串、<code>null</code>、<code>undefined</code> 和 <code>NaN</code>）将变为 <code>false</code>。</li>
+<li>其他值变成 <code>true</code>。</li>
+</ul>
+<p>比如：</p>
+<pre><code class="language-js">alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-number">1</span>) ); <span class="hljs-comment">// true</span>
+alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-number">0</span>) ); <span class="hljs-comment">// false</span>
+
+alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-string">&quot;hello&quot;</span>) ); <span class="hljs-comment">// true</span>
+alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-string">&quot;&quot;</span>) ); <span class="hljs-comment">// false</span></code></pre>
+<p>````warn header=&quot;请注意：包含 0 的字符串 <code>\&quot;0\&quot;</code> 是 <code>true</code>&quot;
+一些编程语言（比如 PHP）视 <code>&quot;0&quot;</code> 为 <code>false</code>。但在 JavaScript 中，非空的字符串总是 <code>true</code>。</p>
+<pre><code class="language-js">alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-string">&quot;0&quot;</span>) ); <span class="hljs-comment">// true</span>
+alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-string">&quot; &quot;</span>) ); <span class="hljs-comment">// 空白，也是 true（任何非空字符串都是 true）</span></code></pre>
+<pre><code>
+## 总结
+
+有三种常用的类型转换：转换为 string 类型、转换为 number 类型和转换为 boolean 类型。
+
+**字符串转换** —— 转换发生在输出内容的时候，也可以通过 `String(value)` 进行显式转换。原始类型值的 string 类型转换通常是很明显的。
+
+**数字型转换** —— 转换发生在进行算术操作时，也可以通过 `Number(value)` 进行显式转换。
+
+数字型转换遵循以下规则：
+
+| 值 |  变成…… |
+|-------|-------------|
+| `undefined` | `NaN` |
+| `null` | `0` |
+| &lt;code&gt;true&amp;nbsp;/&amp;nbsp;false&lt;/code&gt; | `1 / 0` |
+| `string` | “按原样读取”字符串，两端的空白会被忽略。空字符串变成 `0`。转换出错则输出 `NaN`。 |
+
+**布尔型转换** —— 转换发生在进行逻辑操作时，也可以通过 `Boolean(value)` 进行显式转换。
+
+布尔型转换遵循以下规则：
+
+| 值 |  变成…… |
+|-------|-------------|
+| `0`, `null`, `undefined`, `NaN`, `&quot;&quot;` | `false` |
+| 其他值 | `true` |
+
+
+上述的大多数规则都容易理解和记忆。人们通常会犯错误的值得注意的例子有以下几个：
+
+- 对 `undefined` 进行数字型转换时，输出结果为 `NaN`，而非 `0`。
+- 对 `&quot;0&quot;` 和只有空格的字符串（比如：`&quot;   &quot;`）进行布尔型转换时，输出结果为 `true`。
+
+我们在本小节没有讲 object 类型的转换。在我们学习完更多关于 JavaScript 的基础知识后，我们会在专门介绍 object 的章节 &lt;info:object-toprimitive&gt; 中详细讲解 object 类型转换。</code></pre>

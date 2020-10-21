@@ -1,0 +1,14 @@
+<p>importance: 3</p>
+<hr>
+<h1 id="为什么-return-false-不起作用？">为什么 &quot;return false&quot; 不起作用？</h1>
+<p>为什么下面这段代码中的 <code>return false</code> 不起作用？</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handler</span>(<span class="hljs-params"></span>) </span>{
+    alert( <span class="hljs-string">&quot;...&quot;</span> );
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://w3.org&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;handler()&quot;</span>&gt;</span>the browser will go to w3.org<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></code></pre>
+<p>浏览器在点击时会根据 URL 进行跳转，但这不是我们想要的。</p>
+<p>如何修复它？</p>

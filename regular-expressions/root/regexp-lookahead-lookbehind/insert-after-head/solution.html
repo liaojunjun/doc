@@ -1,0 +1,16 @@
+<p>Для того, чтобы вставить после тега <code>&lt;body&gt;</code>, нужно вначале его найти. Будем использовать регулярное выражение <code>pattern:&lt;body.*&gt;</code>.</p>
+<p>Далее, нам нужно оставить сам тег <code>&lt;body&gt;</code> на месте и добавить текст после него.</p>
+<p>Это можно сделать вот так:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;body style=&quot;...&quot;&gt;...&#x27;</span>;
+str = str.replace(<span class="hljs-regexp">/&lt;body.*&gt;/</span>, <span class="hljs-string">&#x27;$&amp;&lt;h1&gt;Hello&lt;/h1&gt;&#x27;</span>);
+
+alert(str); <span class="hljs-comment">// ...&lt;body style=&quot;...&quot;&gt;&lt;h1&gt;Hello&lt;/h1&gt;...</span></code></pre>
+<p>В строке замены <code>$&amp;</code> означает само совпадение, то есть мы заменяем <code>pattern:&lt;body.*&gt;</code> заменяется на самого себя плюс <code>&lt;h1&gt;Hello&lt;/h1&gt;</code>.</p>
+<p>Альтернативный вариант - использовать ретроспективную проверку:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;...&lt;body style=&quot;...&quot;&gt;...&#x27;</span>;
+str = str.replace(<span class="hljs-regexp">/(?&lt;=&lt;body.*&gt;)/</span>, <span class="hljs-string">`&lt;h1&gt;Hello&lt;/h1&gt;`</span>);
+
+alert(str); <span class="hljs-comment">// ...&lt;body style=&quot;...&quot;&gt;&lt;h1&gt;Hello&lt;/h1&gt;...</span></code></pre>
+<p>Такое регулярное выражение на каждой позиции будет проверять, не идёт ли прямо перед ней <code>pattern:&lt;body.*&gt;</code>. Если да - совпадение найдено. Но сам тег <code>pattern:&lt;body.*&gt;</code> в совпадение не входит, он только участвует в проверке. А других символов после проверки в нём нет, так что текст совпадения будет пустым.</p>
+<p>Происходит замена &quot;пустой строки&quot;, перед которой идёт <code>pattern:&lt;body.*&gt;</code> на <code>&lt;h1&gt;Hello&lt;/h1&gt;</code>. Что, как раз, и есть вставка этой строки после <code>&lt;body&gt;</code>.</p>
+<p>P.S. Этому регулярному выражению не помешают флаги: <code>pattern:/&lt;body.*&gt;/si</code>, чтобы в &quot;точку&quot; входил перевод строки (тег может занимать несколько строк), а также чтобы теги в другом регистре типа <code>match:&lt;BODY&gt;</code> тоже находились.</p>

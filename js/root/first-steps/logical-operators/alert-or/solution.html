@@ -1,0 +1,9 @@
+<p>答案：首先是 <code>1</code>，然后是 <code>2</code>。</p>
+<pre><code class="language-js">alert( alert(<span class="hljs-number">1</span>) || <span class="hljs-number">2</span> || alert(<span class="hljs-number">3</span>) );</code></pre>
+<p>对 <code>alert</code> 的调用没有返回值。或者说返回的是 <code>undefined</code>。</p>
+<ol>
+<li>第一个或运算 <code>||</code> 对它的左值 <code>alert(1)</code> 进行了计算。这就显示了第一条信息 <code>1</code>。</li>
+<li>函数 <code>alert</code> 返回了 <code>undefined</code>，所以或运算继续检查第二个操作数以寻找真值。</li>
+<li>第二个操作数 <code>2</code> 是真值，所以执行就中断了。<code>2</code> 被返回，并且被外层的 alert 显示。</li>
+</ol>
+<p>这里不会显示 <code>3</code>，因为运算没有抵达 <code>alert(3)</code>。</p>

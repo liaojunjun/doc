@@ -1,0 +1,11 @@
+<ol>
+<li><p>使用包装（wapper）函数，箭头函数很简洁：</p>
+<pre><code class="language-js">askPassword(<span class="hljs-function">() =&gt;</span> user.login(<span class="hljs-literal">true</span>), <span class="hljs-function">() =&gt;</span> user.login(<span class="hljs-literal">false</span>)); </code></pre>
+<p> 现在它从外部变量中获得了 <code>user</code>，然后以常规方式运行它。</p>
+</li>
+<li><p>或者从 <code>user.login</code> 创建一个偏函数，该函数使用 <code>user</code> 作为上下文，并具有正确的第一个参数：</p>
+</li>
+</ol>
+<pre><code>```js 
+askPassword(user.login.bind(user, true), user.login.bind(user, false)); 
+```</code></pre>

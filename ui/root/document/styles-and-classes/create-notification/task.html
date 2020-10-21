@@ -1,0 +1,14 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="创建一个通知">创建一个通知</h1>
+<p>编写一个函数 <code>showNotification(options)</code>：该函数创建一个带有给定内容的通知 <code>&lt;div class=&quot;notification&quot;&gt;</code>。该通知应该在 1.5 秒后自动消失。</p>
+<p>参数：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 在窗口的右上角附近显示一个带有文本 &quot;Hello&quot; 的元素</span>
+showNotification({
+  <span class="hljs-attr">top</span>: <span class="hljs-number">10</span>, <span class="hljs-comment">// 距窗口顶部 10px（默认为 0px）</span>
+  <span class="hljs-attr">right</span>: <span class="hljs-number">10</span>, <span class="hljs-comment">// 距窗口右边缘 10px（默认为 0px）</span>
+  <span class="hljs-attr">html</span>: <span class="hljs-string">&quot;Hello!&quot;</span>, <span class="hljs-comment">// 通知中的 HTML</span>
+  <span class="hljs-attr">className</span>: <span class="hljs-string">&quot;welcome&quot;</span> <span class="hljs-comment">// div 的附加类（可选）</span>
+});</code></pre>
+<p>[demo src=&quot;solution&quot;]</p>
+<p>使用 CSS 定位在给定的 top/right 坐标处显示元素。源文档已经提供了必要的样式。</p>

@@ -1,0 +1,15 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="函数会选择最新的内容吗？">函数会选择最新的内容吗？</h1>
+<p>函数 sayHi 使用外部变量。当函数运行时，将使用哪个值？</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> name = <span class="hljs-string">&quot;John&quot;</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">&quot;Hi, &quot;</span> + name);
+}
+
+name = <span class="hljs-string">&quot;Pete&quot;</span>;
+
+sayHi(); <span class="hljs-comment">// 会显示什么：&quot;John&quot; 还是 &quot;Pete&quot;？</span></code></pre>
+<p>这种情况在浏览器和服务器端开发中都很常见。一个函数可能被计划在创建之后一段时间后才执行，例如在用户行为或网络请求之后。</p>
+<p>因此，问题是：它会接收最新的修改吗？</p>

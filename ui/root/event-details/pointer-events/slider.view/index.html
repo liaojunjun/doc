@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="style.css">
+
+<div id="slider" class="slider">
+  <div class="thumb"></div>
+</div>
+
+<script>
+  let thumb = slider.querySelector('.thumb');
+  let shiftX;
+
+  thumb.onpointerdown = function(event) {
+    event.preventDefault(); // 阻止开始选择（浏览器行为）
+
+    shiftX = event.clientX - thumb.getBoundingClientRect().left;
+
+    thumb.setPointerCapture(event.pointerId);
+  };
+
+  thumb.onpointermove = function(event) {
+    let newLeft = event.clientX - shiftX - slider.getBoundingClientRect().left;
+
+    // 如果指针移出了滑块 => 调整 left 来防止其超出边界
+    if (newLeft < 0) {
+      newLeft = 0;
+    }
+    let rightEdge = slider.offsetWidth - thumb.offsetWidth;
+    if (newLeft > rightEdge) {
+      newLeft = rightEdge;
+    }
+
+    thumb.style.left = newLeft + 'px';
+  };
+
+  thumb.ondragstart = () => false;
+
+</script>

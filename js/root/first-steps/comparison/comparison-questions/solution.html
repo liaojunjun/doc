@@ -1,0 +1,17 @@
+<pre><code class="language-js"><span class="hljs-number">5</span> &gt; <span class="hljs-number">4</span> → <span class="hljs-literal">true</span>
+<span class="hljs-string">&quot;apple&quot;</span> &gt; <span class="hljs-string">&quot;pineapple&quot;</span> → <span class="hljs-literal">false</span>
+<span class="hljs-string">&quot;2&quot;</span> &gt; <span class="hljs-string">&quot;12&quot;</span> → <span class="hljs-literal">true</span>
+<span class="hljs-literal">undefined</span> == <span class="hljs-literal">null</span> → <span class="hljs-literal">true</span>
+<span class="hljs-literal">undefined</span> === <span class="hljs-literal">null</span> → <span class="hljs-literal">false</span>
+<span class="hljs-literal">null</span> == <span class="hljs-string">&quot;\n0\n&quot;</span> → <span class="hljs-literal">false</span>
+<span class="hljs-literal">null</span> === +<span class="hljs-string">&quot;\n0\n&quot;</span> → <span class="hljs-literal">false</span></code></pre>
+<p>结果的原因：</p>
+<ol>
+<li>数字间比较大小，显然得 true。</li>
+<li>按词典顺序比较，得 false。<code>&quot;a&quot;</code> 比 <code>&quot;p&quot;</code> 小。</li>
+<li>与第 2 题同理，首位字符 <code>&quot;2&quot;</code> 大于 <code>&quot;1&quot;</code>。</li>
+<li><code>null</code> 只与 <code>undefined</code> 互等。</li>
+<li>严格相等模式下，类型不同得 false。</li>
+<li>与第 4 题同理，<code>null</code> 只与 <code>undefined</code> 相等。</li>
+<li>不同类型严格不相等。</li>
+</ol>

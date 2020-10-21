@@ -1,0 +1,92 @@
+<h1 id="fetch：中止（abort）">Fetch：中止（Abort）</h1>
+<p>正如我们所知道的，<code>fetch</code> 返回一个 promise。JavaScript 通常并没有“中止” promise 的概念。那么我们怎样才能中止 <code>fetch</code> 呢？</p>
+<p>为此有一个特殊的内建对象：<code>AbortController</code>，它不仅可以中止 <code>fetch</code>，还可以中止其他异步任务。</p>
+<p>用法很简单：</p>
+<ul>
+<li><p>Step 1：创建一个控制器（controller）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> controller = <span class="hljs-keyword">new</span> AbortController();</code></pre>
+<p>  控制器是一个极其简单的对象。</p>
+<ul>
+<li><p>它具有单个方法 <code>abort()</code>，和单个属性 <code>signal</code>。</p>
+</li>
+<li><p>当 <code>abort()</code> 被调用时：</p>
+<ul>
+<li><code>abort</code> 事件就会在 <code>controller.signal</code> 上触发</li>
+<li><code>controller.signal.aborted</code> 属性变为 <code>true</code>。</li>
+</ul>
+<p>任何对 <code>abort()</code> 调用感兴趣的人，都可以在 <code>controller.signal</code> 上设置监听器来对其进行跟踪。</p>
+<p>就像这样（目前还没有 <code>fetch</code>）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> controller = <span class="hljs-keyword">new</span> AbortController();
+<span class="hljs-keyword">let</span> signal = controller.signal;
+
+<span class="hljs-comment">// 当 controller.abort() 被调用时触发</span>
+signal.addEventListener(<span class="hljs-string">&#x27;abort&#x27;</span>, <span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;abort!&quot;</span>));
+
+controller.abort(); <span class="hljs-comment">// 中止！</span>
+
+alert(signal.aborted); <span class="hljs-comment">// true</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p>Step 2：将 <code>signal</code> 属性传递给 <code>fetch</code> 选项：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> controller = <span class="hljs-keyword">new</span> AbortController();
+fetch(url, {
+  <span class="hljs-attr">signal</span>: controller.signal
+});</code></pre>
+<p>  <code>fetch</code> 方法知道如何与 <code>AbortController</code> 一起使用，它会监听 <code>signal</code> 上的 <code>abort</code>。</p>
+</li>
+<li><p>Step 3：调用 <code>controller.abort()</code> 来中止：</p>
+<pre><code class="language-js">controller.abort();</code></pre>
+<p>  我们完成啦：<code>fetch</code> 从 <code>signal</code> 获取了事件并中止了请求。</p>
+</li>
+</ul>
+<p>当一个 fetch 被中止，它的 promise 就会以一个 error <code>AbortError</code> reject，因此我们应该对其进行处理：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 1 秒后中止</span>
+<span class="hljs-keyword">let</span> controller = <span class="hljs-keyword">new</span> AbortController();
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> controller.abort(), <span class="hljs-number">1000</span>);
+
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch-abort/demo/hang&#x27;</span>, {
+    <span class="hljs-attr">signal</span>: controller.signal
+  });
+} <span class="hljs-keyword">catch</span>(err) {
+  <span class="hljs-keyword">if</span> (err.name == <span class="hljs-string">&#x27;AbortError&#x27;</span>) { <span class="hljs-comment">// handle abort()</span>
+    alert(<span class="hljs-string">&quot;Aborted!&quot;</span>);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">throw</span> err;
+  }
+}</code></pre>
+<p><strong><code>AbortController</code> 是可扩展的，它允许一次取消多个 fetch。</strong></p>
+<p>例如，这里我们并行 fetch 多个 <code>urls</code>，然后 controller 将它们全部中止：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> urls = [...]; <span class="hljs-comment">// 要并行 fetch 的 url 列表</span>
+
+<span class="hljs-keyword">let</span> controller = <span class="hljs-keyword">new</span> AbortController();
+
+<span class="hljs-keyword">let</span> fetchJobs = urls.map(<span class="hljs-function"><span class="hljs-params">url</span> =&gt;</span> fetch(url, {
+  <span class="hljs-attr">signal</span>: controller.signal
+}));
+
+<span class="hljs-keyword">let</span> results = <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.all(fetchJobs);
+
+<span class="hljs-comment">// 如果 controller.abort() 被从其他地方调用，</span>
+<span class="hljs-comment">// 它将中止所有 fetch</span></code></pre>
+<p>如果我们有自己的与 <code>fetch</code> 不同的异步任务，我们可以使用单个 <code>AbortController</code> 中止这些任务以及 fetch。</p>
+<p>我们只需要监听其 <code>abort</code> 事件：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> urls = [...];
+<span class="hljs-keyword">let</span> controller = <span class="hljs-keyword">new</span> AbortController();
+
+<span class="hljs-keyword">let</span> ourJob = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> { <span class="hljs-comment">// 我们的任务</span>
+  ...
+  controller.signal.addEventListener(<span class="hljs-string">&#x27;abort&#x27;</span>, reject);
+});
+
+<span class="hljs-keyword">let</span> fetchJobs = urls.map(<span class="hljs-function"><span class="hljs-params">url</span> =&gt;</span> fetch(url, { <span class="hljs-comment">// fetches</span>
+  <span class="hljs-attr">signal</span>: controller.signal
+}));
+
+<span class="hljs-comment">// 等待完成我们的任务和所有 fetch</span>
+<span class="hljs-keyword">let</span> results = <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.all([...fetchJobs, ourJob]);
+
+<span class="hljs-comment">// 如果 controller.abort() 被从其他地方调用，</span>
+<span class="hljs-comment">// 它将中止所有 fetch 和 ourJob</span></code></pre>
+<p>所以，<code>AbortController</code> 不仅适用于 <code>fetch</code>，它还是一个可以中止异步任务的通用对象，<code>fetch</code> 具有它的内建集成（译注：即 <code>fetch</code> 在内部集成了它）。</p>

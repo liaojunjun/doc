@@ -1,0 +1,162 @@
+<h1 id="类检查：instanceof">类检查：&quot;instanceof&quot;</h1>
+<p><code>instanceof</code> 操作符用于检查一个对象是否属于某个特定的 class。同时，它还考虑了继承。</p>
+<p>在许多情况下，可能都需要进行此类检查。在这儿，我们将使用它来构建一个 <strong>多态性（polymorphic）</strong> 的函数，该函数根据参数的类型对参数进行不同的处理。</p>
+<h2 id="instanceof-操作符-ref-instanceof">instanceof 操作符 [#ref-instanceof]</h2>
+<p>语法：</p>
+<pre><code class="language-js">obj <span class="hljs-keyword">instanceof</span> Class</code></pre>
+<p>如果 <code>obj</code> 隶属于 <code>Class</code> 类（或 <code>Class</code> 类的衍生类），则返回 <code>true</code>。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> </span>{}
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
+
+<span class="hljs-comment">// rabbit 是 Rabbit class 的对象吗？</span>
+*!*
+alert( rabbit <span class="hljs-keyword">instanceof</span> Rabbit ); <span class="hljs-comment">// true</span>
+*/!*</code></pre>
+<p>它还可以与构造函数一起使用：</p>
+<pre><code class="language-js">*!*
+<span class="hljs-comment">// 这里是构造函数，而不是 class</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+*/!*
+
+alert( <span class="hljs-keyword">new</span> Rabbit() <span class="hljs-keyword">instanceof</span> Rabbit ); <span class="hljs-comment">// true</span></code></pre>
+<p>……与诸如 <code>Array</code> 之类的内建 class 一起使用：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+alert( arr <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ); <span class="hljs-comment">// true</span>
+alert( arr <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Object</span> ); <span class="hljs-comment">// true</span></code></pre>
+<p>有一点需要留意，<code>arr</code> 同时还隶属于 <code>Object</code> 类。因为从原型上来讲，<code>Array</code> 是继承自 <code>Object</code> 的。</p>
+<p>通常，<code>instanceof</code> 在检查中会将原型链考虑在内。此外，我们还可以在静态方法 <code>Symbol.hasInstance</code> 中设置自定义逻辑。</p>
+<p><code>obj instanceof Class</code> 算法的执行过程大致如下：</p>
+<ol>
+<li><p>如果这儿有静态方法 <code>Symbol.hasInstance</code>，那就直接调用这个方法：</p>
+<p> 例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 设置 instanceOf 检查</span>
+<span class="hljs-comment">// 并假设具有 canEat 属性的都是 animal</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> </span>{
+  <span class="hljs-keyword">static</span> [<span class="hljs-built_in">Symbol</span>.hasInstance](obj) {
+    <span class="hljs-keyword">if</span> (obj.canEat) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+}
+
+<span class="hljs-keyword">let</span> obj = { <span class="hljs-attr">canEat</span>: <span class="hljs-literal">true</span> };
+
+alert(obj <span class="hljs-keyword">instanceof</span> Animal); <span class="hljs-comment">// true：Animal[Symbol.hasInstance](obj) 被调用</span></code></pre>
+</li>
+<li><p>大多数 class 没有 <code>Symbol.hasInstance</code>。在这种情况下，标准的逻辑是：使用 <code>obj instanceOf Class</code> 检查 <code>Class.prototype</code> 是否等于 <code>obj</code> 的原型链中的原型之一。</p>
+<p> 换句话说就是，一个接一个地比较：</p>
+<pre><code class="language-js">obj.__proto__ === Class.prototype?
+obj.__proto__.__proto__ === Class.prototype?
+obj.__proto__.__proto__.__proto__ === Class.prototype?
+...
+<span class="hljs-comment">// 如果任意一个的答案为 true，则返回 true</span>
+<span class="hljs-comment">// 否则，如果我们已经检查到了原型链的尾端，则返回 false</span></code></pre>
+<p> 在上面那个例子中，<code>rabbit.__proto__ === Rabbit.prototype</code>，所以立即就给出了结果。</p>
+<p> 而在继承的例子中，匹配将在第二步进行：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Animal</span> </span>{}
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Animal</span> </span>{}
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
+*!*
+alert(rabbit <span class="hljs-keyword">instanceof</span> Animal); <span class="hljs-comment">// true</span>
+*/!*
+
+<span class="hljs-comment">// rabbit.__proto__ === Rabbit.prototype</span>
+*!*
+<span class="hljs-comment">// rabbit.__proto__.__proto__ === Animal.prototype（匹配！）</span>
+*/!*</code></pre>
+</li>
+</ol>
+<p>下图展示了 <code>rabbit instanceof Animal</code> 的执行过程中，<code>Animal.prototype</code> 是如何参与比较的：</p>
+<p><img src="instanceof.svg" alt=""></p>
+<p>这里还要提到一个方法 <a href="mdn:js/object/isPrototypeOf">objA.isPrototypeOf(objB)</a>，如果 <code>objA</code> 处在 <code>objB</code> 的原型链中，则返回 <code>true</code>。所以，可以将 <code>obj instanceof Class</code> 检查改为 <code>Class.prototype.isPrototypeOf(obj)</code>。</p>
+<p>这很有趣，但是 <code>Class</code> 的 constructor 自身是不参与检查的！检查过程只和原型链以及 <code>Class.prototype</code> 有关。</p>
+<p>创建对象后，如果更改 <code>prototype</code> 属性，可能会导致有趣的结果。</p>
+<p>就像这样：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
+
+<span class="hljs-comment">// 修改了 prototype</span>
+Rabbit.prototype = {};
+
+<span class="hljs-comment">// ...再也不是 rabbit 了！</span>
+*!*
+alert( rabbit <span class="hljs-keyword">instanceof</span> Rabbit ); <span class="hljs-comment">// false</span>
+*/!*</code></pre>
+<h2 id="福利：使用-objectprototypetostring-方法来揭示类型">福利：使用 Object.prototype.toString 方法来揭示类型</h2>
+<p>大家都知道，一个普通对象被转化为字符串时为 <code>[object Object]</code>：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {};
+
+alert(obj); <span class="hljs-comment">// [object Object]</span>
+alert(obj.toString()); <span class="hljs-comment">// 同上</span></code></pre>
+<p>这是通过 <code>toString</code> 方法实现的。但是这儿有一个隐藏的功能，该功能可以使 <code>toString</code> 实际上比这更强大。我们可以将其作为 <code>typeof</code> 的增强版或者 <code>instanceof</code> 的替代方法来使用。</p>
+<p>听起来挺不可思议？那是自然，精彩马上揭晓。</p>
+<p>按照 <a href="https://tc39.github.io/ecma262/#sec-object.prototype.tostring">规范</a> 所讲，内建的 <code>toString</code> 方法可以被从对象中提取出来，并在任何其他值的上下文中执行。其结果取决于该值。</p>
+<ul>
+<li>对于 number 类型，结果是 <code>[object Number]</code></li>
+<li>对于 boolean 类型，结果是 <code>[object Boolean]</code></li>
+<li>对于 <code>null</code>：<code>[object Null]</code></li>
+<li>对于 <code>undefined</code>：<code>[object Undefined]</code></li>
+<li>对于数组：<code>[object Array]</code></li>
+<li>……等（可自定义）</li>
+</ul>
+<p>让我们演示一下：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 方便起见，将 toString 方法复制到一个变量中</span>
+<span class="hljs-keyword">let</span> objectToString = <span class="hljs-built_in">Object</span>.prototype.toString;
+
+<span class="hljs-comment">// 它是什么类型的？</span>
+<span class="hljs-keyword">let</span> arr = [];
+
+alert( objectToString.call(arr) ); <span class="hljs-comment">// [object *!*Array*/!*]</span></code></pre>
+<p>这里我们用到了在 <a href="info:call-apply-decorators"></a> 一章中讲过的 <a href="mdn:js/function/call">call</a> 方法来在上下文 <code>this=arr</code> 中执行函数 <code>objectToString</code>。</p>
+<p>在内部，<code>toString</code> 的算法会检查 <code>this</code>，并返回相应的结果。再举几个例子：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> s = <span class="hljs-built_in">Object</span>.prototype.toString;
+
+alert( s.call(<span class="hljs-number">123</span>) ); <span class="hljs-comment">// [object Number]</span>
+alert( s.call(<span class="hljs-literal">null</span>) ); <span class="hljs-comment">// [object Null]</span>
+alert( s.call(alert) ); <span class="hljs-comment">// [object Function]</span></code></pre>
+<h3 id="symboltostringtag">Symbol.toStringTag</h3>
+<p>可以使用特殊的对象属性 <code>Symbol.toStringTag</code> 自定义对象的 <code>toString</code> 方法的行为。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  [<span class="hljs-built_in">Symbol</span>.toStringTag]: <span class="hljs-string">&quot;User&quot;</span>
+};
+
+alert( {}.toString.call(user) ); <span class="hljs-comment">// [object User]</span></code></pre>
+<p>对于大多数特定于环境的对象，都有一个这样的属性。下面是一些特定于浏览器的示例：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 特定于环境的对象和类的 toStringTag：</span>
+alert( <span class="hljs-built_in">window</span>[<span class="hljs-built_in">Symbol</span>.toStringTag]); <span class="hljs-comment">// Window</span>
+alert( XMLHttpRequest.prototype[<span class="hljs-built_in">Symbol</span>.toStringTag] ); <span class="hljs-comment">// XMLHttpRequest</span>
+
+alert( {}.toString.call(<span class="hljs-built_in">window</span>) ); <span class="hljs-comment">// [object Window]</span>
+alert( {}.toString.call(<span class="hljs-keyword">new</span> XMLHttpRequest()) ); <span class="hljs-comment">// [object XMLHttpRequest]</span></code></pre>
+<p>正如我们所看到的，输出结果恰好是 <code>Symbol.toStringTag</code>（如果存在），只不过被包裹进了 <code>[object ...]</code> 里。</p>
+<p>这样一来，我们手头上就有了个“磕了药似的 typeof”，不仅能检查原始数据类型，而且适用于内建对象，更可贵的是还支持自定义。</p>
+<p>所以，如果我们想要获取内建对象的类型，并希望把该信息以字符串的形式返回，而不只是检查类型的话，我们可以用 <code>{}.toString.call</code> 替代 <code>instanceof</code>。</p>
+<h2 id="总结">总结</h2>
+<p>让我们总结一下我们知道的类型检查方法：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>用于</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>typeof</code></td>
+<td>原始数据类型</td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>{}.toString</code></td>
+<td>原始数据类型，内建对象，包含 <code>Symbol.toStringTag</code> 属性的对象</td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>instanceof</code></td>
+<td>对象</td>
+<td>true/false</td>
+</tr>
+</tbody></table>
+<p>正如我们所看到的，从技术上讲，<code>{}.toString</code> 是一种“更高级的” <code>typeof</code>。</p>
+<p>当我们使用类的层次结构（hierarchy），并想要对该类进行检查，同时还要考虑继承时，这种场景下 <code>instanceof</code> 操作符确实很出色。</p>

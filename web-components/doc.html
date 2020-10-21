@@ -265,49 +265,1417 @@
     <button  onclick="toggleHash()">开启专注模式</button>
      <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
   </div><div id="page">
-      <fieldset id='_cQXEPI'>
+      <fieldset id='_Vgs1aN'>
       <legend>article</legend>
-      
+      <h1 id="从星球轨道的高度讲起">从星球轨道的高度讲起</h1>
+<p>这一部分我们将会讲述关于「Web Components」的一系列现代标准。</p>
+<p>到目前为止，这些标准仍然在制定中。其中一些特性已经被很好地支持并集成到了现代 HTML/DOM 标准中，但是还有部分特性仍然处在草案阶段。你可以在任何浏览器中尝试一些例子，Google Chrome 可能是对这些新特性支持得最好的浏览器。猜测可能是因为 Google 公司的人本身就是很多相关标准的支持者。</p>
+<h2 id="共通之处在于">共通之处在于……</h2>
+<p>整个组件化的概念并不是最新才提出的。很多框架和其他地方已经广泛地应用了组件化的设计。</p>
+<p>在我们开始探讨实现细节之前，先让我们看看人类的伟大成就：</p>
+<p><img src="satellite.jpg" alt=""></p>
+<p>这是国际空间站（ISS）。</p>
+<p>这是其组成结构（大致的）：</p>
+<p><img src="satellite-expanded.jpg" alt=""></p>
+<p>这个国际空间站：</p>
+<ul>
+<li>由许多组件构成。</li>
+<li>各个组件都由很多的更小的部分组成，</li>
+<li>组件都非常复杂，远比大部分网站更复杂。</li>
+<li>国际化的组件开发团队，整个工作由不同国家、说着不同语言的人共同完成。</li>
+</ul>
+<p>……并且这个家伙能飞，它让人类在太空中能够生存！</p>
+<p>这些复杂的设备是如何被创建的？</p>
+<p>我们可以从中借鉴哪些原则，让我们的开发项目同样的可靠并且可大规模化呢？或者至少让我们可以接近这些目标。</p>
+<h2 id="组件化架构">组件化架构</h2>
+<p>众所周知，开发复杂软件的原则是：不要让软件复杂。</p>
+<p>如果某个部分变得复杂了 —— 将其拆分成更简单的部分，再以最简明的方式组合起来。</p>
+<p><strong>只有让复杂的事情简单化的架构才是好架构。</strong></p>
+<p>我们可以把用户界面拆分为若干可视化组件：每个组件都在页面上占有一块位置，可以执行一个明确的任务，并且可以和其他组件区分开。</p>
+<p>接下来看一个实际的网站的例子，比如 Twitter。</p>
+<p>非常自然地，可以拆分为几个组件：</p>
+<p><img src="web-components-twitter.svg" alt=""></p>
+<ol>
+<li>顶部导航栏。</li>
+<li>用户信息。</li>
+<li>关注推荐。</li>
+<li>提交表格。</li>
+<li>（6，7也是） —— 消息。</li>
+</ol>
+<p>组件也可以包含子组件，比如消息组件可能是更高阶组件「消息列表」的子组件。可点击的用户头像可能也是一个组件，这样的例子还有很多。</p>
+<p>我们如何划分一个组件呢？直觉、经验和常识可以帮助我们完成这件事。通常情况下，如果一个独立可视化实体，我们可以描述其可以做什么和如何在页面上交互，那么就可以将其划分为一个组件。在上面的例子中，这个页面存在几个模块，每个模块都有自己的角色，所以把它们划分为组件是合理的。</p>
+<p>一个组件有：</p>
+<ul>
+<li>自己的 JavaScript 类。</li>
+<li>DOM 结构，并且只由自己的类管理，无法被外部代码操作。（「封装」原则）。</li>
+<li>CSS 样式，作用在这个组件上。</li>
+<li>API：事件，类方法等等，让组件可以与其他组件交互。</li>
+</ul>
+<p>再说一遍，整个「组件化」的概念并不是什么特别的东西。</p>
+<p>现在已经有了很多框架和开发方法论可以实现组件化，它们各个都有自己的卖点。通常情况下，采用特殊的 CSS 类命名和一些规范，已经可以带来「组件化的感觉」 —— 即 CSS 作用域和 DOM 封装。</p>
+<p>而现在浏览器已经原生支持了「Web Components」，我们就可以不用再自己去模拟组件化的结构了。</p>
+<ul>
+<li><a href="https://html.spec.whatwg.org/multipage/custom-elements.html#custom-elements">Custom elements</a> —— 用于自定义 HTML 元素.</li>
+<li><a href="https://dom.spec.whatwg.org/#shadow-trees">Shadow DOM</a> —— 为组件创建内部 DOM，它对外部是不可见的。</li>
+<li><a href="https://drafts.csswg.org/css-scoping/">CSS Scoping</a> —— 申明仅应用于组件的 Shadow DOM 内的样式。</li>
+<li><a href="https://dom.spec.whatwg.org/#retarget">Event retargeting</a> 以及更多的小东西，让自定义组件更适用于开发工作。</li>
+</ul>
+<p>在下一篇中我们将会更细致地讲述「Custom Elements」 —— 一个已经被很广泛支持的 Web Components 重要组成部分。</p>
+
       </fieldset>
       
-      <fieldset id='_F6374N'>
+      <fieldset id='_Mh6Rt2'>
       <legend>solution</legend>
-      
+      <p>请注意：</p>
+<ol>
+<li>在元素被从文档移除的时候，我们会清除 <code>setInterval</code> 的 timer。这非常重要，否则即使我们不再需要它了，它仍然会继续计时。这样浏览器就不能清除这个元素占用和被这个元素引用的内存了。</li>
+<li>我们可以通过 <code>elem.date</code> 属性得到当前时间。类所有的方法和属性天生就是元素的方法和属性。</li>
+</ol>
+
       </fieldset>
       
-      <fieldset id='_davsgW'>
+      <fieldset id='_OYQq9h'>
       <legend>task</legend>
-      
+      <h1 id="计时器元素实例">计时器元素实例</h1>
+<p>我们已经创建了 <code>&lt;time-formatted&gt;</code> 元素用于展示格式化好的时间。</p>
+<p>创建一个 <code>&lt;live-timer&gt;</code> 元素用于展示当前时间：</p>
+<ol>
+<li>这个元素应该在内部使用 <code>&lt;time-formatted&gt;</code>，不要重复实现这个元素的功能。</li>
+<li>每秒钟更新。</li>
+<li>每一秒钟都应该有一个自定义事件 <code>tick</code> 被生成，这个事件的 <code>event.detail</code> 属性带有当前日期。（参考章节 <a href="info:dispatch-events">info:dispatch-events</a> ）。</li>
+</ol>
+<p>使用方式：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">live-timer</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">live-timer</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  elem.addEventListener(<span class="hljs-string">&#x27;tick&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(event.detail));
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>例子：</p>
+<p>[iframe src=&quot;solution&quot; height=40]</p>
+
       </fieldset>
       
-      <fieldset id='_6ENenA'>
+      <fieldset id='_ln6gRQ'>
       <legend>article</legend>
-      
+      <h1 id="custom-elements">Custom elements</h1>
+<p>我们可以通过描述带有自己的方法、属性和事件等的类来创建自定义 HTML 元素。</p>
+<p>在 custom elements （自定义标签）定义完成之后，我们可以将其和 HTML 的内置标签一同使用。</p>
+<p>这是一件好事，因为虽然 HTML 有非常多的标签，但仍然是有穷尽的。如果我们需要像 <code>&lt;easy-tabs&gt;</code>、<code>&lt;sliding-carousel&gt;</code>、<code>&lt;beautiful-upload&gt;</code>…… 这样的标签，内置标签并不能满足我们。</p>
+<p>我们可以把上述的标签定义为特殊的类，然后使用它们，就好像它们本来就是 HTML 的一部分一样。</p>
+<p>Custom elements 有两种：</p>
+<ol>
+<li><strong>Autonomous custom elements （自主自定义标签）</strong> —— &quot;全新的&quot; 元素, 继承自 <code>HTMLElement</code> 抽象类.</li>
+<li><strong>Customized built-in elements （自定义内置元素）</strong> —— 继承内置的 HTML 元素，比如自定义 <code>HTMLButtonElement</code> 等。</li>
+</ol>
+<p>我们将会先创建 autonomous 元素，然后再创建 customized built-in 元素。</p>
+<p>在创建 custom elements 的时候，我们需要告诉浏览器一些细节，包括：如何展示它，以及在添加元素到页面和将其从页面移除的时候需要做什么，等等。</p>
+<p>通过创建一个带有几个特殊方法的类，我们可以完成这件事。这非常容易实现，我们只需要添加几个方法就行了，同时这些方法都不是必须的。</p>
+<p>下面列出了这几个方法的概述：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyElement</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  <span class="hljs-keyword">constructor</span>() {
+    <span class="hljs-built_in">super</span>();
+    <span class="hljs-comment">// 元素在这里创建</span>
+  }
+
+  connectedCallback() {
+    <span class="hljs-comment">// 在元素被添加到文档之后，浏览器会调用这个方法</span>
+    <span class="hljs-comment">//（如果一个元素被反复添加到文档／移除文档，那么这个方法会被多次调用）</span>
+  }
+
+  disconnectedCallback() {
+    <span class="hljs-comment">// 在元素从文档移除到时候，浏览器会调用这个方法</span>
+    <span class="hljs-comment">// （如果一个元素被反复添加到文档／移除文档，那么这个方法会被多次调用）</span>
+  }
+
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">get</span> <span class="hljs-title">observedAttributes</span>() {
+    <span class="hljs-keyword">return</span> [<span class="hljs-comment">/* 属性数组，这些属性的变化会被被监视 */</span>];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    <span class="hljs-comment">// 当上面数组里面的属性变化的时候，这个方法会被调用</span>
+  }
+
+  adoptedCallback() {
+    <span class="hljs-comment">// 在元素被移动到新的文档的时候，这个方法会被调用</span>
+    <span class="hljs-comment">// （document.adoptNode 会用到, 非常少见）</span>
+  }
+
+  <span class="hljs-comment">// 还可以添加更多的元素方法和属性</span>
+}</code></pre>
+<p>在申明了上面几个方法之后，我们需要注册元素：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 让浏览器知道我们新定义的类是为 &lt;my-element&gt; 服务的</span>
+customElements.define(<span class="hljs-string">&quot;my-element&quot;</span>, MyElement);</code></pre>
+<p>现在当任何带有 <code>&lt;my-element&gt;</code> 标签的元素被创建的时候，一个 <code>MyElement</code> 的实例也会被创建，并且前面提到的方法也会被调用。我们同样可以使用 <code>document.createElement(&#39;my-element&#39;)</code> 在 JavaScript 里创建元素。</p>
+<p>```smart header=&quot;Custom element 名称必须包括一个短横线 <code>-</code>&quot;
+Custom element 名称必须包括一个短横线 <code>-</code>, 比如 <code>my-element</code> 和 <code>super-button</code> 都是有效的元素名，但 <code>myelement</code> 并不是。</p>
+<p>这是为了确保 custom element 和内置 HTML 元素之间不会发生命名冲突。</p>
+<pre><code>
+## 例子: &quot;time-formatted&quot;
+
+举个例子，HTML 里面已经有 `&lt;time&gt;` 元素了，用于显示日期／时间。但是这个标签本身并不会对时间进行任何格式化处理。
+
+让我们来创建一个可以展示适用于当前浏览器语言的时间格式的 `&lt;time-formatted&gt;` 元素：
+
+
+```html run height=50 autorun=&quot;no-epub&quot;
+&lt;script&gt;
+*!*
+class TimeFormatted extends HTMLElement { // (1)
+*/!*
+
+  connectedCallback() {
+    let date = new Date(this.getAttribute(&#x27;datetime&#x27;) || Date.now());
+
+    this.innerHTML = new Intl.DateTimeFormat(&quot;default&quot;, {
+      year: this.getAttribute(&#x27;year&#x27;) || undefined,
+      month: this.getAttribute(&#x27;month&#x27;) || undefined,
+      day: this.getAttribute(&#x27;day&#x27;) || undefined,
+      hour: this.getAttribute(&#x27;hour&#x27;) || undefined,
+      minute: this.getAttribute(&#x27;minute&#x27;) || undefined,
+      second: this.getAttribute(&#x27;second&#x27;) || undefined,
+      timeZoneName: this.getAttribute(&#x27;time-zone-name&#x27;) || undefined,
+    }).format(date);
+  }
+
+}
+
+*!*
+customElements.define(&quot;time-formatted&quot;, TimeFormatted); // (2)
+*/!*
+&lt;/script&gt;
+
+&lt;!-- (3) --&gt;
+*!*
+&lt;time-formatted datetime=&quot;2019-12-01&quot;
+*/!*
+  year=&quot;numeric&quot; month=&quot;long&quot; day=&quot;numeric&quot;
+  hour=&quot;numeric&quot; minute=&quot;numeric&quot; second=&quot;numeric&quot;
+  time-zone-name=&quot;short&quot;
+&gt;&lt;/time-formatted&gt;</code></pre>
+<ol>
+<li>这个类只有一个方法 <code>connectedCallback()</code> —— 在 <code>&lt;time-formatted&gt;</code> 元素被添加到页面的时候，浏览器会调用这个方法（或者当 HTML 解析器检测到它的时候），它使用了内置的时间格式化工具 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat">Intl.DateTimeFormat</a>，这个工具可以非常好地展示格式化之后的时间，在各浏览器中兼容性都非常好。</li>
+<li>我们需要通过 <code>customElements.define(tag, class)</code> 来注册这个新元素。</li>
+<li>接下来在任何地方我们都可以使用这个新元素了。</li>
+</ol>
+<pre><code class="language-smart">如果浏览器在 `customElements.define` 之前的任何地方见到了 `&lt;time-formatted&gt;` 元素，并不会报错。但会把这个元素当作未知元素，就像任何非标准标签一样。
+
+`:not(:defined)` CSS 选择器可以对这样「未定义」的元素加上样式。
+
+当 `customElement.define` 被调用的时候，它们被「升级」了：一个新的 `TimeFormatted` 元素为每一个标签创建了，并且 `connectedCallback` 被调用。它们变成了 `:defined`。
+
+我们可以通过这些方法来获取更多的自定义标签的信息：
+- `customElements.get(name)` —— 返回指定 custom element  `name` 的类。
+- `customElements.whenDefined(name)` -- 返回一个 promise，将会在这个具有给定 `name` 的 custom element 变为已定义状态的时候 resolve（不带值）。
+</code></pre>
+<p>```smart header=&quot;在 <code>connectedCallback</code> 中渲染，而不是 <code>constructor</code> 中&quot;
+在上面的例子中，元素里面的内容是在 <code>connectedCallback</code> 中渲染（创建）的。</p>
+<p>为什么不在 <code>constructor</code> 中渲染？</p>
+<p>原因很简单：在 <code>constructor</code> 被调用的时候，还为时过早。虽然这个元素实例已经被创建了，但还没有插入页面。在这个阶段，浏览器还没有处理／创建元素属性：调用 <code>getAttribute</code> 将会得到 <code>null</code>。所以我们并不能在那里渲染元素。</p>
+<p>而且，如果你仔细考虑，这样作对于性能更好 —— 推迟渲染直到真正需要的时候。</p>
+<p>在元素被添加到文档的时候，它的 <code>connectedCallback</code> 方法会被调用。这个元素不仅仅是被添加为了另一个元素的子元素，同样也成为了页面的一部分。因此我们可以构建分离的 DOM，创建元素并且让它们为之后的使用准备好。它们只有在插入页面的时候才会真的被渲染。</p>
+<pre><code>
+## 监视属性
+
+我们目前的 `&lt;time-formatted&gt;` 实现中，在元素渲染以后，后续的属性变化并不会带来任何影响。这对于 HTML 元素来说有点奇怪。通常当我们改变一个属性的时候，比如 `a.href`，我们会预期立即看到变化。我们将会在下面修正这一点。
+
+为了监视这些属性，我们可以在 `observedAttributes()` static getter 中提供属性列表。当这些属性发生变化的时候，`attributeChangedCallback` 会被调用。出于性能优化的考虑，其他属性变化的时候并不会触发这个回调方法。
+
+以下是 `&lt;time-formatted&gt;` 的新版本，它会在属性变化的时候自动更新：
+
+```html run autorun=&quot;no-epub&quot; height=50
+&lt;script&gt;
+class TimeFormatted extends HTMLElement {
+
+*!*
+  render() { // (1)
+*/!*
+    let date = new Date(this.getAttribute(&#x27;datetime&#x27;) || Date.now());
+
+    this.innerHTML = new Intl.DateTimeFormat(&quot;default&quot;, {
+      year: this.getAttribute(&#x27;year&#x27;) || undefined,
+      month: this.getAttribute(&#x27;month&#x27;) || undefined,
+      day: this.getAttribute(&#x27;day&#x27;) || undefined,
+      hour: this.getAttribute(&#x27;hour&#x27;) || undefined,
+      minute: this.getAttribute(&#x27;minute&#x27;) || undefined,
+      second: this.getAttribute(&#x27;second&#x27;) || undefined,
+      timeZoneName: this.getAttribute(&#x27;time-zone-name&#x27;) || undefined,
+    }).format(date);
+  }
+
+*!*
+  connectedCallback() { // (2)
+*/!*
+    if (!this.rendered) {
+      this.render();
+      this.rendered = true;
+    }
+  }
+
+*!*
+  static get observedAttributes() { // (3)
+*/!*
+    return [&#x27;datetime&#x27;, &#x27;year&#x27;, &#x27;month&#x27;, &#x27;day&#x27;, &#x27;hour&#x27;, &#x27;minute&#x27;, &#x27;second&#x27;, &#x27;time-zone-name&#x27;];
+  }
+
+*!*
+  attributeChangedCallback(name, oldValue, newValue) { // (4)
+*/!*
+    this.render();
+  }
+
+}
+
+customElements.define(&quot;time-formatted&quot;, TimeFormatted);
+&lt;/script&gt;
+
+&lt;time-formatted id=&quot;elem&quot; hour=&quot;numeric&quot; minute=&quot;numeric&quot; second=&quot;numeric&quot;&gt;&lt;/time-formatted&gt;
+
+&lt;script&gt;
+*!*
+setInterval(() =&gt; elem.setAttribute(&#x27;datetime&#x27;, new Date()), 1000); // (5)
+*/!*
+&lt;/script&gt;</code></pre>
+<ol>
+<li>渲染逻辑被移动到了 <code>render()</code> 这个辅助方法里面。</li>
+<li>这个方法在元素被插入到页面的时候调用。</li>
+<li><code>attributeChangedCallback</code> 在 <code>observedAttributes()</code> 里的属性改变的时候被调用。</li>
+<li>…… 然后重渲染元素。</li>
+<li>最终，一个计时器就这样被我们轻松地实现了。</li>
+</ol>
+<h2 id="渲染顺序">渲染顺序</h2>
+<p>在 HTML 解析器构建 DOM 的时候，会按照先后顺序处理元素，先处理父级元素再处理子元素。例如，如果我们有 <code>&lt;outer&gt;&lt;inner&gt;&lt;/inner&gt;&lt;/outer&gt;</code>，那么 <code>&lt;outer&gt;</code> 元素会首先被创建并接入到 DOM，然后才是 <code>&lt;inner&gt;</code>。</p>
+<p>这对 custom elements 产生了重要影响。</p>
+<p>比如，如果一个 custom element 想要在 <code>connectedCallback</code> 内访问 <code>innerHTML</code>，它什么也拿不到:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+
+  connectedCallback() {
+*!*
+    alert(<span class="hljs-built_in">this</span>.innerHTML); <span class="hljs-comment">// empty (*)</span>
+*/!*
+  }
+
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+*!*
+<span class="hljs-tag">&lt;<span class="hljs-name">user-info</span>&gt;</span>John<span class="hljs-tag">&lt;/<span class="hljs-name">user-info</span>&gt;</span>
+*/!*</code></pre>
+<p>如果你运行上面的代码，<code>alert</code> 出来的内容是空的。</p>
+<p>这正是因为在那个阶段，子元素还不存在，DOM 还没有完成构建。HTML 解析器先连接 custom element <code>&lt;user-info&gt;</code>，然后再处理子元素，但是那时候子元素还并没有加载上。</p>
+<p>如果我们要给 custom element 传入信息，我们可以使用元素属性。它们是即时生效的。</p>
+<p>或者，如果我们需要子元素，我们可以使用延迟时间为零的 <code>setTimeout</code> 来推迟访问子元素。</p>
+<p>这样是可行的：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+
+  connectedCallback() {
+*!*
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> alert(<span class="hljs-built_in">this</span>.innerHTML)); <span class="hljs-comment">// John (*)</span>
+*/!*
+  }
+
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+*!*
+<span class="hljs-tag">&lt;<span class="hljs-name">user-info</span>&gt;</span>John<span class="hljs-tag">&lt;/<span class="hljs-name">user-info</span>&gt;</span>
+*/!*</code></pre>
+<p>现在 <code>alert</code> 在 <code>(*)</code> 行展示了 「John」，因为我们是在 HTML 解析完成之后，才异步执行了这段程序。我们在这个时候处理必要的子元素并且结束初始化过程。</p>
+<p>另一方面，这个方案并不是完美的。如果嵌套的 custom element 同样使用了 <code>setTimeout</code> 来初始化自身，那么它们会按照先后顺序执行：外层的 <code>setTimeout</code> 首先触发，然后才是内层的。</p>
+<p>这样外层元素还是早于内层元素结束初始化。</p>
+<p>让我们用一个例子来说明：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.id}</span> 已连接。`</span>);
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.id}</span> 初始化完成。`</span>));
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+*!*
+<span class="hljs-tag">&lt;<span class="hljs-name">user-info</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;outer&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">user-info</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;inner&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">user-info</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-info</span>&gt;</span>
+*/!*</code></pre>
+<p>输出顺序：</p>
+<ol>
+<li>outer 已连接。</li>
+<li>inner 已连接。</li>
+<li>outer 初始化完成。</li>
+<li>inner 初始化完成。</li>
+</ol>
+<p>我们可以很明显地看到外层元素并没有等待内层元素。</p>
+<p>并没有任何内置的回调方法可以在嵌套元素渲染好之后通知我们。但我们可以自己实现这样的回调。比如，内层元素可以分派像 <code>initialized</code> 这样的事件，同时外层的元素监听这样的事件并做出响应。</p>
+<h2 id="customized-built-in-elements">Customized built-in elements</h2>
+<p>我们创建的 <code>&lt;time-formatted&gt;</code> 这些新元素，并没有任何相关的语义。搜索引擎并不知晓它们的存在，同时无障碍设备也无法处理它们。</p>
+<p>但上述两点同样是非常重要的。比如，搜索引擎会对这些事情感兴趣，比如我们真的展示了时间。或者如果我们创建了一个特别的按钮，为什么不复用已有的 <code>&lt;button&gt;</code> 功能呢？</p>
+<p>我们可以通过继承内置元素的类来扩展和定制它们。</p>
+<p>比如，按钮是 <code>HTMLButtonElement</code> 的实例，让我们在这个基础上创建元素。</p>
+<ol>
+<li><p>我们的类继承自 <code>HTMLButtonElement</code>：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLButtonElement</span> </span>{ <span class="hljs-comment">/* custom element 方法 */</span> }</code></pre>
+</li>
+<li><p>给 <code>customElements.define</code> 提供定义标签的第三个参数：</p>
+<pre><code class="language-js">customElements.define(<span class="hljs-string">&#x27;hello-button&#x27;</span>, HelloButton, *!*{<span class="hljs-attr">extends</span>: <span class="hljs-string">&#x27;button&#x27;</span>}*/!*);</code></pre>
+<p> 这一步是必要的，因为不同的标签会共享同一个类。</p>
+</li>
+<li><p>最后，插入一个普通的 <code>&lt;button&gt;</code> 标签，但添加 <code>is=&quot;hello-button&quot;</code> 到这个元素，这样就可以使用我们的 custom element：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;hello-button&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre>
+</li>
+</ol>
+<p>下面是一个完整的例子：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-comment">// 这个按钮在被点击的时候说 &quot;hello&quot;</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLButtonElement</span> </span>{
+*!*
+  <span class="hljs-keyword">constructor</span>() {
+*/!*
+    <span class="hljs-built_in">super</span>();
+    <span class="hljs-built_in">this</span>.addEventListener(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;Hello!&quot;</span>));
+  }
+}
+
+*!*
+customElements.define(<span class="hljs-string">&#x27;hello-button&#x27;</span>, HelloButton, {<span class="hljs-attr">extends</span>: <span class="hljs-string">&#x27;button&#x27;</span>});
+*/!*
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+*!*
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;hello-button&quot;</span>&gt;</span>Click me<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+*/!*
+
+*!*
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;hello-button&quot;</span> <span class="hljs-attr">disabled</span>&gt;</span>Disabled<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+*/!*</code></pre>
+<p>我们新定义的按钮继承了内置按钮，所以它拥有和内置按钮相同的样式和标准特性，比如 <code>disabled</code> 属性。</p>
+<h2 id="引用参考">引用参考</h2>
+<ul>
+<li>HTML 现行标准： <a href="https://html.spec.whatwg.org/#custom-elements">https://html.spec.whatwg.org/#custom-elements</a>。</li>
+<li>兼容性： <a href="https://caniuse.com/#feat=custom-elements">https://caniuse.com/#feat=custom-elements</a>。</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>有两种 custom element：</p>
+<ol>
+<li><p>&quot;Autonomous&quot; —— 全新的标签，继承 <code>HTMLElement</code>。</p>
+<p> 定义方式：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyElement</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  <span class="hljs-keyword">constructor</span>() { <span class="hljs-built_in">super</span>(); <span class="hljs-comment">/* ... */</span> }
+  connectedCallback() { <span class="hljs-comment">/* ... */</span> }
+  disconnectedCallback() { <span class="hljs-comment">/* ... */</span>  }
+  <span class="hljs-keyword">static</span> <span class="hljs-keyword">get</span> <span class="hljs-title">observedAttributes</span>() { <span class="hljs-keyword">return</span> [<span class="hljs-comment">/* ... */</span>]; }
+  attributeChangedCallback(name, oldValue, newValue) { <span class="hljs-comment">/* ... */</span> }
+  adoptedCallback() { <span class="hljs-comment">/* ... */</span> }
+ }
+customElements.define(<span class="hljs-string">&#x27;my-element&#x27;</span>, MyElement);
+<span class="hljs-comment">/* &lt;my-element&gt; */</span></code></pre>
+</li>
+<li><p>&quot;Customized built-in elements&quot; —— 已有元素的扩展。</p>
+<p> 需要多一个 <code>.define</code> 参数，同时 <code>is=&quot;...&quot;</code> 在 HTML 中：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLButtonElement</span> </span>{ <span class="hljs-comment">/*...*/</span> }
+customElements.define(<span class="hljs-string">&#x27;my-button&#x27;</span>, MyElement, {<span class="hljs-attr">extends</span>: <span class="hljs-string">&#x27;button&#x27;</span>});
+<span class="hljs-comment">/* &lt;button is=&quot;my-button&quot;&gt; */</span></code></pre>
+</li>
+</ol>
+<p>Custom element 在各浏览器中的兼容性已经非常好了。Edge 支持地相对较差，但是我们可以使用 polyfill <a href="https://github.com/webcomponents/webcomponentsjs">https://github.com/webcomponents/webcomponentsjs</a>。</p>
+
       </fieldset>
       
-      <fieldset id='_rZbFXt'>
+      <fieldset id='_zyeWs6'>
       <legend>article</legend>
-      
+      <h1 id="影子-dom（shadow-dom）">影子 DOM（Shadow DOM）</h1>
+<p>Shadow DOM 为封装而生。它可以让一个组件拥有自己的「影子」DOM 树，这个 DOM 树不能在主文档中被任意访问，可能拥有局部样式规则，还有其他特性。</p>
+<h2 id="内建-shadow-dom">内建 shadow DOM</h2>
+<p>你是否曾经思考过复杂的浏览器控件是如何被创建和添加样式的？</p>
+<p>比如 <code>&lt;input type=&quot;range&quot;&gt;</code>：</p>
+<p>
+<input type="range">
+</p>
+
+<p>浏览器在内部使用 DOM/CSS 来绘制它们。这个 DOM 结构一般来说对我们是隐藏的，但我们可以在开发者工具里面看见它。比如，在 Chrome 里，我们需要打开「Show user agent shadow DOM」选项。</p>
+<p>然后 <code>&lt;input type=&quot;range&quot;&gt;</code> 看起来会像这样：</p>
+<p><img src="shadow-dom-range.png" alt=""></p>
+<p>你在 <code>#shadow-root</code> 下看到的就是被称为「shadow DOM」的东西。</p>
+<p>我们不能使用一般的 JavaScript 调用或者选择器来获取内建 shadow DOM 元素。它们不是常规的子元素，而是一个强大的封装手段。</p>
+<p>在上面的例子中，我们可以看到一个有用的属性 <code>pseudo</code>。这是一个因为历史原因而存在的属性，并不在标准中。我们可以使用它来给子元素加上 CSS 样式，像这样：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+<span class="hljs-comment">/* 让滑块轨道变红 */</span>
+<span class="hljs-selector-tag">input</span><span class="hljs-selector-pseudo">::-webkit-slider-runnable-track</span> {
+  <span class="hljs-attribute">background</span>: red;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;range&quot;</span>&gt;</span></code></pre>
+<p>重申一次，<code>pseudo</code> 是一个非标准的属性。按照时间顺序来说，浏览器首先实验了使用内部 DOM 结构来实现控件，然后，在一段时间之后，shadow DOM 才被标准化来让我们，开发者们，做类似的事。</p>
+<p>接下来，我们将要使用现代 shadow DOM 标准，它在 <a href="https://dom.spec.whatwg.org/#shadow-trees">DOM spec</a> 和其他相关标准中可以被找到。</p>
+<h2 id="shadow-tree">Shadow tree</h2>
+<p>一个 DOM 元素可以有以下两类 DOM 子树：</p>
+<ol>
+<li>Light tree（光明树） —— 一个常规 DOM 子树，由 HTML 子元素组成。我们在之前章节看到的所有子树都是「光明的」。</li>
+<li>Shadow tree（影子树） —— 一个隐藏的 DOM 子树，不在 HTML 中反映，无法被察觉。</li>
+</ol>
+<p>如果一个元素同时有以上两种子树，那么浏览器只渲染 shadow tree。但是我们同样可以设置两种树的组合。我们将会在后面的章节 <a href="info:slots-composition">info:slots-composition</a> 中看到更多细节。</p>
+<p>影子树可以在自定义元素中被使用，其作用是隐藏组件内部结构和添加只在组件内有效的样式。</p>
+<p>比如，这个 <code>&lt;show-hello&gt;</code> 元素将它的内部 DOM 隐藏在了影子里面：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;show-hello&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-keyword">const</span> shadow = <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    shadow.innerHTML = <span class="hljs-string">`&lt;p&gt;
+      Hello, <span class="hljs-subst">${<span class="hljs-built_in">this</span>.getAttribute(<span class="hljs-string">&#x27;name&#x27;</span>)}</span>
+    &lt;/p&gt;`</span>;
+  }  
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">show-hello</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;John&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">show-hello</span>&gt;</span></code></pre>
+<p>这就是在 Chrome 开发者工具中看到的最终样子，所有的内容都在「#shadow-root」下：</p>
+<p><img src="shadow-dom-say-hello.png" alt=""></p>
+<p>首先，调用 <code>elem.attachShadow({mode: …})</code> 可以创建一个 shadow tree。</p>
+<p>这里有两个限制：</p>
+<ol>
+<li>在每个元素中，我们只能创建一个 shadow root。</li>
+<li><code>elem</code> 必须是自定义元素，或者是以下元素的其中一个：「article」、「aside」、「blockquote」、「body」、「div」、「footer」、「h1..h6」、「header」、「main」、「nav」、「p」、「section」或者「span」。其他元素，比如 <code>&lt;img&gt;</code>，不能容纳 shadow tree。</li>
+</ol>
+<p><code>mode</code> 选项可以设定封装层级。他必须是以下两个值之一：</p>
+<ul>
+<li><p><code>「open」</code> —— shadow root 可以通过 <code>elem.shadowRoot</code> 访问。</p>
+<p>  任何代码都可以访问 <code>elem</code> 的 shadow tree。</p>
+</li>
+<li><p><code>「closed」</code> —— <code>elem.shadowRoot</code> 永远是 <code>null</code>。</p>
+<p>  我们只能通过 <code>attachShadow</code> 返回的指针来访问 shadow DOM（并且可能隐藏在一个 class 中）。浏览器原生的 shadow tree，比如 <code>&lt;input type=&quot;range&quot;&gt;</code>，是封闭的。没有任何方法可以访问它们。</p>
+</li>
+</ul>
+<p><code>attachShadow</code> 返回的 <a href="https://dom.spec.whatwg.org/#shadowroot">shadow root</a>，和任何元素一样：我们可以使用 <code>innerHTML</code> 或者 DOM 方法，比如 <code>append</code> 来扩展它。</p>
+<p>我们称有 shadow root 的元素叫做「shadow tree host」，可以通过 shadow root 的 <code>host</code> 属性访问：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 假设 {mode: &quot;open&quot;}，否则 elem.shadowRoot 是 null</span>
+alert(elem.shadowRoot.host === elem); <span class="hljs-comment">// true</span></code></pre>
+<h2 id="封装">封装</h2>
+<p>Shadow DOM 被非常明显地和主文档分开：</p>
+<ol>
+<li>Shadow DOM 元素对于 light DOM 中的 <code>querySelector</code> 不可见。实际上，Shadow DOM 中的元素可能与 light DOM 中某些元素的 id 冲突。这些元素必须在 shadow tree 中独一无二。</li>
+<li>Shadow DOM 有自己的样式。外部样式规则在 shadow DOM 中不产生作用。</li>
+</ol>
+<p>比如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+*!*
+  /* 文档样式对 #elem 内的 shadow tree 无作用 (1) */
+*/!*
+  p { color: red; }
+<span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
+  elem.attachShadow({mode: &#x27;open&#x27;});
+*!*
+    // shadow tree 有自己的样式 (2)
+*/!*
+  elem.shadowRoot.innerHTML = `
+    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">font-weight</span>: bold; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello, John!<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  `;
+
+*!*
+  // <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span> 只对 shadow tree 里面的查询可见 (3)
+*/!*
+  alert(document.querySelectorAll(&#x27;p&#x27;).length); // 0
+  alert(elem.shadowRoot.querySelectorAll(&#x27;p&#x27;).length); // 1
+</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>  </code></pre>
+<ol>
+<li>文档里面的样式对 shadow tree 没有任何效果。</li>
+<li>……但是内部的样式是有效的。</li>
+<li>为了获取 shadow tree 内部的元素，我们可以从树的内部查询。</li>
+</ol>
+<h2 id="参考">参考</h2>
+<ul>
+<li>DOM：<a href="https://dom.spec.whatwg.org/#shadow-trees">https://dom.spec.whatwg.org/#shadow-trees</a></li>
+<li>兼容性：<a href="https://caniuse.com/#feat=shadowdomv1">https://caniuse.com/#feat=shadowdomv1</a></li>
+<li>Shadow DOM 在很多其他标准中被提到，比如：<a href="https://w3c.github.io/DOM-Parsing/#the-innerhtml-mixin">DOM Parsing</a> 指定了 shadow root 有 <code>innerHTML</code>。</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>Shadow DOM 是创建组件级别 DOM 的一种方法。</p>
+<ol>
+<li><code>shadowRoot = elem.attachShadow({mode: open|closed})</code> —— 为 <code>elem</code> 创建 shadow DOM。如果 <code>mode=&quot;open&quot;</code>，那么它通过 <code>elem.shadowRoot</code> 属性被访问。</li>
+<li>我们可以使用 <code>innerHTML</code> 或者其他 DOM 方法来扩展 <code>shadowRoot</code>。</li>
+</ol>
+<p>Shadow DOM 元素：</p>
+<ul>
+<li>有自己的 id 空间。</li>
+<li>对主文档的 JavaScript 选择器隐身，比如 <code>querySelector</code>。</li>
+<li>只使用 shadow tree 内部的样式，不使用主文档的样式。</li>
+</ul>
+<p>Shadow DOM，如果存在的话，会被浏览器渲染而不是所谓的 「light DOM」（普通子元素）。在 <a href="info:slots-composition">info:slots-composition</a> 章节中我们将会看到如何组织它们。</p>
+
       </fieldset>
       
-      <fieldset id='_LA04Zo'>
+      <fieldset id='_ACyQtQ'>
       <legend>article</legend>
-      
+      <h1 id="模板元素">模板元素</h1>
+<p>内建的 <code>&lt;template&gt;</code> 元素用来存储 HTML 模板。浏览器将忽略它的内容，仅检查语法的有效性，但是我们可以在 JavaScript 中访问和使用它来创建其他元素。</p>
+<p>从理论上讲，我们可以在 HTML 中的任何位置创建不可见元素来储存 HTML 模板。那 <code>&lt;template&gt;</code> 元素有什么优势？</p>
+<p>首先，其内容可以是任何有效的HTML，即使它通常需要特定的封闭标签。</p>
+<p>例如，我们可以在其中放置一行表格 <code>&lt;tr&gt;</code> ：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>Contents<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre>
+<p>通常，如果我们在 <code>&lt;tr&gt;</code> 内放置类似 <code>&lt;div&gt;</code> 的元素，浏览器会检测到无效的 DOM 结构并对其进行“修复”，然后用 <code>&lt;table&gt;</code> 封闭 <code>&lt;tr&gt;</code> ，那不是我们想要的。而 <code>&lt;template&gt;</code> 则完全保留我们储存的内容。</p>
+<p>我们也可以将样式和脚本放入 <code>&lt;template&gt;</code> 元素中：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+    <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">font-weight</span>: bold; }
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    alert(<span class="hljs-string">&quot;Hello&quot;</span>);
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre>
+<p>浏览器认为 <code>&lt;template&gt;</code> 的内容“不在文档中”：样式不会被应用，脚本也不会被执行， <code>&lt;video autoplay&gt;</code> 也不会运行，等。</p>
+<p>当我们将内容插入文档时，该内容将变为活动状态（应用样式，运行脚本等）。</p>
+<h2 id="插入模板">插入模板</h2>
+<p>模板的 <code>content</code> 属性可看作<a href="info:modifying-document#document-fragment">DocumentFragment</a> —— 一种特殊的 DOM 节点。</p>
+<p>我们可以将其视为普通的DOM节点，除了它有一个特殊属性：将其插入某个位置时，会被插入的则是其子节点。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    alert(<span class="hljs-string">&quot;Hello&quot;</span>);
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;message&quot;</span>&gt;</span>Hello, world!<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> elem = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
+
+*!*
+  <span class="hljs-comment">// Clone the template content to reuse it multiple times</span>
+  elem.append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>));
+*/!*
+
+  <span class="hljs-built_in">document</span>.body.append(elem);
+  <span class="hljs-comment">// Now the script from &lt;template&gt; runs</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>让我们用 <code>&lt;template&gt;</code> 重写上一章的 Shadow DOM 示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">font-weight</span>: bold; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;message&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span>Click me<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  elem.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    elem.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+
+*!*
+    elem.shadowRoot.append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>)); <span class="hljs-comment">// (*)</span>
+*/!*
+
+    elem.shadowRoot.getElementById(<span class="hljs-string">&#x27;message&#x27;</span>).innerHTML = <span class="hljs-string">&quot;Hello from the shadows!&quot;</span>;
+  };
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>在 <code>(*)</code> 行，我们将 <code>tmpl.content</code> 作为 <code>DocumentFragment</code> 克隆和插入，它的子节点（<code>&lt;style&gt;</code>，<code>&lt;p&gt;</code>）将代为插入。</p>
+<p>它们会变成一个 Shadow DOM：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span>
+  #shadow-root
+    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">font-weight</span>: bold; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;message&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<h2 id="总结">总结</h2>
+<p>总结一下：</p>
+<ul>
+<li><code>&lt;template&gt;</code> 的内容可以是任何语法正确的 HTML。</li>
+<li><code>&lt;template&gt; </code> 内容被视为“超出文档范围”，因此它不会产生任何影响。</li>
+<li>我们可以在JavaScript 中访问 <code>template.content</code> ，将其克隆以在新组件中重复使用。</li>
+</ul>
+<p><code>&lt;template&gt;</code> 标签非常独特，因为：</p>
+<ul>
+<li>浏览器将检查其中的HTML语法（与在脚本中使用模板字符串不同）。</li>
+<li>但允许使用任何顶级 HTML 标签，即使没有适当包装元素的无意义的元素（例如 <code>&lt;tr&gt;</code> ）。</li>
+<li>其内容是交互式的：插入其文档后，脚本会运行， <code>&lt;video autoplay&gt;</code> 会自动播放。</li>
+</ul>
+<p><code>&lt;template&gt;</code> 元素不具有任何迭代机制，数据绑定或变量替换的功能，但我们可以在其基础上实现这些功能。</p>
+
       </fieldset>
       
-      <fieldset id='_XvnJDG'>
+      <fieldset id='_azmb29'>
       <legend>article</legend>
-      
+      <h1 id="shadow-dom-插槽，组成">Shadow DOM 插槽，组成</h1>
+<p>许多类型的组件，例如标签、菜单、照片库等等，需要内容去渲染。</p>
+<p>就像浏览器内建的 <code>&lt;select&gt;</code> 需要 <code>&lt;option&gt;</code> 子项，我们的 <code>&lt;custom-tabs&gt;</code> 可能需要实际的标签内容来起作用。并且一个 <code>&lt;custom-menu&gt;</code> 可能需要菜单子项。</p>
+<p>使用了 <code>&lt;custom-menu&gt;</code> 的代码如下所示：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">custom-menu</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Candy menu<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">item</span>&gt;</span>Lollipop<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">item</span>&gt;</span>Fruit Toast<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">item</span>&gt;</span>Cup Cake<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-menu</span>&gt;</span></code></pre>
+<p>……之后，我们的组件应该正确地渲染成具有给定标题和项目、处理菜单事件等的漂亮菜单。</p>
+<p>如何实现呢？</p>
+<p>我们可以尝试分析元素内容并动态复制重新排列 DOM 节点。这是可能的，但是如果我们要将元素移动到 Shadow DOM，那么文档的 CSS 样式不能在那里应用，因此文档的视觉样式可能会丢失。看起来还需要做一些事情。</p>
+<p>幸运的是我们不需要去做。Shadow DOM 支持 <code>&lt;slot&gt;</code> 元素，由 light DOM 中的内容自动填充。</p>
+<h2 id="具名插槽">具名插槽</h2>
+<p>让我们通过一个简单的例子看下插槽是如何工作的。</p>
+<p>在这里 <code>&lt;user-card&gt;</code> shadow DOM 提供两个插槽, 从 light DOM 填充：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
+customElements.define(&#x27;user-card&#x27;, class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: &#x27;open&#x27;});
+    this.shadowRoot.innerHTML = `
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Name:
+*!*
+        <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+*/!*
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Birthday:
+*!*
+        <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+*/!*
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    `;
+  }
+});
+</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> *!*<span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>*/!*&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> *!*<span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;birthday&quot;</span>*/!*&gt;</span>01.01.2001<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<p>在 shadow DOM 中，<code>&lt;slot name=&quot;X&quot;&gt;</code> 定义了一个“插入点”，一个带有 <code>slot=&quot;X&quot;</code> 的元素被渲染的地方。</p>
+<p>然后浏览器执行”组合“：它从 light DOM 中获取元素并且渲染到 shadow DOM 中的对应插槽中。最后，正是我们想要的 —— 一个能被填充数据的通用组件。</p>
+<p>这是编译后，不考虑组合的 DOM 结构：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  #shadow-root
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Name:
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Birthday:
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span>01.01.2001<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<p>我们创建了 shadow DOM，所以它当然就存在了，位于 <code>#shadow-root</code> 之下。现在元素同时拥有 light DOM 和 shadow DOM。</p>
+<p>为了渲染 shadow DOM 中的每一个 <code>&lt;slot name=&quot;...&quot;&gt;</code> 元素，浏览器在 light DOM 中寻找相同名字的 <code>slot=&quot;...&quot;</code>。这些元素在插槽内被渲染：</p>
+<p><img src="shadow-dom-user-card.svg" alt=""></p>
+<p>结果被叫做扁平化（flattened）DOM：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  #shadow-root
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Name:
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>
+        <span class="hljs-comment">&lt;!-- slotted element is inserted into the slot --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Birthday:
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span>01.01.2001<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<p>……但是 &quot;flattened&quot; DOM 仅仅被创建用来渲染和事件处理，是“虚拟”的。虽然是渲染出来了，但文档中的节点事实上并没有到处移动！</p>
+<p>如果我们调用 <code>querySelector</code> 那就很容易验证：节点仍在它们的位置。</p>
+<pre><code class="language-js"><span class="hljs-comment">// light DOM &lt;span&gt; 节点位置依然不变，在 `&lt;user-card&gt;` 里</span>
+alert( <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&#x27;user-card span&#x27;</span>).length ); <span class="hljs-comment">// 2</span></code></pre>
+<p>因此，扁平化 DOM 是通过插入插槽从 shadow DOM 派生出来的。浏览器渲染它并且用于样式继承、事件传播。但是 JavaScript 在展平前仍按原样看到文档。</p>
+<pre><code class="language-warn">`slot=&quot;...&quot;` 属性仅仅对 shadow host 的直接子代 (在我们的例子中的 `&lt;user-card&gt;` 元素) 有效。对于嵌套元素它将被忽略。
+
+例如，这里的第二个 `&lt;span&gt;` 被忽略了(因为它不是 `&lt;user-card&gt;` 的顶层子元素)：
+```html
+&lt;user-card&gt;
+  &lt;span slot=&quot;username&quot;&gt;John Smith&lt;/span&gt;
+  &lt;div&gt;
+    &lt;!-- invalid slot, must be direct child of user-card --&gt;
+    &lt;span slot=&quot;birthday&quot;&gt;01.01.2001&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/user-card&gt;
+```</code></pre>
+<p>如果在 light DOM 里有多个相同插槽名的元素，那么它们会被一个接一个地添加到插槽中。</p>
+<p>例如这样：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<p>给这个扁平化 DOM 两个元素，插入到 <code>&lt;slot name=&quot;username&quot;&gt;</code> 里：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  #shadow-root
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Name:
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Birthday:
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<h2 id="插槽后备内容">插槽后备内容</h2>
+<p>如果我们在一个 <code>&lt;slot&gt;</code> 内部放点什么，它将成为后备内容。如果 light DOM 中没有相应填充物的话浏览器就展示它。</p>
+<p>例如，在这里的 shadow DOM 中，如果 light DOM 中没有 <code>slot=&quot;username&quot;</code> 的话 <code>Anonymous</code> 就被渲染。</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Name:
+  <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>Anonymous<span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<h2 id="默认插槽：第一个不具名的插槽">默认插槽：第一个不具名的插槽</h2>
+<p>shadow DOM 中第一个没有名字的 <code>&lt;slot&gt;</code> 是一个默认插槽。它从 light DOM 中获取没有放置在其他位置的所有节点。</p>
+<p>例如，让我们把默认插槽添加到 <code>&lt;user-card&gt;</code>，该位置可以收集有关用户的所有未开槽（unslotted）的信息：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
+customElements.define(&#x27;user-card&#x27;, class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: &#x27;open&#x27;});
+    this.shadowRoot.innerHTML = `
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Name:
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Birthday:
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">fieldset</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">legend</span>&gt;</span>Other information<span class="hljs-tag">&lt;/<span class="hljs-name">legend</span>&gt;</span>
+*!*
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+*/!*
+    <span class="hljs-tag">&lt;/<span class="hljs-name">fieldset</span>&gt;</span>
+    `;
+  }
+});
+</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+*!*
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>I like to swim.<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+*/!*
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span>01.01.2001<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+*!*
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>...And play volleyball too!<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+*/!*
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<p>所有未被插入的 light DOM 内容进入 “其他信息” 字段集。</p>
+<p>元素一个接一个的附加到插槽中，因此这两个未插入插槽的信息都在默认插槽中。</p>
+<p>扁平化的 DOM 看起来像这样：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  #shadow-root
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Name:
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Birthday:
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span>01.01.2001<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">fieldset</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">legend</span>&gt;</span>About me<span class="hljs-tag">&lt;/<span class="hljs-name">legend</span>&gt;</span>
+*!*
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>I am John!<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+*/!*
+    <span class="hljs-tag">&lt;/<span class="hljs-name">fieldset</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<h2 id="menu-example">Menu example</h2>
+<p>现在让我们回到在本章开头提到的 <code>&lt;custom-menu&gt;</code> 。</p>
+<p>我们可以使用插槽来分配元素。</p>
+<p>这是 <code>&lt;custom-menu&gt;</code>：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">custom-menu</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>Candy menu<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span>Lollipop<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span>Fruit Toast<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span>Cup Cake<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-menu</span>&gt;</span></code></pre>
+<p>带有适当插槽的 shadow DOM 模版：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-comment">/* menu styles */</span> </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;menu&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span></code></pre>
+<ol>
+<li><code>&lt;span slot=&quot;title&quot;&gt;</code> 进入 <code>&lt;slot name=&quot;title&quot;&gt;</code>。</li>
+<li>模版中有许多 <code>&lt;li slot=&quot;item&quot;&gt;</code>，但是只有一个 <code>&lt;slot name=&quot;item&quot;&gt;</code>。因此所有带有 <code>slot=&quot;item&quot;</code> 的元素都一个接一个地附加到 <code>&lt;slot name=&quot;item&quot;&gt;</code> 上，从而形成列表。</li>
+</ol>
+<p>扁平化的 DOM 变为：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">custom-menu</span>&gt;</span>
+  #shadow-root
+    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-comment">/* menu styles */</span> </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;menu&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>Candy menu<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span>Lollipop<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span>Fruit Toast<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span>Cup Cake<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-menu</span>&gt;</span></code></pre>
+<p>可能会注意到，在有效的 DOM 中，<code>&lt;li&gt;</code> 必须是 <code>&lt;ul&gt;</code> 的直接子代。但这是扁平化的 DOM，它描述了组件的渲染方式，这样的事情在这里自然发生。</p>
+<p>我们只需要添加一个 <code>click</code> 事件处理程序来打开/关闭列表，并且 <code>&lt;custom-menu&gt;</code> 准备好了：</p>
+<pre><code class="language-js">customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+
+    <span class="hljs-comment">// tmpl is the shadow DOM template (above)</span>
+    <span class="hljs-built_in">this</span>.shadowRoot.append( tmpl.content.cloneNode(<span class="hljs-literal">true</span>) );
+
+    <span class="hljs-comment">// we can&#x27;t select light DOM nodes, so let&#x27;s handle clicks on the slot</span>
+    <span class="hljs-built_in">this</span>.shadowRoot.querySelector(<span class="hljs-string">&#x27;slot[name=&quot;title&quot;]&#x27;</span>).onclick = <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-comment">// open/close the menu</span>
+      <span class="hljs-built_in">this</span>.shadowRoot.querySelector(<span class="hljs-string">&#x27;.menu&#x27;</span>).classList.toggle(<span class="hljs-string">&#x27;closed&#x27;</span>);
+    };
+  }
+});</code></pre>
+<p>这是完整的演示：</p>
+<p>[iframe src=&quot;menu&quot; height=140 edit]</p>
+<p>当然我们可以为它添加更多的功能：事件、方法等。</p>
+<h2 id="更新插槽">更新插槽</h2>
+<p>如果外部代码想动态 添加/移除 菜单项怎么办？</p>
+<p><strong>如果 添加/删除 了插槽元素，浏览器将监视插槽并更新渲染。</strong></p>
+<p>另外，由于不复制 light DOM 节点，而是仅在插槽中进行渲染，所以内部的变化是立即可见的。</p>
+<p>因此我们无需执行任何操作即可更新渲染。但是如果组件想知道插槽的更改，那么可以用 <code>slotchange</code> 事件。</p>
+<p>例如，这里的菜单项在 1 秒后动态插入，而且标题在 2 秒后改变。</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">custom-menu</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;menu&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>Candy menu<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-menu</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`&lt;div class=&quot;menu&quot;&gt;
+      &lt;slot name=&quot;title&quot;&gt;&lt;/slot&gt;
+      &lt;ul&gt;&lt;slot name=&quot;item&quot;&gt;&lt;/slot&gt;&lt;/ul&gt;
+    &lt;/div&gt;`</span>;
+
+    <span class="hljs-comment">// shadowRoot can&#x27;t have event handlers, so using the first child</span>
+    <span class="hljs-built_in">this</span>.shadowRoot.firstElementChild.addEventListener(<span class="hljs-string">&#x27;slotchange&#x27;</span>,
+      <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> alert(<span class="hljs-string">&quot;slotchange: &quot;</span> + e.target.name)
+    );
+  }
+});
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  menu.insertAdjacentHTML(<span class="hljs-string">&#x27;beforeEnd&#x27;</span>, <span class="hljs-string">&#x27;&lt;li slot=&quot;item&quot;&gt;Lollipop&lt;/li&gt;&#x27;</span>)
+}, <span class="hljs-number">1000</span>);
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  menu.querySelector(<span class="hljs-string">&#x27;[slot=&quot;title&quot;]&#x27;</span>).innerHTML = <span class="hljs-string">&quot;New menu&quot;</span>;
+}, <span class="hljs-number">2000</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>菜单每次都会更新渲染而无需我们干预。</p>
+<p>这里有两个 <code>slotchange</code> 事件：</p>
+<ol>
+<li><p>在初始化时:</p>
+<p> <code>slotchange: title</code> 立即触发, 因为来自 light DOM 的 <code>slot=&quot;title&quot;</code> 进入了相应的插槽。</p>
+</li>
+<li><p>1 秒后:</p>
+<p> <code>slotchange: item</code> 触发, 当一个新的 <code>&lt;li slot=&quot;item&quot;&gt;</code> 被添加。</p>
+</li>
+</ol>
+<p>请注意：2 秒后，如果修改了 <code>slot=&quot;title&quot;</code> 的内容，则不会发生 <code>slotchange</code> 事件。因为没有插槽更改。我们修改了 slotted 元素的内容，这是另一回事。</p>
+<p>如果我们想通过 JavaScript 跟踪 light DOM 的内部修改，也可以使用更通用的机制: <a href="info:mutation-observer">MutationObserver</a>。</p>
+<h2 id="插槽-api">插槽 API</h2>
+<p>最后让我们来谈谈与插槽相关的 JavaScript 方法。</p>
+<p>正如我们之前所见，JavaScript 会查看真实的 DOM，不展开。但是如果 shadow 树有 <code>{mode: &#39;open&#39;}</code> ，那么我们可以找出哪个元素被放进一个插槽，反之亦然，哪个插槽分配了给这个元素：</p>
+<ul>
+<li><code>node.assignedSlot</code> -- 返回 <code>node</code> 分配给的 <code>&lt;slot&gt;</code> 元素。</li>
+<li><code>slot.assignedNodes({flatten: true/false})</code> -- 分配给插槽的 DOM 节点。默认情况下，<code>flatten</code> 选项为 <code>false</code>。如果显式地设置为 <code>true</code>，则它将更深入地查看扁平化 DOM ，如果嵌套了组件，则返回嵌套的插槽，如果未分配节点，则返回备用内容。</li>
+<li><code>slot.assignedElements({flatten: true/false})</code> -- 分配给插槽的 DOM 元素（与上面相同，但仅元素节点）。</li>
+</ul>
+<p>当我们不仅需要显示已插入内容的内容，还需要在 JavaScript 中对其进行跟踪时，这些方法非常有用。</p>
+<p>例如，如果 <code>&lt;custom-menu&gt;</code> 组件想知道它所显示的内容，那么它可以跟踪 <code>slotchange</code> 并从 <code>slot.assignedElements</code> 获取：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">custom-menu</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;menu&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>Candy menu<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span>Lollipop<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;item&quot;</span>&gt;</span>Fruit Toast<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-menu</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  items = []
+
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`&lt;div class=&quot;menu&quot;&gt;
+      &lt;slot name=&quot;title&quot;&gt;&lt;/slot&gt;
+      &lt;ul&gt;&lt;slot name=&quot;item&quot;&gt;&lt;/slot&gt;&lt;/ul&gt;
+    &lt;/div&gt;`</span>;
+
+    <span class="hljs-comment">// 插槽能被添加/删除/代替</span>
+*!*
+    <span class="hljs-built_in">this</span>.shadowRoot.firstElementChild.addEventListener(<span class="hljs-string">&#x27;slotchange&#x27;</span>, <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> {
+      <span class="hljs-keyword">let</span> slot = e.target;
+      <span class="hljs-keyword">if</span> (slot.name == <span class="hljs-string">&#x27;item&#x27;</span>) {
+        <span class="hljs-built_in">this</span>.items = slot.assignedElements().map(<span class="hljs-function"><span class="hljs-params">elem</span> =&gt;</span> elem.textContent);
+        alert(<span class="hljs-string">&quot;Items: &quot;</span> + <span class="hljs-built_in">this</span>.items);
+      }
+    });
+*/!*
+  }
+});
+
+<span class="hljs-comment">// items 在 1 秒后更新</span>
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  menu.insertAdjacentHTML(<span class="hljs-string">&#x27;beforeEnd&#x27;</span>, <span class="hljs-string">&#x27;&lt;li slot=&quot;item&quot;&gt;Cup Cake&lt;/li&gt;&#x27;</span>)
+}, <span class="hljs-number">1000</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<h2 id="小结">小结</h2>
+<p>通常，如果一个元素含有 shadow DOM，那么其 light DOM 就不会被展示出来。插槽允许在 shadow DOM 中显示 light DOM 子元素。</p>
+<p>插槽有两种：</p>
+<ul>
+<li>具名插槽：<code>&lt;slot name=&quot;X&quot;&gt;...&lt;/slot&gt;</code> - 使用 <code>slot=&quot;X&quot;</code> 获取 light 子元素。</li>
+<li>默认插槽：第一个没有名字的 <code>&lt;slot&gt;</code>（随后的未命名插槽将被忽略）- 接受不是插槽的 light 子元素。</li>
+<li>如果同一插槽中有很多元素 - 它们会被一个接一个地添加。</li>
+<li><code>&lt;slot&gt;</code> 元素的内容作为备用。如果插槽没有 light 型的子元素，就会显示。</li>
+</ul>
+<p>在其槽内渲染插槽元素的过程称为“组合”。结果称为“扁平化 DOM”。</p>
+<p>组合不会真实的去移动节点，从 JavaScript 的视角看 DOM 仍然是相同的。</p>
+<p>JavaScript 可以使用以下的方法访问插槽：</p>
+<ul>
+<li><code>slot.assignedNodes/Elements()</code> - 返回插槽内的 节点/元素。</li>
+<li><code>node.assignedSlot</code> - 相反的方法，返回一个节点的插槽。</li>
+</ul>
+<p>如果我们想知道显示的内容，可以使用以下方法跟踪插槽位的内容：</p>
+<ul>
+<li><code>slotchange</code> 事件 - 在插槽第一次填充时触发，并且在插槽元素的 添加/删除/替换 操作（而不是其子元素）时触发，插槽是 <code>event.target</code> 。</li>
+<li>使用 <a href="info:mutation-observer">MutationObserver</a> 来深入了解插槽内容，并查看其中的更改。</li>
+</ul>
+<p>现在，在 shadow DOM 中有来自 light DOM 的元素时，让我们看看如何正确的设置样式。基本规则是 shadow 元素在内部设置样式，light 元素在外部设置样式，但是有一些例外。</p>
+<p>我们将在下一章中看到详细内容。</p>
+
       </fieldset>
       
-      <fieldset id='_HRm39w'>
+      <fieldset id='_IPRN2L'>
       <legend>article</legend>
-      
+      <h1 id="给-shadow-dom-添加样式">给 Shadow DOM 添加样式</h1>
+<p>shadow DOM 可以包含 <code>&lt;style&gt;</code> 和 <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;…&quot;&gt;</code> 标签。在后一种情况下，样式表是 HTTP 缓存的，因此不会为使用同一模板的多个组件重新下载样式表。</p>
+<p>一般来说，局部样式只在 shadow 树内起作用，文档样式在 shadow 树外起作用。但也有少数例外。</p>
+<h2 id="host">:host</h2>
+<p> <code>:host</code> 选择器允许选择 shadow 宿主（包含 shadow 树的元素）。</p>
+<p>例如，我们正在创建 <code>&lt;custom-dialog&gt;</code> 元素，并且想使它居中。为此，我们需要对 <code>&lt;custom-dialog&gt;</code> 元素本身设置样式。</p>
+<p>这正是 <code>:host</code> 所能做的：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+    <span class="hljs-comment">/* 这些样式将从内部应用到 custom-dialog 元素上 */</span>
+    <span class="hljs-selector-pseudo">:host</span> {
+      <span class="hljs-attribute">position</span>: fixed;
+      <span class="hljs-attribute">left</span>: <span class="hljs-number">50%</span>;
+      <span class="hljs-attribute">top</span>: <span class="hljs-number">50%</span>;
+      <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translate</span>(-<span class="hljs-number">50%</span>, -<span class="hljs-number">50%</span>);
+      <span class="hljs-attribute">display</span>: inline-block;
+      <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid red;
+      <span class="hljs-attribute">padding</span>: <span class="hljs-number">10px</span>;
+    }
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;custom-dialog&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>}).append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>));
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">custom-dialog</span>&gt;</span>
+  Hello!
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-dialog</span>&gt;</span></code></pre>
+<h2 id="级联">级联</h2>
+<p>shadow 宿主（ <code>&lt;custom-dialog&gt;</code> 本身）驻留在 light DOM 中，因此它受到文档 CSS 规则的影响。</p>
+<p>如果在局部的 <code>:host</code> 和文档中都给一个属性设置样式，那么文档样式优先。</p>
+<p>例如，如果在文档中我们有如下样式：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+<span class="hljs-selector-tag">custom-dialog</span> {
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></code></pre>
+<p>……那么 <code>&lt;custom-dialog&gt;</code> 将没有 padding。</p>
+<p>这是非常有利的，因为我们可以在其 <code>:host</code> 规则中设置 “默认” 组件样式，然后在文档中轻松地覆盖它们。</p>
+<p>唯一的例外是当局部属性被标记 <code>!important</code> 时，对于这样的属性，局部样式优先。</p>
+<h2 id="hostselector">:host(selector)</h2>
+<p>与 <code>:host</code> 相同，但仅在 shadow 宿主与 <code>selector</code> 匹配时才应用样式。</p>
+<p>例如，我们希望仅当 <code>&lt;custom-dialog&gt;</code> 具有 <code>centered</code> 属性时才将其居中:</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+*!*
+    :host([centered]) {
+*/!*
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-color: blue;
+    }
+
+    :host {
+      display: inline-block;
+      border: 1px solid red;
+      padding: 10px;
+    }
+  <span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;custom-dialog&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>}).append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>));
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+
+<span class="hljs-tag">&lt;<span class="hljs-name">custom-dialog</span> <span class="hljs-attr">centered</span>&gt;</span>
+  Centered!
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-dialog</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">custom-dialog</span>&gt;</span>
+  Not centered.
+<span class="hljs-tag">&lt;/<span class="hljs-name">custom-dialog</span>&gt;</span></code></pre>
+<p>现在附加的居中样式只应用于第一个对话框：<code>&lt;custom-dialog centered&gt;</code>。</p>
+<h2 id="host-contextselector">:host-context(selector)</h2>
+<p>与 <code>:host</code> 相同，但仅当外部文档中的 shadow 宿主或它的任何祖先节点与 <code>selector</code> 匹配时才应用样式。</p>
+<p>例如，<code>:host-context(.dark-theme)</code> 只有在 <code>&lt;custom-dialog&gt;</code> 或者 <code>&lt;custom-dialog&gt;</code> 的任何祖先节点上有 <code>dark-theme</code> 类时才匹配：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;dark-theme&quot;</span>&gt;</span>
+  <span class="hljs-comment">&lt;!--
+    :host-context(.dark-theme) 只应用于 .dark-theme 内部的 custom-dialog
+  --&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">custom-dialog</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">custom-dialog</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
+<p>总之，我们可以使用 <code>:host</code>-family 系列的选择器来对组件的主元素进行样式设置，具体取决于上下文。这些样式（除 <code>!important</code> 外）可以被文档样式覆盖。</p>
+<h2 id="给占槽（-slotted-）内容添加样式">给占槽（ slotted ）内容添加样式</h2>
+<p>现在让我们考虑有插槽的情况。</p>
+<p>占槽元素来自 light DOM，所以它们使用文档样式。局部样式不会影响占槽内容。</p>
+<p>在下面的例子中，按照文档样式，占槽的 <code>&lt;span&gt;</code> 是粗体，但是它不从局部样式中获取 <code>background</code>：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+*!*
+  span { font-weight: bold }
+*/!*
+<span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>*!*<span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>*/!*<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
+      &lt;style&gt;
+*!*
+      span { background: red; }
+*/!*
+      &lt;/style&gt;
+      Name: &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
+    `</span>;
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>结果是粗体，但不是红色。</p>
+<p>如果我们想要在我们的组件中设置占槽元素的样式，有两种选择。</p>
+<p>首先，我们可以对 <code>&lt;slot&gt;</code> 本身进行样式化，并借助 CSS 继承：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>*!*<span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>*/!*<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
+      &lt;style&gt;
+*!*
+      slot[name=&quot;username&quot;] { font-weight: bold; }
+*/!*
+      &lt;/style&gt;
+      Name: &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
+    `</span>;
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>这里 <code>&lt;p&gt;John Smith&lt;/p&gt;</code> 变成粗体，因为 CSS 继承在 <code>&lt;slot&gt;</code> 和它的内容之间有效。但是在 CSS 中，并不是所有的属性都是继承的。</p>
+<p>另一个选项是使用 <code>::slotted(selector)</code> 伪类。它根据两个条件来匹配元素：</p>
+<ol>
+<li>这是一个占槽元素，来自于 light DOM。插槽名并不重要，任何占槽元素都可以，但只能是元素本身，而不是它的子元素 。</li>
+<li>该元素与 <code>selector</code> 匹配。</li>
+</ol>
+<p>在我们的例子中，<code>::slotted(div)</code> 正好选择了 <code>&lt;div slot=&quot;username&quot;&gt;</code> ，但是没有选择它的子元素：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
+      &lt;style&gt;
+*!*
+      ::slotted(div) { border: 1px solid red; }
+*/!*
+      &lt;/style&gt;
+      Name: &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
+    `</span>;
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>请注意，<code>::slotted</code> 选择器不能用于任何插槽中更深层的内容。下面这些选择器是无效的：</p>
+<pre><code class="language-css"><span class="hljs-selector-pseudo">::slotted(div</span> <span class="hljs-selector-tag">span</span>) {
+  <span class="hljs-comment">/* 我们插入的 &lt;div&gt; 不会匹配这个选择器 */</span>
+}
+
+<span class="hljs-selector-pseudo">::slotted(div)</span> <span class="hljs-selector-tag">p</span> {
+  <span class="hljs-comment">/* 不能进入 light DOM 中选择元素 */</span>
+}</code></pre>
+<p>此外，<code>::sloated</code> 只能在 CSS 中使用，不能在 <code>querySelector</code> 中使用。</p>
+<h2 id="用自定义-css-属性作为勾子">用自定义 CSS 属性作为勾子</h2>
+<p>如何在主文档中设置组件的内建元素的样式?</p>
+<p>像 <code>:host</code> 这样的选择器应用规则到 <code>&lt;custom-dialog&gt;</code> 元素或 <code>&lt;user-card&gt;</code>，但是如何设置在它们内部的 shadow DOM 元素的样式呢？</p>
+<p>没有选择器可以从文档中直接影响 shadow DOM 样式。但是，正如我们暴露用来与组件交互的方法那样，我们也可以暴露 CSS 变量（自定义 CSS 属性）来对其进行样式设置。</p>
+<p><strong>自定义 CSS 属性存在于所有层次，包括 light DOM 和 shadow DOM。</strong></p>
+<p>例如，在 shadow DOM 中，我们可以使用 <code>--user-card-field-color</code> CSS 变量来设置字段的样式，而外部文档可以设置它的值：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+  <span class="hljs-selector-class">.field</span> {
+    <span class="hljs-attribute">color</span>: <span class="hljs-built_in">var</span>(--user-card-field-color, black);
+    <span class="hljs-comment">/* 如果 --user-card-field-color 没有被声明过，则取值为 black */</span>
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;field&quot;</span>&gt;</span>Name: <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;field&quot;</span>&gt;</span>Birthday: <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></code></pre>
+<p>然后，我们可以在外部文档中为 <code>&lt;user-card&gt;</code> 声明此属性：</p>
+<pre><code class="language-css"><span class="hljs-selector-tag">user-card</span> {
+  <span class="hljs-attribute">--user-card-field-color</span>: green;
+}</code></pre>
+<p>自定义 CSS 属性穿透 shadow DOM，它们在任何地方都可见，因此内部的 <code>.field</code> 规则将使用它。</p>
+<p>以下是完整的示例：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+*!*
+  user-card {
+    --user-card-field-color: green;
+  }
+*/!*
+<span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
+*!*
+    .field {
+      color: var(--user-card-field-color, black);
+    }
+*/!*
+  <span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;field&quot;</span>&gt;</span>Name: <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;field&quot;</span>&gt;</span>Birthday: <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.append(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;tmpl&#x27;</span>).content.cloneNode(<span class="hljs-literal">true</span>));
+  }
+});
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span>01.01.2001<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<h2 id="小结">小结</h2>
+<p>shadow DOM 可以引入样式，如 <code>&lt;style&gt;</code> 或 <code>&lt;link rel=&quot;stylesheet&quot;&gt;</code>。</p>
+<p>局部样式可以影响：</p>
+<ul>
+<li>shadow 树,</li>
+<li>shadow 宿主（通过 <code>:host</code>-family 系列伪类），</li>
+<li>占槽元素（来自 light DOM），<code>::slotted(selector)</code> 允许选择占槽元素本身，但不能选择它们的子元素。</li>
+</ul>
+<p>文档样式可以影响：</p>
+<ul>
+<li>shadow 宿主（因为它位于外部文档中）</li>
+<li>占槽元素及占槽元素的内容（因为它们同样位于外部文档中）</li>
+</ul>
+<p>当 CSS 属性冲突时，通常文档样式具有优先级，除非属性被标记为 <code>!important</code>，那么局部样式优先。</p>
+<p>CSS 自定义属性穿透 shadow DOM。它们被用作 “勾子” 来设计组件的样式：</p>
+<ol>
+<li>组件使用自定义 CSS 属性对关键元素进行样式设置，比如 <code>var(--component-name-title, &lt;default value&gt;)</code> 。</li>
+<li>组件作者为开发人员发布这些属性，它们和其他公共的组件方法一样重要。</li>
+<li>当开发人员想要对一个标题进行样式设计时，他们会为 shadow 宿主或宿主上层的元素赋值 <code>--component-name-title</code> CSS 属性。</li>
+<li>奥力给！</li>
+</ol>
+
       </fieldset>
       
-      <fieldset id='_EV3CxJ'>
+      <fieldset id='_UftLNP'>
       <legend>article</legend>
-      
+      <h1 id="shadow-dom-和事件（events）">Shadow DOM 和事件（events）</h1>
+<p>Shadow tree 背后的思想是封装组件的内部实现细节。</p>
+<p>假设，在 <code>&lt;user-card&gt;</code> 组件的 shadow DOM 内触发一个点击事件。但是主文档内部的脚本并不了解 shadow DOM 内部，尤其是当组件来自于第三方库。</p>
+<p>所以，为了保持细节简单，浏览器会<strong>重新定位</strong>（retarget）事件。</p>
+<p><strong>当事件在组件外部捕获时，shadow DOM 中发生的事件将会以 host 元素作为目标。</strong></p>
+<p>这里有个简单的例子：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`&lt;p&gt;
+      &lt;button&gt;Click me&lt;/button&gt;
+    &lt;/p&gt;`</span>;
+    <span class="hljs-built_in">this</span>.shadowRoot.firstElementChild.onclick =
+      <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> alert(<span class="hljs-string">&quot;Inner target: &quot;</span> + e.target.tagName);
+  }
+});
+
+<span class="hljs-built_in">document</span>.onclick =
+  <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> alert(<span class="hljs-string">&quot;Outer target: &quot;</span> + e.target.tagName);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>如果你点击了 button，就会出现以下信息：</p>
+<ol>
+<li>Inner target: <code>BUTTON</code> —— 内部事件处理程序获取了正确的目标，即 shadow DOM 中的元素。</li>
+<li>Outer target: <code>USER-CARD</code> —— 文档事件处理程序以 shadow host 作为目标。</li>
+</ol>
+<p>事件重定向是一件很棒的事情，因为外部文档并不需要知道组件的内部情况。从它的角度来看，事件是发生在 <code>&lt;user-card&gt;</code>。</p>
+<p><strong>如果事件发生在 slotted 元素上，实际存在于 light DOM 上，则不会发生重定向。</strong></p>
+<p>例如，在下面的例子中，如果用户点击了 <code>&lt;span slot=&quot;username&quot;&gt;</code>，那么对于 shadow 和 light 处理程序来说，事件目标就是当前这个 <code>span</code> 元素。</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;userCard&quot;</span>&gt;</span>
+*!*
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+*/!*
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`&lt;div&gt;
+      &lt;b&gt;Name:&lt;/b&gt; &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
+    &lt;/div&gt;`</span>;
+
+    <span class="hljs-built_in">this</span>.shadowRoot.firstElementChild.onclick =
+      <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> alert(<span class="hljs-string">&quot;Inner target: &quot;</span> + e.target.tagName);
+  }
+});
+
+userCard.onclick = <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> alert(<span class="hljs-string">`Outer target: <span class="hljs-subst">${e.target.tagName}</span>`</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>如果单击事件发生在 <code>&quot;John Smith&quot;</code> 上，则对于内部和外部处理程序来说，其目标是 <code>&lt;span slot=&quot;username&quot;&gt;</code>。这是 light DOM 中的元素，所以没有重定向。</p>
+<p>另一方面，如果单击事件发生在源自 shadow DOM 的元素上，例如，在 <code>&lt;b&gt;Name&lt;/b&gt;</code> 上，然后当它冒泡出 shadow DOM 后，其 <code>event.target</code> 将重置为 <code>&lt;user-card&gt;</code>。</p>
+<h2 id="冒泡（bubbling）-eventcomposedpath">冒泡（bubbling）, event.composedPath()</h2>
+<p>出于事件冒泡的目的，使用扁平 DOM（flattened DOM）。</p>
+<p>所以，如果我们有一个 slot 元素，并且事件发生在它的内部某个地方，那么它就会冒泡到 <code>&lt;slot&gt;</code> 并继续向上。</p>
+<p>使用 <code>event.composedPath()</code> 获得原始事件目标的完整路径以及所有 shadow 元素。正如我们从方法名称中看到的那样，该路径是在组合（composition）之后获取的。</p>
+<p>在上面的例子中，扁平 DOM 是：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;userCard&quot;</span>&gt;</span>
+  #shadow-root
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>Name:<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<p>因此，对于 <code>&lt;span slot=&quot;username&quot;&gt;</code> 上的点击事件，会调用 <code>event.composedPath()</code> 并返回一个数组：[<code>span</code>, <code>slot</code>, <code>div</code>, <code>shadow-root</code>, <code>user-card</code>, <code>body</code>, <code>html</code>, <code>document</code>, <code>window</code>]。在组合之后，这正是扁平 DOM 中目标元素的父链。</p>
+<p>```warn header=&quot;Shadow 树详细信息仅提供给 <code>{mode:&#39;open&#39;}</code> 树&quot;
+如果 shadow 树是用 <code>{mode: &#39;closed&#39;}</code> 创建的，那么组合路径就从 host 开始：<code>user-card</code> 及其更上层。</p>
+<p>这与使用 shadow DOM 的其他方法的原理类似。closed 树内部是完全隐藏的。</p>
+<pre><code>
+
+## event.composed
+
+大多数事件能成功冒泡到 shadow DOM 边界。很少有事件不能冒泡到 shadow DOM 边界。
+
+这由 `composed` 事件对象属性控制。如果 `composed` 是 `true`，那么事件就能穿过边界。否则它仅能在 shadow DOM 内部捕获。
+
+如果你浏览一下 [UI 事件规范](https://www.w3.org/TR/uievents) 就知道，大部分事件都是 `composed: true`：
+
+- `blur`，`focus`，`focusin`，`focusout`，
+- `click`，`dblclick`，
+- `mousedown`，`mouseup` `mousemove`，`mouseout`，`mouseover`，
+- `wheel`，
+- `beforeinput`，`input`，`keydown`，`keyup`。
+
+所有触摸事件（touch events）及指针事件（pointer events）都是 `composed: true`。
+
+但也有些事件是 `composed: false` 的：
+
+- `mouseenter`，`mouseleave`（它们根本不会冒泡），
+- `load`，`unload`，`abort`，`error`，
+- `select`，
+- `slotchange`。
+
+这些事件仅能在事件目标所在的同一 DOM 中的元素上捕获，
+
+## 自定义事件（Custom events）
+
+当我们发送（dispatch）自定义事件，我们需要设置 `bubbles` 和 `composed` 属性都为 `true` 以使其冒泡并从组件中冒泡出来。
+
+例如，我们在 `div#outer` shadow DOM 内部创建 `div#inner` 并在其上触发两个事件。只有 `composed: true` 的那个自定义事件才会让该事件本身冒泡到文档外面：
+
+```html run untrusted height=0
+&lt;div id=&quot;outer&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+outer.attachShadow({mode: &#x27;open&#x27;});
+
+let inner = document.createElement(&#x27;div&#x27;);
+outer.shadowRoot.append(inner);
+
+/*
+div(id=outer)
+  #shadow-dom
+    div(id=inner)
+*/
+
+document.addEventListener(&#x27;test&#x27;, event =&gt; alert(event.detail));
+
+inner.dispatchEvent(new CustomEvent(&#x27;test&#x27;, {
+  bubbles: true,
+*!*
+  composed: true,
+*/!*
+  detail: &quot;composed&quot;
+}));
+
+inner.dispatchEvent(new CustomEvent(&#x27;test&#x27;, {
+  bubbles: true,
+*!*
+  composed: false,
+*/!*
+  detail: &quot;not composed&quot;
+}));
+&lt;/script&gt;</code></pre>
+<h2 id="总结">总结</h2>
+<p>事件仅仅是在它们的 <code>composed</code> 标志设置为 <code>true</code> 的时候才能通过 shadow DOM 边界。</p>
+<p>内建事件大部分都是 <code>composed: true</code> 的，正如相关规范所描述的那样：</p>
+<ul>
+<li>UI 事件 <a href="https://www.w3.org/TR/uievents">https://www.w3.org/TR/uievents</a>。</li>
+<li>Touch 事件 <a href="https://w3c.github.io/touch-events">https://w3c.github.io/touch-events</a>。</li>
+<li>Pointer 事件 <a href="https://www.w3.org/TR/pointerevents">https://www.w3.org/TR/pointerevents</a>。</li>
+<li>……等等。</li>
+</ul>
+<p>也有些内建事件它们是 <code>composed: false</code> 的：</p>
+<ul>
+<li><code>mouseenter</code>，<code>mouseleave</code>（也不冒泡），</li>
+<li><code>load</code>，<code>unload</code>，<code>abort</code>，<code>error</code>，</li>
+<li><code>select</code>，</li>
+<li><code>slotchange</code>。</li>
+</ul>
+<p>这些事件仅能在同一 DOM 中的元素上捕获。</p>
+<p>如果我们发送一个 <code>CustomEvent</code>，那么我们应该显式地设置 <code>composed: true</code>。</p>
+<p>请注意，如果是嵌套组件，一个 shadow DOM 可能嵌套到另外一个 shadow DOM 中。在这种情况下合成事件冒泡到所有 shadow DOM 边界。因此，如果一个事件仅用于直接封闭组件，我们也可以在 shadow host 上发送它并设置 <code>composed: false</code>。这样它就不在组件 shadow DOM 中，也不会冒泡到更高级别的 DOM。</p>
+
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>webcomponents-intro</strong><br/></div><div style="margin-left:1em"><a href="#_cQXEPI">article</a><br/></div><div style="margin-left:0em"><strong>custom-elements</strong><br/></div><div style="margin-left:1em"><strong>live-timer</strong><br/></div><div style="margin-left:2em"><a href="#_F6374N">solution</a><br/></div><div style="margin-left:2em"><a href="#_davsgW">task</a><br/></div><div style="margin-left:1em"><a href="#_6ENenA">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom</strong><br/></div><div style="margin-left:1em"><a href="#_rZbFXt">article</a><br/></div><div style="margin-left:0em"><strong>template-element</strong><br/></div><div style="margin-left:1em"><a href="#_LA04Zo">article</a><br/></div><div style="margin-left:0em"><strong>slots-composition</strong><br/></div><div style="margin-left:1em"><a href="#_XvnJDG">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-style</strong><br/></div><div style="margin-left:1em"><a href="#_HRm39w">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-events</strong><br/></div><div style="margin-left:1em"><a href="#_EV3CxJ">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>webcomponents-intro</strong><br/></div><div style="margin-left:1em"><a href="#_Vgs1aN">article</a><br/></div><div style="margin-left:0em"><strong>custom-elements</strong><br/></div><div style="margin-left:1em"><strong>live-timer</strong><br/></div><div style="margin-left:2em"><a href="#_Mh6Rt2">solution</a><br/></div><div style="margin-left:2em"><a href="#_OYQq9h">task</a><br/></div><div style="margin-left:1em"><a href="#_ln6gRQ">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom</strong><br/></div><div style="margin-left:1em"><a href="#_zyeWs6">article</a><br/></div><div style="margin-left:0em"><strong>template-element</strong><br/></div><div style="margin-left:1em"><a href="#_ACyQtQ">article</a><br/></div><div style="margin-left:0em"><strong>slots-composition</strong><br/></div><div style="margin-left:1em"><a href="#_azmb29">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-style</strong><br/></div><div style="margin-left:1em"><a href="#_IPRN2L">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-events</strong><br/></div><div style="margin-left:1em"><a href="#_UftLNP">article</a><br/></div></div>
 </body></html>

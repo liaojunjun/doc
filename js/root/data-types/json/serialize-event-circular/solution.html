@@ -1,0 +1,25 @@
+<pre><code class="language-js"><span class="hljs-keyword">let</span> room = {
+  <span class="hljs-attr">number</span>: <span class="hljs-number">23</span>
+};
+
+<span class="hljs-keyword">let</span> meetup = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Conference&quot;</span>,
+  <span class="hljs-attr">occupiedBy</span>: [{<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>}, {<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Alice&quot;</span>}],
+  <span class="hljs-attr">place</span>: room
+};
+
+room.occupiedBy = meetup;
+meetup.self = meetup;
+
+alert( <span class="hljs-built_in">JSON</span>.stringify(meetup, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">replacer</span>(<span class="hljs-params">key, value</span>) </span>{
+  <span class="hljs-keyword">return</span> (key != <span class="hljs-string">&quot;&quot;</span> &amp;&amp; value == meetup) ? <span class="hljs-literal">undefined</span> : value;
+}));
+
+<span class="hljs-comment">/* 
+{
+  &quot;title&quot;:&quot;Conference&quot;,
+  &quot;occupiedBy&quot;:[{&quot;name&quot;:&quot;John&quot;},{&quot;name&quot;:&quot;Alice&quot;}],
+  &quot;place&quot;:{&quot;number&quot;:23}
+}
+*/</span></code></pre>
+<p>这里我们还需要判断 <code>key==&quot;&quot;</code> 以排除第一个调用时 <code>value</code> 是 <code>meetup</code> 的情况。</p>

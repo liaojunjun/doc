@@ -1,0 +1,22 @@
+<p>importance: 3</p>
+<hr>
+<h1 id="数值属性都乘以-2">数值属性都乘以 2</h1>
+<p>创建一个 <code>multiplyNumeric(obj)</code> 函数，把 <code>obj</code> 所有的数值属性都乘以 <code>2</code>。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 在调用之前</span>
+<span class="hljs-keyword">let</span> menu = {
+  <span class="hljs-attr">width</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-number">300</span>,
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;My menu&quot;</span>
+};
+
+multiplyNumeric(menu);
+
+<span class="hljs-comment">// 调用函数之后</span>
+menu = {
+  <span class="hljs-attr">width</span>: <span class="hljs-number">400</span>,
+  <span class="hljs-attr">height</span>: <span class="hljs-number">600</span>,
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;My menu&quot;</span>
+};</code></pre>
+<p>注意 <code>multiplyNumeric</code> 函数不需要返回任何值，它应该就地修改对象。</p>
+<p>P.S. 用 <code>typeof</code> 检查值类型。</p>

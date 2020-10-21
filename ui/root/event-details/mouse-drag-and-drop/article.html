@@ -1,0 +1,223 @@
+<h1 id="鼠标拖放事件">鼠标拖放事件</h1>
+<p>拖放（Drag&#39;n&#39;Drop）是一个很赞的界面解决方案。取某件东西并将其拖放是执行许多东西的一种简单明了的方式，从复制和移动文档（如在文件管理器中）到订购（将物品放入购物车）。</p>
+<p>在现代 HTML 标准中有一个 <a href="https://html.spec.whatwg.org/multipage/interaction.html#dnd">关于拖放的部分</a>，其中包含了例如 <code>dragstart</code> 和 <code>dragend</code> 等特殊事件。</p>
+<p>这些事件使我们能够支持特殊类型的拖放，例如处理从 OS 文件管理器中拖动文件，并将其拖放到浏览器窗口中。之后，JavaScript 便可以访问此类文件中的内容。</p>
+<p>但是，原生的拖放事件也有其局限性。例如，我们无法阻止从特定区域的拖动。并且，我们无法将拖动变成“水平”或“竖直”的。还有很多其他使用它们无法完成的拖放任务。并且，移动设备对此类事件的支持非常有限。</p>
+<p>因此，在这里我们将看到，如何使用鼠标事件来实现拖放。</p>
+<h2 id="拖放算法">拖放算法</h2>
+<p>基础的拖放算法如下所示：</p>
+<ol>
+<li>在 <code>mousedown</code> 上 —— 根据需要准备要移动的元素（也许创建一个它的副本，向其中添加一个类或其他任何东西）。</li>
+<li>然后在 <code>mousemove</code> 上，通过更改 <code>position:absolute</code> 情况下的 <code>left/top</code> 来移动它。</li>
+<li>在 <code>mouseup</code> 上 —— 执行与完成的拖放相关的所有行为。</li>
+</ol>
+<p>这些都是基础内容。稍后，我们将看到如何实现其他功能，例如当我们将一个东西拖动到一个元素上方时，高亮显示该元素。</p>
+<p>下面是拖放一个球的实现代码：</p>
+<pre><code class="language-js">ball.onmousedown = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-comment">// (1) 准备移动：确保 absolute，并通过设置 z-index 以确保球在顶部</span>
+  ball.style.position = <span class="hljs-string">&#x27;absolute&#x27;</span>;
+  ball.style.zIndex = <span class="hljs-number">1000</span>;
+
+  <span class="hljs-comment">// 将其从当前父元素中直接移动到 body 中</span>
+  <span class="hljs-comment">// 以使其定位是相对于 body 的</span>
+  <span class="hljs-built_in">document</span>.body.append(ball);  
+
+  <span class="hljs-comment">// 现在球的中心在 (pageX, pageY) 坐标上</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">moveAt</span>(<span class="hljs-params">pageX, pageY</span>) </span>{
+    ball.style.left = pageX - ball.offsetWidth / <span class="hljs-number">2</span> + <span class="hljs-string">&#x27;px&#x27;</span>;
+    ball.style.top = pageY - ball.offsetHeight / <span class="hljs-number">2</span> + <span class="hljs-string">&#x27;px&#x27;</span>;
+  }
+
+  <span class="hljs-comment">// 将我们绝对定位的球移到指针下方</span>
+  moveAt(event.pageX, event.pageY);
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onMouseMove</span>(<span class="hljs-params">event</span>) </span>{
+    moveAt(event.pageX, event.pageY);
+  }
+
+  <span class="hljs-comment">// (2) 在 mousemove 事件上移动球</span>
+  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&#x27;mousemove&#x27;</span>, onMouseMove);
+
+  <span class="hljs-comment">// (3) 放下球，并移除不需要的处理程序</span>
+  ball.onmouseup = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">document</span>.removeEventListener(<span class="hljs-string">&#x27;mousemove&#x27;</span>, onMouseMove);
+    ball.onmouseup = <span class="hljs-literal">null</span>;
+  };
+
+};</code></pre>
+<p>如果我们运行这段代码，我们会发现一些奇怪的事情。在拖放的一开始，球“分叉”了：我们开始拖动它的“克隆”。</p>
+<pre><code class="language-online">这是一个正在运行中的示例：
+
+[iframe src=&quot;ball&quot; height=230]
+
+尝试使用鼠标进行拖放，你会看到这种奇怪的行为。</code></pre>
+<p>这是因为浏览器有自己的对图片和一些其他元素的拖放处理。它会在我们进行拖放操作时自动运行，并与我们的拖放处理产生了冲突。</p>
+<p>禁用它：</p>
+<pre><code class="language-js">ball.ondragstart = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+};</code></pre>
+<p>现在一切都正常了。</p>
+<pre><code class="language-online">这是一个正在运行中的示例：
+
+[iframe src=&quot;ball2&quot; height=230]</code></pre>
+<p>另一个重要的方面是 —— 我们在 <code>document</code> 上跟踪 <code>mousemove</code>，而不是在 <code>ball</code> 上。乍一看，鼠标似乎总是在球的上方，我们可以将 <code>mousemove</code> 放在球上。</p>
+<p>但正如我们所记得的那样，<code>mousemove</code> 会经常被触发，但不会针对每个像素都如此。因此，在快速移动鼠标后，鼠标指针可能会从球上跳转至文档中间的某个位置（甚至跳转至窗口外）。</p>
+<p>因此，我们应该监听 <code>document</code> 以捕获它。</p>
+<h2 id="修正定位">修正定位</h2>
+<p>在上述示例中，球在移动时，球的中心始终位于鼠标指针下方：</p>
+<pre><code class="language-js">ball.style.left = pageX - ball.offsetWidth / <span class="hljs-number">2</span> + <span class="hljs-string">&#x27;px&#x27;</span>;
+ball.style.top = pageY - ball.offsetHeight / <span class="hljs-number">2</span> + <span class="hljs-string">&#x27;px&#x27;</span>;</code></pre>
+<p>不错，但这存在副作用。要启动拖放，我们可以在球上的任意位置 <code>mousedown</code>。但是，如果从球的边缘“抓住”球，那么球会突然“跳转”以使球的中心位于鼠标指针下方。</p>
+<p>如果我们能够保持元素相对于鼠标指针的初始偏移，那就更好了。</p>
+<p>例如，我们按住球的边缘处开始拖动，那么在拖动时，鼠标指针应该保持在一开始所按住的边缘位置上。</p>
+<p><img src="ball_shift.svg" alt=""></p>
+<p>让我们更新一下我们的算法：</p>
+<ol>
+<li><p>当访问者按下按钮（<code>mousedown</code>）时 —— 我们可以在变量 <code>shiftX/shiftY</code> 中记住鼠标指针到球左上角的距离。我们应该在拖动时保持这个距离。</p>
+<p> 我们可以通过坐标相减来获取这个偏移：</p>
+<pre><code class="language-js"><span class="hljs-comment">// onmousedown</span>
+<span class="hljs-keyword">let</span> shiftX = event.clientX - ball.getBoundingClientRect().left;
+<span class="hljs-keyword">let</span> shiftY = event.clientY - ball.getBoundingClientRect().top;</code></pre>
+</li>
+<li><p>然后，在拖动球时，我们将鼠标指针相对于球的这个偏移也考虑在内，像这样：</p>
+<pre><code class="language-js"><span class="hljs-comment">// onmousemove</span>
+<span class="hljs-comment">// 球具有 position:absoute</span>
+ball.style.left = event.pageX - *!*shiftX*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;
+ball.style.top = event.pageY - *!*shiftY*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;</code></pre>
+</li>
+</ol>
+<p>能够更好地进行定位的最终代码：</p>
+<pre><code class="language-js">ball.onmousedown = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+
+*!*
+  <span class="hljs-keyword">let</span> shiftX = event.clientX - ball.getBoundingClientRect().left;
+  <span class="hljs-keyword">let</span> shiftY = event.clientY - ball.getBoundingClientRect().top;
+*/!*
+
+  ball.style.position = <span class="hljs-string">&#x27;absolute&#x27;</span>;
+  ball.style.zIndex = <span class="hljs-number">1000</span>;
+  <span class="hljs-built_in">document</span>.body.append(ball);
+
+  moveAt(event.pageX, event.pageY);
+
+  <span class="hljs-comment">// 移动现在位于坐标 (pageX, pageY) 上的球</span>
+  <span class="hljs-comment">// 将初始的偏移考虑在内</span>
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">moveAt</span>(<span class="hljs-params">pageX, pageY</span>) </span>{
+    ball.style.left = pageX - *!*shiftX*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;
+    ball.style.top = pageY - *!*shiftY*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onMouseMove</span>(<span class="hljs-params">event</span>) </span>{
+    moveAt(event.pageX, event.pageY);
+  }
+
+  <span class="hljs-comment">// 在 mousemove 事件上移动球</span>
+  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&#x27;mousemove&#x27;</span>, onMouseMove);
+
+  <span class="hljs-comment">// 放下球，并移除不需要的处理程序</span>
+  ball.onmouseup = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-built_in">document</span>.removeEventListener(<span class="hljs-string">&#x27;mousemove&#x27;</span>, onMouseMove);
+    ball.onmouseup = <span class="hljs-literal">null</span>;
+  };
+
+};
+
+ball.ondragstart = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+};</code></pre>
+<pre><code class="language-online">In action (inside `&lt;iframe&gt;`):
+
+[iframe src=&quot;ball3&quot; height=230]</code></pre>
+<p>如果我们按住球的右下角来进行拖动，这种差异会尤其明显。在前面的示例中，球会在鼠标指针下“跳转”一下。现在，更新后的代码可以让我们从当前位置流畅地跟随鼠标。</p>
+<h2 id="潜在的放置目标">潜在的放置目标</h2>
+<p>在前面的示例中，球可以被放置（drop）到“任何地方”。在实际中，我们通常是将一个元素放到另一个元素上。例如，将一个“文件”放置到一个“文件夹”或者其他地方。</p>
+<p>抽象地讲，我们取一个 &quot;draggable&quot; 的元素，并将其放在 &quot;droppable&quot; 的元素上。</p>
+<p>我们需要知道：</p>
+<ul>
+<li>在拖放结束时，所拖动的元素要放在哪里 —— 执行相应的行为</li>
+<li>并且，最好知道我们所拖动到的 &quot;droppable&quot; 的元素的位置，并高亮显示 &quot;droppable&quot; 的元素。</li>
+</ul>
+<p>这个解决方案很有意思，只是有点麻烦，所以我们在这儿对此进行介绍。</p>
+<p>第一个想法是什么？可能是将 <code>onmouseover/mouseup</code> 处理程序放在潜在的 &quot;droppable&quot; 的元素中？</p>
+<p>但这行不通。</p>
+<p>问题在于，当我们拖动时，可拖动元素一直是位于其他元素上的。而鼠标事件只发生在顶部元素上，而不是发生在那些下面的元素。</p>
+<p>例如，下面有两个 <code>&lt;div&gt;</code> 元素，红色的在蓝色的上面（完全覆盖）。这里，在蓝色的 <code>&lt;div&gt;</code> 中没有办法来捕获事件，因为红色的 <code>&lt;div&gt;</code> 在它上面：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+  <span class="hljs-selector-tag">div</span> {
+    <span class="hljs-attribute">width</span>: <span class="hljs-number">50px</span>;
+    <span class="hljs-attribute">height</span>: <span class="hljs-number">50px</span>;
+    <span class="hljs-attribute">position</span>: absolute;
+    <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;background:blue&quot;</span> <span class="hljs-attr">onmouseover</span>=<span class="hljs-string">&quot;alert(&#x27;never works&#x27;)&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;background:red&quot;</span> <span class="hljs-attr">onmouseover</span>=<span class="hljs-string">&quot;alert(&#x27;over red!&#x27;)&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<p>与可拖动的元素相同。球始终位于其他元素之上，因此事件会发生在球上。无论我们在较低的元素上设置什么处理程序，它们都不会起作用。</p>
+<p>这就是一开始的那个想法，将处理程序放在潜在的 &quot;droppable&quot; 的元素，在实际操作中不起作用的原因。它们不会运行。</p>
+<p>那么，该怎么办？</p>
+<p>有一个叫做 <code>document.elementFromPoint(clientX, clientY)</code> 的方法。它会返回在给定的窗口相对坐标处的嵌套的最深的元素（如果给定的坐标在窗口外，则返回 <code>null</code>）。</p>
+<p>我们可以在我们的任何鼠标事件处理程序中使用它，以检测鼠标指针下的潜在的 &quot;droppable&quot; 的元素，就像这样：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 在一个鼠标事件处理程序中</span>
+ball.hidden = <span class="hljs-literal">true</span>; <span class="hljs-comment">// (*) 隐藏我们拖动的元素</span>
+
+<span class="hljs-keyword">let</span> elemBelow = <span class="hljs-built_in">document</span>.elementFromPoint(event.clientX, event.clientY);
+<span class="hljs-comment">// elemBelow 是球下方的元素，可能是 droppable 的元素</span>
+
+ball.hidden = <span class="hljs-literal">false</span>;</code></pre>
+<p>请注意：我们需要在调用 <code>(*)</code> 之前隐藏球。否则，我们通常会在这些坐标上有一个球，因为它是在鼠标指针下的最顶部的元素：<code>elemBelow=ball</code>。</p>
+<p>我们可以使用该代码来检查我们正在“飞过”的元素是什么。并在放置（drop）时，对放置进行处理。</p>
+<p>基于 <code>onMouseMove</code> 扩展的代码，用于查找 &quot;droppable&quot; 的元素：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 我们当前正在飞过的潜在的 droppable 的元素</span>
+<span class="hljs-keyword">let</span> currentDroppable = <span class="hljs-literal">null</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onMouseMove</span>(<span class="hljs-params">event</span>) </span>{
+  moveAt(event.pageX, event.pageY);
+
+  ball.hidden = <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">let</span> elemBelow = <span class="hljs-built_in">document</span>.elementFromPoint(event.clientX, event.clientY);
+  ball.hidden = <span class="hljs-literal">false</span>;
+
+  <span class="hljs-comment">// mousemove 事件可能会在窗口外被触发（当球被拖出屏幕时）</span>
+  <span class="hljs-comment">// 如果 clientX/clientY 在窗口外，那么 elementfromPoint 会返回 null</span>
+  <span class="hljs-keyword">if</span> (!elemBelow) <span class="hljs-keyword">return</span>;
+
+  <span class="hljs-comment">// 潜在的 droppable 的元素被使用 &quot;droppable&quot; 类进行标记（也可以是其他逻辑）</span>
+  <span class="hljs-keyword">let</span> droppableBelow = elemBelow.closest(<span class="hljs-string">&#x27;.droppable&#x27;</span>);
+
+  <span class="hljs-keyword">if</span> (currentDroppable != droppableBelow) {
+    <span class="hljs-comment">// 我们正在飞入或飞出...</span>
+    <span class="hljs-comment">// 注意：它们两个的值都可能为 null</span>
+    <span class="hljs-comment">//   currentDroppable=null —— 如果我们在此事件之前，鼠标指针不是在一个 droppable 的元素上（例如空白处）</span>
+    <span class="hljs-comment">//   droppableBelow=null —— 如果现在，在当前事件中，我们的鼠标指针不是在一个 droppable 的元素上</span>
+
+    <span class="hljs-keyword">if</span> (currentDroppable) {
+      <span class="hljs-comment">// 处理“飞出” droppable 的元素时的处理逻辑（移除高亮）</span>
+      leaveDroppable(currentDroppable);
+    }
+    currentDroppable = droppableBelow;
+    <span class="hljs-keyword">if</span> (currentDroppable) {
+      <span class="hljs-comment">// 处理“飞入” droppable 的元素时的逻辑</span>
+      enterDroppable(currentDroppable);
+    }
+  }
+}</code></pre>
+<p>在下面这个示例中，当球被拖到球门上时，球门会被高亮显示。</p>
+<p>[codetabs height=250 src=&quot;ball4&quot;]</p>
+<p>现在，我们在整个处理过程中，在当前变量 <code>currentDroppable</code> 中都存储了当前的“放置目标”，可以用它来进行高亮显示或者其他操作。</p>
+<h2 id="总结">总结</h2>
+<p>我们考虑了一种基础的拖放算法。</p>
+<p>关键部分：</p>
+<ol>
+<li>事件流：<code>ball.mousedown</code> -&gt; <code>document.mousemove</code> -&gt; <code>ball.mouseup</code>（不要忘记取消原生 <code>ondragstart</code>）。</li>
+<li>在拖动开始时 —— 记住鼠标指针相对于元素的初始偏移（shift）：<code>shiftX/shiftY</code>，并在拖动过程中保持它不变。</li>
+<li>使用 <code>document.elementFromPoint</code> 检测鼠标指针下的 &quot;droppable&quot; 的元素。</li>
+</ol>
+<p>我们可以在此基础上做很多事情。</p>
+<ul>
+<li>在 <code>mouseup</code> 上，我们可以智能地完成放置（drop）：更改数据，移动元素。</li>
+<li>我们可以高亮我们正在“飞过”的元素。</li>
+<li>我们可以将拖动限制在特定的区域或者方向。</li>
+<li>我们可以对 <code>mousedown/up</code> 使用事件委托。一个大范围的用于检查 <code>event.target</code> 的事件处理程序可以管理数百个元素的拖放。</li>
+<li>等。</li>
+</ul>
+<p>有一些在此基础上已经将体系结构构建好的框架：<code>DragZone</code>，<code>Droppable</code>，<code>Draggable</code> 及其他 class。它们中的大多数做的都是与上述类似的事情，所以现在你应该很容易理解它们了。或者自己动手实现。正如你所看到的，其实挺简单的，有时候比基于第三方解决方案进行改写还容易。</p>

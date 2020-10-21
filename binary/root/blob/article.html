@@ -1,0 +1,162 @@
+<h1 id="blob">Blob</h1>
+<p><code>ArrayBuffer</code> 和视图（view）都是 ECMA 标准的一部分，是 JavaScript 的一部分。</p>
+<p>在浏览器中，还有其他更高级的对象，特别是 <code>Blob</code>，在 <a href="https://www.w3.org/TR/FileAPI/">File API</a> 中有相关描述。</p>
+<p><code>Blob</code> 由一个可选的字符串 <code>type</code>（通常是 MIME 类型）和 <code>blobParts</code> 组成 —— 一系列其他 <code>Blob</code> 对象，字符串和 <code>BufferSource</code>。</p>
+<p><img src="blob.svg" alt=""></p>
+<p>构造函数的语法为：</p>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> Blob(blobParts, options);</code></pre>
+<ul>
+<li><strong><code>blobParts</code></strong> 是 <code>Blob</code>/<code>BufferSource</code>/<code>String</code> 类型的值的数组。</li>
+<li><strong><code>options</code></strong> 可选对象：<ul>
+<li><strong><code>type</code></strong> —— <code>Blob</code> 类型，通常是 MIME 类型，例如 <code>image/png</code>，</li>
+<li><strong><code>endings</code></strong> —— 是否转换换行符，使 <code>Blob</code> 对应于当前操作系统的换行符（<code>\r\n</code> 或 <code>\n</code>）。默认为 <code>&quot;transparent&quot;</code>（啥也不做），不过也可以是 <code>&quot;native&quot;</code>（转换）。</li>
+</ul>
+</li>
+</ul>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 从字符串创建 Blob</span>
+<span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">new</span> Blob([<span class="hljs-string">&quot;&lt;html&gt;…&lt;/html&gt;&quot;</span>], {<span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text/html&#x27;</span>});
+<span class="hljs-comment">// 请注意：第一个参数必须是一个数组 [...]</span></code></pre>
+<pre><code class="language-js"><span class="hljs-comment">// 从类型化数组（typed array）和字符串创建 Blob</span>
+<span class="hljs-keyword">let</span> hello = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>([<span class="hljs-number">72</span>, <span class="hljs-number">101</span>, <span class="hljs-number">108</span>, <span class="hljs-number">108</span>, <span class="hljs-number">111</span>]); <span class="hljs-comment">// 二进制格式的 &quot;hello&quot; </span>
+
+<span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">new</span> Blob([hello, <span class="hljs-string">&#x27; &#x27;</span>, <span class="hljs-string">&#x27;world&#x27;</span>], {<span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text/plain&#x27;</span>});</code></pre>
+<p>我们可以用 <code>slice</code> 方法来提取 <code>Blob</code> 片段：</p>
+<pre><code class="language-js">blob.slice([byteStart], [byteEnd], [contentType]);</code></pre>
+<ul>
+<li><strong><code>byteStart</code></strong> —— 起始字节，默认为 0。</li>
+<li><strong><code>byteEnd</code></strong> —— 最后一个字节（专有，默认为最后）。</li>
+<li><strong><code>contentType</code></strong> —— 新 blob 的 <code>type</code>，默认与源 blob 相同。</li>
+</ul>
+<p>参数值类似于 <code>array.slice</code>，也允许是负数。</p>
+<p>```smart header=&quot;<code>Blob</code> 对象是不可改变的&quot;
+我们无法直接在 <code>Blob</code> 中更改数据，但我们可以通过 <code>slice</code> 获得 <code>Blob</code> 的多个部分，从这些部分创建新的 <code>Blob</code> 对象，将它们组成新的 <code>Blob</code>，等。</p>
+<p>这种行为类似于 JavaScript 字符串：我们无法更改字符串中的字符，但可以生成一个新的改动过的字符串。</p>
+<pre><code>
+## Blob 用作 URL
+
+Blob 可以很容易用作 `&lt;a&gt;`、`&lt;img&gt;` 或其他标签的 URL，来显示它们的内容。
+
+多亏了 `type`，让我们也可以下载/上传 `Blob` 对象，而在网络请求中，`type` 自然地变成了 `Content-Type`。
+
+让我们从一个简单的例子开始。通过点击链接，你可以下载一个具有动态生成的内容为 `hello world` 的 `Blob` 的文件：
+
+```html run
+&lt;!-- download 特性（attribute）强制浏览器下载而不是导航 --&gt;
+&lt;a download=&quot;hello.txt&quot; href=&#x27;#&#x27; id=&quot;link&quot;&gt;Download&lt;/a&gt;
+
+&lt;script&gt;
+let blob = new Blob([&quot;Hello, world!&quot;], {type: &#x27;text/plain&#x27;});
+
+link.href = URL.createObjectURL(blob);
+&lt;/script&gt;</code></pre>
+<p>我们也可以在 Javascript 中动态创建一个链接，通过 <code>link.click()</code> 模拟一个点击，然后便自动下载了。</p>
+<p>下面是类似的代码，此代码可以让用户无需任何 HTML 即可下载动态生成的 <code>Blob</code>（译注：也就是通过代码模拟用户点击，从而自动下载）：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> link = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;a&#x27;</span>);
+link.download = <span class="hljs-string">&#x27;hello.txt&#x27;</span>;
+
+<span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">new</span> Blob([<span class="hljs-string">&#x27;Hello, world!&#x27;</span>], {<span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text/plain&#x27;</span>});
+
+link.href = URL.createObjectURL(blob);
+
+link.click();
+
+URL.revokeObjectURL(link.href);</code></pre>
+<p><code>URL.createObjectURL</code> 取一个 <code>Blob</code>，并为其创建一个唯一的 URL，形式为 <code>blob:&lt;origin&gt;/&lt;uuid&gt;</code>。</p>
+<p>也就是 <code>link.href</code> 的值的样子：</p>
+<pre><code>blob:https://javascript.info/1e67e00e-860d-40a5-89ae-6ab0cbee6273</code></pre>
+<p>浏览器内部为每个通过 <code>URL.createObjectURL</code> 生成的 URL 存储了一个 URL -&gt; <code>Blob</code> 映射。因此，此类 URL 很短，但可以访问 <code>Blob</code>。</p>
+<p>生成的 URL（即其链接）仅在当前文档打开的状态下才有效。它允许引用 <code>&lt;img&gt;</code>、<code>&lt;a&gt;</code> 中的 <code>Blob</code>，以及基本上任何其他期望 URL 的对象。</p>
+<p>不过它有个副作用。虽然这里有 <code>Blob</code> 的映射，但 <code>Blob</code> 本身只保存在内存中的。浏览器无法释放它。</p>
+<p>在文档退出时（unload），该映射会被自动清除，因此 <code>Blob</code> 也相应被释放了。但是，如果应用程序寿命很长，那这个释放就不会很快发生。</p>
+<p><strong>因此，如果我们创建一个 URL，那么即使我们不再需要该 <code>Blob</code> 了，它也会被挂在内存中。</strong></p>
+<p><code>URL.revokeObjectURL(url)</code> 从内部映射中移除引用，因此允许 <code>Blob</code> 被删除（如果没有其他引用的话），并释放内存。</p>
+<p>在上面最后一个示例中，我们打算仅使用一次 <code>Blob</code>，来进行即时下载，因此我们立即调用 <code>URL.revokeObjectURL(link.href)</code>。</p>
+<p>而在前一个带有可点击的 HTML 链接的示例中，我们不调用 <code>URL.revokeObjectURL(link.href)</code>，因为那样会使 <code>Blob</code> URL 无效。在调用该方法后，由于映射被删除了，因此该 URL 也就不再起作用了。</p>
+<h2 id="blob-转换为-base64">Blob 转换为 base64</h2>
+<p><code>URL.createObjectURL</code> 的一个替代方法是，将 <code>Blob</code> 转换为 base64-编码的字符串。</p>
+<p>这种编码将二进制数据表示为一个由 0 到 64 的 ASCII 码组成的字符串，非常安全且“可读“。更重要的是 —— 我们可以在 &quot;data-url&quot; 中使用此编码。</p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs">&quot;data-url&quot;</a> 的形式为 <code>data:[&lt;mediatype&gt;][;base64],&lt;data&gt;</code>。我们可以在任何地方使用这种 url，和使用“常规” url 一样。</p>
+<p>例如，这是一个笑脸：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7&quot;</span>&gt;</span></code></pre>
+<p>浏览器将解码该字符串，并显示图像：<img src="data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7"></p>
+<p>我们使用内建的 <code>FileReader</code> 对象来将 <code>Blob</code> 转换为 base64。它可以将 <code>Blob</code> 中的数据读取为多种格式。在<a href="info:file">下一章</a> 我们将更深入地介绍它。</p>
+<p>下面是下载 <code>Blob</code> 的示例，这次是通过 base-64：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> link = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;a&#x27;</span>);
+link.download = <span class="hljs-string">&#x27;hello.txt&#x27;</span>;
+
+<span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">new</span> Blob([<span class="hljs-string">&#x27;Hello, world!&#x27;</span>], {<span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text/plain&#x27;</span>});
+
+*!*
+<span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader();
+reader.readAsDataURL(blob); <span class="hljs-comment">// 将 Blob 转换为 base64 并调用 onload</span>
+*/!*
+
+reader.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  link.href = reader.result; <span class="hljs-comment">// data url</span>
+  link.click();
+};</code></pre>
+<p>这两种从 <code>Blob</code> 创建 URL 的方法都可以用。但通常 <code>URL.createObjectURL(blob)</code> 更简单快捷。</p>
+<pre><code class="language-compare">+ 如果介意内存，我们需要撤销（revoke）它们
++ 直接访问 `Blob`，无需“编码/解码”
+- 无需撤销（revoke）任何操作。
+- 对大的 `Blob` 进行编码时，性能和内存会有损耗。</code></pre>
+<h2 id="image-转换为-blob">Image 转换为 blob</h2>
+<p>我们可以创建一个图像（image）的、图像的一部分、或者甚至创建一个页面截图的 <code>Blob</code>。这样方便将其上传至其他地方。</p>
+<p>图像操作是通过 <code>&lt;canvas&gt;</code> 元素来实现的：</p>
+<ol>
+<li>使用 <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage">canvas.drawImage</a> 在 canvas 上绘制图像（或图像的一部分）。</li>
+<li>调用 canvas 方法 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob">.toBlob(callback, format, quality)</a> 创建一个 <code>Blob</code>，并在创建完成后使用其运行 <code>callback</code>。</li>
+</ol>
+<p>在下面这个示例中，图像只是被复制了，不过我们可以在创建 blob 之前，从中裁剪图像，或者在 canvas 上对其进行转换：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 获取任何图像</span>
+<span class="hljs-keyword">let</span> img = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&#x27;img&#x27;</span>);
+
+<span class="hljs-comment">// 生成同尺寸的 &lt;canvas&gt;</span>
+<span class="hljs-keyword">let</span> canvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;canvas&#x27;</span>);
+canvas.width = img.clientWidth;
+canvas.height = img.clientHeight;
+
+<span class="hljs-keyword">let</span> context = canvas.getContext(<span class="hljs-string">&#x27;2d&#x27;</span>);
+
+<span class="hljs-comment">// 向其中复制图像（此方法允许剪裁图像）</span>
+context.drawImage(img, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+<span class="hljs-comment">// 我们 context.rotate()，并在 canvas 上做很多其他事情</span>
+
+<span class="hljs-comment">// toBlob 是异步操作，结束后会调用 callback</span>
+canvas.toBlob(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">blob</span>) </span>{
+  <span class="hljs-comment">// blob 创建完成，下载它</span>
+  <span class="hljs-keyword">let</span> link = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;a&#x27;</span>);
+  link.download = <span class="hljs-string">&#x27;example.png&#x27;</span>;
+
+  link.href = URL.createObjectURL(blob);
+  link.click();
+
+  <span class="hljs-comment">// 删除内部 blob 引用，这样浏览器可以从内存中将其清除</span>
+  URL.revokeObjectURL(link.href);
+}, <span class="hljs-string">&#x27;image/png&#x27;</span>);</code></pre>
+<p>如果我们更喜欢 <code>async/await</code> 而不是 callback：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> canvasElem.toBlob(resolve, <span class="hljs-string">&#x27;image/png&#x27;</span>));</code></pre>
+<p>对于页面截屏，我们可以使用诸如 <a href="https://github.com/niklasvh/html2canvas">https://github.com/niklasvh/html2canvas</a> 之类的库。它所做的只是扫一遍浏览器页面，并将其绘制在 <code>&lt;canvas&gt;</code> 上。然后，我们就可以像上面一样获取一个它的 <code>Blob</code>。</p>
+<h2 id="blob-转换为-arraybuffer">Blob 转换为 ArrayBuffer</h2>
+<p><code>Blob</code> 构造器允许从几乎所有东西创建 blob，包括任何 <code>BufferSource</code>。</p>
+<p>但是，如果我们需要执行低级别的操作的话，则可以使用 <code>FileReader</code> 从 blob 中获取最低级别的 <code>ArrayBuffer</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 从 blob 获取 arrayBuffer</span>
+<span class="hljs-keyword">let</span> fileReader = <span class="hljs-keyword">new</span> FileReader();
+
+*!*
+fileReader.readAsArrayBuffer(blob);
+*/!*
+
+fileReader.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">let</span> arrayBuffer = fileReader.result;
+};</code></pre>
+<h2 id="总结">总结</h2>
+<p><code>ArrayBuffer</code>，<code>Uint8Array</code> 及其他 <code>BufferSource</code> 是“二进制数据”，而 <a href="https://www.w3.org/TR/FileAPI/#dfn-Blob">Blob</a> 则表示“具有类型的二进制数据”。</p>
+<p>这样可以方便 <code>Blob</code> 用于在浏览器中非常常见的上传/下载操作。</p>
+<p><a href="info:xmlhttprequest">XMLHttpRequest</a>，<a href="info:fetch">fetch</a> 等进行 Web 请求的方法可以自然地使用 <code>Blob</code>，也可以使用其他类型的二进制数据。</p>
+<p>我们可以轻松地在 <code>Blob</code> 和低级别的二进制数据类型之间进行转换：</p>
+<ul>
+<li>我们可以使用 <code>new Blob(...)</code> 构造函数从一个类型化数组（typed array）创建 <code>Blob</code>。</li>
+<li>我们可以使用 <code>FileReader</code> 从 <code>Blob</code> 中取回 <code>ArrayBuffer</code>，然后在其上创建一个视图（view），用于低级别的二进制处理。</li>
+</ul>

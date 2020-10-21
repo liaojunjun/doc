@@ -1,0 +1,20 @@
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+};
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">wrap</span>(<span class="hljs-params">target</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(target, {
+    get(target, prop, receiver) {
+      <span class="hljs-keyword">if</span> (prop <span class="hljs-keyword">in</span> target) {
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Reflect</span>.get(target, prop, receiver);
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">ReferenceError</span>(<span class="hljs-string">`Property doesn&#x27;t exist: &quot;<span class="hljs-subst">${prop}</span>&quot;`</span>)
+      }
+    }
+  });
+}
+
+user = wrap(user);
+
+alert(user.name); <span class="hljs-comment">// John</span>
+alert(user.age); <span class="hljs-comment">// ReferenceError: Property doesn&#x27;t exist &quot;age&quot;</span></code></pre>

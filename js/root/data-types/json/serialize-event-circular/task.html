@@ -1,0 +1,33 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="排除反向引用">排除反向引用</h1>
+<p>在简单循环引用的情况下，我们可以通过名称排除序列化中违规的属性。</p>
+<p>但是，有时我们不能只使用名称，因为它既可能在循环引用中也可能在常规属性中使用。因此，我们可以通过属性值来检查属性。</p>
+<p>编写 <code>replacer</code> 函数，移除引用 <code>meetup</code> 的属性，并将其他所有属性序列化：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> room = {
+  <span class="hljs-attr">number</span>: <span class="hljs-number">23</span>
+};
+
+<span class="hljs-keyword">let</span> meetup = {
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Conference&quot;</span>,
+  <span class="hljs-attr">occupiedBy</span>: [{<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>}, {<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Alice&quot;</span>}],
+  <span class="hljs-attr">place</span>: room
+};
+
+*!*
+<span class="hljs-comment">// 循环引用</span>
+room.occupiedBy = meetup;
+meetup.self = meetup;
+*/!*
+
+alert( <span class="hljs-built_in">JSON</span>.stringify(meetup, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">replacer</span>(<span class="hljs-params">key, value</span>) </span>{
+  <span class="hljs-comment">/* your code */</span>
+}));
+
+<span class="hljs-comment">/* 结果应该是：
+{
+  &quot;title&quot;:&quot;Conference&quot;,
+  &quot;occupiedBy&quot;:[{&quot;name&quot;:&quot;John&quot;},{&quot;name&quot;:&quot;Alice&quot;}],
+  &quot;place&quot;:{&quot;number&quot;:23}
+}
+*/</span></code></pre>

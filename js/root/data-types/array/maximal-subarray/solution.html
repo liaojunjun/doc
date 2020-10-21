@@ -1,0 +1,74 @@
+<h1 id="慢的解决方案">慢的解决方案</h1>
+<p>我们可以计算所有可能的子集的和。</p>
+<p>最简单的方法就是获取每个元素然后计算从它开始所有子数组的和。</p>
+<p>以 <code>[-1, 2, 3, -9, 11]</code> 为例：</p>
+<pre><code class="language-js"><span class="hljs-comment">// 从 -1 开始：</span>
+<span class="hljs-number">-1</span>
+<span class="hljs-number">-1</span> + <span class="hljs-number">2</span>
+<span class="hljs-number">-1</span> + <span class="hljs-number">2</span> + <span class="hljs-number">3</span>
+<span class="hljs-number">-1</span> + <span class="hljs-number">2</span> + <span class="hljs-number">3</span> + (<span class="hljs-number">-9</span>)
+<span class="hljs-number">-1</span> + <span class="hljs-number">2</span> + <span class="hljs-number">3</span> + (<span class="hljs-number">-9</span>) + <span class="hljs-number">11</span>
+
+<span class="hljs-comment">// 从 2 开始：</span>
+<span class="hljs-number">2</span>
+<span class="hljs-number">2</span> + <span class="hljs-number">3</span>
+<span class="hljs-number">2</span> + <span class="hljs-number">3</span> + (<span class="hljs-number">-9</span>)
+<span class="hljs-number">2</span> + <span class="hljs-number">3</span> + (<span class="hljs-number">-9</span>) + <span class="hljs-number">11</span>
+
+<span class="hljs-comment">// 从 3 开始：</span>
+<span class="hljs-number">3</span>
+<span class="hljs-number">3</span> + (<span class="hljs-number">-9</span>)
+<span class="hljs-number">3</span> + (<span class="hljs-number">-9</span>) + <span class="hljs-number">11</span>
+
+<span class="hljs-comment">// 从 -9 开始：</span>
+<span class="hljs-number">-9</span>
+<span class="hljs-number">-9</span> + <span class="hljs-number">11</span>
+
+<span class="hljs-comment">// 从 -11 开始：</span>
+<span class="hljs-number">-11</span></code></pre>
+<p>这样写出来的代码实际上是一个嵌套循环：外部循环遍历数组所有元素，内部循环计算从当前元素开始的所有子数组各自的和。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMaxSubSum</span>(<span class="hljs-params">arr</span>) </span>{
+  <span class="hljs-keyword">let</span> maxSum = <span class="hljs-number">0</span>; <span class="hljs-comment">// 如果没有取到任何元素，就返回 0</span>
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; arr.length; i++) {
+    <span class="hljs-keyword">let</span> sumFixedStart = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = i; j &lt; arr.length; j++) {
+      sumFixedStart += arr[j];
+      maxSum = <span class="hljs-built_in">Math</span>.max(maxSum, sumFixedStart);
+    }
+  }
+
+  <span class="hljs-keyword">return</span> maxSum;
+}
+
+alert( getMaxSubSum([<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">-9</span>]) ); <span class="hljs-comment">// 5</span>
+alert( getMaxSubSum([<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">-9</span>, <span class="hljs-number">11</span>]) ); <span class="hljs-comment">// 11</span>
+alert( getMaxSubSum([<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]) ); <span class="hljs-comment">// 3</span>
+alert( getMaxSubSum([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]) ); <span class="hljs-comment">// 6</span>
+alert( getMaxSubSum([<span class="hljs-number">100</span>, <span class="hljs-number">-9</span>, <span class="hljs-number">2</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">5</span>]) ); <span class="hljs-comment">// 100</span></code></pre>
+<p>该方案的时间复杂度是 <a href="https://en.wikipedia.org/wiki/Big_O_notation">O(n<sup>2</sup>)</a>。也就是说，如果我们把数组大小增加 2 倍，那么算法的运行时间将会延长4倍。</p>
+<p>对于大型数组（1000，10000 或者更多项）这种算法会导致严重的时间消耗。</p>
+<h1 id="快的解决方案">快的解决方案</h1>
+<p>让我们遍历数组，将当前局部元素的和保存在变量 <code>s</code> 中。如果 <code>s</code> 在某一点变成负数了，就重新分配 <code>s=0</code>。所有 <code>s</code> 中的最大值就是答案。</p>
+<p>如果文字描述不太好理解，就直接看下面的代码吧，真的很短：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMaxSubSum</span>(<span class="hljs-params">arr</span>) </span>{
+  <span class="hljs-keyword">let</span> maxSum = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> partialSum = <span class="hljs-number">0</span>;
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> item <span class="hljs-keyword">of</span> arr) { <span class="hljs-comment">// arr 中的每个 item</span>
+    partialSum += item; <span class="hljs-comment">// 将其加到 partialSum</span>
+    maxSum = <span class="hljs-built_in">Math</span>.max(maxSum, partialSum); <span class="hljs-comment">// 记住最大值</span>
+    <span class="hljs-keyword">if</span> (partialSum &lt; <span class="hljs-number">0</span>) partialSum = <span class="hljs-number">0</span>; <span class="hljs-comment">// 如果是负数就置为 0</span>
+  }
+
+  <span class="hljs-keyword">return</span> maxSum;
+}
+
+alert( getMaxSubSum([<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">-9</span>]) ); <span class="hljs-comment">// 5</span>
+alert( getMaxSubSum([<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">-9</span>, <span class="hljs-number">11</span>]) ); <span class="hljs-comment">// 11</span>
+alert( getMaxSubSum([<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]) ); <span class="hljs-comment">// 3</span>
+alert( getMaxSubSum([<span class="hljs-number">100</span>, <span class="hljs-number">-9</span>, <span class="hljs-number">2</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">5</span>]) ); <span class="hljs-comment">// 100</span>
+alert( getMaxSubSum([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]) ); <span class="hljs-comment">// 6</span>
+alert( getMaxSubSum([<span class="hljs-number">-1</span>, <span class="hljs-number">-2</span>, <span class="hljs-number">-3</span>]) ); <span class="hljs-comment">// 0</span></code></pre>
+<p>该算法只需要遍历 1 轮数组，所以时间复杂度是 O(n)。</p>
+<p>你也可以在这获取更多该算法的细节信息：<a href="http://en.wikipedia.org/wiki/Maximum_subarray_problem">最大子数组问题</a>。如果还是不明白，那就调试上面的例子，观察它是怎样工作的，说得再多也没有自己去调试好使。</p>

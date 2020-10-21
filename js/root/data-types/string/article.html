@@ -1,0 +1,474 @@
+<h1 id="字符串">字符串</h1>
+<p>在 JavaScript 中，文本数据被以字符串形式存储，单个字符没有单独的类型。</p>
+<p>字符串的内部格式始终是 <a href="https://en.wikipedia.org/wiki/UTF-16">UTF-16</a>，它不依赖于页面编码。</p>
+<h2 id="引号（quotes）">引号（Quotes）</h2>
+<p>让我们回忆一下引号的种类。</p>
+<p>字符串可以包含在单引号、双引号或反引号中：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> single = <span class="hljs-string">&#x27;single-quoted&#x27;</span>;
+<span class="hljs-keyword">let</span> double = <span class="hljs-string">&quot;double-quoted&quot;</span>;
+
+<span class="hljs-keyword">let</span> backticks = <span class="hljs-string">`backticks`</span>;</code></pre>
+<p>单引号和双引号基本相同。但是，反引号允许我们通过 <code>${…}</code> 将任何表达式嵌入到字符串中：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a, b</span>) </span>{
+  <span class="hljs-keyword">return</span> a + b;
+}
+
+alert(<span class="hljs-string">`1 + 2 = <span class="hljs-subst">${sum(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)}</span>.`</span>); <span class="hljs-comment">// 1 + 2 = 3.</span></code></pre>
+<p>使用反引号的另一个优点是它们允许字符串跨行：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> guestList = <span class="hljs-string">`Guests:
+ * John
+ * Pete
+ * Mary
+`</span>;
+
+alert(guestList); <span class="hljs-comment">// 客人清单，多行</span></code></pre>
+<p>看起来很自然，不是吗？但是单引号和双引号可不能这样做。</p>
+<p>如果我们使用单引号或双引号来实现字符串跨行的话，则会出现错误：</p>
+<pre><code class="language-js">let guestList = &quot;Guests: // Error: Unexpected token ILLEGAL
+  * John&quot;;</code></pre>
+<p>当不考虑多行字符串的需要时，单引号和双引号来自语言创建的古时代。反引号出现较晚，因此更通用。</p>
+<p>反引号还允许我们在第一个反引号之前指定一个“模版函数”。语法是：<code>func&#96;string&#96;</code>。函数 <code>func</code> 被自动调用，接收字符串和嵌入式表达式，并处理它们。你可以在 <a href="mdn:/JavaScript/Reference/Template_literals#Tagged_template_literals">docs</a> 中阅读更多关于它们的信息。这叫做 &quot;tagged templates&quot;。此功能可以更轻松地将字符串包装到自定义模版或其他函数中，但这很少使用。</p>
+<h2 id="特殊字符">特殊字符</h2>
+<p>我们仍然可以通过使用“换行符（newline character）”，以支持使用单引号和双引号来创建跨行字符串。换行符写作 <code>\n</code>，用来表示换行：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> guestList = <span class="hljs-string">&quot;Guests:\n * John\n * Pete\n * Mary&quot;</span>;
+
+alert(guestList); <span class="hljs-comment">// 一个多行的客人列表</span></code></pre>
+<p>例如，这两行描述的是一样的，只是书写方式不同：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str1 = <span class="hljs-string">&quot;Hello\nWorld&quot;</span>; <span class="hljs-comment">// 使用“换行符”创建的两行字符串</span>
+
+<span class="hljs-comment">// 使用反引号和普通的换行创建的两行字符串</span>
+<span class="hljs-keyword">let</span> str2 = <span class="hljs-string">`Hello
+World`</span>;
+
+alert(str1 == str2); <span class="hljs-comment">// true</span></code></pre>
+<p>还有其他不常见的“特殊”字符。</p>
+<p>这是完整列表：</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>\n</code></td>
+<td>换行</td>
+</tr>
+<tr>
+<td><code>\r</code></td>
+<td>回车：不单独使用。Windows 文本文件使用两个字符 <code>\r\n</code> 的组合来表示换行。</td>
+</tr>
+<tr>
+<td><code>\&#39;</code>, <code>\&quot;</code></td>
+<td>引号</td>
+</tr>
+<tr>
+<td><code>\\</code></td>
+<td>反斜线</td>
+</tr>
+<tr>
+<td><code>\t</code></td>
+<td>制表符</td>
+</tr>
+<tr>
+<td><code>\b</code>, <code>\f</code>, <code>\v</code></td>
+<td>退格，换页，垂直标签 —— 为了兼容性，现在已经不使用了。</td>
+</tr>
+<tr>
+<td><code>\xXX</code></td>
+<td>具有给定十六进制 Unicode <code>XX</code> 的 Unicode 字符，例如：<code>&#39;\x7A&#39;</code> 和 <code>&#39;z&#39;</code> 相同。</td>
+</tr>
+<tr>
+<td><code>\uXXXX</code></td>
+<td>以 UTF-16 编码的十六进制代码 <code>XXXX</code> 的 unicode 字符，例如 <code>\u00A9</code> —— 是版权符号 <code>©</code> 的 unicode。它必须正好是 4 个十六进制数字。</td>
+</tr>
+<tr>
+<td><code>\u{X…XXXXXX}</code>（1 到 6 个十六进制字符）</td>
+<td>具有给定 UTF-32 编码的 unicode 符号。一些罕见的字符用两个 unicode 符号编码，占用 4 个字节。这样我们就可以插入长代码了。</td>
+</tr>
+</tbody></table>
+<p>unicode 示例：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;\u00A9&quot;</span> ); <span class="hljs-comment">// ©</span>
+alert( <span class="hljs-string">&quot;\u{20331}&quot;</span> ); <span class="hljs-comment">// 佫，罕见的中国象形文字（长 unicode）</span>
+alert( <span class="hljs-string">&quot;\u{1F60D}&quot;</span> ); <span class="hljs-comment">// 😍，笑脸符号（另一个长 unicode）</span></code></pre>
+<p>所有的特殊字符都以反斜杠字符 <code>\</code> 开始。它也被称为“转义字符”。</p>
+<p>如果我们想要在字符串中插入一个引号，我们也会使用它。</p>
+<p>例如：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;I*!*\&#x27;*/!*m the Walrus!&#x27;</span> ); <span class="hljs-comment">// *!*I&#x27;m*/!* the Walrus!</span></code></pre>
+<p>正如你所看到的，我们必须在内部引号前加上反斜杠 <code>\&#39;</code>，否则它将表示字符串结束。</p>
+<p>当然，只有与外部闭合引号相同的引号才需要转义。因此，作为一个更优雅的解决方案，我们可以改用双引号或者反引号：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">`I&#x27;m the Walrus!`</span> ); <span class="hljs-comment">// I&#x27;m the Walrus!</span></code></pre>
+<p>注意反斜杠 <code>\</code> 在 JavaScript 中用于正确读取字符串，然后消失。内存中的字符串没有 <code>\</code>。你从上述示例中的 <code>alert</code> 可以清楚地看到这一点。</p>
+<p>但是如果我们需要在字符串中显示一个实际的反斜杠 <code>\</code> 应该怎么做？</p>
+<p>我们可以这样做，只需要将其书写两次 <code>\\</code>：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">`The backslash: \\`</span> ); <span class="hljs-comment">// The backslash: \</span></code></pre>
+<h2 id="字符串长度">字符串长度</h2>
+<p><code>length</code> 属性表示字符串长度：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">`My\n`</span>.length ); <span class="hljs-comment">// 3</span></code></pre>
+<p>注意 <code>\n</code> 是一个单独的“特殊”字符，所以长度确实是 <code>3</code>。</p>
+<p>```warn header=&quot;<code>length</code> 是一个属性&quot;
+掌握其他编程语言的人，有时会错误地调用 <code>str.length()</code> 而不是 <code>str.length</code>。这是行不通的。</p>
+<p>请注意 <code>str.length</code> 是一个数字属性，而不是函数。后面不需要添加括号。</p>
+<pre><code>
+## 访问字符
+
+要获取在 `pos` 位置的一个字符，可以使用方括号 `[pos]` 或者调用 [str.charAt(pos)](mdn:js/String/charAt) 方法。第一个字符从零位置开始：
+
+```js run
+let str = `Hello`;
+
+// 第一个字符
+alert( str[0] ); // H
+alert( str.charAt(0) ); // H
+
+// 最后一个字符
+alert( str[str.length - 1] ); // o</code></pre>
+<p>方括号是获取字符的一种现代化方法，而 <code>charAt</code> 是历史原因才存在的。</p>
+<p>它们之间的唯一区别是，如果没有找到字符，<code>[]</code> 返回 <code>undefined</code>，而 <code>charAt</code> 返回一个空字符串：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`Hello`</span>;
+
+alert( str[<span class="hljs-number">1000</span>] ); <span class="hljs-comment">// undefined</span>
+alert( str.charAt(<span class="hljs-number">1000</span>) ); <span class="hljs-comment">// &#x27;&#x27;（空字符串）</span></code></pre>
+<p>我们也可以使用 <code>for..of</code> 遍历字符：</p>
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> char <span class="hljs-keyword">of</span> <span class="hljs-string">&quot;Hello&quot;</span>) {
+  alert(char); <span class="hljs-comment">// H,e,l,l,o（char 变为 &quot;H&quot;，然后是 &quot;e&quot;，然后是 &quot;l&quot; 等）</span>
+}</code></pre>
+<h2 id="字符串是不可变的">字符串是不可变的</h2>
+<p>在 JavaScript 中，字符串不可更改。改变字符是不可能的。</p>
+<p>我们证明一下为什么不可能：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;Hi&#x27;</span>;
+
+str[<span class="hljs-number">0</span>] = <span class="hljs-string">&#x27;h&#x27;</span>; <span class="hljs-comment">// error</span>
+alert( str[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// 无法运行</span></code></pre>
+<p>通常的解决方法是创建一个新的字符串，并将其分配给 <code>str</code> 而不是以前的字符串。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;Hi&#x27;</span>;
+
+str = <span class="hljs-string">&#x27;h&#x27;</span> + str[<span class="hljs-number">1</span>];  <span class="hljs-comment">// 替换字符串</span>
+
+alert( str ); <span class="hljs-comment">// hi</span></code></pre>
+<p>在接下来的章节，我们将看到更多相关示例。</p>
+<h2 id="改变大小写">改变大小写</h2>
+<p><a href="mdn:js/String/toLowerCase">toLowerCase()</a> 和 <a href="mdn:js/String/toUpperCase">toUpperCase()</a> 方法可以改变大小写：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;Interface&#x27;</span>.toUpperCase() ); <span class="hljs-comment">// INTERFACE</span>
+alert( <span class="hljs-string">&#x27;Interface&#x27;</span>.toLowerCase() ); <span class="hljs-comment">// interface</span></code></pre>
+<p>或者我们想要使一个字符变成小写：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;Interface&#x27;</span>[<span class="hljs-number">0</span>].toLowerCase() ); <span class="hljs-comment">// &#x27;i&#x27;</span></code></pre>
+<h2 id="查找子字符串">查找子字符串</h2>
+<p>在字符串中查找子字符串有很多种方法。</p>
+<h3 id="strindexof">str.indexOf</h3>
+<p>第一个方法是 <a href="mdn:js/String/indexOf">str.indexOf(substr, pos)</a>。</p>
+<p>它从给定位置 <code>pos</code> 开始，在 <code>str</code> 中查找 <code>substr</code>，如果没有找到，则返回 <code>-1</code>，否则返回匹配成功的位置。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;Widget with id&#x27;</span>;
+
+alert( str.indexOf(<span class="hljs-string">&#x27;Widget&#x27;</span>) ); <span class="hljs-comment">// 0，因为 &#x27;Widget&#x27; 一开始就被找到</span>
+alert( str.indexOf(<span class="hljs-string">&#x27;widget&#x27;</span>) ); <span class="hljs-comment">// -1，没有找到，检索是大小写敏感的</span>
+
+alert( str.indexOf(<span class="hljs-string">&quot;id&quot;</span>) ); <span class="hljs-comment">// 1，&quot;id&quot; 在位置 1 处（……idget 和 id）</span></code></pre>
+<p>可选的第二个参数允许我们从给定的起始位置开始检索。</p>
+<p>例如，<code>&quot;id&quot;</code> 第一次出现的位置是 <code>1</code>。查询下一个存在位置时，我们从 <code>2</code> 开始检索：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;Widget with id&#x27;</span>;
+
+alert( str.indexOf(<span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-number">2</span>) ) <span class="hljs-comment">// 12</span></code></pre>
+<p>如果我们对所有存在位置都感兴趣，可以在一个循环中使用 <code>indexOf</code>。每一次新的调用都发生在上一匹配位置之后：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;As sly as a fox, as strong as an ox&#x27;</span>;
+
+<span class="hljs-keyword">let</span> target = <span class="hljs-string">&#x27;as&#x27;</span>; <span class="hljs-comment">// 这是我们要查找的目标</span>
+
+<span class="hljs-keyword">let</span> pos = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+  <span class="hljs-keyword">let</span> foundPos = str.indexOf(target, pos);
+  <span class="hljs-keyword">if</span> (foundPos == <span class="hljs-number">-1</span>) <span class="hljs-keyword">break</span>;
+
+  alert( <span class="hljs-string">`Found at <span class="hljs-subst">${foundPos}</span>`</span> );
+  pos = foundPos + <span class="hljs-number">1</span>; <span class="hljs-comment">// 继续从下一个位置查找</span>
+}</code></pre>
+<p>相同的算法可以简写：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;As sly as a fox, as strong as an ox&quot;</span>;
+<span class="hljs-keyword">let</span> target = <span class="hljs-string">&quot;as&quot;</span>;
+
+*!*
+<span class="hljs-keyword">let</span> pos = <span class="hljs-number">-1</span>;
+<span class="hljs-keyword">while</span> ((pos = str.indexOf(target, pos + <span class="hljs-number">1</span>)) != <span class="hljs-number">-1</span>) {
+  alert( pos );
+}
+*/!*</code></pre>
+<p>```smart header=&quot;<code>str.lastIndexOf(substr, pos)</code>&quot;
+还有一个类似的方法 <a href="mdn:js/String/lastIndexOf">str.lastIndexOf(substr, position)</a>，它从字符串的末尾开始搜索到开头。</p>
+<p>它会以相反的顺序列出这些事件。</p>
+<pre><code>
+在 `if` 测试中 `indexOf` 有一点不方便。我们不能像这样把它放在 `if` 中：
+
+```js run
+let str = &quot;Widget with id&quot;;
+
+if (str.indexOf(&quot;Widget&quot;)) {
+    alert(&quot;We found it&quot;); // 不工作！
+}</code></pre>
+<p>上述示例中的 <code>alert</code> 不会显示，因为 <code>str.indexOf(&quot;Widget&quot;)</code> 返回 <code>0</code>（意思是它在起始位置就查找到了匹配项）。是的，但是 <code>if</code> 认为 <code>0</code> 表示 <code>false</code>。</p>
+<p>因此我们应该检查 <code>-1</code>，像这样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Widget with id&quot;</span>;
+
+*!*
+<span class="hljs-keyword">if</span> (str.indexOf(<span class="hljs-string">&quot;Widget&quot;</span>) != <span class="hljs-number">-1</span>) {
+*/!*
+    alert(<span class="hljs-string">&quot;We found it&quot;</span>); <span class="hljs-comment">// 现在工作了！</span>
+}</code></pre>
+<h4 id="按位（bitwise）not-技巧">按位（bitwise）NOT 技巧</h4>
+<p>这里使用的一个老技巧是 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Bitwise_NOT">bitwise NOT</a> <code>~</code> 运算符。它将数字转换为 32-bit 整数（如果存在小数部分，则删除小数部分），然后对其二进制表示形式中的所有位均取反。</p>
+<p>实际上，这意味着一件很简单的事儿：对于 32-bit 整数，<code>~n</code> 等于 <code>-(n+1)</code>。</p>
+<p>例如：</p>
+<pre><code class="language-js">alert( ~<span class="hljs-number">2</span> ); <span class="hljs-comment">// -3，和 -(2+1) 相同</span>
+alert( ~<span class="hljs-number">1</span> ); <span class="hljs-comment">// -2，和 -(1+1) 相同</span>
+alert( ~<span class="hljs-number">0</span> ); <span class="hljs-comment">// -1，和 -(0+1) 相同</span>
+*!*
+alert( ~<span class="hljs-number">-1</span> ); <span class="hljs-comment">// 0，和 -(-1+1) 相同</span>
+*/!*</code></pre>
+<p>正如我们看到这样，只有当 <code>n == -1</code> 时，<code>~n</code> 才为零（适用于任何 32-bit 带符号的整数 <code>n</code>）。</p>
+<p>因此，仅当 <code>indexOf</code> 的结果不是 <code>-1</code> 时，检查 <code>if ( ~str.indexOf(&quot;...&quot;) )</code> 才为真。换句话说，当有匹配时。</p>
+<p>人们用它来简写 <code>indexOf</code> 检查：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Widget&quot;</span>;
+
+<span class="hljs-keyword">if</span> (~str.indexOf(<span class="hljs-string">&quot;Widget&quot;</span>)) {
+  alert( <span class="hljs-string">&#x27;Found it!&#x27;</span> ); <span class="hljs-comment">// 正常运行</span>
+}</code></pre>
+<p>通常不建议以非显而易见的方式使用语言特性，但这种特殊技巧在旧代码中仍被广泛使用，所以我们应该理解它。</p>
+<p>只要记住：<code>if (~str.indexOf(...))</code> 读作 &quot;if found&quot;。</p>
+<p>确切地说，由于 <code>~</code> 运算符将大数字截断为 32 位，因此存在给出 <code>0</code> 的其他数字，最小的数字是 <code>~4294967295=0</code>。这使得这种检查只有在字符串没有那么长的情况下才是正确的。</p>
+<p>现在我们只会在旧的代码中看到这个技巧，因为现代 JavaScript 提供了 <code>.includes</code> 方法（见下文）。</p>
+<h3 id="includes，startswith，endswith">includes，startsWith，endsWith</h3>
+<p>更现代的方法 <a href="mdn:js/String/includes">str.includes(substr, pos)</a> 根据 <code>str</code> 中是否包含 <code>substr</code> 来返回 <code>true/false</code>。</p>
+<p>如果我们需要检测匹配，但不需要它的位置，那么这是正确的选择：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Widget with id&quot;</span>.includes(<span class="hljs-string">&quot;Widget&quot;</span>) ); <span class="hljs-comment">// true</span>
+
+alert( <span class="hljs-string">&quot;Hello&quot;</span>.includes(<span class="hljs-string">&quot;Bye&quot;</span>) ); <span class="hljs-comment">// false</span></code></pre>
+<p><code>str.includes</code> 的第二个可选参数是开始搜索的起始位置：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Midget&quot;</span>.includes(<span class="hljs-string">&quot;id&quot;</span>) ); <span class="hljs-comment">// true</span>
+alert( <span class="hljs-string">&quot;Midget&quot;</span>.includes(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-number">3</span>) ); <span class="hljs-comment">// false, 从位置 3 开始没有 &quot;id&quot;</span></code></pre>
+<p>方法 <a href="mdn:js/String/startsWith">str.startsWith</a> 和 <a href="mdn:js/String/endsWith">str.endsWith</a> 的功能与其名称所表示的意思相同：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;Widget&quot;</span>.startsWith(<span class="hljs-string">&quot;Wid&quot;</span>) ); <span class="hljs-comment">// true，&quot;Widget&quot; 以 &quot;Wid&quot; 开始</span>
+alert( <span class="hljs-string">&quot;Widget&quot;</span>.endsWith(<span class="hljs-string">&quot;get&quot;</span>) ); <span class="hljs-comment">// true，&quot;Widget&quot; 以 &quot;get&quot; 结束</span></code></pre>
+<h2 id="获取子字符串">获取子字符串</h2>
+<p>JavaScript 中有三种获取字符串的方法：<code>substring</code>、<code>substr</code> 和 <code>slice</code>。</p>
+<p><code>str.slice(start [, end])</code>
+: 返回字符串从 <code>start</code> 到（但不包括）<code>end</code> 的部分。</p>
+<pre><code>例如：
+
+```js run
+let str = &quot;stringify&quot;;
+alert( str.slice(0, 5) ); // &#x27;strin&#x27;，从 0 到 5 的子字符串（不包括 5）
+alert( str.slice(0, 1) ); // &#x27;s&#x27;，从 0 到 1，但不包括 1，所以只有在 0 处的字符
+```
+
+如果没有第二个参数，`slice` 会一直运行到字符串末尾：
+
+```js run
+let str = &quot;st*!*ringify*/!*&quot;;
+alert( str.slice(2) ); // 从第二个位置直到结束
+```
+
+`start/end` 也有可能是负值。它们的意思是起始位置从字符串结尾计算：
+
+```js run
+let str = &quot;strin*!*gif*/!*y&quot;;
+
+// 从右边的第四个位置开始，在右边的第一个位置结束
+alert( str.slice(-4, -1) ); // &#x27;gif&#x27;
+```</code></pre>
+<p><code>str.substring(start [, end])</code>
+: 返回字符串在 <code>start</code> 和 <code>end</code> <strong>之间</strong> 的部分。</p>
+<pre><code>这与 `slice` 几乎相同，但它允许 `start` 大于 `end`。
+
+例如：
+
+```js run
+let str = &quot;st*!*ring*/!*ify&quot;;
+
+// 这些对于 substring 是相同的
+alert( str.substring(2, 6) ); // &quot;ring&quot;
+alert( str.substring(6, 2) ); // &quot;ring&quot;
+
+// ……但对 slice 是不同的：
+alert( str.slice(2, 6) ); // &quot;ring&quot;（一样）
+alert( str.slice(6, 2) ); // &quot;&quot;（空字符串）
+
+```
+
+不支持负参数（不像 slice），它们被视为 `0`。</code></pre>
+<p><code>str.substr(start [, length])</code>
+: 返回字符串从 <code>start</code> 开始的给定 <code>length</code> 的部分。</p>
+<pre><code>与以前的方法相比，这个允许我们指定 `length` 而不是结束位置：
+
+```js run
+let str = &quot;st*!*ring*/!*ify&quot;;
+alert( str.substr(2, 4) ); // &#x27;ring&#x27;，从位置 2 开始，获取 4 个字符
+```
+
+第一个参数可能是负数，从结尾算起：
+
+```js run
+let str = &quot;strin*!*gi*/!*fy&quot;;
+alert( str.substr(-4, 2) ); // &#x27;gi&#x27;，从第 4 位获取 2 个字符
+```</code></pre>
+<p>我们回顾一下这些方法，以免混淆：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>选择方式……</th>
+<th>负值参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>slice(start, end)</code></td>
+<td>从 <code>start</code> 到 <code>end</code>（不含 <code>end</code>）</td>
+<td>允许</td>
+</tr>
+<tr>
+<td><code>substring(start, end)</code></td>
+<td><code>start</code> 与 <code>end</code> 之间（包括 <code>start</code>，但不包括 <code>end</code>）</td>
+<td>负值代表 <code>0</code></td>
+</tr>
+<tr>
+<td><code>substr(start, length)</code></td>
+<td>从 <code>start</code> 开始获取长为 <code>length</code> 的字符串</td>
+<td>允许 <code>start</code> 为负数</td>
+</tr>
+</tbody></table>
+<pre><code class="language-smart">它们可以完成这项工作。形式上，`substr` 有一个小缺点：它不是在 JavaScript 核心规范中描述的，而是在附录 B 中，它涵盖了主要由于历史原因而存在的仅浏览器特性。因此，非浏览器环境可能无法支持它。但实际上它在任何地方都有效。
+
+相较于其他两个变体，`slice` 稍微灵活一些，它允许以负值作为参数并且写法更简短。因此仅仅记住这三种方法中的 `slice` 就足够了。</code></pre>
+<h2 id="比较字符串">比较字符串</h2>
+<p>正如我们从 <a href="info:comparison">info:comparison</a> 一章中了解到的，字符串按字母顺序逐字比较。</p>
+<p>不过，也有一些奇怪的地方。</p>
+<ol>
+<li><p>小写字母总是大于大写字母：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;a&#x27;</span> &gt; <span class="hljs-string">&#x27;Z&#x27;</span> ); <span class="hljs-comment">// true</span></code></pre>
+</li>
+<li><p>带变音符号的字母存在“乱序”的情况：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;Österreich&#x27;</span> &gt; <span class="hljs-string">&#x27;Zealand&#x27;</span> ); <span class="hljs-comment">// true</span></code></pre>
+<p> 如果我们对这些国家名进行排序，可能会导致奇怪的结果。通常，人们会期望 <code>Zealand</code> 在名单中的 <code>Österreich</code> 之后出现。</p>
+</li>
+</ol>
+<p>为了明白发生了什么，我们回顾一下在 JavaScript 中字符串的内部表示。</p>
+<p>所有的字符串都使用 <a href="https://en.wikipedia.org/wiki/UTF-16">UTF-16</a> 编码。即：每个字符都有对应的数字代码。有特殊的方法可以获取代码表示的字符，以及字符对应的代码。</p>
+<p><code>str.codePointAt(pos)</code>
+: 返回在 <code>pos</code> 位置的字符代码 :</p>
+<pre><code>```js run
+// 不同的字母有不同的代码
+alert( &quot;z&quot;.codePointAt(0) ); // 122
+alert( &quot;Z&quot;.codePointAt(0) ); // 90
+```</code></pre>
+<p><code>String.fromCodePoint(code)</code>
+: 通过数字 <code>code</code> 创建字符</p>
+<pre><code>```js run
+alert( String.fromCodePoint(90) ); // Z
+```
+
+我们还可以用 `\u` 后跟十六进制代码，通过这些代码添加 unicode 字符：
+
+```js run
+// 在十六进制系统中 90 为 5a
+alert( &#x27;\u005a&#x27; ); // Z
+```</code></pre>
+<p>现在我们看一下代码为 <code>65..220</code> 的字符（拉丁字母和一些额外的字符），方法是创建一个字符串：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;&#x27;</span>;
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">65</span>; i &lt;= <span class="hljs-number">220</span>; i++) {
+  str += <span class="hljs-built_in">String</span>.fromCodePoint(i);
+}
+alert( str );
+<span class="hljs-comment">// ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~</span>
+<span class="hljs-comment">// ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜ</span></code></pre>
+<p>看到没？先是大写字符，然后是一些特殊字符，然后是小写字符，而 <code>Ö</code> 几乎是最后输出。</p>
+<p>现在很明显为什么 <code>a &gt; Z</code>。</p>
+<p>字符通过数字代码进行比较。越大的代码意味着字符越大。<code>a</code>（97）的代码大于 <code>Z</code>（90）的代码。</p>
+<ul>
+<li>所有小写字母追随在大写字母之后，因为它们的代码更大。</li>
+<li>一些像 <code>Ö</code> 的字母与主要字母表不同。这里，它的代码比任何从 <code>a</code> 到 <code>z</code> 的代码都要大。</li>
+</ul>
+<h3 id="正确的比较">正确的比较</h3>
+<p>执行字符串比较的“正确”算法比看起来更复杂，因为不同语言的字母都不相同。</p>
+<p>因此浏览器需要知道要比较的语言。</p>
+<p>幸运的是，所有现代浏览器（IE10- 需要额外的库 <a href="https://github.com/andyearnshaw/Intl.js/">Intl.JS</a>) 都支持国际化标准 <a href="http://www.ecma-international.org/ecma-402/1.0/ECMA-402.pdf">ECMA-402</a>。</p>
+<p>它提供了一种特殊的方法来比较不同语言的字符串，遵循它们的规则。</p>
+<p>调用 <a href="mdn:js/String/localeCompare">str.localeCompare(str2)</a> 会根据语言规则返回一个整数，这个整数能表明 <code>str</code> 是否在 <code>str2</code> 前，后或者等于它：</p>
+<ul>
+<li>如果 <code>str</code> 小于 <code>str2</code> 则返回负数。</li>
+<li>如果 <code>str</code> 大于 <code>str2</code> 则返回正数。</li>
+<li>如果它们相等则返回 <code>0</code>。</li>
+</ul>
+<p>例如：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;Österreich&#x27;</span>.localeCompare(<span class="hljs-string">&#x27;Zealand&#x27;</span>) ); <span class="hljs-comment">// -1</span></code></pre>
+<p>这个方法实际上在 <a href="mdn:js/String/localeCompare">文档</a> 中指定了两个额外的参数，这两个参数允许它指定语言（默认语言从环境中获取，字符顺序视语言不同而不同）并设置诸如区别大小之类的附加规则，或应该将 <code>&quot;a&quot;</code> 和 <code>&quot;á&quot;</code> 看作相等情况等。</p>
+<h2 id="内部，unicode">内部，Unicode</h2>
+<pre><code class="language-warn">这部分会深入字符串内部。如果你计划处理 emoji、罕见的数学或象形文字或其他罕见的符号，这些知识会对你有用。
+
+如果你不打算支持它们，你可以跳过这一部分。</code></pre>
+<h3 id="代理对">代理对</h3>
+<p>所有常用的字符都是一个 2 字节的代码。大多数欧洲语言，数字甚至大多数象形文字中的字母都有 2 字节的表示形式。</p>
+<p>但 2 字节只允许 65536 个组合，这对于表示每个可能的符号是不够的。所以稀有的符号被称为“代理对”的一对 2 字节的符号编码。</p>
+<p>这些符号的长度是 <code>2</code>：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;𝒳&#x27;</span>.length ); <span class="hljs-comment">// 2，大写数学符号 X</span>
+alert( <span class="hljs-string">&#x27;😂&#x27;</span>.length ); <span class="hljs-comment">// 2，笑哭表情</span>
+alert( <span class="hljs-string">&#x27;𩷶&#x27;</span>.length ); <span class="hljs-comment">// 2，罕见的中国象形文字</span></code></pre>
+<p>注意，代理对在 JavaScript 被创建时并不存在，因此无法被编程语言正确处理！</p>
+<p>我们实际上在上面的每个字符串中都有一个符号，但 <code>length</code> 显示长度为 <code>2</code>。</p>
+<p><code>String.fromCodePoint</code> 和 <code>str.codePointAt</code> 是几种处理代理对的少数方法。它们最近才出现在编程语言中。在它们之前，只有 <a href="mdn:js/String/fromCharCode">String.fromCharCode</a> 和 <a href="mdn:js/String/charCodeAt">str.charCodeAt</a>。这些方法实际上与 <code>fromCodePoint/codePointAt</code> 相同，但是不适用于代理对。</p>
+<p>获取符号可能会非常麻烦，因为代理对被认为是两个字符：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;𝒳&#x27;</span>[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// 奇怪的符号……</span>
+alert( <span class="hljs-string">&#x27;𝒳&#x27;</span>[<span class="hljs-number">1</span>] ); <span class="hljs-comment">// ……代理对的一块</span></code></pre>
+<p>请注意，代理对的各部分没有任何意义。因此，上述示例中的 alert 显示的实际上是垃圾信息。</p>
+<p>技术角度来说，代理对也是可以通过它们的代码检测到的：如果一个字符的代码在 <code>0xd800..0xdbff</code> 范围内，那么它是代理对的第一部分。下一个字符（第二部分）必须在 <code>0xdc00..0xdfff</code> 范围中。这些范围是按照标准专门为代理对保留的。</p>
+<p>在上述示例中：</p>
+<pre><code class="language-js"><span class="hljs-comment">// charCodeAt 不理解代理对，所以它给出了代理对的代码</span>
+
+alert( <span class="hljs-string">&#x27;𝒳&#x27;</span>.charCodeAt(<span class="hljs-number">0</span>).toString(<span class="hljs-number">16</span>) ); <span class="hljs-comment">// d835，在 0xd800 和 0xdbff 之间</span>
+alert( <span class="hljs-string">&#x27;𝒳&#x27;</span>.charCodeAt(<span class="hljs-number">1</span>).toString(<span class="hljs-number">16</span>) ); <span class="hljs-comment">// dcb3, 在 0xdc00 和 0xdfff 之间</span></code></pre>
+<p>本章节后面的 <a href="info:iterable">info:iterable</a> 章节中，你可以找到更多处理代理对的方法。可能也专门的库，这里没有什么足够好的建议了。</p>
+<h3 id="变音符号与规范化">变音符号与规范化</h3>
+<p>在许多语言中，都有一些由基本字符组成的符号，在其上方/下方有一个标记。</p>
+<p>例如，字母 <code>a</code> 可以是 <code>àáâäãåā</code> 的基本字符。最常见的“复合”字符在 UTF-16 表中都有自己的代码。但不是全部，因为可能的组合太多。</p>
+<p>为了支持任意组合，UTF-16 允许我们使用多个 unicode 字符：基本字符紧跟“装饰”它的一个或多个“标记”字符。</p>
+<p>例如，如果我们 <code>S</code> 后跟有特殊的 &quot;dot above&quot; 字符（代码 <code>\u0307</code>），则显示 Ṡ。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;S\u0307&#x27;</span> ); <span class="hljs-comment">// Ṡ</span></code></pre>
+<p>如果我们需要在字母上方（或下方）添加额外的标记 —— 没问题，只需要添加必要的标记字符即可。</p>
+<p>例如，如果我们追加一个字符 &quot;dot below&quot;（代码 <code>\u0323</code>），那么我们将得到“S 上面和下面都有点”的字符：<code>Ṩ</code>。</p>
+<p>例如：</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;S\u0307\u0323&#x27;</span> ); <span class="hljs-comment">// Ṩ</span></code></pre>
+<p>这在提供良好灵活性的同时，也存在一个有趣的问题：两个视觉上看起来相同的字符，可以用不同的 unicode 组合表示。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> s1 = <span class="hljs-string">&#x27;S\u0307\u0323&#x27;</span>; <span class="hljs-comment">// Ṩ，S + 上点 + 下点</span>
+<span class="hljs-keyword">let</span> s2 = <span class="hljs-string">&#x27;S\u0323\u0307&#x27;</span>; <span class="hljs-comment">// Ṩ，S + 下点 + 上点</span>
+
+alert( <span class="hljs-string">`s1: <span class="hljs-subst">${s1}</span>, s2: <span class="hljs-subst">${s2}</span>`</span> );
+
+alert( s1 == s2 ); <span class="hljs-comment">// false，尽管字符看起来相同（?!）</span></code></pre>
+<p>为了解决这个问题，有一个 “unicode 规范化”算法，它将每个字符串都转化成单个“通用”格式。</p>
+<p>它由 <a href="mdn:js/String/normalize">str.normalize()</a> 实现。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;S\u0307\u0323&quot;</span>.normalize() == <span class="hljs-string">&quot;S\u0323\u0307&quot;</span>.normalize() ); <span class="hljs-comment">// true</span></code></pre>
+<p>有趣的是，在实际情况下，<code>normalize()</code> 实际上将一个由 3 个字符组成的序列合并为一个：<code>\u1e68</code>（S 有两个点）。</p>
+<pre><code class="language-js">alert( <span class="hljs-string">&quot;S\u0307\u0323&quot;</span>.normalize().length ); <span class="hljs-comment">// 1</span>
+
+alert( <span class="hljs-string">&quot;S\u0307\u0323&quot;</span>.normalize() == <span class="hljs-string">&quot;\u1e68&quot;</span> ); <span class="hljs-comment">// true</span></code></pre>
+<p>事实上，情况并非总是如此，因为符号 <code>Ṩ</code> 是“常用”的，所以 UTF-16 创建者把它包含在主表中并给它了对应的代码。</p>
+<p>如果你想了解更多关于规范化规则和变体的信息 —— 它们在 Unicode 标准附录中有详细描述：<a href="http://www.unicode.org/reports/tr15/">Unicode 规范化形式</a>，但对于大多数实际目的来说，本文的内容就已经足够了。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>有 3 种类型的引号。反引号允许字符串跨越多行并可以使用 <code>${…}</code> 在字符串中嵌入表达式。</li>
+<li>JavaScript 中的字符串使用的是 UTF-16 编码。</li>
+<li>我们可以使用像 <code>\n</code> 这样的特殊字符或通过使用 <code>\u...</code> 来操作它们的 unicode 进行字符插入。 </li>
+<li>获取字符时，使用 <code>[]</code>。</li>
+<li>获取子字符串，使用 <code>slice</code> 或 <code>substring</code>。</li>
+<li>字符串的大/小写转换，使用：<code>toLowerCase/toUpperCase</code>。</li>
+<li>查找子字符串时，使用 <code>indexOf</code> 或 <code>includes/startsWith/endsWith</code> 进行简单检查。</li>
+<li>根据语言比较字符串时使用 <code>localeCompare</code>，否则将按字符代码进行比较。</li>
+</ul>
+<p>还有其他几种有用的字符串方法：</p>
+<ul>
+<li><code>str.trim()</code> —— 删除字符串前后的空格 (&quot;trims&quot;)。</li>
+<li><code>str.repeat(n)</code> —— 重复字符串 <code>n</code> 次。</li>
+<li>……更多内容细节请参见 <a href="mdn:js/String">手册</a>。</li>
+</ul>
+<p>字符串还具有使用正则表达式进行搜索/替换的方法。但这个话题很大，因此我们将在本教程中单独的 <a href="info:regular-expressions">info:regular-expressions</a> 章节中进行讨论。</p>

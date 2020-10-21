@@ -1,0 +1,14 @@
+<p>importance: 4</p>
+<hr>
+<h1 id="变量可见吗？">变量可见吗？</h1>
+<p>下面这段代码的结果会是什么？</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> x = <span class="hljs-number">1</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">func</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-built_in">console</span>.log(x); <span class="hljs-comment">// ?</span>
+
+  <span class="hljs-keyword">let</span> x = <span class="hljs-number">2</span>;
+}
+
+func();</code></pre>
+<p>P.S. 这个任务有一个陷阱。解决方案并不明显。</p>

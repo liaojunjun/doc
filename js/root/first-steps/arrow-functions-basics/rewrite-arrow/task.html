@@ -1,0 +1,12 @@
+<h1 id="用箭头函数重写">用箭头函数重写</h1>
+<p>用箭头函数重写下面的函数表达式：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ask</span>(<span class="hljs-params">question, yes, no</span>) </span>{
+  <span class="hljs-keyword">if</span> (confirm(question)) yes()
+  <span class="hljs-keyword">else</span> no();
+}
+
+ask(
+  <span class="hljs-string">&quot;Do you agree?&quot;</span>,
+  <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-string">&quot;You agreed.&quot;</span>); },
+  <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-string">&quot;You canceled the execution.&quot;</span>); }
+);</code></pre>

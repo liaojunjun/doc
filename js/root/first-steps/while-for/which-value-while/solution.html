@@ -1,0 +1,19 @@
+<p>这个题目展现了 i++/++i 两种形式在比较中导致的不同结果。</p>
+<ol>
+<li><p><strong>从 1 到 4</strong></p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">while</span> (++i &lt; <span class="hljs-number">5</span>) alert( i );</code></pre>
+<p> 第一个值是 <code>i = 1</code>，因为 <code>++i</code> 首先递增 <code>i</code> 然后返回新值。因此先比较 <code>1 &lt; 5</code> 然后通过 <code>alert</code> 显示 <code>1</code>。</p>
+<p> 然后按照 <code>2, 3, 4…</code> —— 数值一个接着一个被显示出来。在比较中使用的都是递增后的值，因为 <code>++</code> 在变量前。</p>
+<p> 最终，<code>i = 4</code> 时，在 <code>++i &lt; 5</code> 的比较中，<code>i</code> 值递增至 <code>5</code>，所以 <code>while(5 &lt; 5)</code> 不符合循环条件，循环停止。所以没有显示 <code>5</code>。</p>
+</li>
+<li><p><strong>从 1 到 5</strong></p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">while</span> (i++ &lt; <span class="hljs-number">5</span>) alert( i );</code></pre>
+<p> 第一个值也是 <code>i = 1</code>。后缀形式 <code>i++</code> 递增 <code>i</code> 然后返回 <strong>旧</strong> 值，因此比较 <code>i++ &lt; 5</code> 将使用 <code>i = 0</code>（与 <code>++i &lt; 5</code> 不同）。</p>
+<p> 但 <code>alert</code> 调用是独立的。这是在递增和比较之后执行的另一条语句。因此它得到了当前的 <code>i = 1</code>。</p>
+<p> 接下来是 <code>2, 3,4…</code></p>
+<p> 我们在 <code>i = 4</code> 时暂停，前缀形式 <code>++i</code> 会递增 <code>i</code> 并在比较中使用新值 <code>5</code>。但我们这里是后缀形式 <code>i++</code>。因此，它将 <code>i</code> 递增到 <code>5</code>，但返回旧值。因此实际比较的是 <code>while(4 &lt; 5)</code> —— true，程序继续执行 <code>alert</code>。</p>
+<p> <code>i = 5</code> 是最后一个值，因为下一步比较 <code>while(5 &lt; 5)</code> 为 false。</p>
+</li>
+</ol>

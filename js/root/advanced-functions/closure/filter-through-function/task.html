@@ -1,0 +1,21 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="通过函数筛选">通过函数筛选</h1>
+<p>我们有一个内建的数组方法 <code>arr.filter(f)</code>。它通过函数 <code>f</code> 过滤元素。如果它返回 <code>true</code>，那么该元素会被返回到结果数组中。</p>
+<p>制造一系列“即用型”过滤器：</p>
+<ul>
+<li><code>inBetween(a, b)</code> —— 在 <code>a</code> 和 <code>b</code> 之间或与它们相等（包括）。</li>
+<li><code>inArray([...])</code> —— 包含在给定的数组中。</li>
+</ul>
+<p>用法如下所示：</p>
+<ul>
+<li><code>arr.filter(inBetween(3,6))</code> —— 只挑选范围在 3 到 6 的值。</li>
+<li><code>arr.filter(inArray([1,2,3]))</code> —— 只挑选与 <code>[1,2,3]</code> 中的元素匹配的元素。</li>
+</ul>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-comment">/* .. inBetween 和 inArray 的代码 */</span>
+<span class="hljs-keyword">let</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>];
+
+alert( arr.filter(inBetween(<span class="hljs-number">3</span>, <span class="hljs-number">6</span>)) ); <span class="hljs-comment">// 3,4,5,6</span>
+
+alert( arr.filter(inArray([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">10</span>])) ); <span class="hljs-comment">// 1,2</span></code></pre>

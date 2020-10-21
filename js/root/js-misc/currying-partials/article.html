@@ -1,0 +1,132 @@
+<p>libs:</p>
+<ul>
+<li>lodash</li>
+</ul>
+<hr>
+<h1 id="柯里化（currying）">柯里化（Currying）</h1>
+<p><a href="https://en.wikipedia.org/wiki/Currying">柯里化（Currying）</a>是一种关于函数的高阶技术。它不仅被用于 JavaScript，还被用于其他编程语言。</p>
+<p>柯里化是一种函数的转换，它是指将一个函数从可调用的 <code>f(a, b, c)</code> 转换为可调用的 <code>f(a)(b)(c)</code>。</p>
+<p>柯里化不会调用函数。它只是对函数进行转换。</p>
+<p>让我们先来看一个例子，以更好地理解我们正在讲的内容，然后再进行一个实际应用。</p>
+<p>我们将创建一个辅助函数 <code>curry(f)</code>，该函数将对两个参数的函数 <code>f</code> 执行柯里化。换句话说，对于两个参数的函数 <code>f(a, b)</code> 执行 <code>curry(f)</code> 会将其转换为以 <code>f(a)(b)</code> 形式运行的函数：</p>
+<pre><code class="language-js">*!*
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">curry</span>(<span class="hljs-params">f</span>) </span>{ <span class="hljs-comment">// curry(f) 执行柯里化转换</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">a</span>) </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">b</span>) </span>{
+      <span class="hljs-keyword">return</span> f(a, b);
+    };
+  };
+}
+*/!*
+
+<span class="hljs-comment">// 用法</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a, b</span>) </span>{
+  <span class="hljs-keyword">return</span> a + b;
+}
+
+<span class="hljs-keyword">let</span> curriedSum = curry(sum);
+
+alert( curriedSum(<span class="hljs-number">1</span>)(<span class="hljs-number">2</span>) ); <span class="hljs-comment">// 3</span></code></pre>
+<p>正如你所看到的，实现非常简单：只有两个包装器（wrapper）。</p>
+<ul>
+<li><code>curry(func)</code> 的结果就是一个包装器 <code>function(a)</code>。</li>
+<li>当它被像 <code>curriedSum(1)</code> 这样调用时，它的参数会被保存在词法环境中，然后返回一个新的包装器 <code>function(b)</code>。</li>
+<li>然后这个包装器被以 <code>2</code> 为参数调用，并且，它将该调用传递给原始的 <code>sum</code> 函数。</li>
+</ul>
+<p>柯里化更高级的实现，例如 lodash 库的 <a href="https://lodash.com/docs#curry">_.curry</a>，会返回一个包装器，该包装器允许函数被正常调用或者以偏函数（partial）的方式调用：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a, b</span>) </span>{
+  <span class="hljs-keyword">return</span> a + b;
+}
+
+<span class="hljs-keyword">let</span> curriedSum = _.curry(sum); <span class="hljs-comment">// 使用来自 lodash 库的 _.curry</span>
+
+alert( curriedSum(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>) ); <span class="hljs-comment">// 3，仍可正常调用</span>
+alert( curriedSum(<span class="hljs-number">1</span>)(<span class="hljs-number">2</span>) ); <span class="hljs-comment">// 3，以偏函数的方式调用</span></code></pre>
+<h2 id="柯里化？目的是什么？">柯里化？目的是什么？</h2>
+<p>要了解它的好处，我们需要一个实际中的例子。</p>
+<p>例如，我们有一个用于格式化和输出信息的日志（logging）函数 <code>log(date, importance, message)</code>。在实际项目中，此类函数具有很多有用的功能，例如通过网络发送日志（log），在这儿我们仅使用 <code>alert</code>：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span>(<span class="hljs-params">date, importance, message</span>) </span>{
+  alert(<span class="hljs-string">`[<span class="hljs-subst">${date.getHours()}</span>:<span class="hljs-subst">${date.getMinutes()}</span>] [<span class="hljs-subst">${importance}</span>] <span class="hljs-subst">${message}</span>`</span>);
+}</code></pre>
+<p>让我们将它柯里化！</p>
+<pre><code class="language-js">log = _.curry(log);</code></pre>
+<p>柯里化之后，<code>log</code> 仍正常运行：</p>
+<pre><code class="language-js">log(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(), <span class="hljs-string">&quot;DEBUG&quot;</span>, <span class="hljs-string">&quot;some debug&quot;</span>); <span class="hljs-comment">// log(a, b, c)</span></code></pre>
+<p>……但是也可以以柯里化形式运行：</p>
+<pre><code class="language-js">log(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>())(<span class="hljs-string">&quot;DEBUG&quot;</span>)(<span class="hljs-string">&quot;some debug&quot;</span>); <span class="hljs-comment">// log(a)(b)(c)</span></code></pre>
+<p>现在，我们可以轻松地为当前日志创建便捷函数：</p>
+<pre><code class="language-js"><span class="hljs-comment">// logNow 会是带有固定第一个参数的日志的偏函数</span>
+<span class="hljs-keyword">let</span> logNow = log(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>());
+
+<span class="hljs-comment">// 使用它</span>
+logNow(<span class="hljs-string">&quot;INFO&quot;</span>, <span class="hljs-string">&quot;message&quot;</span>); <span class="hljs-comment">// [HH:mm] INFO message</span></code></pre>
+<p>现在，<code>logNow</code> 是具有固定第一个参数的 <code>log</code>，换句话说，就是更简短的“偏应用函数（partially applied function）”或“偏函数（partial）”。</p>
+<p>我们可以更进一步，为当前的调试日志（debug log）提供便捷函数：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> debugNow = logNow(<span class="hljs-string">&quot;DEBUG&quot;</span>);
+
+debugNow(<span class="hljs-string">&quot;message&quot;</span>); <span class="hljs-comment">// [HH:mm] DEBUG message</span></code></pre>
+<p>所以：</p>
+<ol>
+<li>柯里化之后，我们没有丢失任何东西：<code>log</code> 依然可以被正常调用。</li>
+<li>我们可以轻松地生成偏函数，例如用于生成今天的日志的偏函数。</li>
+</ol>
+<h2 id="高级柯里化实现">高级柯里化实现</h2>
+<p>如果你想了解更多细节，下面是用于多参数函数的“高级”柯里化实现，我们也可以把它用于上面的示例。</p>
+<p>它非常短：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">curry</span>(<span class="hljs-params">func</span>) </span>{
+
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">curried</span>(<span class="hljs-params">...args</span>) </span>{
+    <span class="hljs-keyword">if</span> (args.length &gt;= func.length) {
+      <span class="hljs-keyword">return</span> func.apply(<span class="hljs-built_in">this</span>, args);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">...args2</span>) </span>{
+        <span class="hljs-keyword">return</span> curried.apply(<span class="hljs-built_in">this</span>, args.concat(args2));
+      }
+    }
+  };
+
+}</code></pre>
+<p>用例：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a, b, c</span>) </span>{
+  <span class="hljs-keyword">return</span> a + b + c;
+}
+
+<span class="hljs-keyword">let</span> curriedSum = curry(sum);
+
+alert( curriedSum(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>) ); <span class="hljs-comment">// 6，仍然可以被正常调用</span>
+alert( curriedSum(<span class="hljs-number">1</span>)(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>) ); <span class="hljs-comment">// 6，对第一个参数的柯里化</span>
+alert( curriedSum(<span class="hljs-number">1</span>)(<span class="hljs-number">2</span>)(<span class="hljs-number">3</span>) ); <span class="hljs-comment">// 6，全柯里化</span></code></pre>
+<p>新的 <code>curry</code> 可能看上去有点复杂，但是它很容易理解。</p>
+<p><code>curry(func)</code> 调用的结果是如下所示的包装器 <code>curried</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// func 是要转换的函数</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">curried</span>(<span class="hljs-params">...args</span>) </span>{
+  <span class="hljs-keyword">if</span> (args.length &gt;= func.length) { <span class="hljs-comment">// (1)</span>
+    <span class="hljs-keyword">return</span> func.apply(<span class="hljs-built_in">this</span>, args);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pass</span>(<span class="hljs-params">...args2</span>) </span>{ <span class="hljs-comment">// (2)</span>
+      <span class="hljs-keyword">return</span> curried.apply(<span class="hljs-built_in">this</span>, args.concat(args2));
+    }
+  }
+};</code></pre>
+<p>当我们运行它时，这里有两个 <code>if</code> 执行分支：</p>
+<ol>
+<li>现在调用：如果传入的 <code>args</code> 长度与原始函数所定义的（<code>func.length</code>）相同或者更长，那么只需要将调用传递给它即可。</li>
+<li>获取一个偏函数：否则，<code>func</code> 还没有被调用。取而代之的是，返回另一个包装器 <code>pass</code>，它将重新应用 <code>curried</code>，将之前传入的参数与新的参数一起传入。然后，在一个新的调用中，再次，我们将获得一个新的偏函数（如果参数不足的话），或者最终的结果。</li>
+</ol>
+<p>例如，让我们看看 <code>sum(a, b, c)</code> 这个例子。它有三个参数，所以 <code>sum.length = 3</code>。</p>
+<p>对于调用 <code>curried(1)(2)(3)</code>：</p>
+<ol>
+<li>第一个调用 <code>curried(1)</code> 将 <code>1</code> 保存在词法环境中，然后返回一个包装器 <code>pass</code>。</li>
+<li>包装器 <code>pass</code> 被调用，参数为 <code>(2)</code>：它会获取之前的参数 <code>(1)</code>，将它与得到的 <code>(2)</code> 连在一起，并一起调用 <code>curried(1, 2)</code>。由于参数数量仍小于 3，<code>curry</code> 函数依然会返回 <code>pass</code>。</li>
+<li>包装器 <code>pass</code> 再次被调用，参数为 <code>(3)</code>，在接下来的调用中，<code>pass(3)</code> 会获取之前的参数 (<code>1</code>, <code>2</code>) 并将 <code>3</code> 与之合并，执行调用 <code>curried(1, 2, 3)</code> — 最终有 <code>3</code> 个参数，它们被传入最原始的函数中。</li>
+</ol>
+<p>如果这还不够清楚，那你可以把函数调用顺序在你的脑海中或者在纸上过一遍。</p>
+<pre><code class="language-smart">柯里化要求函数具有固定数量的参数。
+
+使用 rest 参数的函数，例如 `f(...args)`，不能以这种方式进行柯里化。</code></pre>
+<pre><code class="language-smart">根据定义，柯里化应该将 `sum(a, b, c)` 转换为 `sum(a)(b)(c)`。
+
+但是，如前所述，JavaScript 中大多数的柯里化实现都是高级版的：它们使得函数可以被多参数变体调用。</code></pre>
+<h2 id="总结">总结</h2>
+<p><strong>柯里化</strong> 是一种转换，将 <code>f(a,b,c)</code> 转换为可以被以 <code>f(a)(b)(c)</code> 的形式进行调用。JavaScript 实现通常都保持该函数可以被正常调用，并且如果参数数量不足，则返回偏函数。</p>
+<p>柯里化让我们能够更容易地获取偏函数。就像我们在日志记录示例中看到的那样，普通函数 <code>log(date, importance, message)</code> 在被柯里化之后，当我们调用它的时候传入一个参数（如 <code>log(date)</code>）或两个参数（<code>log(date, importance)</code>）时，它会返回偏函数。</p>

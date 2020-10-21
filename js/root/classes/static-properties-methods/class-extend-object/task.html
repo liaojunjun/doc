@@ -1,0 +1,29 @@
+<p>importance: 3</p>
+<hr>
+<h1 id="类扩展自对象？">类扩展自对象？</h1>
+<p>正如我们所知道的，所有的对象通常都继承自 <code>Object.prototype</code>，并且可以访问“通用”对象方法，例如 <code>hasOwnProperty</code> 等。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> </span>{
+  <span class="hljs-keyword">constructor</span>(name) {
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+}
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;Rab&quot;</span>);
+
+*!*
+<span class="hljs-comment">// hasOwnProperty 方法来自于 Object.prototype</span>
+alert( rabbit.hasOwnProperty(<span class="hljs-string">&#x27;name&#x27;</span>) ); <span class="hljs-comment">// true</span>
+*/!*</code></pre>
+<p>但是，如果我们像这样 <code>&quot;class Rabbit extends Object&quot;</code> 把它明确地写出来，那么结果会与简单的 <code>&quot;class Rabbit&quot;</code> 有所不同么？</p>
+<p>不同之处在哪里？</p>
+<p>下面是此类的示例代码（它无法正常运行 — 为什么？修复它？）：</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Object</span> </span>{
+  <span class="hljs-keyword">constructor</span>(name) {
+    <span class="hljs-built_in">this</span>.name = name;
+  }
+}
+
+<span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;Rab&quot;</span>);
+
+alert( rabbit.hasOwnProperty(<span class="hljs-string">&#x27;name&#x27;</span>) ); <span class="hljs-comment">// Error</span></code></pre>

@@ -1,0 +1,6 @@
+<pre><code class="language-js"><span class="hljs-keyword">let</span> a = +prompt(<span class="hljs-string">&quot;The first number?&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
+<span class="hljs-keyword">let</span> b = +prompt(<span class="hljs-string">&quot;The second number?&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
+
+alert( a + b );</code></pre>
+<p>注意在 <code>prompt</code> 前面的一元加号 <code>+</code>。它将立即把值转换成数字。</p>
+<p>否则，<code>a</code> 和 <code>b</code> 将会是字符串，它们的总和将是它们的连接，即：<code>&quot;1&quot; + &quot;2&quot; = &quot;12&quot;</code>。</p>

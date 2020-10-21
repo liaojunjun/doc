@@ -1,0 +1,134 @@
+<h1 id="垃圾回收">垃圾回收</h1>
+<p>对于开发者来说，JavaScript 的内存管理是自动的、无形的。我们创建的原始值、对象、函数……这一切都会占用内存。</p>
+<p>当我们不再需要某个东西时会发生什么？JavaScript 引擎如何发现它并清理它？</p>
+<h2 id="可达性（reachability）">可达性（Reachability）</h2>
+<p>JavaScript 中主要的内存管理概念是 <strong>可达性</strong>。</p>
+<p>简而言之，“可达”值是那些以某种方式可访问或可用的值。它们一定是存储在内存中的。</p>
+<ol>
+<li><p>这里列出固有的可达值的基本集合，这些值明显不能被释放。</p>
+<p> 比方说：</p>
+<ul>
+<li><p>当前函数的局部变量和参数。</p>
+</li>
+<li><p>嵌套调用时，当前调用链上所有函数的变量与参数。</p>
+</li>
+<li><p>全局变量。</p>
+</li>
+<li><p>（还有一些内部的）</p>
+<p>这些值被称作 <strong>根（roots）</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p>如果一个值可以通过引用或引用链从根访问任何其他值，则认为该值是可达的。</p>
+<p> 比方说，如果全局变量中有一个对象，并且该对象有一个属性引用了另一个对象，则该对象被认为是可达的。而且它引用的内容也是可达的。下面是详细的例子。</p>
+</li>
+</ol>
+<p>在 JavaScript 引擎中有一个被称作 <a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">垃圾回收器</a> 的东西在后台执行。它监控着所有对象的状态，并删除掉那些已经不可达的。</p>
+<h2 id="一个简单的例子">一个简单的例子</h2>
+<p>这里是一个最简单的例子：</p>
+<pre><code class="language-js"><span class="hljs-comment">// user 具有对这个对象的引用</span>
+<span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+};</code></pre>
+<p><img src="memory-user-john.svg" alt=""></p>
+<p>这里的箭头描述了一个对象引用。全局变量 <code>&quot;user&quot;</code> 引用了对象 <code>{name：&quot;John&quot;}</code>（为简洁起见，我们称它为 John）。John 的 <code>&quot;name&quot;</code> 属性存储一个原始值，所以它被写在对象内部。</p>
+<p>如果 <code>user</code> 的值被重写了，这个引用就没了：</p>
+<pre><code class="language-js">user = <span class="hljs-literal">null</span>;</code></pre>
+<p><img src="memory-user-john-lost.svg" alt=""></p>
+<p>现在 John 变成不可达的了。因为没有引用了，就不能访问到它了。垃圾回收器会认为它是垃圾数据并进行回收，然后释放内存。</p>
+<h2 id="两个引用">两个引用</h2>
+<p>现在让我们想象下，我们把 <code>user</code> 的引用复制给 <code>admin</code>：</p>
+<pre><code class="language-js"><span class="hljs-comment">// user 具有对这个对象的引用</span>
+<span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+};
+
+*!*
+<span class="hljs-keyword">let</span> admin = user;
+*/!*</code></pre>
+<p><img src="memory-user-john-admin.svg" alt=""></p>
+<p>现在如果执行刚刚的那个操作：</p>
+<pre><code class="language-js">user = <span class="hljs-literal">null</span>;</code></pre>
+<p>……然后对象仍然可以被通过 <code>admin</code> 这个全局变量访问到，所以对象还在内存中。如果我们又重写了 <code>admin</code>，对象就会被删除。</p>
+<h2 id="相互关联的对象">相互关联的对象</h2>
+<p>现在来看一个更复杂的例子。这是个家庭：</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">marry</span>(<span class="hljs-params">man, woman</span>) </span>{
+  woman.husband = man;
+  man.wife = woman;
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">father</span>: man,
+    <span class="hljs-attr">mother</span>: woman
+  }
+}
+
+<span class="hljs-keyword">let</span> family = marry({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
+}, {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Ann&quot;</span>
+});</code></pre>
+<p><code>marry</code> 函数通过让两个对象相互引用使它们“结婚”了，并返回了一个包含这两个对象的新对象。</p>
+<p>由此产生的内存结构：</p>
+<p><img src="family.svg" alt=""></p>
+<p>到目前为止，所有对象都是可达的。</p>
+<p>现在让我们移除两个引用：</p>
+<pre><code class="language-js"><span class="hljs-keyword">delete</span> family.father;
+<span class="hljs-keyword">delete</span> family.mother.husband;</code></pre>
+<p><img src="family-delete-refs.svg" alt=""></p>
+<p>仅删除这两个引用中的一个是不够的，因为所有的对象仍然都是可达的。</p>
+<p>但是，如果我们把这两个都删除，那么我们可以看到再也没有对 John 的引用了：</p>
+<p><img src="family-no-father.svg" alt=""></p>
+<p>对外引用不重要，只有传入引用才可以使对象可达。所以，John 现在是不可达的，并且将被从内存中删除，同时 John 的所有数据也将变得不可达。</p>
+<p>经过垃圾回收：</p>
+<p><img src="family-no-father-2.svg" alt=""></p>
+<h2 id="无法到达的岛屿">无法到达的岛屿</h2>
+<p>几个对象相互引用，但外部没有对其任意对象的引用，这些对象也可能是不可达的，并被从内存中删除。</p>
+<p>源对象与上面相同。然后：</p>
+<pre><code class="language-js">family = <span class="hljs-literal">null</span>;</code></pre>
+<p>内存内部状态将变成：</p>
+<p><img src="family-no-family.svg" alt=""></p>
+<p>这个例子展示了可达性概念的重要性。</p>
+<p>显而易见，John 和 Ann 仍然连着，都有传入的引用。但是，这样还不够。</p>
+<p>前面说的 <code>&quot;family&quot;</code> 对象已经不再与根相连，没有了外部对其的引用，所以它变成了一座“孤岛”，并且将被从内存中删除。</p>
+<h2 id="内部算法">内部算法</h2>
+<p>垃圾回收的基本算法被称为 &quot;mark-and-sweep&quot;。</p>
+<p>定期执行以下“垃圾回收”步骤：</p>
+<ul>
+<li>垃圾收集器找到所有的根，并“标记”（记住）它们。</li>
+<li>然后它遍历并“标记”来自它们的所有引用。</li>
+<li>然后它遍历标记的对象并标记 <strong>它们的</strong> 引用。所有被遍历到的对象都会被记住，以免将来再次遍历到同一个对象。</li>
+<li>……如此操作，直到所有可达的（从根部）引用都被访问到。</li>
+<li>没有被标记的对象都会被删除。</li>
+</ul>
+<p>例如，使我们的对象有如下的结构：</p>
+<p><img src="garbage-collection-1.svg" alt=""></p>
+<p>我们可以清楚地看到右侧有一个“无法到达的岛屿”。现在我们来看看“标记和清除”垃圾收集器如何处理它。</p>
+<p>第一步标记所有的根：</p>
+<p><img src="garbage-collection-2.svg" alt=""></p>
+<p>然后它们的引用被标记了：</p>
+<p><img src="garbage-collection-3.svg" alt=""></p>
+<p>……如果还有引用的话，继续标记：</p>
+<p><img src="garbage-collection-4.svg" alt=""></p>
+<p>现在，无法通过这个过程访问到的对象被认为是不可达的，并且会被删除。</p>
+<p><img src="garbage-collection-5.svg" alt=""></p>
+<p>我们还可以将这个过程想象成从根溢出一个巨大的油漆桶，它流经所有引用并标记所有可到达的对象。然后移除未标记的。</p>
+<p>这是垃圾收集工作的概念。JavaScript 引擎做了许多优化，使垃圾回收运行速度更快，并且不影响正常代码运行。</p>
+<p>一些优化建议：</p>
+<ul>
+<li><strong>分代收集（Generational collection）</strong>—— 对象被分成两组：“新的”和“旧的”。许多对象出现，完成它们的工作并很快死去，它们可以很快被清理。那些长期存活的对象会变得“老旧”，而且被检查的频次也会减少。</li>
+<li><strong>增量收集（Incremental collection）</strong>—— 如果有许多对象，并且我们试图一次遍历并标记整个对象集，则可能需要一些时间，并在执行过程中带来明显的延迟。所以引擎试图将垃圾收集工作分成几部分来做。然后将这几部分会逐一进行处理。这需要它们之间有额外的标记来追踪变化，但是这样会有许多微小的延迟而不是一个大的延迟。</li>
+<li><strong>闲时收集（Idle-time collection）</strong>—— 垃圾收集器只会在 CPU 空闲时尝试运行，以减少可能对代码执行的影响。</li>
+</ul>
+<p>还有其他垃圾回收算法的优化和风格。尽管我想在这里描述它们，但我必须打住了，因为不同的引擎会有不同的调整和技巧。而且，更重要的是，随着引擎的发展，情况会发生变化，所以在没有真实需求的时候，“提前”学习这些内容是不值得的。当然，除非这是一个纯粹的利益关系。我在下面给你提供了一些相关链接。</p>
+<h2 id="总结">总结</h2>
+<p>主要需要掌握的内容：</p>
+<ul>
+<li>垃圾回收是自动完成的，我们不能强制执行或是阻止执行。</li>
+<li>当对象是可达状态时，它一定是存在于内存中的。</li>
+<li>被引用与可访问（从一个根）不同：一组相互连接的对象可能整体都不可达。</li>
+</ul>
+<p>现代引擎实现了垃圾回收的高级算法。</p>
+<p>《The Garbage Collection Handbook: The Art of Automatic Memory Management》（R. Jones 等人著）这本书涵盖了其中一些内容。</p>
+<p>如果你熟悉底层（low-level）编程，关于 V8 引擎垃圾回收器的更详细信息请参阅文章 <a href="http://jayconrod.com/posts/55/a-tour-of-v8-garbage-collection">V8 之旅：垃圾回收</a>。</p>
+<p><a href="http://v8project.blogspot.com/">V8 博客</a> 还不时发布关于内存管理变化的文章。当然，为了学习垃圾收集，你最好通过学习 V8 引擎内部知识来进行准备，并阅读一个名为 <a href="http://mrale.ph">Vyacheslav Egorov</a> 的 V8 引擎工程师的博客。我之所以说 “V8”，因为网上关于它的文章最丰富的。对于其他引擎，许多方法是相似的，但在垃圾收集上许多方面有所不同。</p>
+<p>当你需要底层的优化时，对引擎有深入了解将很有帮助。在熟悉了这门编程语言之后，把熟悉引擎作为下一步计划是明智之选。</p>

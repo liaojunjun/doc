@@ -1,0 +1,9 @@
+<p>我们将表格创建为字符串：<code>&quot;&lt;table&gt;...&lt;/table&gt;&quot;</code>，然后将其赋值给 <code>innerHTML</code>。</p>
+<p>算法如下：</p>
+<ol>
+<li>使用 <code>&lt;th&gt;</code> 创建带有星期名的表头。</li>
+<li>创建日期对象 <code>d = new Date(year, month-1)</code>。它是 <code>month</code> 的第一天（考虑到 JavaScript 中的月份从 <code>0</code> 开始，而不是从 <code>1</code> 开始）。</li>
+<li>直到月份的第一天 <code>d.getDay()</code>，前面的几个单元格是空的。让我们用 <code>&lt;td&gt;&lt;/td&gt;</code> 填充它们。</li>
+<li>天数增长 <code>d</code>：<code>d.setDate(d.getDate()+1)</code>。如果 <code>d.getMonth()</code> 还没到下一个月，那么就将新的单元格 <code>&lt;td&gt;</code> 添加到日历中。如果那天是星期日，就添加一个新行 <code>"&lt;/tr&gt;&lt;tr&gt;"</code>。</li>
+<li>如果该月结束，但表格的行尚未填满，就用空的 <code>&lt;td&gt;</code> 补齐。</li>
+</ol>

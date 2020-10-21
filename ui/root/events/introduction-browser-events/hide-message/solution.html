@@ -1,0 +1,5 @@
+<p>我们可以使用 <code>position:absolute</code>（并使窗格 <code>position:relative</code>）或者 <code>float:right</code> 来添加按钮。<code>float:right</code> 的好处是按钮永远都不会与文本重叠，但是 <code>position:absolute</code> 则提供了更大的自由度。选择权在你自己手上。</p>
+<p>然后，对于每个窗格（pane），代码可以像这样：</p>
+<pre><code class="language-js">pane.insertAdjacentHTML(<span class="hljs-string">&quot;afterbegin&quot;</span>, <span class="hljs-string">&#x27;&lt;button class=&quot;remove-button&quot;&gt;[x]&lt;/button&gt;&#x27;</span>);</code></pre>
+<p>然后 <code>&lt;button&gt;</code> 变成了 <code>pane.firstChild</code>，因此我们可以像这样为它添加处理程序：</p>
+<pre><code class="language-js">pane.firstChild.onclick = <span class="hljs-function">() =&gt;</span> pane.remove();</code></pre>

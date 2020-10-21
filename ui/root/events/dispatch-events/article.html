@@ -1,0 +1,211 @@
+<h1 id="创建自定义事件">创建自定义事件</h1>
+<p>我们不仅可以分配事件处理程序，还可以从 JavaScript 生成事件。</p>
+<p>自定义事件可用于创建“图形组件”。例如，我们自己的基于 JavaScript 的菜单的根元素可能会触发 <code>open</code>（打开菜单），<code>select</code>（有一项被选中）等事件来告诉菜单发生了什么。另一个代码可能会监听事件，并观察菜单发生了什么。</p>
+<p>我们不仅可以生成出于自身目的而创建的全新事件，还可以生成例如 <code>click</code> 和 <code>mousedown</code> 等内建事件。这可能会有助于自动化测试。</p>
+<h2 id="事件构造器">事件构造器</h2>
+<p>内建事件类形成一个层次结构（hierarchy），类似于 DOM 元素类。根是内建的 <a href="http://www.w3.org/TR/dom/#event">Event</a> 类。</p>
+<p>我们可以像这样创建 <code>Event</code> 对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> event = <span class="hljs-keyword">new</span> Event(type[, options]);</code></pre>
+<p>参数：</p>
+<ul>
+<li><p><strong>type</strong> —— 事件类型，可以是像这样 <code>&quot;click&quot;</code> 的字符串，或者我们自己的像这样 <code>&quot;my-event&quot;</code> 的参数。</p>
+</li>
+<li><p><strong>options</strong> —— 具有两个可选属性的对象：</p>
+<ul>
+<li><code>bubbles: true/false</code> —— 如果为 <code>true</code>，那么事件会冒泡。</li>
+<li><code>cancelable: true/false</code> —— 如果为 <code>true</code>，那么“默认行为”就会被阻止。稍后我们会看到对于自定义事件，它意味着什么。</li>
+</ul>
+<p>默认情况下，以上两者都为 false：<code>{bubbles: false, cancelable: false}</code>。</p>
+</li>
+</ul>
+<h2 id="dispatchevent">dispatchEvent</h2>
+<p>事件对象被创建后，我们应该使用 <code>elem.dispatchEvent(event)</code> 调用在元素上“运行”它。</p>
+<p>然后，处理程序会对它做出反应，就好像它是一个常规的浏览器事件一样。如果事件是用 <code>bubbles</code> 标志创建的，那么它会冒泡。</p>
+<p>在下面这个示例中，<code>click</code> 事件是用 JavaScript 初始化创建的。处理程序工作方式和点击按钮的方式相同：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;);&quot;</span>&gt;</span>Autoclick<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">let</span> event = <span class="hljs-keyword">new</span> Event(<span class="hljs-string">&quot;click&quot;</span>);
+  elem.dispatchEvent(event);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<pre><code class="language-smart">有一种方法可以区分“真实”用户事件和通过脚本生成的事件。
+
+对于来自真实用户操作的事件，`event.isTrusted` 属性为 `true`，对于脚本生成的事件，`event.isTrusted` 属性为 `false`。</code></pre>
+<h2 id="冒泡示例">冒泡示例</h2>
+<p>我们可以创建一个名为 <code>&quot;hello&quot;</code> 的冒泡事件，并在 <code>document</code> 上捕获它。</p>
+<p>我们需要做的就是将 <code>bubbles</code> 设置为 <code>true</code>：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span>Hello from the script!<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 在 document 上捕获...</span>
+  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&quot;hello&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{ <span class="hljs-comment">// (1)</span>
+    alert(<span class="hljs-string">&quot;Hello from &quot;</span> + event.target.tagName); <span class="hljs-comment">// Hello from H1</span>
+  });
+
+  <span class="hljs-comment">// ...在 elem 上 dispatch！</span>
+  <span class="hljs-keyword">let</span> event = <span class="hljs-keyword">new</span> Event(<span class="hljs-string">&quot;hello&quot;</span>, {<span class="hljs-attr">bubbles</span>: <span class="hljs-literal">true</span>}); <span class="hljs-comment">// (2)</span>
+  elem.dispatchEvent(event);
+
+  <span class="hljs-comment">// 在 document 上的处理程序将被激活，并显示消息。</span>
+
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>注意：</p>
+<ol>
+<li>我们应该对我们的自定义事件使用 <code>addEventListener</code>，因为 <code>on&lt;event&gt;</code> 仅存在于内建事件中，<code>document.onhello</code> 则无法运行。</li>
+<li>必须设置 <code>bubbles:true</code>，否则事件不会向上冒泡。</li>
+</ol>
+<p>内建事件（<code>click</code>）和自定义事件（<code>hello</code>）的冒泡机制相同。自定义事件也有捕获阶段和冒泡阶段。</p>
+<h2 id="mouseevent，keyboardevent-及其他">MouseEvent，KeyboardEvent 及其他</h2>
+<p>这是一个摘自于 <a href="https://www.w3.org/TR/uievents">UI 事件规范</a> 的一个简短的 UI 事件类列表：</p>
+<ul>
+<li><code>UIEvent</code></li>
+<li><code>FocusEvent</code></li>
+<li><code>MouseEvent</code></li>
+<li><code>WheelEvent</code></li>
+<li><code>KeyboardEvent</code></li>
+<li>...</li>
+</ul>
+<p>如果我们想要创建这样的事件，我们应该使用它们而不是 <code>new Event</code>。例如，<code>new MouseEvent(&quot;click&quot;)</code>。</p>
+<p>正确的构造器允许为该类型的事件指定标准属性。</p>
+<p>就像鼠标事件的 <code>clientX/clientY</code> 一样：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> event = <span class="hljs-keyword">new</span> MouseEvent(<span class="hljs-string">&quot;click&quot;</span>, {
+  <span class="hljs-attr">bubbles</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">cancelable</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">clientX</span>: <span class="hljs-number">100</span>,
+  <span class="hljs-attr">clientY</span>: <span class="hljs-number">100</span>
+});
+
+*!*
+alert(event.clientX); <span class="hljs-comment">// 100</span>
+*/!*</code></pre>
+<p>请注意：通用的 <code>Event</code> 构造器不允许这样做。</p>
+<p>让我们试试：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> event = <span class="hljs-keyword">new</span> Event(<span class="hljs-string">&quot;click&quot;</span>, {
+  <span class="hljs-attr">bubbles</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// 构造器 Event 中只有 bubbles 和 cancelable 可以工作</span>
+  <span class="hljs-attr">cancelable</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">clientX</span>: <span class="hljs-number">100</span>,
+  <span class="hljs-attr">clientY</span>: <span class="hljs-number">100</span>
+});
+
+*!*
+alert(event.clientX); <span class="hljs-comment">// undefined，未知的属性被忽略了！</span>
+*/!*</code></pre>
+<p>从技术上讲，我们可以通过在创建后直接分配 <code>event.clientX=100</code> 来解决这个问题。所以，这是一个方便和遵守规则的问题。浏览器生成的事件始终具有正确的类型。</p>
+<p>规范中提供了不同 UI 事件的属性的完整列表，例如 <a href="https://www.w3.org/TR/uievents/#mouseevent">MouseEvent</a>。</p>
+<h2 id="自定义事件">自定义事件</h2>
+<p>对于我们自己的全新事件类型，例如 <code>&quot;hello&quot;</code>，我们应该使用 <code>new CustomEvent</code>。从技术上讲，<a href="https://dom.spec.whatwg.org/#customevent">CustomEvent</a> 和 <code>Event</code> 一样。除了一点不同。</p>
+<p>在第二个参数（对象）中，我们可以为我们想要与事件一起传递的任何自定义信息添加一个附加的属性 <code>detail</code>。</p>
+<p>例如：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span>Hello for John!<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-comment">// 事件附带给处理程序的其他详细信息</span>
+  elem.addEventListener(<span class="hljs-string">&quot;hello&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+    alert(*!*event.detail.name*/!*);
+  });
+
+  elem.dispatchEvent(<span class="hljs-keyword">new</span> CustomEvent(<span class="hljs-string">&quot;hello&quot;</span>, {
+*!*
+    detail: { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> }
+*/!*
+  }));
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p><code>detail</code> 属性可以有任何数据。从技术上讲，我们可以不用，因为我们可以在创建后将任何属性分配给常规的 <code>new Event</code> 对象中。但是 <code>CustomEvent</code> 提供了特殊的 <code>detail</code> 字段，以避免与其他事件属性的冲突。</p>
+<p>此外，事件类描述了它是“什么类型的事件”，如果事件是自定义的，那么我们应该使用 <code>CustomEvent</code> 来明确它是什么。</p>
+<h2 id="eventpreventdefault">event.preventDefault()</h2>
+<p>许多浏览器事件都有“默认行为”，例如，导航到链接，开始一个选择，等。</p>
+<p>对于新的，自定义的事件，绝对没有默认的浏览器行为，但是分派（dispatch）此类事件的代码可能有自己的计划，触发该事件之后应该做什么。</p>
+<p>通过调用 <code>event.preventDefault()</code>，事件处理程序可以发出一个信号，指出这些行为应该被取消。</p>
+<p>在这种情况下，<code>elem.dispatchEvent(event)</code> 的调用会返回 <code>false</code>。那么分派（dispatch）该事件的代码就会知道不应该再继续。</p>
+<p>让我们看一个实际的例子 —— 一只隐藏的兔子（可以是关闭菜单或者其他）。</p>
+<p>在下面，你可以看到一个在其上分派了 <code>&quot;hide&quot;</code> 事件的 <code>#rabbit</code> 和 <code>hide()</code> 函数，以使所有感兴趣的各方面都知道这只兔子要隐藏起来。</p>
+<p>任何处理程序都可以使用 <code>rabbit.addEventListener(&#39;hide&#39;,...)</code> 来监听该事件，并在需要时使用 <code>event.preventDefault()</code> 来取消该行为。然后兔子就不会藏起来了：</p>
+<pre><code class="language-html">&lt;pre id=&quot;rabbit&quot;&gt;
+  |\   /|
+   \|_|/
+   /. .\
+  =\_Y_/=
+   {&gt;o&lt;}
+&lt;/pre&gt;
+&lt;button onclick=&quot;hide()&quot;&gt;Hide()&lt;/button&gt;
+
+&lt;script&gt;
+  // hide() 将在 2 秒后被自动调用
+  function hide() {
+    let event = new CustomEvent(&quot;hide&quot;, {
+      cancelable: true // 没有这个标志，preventDefault 将不起作用
+    });
+    if (!rabbit.dispatchEvent(event)) {
+      alert(&#x27;The action was prevented by a handler&#x27;);
+    } else {
+      rabbit.hidden = true;
+    }
+  }
+
+  rabbit.addEventListener(&#x27;hide&#x27;, function(event) {
+    if (confirm(&quot;Call preventDefault?&quot;)) {
+      event.preventDefault();
+    }
+  });
+&lt;/script&gt;</code></pre>
+<p>请注意：该事件必须具有 <code>cancelable: true</code> 标志，否则 <code>event.preventDefault()</code> 调用将会被忽略。</p>
+<h2 id="事件中的事件是同步的">事件中的事件是同步的</h2>
+<p>通常事件是在队列中处理的。也就是说：如果浏览器正在处理 <code>onclick</code>，这时发生了一个新的事件，例如鼠标移动了，那么它会被排入队列，相应的 <code>mousemove</code> 处理程序将在 <code>onclick</code> 事件处理完成后被调用。</p>
+<p>值得注意的例外情况就是，一个事件是在另一个事件中发起的。例如使用 <code>dispatchEvent</code>。这类事件将会被立即处理，即在新的事件处理程序被调用之后，恢复到当前的事件处理程序。</p>
+<p>例如，在下面的代码中，<code>menu-open</code> 事件是在 <code>onclick</code> 事件执行过程中被调用的。</p>
+<p>它会被立即执行，而不必等待 <code>onclick</code> 处理程序结束：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;menu&quot;</span>&gt;</span>Menu (click me)<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  menu.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    alert(<span class="hljs-number">1</span>);
+
+    menu.dispatchEvent(<span class="hljs-keyword">new</span> CustomEvent(<span class="hljs-string">&quot;menu-open&quot;</span>, {
+      <span class="hljs-attr">bubbles</span>: <span class="hljs-literal">true</span>
+    }));
+
+    alert(<span class="hljs-number">2</span>);
+  };
+
+  <span class="hljs-comment">// 在 1 和 2 之间触发</span>
+  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&#x27;menu-open&#x27;</span>, <span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&#x27;nested&#x27;</span>));
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>输出顺序为：1 -&gt; nested -&gt; 2。</p>
+<p>请注意，嵌套事件 <code>menu-open</code> 会在 <code>document</code> 上被捕获。嵌套事件的传播（propagation）和处理先被完成，然后处理过程才会返回到外部代码（<code>onclick</code>）。</p>
+<p>这不只是与 <code>dispatchEvent</code> 有关，还有其他情况。如果一个事件处理程序进一步触发了其它的事件 —— 它们同样也会被以嵌套的方式同步处理。</p>
+<p>不过有时候，这并不是我们期望的结果。我们想让 <code>onclick</code> 不受 <code>menu-open</code> 或者其它嵌套事件的影响，优先被处理完毕。</p>
+<p>那么，我们就可以将 <code>dispatchEvent</code>（或另一个触发事件的调用）放在 <code>onclick</code> 末尾，或者最好将其包装到零延迟的 <code>setTimeout</code> 中：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;menu&quot;</span>&gt;</span>Menu (click me)<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  menu.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    alert(<span class="hljs-number">1</span>);
+
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> menu.dispatchEvent(<span class="hljs-keyword">new</span> CustomEvent(<span class="hljs-string">&quot;menu-open&quot;</span>, {
+      <span class="hljs-attr">bubbles</span>: <span class="hljs-literal">true</span>
+    })));
+
+    alert(<span class="hljs-number">2</span>);
+  };
+
+  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&#x27;menu-open&#x27;</span>, <span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&#x27;nested&#x27;</span>));
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>现在，<code>dispatchEvent</code> 在当前代码执行完成之后异步运行，包括 <code>mouse.onclick</code>，因此，事件处理程序是完全独立的。</p>
+<p>输出顺序变成：1 -&gt; 2 -&gt; nested。</p>
+<h2 id="总结">总结</h2>
+<p>要从代码生成一个事件，我们首先需要创建一个事件对象。</p>
+<p>通用的 <code>Event(name, options)</code> 构造器接受任意事件名称和具有两个属性的 <code>options</code> 对象：</p>
+<ul>
+<li>如果事件应该冒泡，则 <code>bubbles: true</code>。</li>
+<li>如果 <code>event.preventDefault()</code> 应该有效，则 <code>cancelable: true</code>。</li>
+</ul>
+<p>其他像 <code>MouseEvent</code> 和 <code>KeyboardEvent</code> 这样的原生事件的构造器，都接受特定于该事件类型的属性。例如，鼠标事件的 <code>clientX</code>。</p>
+<p>对于自定义事件，我们应该使用 <code>CustomEvent</code> 构造器。它有一个名为 <code>detail</code> 的附加选项，我们应该将事件特定的数据分配给它。然后，所有处理程序可以以 <code>event.detail</code> 的形式来访问它。</p>
+<p>尽管技术上有可能生成像 <code>click</code> 或 <code>keydown</code> 这样的浏览器事件，但我们还是应谨慎使用。</p>
+<p>我们不应该生成浏览器事件，因为这是运行处理程序的一种怪异（hacky）方式。大多数时候，这都是一种糟糕的架构。</p>
+<p>可以生成原生事件：</p>
+<ul>
+<li>如果第三方程序库不提供其他交互方式，那么这是使第三方程序库工作所需的一种肮脏手段。</li>
+<li>对于自动化测试，要在脚本中“点击按钮”并查看接口是否正确响应。</li>
+</ul>
+<p>使用我们自己的名称的自定义事件通常是出于架构的目的而创建的，以指示发生在菜单（menu），滑块（slider），轮播（carousel）等内部发生了什么。</p>

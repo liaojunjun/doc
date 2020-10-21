@@ -1,0 +1,118 @@
+<h1 id="原生的原型">原生的原型</h1>
+<p><code>&quot;prototype&quot;</code> 属性在 JavaScript 自身的核心部分中被广泛地应用。所有的内置构造函数都用到了它。</p>
+<p>首先，我们将看看原生原型的详细信息，然后学习如何使用它为内建对象添加新功能。</p>
+<h2 id="objectprototype">Object.prototype</h2>
+<p>假如我们输出一个空对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {};
+alert( obj ); <span class="hljs-comment">// &quot;[object Object]&quot; ?</span></code></pre>
+<p>生成字符串 <code>&quot;[object Object]&quot;</code> 的代码在哪里？那就是一个内建的 <code>toString</code> 方法，但是它在哪里呢？<code>obj</code> 是空的！</p>
+<p>……然而简短的表达式 <code>obj = {}</code> 和 <code>obj = new Object()</code> 是一个意思，其中 <code>Object</code> 就是一个内建的对象构造函数，其自身的 <code>prototype</code> 指向一个带有 <code>toString</code> 和其他方法的一个巨大的对象。</p>
+<p>就像这样：</p>
+<p><img src="object-prototype.svg" alt=""></p>
+<p>当 <code>new Object()</code> 被调用（或一个字面量对象 <code>{...}</code> 被创建），按照前面章节中我们学习过的规则，这个对象的 <code>[[Prototype]]</code> 属性被设置为 <code>Object.prototype</code>：</p>
+<p><img src="object-prototype-1.svg" alt=""></p>
+<p>所以，之后当 <code>obj.toString()</code> 被调用时，这个方法是从 <code>Object.prototype</code> 中获取的。</p>
+<p>我们可以这样验证它：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {};
+
+alert(obj.__proto__ === <span class="hljs-built_in">Object</span>.prototype); <span class="hljs-comment">// true</span>
+<span class="hljs-comment">// obj.toString === obj.__proto__.toString == Object.prototype.toString</span></code></pre>
+<p>请注意在 <code>Object.prototype</code> 上方的链中没有更多的 <code>[[Prototype]]</code>：</p>
+<pre><code class="language-js">alert(<span class="hljs-built_in">Object</span>.prototype.__proto__); <span class="hljs-comment">// null</span></code></pre>
+<h2 id="其他内建原型">其他内建原型</h2>
+<p>其他内建对象，像 <code>Array</code>、<code>Date</code>、<code>Function</code> 及其他，都在 prototype 上挂载了方法。</p>
+<p>例如，当我们创建一个数组 <code>[1, 2, 3]</code>，在内部会默认使用 <code>new Array()</code> 构造器。因此 <code>Array.prototype</code> 变成了这个数组的 prototype，并为这个数组提供数组的操作方法。这样内存的存储效率是很高的。</p>
+<p>按照规范，所有的内建原型顶端都是 <code>Object.prototype</code>。这就是为什么有人说“一切都从对象继承而来”。</p>
+<p>下面是完整的示意图（3 个内建对象）：</p>
+<p><img src="native-prototypes-classes.svg" alt=""></p>
+<p>让我们手动验证原型：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+
+<span class="hljs-comment">// 它继承自 Array.prototype？</span>
+alert( arr.__proto__ === <span class="hljs-built_in">Array</span>.prototype ); <span class="hljs-comment">// true</span>
+
+<span class="hljs-comment">// 接下来继承自 Object.prototype？</span>
+alert( arr.__proto__.__proto__ === <span class="hljs-built_in">Object</span>.prototype ); <span class="hljs-comment">// true</span>
+
+<span class="hljs-comment">// 原型链的顶端为 null。</span>
+alert( arr.__proto__.__proto__.__proto__ ); <span class="hljs-comment">// null</span></code></pre>
+<p>一些方法在原型上可能会发生重叠，例如，<code>Array.prototype</code> 有自己的 <code>toString</code> 方法来列举出来数组的所有元素并用逗号分隔每一个元素。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+alert(arr); <span class="hljs-comment">// 1,2,3 &lt;-- Array.prototype.toString 的结果</span></code></pre>
+<p>正如我们之前看到的那样，<code>Object.prototype</code> 也有 <code>toString</code> 方法，但是 <code>Array.prototype</code> 在原型链上更近，所以数组对象原型上的方法会被使用。</p>
+<p><img src="native-prototypes-array-tostring.svg" alt=""></p>
+<p>浏览器内的工具，像 Chrome 开发者控制台也会显示继承性（可能需要对内置对象使用 <code>console.dir</code>）：</p>
+<p><img src="console_dir_array.png" alt=""></p>
+<p>其他内建对象也以同样的方式运行。即使是函数 —— 它们是内建构造器 <code>Function</code> 的对象，并且它们的方法（<code>call</code>/<code>apply</code> 及其他）都取自 <code>Function.prototype</code>。函数也有自己的 <code>toString</code> 方法。</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{}
+
+alert(f.__proto__ == <span class="hljs-built_in">Function</span>.prototype); <span class="hljs-comment">// true</span>
+alert(f.__proto__.__proto__ == <span class="hljs-built_in">Object</span>.prototype); <span class="hljs-comment">// true, inherit from objects</span></code></pre>
+<h2 id="基本数据类型">基本数据类型</h2>
+<p>最复杂的事情发生在字符串、数字和布尔值上。</p>
+<p>正如我们记忆中的那样，它们并不是对象。但是如果我们试图访问它们的属性，那么临时包装器对象将会通过内建的构造器 <code>String</code>、<code>Number</code> 和 <code>Boolean</code> 被创建。它们提供给我们操作字符串、数字和布尔值的方法然后消失。</p>
+<p>这些对象对我们来说是无形地创建出来的。大多数引擎都会对其进行优化，但是规范中描述的就是通过这种方式。这些对象的方法也驻留在它们的 prototype 中，可以通过 <code>String.prototype</code>、<code>Number.prototype</code> 和 <code>Boolean.prototype</code> 进行获取。</p>
+<p>```warn header=&quot;值 <code>null</code> 和 <code>undefined</code> 没有对象包装器&quot;
+特殊值 <code>null</code> 和 <code>undefined</code> 比较特殊。它们没有对象包装器，所以它们没有方法和属性。并且它们也没有相应的原型。</p>
+<pre><code>
+## 更改原生原型 [#native-prototype-change]
+
+原生的原型是可以被修改的。例如，我们向 `String.prototype` 中添加一个方法，这个方法将对所有的字符串都是可用的：
+
+```js run
+String.prototype.show = function() {
+  alert(this);
+};
+
+&quot;BOOM!&quot;.show(); // BOOM!</code></pre>
+<p>在开发的过程中，我们可能会想要一些新的内建方法，并且想把它们添加到原生原型中。但这通常是一个很不好的想法。</p>
+<pre><code class="language-warn">原型是全局的，所以很容易造成冲突。如果有两个库都添加了 `String.prototype.show` 方法，那么其中的一个方法将被另一个覆盖。
+
+所以，通常来说，修改原生原型被认为是一个很不好的想法。</code></pre>
+<p><strong>在现代编程中，只有一种情况下允许修改原生原型。那就是 polyfilling。</strong></p>
+<p>Polyfilling 是一个术语，表示某个方法在 JavaScript 规范中已存在，但是特定的 JavaScript 引擎尚不支持该方法，那么我们可以通过手动实现它，并用以填充内建原型。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">if</span> (!<span class="hljs-built_in">String</span>.prototype.repeat) { <span class="hljs-comment">// 如果这儿没有这个方法</span>
+  <span class="hljs-comment">// 那就在 prototype 中添加它</span>
+
+  <span class="hljs-built_in">String</span>.prototype.repeat = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">n</span>) </span>{
+    <span class="hljs-comment">// 重复传入的字符串 n 次</span>
+
+    <span class="hljs-comment">// 实际上，实现代码比这个要复杂一些（完整的方法可以在规范中找到）</span>
+    <span class="hljs-comment">// 但即使是不够完美的 polyfill 也常常被认为是足够好的</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(n + <span class="hljs-number">1</span>).join(<span class="hljs-built_in">this</span>);
+  };
+}
+
+alert( <span class="hljs-string">&quot;La&quot;</span>.repeat(<span class="hljs-number">3</span>) ); <span class="hljs-comment">// LaLaLa</span></code></pre>
+<h2 id="从原型中借用">从原型中借用</h2>
+<p>在 <a href="info:call-apply-decorators#method-borrowing">info:call-apply-decorators#method-borrowing</a> 一章中，我们讨论了方法借用。</p>
+<p>那是指我们从一个对象获取一个方法，并将其复制到另一个对象。</p>
+<p>一些原生原型的方法通常会被借用。</p>
+<p>例如，如果我们要创建类数组对象，则可能需要向其中复制一些 <code>Array</code> 方法。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {
+  <span class="hljs-number">0</span>: <span class="hljs-string">&quot;Hello&quot;</span>,
+  <span class="hljs-number">1</span>: <span class="hljs-string">&quot;world!&quot;</span>,
+  <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>,
+};
+
+*!*
+obj.join = <span class="hljs-built_in">Array</span>.prototype.join;
+*/!*
+
+alert( obj.join(<span class="hljs-string">&#x27;,&#x27;</span>) ); <span class="hljs-comment">// Hello,world!</span></code></pre>
+<p>上面这段代码有效，是因为内建的方法 <code>join</code> 的内部算法只关心正确的索引和 <code>length</code> 属性。它不会检查这个对象是否是真正的数组。许多内建方法就是这样。</p>
+<p>另一种方式是通过将 <code>obj.__proto__</code> 设置为 <code>Array.prototype</code>，这样 <code>Array</code> 中的所有方法都自动地可以在 <code>obj</code> 中使用了。</p>
+<p>但是如果 <code>obj</code> 已经从另一个对象进行了继承，那么这种方法就不可行了（译注：因为这样会覆盖掉已有的继承。此处 <code>obj</code> 其实已经从 <code>Object</code> 进行了继承，但是 <code>Array</code> 也继承自 <code>Object</code>，所以此处的方法借用不会影响 <code>obj</code> 对原有继承的继承，因为 <code>obj</code> 通过原型链依旧继承了 <code>Object</code>）。请记住，我们一次只能继承一个对象。</p>
+<p>方法借用很灵活，它允许在需要时混合来自不同对象的方法。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>所有的内建对象都遵循相同的模式（pattern）：<ul>
+<li>方法都存储在 prototype 中（<code>Array.prototype</code>、<code>Object.prototype</code>、<code>Date.prototype</code> 等）。</li>
+<li>对象本身只存储数据（数组元素、对象属性、日期）。</li>
+</ul>
+</li>
+<li>原始数据类型也将方法存储在包装器对象的 prototype 中：<code>Number.prototype</code>、<code>String.prototype</code> 和 <code>Boolean.prototype</code>。只有 <code>undefined</code> 和 <code>null</code> 没有包装器对象。</li>
+<li>内建原型可以被修改或被用新的方法填充。但是不建议更改它们。唯一允许的情况可能是，当我们添加一个还没有被 JavaScript 引擎支持，但已经被加入 JavaScript 规范的新标准时，才可能允许这样做。</li>
+</ul>

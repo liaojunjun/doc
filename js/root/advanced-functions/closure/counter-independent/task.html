@@ -1,0 +1,23 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="counter-是独立的吗？">Counter 是独立的吗？</h1>
+<p>在这儿我们用相同的 <code>makeCounter</code> 函数创建了两个计数器（counters）：<code>counter</code> 和 <code>counter2</code>。</p>
+<p>它们是独立的吗？第二个 counter 会显示什么？<code>0,1</code> 或 <code>2,3</code> 还是其他？</p>
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeCounter</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> count++;
+  };
+}
+
+<span class="hljs-keyword">let</span> counter = makeCounter();
+<span class="hljs-keyword">let</span> counter2 = makeCounter();
+
+alert( counter() ); <span class="hljs-comment">// 0</span>
+alert( counter() ); <span class="hljs-comment">// 1</span>
+
+*!*
+alert( counter2() ); <span class="hljs-comment">// ?</span>
+alert( counter2() ); <span class="hljs-comment">// ?</span>
+*/!*</code></pre>

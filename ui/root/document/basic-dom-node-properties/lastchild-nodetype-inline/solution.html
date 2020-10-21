@@ -1,0 +1,12 @@
+<p>这里有一个陷阱。</p>
+<p>在 <code>&lt;script&gt;</code> 执行时，最后一个 DOM 节点就是 <code>&lt;script&gt;</code>，因为浏览器还没有处理页面的其余部分。</p>
+<p>所以结果是 <code>1</code>（元素节点）。</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    alert(<span class="hljs-built_in">document</span>.body.lastChild.nodeType);
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>

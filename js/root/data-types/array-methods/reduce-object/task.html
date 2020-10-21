@@ -1,0 +1,26 @@
+<p>importance: 4</p>
+<hr>
+<h1 id="从数组创建键（值）对象">从数组创建键（值）对象</h1>
+<p>假设我们收到了一个用户数组，形式为：<code>{id:..., name:..., age... }</code>。</p>
+<p>创建一个函数 <code>groupById(arr)</code> 从该数组创建对象，以 <code>id</code> 为键（key），数组项为值。</p>
+<p>例如:</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> users = [
+  {<span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;john&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John Smith&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">20</span>},
+  {<span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;ann&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Ann Smith&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">24</span>},
+  {<span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;pete&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pete Peterson&quot;</span>, <span class="hljs-attr">age</span>: <span class="hljs-number">31</span>},
+];
+
+<span class="hljs-keyword">let</span> usersById = groupById(users);
+
+<span class="hljs-comment">/*
+// 调用函数后，我们应该得到：
+
+usersById = {
+  john: {id: &#x27;john&#x27;, name: &quot;John Smith&quot;, age: 20},
+  ann: {id: &#x27;ann&#x27;, name: &quot;Ann Smith&quot;, age: 24},
+  pete: {id: &#x27;pete&#x27;, name: &quot;Pete Peterson&quot;, age: 31},
+}
+*/</span></code></pre>
+<p>处理服务端数据时，这个函数很有用。</p>
+<p>在这个任务里我们假设 <code>id</code> 是唯一的。没有两个具有相同 <code>id</code> 的数组项。</p>
+<p>请在解决方案中使用数组的 <code>.reduce</code> 方法。</p>

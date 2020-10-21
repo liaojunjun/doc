@@ -1,0 +1,157 @@
+<h1 id="shadow-dom-和事件（events）">Shadow DOM 和事件（events）</h1>
+<p>Shadow tree 背后的思想是封装组件的内部实现细节。</p>
+<p>假设，在 <code>&lt;user-card&gt;</code> 组件的 shadow DOM 内触发一个点击事件。但是主文档内部的脚本并不了解 shadow DOM 内部，尤其是当组件来自于第三方库。</p>
+<p>所以，为了保持细节简单，浏览器会<strong>重新定位</strong>（retarget）事件。</p>
+<p><strong>当事件在组件外部捕获时，shadow DOM 中发生的事件将会以 host 元素作为目标。</strong></p>
+<p>这里有个简单的例子：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`&lt;p&gt;
+      &lt;button&gt;Click me&lt;/button&gt;
+    &lt;/p&gt;`</span>;
+    <span class="hljs-built_in">this</span>.shadowRoot.firstElementChild.onclick =
+      <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> alert(<span class="hljs-string">&quot;Inner target: &quot;</span> + e.target.tagName);
+  }
+});
+
+<span class="hljs-built_in">document</span>.onclick =
+  <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> alert(<span class="hljs-string">&quot;Outer target: &quot;</span> + e.target.tagName);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>如果你点击了 button，就会出现以下信息：</p>
+<ol>
+<li>Inner target: <code>BUTTON</code> —— 内部事件处理程序获取了正确的目标，即 shadow DOM 中的元素。</li>
+<li>Outer target: <code>USER-CARD</code> —— 文档事件处理程序以 shadow host 作为目标。</li>
+</ol>
+<p>事件重定向是一件很棒的事情，因为外部文档并不需要知道组件的内部情况。从它的角度来看，事件是发生在 <code>&lt;user-card&gt;</code>。</p>
+<p><strong>如果事件发生在 slotted 元素上，实际存在于 light DOM 上，则不会发生重定向。</strong></p>
+<p>例如，在下面的例子中，如果用户点击了 <code>&lt;span slot=&quot;username&quot;&gt;</code>，那么对于 shadow 和 light 处理程序来说，事件目标就是当前这个 <code>span</code> 元素。</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;userCard&quot;</span>&gt;</span>
+*!*
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+*/!*
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  connectedCallback() {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`&lt;div&gt;
+      &lt;b&gt;Name:&lt;/b&gt; &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
+    &lt;/div&gt;`</span>;
+
+    <span class="hljs-built_in">this</span>.shadowRoot.firstElementChild.onclick =
+      <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> alert(<span class="hljs-string">&quot;Inner target: &quot;</span> + e.target.tagName);
+  }
+});
+
+userCard.onclick = <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> alert(<span class="hljs-string">`Outer target: <span class="hljs-subst">${e.target.tagName}</span>`</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<p>如果单击事件发生在 <code>&quot;John Smith&quot;</code> 上，则对于内部和外部处理程序来说，其目标是 <code>&lt;span slot=&quot;username&quot;&gt;</code>。这是 light DOM 中的元素，所以没有重定向。</p>
+<p>另一方面，如果单击事件发生在源自 shadow DOM 的元素上，例如，在 <code>&lt;b&gt;Name&lt;/b&gt;</code> 上，然后当它冒泡出 shadow DOM 后，其 <code>event.target</code> 将重置为 <code>&lt;user-card&gt;</code>。</p>
+<h2 id="冒泡（bubbling）-eventcomposedpath">冒泡（bubbling）, event.composedPath()</h2>
+<p>出于事件冒泡的目的，使用扁平 DOM（flattened DOM）。</p>
+<p>所以，如果我们有一个 slot 元素，并且事件发生在它的内部某个地方，那么它就会冒泡到 <code>&lt;slot&gt;</code> 并继续向上。</p>
+<p>使用 <code>event.composedPath()</code> 获得原始事件目标的完整路径以及所有 shadow 元素。正如我们从方法名称中看到的那样，该路径是在组合（composition）之后获取的。</p>
+<p>在上面的例子中，扁平 DOM 是：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;userCard&quot;</span>&gt;</span>
+  #shadow-root
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>Name:<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
+<p>因此，对于 <code>&lt;span slot=&quot;username&quot;&gt;</code> 上的点击事件，会调用 <code>event.composedPath()</code> 并返回一个数组：[<code>span</code>, <code>slot</code>, <code>div</code>, <code>shadow-root</code>, <code>user-card</code>, <code>body</code>, <code>html</code>, <code>document</code>, <code>window</code>]。在组合之后，这正是扁平 DOM 中目标元素的父链。</p>
+<p>```warn header=&quot;Shadow 树详细信息仅提供给 <code>{mode:&#39;open&#39;}</code> 树&quot;
+如果 shadow 树是用 <code>{mode: &#39;closed&#39;}</code> 创建的，那么组合路径就从 host 开始：<code>user-card</code> 及其更上层。</p>
+<p>这与使用 shadow DOM 的其他方法的原理类似。closed 树内部是完全隐藏的。</p>
+<pre><code>
+
+## event.composed
+
+大多数事件能成功冒泡到 shadow DOM 边界。很少有事件不能冒泡到 shadow DOM 边界。
+
+这由 `composed` 事件对象属性控制。如果 `composed` 是 `true`，那么事件就能穿过边界。否则它仅能在 shadow DOM 内部捕获。
+
+如果你浏览一下 [UI 事件规范](https://www.w3.org/TR/uievents) 就知道，大部分事件都是 `composed: true`：
+
+- `blur`，`focus`，`focusin`，`focusout`，
+- `click`，`dblclick`，
+- `mousedown`，`mouseup` `mousemove`，`mouseout`，`mouseover`，
+- `wheel`，
+- `beforeinput`，`input`，`keydown`，`keyup`。
+
+所有触摸事件（touch events）及指针事件（pointer events）都是 `composed: true`。
+
+但也有些事件是 `composed: false` 的：
+
+- `mouseenter`，`mouseleave`（它们根本不会冒泡），
+- `load`，`unload`，`abort`，`error`，
+- `select`，
+- `slotchange`。
+
+这些事件仅能在事件目标所在的同一 DOM 中的元素上捕获，
+
+## 自定义事件（Custom events）
+
+当我们发送（dispatch）自定义事件，我们需要设置 `bubbles` 和 `composed` 属性都为 `true` 以使其冒泡并从组件中冒泡出来。
+
+例如，我们在 `div#outer` shadow DOM 内部创建 `div#inner` 并在其上触发两个事件。只有 `composed: true` 的那个自定义事件才会让该事件本身冒泡到文档外面：
+
+```html run untrusted height=0
+&lt;div id=&quot;outer&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+outer.attachShadow({mode: &#x27;open&#x27;});
+
+let inner = document.createElement(&#x27;div&#x27;);
+outer.shadowRoot.append(inner);
+
+/*
+div(id=outer)
+  #shadow-dom
+    div(id=inner)
+*/
+
+document.addEventListener(&#x27;test&#x27;, event =&gt; alert(event.detail));
+
+inner.dispatchEvent(new CustomEvent(&#x27;test&#x27;, {
+  bubbles: true,
+*!*
+  composed: true,
+*/!*
+  detail: &quot;composed&quot;
+}));
+
+inner.dispatchEvent(new CustomEvent(&#x27;test&#x27;, {
+  bubbles: true,
+*!*
+  composed: false,
+*/!*
+  detail: &quot;not composed&quot;
+}));
+&lt;/script&gt;</code></pre>
+<h2 id="总结">总结</h2>
+<p>事件仅仅是在它们的 <code>composed</code> 标志设置为 <code>true</code> 的时候才能通过 shadow DOM 边界。</p>
+<p>内建事件大部分都是 <code>composed: true</code> 的，正如相关规范所描述的那样：</p>
+<ul>
+<li>UI 事件 <a href="https://www.w3.org/TR/uievents">https://www.w3.org/TR/uievents</a>。</li>
+<li>Touch 事件 <a href="https://w3c.github.io/touch-events">https://w3c.github.io/touch-events</a>。</li>
+<li>Pointer 事件 <a href="https://www.w3.org/TR/pointerevents">https://www.w3.org/TR/pointerevents</a>。</li>
+<li>……等等。</li>
+</ul>
+<p>也有些内建事件它们是 <code>composed: false</code> 的：</p>
+<ul>
+<li><code>mouseenter</code>，<code>mouseleave</code>（也不冒泡），</li>
+<li><code>load</code>，<code>unload</code>，<code>abort</code>，<code>error</code>，</li>
+<li><code>select</code>，</li>
+<li><code>slotchange</code>。</li>
+</ul>
+<p>这些事件仅能在同一 DOM 中的元素上捕获。</p>
+<p>如果我们发送一个 <code>CustomEvent</code>，那么我们应该显式地设置 <code>composed: true</code>。</p>
+<p>请注意，如果是嵌套组件，一个 shadow DOM 可能嵌套到另外一个 shadow DOM 中。在这种情况下合成事件冒泡到所有 shadow DOM 边界。因此，如果一个事件仅用于直接封闭组件，我们也可以在 shadow host 上发送它并设置 <code>composed: false</code>。这样它就不在组件 shadow DOM 中，也不会冒泡到更高级别的 DOM。</p>

@@ -1,0 +1,66 @@
+<h1 id="reference-type">Reference Type</h1>
+<pre><code class="language-warn">本文所讲的是一个高阶主题，能帮你更好地理解一些边缘情况。
+
+这仅是锦上添花。许多经验丰富的的开发者不甚了了也过得不错。如果你想了解代码运行的本质，那就继续读下去吧。</code></pre>
+<p>一个动态执行的方法调用可能会丢失 <code>this</code>。</p>
+<p>例如：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  hi() { alert(<span class="hljs-built_in">this</span>.name); },
+  bye() { alert(<span class="hljs-string">&quot;Bye&quot;</span>); }
+};
+
+user.hi(); <span class="hljs-comment">// 正常运行</span>
+
+<span class="hljs-comment">// 现在让我们基于 name 来选择调用 user.hi 或 user.bye</span>
+*!*
+(user.name == <span class="hljs-string">&quot;John&quot;</span> ? user.hi : user.bye)(); <span class="hljs-comment">// Error!</span>
+*/!*</code></pre>
+<p>在最后一行有个在 <code>user.hi</code> 和 <code>user.bye</code> 中做选择的条件（三元）运算符。当前情形下的结果是 <code>user.hi</code>。</p>
+<p>接着该方法被通过 <code>()</code> 立刻调用。但是并不能正常工作！</p>
+<p>如你所见，此处调用导致了一个错误，因为在该调用中 <code>&quot;this&quot;</code> 的值变成了 <code>undefined</code>。</p>
+<p>这样是能工作的（对象.方法）：</p>
+<pre><code class="language-js">user.hi();</code></pre>
+<p>这就无法工作了（被评估的方法）：</p>
+<pre><code class="language-js">(user.name == <span class="hljs-string">&quot;John&quot;</span> ? user.hi : user.bye)(); <span class="hljs-comment">// Error!</span></code></pre>
+<p>为什么呢？欲知缘何，且让我们深入 <code>obj.method()</code> 调用运行的本质。</p>
+<h2 id="reference-type-解读">Reference type 解读</h2>
+<p>仔细看的话，我们可能注意到 <code>obj.method()</code> 语句中的两个操作：</p>
+<ol>
+<li>首先，点 <code>&#39;.&#39;</code> 取了属性 <code>obj.method</code> 的值。</li>
+<li>接着 <code>()</code> 执行了它。</li>
+</ol>
+<p>那么，<code>this</code> 的信息是怎么从第一部分传递到第二部分的呢？</p>
+<p>如果我们将这些操作放在不同的行，<code>this</code> 必定是会丢失的：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  hi() { alert(<span class="hljs-built_in">this</span>.name); }
+}
+
+*!*
+<span class="hljs-comment">// 把获取方法和调用方法拆成两行</span>
+<span class="hljs-keyword">let</span> hi = user.hi;
+hi(); <span class="hljs-comment">// 报错了，因为 this 的值是 undefined</span>
+*/!*</code></pre>
+<p>这里 <code>hi = user.hi</code> 把函数赋值给了一个变量，接下来在最后一行它是完全独立的，所以这里没有 <code>this</code>。</p>
+<p><strong>为确保 <code>user.hi()</code> 调用正常运行，JavaScript 玩了个小把戏 —— 点 <code>&#39;.&#39;</code> 返回的不是一个函数，而是一个特殊的 <a href="https://tc39.github.io/ecma262/#sec-reference-specification-type">Reference Type</a> 的值。</strong></p>
+<p>Reference Type 是 ECMA 中的一个“规范类型”。我们不能直接使用它，但它被用在 JavaScript 语言内部。</p>
+<p>Reference Type 的值是一个三个值的组合 <code>(base, name, strict)</code>，其中：</p>
+<ul>
+<li><code>base</code> 是对象。</li>
+<li><code>name</code> 是属性名。</li>
+<li><code>strict</code> 在 <code>use strict</code> 模式下为 true。</li>
+</ul>
+<p>对属性 <code>user.hi</code> 访问的结果不是一个函数，而是一个 Reference Type 的值。对于 <code>user.hi</code>，在严格模式下是：</p>
+<pre><code class="language-js"><span class="hljs-comment">// Reference Type 的值</span>
+(user, <span class="hljs-string">&quot;hi&quot;</span>, <span class="hljs-literal">true</span>)</code></pre>
+<p>当 <code>()</code> 被在 Reference Type 上调用时，它们会接收到关于对象和对象的方法的完整信息，然后可以设置正确的 <code>this</code>（在此处 <code>=user</code>）。</p>
+<p>Reference Type 是一个特殊的“中间人”内部类型，目的是从 <code>.</code> 传递信息给 <code>()</code> 调用。</p>
+<p>任何例如赋值 <code>hi = user.hi</code> 等其他的操作，都会将 Reference Type 作为一个整体丢弃掉，而会取 <code>user.hi</code>（一个函数）的值并继续传递。所以任何后续操作都“丢失”了 <code>this</code>。</p>
+<p>因此，<code>this</code> 的值仅在函数直接被通过点符号 <code>obj.method()</code> 或方括号 <code>obj[&#39;method&#39;]()</code> 语法（此处它们作用相同）调用时才被正确传递。在本教程的后续章节，我们会学习多种解决这个问题的方式，例如 <a href="/bind#solution-2-bind">func.bind()</a>。</p>
+<h2 id="总结">总结</h2>
+<p>Reference Type 是语言内部的一个类型。</p>
+<p>读取一个属性，例如在 <code>obj.method()</code> 中，<code>.</code> 返回的准确来说不是属性的值，而是一个特殊的 &quot;Reference Type&quot; 值，其中储存着属性的值和它的来源对象。</p>
+<p>这是为了随后的方法调用 <code>()</code> 获取来源对象，然后将 <code>this</code> 设为它。</p>
+<p>对于所有其它操作，Reference Type 会自动变成属性的值（在我们这个情况下是一个函数）。</p>
+<p>这整个机理对我们是不可见的。它仅在一些微妙的情形下才重要，例如一个方法是通过表达式从对象动态获取的。</p>

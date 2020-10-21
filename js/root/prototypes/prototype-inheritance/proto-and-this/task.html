@@ -1,0 +1,16 @@
+<p>importance: 5</p>
+<hr>
+<h1 id="写在哪里？">写在哪里？</h1>
+<p>我们有从 <code>animal</code> 中继承的 <code>rabbit</code>。</p>
+<p>如果我们调用 <code>rabbit.eat()</code>，哪一个对象会接收到 <code>full</code> 属性：<code>animal</code> 还是 <code>rabbit</code>？</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
+  eat() {
+    <span class="hljs-built_in">this</span>.full = <span class="hljs-literal">true</span>;
+  }
+};
+
+<span class="hljs-keyword">let</span> rabbit = {
+  <span class="hljs-attr">__proto__</span>: animal
+};
+
+rabbit.eat();</code></pre>
