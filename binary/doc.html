@@ -190,16 +190,16 @@
         .task-list-item{list-style-type:none}
         .task-list-item+.task-list-item{margin-top:3px}
         .task-list-item input{margin:0 .2em .25em -1.6em;vertical-align:middle}
-        #page{width:calc(100% - 300px);margin-left:300px}
+        #page{width:calc(100% - 500px);margin-left:500px;overflow: hidden;}
         fieldset{display:none;background-color:#fff;border:0;overflow:hidden;box-shadow:2px 2px 10px rgba(128,128,128,0.2);margin-bottom:20px;padding:20px}
         fieldset legend{font-weight:bold;color:green;height:3.5em;margin-left:-20px;padding:0}
-        #nav{background:rgb(255 255 255 / .6);padding:40px;position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto}
+        #nav{background:rgb(255 255 255 / .7);padding:20px 10px 100px 20px;position:fixed;top:0;left:0;bottom:0;width:500px;overflow-y:auto;overflow-x: hidden;white-space:nowrap}
         ::-webkit-scrollbar{width:5px}
         ::-webkit-scrollbar-thumb{background-color:#79a5e8}
         @media print,(max-width:900px){
           #nav{display:none!important}
           #page{width:100%!important;margin-left:0!important}
-          fieldset{display:block!important;box-shadow:none!important}
+          fieldset{padding-top: 0 !important;padding-bottom: 0 !important;display:block!important;box-shadow:none!important}
           .toggle-hash-btn {display: none !important;}
         }
         .hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}
@@ -220,6 +220,7 @@
         .hljs-emphasis{font-style:italic}
         .hljs-strong{font-weight:bold}
         .toggle-hash-btn {position: fixed;bottom: 10px;left:10px;z-index: 1000; display: flex; justify-content: space-between;  width: 270px;}
+        iframe {border: 5px solid #999;margin:10px;width: 90%;min-height: 50px;}
     </style>
     <script>
           const $ = selector => document.querySelector(selector);
@@ -263,21 +264,20 @@
 <body>
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
-     <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
   </div><div id="page">
-      <fieldset id='_M3KkHp'>
+      <fieldset id='_cK6QYr'>
       <legend>solution</legend>
       
       </fieldset>
       
-      <fieldset id='_sZAatX'>
+      <fieldset id='_6D5Qwv'>
       <legend>task</legend>
       <h1 id="拼接类型化数组">拼接类型化数组</h1>
 <p>给定一个 <code>Uint8Array</code> 数组，请写一个函数 <code>concat(arrays)</code>，将数组拼接成一个单一数组并返回。</p>
 
       </fieldset>
       
-      <fieldset id='_OFHYGy'>
+      <fieldset id='_7ePmtO'>
       <legend>article</legend>
       <h1 id="arraybuffer，二进制数组">ArrayBuffer，二进制数组</h1>
 <p>在 Web 开发中，当我们处理文件时（创建，上传，下载），经常会遇到二进制数据。另一个典型的应用场景是图像处理。</p>
@@ -329,7 +329,7 @@ alert(view.byteLength); <span class="hljs-comment">// 16，字节中的大小</s
 view[<span class="hljs-number">0</span>] = <span class="hljs-number">123456</span>;
 
 <span class="hljs-comment">// 遍历值</span>
-<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> num <span class="hljs-keyword">of</span> view) {
+<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> num <span class="hljs-keyword">of</span> view</span>)</span> {
   alert(num); <span class="hljs-comment">// 123456，然后 0，0，0（一共 4 个值）</span>
 }
 </code></pre>
@@ -498,7 +498,7 @@ dataView.setUint32(<span class="hljs-number">0</span>, <span class="hljs-number"
 
       </fieldset>
       
-      <fieldset id='_ylR3Gy'>
+      <fieldset id='_8zd7zT'>
       <legend>article</legend>
       <h1 id="textdecoder-和-textencoder">TextDecoder 和 TextEncoder</h1>
 <p>如果二进制数据实际上是一个字符串怎么办？例如，我们收到了一个包含文本数据的文件。</p>
@@ -534,7 +534,7 @@ alert( <span class="hljs-keyword">new</span> TextDecoder().decode(uint8Array) );
 
 <span class="hljs-comment">// 该字符串位于中间</span>
 <span class="hljs-comment">// 在不复制任何内容的前提下，创建一个新的视图</span>
-<span class="hljs-keyword">let</span> binaryString = uint8Array.subarray(<span class="hljs-number">1</span>, <span class="hljs-number">-1</span>);
+<span class="hljs-keyword">let</span> binaryString = uint8Array.subarray(<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>);
 
 alert( <span class="hljs-keyword">new</span> TextDecoder().decode(binaryString) ); <span class="hljs-comment">// Hello</span></code></pre>
 <h2 id="textencoder">TextEncoder</h2>
@@ -554,7 +554,7 @@ alert(uint8Array); <span class="hljs-comment">// 72,101,108,108,111</span></code
 
       </fieldset>
       
-      <fieldset id='_CljDrn'>
+      <fieldset id='_E0Fs3P'>
       <legend>article</legend>
       <h1 id="blob">Blob</h1>
 <p><code>ArrayBuffer</code> 和视图（view）都是 ECMA 标准的一部分，是 JavaScript 的一部分。</p>
@@ -721,7 +721,7 @@ fileReader.onload = <span class="hljs-function"><span class="hljs-keyword">funct
 
       </fieldset>
       
-      <fieldset id='_qAM33v'>
+      <fieldset id='_DOuaeJ'>
       <legend>article</legend>
       <h1 id="file-和-filereader">File 和 FileReader</h1>
 <p><a href="https://www.w3.org/TR/FileAPI/#dfn-file">File</a> 对象继承自 <code>Blob</code>，并扩展了与文件系统相关的功能。 </p>
@@ -839,5 +839,5 @@ fileReader.onload = <span class="hljs-function"><span class="hljs-keyword">funct
 而且，如果我们要通过网络发送一个 `File`，那也很容易：像 `XMLHttpRequest` 或 `fetch` 等网络 API 本身就接受 `File` 对象。</code></pre>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>arraybuffer-binary-arrays</strong><br/></div><div style="margin-left:1em"><strong>concat</strong><br/></div><div style="margin-left:2em"><a href="#_M3KkHp">solution</a><br/></div><div style="margin-left:2em"><a href="#_sZAatX">task</a><br/></div><div style="margin-left:1em"><a href="#_OFHYGy">article</a><br/></div><div style="margin-left:0em"><strong>text-decoder</strong><br/></div><div style="margin-left:1em"><a href="#_ylR3Gy">article</a><br/></div><div style="margin-left:0em"><strong>blob</strong><br/></div><div style="margin-left:1em"><a href="#_CljDrn">article</a><br/></div><div style="margin-left:0em"><strong>file</strong><br/></div><div style="margin-left:1em"><a href="#_qAM33v">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>arraybuffer-binary-arrays</strong><br/></div><div style="margin-left:1em"><strong>concat</strong><br/></div><div style="margin-left:2em"><a href="#_cK6QYr">solution</a><br/></div><div style="margin-left:2em"><a href="#_6D5Qwv">task</a><br/></div><div style="margin-left:1em"><a href="#_7ePmtO">article</a><br/></div><div style="margin-left:0em"><strong>text-decoder</strong><br/></div><div style="margin-left:1em"><a href="#_8zd7zT">article</a><br/></div><div style="margin-left:0em"><strong>blob</strong><br/></div><div style="margin-left:1em"><a href="#_E0Fs3P">article</a><br/></div><div style="margin-left:0em"><strong>file</strong><br/></div><div style="margin-left:1em"><a href="#_DOuaeJ">article</a><br/></div></div>
 </body></html>

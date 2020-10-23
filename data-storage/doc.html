@@ -190,16 +190,16 @@
         .task-list-item{list-style-type:none}
         .task-list-item+.task-list-item{margin-top:3px}
         .task-list-item input{margin:0 .2em .25em -1.6em;vertical-align:middle}
-        #page{width:calc(100% - 300px);margin-left:300px}
+        #page{width:calc(100% - 500px);margin-left:500px;overflow: hidden;}
         fieldset{display:none;background-color:#fff;border:0;overflow:hidden;box-shadow:2px 2px 10px rgba(128,128,128,0.2);margin-bottom:20px;padding:20px}
         fieldset legend{font-weight:bold;color:green;height:3.5em;margin-left:-20px;padding:0}
-        #nav{background:rgb(255 255 255 / .6);padding:40px;position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto}
+        #nav{background:rgb(255 255 255 / .7);padding:20px 10px 100px 20px;position:fixed;top:0;left:0;bottom:0;width:500px;overflow-y:auto;overflow-x: hidden;white-space:nowrap}
         ::-webkit-scrollbar{width:5px}
         ::-webkit-scrollbar-thumb{background-color:#79a5e8}
         @media print,(max-width:900px){
           #nav{display:none!important}
           #page{width:100%!important;margin-left:0!important}
-          fieldset{display:block!important;box-shadow:none!important}
+          fieldset{padding-top: 0 !important;padding-bottom: 0 !important;display:block!important;box-shadow:none!important}
           .toggle-hash-btn {display: none !important;}
         }
         .hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}
@@ -220,6 +220,7 @@
         .hljs-emphasis{font-style:italic}
         .hljs-strong{font-weight:bold}
         .toggle-hash-btn {position: fixed;bottom: 10px;left:10px;z-index: 1000; display: flex; justify-content: space-between;  width: 270px;}
+        iframe {border: 5px solid #999;margin:10px;width: 90%;min-height: 50px;}
     </style>
     <script>
           const $ = selector => document.querySelector(selector);
@@ -263,9 +264,8 @@
 <body>
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
-     <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
   </div><div id="page">
-      <fieldset id='_p3OAkB'>
+      <fieldset id='_46EyCH'>
       <legend>article</legend>
       <h1 id="cookie，documentcookie">Cookie，document.cookie</h1>
 <p>Cookie 是直接存储在浏览器中的一小串数据。它们是 HTTP 协议的一部分，由 <a href="https://tools.ietf.org/html/rfc6265">RFC 6265</a> 规范定义。</p>
@@ -355,7 +355,7 @@ date = date.toUTCString();
 <span class="hljs-built_in">document</span>.cookie = <span class="hljs-string">&quot;user=John; expires=&quot;</span> + date;</code></pre>
 <p>如果我们将 <code>expires</code> 设置为过去的时间，则 cookie 会被删除。</p>
 <ul>
-<li><strong><code>max-age=3600</code></strong></li>
+<li> <strong><code>max-age=3600</code></strong></li>
 </ul>
 <p><code>expires</code> 的替代选项，具指明 cookie 的过期时间距离当前时间的秒数。</p>
 <p>如果为 0 或负数，则 cookie 会被删除：</p>
@@ -478,7 +478,7 @@ setCookie(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-s
 <p>要删除一个 cookie，我们可以给它设置一个负的过期时间来调用它：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deleteCookie</span>(<span class="hljs-params">name</span>) </span>{
   setCookie(name, <span class="hljs-string">&quot;&quot;</span>, {
-    <span class="hljs-string">&#x27;max-age&#x27;</span>: <span class="hljs-number">-1</span>
+    <span class="hljs-string">&#x27;max-age&#x27;</span>: -<span class="hljs-number">1</span>
   })
 }</code></pre>
 <pre><code class="language-warn">请注意：当我们更新或删除一个 cookie 时，我们应该使用和设置 cookie 时相同的路径和域选项。</code></pre>
@@ -548,12 +548,12 @@ setCookie(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-s
 
       </fieldset>
       
-      <fieldset id='_wH92OS'>
+      <fieldset id='_BHmv0z'>
       <legend>solution</legend>
       
       </fieldset>
       
-      <fieldset id='_QtPAY4'>
+      <fieldset id='_zy5hJR'>
       <legend>task</legend>
       <h1 id="自动保存表单字段">自动保存表单字段</h1>
 <p>创建一个 <code>textarea</code> 字段，每当其值发生变化时，可以将其“自动保存”。</p>
@@ -563,7 +563,7 @@ setCookie(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-s
 
       </fieldset>
       
-      <fieldset id='_6WrOS3'>
+      <fieldset id='_Yjb4vs'>
       <legend>article</legend>
       <h1 id="localstorage，sessionstorage">LocalStorage，sessionStorage</h1>
 <p>Web 存储对象 <code>localStorage</code> 和 <code>sessionStorage</code> 允许我们在浏览器上保存键/值对。</p>
@@ -620,18 +620,18 @@ alert( <span class="hljs-built_in">localStorage</span>.test ); <span class="hljs
 <p>正如我们所看到的，这些方法提供了“按照键获取/设置/删除”的功能。但我们如何获取所有保存的值或键呢？</p>
 <p>不幸的是，存储对象是不可迭代的。</p>
 <p>一种方法是像遍历数组那样遍历它们：</p>
-<pre><code class="language-js"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">localStorage</span>.length; i++) {
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">localStorage</span>.length; i++</span>)</span> {
   <span class="hljs-keyword">let</span> key = <span class="hljs-built_in">localStorage</span>.key(i);
   alert(<span class="hljs-string">`<span class="hljs-subst">${key}</span>: <span class="hljs-subst">${<span class="hljs-built_in">localStorage</span>.getItem(key)}</span>`</span>);
 }</code></pre>
 <p>另一个方式是使用 <code>for key in localStorage</code> 循环，就像处理常规对象一样。</p>
 <p>它会遍历所有的键，但也会输出一些我们不需要的内建字段。</p>
 <pre><code class="language-js"><span class="hljs-comment">// 不好的尝试</span>
-<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">localStorage</span>) {
+<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">localStorage</span></span>)</span> {
   alert(key); <span class="hljs-comment">// 显示 getItem，setItem 和其他内建的东西</span>
 }</code></pre>
 <p>……因此，我们需要使用 <code>hasOwnProperty</code> 检查来过滤掉原型中的字段：</p>
-<pre><code class="language-js"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">localStorage</span>) {
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">localStorage</span></span>)</span> {
   <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">localStorage</span>.hasOwnProperty(key)) {
     <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 跳过像 &quot;setItem&quot;，&quot;getItem&quot; 等这样的键</span>
   }
@@ -639,7 +639,7 @@ alert( <span class="hljs-built_in">localStorage</span>.test ); <span class="hljs
 }</code></pre>
 <p>……或者，使用 <code>Object.keys</code> 获取只属于“自己”的键，然后如果需要，可以遍历它们：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> keys = <span class="hljs-built_in">Object</span>.keys(<span class="hljs-built_in">localStorage</span>);
-<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">of</span> keys) {
+<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> key <span class="hljs-keyword">of</span> keys</span>)</span> {
   alert(<span class="hljs-string">`<span class="hljs-subst">${key}</span>: <span class="hljs-subst">${<span class="hljs-built_in">localStorage</span>.getItem(key)}</span>`</span>);
 }</code></pre>
 <p>后者有效，因为 <code>Object.keys</code> 只返回属于对象的键，会忽略原型上的。</p>
@@ -744,7 +744,7 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-built
 
       </fieldset>
       
-      <fieldset id='_6Dzd13'>
+      <fieldset id='_iux6rw'>
       <legend>article</legend>
       <p>libs:</p>
 <ul>
@@ -805,7 +805,7 @@ openRequest.onsuccess = <span class="hljs-function"><span class="hljs-keyword">f
 openRequest.onupgradeneeded = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
   <span class="hljs-comment">// 现有的数据库版本小于 2（或不存在）</span>
   <span class="hljs-keyword">let</span> db = openRequest.result;
-  <span class="hljs-keyword">switch</span>(event.oldVersion) { <span class="hljs-comment">// 现有的 db 版本</span>
+  <span class="hljs-function"><span class="hljs-title">switch</span>(<span class="hljs-params">event.oldVersion</span>)</span> { <span class="hljs-comment">// 现有的 db 版本</span>
     <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:
       <span class="hljs-comment">// 版本 0 表示客户端没有数据库</span>
       <span class="hljs-comment">// 执行初始化</span>
@@ -1277,7 +1277,7 @@ request.onsuccess = <span class="hljs-function"><span class="hljs-keyword">funct
   <span class="hljs-keyword">await</span> transaction.complete;
 
   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;jsbook saved&#x27;</span>);
-} <span class="hljs-keyword">catch</span>(err) {
+} <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">err</span>)</span> {
   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;error&#x27;</span>, err.message);
 }
 </code></pre>
@@ -1346,5 +1346,5 @@ request.onsuccess = <span class="hljs-function"><span class="hljs-keyword">funct
 <p>[codetabs src=&quot;books&quot; current=&quot;index.html&quot;]</p>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>cookie</strong><br/></div><div style="margin-left:1em"><a href="#_p3OAkB">article</a><br/></div><div style="margin-left:0em"><strong>localstorage</strong><br/></div><div style="margin-left:1em"><strong>form-autosave</strong><br/></div><div style="margin-left:2em"><a href="#_wH92OS">solution</a><br/></div><div style="margin-left:2em"><a href="#_QtPAY4">task</a><br/></div><div style="margin-left:1em"><a href="#_6WrOS3">article</a><br/></div><div style="margin-left:0em"><strong>indexeddb</strong><br/></div><div style="margin-left:1em"><a href="#_6Dzd13">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>cookie</strong><br/></div><div style="margin-left:1em"><a href="#_46EyCH">article</a><br/></div><div style="margin-left:0em"><strong>localstorage</strong><br/></div><div style="margin-left:1em"><strong>form-autosave</strong><br/></div><div style="margin-left:2em"><a href="#_BHmv0z">solution</a><br/></div><div style="margin-left:2em"><a href="#_zy5hJR">task</a><br/></div><div style="margin-left:1em"><a href="#_Yjb4vs">article</a><br/></div><div style="margin-left:0em"><strong>indexeddb</strong><br/></div><div style="margin-left:1em"><a href="#_iux6rw">article</a><br/></div></div>
 </body></html>

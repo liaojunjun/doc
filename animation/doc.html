@@ -190,16 +190,16 @@
         .task-list-item{list-style-type:none}
         .task-list-item+.task-list-item{margin-top:3px}
         .task-list-item input{margin:0 .2em .25em -1.6em;vertical-align:middle}
-        #page{width:calc(100% - 300px);margin-left:300px}
+        #page{width:calc(100% - 500px);margin-left:500px;overflow: hidden;}
         fieldset{display:none;background-color:#fff;border:0;overflow:hidden;box-shadow:2px 2px 10px rgba(128,128,128,0.2);margin-bottom:20px;padding:20px}
         fieldset legend{font-weight:bold;color:green;height:3.5em;margin-left:-20px;padding:0}
-        #nav{background:rgb(255 255 255 / .6);padding:40px;position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto}
+        #nav{background:rgb(255 255 255 / .7);padding:20px 10px 100px 20px;position:fixed;top:0;left:0;bottom:0;width:500px;overflow-y:auto;overflow-x: hidden;white-space:nowrap}
         ::-webkit-scrollbar{width:5px}
         ::-webkit-scrollbar-thumb{background-color:#79a5e8}
         @media print,(max-width:900px){
           #nav{display:none!important}
           #page{width:100%!important;margin-left:0!important}
-          fieldset{display:block!important;box-shadow:none!important}
+          fieldset{padding-top: 0 !important;padding-bottom: 0 !important;display:block!important;box-shadow:none!important}
           .toggle-hash-btn {display: none !important;}
         }
         .hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}
@@ -220,6 +220,7 @@
         .hljs-emphasis{font-style:italic}
         .hljs-strong{font-weight:bold}
         .toggle-hash-btn {position: fixed;bottom: 10px;left:10px;z-index: 1000; display: flex; justify-content: space-between;  width: 270px;}
+        iframe {border: 5px solid #999;margin:10px;width: 90%;min-height: 50px;}
     </style>
     <script>
           const $ = selector => document.querySelector(selector);
@@ -263,9 +264,8 @@
 <body>
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
-     <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
   </div><div id="page">
-      <fieldset id='_11l8CW'>
+      <fieldset id='_9cDSmA'>
       <legend>article</legend>
       <h1 id="贝塞尔曲线">贝塞尔曲线</h1>
 <p>贝塞尔曲线用于计算机图形绘制形状，CSS 动画和许多其他地方。</p>
@@ -428,7 +428,7 @@
 
       </fieldset>
       
-      <fieldset id='_UhtcYE'>
+      <fieldset id='_lCcBWv'>
       <legend>solution</legend>
       <p>使用 CSS 为 <code>width</code> 和 <code>height</code> 属性生成动效：</p>
 <pre><code class="language-css"><span class="hljs-comment">/* 原始类 */</span>
@@ -446,7 +446,7 @@
 
       </fieldset>
       
-      <fieldset id='_SR8kti'>
+      <fieldset id='_nLwjHZ'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -462,7 +462,7 @@
 
       </fieldset>
       
-      <fieldset id='_OeJFe1'>
+      <fieldset id='_odNjq5'>
       <legend>solution</legend>
       <p>我们需要为此选择合适的贝塞尔曲线。它应该在某个地方拥有 <code>y &gt; 1</code>，来使得飞机『跳出来』。 </p>
 <p>举例来说，我们可以使两个控制点的 <code>y</code> 都大于 <code>1</code>：<code>cubic-bezier(0.25, 1.5, 0.75, 1.5)</code>。</p>
@@ -471,7 +471,7 @@
 
       </fieldset>
       
-      <fieldset id='_zPKJeW'>
+      <fieldset id='_OWMYaR'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -483,12 +483,12 @@
 
       </fieldset>
       
-      <fieldset id='_gegy3K'>
+      <fieldset id='_jGeGZS'>
       <legend>solution</legend>
       
       </fieldset>
       
-      <fieldset id='_TMeTGG'>
+      <fieldset id='_7FaW4V'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -504,7 +504,7 @@
 
       </fieldset>
       
-      <fieldset id='_Vgpuim'>
+      <fieldset id='_6LK3aA'>
       <legend>article</legend>
       <h1 id="css-动画">CSS 动画</h1>
 <p>CSS 动画可以在不借助 Javascript 的情况下做出一些简单的动画效果。</p>
@@ -806,7 +806,7 @@ growing.onclick = <span class="hljs-function"><span class="hljs-keyword">functio
 
       </fieldset>
       
-      <fieldset id='_T0njnD'>
+      <fieldset id='_6pffGp'>
       <legend>solution</legend>
       <p>为了达到反弹效果，我们可以在带有 <code>position:relative</code> 属性的区域内，给小球使用 <code>top</code> 和 <code>position:absolute</code> CSS 属性。</p>
 <p>field 区域的底部坐标是 <code>field.clientHeight</code>。<code>top</code> 属性给出了球顶部的坐标，在最底部时达到 <code>field.clientHeight - ball.clientHeight</code>。</p>
@@ -818,14 +818,14 @@ growing.onclick = <span class="hljs-function"><span class="hljs-keyword">functio
 animate({
   <span class="hljs-attr">duration</span>: <span class="hljs-number">2000</span>,
   <span class="hljs-attr">timing</span>: makeEaseOut(bounce),
-  draw(progress) {
+  <span class="hljs-function"><span class="hljs-title">draw</span>(<span class="hljs-params">progress</span>)</span> {
     ball.style.top = to * progress + <span class="hljs-string">&#x27;px&#x27;</span>
   }
 });</code></pre>
 
       </fieldset>
       
-      <fieldset id='_NtJmoi'>
+      <fieldset id='_nTYl5g'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -835,7 +835,7 @@ animate({
 
       </fieldset>
       
-      <fieldset id='_VavPHX'>
+      <fieldset id='_We6rHS'>
       <legend>solution</legend>
       <p>在任务 <a href="info:task/animate-ball">info:task/animate-ball</a> 中，我们只有一个需要添加动画的属性。现在多了一个 <code>elem.style.left</code>。</p>
 <p>水平坐标由另一个定律改变：它不会“反弹”，而是逐渐增加使球逐渐向右移动。</p>
@@ -865,7 +865,7 @@ animate({
 
       </fieldset>
       
-      <fieldset id='_WTVmme'>
+      <fieldset id='_Ved2OM'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -877,7 +877,7 @@ animate({
 
       </fieldset>
       
-      <fieldset id='_kHaDVW'>
+      <fieldset id='_Z89e8F'>
       <legend>article</legend>
       <h1 id="javascript-动画">JavaScript 动画</h1>
 <p>JavaScript 动画可以处理 CSS 无法处理的事情。</p>
@@ -1012,10 +1012,10 @@ function draw(progress) {
 <p>它的代码如下：</p>
 <pre><code class="language-js">animate({
   <span class="hljs-attr">duration</span>: <span class="hljs-number">1000</span>,
-  timing(timeFraction) {
+  <span class="hljs-function"><span class="hljs-title">timing</span>(<span class="hljs-params">timeFraction</span>)</span> {
     <span class="hljs-keyword">return</span> timeFraction;
   },
-  draw(progress) {
+  <span class="hljs-function"><span class="hljs-title">draw</span>(<span class="hljs-params">progress</span>)</span> {
     elem.style.width = progress * <span class="hljs-number">100</span> + <span class="hljs-string">&#x27;%&#x27;</span>;
   }
 });</code></pre>
@@ -1172,5 +1172,5 @@ bounceEaseInOut = makeEaseInOut(bounce);</code></pre>
 <p><code>draw</code> 也是如此：我们可以将任何东西动画化，而不仅仅是 CSS 属性。</p>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>bezier-curve</strong><br/></div><div style="margin-left:1em"><a href="#_11l8CW">article</a><br/></div><div style="margin-left:0em"><strong>css-animations</strong><br/></div><div style="margin-left:1em"><strong>animate-logo-css</strong><br/></div><div style="margin-left:2em"><a href="#_UhtcYE">solution</a><br/></div><div style="margin-left:2em"><a href="#_SR8kti">task</a><br/></div><div style="margin-left:1em"><strong>animate-logo-bezier-css</strong><br/></div><div style="margin-left:2em"><a href="#_OeJFe1">solution</a><br/></div><div style="margin-left:2em"><a href="#_zPKJeW">task</a><br/></div><div style="margin-left:1em"><strong>animate-circle</strong><br/></div><div style="margin-left:2em"><a href="#_gegy3K">solution</a><br/></div><div style="margin-left:2em"><a href="#_TMeTGG">task</a><br/></div><div style="margin-left:1em"><a href="#_Vgpuim">article</a><br/></div><div style="margin-left:0em"><strong>js-animation</strong><br/></div><div style="margin-left:1em"><strong>animate-ball</strong><br/></div><div style="margin-left:2em"><a href="#_T0njnD">solution</a><br/></div><div style="margin-left:2em"><a href="#_NtJmoi">task</a><br/></div><div style="margin-left:1em"><strong>animate-ball-hops</strong><br/></div><div style="margin-left:2em"><a href="#_VavPHX">solution</a><br/></div><div style="margin-left:2em"><a href="#_WTVmme">task</a><br/></div><div style="margin-left:1em"><a href="#_kHaDVW">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>bezier-curve</strong><br/></div><div style="margin-left:1em"><a href="#_9cDSmA">article</a><br/></div><div style="margin-left:0em"><strong>css-animations</strong><br/></div><div style="margin-left:1em"><strong>animate-logo-css</strong><br/></div><div style="margin-left:2em"><a href="#_lCcBWv">solution</a><br/></div><div style="margin-left:2em"><a href="#_nLwjHZ">task</a><br/></div><div style="margin-left:1em"><strong>animate-logo-bezier-css</strong><br/></div><div style="margin-left:2em"><a href="#_odNjq5">solution</a><br/></div><div style="margin-left:2em"><a href="#_OWMYaR">task</a><br/></div><div style="margin-left:1em"><strong>animate-circle</strong><br/></div><div style="margin-left:2em"><a href="#_jGeGZS">solution</a><br/></div><div style="margin-left:2em"><a href="#_7FaW4V">task</a><br/></div><div style="margin-left:1em"><a href="#_6LK3aA">article</a><br/></div><div style="margin-left:0em"><strong>js-animation</strong><br/></div><div style="margin-left:1em"><strong>animate-ball</strong><br/></div><div style="margin-left:2em"><a href="#_6pffGp">solution</a><br/></div><div style="margin-left:2em"><a href="#_nTYl5g">task</a><br/></div><div style="margin-left:1em"><strong>animate-ball-hops</strong><br/></div><div style="margin-left:2em"><a href="#_We6rHS">solution</a><br/></div><div style="margin-left:2em"><a href="#_Ved2OM">task</a><br/></div><div style="margin-left:1em"><a href="#_Z89e8F">article</a><br/></div></div>
 </body></html>

@@ -1,4 +1,3 @@
-
 # 事件委托
 
 捕获和冒泡允许我们实现一种被称为 **事件委托** 的强大的事件处理模式。
@@ -18,15 +17,23 @@
 ```html
 <table>
   <tr>
-    <th colspan="3"><em>Bagua</em> Chart: Direction, Element, Color, Meaning</th>
+    <th colspan="3">
+      <em>Bagua</em> Chart: Direction, Element, Color, Meaning
+    </th>
   </tr>
   <tr>
-    <td class="nw"><strong>Northwest</strong><br>Metal<br>Silver<br>Elders</td>
+    <td class="nw">
+      <strong>Northwest</strong><br />Metal<br />Silver<br />Elders
+    </td>
     <td class="n">...</td>
     <td class="ne">...</td>
   </tr>
-  <tr>...2 more lines of this kind...</tr>
-  <tr>...2 more lines of this kind...</tr>
+  <tr>
+    ...2 more lines of this kind...
+  </tr>
+  <tr>
+    ...2 more lines of this kind...
+  </tr>
 </table>
 ```
 
@@ -72,10 +79,9 @@ function highlight(td) {
 
 ```html
 <td>
-*!*
+  *!*
   <strong>Northwest</strong>
-*/!*
-  ...
+  */!* ...
 </td>
 ```
 
@@ -88,8 +94,8 @@ function highlight(td) {
 下面是改进后的代码：
 
 ```js
-table.onclick = function(event) {
-  let td = event.target.closest('td'); // (1)
+table.onclick = function (event) {
+  let td = event.target.closest("td"); // (1)
 
   if (!td) return; // (2)
 
@@ -100,6 +106,7 @@ table.onclick = function(event) {
 ```
 
 解释：
+
 1. `elem.closest(selector)` 方法返回与 `selector` 匹配的最近的祖先。在我们的例子中，我们从源元素开始向上寻找 `<td>`。
 2. 如果 `event.target` 不在任何 `<td>` 中，那么调用将立即返回，因为这里没有什么事儿可做。
 3. 对于嵌套的表格，`event.target` 可能是一个 `<td>`，但位于当前表格之外。因此我们需要检查它是否是 **我们的表格中的** `<td>`。
@@ -129,35 +136,35 @@ table.onclick = function(event) {
 </div>
 
 <script>
-  class Menu {
-    constructor(elem) {
-      this._elem = elem;
-      elem.onclick = this.onClick.bind(this); // (*)
-    }
-
-    save() {
-      alert('saving');
-    }
-
-    load() {
-      alert('loading');
-    }
-
-    search() {
-      alert('searching');
-    }
-
-    onClick(event) {
-*!*
-      let action = event.target.dataset.action;
-      if (action) {
-        this[action]();
+    class Menu {
+      constructor(elem) {
+        this._elem = elem;
+        elem.onclick = this.onClick.bind(this); // (*)
       }
-*/!*
-    };
-  }
 
-  new Menu(menu);
+      save() {
+        alert('saving');
+      }
+
+      load() {
+        alert('loading');
+      }
+
+      search() {
+        alert('searching');
+      }
+
+      onClick(event) {
+  *!*
+        let action = event.target.dataset.action;
+        if (action) {
+          this[action]();
+        }
+  */!*
+      };
+    }
+
+    new Menu(menu);
 </script>
 ```
 
@@ -177,6 +184,7 @@ table.onclick = function(event) {
 我们还可以使用事件委托将“行为（behavior）”以 **声明方式** 添加到具有特殊特性（attribute）和类的元素中。
 
 行为模式分为两个部分：
+
 1. 我们将自定义特性添加到描述其行为的元素。
 2. 用文档范围级的处理程序追踪事件，如果事件发生在具有特定特性的元素上 —— 则执行行为（action）。
 
@@ -185,16 +193,15 @@ table.onclick = function(event) {
 例如，这里的特性 `data-counter` 给按钮添加了一个“点击增加”的行为。
 
 ```html run autorun height=60
-Counter: <input type="button" value="1" data-counter>
-One more counter: <input type="button" value="2" data-counter>
+Counter: <input type="button" value="1" data-counter /> One more counter:
+<input type="button" value="2" data-counter />
 
 <script>
-  document.addEventListener('click', function(event) {
-
-    if (event.target.dataset.counter != undefined) { // 如果这个特性存在...
+  document.addEventListener("click", function (event) {
+    if (event.target.dataset.counter != undefined) {
+      // 如果这个特性存在...
       event.target.value++;
     }
-
   });
 </script>
 ```
@@ -203,28 +210,22 @@ One more counter: <input type="button" value="2" data-counter>
 
 我们可以根据需要使用 `data-counter` 特性，多少都可以。我们可以随时向 HTML 添加新的特性。使用事件委托，我们属于对 HTML 进行了“扩展”，添加了描述新行为的特性。
 
-```warn header="对于文档级的处理程序 —— 始终使用的是 `addEventListener`"
-当我们将事件处理程序分配给 `document` 对象时，我们应该始终使用 `addEventListener`，而不是 `document.on<event>`，因为后者会引起冲突：新的处理程序会覆盖旧的处理程序。
+对于文档级的处理程序 —— 始终使用的是 `addEventListener`" 当我们将事件处理程序分配给 `document`对象时，我们应该始终使用`addEventListener`，
+而不是 `document.on<event>`，因为后者会引起冲突：新的处理程序会覆盖旧的处理程序。
 
 对于实际项目来说。在 `document` 上有许多由代码的不同部分设置的处理程序，这是很正常的。
-```
 
 ### 行为：切换器
 
 再举一个例子。点击一个具有 `data-toggle-id` 特性的元素将显示/隐藏具有给定 `id` 的元素：
 
-```html autorun run height=60
-<button *!*data-toggle-id="subscribe-mail"*/!*>
-  Show the subscription form
-</button>
+```html
+<button data-toggle-id="subscribe-mail">Show the subscription form</button>
 
-<form id="subscribe-mail" hidden>
-  Your mail: <input type="email">
-</form>
+<form id="subscribe-mail" hidden>Your mail: <input type="email" /></form>
 
 <script>
-*!*
-  document.addEventListener('click', function(event) {
+  document.addEventListener("click", function (event) {
     let id = event.target.dataset.toggleId;
     if (!id) return;
 
@@ -232,7 +233,6 @@ One more counter: <input type="button" value="2" data-counter>
 
     elem.hidden = !elem.hidden;
   });
-*/!*
 </script>
 ```
 

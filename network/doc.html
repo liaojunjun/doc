@@ -190,16 +190,16 @@
         .task-list-item{list-style-type:none}
         .task-list-item+.task-list-item{margin-top:3px}
         .task-list-item input{margin:0 .2em .25em -1.6em;vertical-align:middle}
-        #page{width:calc(100% - 300px);margin-left:300px}
+        #page{width:calc(100% - 500px);margin-left:500px;overflow: hidden;}
         fieldset{display:none;background-color:#fff;border:0;overflow:hidden;box-shadow:2px 2px 10px rgba(128,128,128,0.2);margin-bottom:20px;padding:20px}
         fieldset legend{font-weight:bold;color:green;height:3.5em;margin-left:-20px;padding:0}
-        #nav{background:rgb(255 255 255 / .6);padding:40px;position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto}
+        #nav{background:rgb(255 255 255 / .7);padding:20px 10px 100px 20px;position:fixed;top:0;left:0;bottom:0;width:500px;overflow-y:auto;overflow-x: hidden;white-space:nowrap}
         ::-webkit-scrollbar{width:5px}
         ::-webkit-scrollbar-thumb{background-color:#79a5e8}
         @media print,(max-width:900px){
           #nav{display:none!important}
           #page{width:100%!important;margin-left:0!important}
-          fieldset{display:block!important;box-shadow:none!important}
+          fieldset{padding-top: 0 !important;padding-bottom: 0 !important;display:block!important;box-shadow:none!important}
           .toggle-hash-btn {display: none !important;}
         }
         .hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}
@@ -220,6 +220,7 @@
         .hljs-emphasis{font-style:italic}
         .hljs-strong{font-weight:bold}
         .toggle-hash-btn {position: fixed;bottom: 10px;left:10px;z-index: 1000; display: flex; justify-content: space-between;  width: 270px;}
+        iframe {border: 5px solid #999;margin:10px;width: 90%;min-height: 50px;}
     </style>
     <script>
           const $ = selector => document.querySelector(selector);
@@ -263,9 +264,8 @@
 <body>
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
-     <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
   </div><div id="page">
-      <fieldset id='_7ZTpQ6'>
+      <fieldset id='_1XvWJs'>
       <legend>solution</legend>
       <p>要获取一个用户，我们需要：<code>fetch(&#39;https://api.github.com/users/USERNAME&#39;)</code>.</p>
 <p>如果响应的状态码是 <code>200</code>，则调用 <code>.json()</code> 来读取 JS 对象。</p>
@@ -274,7 +274,7 @@
 <pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getUsers</span>(<span class="hljs-params">names</span>) </span>{
   <span class="hljs-keyword">let</span> jobs = [];
 
-  <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> name <span class="hljs-keyword">of</span> names) {
+  <span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> name <span class="hljs-keyword">of</span> names</span>)</span> {
     <span class="hljs-keyword">let</span> job = fetch(<span class="hljs-string">`https://api.github.com/users/<span class="hljs-subst">${name}</span>`</span>).then(
       <span class="hljs-function"><span class="hljs-params">successResponse</span> =&gt;</span> {
         <span class="hljs-keyword">if</span> (successResponse.status != <span class="hljs-number">200</span>) {
@@ -300,7 +300,7 @@
 
       </fieldset>
       
-      <fieldset id='_K68t4m'>
+      <fieldset id='_LVtgBW'>
       <legend>task</legend>
       <h1 id="从-github-fetch-用户信息">从 GitHub fetch 用户信息</h1>
 <p>创建一个异步函数 <code>getUsers(names)</code>，该函数接受 GitHub 登录名数组作为输入，查询 GitHub 以获取有关这些用户的信息，并返回 GitHub 用户数组。</p>
@@ -315,7 +315,7 @@
 
       </fieldset>
       
-      <fieldset id='_kEo24b'>
+      <fieldset id='_Z2heU2'>
       <legend>article</legend>
       <h1 id="fetch">Fetch</h1>
 <p>JavaScript 可以将网络请求发送到服务器，并在需要时加载新信息。</p>
@@ -561,7 +561,7 @@ alert(result.message);</code></pre>
 
       </fieldset>
       
-      <fieldset id='_W7yF5T'>
+      <fieldset id='_Rx1uqh'>
       <legend>article</legend>
       <h1 id="formdata">FormData</h1>
 <p>这一章是关于发送 HTML 表单的：带有或不带文件，带有其他字段等。</p>
@@ -618,7 +618,7 @@ formData.append(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="
 formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;value2&#x27;</span>);
 
 <span class="hljs-comment">// 列出 key/value 对</span>
-<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> [name, value] <span class="hljs-keyword">of</span> formData) {
+<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> [name, value] <span class="hljs-keyword">of</span> formData</span>)</span> {
   alert(<span class="hljs-string">`<span class="hljs-subst">${name}</span> = <span class="hljs-subst">${value}</span>`</span>); <span class="hljs-comment">// key1=value1，然后是 key2=value2</span>
 }</code></pre>
 <h2 id="发送带有文件的表单">发送带有文件的表单</h2>
@@ -710,7 +710,7 @@ formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="
 
       </fieldset>
       
-      <fieldset id='_UmBNme'>
+      <fieldset id='_sqliOp'>
       <legend>article</legend>
       <h1 id="fetch：下载进度">Fetch：下载进度</h1>
 <p><code>fetch</code> 方法允许去跟踪 <strong>下载</strong> 进度。</p>
@@ -722,7 +722,7 @@ formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="
 <span class="hljs-keyword">const</span> reader = response.body.getReader();
 
 <span class="hljs-comment">// 在 body 下载时，一直为无限循环</span>
-<span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {
+<span class="hljs-function"><span class="hljs-title">while</span>(<span class="hljs-params"><span class="hljs-literal">true</span></span>)</span> {
   <span class="hljs-comment">// 当最后一块下载完成时，done 值为 true</span>
   <span class="hljs-comment">// value 是块字节的 Uint8Array</span>
   <span class="hljs-keyword">const</span> {done, value} = <span class="hljs-keyword">await</span> reader.read();
@@ -753,7 +753,7 @@ formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="
 <span class="hljs-comment">// Step 3：读取数据</span>
 <span class="hljs-keyword">let</span> receivedLength = <span class="hljs-number">0</span>; <span class="hljs-comment">// 当前接收到了这么多字节</span>
 <span class="hljs-keyword">let</span> chunks = []; <span class="hljs-comment">// 接收到的二进制块的数组（包括 body）</span>
-<span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>) {
+<span class="hljs-function"><span class="hljs-title">while</span>(<span class="hljs-params"><span class="hljs-literal">true</span></span>)</span> {
   <span class="hljs-keyword">const</span> {done, value} = <span class="hljs-keyword">await</span> reader.read();
 
   <span class="hljs-keyword">if</span> (done) {
@@ -769,7 +769,7 @@ formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="
 <span class="hljs-comment">// Step 4：将块连接到单个 Uint8Array</span>
 <span class="hljs-keyword">let</span> chunksAll = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(receivedLength); <span class="hljs-comment">// (4.1)</span>
 <span class="hljs-keyword">let</span> position = <span class="hljs-number">0</span>;
-<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> chunk <span class="hljs-keyword">of</span> chunks) {
+<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> chunk <span class="hljs-keyword">of</span> chunks</span>)</span> {
     chunksAll.set(chunk, position); <span class="hljs-comment">// (4.2)</span>
     position += chunk.length;
 }
@@ -808,7 +808,7 @@ alert(commits[<span class="hljs-number">0</span>].author.login);</code></pre>
 
       </fieldset>
       
-      <fieldset id='_kyb2sW'>
+      <fieldset id='_9zmJ7n'>
       <legend>article</legend>
       <h1 id="fetch：中止（abort）">Fetch：中止（Abort）</h1>
 <p>正如我们所知道的，<code>fetch</code> 返回一个 promise。JavaScript 通常并没有“中止” promise 的概念。那么我们怎样才能中止 <code>fetch</code> 呢？</p>
@@ -861,7 +861,7 @@ fetch(url, {
   <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch-abort/demo/hang&#x27;</span>, {
     <span class="hljs-attr">signal</span>: controller.signal
   });
-} <span class="hljs-keyword">catch</span>(err) {
+} <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">err</span>)</span> {
   <span class="hljs-keyword">if</span> (err.name == <span class="hljs-string">&#x27;AbortError&#x27;</span>) { <span class="hljs-comment">// handle abort()</span>
     alert(<span class="hljs-string">&quot;Aborted!&quot;</span>);
   } <span class="hljs-keyword">else</span> {
@@ -905,7 +905,7 @@ fetch(url, {
 
       </fieldset>
       
-      <fieldset id='_WF1qVz'>
+      <fieldset id='_PbmgVc'>
       <legend>solution</legend>
       <p>我们需要 <code>Origin</code>，是因为有时会没有 <code>Referer</code>。例如，当我们从 HTTPS（从高安全性访问低安全性）<code>fetch</code> HTTP 页面时，便没有 <code>Referer</code>。</p>
 <p><a href="http://en.wikipedia.org/wiki/Content_Security_Policy">内容安全策略</a> 可能会禁止发送 <code>Referer</code>。</p>
@@ -915,7 +915,7 @@ fetch(url, {
 
       </fieldset>
       
-      <fieldset id='_ga2M2J'>
+      <fieldset id='_gwdcd0'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -940,14 +940,14 @@ Referer: http://javascript.info/some/url
 
       </fieldset>
       
-      <fieldset id='_KUAWpB'>
+      <fieldset id='_Dt8kxT'>
       <legend>article</legend>
       <h1 id="fetch：跨源请求">Fetch：跨源请求</h1>
 <p>如果我们向另一个网站发送 <code>fetch</code> 请求，则该请求可能会失败。</p>
 <p>例如，让我们尝试向 <code>http://example.com</code> 发送 <code>fetch</code> 请求：</p>
 <pre><code class="language-js"><span class="hljs-keyword">try</span> {
   <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;http://example.com&#x27;</span>);
-} <span class="hljs-keyword">catch</span>(err) {
+} <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">err</span>)</span> {
   alert(err); <span class="hljs-comment">// fetch 失败</span>
 }</code></pre>
 <p>正如所料，获取失败。</p>
@@ -1220,7 +1220,7 @@ Access-Control-Allow-Credentials: true</code></pre>
 
       </fieldset>
       
-      <fieldset id='_u1ZOYV'>
+      <fieldset id='_EphjzO'>
       <legend>article</legend>
       <h1 id="fetch-api">Fetch API</h1>
 <p>到目前为止，我们已经对 <code>fetch</code> 相当了解了。</p>
@@ -1239,7 +1239,7 @@ Access-Control-Allow-Credentials: true</code></pre>
   <span class="hljs-attr">body</span>: <span class="hljs-literal">undefined</span> <span class="hljs-comment">// string，FormData，Blob，BufferSource，或 URLSearchParams</span>
   <span class="hljs-attr">referrer</span>: <span class="hljs-string">&quot;about:client&quot;</span>, <span class="hljs-comment">// 或 &quot;&quot; 以不发送 Referer header，</span>
   <span class="hljs-comment">// 或者是当前源的 url</span>
-  <span class="hljs-attr">referrerPolicy</span>: <span class="hljs-string">&quot;no-referrer-when-downgrade&quot;</span>, <span class="hljs-comment">// no-referrer，origin，same-origin...</span>
+  referrerPolicy: <span class="hljs-string">&quot;no-referrer-when-downgrade&quot;</span>, <span class="hljs-comment">// no-referrer，origin，same-origin...</span>
   <span class="hljs-attr">mode</span>: <span class="hljs-string">&quot;cors&quot;</span>, <span class="hljs-comment">// same-origin，no-cors</span>
   <span class="hljs-attr">credentials</span>: <span class="hljs-string">&quot;same-origin&quot;</span>, <span class="hljs-comment">// omit，include</span>
   <span class="hljs-attr">cache</span>: <span class="hljs-string">&quot;default&quot;</span>, <span class="hljs-comment">// no-store，reload，no-cache，force-cache，或 only-if-cached</span>
@@ -1449,7 +1449,7 @@ fetch(&#x27;http://site.com/file&#x27;, {
 
       </fieldset>
       
-      <fieldset id='_HgWIRs'>
+      <fieldset id='_QjYk6H'>
       <legend>article</legend>
       <h1 id="url-对象">URL 对象</h1>
 <p>内建的 <a href="https://url.spec.whatwg.org/#api">URL</a> 类提供了用于创建和解析 URL 的便捷接口。</p>
@@ -1527,7 +1527,7 @@ url.searchParams.set(<span class="hljs-string">&#x27;tbs&#x27;</span>, <span cla
 alert(url); <span class="hljs-comment">// https://google.com/search?q=test+me%21&amp;tbs=qdr%3Ay</span>
 
 <span class="hljs-comment">// 遍历搜索参数（被解码）</span>
-<span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> [name, value] <span class="hljs-keyword">of</span> url.searchParams) {
+<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> [name, value] <span class="hljs-keyword">of</span> url.searchParams</span>)</span> {
   alert(<span class="hljs-string">`<span class="hljs-subst">${name}</span>=<span class="hljs-subst">${value}</span>`</span>); <span class="hljs-comment">// q=test me!，然后是 tbs=qdr:y</span>
 }</code></pre>
 <h2 id="编码（encoding）">编码（encoding）</h2>
@@ -1594,7 +1594,7 @@ alert(<span class="hljs-keyword">new</span> URL(url)); <span class="hljs-comment
 
       </fieldset>
       
-      <fieldset id='_4Xnjqq'>
+      <fieldset id='_CN5cep'>
       <legend>article</legend>
       <h1 id="xmlhttprequest">XMLHttpRequest</h1>
 <p><code>XMLHttpRequest</code> 是一个内建的浏览器对象，它允许使用 JavaScript 发送 HTTP 请求。</p>
@@ -1780,7 +1780,7 @@ xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-str
   } <span class="hljs-keyword">else</span> {
     alert(xhr.response);
   }
-} <span class="hljs-keyword">catch</span>(err) { <span class="hljs-comment">// 代替 onerror</span>
+} <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">err</span>)</span> { <span class="hljs-comment">// 代替 onerror</span>
   alert(<span class="hljs-string">&quot;Request failed&quot;</span>);
 }</code></pre>
 <p>这看起来好像不错，但是很少使用同步调用，因为它们会阻塞页面内的 JavaScript，直到加载完成。在某些浏览器中，滚动可能无法正常进行。如果一个同步调用执行时间过长，浏览器可能会建议关闭“挂起（hanging）”的网页。</p>
@@ -2008,7 +2008,7 @@ xhr.onerror = <span class="hljs-function"><span class="hljs-keyword">function</s
 
       </fieldset>
       
-      <fieldset id='_4LkMLu'>
+      <fieldset id='_8DreUM'>
       <legend>article</legend>
       <h1 id="可恢复的文件上传">可恢复的文件上传</h1>
 <p>使用 <code>fetch</code> 方法来上传文件相当容易。</p>
@@ -2068,7 +2068,7 @@ xhr.send(file.slice(startByte));</code></pre>
 
       </fieldset>
       
-      <fieldset id='_USAt6o'>
+      <fieldset id='_eC8y3U'>
       <legend>article</legend>
       <h1 id="长轮询（long-polling）">长轮询（Long polling）</h1>
 <p>长轮询是与服务器保持持久连接的最简单的方式，它不使用任何特定的协议，例如 WebSocket 或者 Server Sent Event。</p>
@@ -2141,7 +2141,7 @@ subscribe();</code></pre>
 
       </fieldset>
       
-      <fieldset id='_IKPsUS'>
+      <fieldset id='_CPApuJ'>
       <legend>article</legend>
       <h1 id="websocket">WebSocket</h1>
 <p>在 <a href="http://tools.ietf.org/html/rfc6455">RFC 6455</a> 规范中描述的 <code>WebSocket</code> 协议提供了一种在浏览器和服务器之间建立持久连接来交换数据的方法。数据可以作为“数据包”在两个方向上传递，而不会断开连接和其他 HTTP 请求。</p>
@@ -2393,7 +2393,7 @@ http.createServer(<span class="hljs-function">(<span class="hljs-params">req, re
   ws.on(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message</span>) </span>{
     message = message.slice(<span class="hljs-number">0</span>, <span class="hljs-number">50</span>); <span class="hljs-comment">// message 的最大长度为 50</span>
 
-    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> client <span class="hljs-keyword">of</span> clients) {
+    <span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> client <span class="hljs-keyword">of</span> clients</span>)</span> {
       client.send(message);
     }
   });
@@ -2431,7 +2431,7 @@ http.createServer(<span class="hljs-function">(<span class="hljs-params">req, re
 
       </fieldset>
       
-      <fieldset id='_kg2hRm'>
+      <fieldset id='_vgI6hV'>
       <legend>article</legend>
       <h1 id="server-sent-events">Server Sent Events</h1>
 <p><a href="https://html.spec.whatwg.org/multipage/comms.html#the-eventsource-interface">Server-Sent Events</a> 规范描述了一个内建的类 <code>EventSource</code>，它能保持与服务器的连接，并允许从中接收事件。</p>
@@ -2621,5 +2621,5 @@ eventSource.addEventListener(<span class="hljs-string">&#x27;leave&#x27;</span>,
 <p>一条消息可以按任何顺序包含一个或多个字段，但是 <code>id:</code> 通常排在最后。</p>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>fetch</strong><br/></div><div style="margin-left:1em"><strong>fetch-users</strong><br/></div><div style="margin-left:2em"><a href="#_7ZTpQ6">solution</a><br/></div><div style="margin-left:2em"><a href="#_K68t4m">task</a><br/></div><div style="margin-left:1em"><a href="#_kEo24b">article</a><br/></div><div style="margin-left:0em"><strong>formdata</strong><br/></div><div style="margin-left:1em"><a href="#_W7yF5T">article</a><br/></div><div style="margin-left:0em"><strong>fetch-progress</strong><br/></div><div style="margin-left:1em"><a href="#_UmBNme">article</a><br/></div><div style="margin-left:0em"><strong>fetch-abort</strong><br/></div><div style="margin-left:1em"><a href="#_kyb2sW">article</a><br/></div><div style="margin-left:0em"><strong>fetch-crossorigin</strong><br/></div><div style="margin-left:1em"><strong>do-we-need-origin</strong><br/></div><div style="margin-left:2em"><a href="#_WF1qVz">solution</a><br/></div><div style="margin-left:2em"><a href="#_ga2M2J">task</a><br/></div><div style="margin-left:1em"><a href="#_KUAWpB">article</a><br/></div><div style="margin-left:0em"><strong>fetch-api</strong><br/></div><div style="margin-left:1em"><a href="#_u1ZOYV">article</a><br/></div><div style="margin-left:0em"><strong>url</strong><br/></div><div style="margin-left:1em"><a href="#_HgWIRs">article</a><br/></div><div style="margin-left:0em"><strong>xmlhttprequest</strong><br/></div><div style="margin-left:1em"><a href="#_4Xnjqq">article</a><br/></div><div style="margin-left:0em"><strong>resume-upload</strong><br/></div><div style="margin-left:1em"><a href="#_4LkMLu">article</a><br/></div><div style="margin-left:0em"><strong>long-polling</strong><br/></div><div style="margin-left:1em"><a href="#_USAt6o">article</a><br/></div><div style="margin-left:0em"><strong>websocket</strong><br/></div><div style="margin-left:1em"><a href="#_IKPsUS">article</a><br/></div><div style="margin-left:0em"><strong>server-sent-events</strong><br/></div><div style="margin-left:1em"><a href="#_kg2hRm">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>fetch</strong><br/></div><div style="margin-left:1em"><strong>fetch-users</strong><br/></div><div style="margin-left:2em"><a href="#_1XvWJs">solution</a><br/></div><div style="margin-left:2em"><a href="#_LVtgBW">task</a><br/></div><div style="margin-left:1em"><a href="#_Z2heU2">article</a><br/></div><div style="margin-left:0em"><strong>formdata</strong><br/></div><div style="margin-left:1em"><a href="#_Rx1uqh">article</a><br/></div><div style="margin-left:0em"><strong>fetch-progress</strong><br/></div><div style="margin-left:1em"><a href="#_sqliOp">article</a><br/></div><div style="margin-left:0em"><strong>fetch-abort</strong><br/></div><div style="margin-left:1em"><a href="#_9zmJ7n">article</a><br/></div><div style="margin-left:0em"><strong>fetch-crossorigin</strong><br/></div><div style="margin-left:1em"><strong>do-we-need-origin</strong><br/></div><div style="margin-left:2em"><a href="#_PbmgVc">solution</a><br/></div><div style="margin-left:2em"><a href="#_gwdcd0">task</a><br/></div><div style="margin-left:1em"><a href="#_Dt8kxT">article</a><br/></div><div style="margin-left:0em"><strong>fetch-api</strong><br/></div><div style="margin-left:1em"><a href="#_EphjzO">article</a><br/></div><div style="margin-left:0em"><strong>url</strong><br/></div><div style="margin-left:1em"><a href="#_QjYk6H">article</a><br/></div><div style="margin-left:0em"><strong>xmlhttprequest</strong><br/></div><div style="margin-left:1em"><a href="#_CN5cep">article</a><br/></div><div style="margin-left:0em"><strong>resume-upload</strong><br/></div><div style="margin-left:1em"><a href="#_8DreUM">article</a><br/></div><div style="margin-left:0em"><strong>long-polling</strong><br/></div><div style="margin-left:1em"><a href="#_eC8y3U">article</a><br/></div><div style="margin-left:0em"><strong>websocket</strong><br/></div><div style="margin-left:1em"><a href="#_CPApuJ">article</a><br/></div><div style="margin-left:0em"><strong>server-sent-events</strong><br/></div><div style="margin-left:1em"><a href="#_vgI6hV">article</a><br/></div></div>
 </body></html>

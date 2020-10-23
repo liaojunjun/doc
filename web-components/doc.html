@@ -190,16 +190,16 @@
         .task-list-item{list-style-type:none}
         .task-list-item+.task-list-item{margin-top:3px}
         .task-list-item input{margin:0 .2em .25em -1.6em;vertical-align:middle}
-        #page{width:calc(100% - 300px);margin-left:300px}
+        #page{width:calc(100% - 500px);margin-left:500px;overflow: hidden;}
         fieldset{display:none;background-color:#fff;border:0;overflow:hidden;box-shadow:2px 2px 10px rgba(128,128,128,0.2);margin-bottom:20px;padding:20px}
         fieldset legend{font-weight:bold;color:green;height:3.5em;margin-left:-20px;padding:0}
-        #nav{background:rgb(255 255 255 / .6);padding:40px;position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto}
+        #nav{background:rgb(255 255 255 / .7);padding:20px 10px 100px 20px;position:fixed;top:0;left:0;bottom:0;width:500px;overflow-y:auto;overflow-x: hidden;white-space:nowrap}
         ::-webkit-scrollbar{width:5px}
         ::-webkit-scrollbar-thumb{background-color:#79a5e8}
         @media print,(max-width:900px){
           #nav{display:none!important}
           #page{width:100%!important;margin-left:0!important}
-          fieldset{display:block!important;box-shadow:none!important}
+          fieldset{padding-top: 0 !important;padding-bottom: 0 !important;display:block!important;box-shadow:none!important}
           .toggle-hash-btn {display: none !important;}
         }
         .hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}
@@ -220,6 +220,7 @@
         .hljs-emphasis{font-style:italic}
         .hljs-strong{font-weight:bold}
         .toggle-hash-btn {position: fixed;bottom: 10px;left:10px;z-index: 1000; display: flex; justify-content: space-between;  width: 270px;}
+        iframe {border: 5px solid #999;margin:10px;width: 90%;min-height: 50px;}
     </style>
     <script>
           const $ = selector => document.querySelector(selector);
@@ -263,9 +264,8 @@
 <body>
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
-     <a target='_blank' href="https://github.com/liaojunjun/ggdoc"><svg class="octicon octicon-mark-github v-align-middle" height="25" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a>
   </div><div id="page">
-      <fieldset id='_zwWUXb'>
+      <fieldset id='_iGnsis'>
       <legend>article</legend>
       <h1 id="从星球轨道的高度讲起">从星球轨道的高度讲起</h1>
 <p>这一部分我们将会讲述关于「Web Components」的一系列现代标准。</p>
@@ -324,7 +324,7 @@
 
       </fieldset>
       
-      <fieldset id='_2hg84K'>
+      <fieldset id='_g9pKrL'>
       <legend>solution</legend>
       <p>请注意：</p>
 <ol>
@@ -334,7 +334,7 @@
 
       </fieldset>
       
-      <fieldset id='_aqoyel'>
+      <fieldset id='_ttFQT7'>
       <legend>task</legend>
       <h1 id="计时器元素实例">计时器元素实例</h1>
 <p>我们已经创建了 <code>&lt;time-formatted&gt;</code> 元素用于展示格式化好的时间。</p>
@@ -355,7 +355,7 @@
 
       </fieldset>
       
-      <fieldset id='_1w88Hz'>
+      <fieldset id='_KbaQeR'>
       <legend>article</legend>
       <h1 id="custom-elements">Custom elements</h1>
 <p>我们可以通过描述带有自己的方法、属性和事件等的类来创建自定义 HTML 元素。</p>
@@ -372,17 +372,17 @@
 <p>通过创建一个带有几个特殊方法的类，我们可以完成这件事。这非常容易实现，我们只需要添加几个方法就行了，同时这些方法都不是必须的。</p>
 <p>下面列出了这几个方法的概述：</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyElement</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  <span class="hljs-keyword">constructor</span>() {
+  <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">super</span>();
     <span class="hljs-comment">// 元素在这里创建</span>
   }
 
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-comment">// 在元素被添加到文档之后，浏览器会调用这个方法</span>
     <span class="hljs-comment">//（如果一个元素被反复添加到文档／移除文档，那么这个方法会被多次调用）</span>
   }
 
-  disconnectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">disconnectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-comment">// 在元素从文档移除到时候，浏览器会调用这个方法</span>
     <span class="hljs-comment">// （如果一个元素被反复添加到文档／移除文档，那么这个方法会被多次调用）</span>
   }
@@ -391,11 +391,11 @@
     <span class="hljs-keyword">return</span> [<span class="hljs-comment">/* 属性数组，这些属性的变化会被被监视 */</span>];
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  <span class="hljs-function"><span class="hljs-title">attributeChangedCallback</span>(<span class="hljs-params">name, oldValue, newValue</span>)</span> {
     <span class="hljs-comment">// 当上面数组里面的属性变化的时候，这个方法会被调用</span>
   }
 
-  adoptedCallback() {
+  <span class="hljs-function"><span class="hljs-title">adoptedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-comment">// 在元素被移动到新的文档的时候，这个方法会被调用</span>
     <span class="hljs-comment">// （document.adoptNode 会用到, 非常少见）</span>
   }
@@ -549,7 +549,7 @@ setInterval(() =&gt; elem.setAttribute(&#x27;datetime&#x27;, new Date()), 1000);
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
 
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
 *!*
     alert(<span class="hljs-built_in">this</span>.innerHTML); <span class="hljs-comment">// empty (*)</span>
 */!*
@@ -569,7 +569,7 @@ customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <s
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
 
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
 *!*
     <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> alert(<span class="hljs-built_in">this</span>.innerHTML)); <span class="hljs-comment">// John (*)</span>
 */!*
@@ -587,7 +587,7 @@ customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <s
 <p>让我们用一个例子来说明：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.id}</span> 已连接。`</span>);
     <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.id}</span> 初始化完成。`</span>));
   }
@@ -630,7 +630,7 @@ customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <s
 <span class="hljs-comment">// 这个按钮在被点击的时候说 &quot;hello&quot;</span>
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLButtonElement</span> </span>{
 *!*
-  <span class="hljs-keyword">constructor</span>() {
+  <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> {
 */!*
     <span class="hljs-built_in">super</span>();
     <span class="hljs-built_in">this</span>.addEventListener(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;Hello!&quot;</span>));
@@ -661,12 +661,12 @@ customElements.define(<span class="hljs-string">&#x27;hello-button&#x27;</span>,
 <li><p>&quot;Autonomous&quot; —— 全新的标签，继承 <code>HTMLElement</code>。</p>
 <p> 定义方式：</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyElement</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  <span class="hljs-keyword">constructor</span>() { <span class="hljs-built_in">super</span>(); <span class="hljs-comment">/* ... */</span> }
-  connectedCallback() { <span class="hljs-comment">/* ... */</span> }
-  disconnectedCallback() { <span class="hljs-comment">/* ... */</span>  }
+  <span class="hljs-function"><span class="hljs-title">constructor</span>(<span class="hljs-params"></span>)</span> { <span class="hljs-built_in">super</span>(); <span class="hljs-comment">/* ... */</span> }
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> { <span class="hljs-comment">/* ... */</span> }
+  <span class="hljs-function"><span class="hljs-title">disconnectedCallback</span>(<span class="hljs-params"></span>)</span> { <span class="hljs-comment">/* ... */</span>  }
   <span class="hljs-keyword">static</span> <span class="hljs-keyword">get</span> <span class="hljs-title">observedAttributes</span>() { <span class="hljs-keyword">return</span> [<span class="hljs-comment">/* ... */</span>]; }
-  attributeChangedCallback(name, oldValue, newValue) { <span class="hljs-comment">/* ... */</span> }
-  adoptedCallback() { <span class="hljs-comment">/* ... */</span> }
+  <span class="hljs-function"><span class="hljs-title">attributeChangedCallback</span>(<span class="hljs-params">name, oldValue, newValue</span>)</span> { <span class="hljs-comment">/* ... */</span> }
+  <span class="hljs-function"><span class="hljs-title">adoptedCallback</span>(<span class="hljs-params"></span>)</span> { <span class="hljs-comment">/* ... */</span> }
  }
 customElements.define(<span class="hljs-string">&#x27;my-element&#x27;</span>, MyElement);
 <span class="hljs-comment">/* &lt;my-element&gt; */</span></code></pre>
@@ -682,7 +682,7 @@ customElements.define(<span class="hljs-string">&#x27;my-button&#x27;</span>, My
 
       </fieldset>
       
-      <fieldset id='_yHsrRC'>
+      <fieldset id='_Ue9A7O'>
       <legend>article</legend>
       <h1 id="影子-dom（shadow-dom）">影子 DOM（Shadow DOM）</h1>
 <p>Shadow DOM 为封装而生。它可以让一个组件拥有自己的「影子」DOM 树，这个 DOM 树不能在主文档中被任意访问，可能拥有局部样式规则，还有其他特性。</p>
@@ -720,7 +720,7 @@ customElements.define(<span class="hljs-string">&#x27;my-button&#x27;</span>, My
 <p>比如，这个 <code>&lt;show-hello&gt;</code> 元素将它的内部 DOM 隐藏在了影子里面：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;show-hello&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-keyword">const</span> shadow = <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     shadow.innerHTML = <span class="hljs-string">`&lt;p&gt;
       Hello, <span class="hljs-subst">${<span class="hljs-built_in">this</span>.getAttribute(<span class="hljs-string">&#x27;name&#x27;</span>)}</span>
@@ -735,7 +735,7 @@ customElements.define(<span class="hljs-string">&#x27;show-hello&#x27;</span>, <
 <p>首先，调用 <code>elem.attachShadow({mode: …})</code> 可以创建一个 shadow tree。</p>
 <p>这里有两个限制：</p>
 <ol>
-<li>在每个元素中，我们只能创建一个 shadow root。</li>
+<li> 在每个元素中，我们只能创建一个 shadow root。</li>
 <li><code>elem</code> 必须是自定义元素，或者是以下元素的其中一个：「article」、「aside」、「blockquote」、「body」、「div」、「footer」、「h1..h6」、「header」、「main」、「nav」、「p」、「section」或者「span」。其他元素，比如 <code>&lt;img&gt;</code>，不能容纳 shadow tree。</li>
 </ol>
 <p><code>mode</code> 选项可以设定封装层级。他必须是以下两个值之一：</p>
@@ -810,7 +810,7 @@ alert(elem.shadowRoot.host === elem); <span class="hljs-comment">// true</span><
 
       </fieldset>
       
-      <fieldset id='_NzY8bt'>
+      <fieldset id='_7fISzd'>
       <legend>article</legend>
       <h1 id="模板元素">模板元素</h1>
 <p>内建的 <code>&lt;template&gt;</code> 元素用来存储 HTML 模板。浏览器将忽略它的内容，仅检查语法的有效性，但是我们可以在 JavaScript 中访问和使用它来创建其他元素。</p>
@@ -899,7 +899,7 @@ alert(elem.shadowRoot.host === elem); <span class="hljs-comment">// true</span><
 
       </fieldset>
       
-      <fieldset id='_XPQX1X'>
+      <fieldset id='_X9GbrT'>
       <legend>article</legend>
       <h1 id="shadow-dom-插槽，组成">Shadow DOM 插槽，组成</h1>
 <p>许多类型的组件，例如标签、菜单、照片库等等，需要内容去渲染。</p>
@@ -918,25 +918,25 @@ alert(elem.shadowRoot.host === elem); <span class="hljs-comment">// true</span><
 <h2 id="具名插槽">具名插槽</h2>
 <p>让我们通过一个简单的例子看下插槽是如何工作的。</p>
 <p>在这里 <code>&lt;user-card&gt;</code> shadow DOM 提供两个插槽, 从 light DOM 填充：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
-customElements.define(&#x27;user-card&#x27;, class extends HTMLElement {
-  connectedCallback() {
-    this.attachShadow({mode: &#x27;open&#x27;});
-    this.shadowRoot.innerHTML = `
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Name:
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
+    <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
+    <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
+      &lt;div&gt;Name:
 *!*
-        <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+        &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
 */!*
-      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Birthday:
+      &lt;/div&gt;
+      &lt;div&gt;Birthday:
 *!*
-        <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
+        &lt;slot name=&quot;birthday&quot;&gt;&lt;/slot&gt;
 */!*
-      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    `;
+      &lt;/div&gt;
+    `</span>;
   }
 });
-</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">span</span> *!*<span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>*/!*&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
@@ -1118,7 +1118,7 @@ customElements.define(&#x27;user-card&#x27;, class extends HTMLElement {
 <p>可能会注意到，在有效的 DOM 中，<code>&lt;li&gt;</code> 必须是 <code>&lt;ul&gt;</code> 的直接子代。但这是扁平化的 DOM，它描述了组件的渲染方式，这样的事情在这里自然发生。</p>
 <p>我们只需要添加一个 <code>click</code> 事件处理程序来打开/关闭列表，并且 <code>&lt;custom-menu&gt;</code> 准备好了：</p>
 <pre><code class="language-js">customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
 
     <span class="hljs-comment">// tmpl is the shadow DOM template (above)</span>
@@ -1146,7 +1146,7 @@ customElements.define(&#x27;user-card&#x27;, class extends HTMLElement {
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`&lt;div class=&quot;menu&quot;&gt;
       &lt;slot name=&quot;title&quot;&gt;&lt;/slot&gt;
@@ -1200,7 +1200,7 @@ customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, 
 customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
   items = []
 
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`&lt;div class=&quot;menu&quot;&gt;
       &lt;slot name=&quot;title&quot;&gt;&lt;/slot&gt;
@@ -1251,7 +1251,7 @@ customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, 
 
       </fieldset>
       
-      <fieldset id='_5EL2xK'>
+      <fieldset id='_PTjbfE'>
       <legend>article</legend>
       <h1 id="给-shadow-dom-添加样式">给 Shadow DOM 添加样式</h1>
 <p>shadow DOM 可以包含 <code>&lt;style&gt;</code> 和 <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;…&quot;&gt;</code> 标签。在后一种情况下，样式表是 HTTP 缓存的，因此不会为使用同一模板的多个组件重新下载样式表。</p>
@@ -1278,7 +1278,7 @@ customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, 
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;custom-dialog&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>}).append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>));
   }
 });
@@ -1325,7 +1325,7 @@ customElements.define(<span class="hljs-string">&#x27;custom-dialog&#x27;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;custom-dialog&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>}).append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>));
   }
 });
@@ -1366,7 +1366,7 @@ customElements.define(<span class="hljs-string">&#x27;custom-dialog&#x27;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
       &lt;style&gt;
@@ -1388,7 +1388,7 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
       &lt;style&gt;
@@ -1416,7 +1416,7 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
       &lt;style&gt;
@@ -1481,7 +1481,7 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.append(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;tmpl&#x27;</span>).content.cloneNode(<span class="hljs-literal">true</span>));
   }
@@ -1516,7 +1516,7 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
 
       </fieldset>
       
-      <fieldset id='_ZuWe88'>
+      <fieldset id='_sG1s9a'>
       <legend>article</legend>
       <h1 id="shadow-dom-和事件（events）">Shadow DOM 和事件（events）</h1>
 <p>Shadow tree 背后的思想是封装组件的内部实现细节。</p>
@@ -1528,7 +1528,7 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`&lt;p&gt;
       &lt;button&gt;Click me&lt;/button&gt;
@@ -1557,7 +1557,7 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
-  connectedCallback() {
+  <span class="hljs-function"><span class="hljs-title">connectedCallback</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`&lt;div&gt;
       &lt;b&gt;Name:&lt;/b&gt; &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
@@ -1677,5 +1677,5 @@ inner.dispatchEvent(new CustomEvent(&#x27;test&#x27;, {
 <p>请注意，如果是嵌套组件，一个 shadow DOM 可能嵌套到另外一个 shadow DOM 中。在这种情况下合成事件冒泡到所有 shadow DOM 边界。因此，如果一个事件仅用于直接封闭组件，我们也可以在 shadow host 上发送它并设置 <code>composed: false</code>。这样它就不在组件 shadow DOM 中，也不会冒泡到更高级别的 DOM。</p>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>webcomponents-intro</strong><br/></div><div style="margin-left:1em"><a href="#_zwWUXb">article</a><br/></div><div style="margin-left:0em"><strong>custom-elements</strong><br/></div><div style="margin-left:1em"><strong>live-timer</strong><br/></div><div style="margin-left:2em"><a href="#_2hg84K">solution</a><br/></div><div style="margin-left:2em"><a href="#_aqoyel">task</a><br/></div><div style="margin-left:1em"><a href="#_1w88Hz">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom</strong><br/></div><div style="margin-left:1em"><a href="#_yHsrRC">article</a><br/></div><div style="margin-left:0em"><strong>template-element</strong><br/></div><div style="margin-left:1em"><a href="#_NzY8bt">article</a><br/></div><div style="margin-left:0em"><strong>slots-composition</strong><br/></div><div style="margin-left:1em"><a href="#_XPQX1X">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-style</strong><br/></div><div style="margin-left:1em"><a href="#_5EL2xK">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-events</strong><br/></div><div style="margin-left:1em"><a href="#_ZuWe88">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>webcomponents-intro</strong><br/></div><div style="margin-left:1em"><a href="#_iGnsis">article</a><br/></div><div style="margin-left:0em"><strong>custom-elements</strong><br/></div><div style="margin-left:1em"><strong>live-timer</strong><br/></div><div style="margin-left:2em"><a href="#_g9pKrL">solution</a><br/></div><div style="margin-left:2em"><a href="#_ttFQT7">task</a><br/></div><div style="margin-left:1em"><a href="#_KbaQeR">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom</strong><br/></div><div style="margin-left:1em"><a href="#_Ue9A7O">article</a><br/></div><div style="margin-left:0em"><strong>template-element</strong><br/></div><div style="margin-left:1em"><a href="#_7fISzd">article</a><br/></div><div style="margin-left:0em"><strong>slots-composition</strong><br/></div><div style="margin-left:1em"><a href="#_X9GbrT">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-style</strong><br/></div><div style="margin-left:1em"><a href="#_PTjbfE">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-events</strong><br/></div><div style="margin-left:1em"><a href="#_sG1s9a">article</a><br/></div></div>
 </body></html>

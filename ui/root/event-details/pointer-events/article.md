@@ -8,11 +8,11 @@
 
 - 很早以前，浏览器只存在鼠标事件。
 
-    后来，触屏设备出现了。为了让以前的代码正常运行，触屏设备也沿用了鼠标事件。比如，轻触屏幕就会触发 `mousedown` 事件。但由于触摸设备在诸多方面都更加强大，而鼠标事件就显得心有余而力不足了。比如，我们可以同时触控多点，而鼠标事件并没有相关属性。
+  后来，触屏设备出现了。为了让以前的代码正常运行，触屏设备也沿用了鼠标事件。比如，轻触屏幕就会触发 `mousedown` 事件。但由于触摸设备在诸多方面都更加强大，而鼠标事件就显得心有余而力不足了。比如，我们可以同时触控多点，而鼠标事件并没有相关属性。
 
 - 为了实现一些触摸屏特有的特性（这里不再赘述这些特性，因为指针事件更加完善），人们引入了触摸事件，例如 `touchstart`、`touchend`、`touchmove`。
 
-    不过这还是不够完美。因为很多其他输入设备（如触控笔）都有自己的特性。而且同时维护两份分别处理鼠标事件和触摸事件的代码，显得有些笨重了。
+  不过这还是不够完美。因为很多其他输入设备（如触控笔）都有自己的特性。而且同时维护两份分别处理鼠标事件和触摸事件的代码，显得有些笨重了。
 
 - 为了解决这些问题，人们引入了全新的规范「指针事件」。它为各种指针输入设备提供了一套统一的事件。
 
@@ -24,37 +24,36 @@
 
 指针事件的命名方式和鼠标事件类似：
 
-| 指针事件 | 鼠标事件 |
-|---------------|-------------|
-| `pointerdown` | `mousedown` |
-| `pointerup` | `mouseup` |
-| `pointermove` | `mousemove` |
-| `pointerover` | `mouseover` |
-| `pointerout` | `mouseout` |
-| `pointerenter` | `mouseenter` |
-| `pointerleave` | `mouseleave` |
-| `pointercancel` | - |
-| `gotpointercapture` | - |
-| `lostpointercapture` | - |
+| 指针事件             | 鼠标事件     |
+| -------------------- | ------------ |
+| `pointerdown`        | `mousedown`  |
+| `pointerup`          | `mouseup`    |
+| `pointermove`        | `mousemove`  |
+| `pointerover`        | `mouseover`  |
+| `pointerout`         | `mouseout`   |
+| `pointerenter`       | `mouseenter` |
+| `pointerleave`       | `mouseleave` |
+| `pointercancel`      | -            |
+| `gotpointercapture`  | -            |
+| `lostpointercapture` | -            |
 
 不难发现，每一个 `mouse<event>` 都有与之相对应的 `pointer<event>`。同时还有 3 个额外的事件没有相应的 `mouse...`，我们会在稍后详细解释它们。
 
-```smart header="在代码中用 `pointer<event>` 替换 `mouse<event>`"
+在代码中用 `pointer<event>` 替换 `mouse<event>`"
 我们可以把代码中的 `mouse<event>` 都替换成 `pointer<event>`，程序仍然正常兼容鼠标设备。
 
 替换之后，程序对触屏设备的支持会“魔法般”地提升。但你可能需要在 CSS 中添加一行规则 `touch-action: none`。我们会在下文 `pointercancel` 一节中描述这里面的细节。
-```
 
 ## 指针事件属性
 
 指针事件具备和鼠标事件完全相同的属性，包括 `clientX/Y` 和 `target` 等，以及一些额外的属性：
 
 - `pointerId` —— 触发当前事件的指针唯一标识符。
-    
-    可以用来处理多指针的情况，比如带有触控笔和多点触控功能（将在下文详述）的触摸屏。
+  可以用来处理多指针的情况，比如带有触控笔和多点触控功能（将在下文详述）的触摸屏。
 - `pointerType` —— 指针的设备类型，必须为一个字符串。可以是："mouse"、"pen" 或 "touch"。
 
-    我们可以使用这个属性来针对不同类型的指针输入做出不同响应。
+  我们可以使用这个属性来针对不同类型的指针输入做出不同响应。
+
 - `isPrimary` —— 当指针为首要指针（多点触控时按下的第一根手指）时为 `true`。
 
 对于一些能够测量接触面积和点按压力的指针（例如一根手指压在触屏上），这些额外属性会比较有用：
@@ -76,9 +75,9 @@
 这里是当用户先后在两个地方按下手指时发生的事情：
 
 1. 第一个触摸：
-    - `pointerdown` 事件触发，`isPrimary=true`，并且被指派了一个 `pointerId`。
+   - `pointerdown` 事件触发，`isPrimary=true`，并且被指派了一个 `pointerId`。
 2. 第二个和后续的更多触摸：
-    - `pointerdown` 事件触发，`isPrimary=false`，并且每一个触摸都被指派了不同的 `pointerId`。
+   - `pointerdown` 事件触发，`isPrimary=false`，并且每一个触摸都被指派了不同的 `pointerId`。
 
 请注意：`pointerId` 不是分配给整个设备的，而是分配给每一个触摸的。如果 5 根手指同时触摸屏幕，我们会得到 5 个 `pointerdown` 事件和相应的坐标以及 5 个不同的 `pointerId`。
 
@@ -86,13 +85,11 @@
 
 利用 `pointerId`，我们可以追踪多根正在触摸屏幕的手指。当用户移动或抬起某根手指时，我们会得到和 `pointerdown` 事件具有相同 `pointerId` 的 `pointermove` 或 `pointerup` 事件。
 
-```online
 这是一个记录 `pointerdown` 和 `pointerup` 事件的演示:
 
-[iframe src="multitouch" edit height=200]
+<iframe src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/multitouch.view/index.html" width="100%" height="400"></iframe>
 
 请注意：你使用的必须是一个多点触控设备（如平板或手机）才能看到区别。对于使用鼠标这样的单点触控设备，所有指针事件都会具有相同的 `pointerId` 和 `isPrimary=true` 属性。
-```
 
 ## 事件：pointercancel
 
@@ -101,31 +98,30 @@
 `pointercancel` 事件将会在一个正处于活跃状态的指针交互由于某些原因被中断时触发。也就是在这个事件之后，该指针就不会继续触发更多事件了。
 
 导致指针中断的可能原因如下：
+
 - 指针设备硬件被禁用。
 - 设备方向旋转（例如给平板转了个方向）。
 - 浏览器打算自行处理这一交互，比如将其看作是一个专门的鼠标手势或缩放操作等。
 
 我们会用一个实际例子来阐释 `pointercancel` 的影响。
 
-例如，我们想要实现一个像 <info:mouse-drag-and-drop> 中开头提到的那样的一个对球的拖放操作。
+例如，我们想要实现一个像鼠标拖放事件中开头提到的那样的一个对球的拖放操作。
 
 用户的操作流和对应的事件如下：
 
-1) 用户在一张图片上按下鼠标，开始拖拽
-    - `pointerdown` 事件触发
-2) 用户开始拖动图片
-    - `pointermove` 事件触发，可能触发多次
-3) 想不到吧！浏览器有自己原生的图片拖放操作，接管了之前的拖放过程，于是触发了 `pointercancel` 事件。
-    - 现在拖放图片的操作由浏览器自行实现。用户甚至可能会把图片拖出浏览器，放进他们的邮件程序或文件管理器。
-    - 我们不会再得到 `pointermove` 事件了。
+1. 用户在一张图片上按下鼠标，开始拖拽
+   - `pointerdown` 事件触发
+2. 用户开始拖动图片
+   - `pointermove` 事件触发，可能触发多次
+3. 想不到吧！浏览器有自己原生的图片拖放操作，接管了之前的拖放过程，于是触发了 `pointercancel` 事件。
+   - 现在拖放图片的操作由浏览器自行实现。用户甚至可能会把图片拖出浏览器，放进他们的邮件程序或文件管理器。
+   - 我们不会再得到 `pointermove` 事件了。
 
 这里的问题就在于浏览器”劫持“了这一个互动操作，触发了 `pointercancel` 事件，而 `pointermove` 事件不再继续触发。
 
-```online
 这里是一个指针事件的演示（只包含 `up/down`、`move` 和 `cancel），事件的触发被记录在了文本框中：
 
-[iframe src="ball" height=240 edit]
-```
+<iframe src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/ball.view/index.html" width="100%" height="400"></iframe>
 
 我们想要实现自己的拖放操作，所以让我们来看看如何告诉浏览器不要接管拖放操作。
 
@@ -134,21 +130,19 @@
 我们需要做两件事：
 
 1. 阻止原生的拖放操作发生：
-    - 正如我们在 <info:mouse-drag-and-drop> 中描述的那样，可以通过设置 `ball.ondragstart = () => false` 来实现。
-    - 这种方式也适用于鼠标事件。
+   - 正如我们在 鼠标拖放事件中描述的那样，可以通过设置 `ball.ondragstart = () => false` 来实现。
+   - 这种方式也适用于鼠标事件。
 2. 对于触屏设备，浏览器同样有和触摸相关的行为。在这里我们也会遇到类似的问题。
-    - 我们可以通过在 CSS 中设置 `#ball { touch-action: none }` 来阻止它们。
-    - 之后我们的代码便可以在触屏设备中正常工作了。
+   - 我们可以通过在 CSS 中设置 `#ball { touch-action: none }` 来阻止它们。
+   - 之后我们的代码便可以在触屏设备中正常工作了。
 
 经过上述操作，事件将会按照我们预期的方式触发，浏览器也不会劫持拖放过程来产生一个 `pointercancel` 事件。
 
-```online
 这个演示增加了以下几行：
 
-[iframe src="ball-2" height=240 edit]
+<iframe src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/ball-2.view/index.html" width="100%" height="400"></iframe>
 
 可以看到，`pointercancel` 事件不再被触发。
-```
 
 现在我们就可以添加让球的位置移动的代码了，并且我们的代码对鼠标和触控设备都有效。
 
@@ -159,6 +153,7 @@
 这其中的主要思想是，我们可以通过一个特定的 `pointerId` 来把所有事件绑定（bind）到一个元素。这样之后，所有具有相同 `pointerId` 的后续事件都将被重定向到同一个元素。也就是说：浏览器会把那个元素作为目标和相关处理程序的触发器，无论这些指针事件实际上是在何处发生的。
 
 相关的方法有：
+
 - `elem.setPointerCapture(pointerId)` —— 把给定的 `pointerId` 绑定到 `elem`。
 - `elem.releasePointerCapture(pointerId)` —— 把给定的 `pointerId` 从 `elem` 取消绑定。
 
@@ -168,14 +163,14 @@
 
 **指针捕获被用于简化拖放类的操作。**
 
-让我们来回忆一下在 <info:mouse-drag-and-drop> 中提到的写一个自定义滑动条时所遇到的问题。
+让我们来回忆一下在鼠标拖放事件中提到的写一个自定义滑动条时所遇到的问题。
 
-1) 首先，用户按下滑块，触发 `pointerdown` 事件，用户开始拖动滑块。
-2) ……但随着指针的移动，用户的指针可能会离开滑动条，移动到滑动条之上或之下的位置。
+1. 首先，用户按下滑块，触发 `pointerdown` 事件，用户开始拖动滑块。
+2. ……但随着指针的移动，用户的指针可能会离开滑动条，移动到滑动条之上或之下的位置。
 
 但我们会想要继续追踪 `pointermove` 事件，移动滑块直到 `pointerup` 事件，即便指针已经不再位于滑动条上了。
 
-[之前的解决方案](info:mouse-drag-and-drop)，为了处理滑块之外的 `pointermove` 事件，我们监听了整个 `document` 的 `pointermove` 事件。
+之前的解决方案，为了处理滑块之外的 `pointermove` 事件，我们监听了整个 `document` 的 `pointermove` 事件。
 
 指针捕获提供了第二种解决方案：我们可以在 `pointerdown` 事件的处理程序中调用 `thumb.setPointerCapture(event.pointerId)`，这样接下来在 `pointerup` 之前发生的所有指针事件都会被重定向到 `thumb` 上。
 
@@ -184,26 +179,22 @@
 主要代码如下：
 
 ```js
-thumb.onpointerdown = function(event) {
+thumb.onpointerdown = function (event) {
   // 把所有指针事件（pointerup 之前发生的）重定向到自己
   thumb.setPointerCapture(event.pointerId);
 };
 
-thumb.onpointermove = function(event) {
+thumb.onpointermove = function (event) {
   // 移动滑动条：在 thumb 上监听即可，因为所有事件都被重定向到了 thumb
   let newLeft = event.clientX - slider.getBoundingClientRect().left;
-  thumb.style.left = newLeft + 'px';
+  thumb.style.left = newLeft + "px";
 };
 
 // 注意：无需调用 thumb.releasePointerCapture，
 // 它会在 pointerup 时自动调用
 ```
 
-```online
-完整示例：
-
-[iframe src="slider" height=100 edit]
-```
+<iframe src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/slider.view/index.html" width="100%" height="400"></iframe>
 
 **言而总之：由于我们无需再在整个 `document` 上添加/移除处理程序，代码就变得整洁多了。这就是指针捕获的意义所在。**
 

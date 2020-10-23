@@ -8,15 +8,23 @@
 <p>其 HTML 如下所示：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">colspan</span>=<span class="hljs-string">&quot;3&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>Bagua<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span> Chart: Direction, Element, Color, Meaning<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">colspan</span>=<span class="hljs-string">&quot;3&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>Bagua<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span> Chart: Direction, Element, Color, Meaning
+    <span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;nw&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Northwest<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>Metal<span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>Silver<span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>Elders<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;nw&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Northwest<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>Metal<span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>Silver<span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>Elders
+    <span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;n&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;ne&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>...2 more lines of this kind...<span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>...2 more lines of this kind...<span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+    ...2 more lines of this kind...
+  <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+    ...2 more lines of this kind...
+  <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></code></pre>
 <p>该表格有 9 个单元格（cell），但可以有 99 个或 9999 个单元格，这都不重要。</p>
 <p><strong>我们的任务是在点击时高亮显示被点击的单元格 <code>&lt;td&gt;</code>。</strong></p>
@@ -47,17 +55,16 @@ table.onclick = <span class="hljs-function"><span class="hljs-keyword">function<
 <p>点击可能不是发生在 <code>&lt;td&gt;</code> 上，而是发生在其内部。</p>
 <p>在我们的例子中，如果我们看一下 HTML 内部，我们可以看到 <code>&lt;td&gt;</code> 内还有嵌套的标签，例如 <code>&lt;strong&gt;</code>：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>
-*!*
+  *!*
   <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Northwest<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
-*/!*
-  ...
+  */!* ...
 <span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></code></pre>
 <p>自然地，如果在该 <code>&lt;strong&gt;</code> 上点击，那么它将成为 <code>event.target</code> 的值。</p>
 <p><img src="bagua-bubble.svg" alt=""></p>
 <p>在处理程序 <code>table.onclick</code> 中，我们应该接受这样的 <code>event.target</code>，并确定该点击是否在 <code>&lt;td&gt;</code> 内。</p>
 <p>下面是改进后的代码：</p>
-<pre><code class="language-js">table.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
-  <span class="hljs-keyword">let</span> td = event.target.closest(<span class="hljs-string">&#x27;td&#x27;</span>); <span class="hljs-comment">// (1)</span>
+<pre><code class="language-js">table.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">let</span> td = event.target.closest(<span class="hljs-string">&quot;td&quot;</span>); <span class="hljs-comment">// (1)</span>
 
   <span class="hljs-keyword">if</span> (!td) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// (2)</span>
 
@@ -86,35 +93,35 @@ table.onclick = <span class="hljs-function"><span class="hljs-keyword">function<
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Menu</span> </span>{
-    <span class="hljs-keyword">constructor</span>(elem) {
-      <span class="hljs-built_in">this</span>._elem = elem;
-      elem.onclick = <span class="hljs-built_in">this</span>.onClick.bind(<span class="hljs-built_in">this</span>); <span class="hljs-comment">// (*)</span>
-    }
-
-    save() {
-      alert(<span class="hljs-string">&#x27;saving&#x27;</span>);
-    }
-
-    load() {
-      alert(<span class="hljs-string">&#x27;loading&#x27;</span>);
-    }
-
-    search() {
-      alert(<span class="hljs-string">&#x27;searching&#x27;</span>);
-    }
-
-    onClick(event) {
-*!*
-      <span class="hljs-keyword">let</span> action = event.target.dataset.action;
-      <span class="hljs-keyword">if</span> (action) {
-        <span class="hljs-built_in">this</span>[action]();
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Menu</span> </span>{
+      <span class="hljs-keyword">constructor</span>(elem) {
+        <span class="hljs-built_in">this</span>._elem = elem;
+        elem.onclick = <span class="hljs-built_in">this</span>.onClick.bind(<span class="hljs-built_in">this</span>); <span class="hljs-comment">// (*)</span>
       }
-*/!*
-    };
-  }
 
-  <span class="hljs-keyword">new</span> Menu(menu);
+      save() {
+        alert(<span class="hljs-string">&#x27;saving&#x27;</span>);
+      }
+
+      load() {
+        alert(<span class="hljs-string">&#x27;loading&#x27;</span>);
+      }
+
+      search() {
+        alert(<span class="hljs-string">&#x27;searching&#x27;</span>);
+      }
+
+      onClick(event) {
+  *!*
+        <span class="hljs-keyword">let</span> action = event.target.dataset.action;
+        <span class="hljs-keyword">if</span> (action) {
+          <span class="hljs-built_in">this</span>[action]();
+        }
+  */!*
+      };
+    }
+
+    <span class="hljs-keyword">new</span> Menu(menu);
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>请注意，<code>this.onClick</code> 在 <code>(*)</code> 行中被绑定到了 <code>this</code>。这很重要，因为否则内部的 <code>this</code> 将引用 DOM 元素（<code>elem</code>），而不是 <code>Menu</code> 对象，那样的话，<code>this[action]</code> 将不是我们所需要的。</p>
 <p>那么，这里的委托给我们带来了什么好处？</p>
@@ -130,49 +137,38 @@ table.onclick = <span class="hljs-function"><span class="hljs-keyword">function<
 </ol>
 <h3 id="行为：计数器">行为：计数器</h3>
 <p>例如，这里的特性 <code>data-counter</code> 给按钮添加了一个“点击增加”的行为。</p>
-<pre><code class="language-html">Counter: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;1&quot;</span> <span class="hljs-attr">data-counter</span>&gt;</span>
-One more counter: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;2&quot;</span> <span class="hljs-attr">data-counter</span>&gt;</span>
+<pre><code class="language-html">Counter: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;1&quot;</span> <span class="hljs-attr">data-counter</span> /&gt;</span> One more counter:
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;2&quot;</span> <span class="hljs-attr">data-counter</span> /&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
-
-    <span class="hljs-keyword">if</span> (event.target.dataset.counter != <span class="hljs-literal">undefined</span>) { <span class="hljs-comment">// 如果这个特性存在...</span>
+  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&quot;click&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+    <span class="hljs-keyword">if</span> (event.target.dataset.counter != <span class="hljs-literal">undefined</span>) {
+      <span class="hljs-comment">// 如果这个特性存在...</span>
       event.target.value++;
     }
-
   });
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>如果我们点击按钮 —— 它的值就会增加。但不仅仅是按钮，一般的方法在这里也很重要。</p>
 <p>我们可以根据需要使用 <code>data-counter</code> 特性，多少都可以。我们可以随时向 HTML 添加新的特性。使用事件委托，我们属于对 HTML 进行了“扩展”，添加了描述新行为的特性。</p>
-<p>```warn header=&quot;对于文档级的处理程序 —— 始终使用的是 <code>addEventListener</code>&quot;
-当我们将事件处理程序分配给 <code>document</code> 对象时，我们应该始终使用 <code>addEventListener</code>，而不是 <code>document.on&lt;event&gt;</code>，因为后者会引起冲突：新的处理程序会覆盖旧的处理程序。</p>
+<p>对于文档级的处理程序 —— 始终使用的是 <code>addEventListener</code>&quot; 当我们将事件处理程序分配给 <code>document</code>对象时，我们应该始终使用<code>addEventListener</code>，
+而不是 <code>document.on&lt;event&gt;</code>，因为后者会引起冲突：新的处理程序会覆盖旧的处理程序。</p>
 <p>对于实际项目来说。在 <code>document</code> 上有许多由代码的不同部分设置的处理程序，这是很正常的。</p>
-<pre><code>
-### 行为：切换器
+<h3 id="行为：切换器">行为：切换器</h3>
+<p>再举一个例子。点击一个具有 <code>data-toggle-id</code> 特性的元素将显示/隐藏具有给定 <code>id</code> 的元素：</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-toggle-id</span>=<span class="hljs-string">&quot;subscribe-mail&quot;</span>&gt;</span>Show the subscription form<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 
-再举一个例子。点击一个具有 `data-toggle-id` 特性的元素将显示/隐藏具有给定 `id` 的元素：
+<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;subscribe-mail&quot;</span> <span class="hljs-attr">hidden</span>&gt;</span>Your mail: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;email&quot;</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
 
-```html autorun run height=60
-&lt;button *!*data-toggle-id=&quot;subscribe-mail&quot;*/!*&gt;
-  Show the subscription form
-&lt;/button&gt;
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&quot;click&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+    <span class="hljs-keyword">let</span> id = event.target.dataset.toggleId;
+    <span class="hljs-keyword">if</span> (!id) <span class="hljs-keyword">return</span>;
 
-&lt;form id=&quot;subscribe-mail&quot; hidden&gt;
-  Your mail: &lt;input type=&quot;email&quot;&gt;
-&lt;/form&gt;
-
-&lt;script&gt;
-*!*
-  document.addEventListener(&#x27;click&#x27;, function(event) {
-    let id = event.target.dataset.toggleId;
-    if (!id) return;
-
-    let elem = document.getElementById(id);
+    <span class="hljs-keyword">let</span> elem = <span class="hljs-built_in">document</span>.getElementById(id);
 
     elem.hidden = !elem.hidden;
   });
-*/!*
-&lt;/script&gt;</code></pre>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>让我们再次注意我们做了什么。现在，要向元素添加切换功能 —— 无需了解 JavaScript，只需要使用特性 <code>data-toggle-id</code> 即可。</p>
 <p>这可能变得非常方便 —— 无需为每个这样的元素编写 JavaScript。只需要使用行为。文档级处理程序使其适用于页面的任意元素。</p>
 <p>我们也可以组合单个元素上的多个行为。</p>

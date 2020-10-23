@@ -1,14 +1,10 @@
-importance: 5
-
----
-
 # 无限的页面
 
 创建一个无限的页面。当访问者滚动到页面末端时，它会自动将当期日期时间附加到文本中（以便访问者可以滚动更多内容）。
 
 像这样：
 
-[iframe src="solution" height=200]
+<iframe src="./root/event-details/onscroll/endless-page/solution.view/index.html" height="200" width="100%"></iframe>
 
 请注意滚动的两个重要特性：
 
