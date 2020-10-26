@@ -4,9 +4,11 @@
 
 处理程序（handler）被分配给了 `<div>`，但是如果你点击任何嵌套的标签（例如 `<em>` 或 `<code>`），该处理程序也会运行：
 
-```html autorun height=60
+```html
 <div onclick="alert('The handler!')">
-  <em>If you click on <code>EM</code>, the handler on <code>DIV</code> runs.</em>
+  <em
+    >If you click on <code>EM</code>, the handler on <code>DIV</code> runs.</em
+  >
 </div>
 ```
 
@@ -28,14 +30,17 @@
   }
 </style>
 
-<form onclick="alert('form')">FORM
-  <div onclick="alert('div')">DIV
+<form onclick="alert('form')">
+  FORM
+  <div onclick="alert('div')">
+    DIV
     <p onclick="alert('p')">P</p>
   </div>
 </form>
 ```
 
 点击内部的 `<p>` 会首先运行 `onclick`：
+
 1. 在该 `<p>` 上的。
 2. 然后是外部 `<div>` 上的。
 3. 然后是外部 `<form>` 上的。
@@ -115,7 +120,6 @@
 通常，没有真正的必要去阻止冒泡。一项看似需要阻止冒泡的任务，可以通过其他方法解决。其中之一就是使用自定义事件，稍后我们会介绍它们此外，我们还可以将我们的数据写入一个处理程序中的 `event` 对象，并在另一个处理程序中读取该数据，这样我们就可以向父处理程序传递有关下层处理程序的信息。
 ```
 
-
 ## 捕获
 
 事件处理的另一个阶段被称为“捕获（capturing）”。它很少被用在实际开发中，但有时是有用的。
@@ -149,7 +153,6 @@ elem.addEventListener(..., true)
 - 如果为 `false`（默认值），则在冒泡阶段设置处理程序。
 - 如果为 `true`，则在捕获阶段设置处理程序。
 
-
 请注意，虽然形式上有 3 个阶段，但第 2 阶段（“目标阶段”：事件到达元素）没有被单独处理：捕获阶段和冒泡阶段的处理程序都在该阶段被触发。
 
 让我们来看看捕获和冒泡：
@@ -162,16 +165,22 @@ elem.addEventListener(..., true)
   }
 </style>
 
-<form>FORM
-  <div>DIV
+<form>
+  FORM
+  <div>
+    DIV
     <p>P</p>
   </div>
 </form>
 
 <script>
-  for(let elem of document.querySelectorAll('*')) {
-    elem.addEventListener("click", e => alert(`Capturing: ${elem.tagName}`), true);
-    elem.addEventListener("click", e => alert(`Bubbling: ${elem.tagName}`));
+  for (let elem of document.querySelectorAll("*")) {
+    elem.addEventListener(
+      "click",
+      (e) => alert(`Capturing: ${elem.tagName}`),
+      true
+    );
+    elem.addEventListener("click", (e) => alert(`Bubbling: ${elem.tagName}`));
   }
 </script>
 ```
@@ -186,9 +195,9 @@ elem.addEventListener(..., true)
 
 有一个属性 `event.eventPhase`，它告诉我们捕获事件的阶段数。但它很少被使用，因为我们通常是从处理程序中了解到它。
 
-```smart header="要移除处理程序，`removeEventListener` 需要同一阶段"
-如果我们 `addEventListener(..., true)`，那么我们应该在 `removeEventListener(..., true)` 中提到同一阶段，以正确删除处理程序。
-```
+```smart header="要移除处理程序，`removeEventListener`需要同一阶段" 如果我们`addEventListener(..., true)`，那么我们应该在 `removeEventListener(..., true)` 中提到同一阶段，以正确删除处理程序。
+
+`````
 
 ````smart header="同一元素的同一阶段的监听器按其设置顺序运行"
 如果我们在同一阶段有多个事件处理程序，并通过 `addEventListener` 分配给了相同的元素，则它们的运行顺序与创建顺序相同：
@@ -196,8 +205,9 @@ elem.addEventListener(..., true)
 ```js
 elem.addEventListener("click", e => alert(1)); // 会先被触发
 elem.addEventListener("click", e => alert(2));
+`````
+
 ```
-````
 
 
 ## 总结
@@ -223,3 +233,4 @@ elem.addEventListener("click", e => alert(2));
 事件处理程序也是如此。在特定元素上设置处理程序的代码，了解有关该元素最详尽的信息。特定于 `<td>` 的处理程序可能恰好适合于该 `<td>`，这个处理程序知道关于该元素的所有信息。所以该处理程序应该首先获得机会。然后，它的直接父元素也了解相关上下文，但了解的内容会少一些，以此类推，直到处理一般性概念并最后运行的最顶部的元素为止。
 
 冒泡和捕获为“事件委托”奠定了基础 —— 一种非常强大的事件处理模式，我们将在下一章中进行研究。
+```
