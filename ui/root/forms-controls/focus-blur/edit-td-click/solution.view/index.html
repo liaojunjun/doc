@@ -1,78 +1,116 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      textarea {
+        width: 200px;
+        height: 200px;
+      }
+    </style>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-</head>
+  <body>
+    <link rel="stylesheet" href="bagua.css" />
+    <link rel="stylesheet" href="my.css" />
 
-<body>
-  <link rel="stylesheet" href="bagua.css">
-  <link rel="stylesheet" href="my.css">
+    <p>Click on a table cell to edit it. Press OK or CANCEL when you finish.</p>
 
+    <table id="bagua-table">
+      <tr>
+        <th colspan="3">
+          <em>Bagua</em> Chart: Direction, Element, Color, Meaning
+        </th>
+      </tr>
+      <tr>
+        <td class="nw">
+          <strong>Northwest</strong> <br />Metal <br />Silver <br />Elders
+        </td>
+        <td class="n">
+          <strong>North</strong> <br />Water <br />Blue <br />Change
+        </td>
+        <td class="ne">
+          <strong>Northeast</strong> <br />Earth <br />Yellow <br />Direction
+        </td>
+      </tr>
+      <tr>
+        <td class="w">
+          <strong>West</strong> <br />Metal <br />Gold <br />Youth
+        </td>
+        <td class="c">
+          <strong>Center</strong> <br />All <br />Purple <br />Harmony
+        </td>
+        <td class="e">
+          <strong>East</strong> <br />Wood <br />Blue <br />Future
+        </td>
+      </tr>
+      <tr>
+        <td class="sw">
+          <strong>Southwest</strong> <br />Earth <br />Brown <br />Tranquility
+        </td>
+        <td class="s">
+          <strong>South</strong> <br />Fire <br />Orange <br />Fame
+        </td>
+        <td class="se">
+          <strong>Southeast</strong> <br />Wood <br />Green <br />Romance
+        </td>
+      </tr>
+    </table>
 
-  <p>Click on a table cell to edit it. Press OK or CANCEL when you finish.</p>
+    <!-- <script src="script.js"></script> -->
 
-  <table id="bagua-table">
-    <tr>
-      <th colspan="3"><em>Bagua</em> Chart: Direction, Element, Color, Meaning</th>
-    </tr>
-    <tr>
-      <td class="nw"><strong>Northwest</strong>
-        <br>Metal
-        <br>Silver
-        <br>Elders
-      </td>
-      <td class="n"><strong>North</strong>
-        <br>Water
-        <br>Blue
-        <br>Change
-      </td>
-      <td class="ne"><strong>Northeast</strong>
-        <br>Earth
-        <br>Yellow
-        <br>Direction
-      </td>
-    </tr>
-    <tr>
-      <td class="w"><strong>West</strong>
-        <br>Metal
-        <br>Gold
-        <br>Youth
-      </td>
-      <td class="c"><strong>Center</strong>
-        <br>All
-        <br>Purple
-        <br>Harmony
-      </td>
-      <td class="e"><strong>East</strong>
-        <br>Wood
-        <br>Blue
-        <br>Future
-      </td>
-    </tr>
-    <tr>
-      <td class="sw"><strong>Southwest</strong>
-        <br>Earth
-        <br>Brown
-        <br>Tranquility
-      </td>
-      <td class="s"><strong>South</strong>
-        <br>Fire
-        <br>Orange
-        <br>Fame
-      </td>
-      <td class="se"><strong>Southeast</strong>
-        <br>Wood
-        <br>Green
-        <br>Romance
-      </td>
-    </tr>
+    <script>
+      const table = document.getElementById("bagua-table");
+      let oldData = null;
+      let edit = false;
+      let save = null;
+      let cancel = null;
 
-  </table>
+      function finishTdEdit() {
+        save = cancel = null;
+        edit = false;
+        oldData = null;
+      }
 
+      table.addEventListener("click", (e) => {
+        const node = e.target.closest("td,button[data-active]");
+        if (!table.contains(node)) return;
 
-  <script src="script.js"></script>
+        if (node.tagName === "TD" && !edit) {
+          edit = true;
+          oldData = node.innerHTML;
+          const area = document.createElement("textarea");
+          area.value = oldData;
+          node.innerHTML = "";
+          area.style.width = node.clientWidth + "px";
+          area.style.height = node.clientHeight + "px";
+          node.append(area);
 
-</body>
+          area.focus();
 
+          node.insertAdjacentHTML(
+            "beforeend",
+            `<button data-active="save">save</button><button data-active="cancel">cancel</button>`
+          );
+
+          save = function () {
+            node.innerHTML = area.value;
+            area.remove();
+          };
+          cancel = function () {
+            node.innerHTML = oldData;
+            area.remove();
+          };
+        } else if (node.tagName === "BUTTON") {
+          const active = node.dataset.active;
+          if (active === "save") {
+            save();
+          } else if (active === "cancel") {
+            cancel();
+          }
+          finishTdEdit();
+        }
+      });
+    </script>
+  </body>
 </html>

@@ -16,32 +16,31 @@
 这两个行为都会触发表单的 `submit` 事件。处理程序可以检查数据，如果有错误，就显示出来，并调用 `event.preventDefault()`，这样表单就不会被发送到服务器了。
 
 在下面的表单中：
+
 1. 在文本字段中按下 `key:Enter` 键。
 2. 点击 `<input type="submit">`。
 
 这两种行为都会显示 `alert`，而因为代码中的 `return false`，表单不会被发送到别处：
 
-```html autorun height=60 no-beautify
+```html
 <form onsubmit="alert('submit!');return false">
-  First: Enter in the input field <input type="text" value="text"><br>
-  Second: Click "submit": <input type="submit" value="Submit">
+  First: Enter in the input field <input type="text" value="text" /><br />
+  Second: Click "submit": <input type="submit" value="Submit" />
 </form>
 ```
 
-````smart header="`submit` 和 `click` 的关系"
-在输入框中使用 `key:Enter` 发送表单时，会在 `<input type="submit">` 上触发一次 `click` 事件。
+`submit`和`click`的关系" 在输入框中使用`key:Enter`发送表单时，会在`<input type="submit">`上触发一次`click` 事件。
 
 这很有趣，因为实际上根本没有点击。
 
 这是一个示例：
-```html autorun height=60
+
+```html
 <form onsubmit="return false">
- <input type="text" size="30" value="Focus here and press enter">
- <input type="submit" value="Submit" *!*onclick="alert('click')"*/!*>
+  <input type="text" size="30" value="Focus here and press enter" />
+  <input type="submit" value="Submit" *!*onclick="alert('click')"*/!*>
 </form>
 ```
-
-````
 
 ## 方法：submit
 
@@ -51,10 +50,10 @@
 
 有时该方法被用来手动创建和发送表单，如下所示：
 
-```js run
-let form = document.createElement('form');
-form.action = 'https://google.com/search';
-form.method = 'GET';
+```js
+let form = document.createElement("form");
+form.action = "https://google.com/search";
+form.method = "GET";
 
 form.innerHTML = '<input name="q" value="test">';
 

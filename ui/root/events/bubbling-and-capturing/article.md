@@ -52,11 +52,10 @@
 
 这个过程被称为“冒泡（bubbling）”，因为事件从内部元素“冒泡”到所有父级，就像在水里的气泡一样。
 
-```warn header="**几乎** 所有事件都会冒泡。"
+**几乎** 所有事件都会冒泡。"
 这句话中的关键词是“几乎”。
 
 例如，`focus` 事件不会冒泡。同样，我们以后还会遇到其他例子。但这仍然是例外，而不是规则，大多数事件的确都是冒泡的。
-```
 
 ## event.target
 
@@ -92,21 +91,19 @@
 
 例如，如果你点击 `<button>`，这里的 `body.onclick` 不会工作：
 
-```html run autorun height=60
+```html
 <body onclick="alert(`the bubbling doesn't reach here`)">
   <button onclick="event.stopPropagation()">Click me</button>
 </body>
 ```
 
-```smart header="event.stopImmediatePropagation()"
-如果一个元素在一个事件上有多个处理程序，即使其中一个停止冒泡，其他处理程序仍会执行。
+"event.stopImmediatePropagation()" 如果一个元素在一个事件上有多个处理程序，即使其中一个停止冒泡，其他处理程序仍会执行。
 
 换句话说，`event.stopPropagation()` 停止向上移动，但是当前元素上的其他处理程序都会继续运行。
 
 有一个 `event.stopImmediatePropagation()` 方法，可以用于停止冒泡，并阻止当前元素上的处理程序运行。使用该方法之后，其他处理程序就不会被执行。
-```
 
-```warn header="不要在没有需要的情况下停止冒泡！"
+不要在没有需要的情况下停止冒泡！
 冒泡很方便。不要在没有真实需求时阻止它：除非是显而易见的，并且在架构上经过深思熟虑的。
 
 有时 `event.stopPropagation()` 会产生隐藏的陷阱，以后可能会成为问题。
@@ -118,7 +115,6 @@
 3. 我们的分析不适用于被 `stopPropagation` 所阻止点击的区域。太伤心了，我们有一个“死区”。
 
 通常，没有真正的必要去阻止冒泡。一项看似需要阻止冒泡的任务，可以通过其他方法解决。其中之一就是使用自定义事件，稍后我们会介绍它们此外，我们还可以将我们的数据写入一个处理程序中的 `event` 对象，并在另一个处理程序中读取该数据，这样我们就可以向父处理程序传递有关下层处理程序的信息。
-```
 
 ## 捕获
 
@@ -157,7 +153,7 @@ elem.addEventListener(..., true)
 
 让我们来看看捕获和冒泡：
 
-```html run autorun height=140 edit
+```html
 <style>
   body * {
     margin: 10px;
@@ -195,42 +191,4 @@ elem.addEventListener(..., true)
 
 有一个属性 `event.eventPhase`，它告诉我们捕获事件的阶段数。但它很少被使用，因为我们通常是从处理程序中了解到它。
 
-```smart header="要移除处理程序，`removeEventListener`需要同一阶段" 如果我们`addEventListener(..., true)`，那么我们应该在 `removeEventListener(..., true)` 中提到同一阶段，以正确删除处理程序。
-
-`````
-
-````smart header="同一元素的同一阶段的监听器按其设置顺序运行"
-如果我们在同一阶段有多个事件处理程序，并通过 `addEventListener` 分配给了相同的元素，则它们的运行顺序与创建顺序相同：
-
-```js
-elem.addEventListener("click", e => alert(1)); // 会先被触发
-elem.addEventListener("click", e => alert(2));
-`````
-
-```
-
-
-## 总结
-
-当一个事件发生时 —— 发生该事件的嵌套最深的元素被标记为“目标元素”（`event.target`）。
-
-- 然后，事件从文档根节点向下移动到 `event.target`，并在途中调用分配了 `addEventListener(..., true)` 的处理程序（`true` 是 `{capture: true}` 的一个简写形式）。
-- 然后，在目标元素自身上调用处理程序。
-- 然后，事件从 `event.target` 向上移动到根，调用使用 `on<event>` 和没有第三个参数的，或者第三个参数为 `false/{capture:false}` 的 `addEventListener` 分配的处理程序。
-
-每个处理程序都可以访问 `event` 对象的属性：
-
-- `event.target` —— 引发事件的层级最深的元素。
-- `event.currentTarget`（=`this`）—— 处理事件的当前元素（具有处理程序的元素）
-- `event.eventPhase` —— 当前阶段（capturing=1，target=2，bubbling=3）。
-
-任何事件处理程序都可以通过调用 `event.stopPropagation()` 来停止事件，但不建议这样做，因为我们不确定是否确实不需要冒泡上来的事件，也许是用于完全不同的事情。
-
-捕获阶段很少使用，通常我们会在冒泡时处理事件。这背后有一个逻辑。
-
-在现实世界中，当事故发生时，当地警方会首先做出反应。他们最了解发生这件事的地方。然后，如果需要，上级主管部门再进行处理。
-
-事件处理程序也是如此。在特定元素上设置处理程序的代码，了解有关该元素最详尽的信息。特定于 `<td>` 的处理程序可能恰好适合于该 `<td>`，这个处理程序知道关于该元素的所有信息。所以该处理程序应该首先获得机会。然后，它的直接父元素也了解相关上下文，但了解的内容会少一些，以此类推，直到处理一般性概念并最后运行的最顶部的元素为止。
-
-冒泡和捕获为“事件委托”奠定了基础 —— 一种非常强大的事件处理模式，我们将在下一章中进行研究。
-```
+要移除处理程序，`removeEventListener`需要同一阶段" 如果我们`addEventListener(..., true)`，那么我们应该在 `removeEventListener(..., true)` 中提到同一阶段，以正确删除处理程序。

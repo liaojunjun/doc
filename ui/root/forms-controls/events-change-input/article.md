@@ -10,14 +10,14 @@
 
 例如，当我们在下面的文本字段中键入内容时 —— 不会触发 `change` 事件。但是，当我们将焦点移到其他位置时，例如，点击按钮 —— 就会触发 `change` 事件：
 
-```html autorun height=40 run
-<input type="text" onchange="alert(this.value)">
-<input type="button" value="Button">
+```html
+<input type="text" onchange="alert(this.value)" />
+<input type="button" value="Button" />
 ```
 
 对于其它元素：`select`，`input type=checkbox/radio`，会在选项更改后立即触发 `change` 事件。
 
-```html autorun height=40 run
+```html
 <select onchange="alert(this.value)">
   <option value="">Select something</option>
   <option value="1">Option 1</option>
@@ -25,7 +25,6 @@
   <option value="3">Option 3</option>
 </select>
 ```
-
 
 ## 事件：input
 
@@ -35,10 +34,10 @@
 
 例如：
 
-```html autorun height=40 run
-<input type="text" id="input"> oninput: <span id="result"></span>
+```html
+<input type="text" id="input" /> oninput: <span id="result"></span>
 <script>
-  input.oninput = function() {
+  input.oninput = function () {
     result.innerHTML = input.value;
   };
 </script>
@@ -48,11 +47,9 @@
 
 另一方面，`input` 事件不会在那些不涉及值更改的键盘输入或其他行为上触发，例如在输入时按方向键 `key:⇦` `key:⇨`。
 
-```smart header="无法阻止 `oninput` 中的任何事件"
-当输入值更改后，就会触发 `input` 事件。
+"无法阻止 `oninput`中的任何事件" 当输入值更改后，就会触发`input` 事件。
 
 所以，我们无法使用 `event.preventDefault()` —— 已经太迟了，不会起任何作用了。
-```
 
 ## 事件：cut，copy，paste
 
@@ -64,11 +61,11 @@
 
 例如，下面的代码阻止了所有的这样的事件，并显示出了我们所尝试剪切/拷贝/粘贴的内容：
 
-```html autorun height=40 run
-<input type="text" id="input">
+```html
+<input type="text" id="input" />
 <script>
-  input.oncut = input.oncopy = input.onpaste = function(event) {
-    alert(event.type + ' - ' + event.clipboardData.getData('text/plain'));
+  input.oncut = input.oncopy = input.onpaste = function (event) {
+    alert(event.type + " - " + event.clipboardData.getData("text/plain"));
     return false;
   };
 </script>
@@ -86,8 +83,8 @@
 
 数据更改事件:
 
-| 事件 | 描述 | 特点 |
-|---------|----------|-------------|
-| `change`| 值被改变。 | 对于文本输入，当失去焦点时触发。 |
-| `input` | 文本输入的每次更改。 | 立即触发，与 `change` 不同。 |
+| 事件             | 描述                 | 特点                                                            |
+| ---------------- | -------------------- | --------------------------------------------------------------- |
+| `change`         | 值被改变。           | 对于文本输入，当失去焦点时触发。                                |
+| `input`          | 文本输入的每次更改。 | 立即触发，与 `change` 不同。                                    |
 | `cut/copy/paste` | 剪贴/拷贝/粘贴行为。 | 行为可以被阻止。`event.clipboardData` 属性可以用于读/写剪贴板。 |

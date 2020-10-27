@@ -20,6 +20,7 @@ let event = new Event(type[, options]);
 
 - **type** —— 事件类型，可以是像这样 `"click"` 的字符串，或者我们自己的像这样 `"my-event"` 的参数。
 - **options** —— 具有两个可选属性的对象：
+
   - `bubbles: true/false` —— 如果为 `true`，那么事件会冒泡。
   - `cancelable: true/false` —— 如果为 `true`，那么“默认行为”就会被阻止。稍后我们会看到对于自定义事件，它意味着什么。
 
@@ -33,7 +34,7 @@ let event = new Event(type[, options]);
 
 在下面这个示例中，`click` 事件是用 JavaScript 初始化创建的。处理程序工作方式和点击按钮的方式相同：
 
-```html run no-beautify
+```html
 <button id="elem" onclick="alert('Click!');">Autoclick</button>
 
 <script>
@@ -42,11 +43,10 @@ let event = new Event(type[, options]);
 </script>
 ```
 
-```smart header="event.isTrusted"
+"event.isTrusted"
 有一种方法可以区分“真实”用户事件和通过脚本生成的事件。
 
 对于来自真实用户操作的事件，`event.isTrusted` 属性为 `true`，对于脚本生成的事件，`event.isTrusted` 属性为 `false`。
-```
 
 ## 冒泡示例
 
@@ -54,24 +54,23 @@ let event = new Event(type[, options]);
 
 我们需要做的就是将 `bubbles` 设置为 `true`：
 
-```html run no-beautify
+```html
 <h1 id="elem">Hello from the script!</h1>
 
 <script>
   // 在 document 上捕获...
-  document.addEventListener("hello", function(event) { // (1)
+  document.addEventListener("hello", function (event) {
+    // (1)
     alert("Hello from " + event.target.tagName); // Hello from H1
   });
 
   // ...在 elem 上 dispatch！
-  let event = new Event("hello", {bubbles: true}); // (2)
+  let event = new Event("hello", { bubbles: true }); // (2)
   elem.dispatchEvent(event);
 
   // 在 document 上的处理程序将被激活，并显示消息。
-
 </script>
 ```
-
 
 注意：
 
@@ -97,34 +96,30 @@ let event = new Event(type[, options]);
 
 就像鼠标事件的 `clientX/clientY` 一样：
 
-```js run
+```js
 let event = new MouseEvent("click", {
   bubbles: true,
   cancelable: true,
   clientX: 100,
-  clientY: 100
+  clientY: 100,
 });
 
-*!*
 alert(event.clientX); // 100
-*/!*
 ```
 
 请注意：通用的 `Event` 构造器不允许这样做。
 
 让我们试试：
 
-```js run
+```js
 let event = new Event("click", {
   bubbles: true, // 构造器 Event 中只有 bubbles 和 cancelable 可以工作
   cancelable: true,
   clientX: 100,
-  clientY: 100
+  clientY: 100,
 });
 
-*!*
 alert(event.clientX); // undefined，未知的属性被忽略了！
-*/!*
 ```
 
 从技术上讲，我们可以通过在创建后直接分配 `event.clientX=100` 来解决这个问题。所以，这是一个方便和遵守规则的问题。浏览器生成的事件始终具有正确的类型。
@@ -144,15 +139,15 @@ alert(event.clientX); // undefined，未知的属性被忽略了！
 
 <script>
   // 事件附带给处理程序的其他详细信息
-  elem.addEventListener("hello", function(event) {
-    alert(*!*event.detail.name*/!*);
+  elem.addEventListener("hello", function (event) {
+    alert(event.detail.name);
   });
 
-  elem.dispatchEvent(new CustomEvent("hello", {
-*!*
-    detail: { name: "John" }
-*/!*
-  }));
+  elem.dispatchEvent(
+    new CustomEvent("hello", {
+      detail: { name: "John" },
+    })
+  );
 </script>
 ```
 
@@ -176,7 +171,7 @@ alert(event.clientX); // undefined，未知的属性被忽略了！
 
 任何处理程序都可以使用 `rabbit.addEventListener('hide',...)` 来监听该事件，并在需要时使用 `event.preventDefault()` 来取消该行为。然后兔子就不会藏起来了：
 
-```html run refresh autorun
+```html
 <pre id="rabbit">
   |\   /|
    \|_|/
@@ -190,24 +185,22 @@ alert(event.clientX); // undefined，未知的属性被忽略了！
   // hide() 将在 2 秒后被自动调用
   function hide() {
     let event = new CustomEvent("hide", {
-      cancelable: true // 没有这个标志，preventDefault 将不起作用
+      cancelable: true, // 没有这个标志，preventDefault 将不起作用
     });
     if (!rabbit.dispatchEvent(event)) {
-      alert('The action was prevented by a handler');
+      alert("The action was prevented by a handler");
     } else {
       rabbit.hidden = true;
     }
   }
 
-  rabbit.addEventListener('hide', function(event) {
+  rabbit.addEventListener("hide", function (event) {
     if (confirm("Call preventDefault?")) {
       event.preventDefault();
     }
   });
 </script>
 ```
-
-请注意：该事件必须具有 `cancelable: true` 标志，否则 `event.preventDefault()` 调用将会被忽略。
 
 ## 事件中的事件是同步的
 
@@ -219,23 +212,24 @@ alert(event.clientX); // undefined，未知的属性被忽略了！
 
 它会被立即执行，而不必等待 `onclick` 处理程序结束：
 
-
-```html run autorun
+```html
 <button id="menu">Menu (click me)</button>
 
 <script>
-  menu.onclick = function() {
+  menu.onclick = function () {
     alert(1);
 
-    menu.dispatchEvent(new CustomEvent("menu-open", {
-      bubbles: true
-    }));
+    menu.dispatchEvent(
+      new CustomEvent("menu-open", {
+        bubbles: true,
+      })
+    );
 
     alert(2);
   };
 
   // 在 1 和 2 之间触发
-  document.addEventListener('menu-open', () => alert('nested'));
+  document.addEventListener("menu-open", () => alert("nested"));
 </script>
 ```
 
@@ -249,47 +243,28 @@ alert(event.clientX); // undefined，未知的属性被忽略了！
 
 那么，我们就可以将 `dispatchEvent`（或另一个触发事件的调用）放在 `onclick` 末尾，或者最好将其包装到零延迟的 `setTimeout` 中：
 
-```html run
+```html
 <button id="menu">Menu (click me)</button>
 
 <script>
-  menu.onclick = function() {
+  menu.onclick = function () {
     alert(1);
 
-    setTimeout(() => menu.dispatchEvent(new CustomEvent("menu-open", {
-      bubbles: true
-    })));
+    setTimeout(() =>
+      menu.dispatchEvent(
+        new CustomEvent("menu-open", {
+          bubbles: true,
+        })
+      )
+    );
 
     alert(2);
   };
 
-  document.addEventListener('menu-open', () => alert('nested'));
+  document.addEventListener("menu-open", () => alert("nested"));
 </script>
 ```
 
 现在，`dispatchEvent` 在当前代码执行完成之后异步运行，包括 `mouse.onclick`，因此，事件处理程序是完全独立的。
 
 输出顺序变成：1 -> 2 -> nested。
-
-## 总结
-
-要从代码生成一个事件，我们首先需要创建一个事件对象。
-
-通用的 `Event(name, options)` 构造器接受任意事件名称和具有两个属性的 `options` 对象：
-- 如果事件应该冒泡，则 `bubbles: true`。
-- 如果 `event.preventDefault()` 应该有效，则 `cancelable: true`。
-
-其他像 `MouseEvent` 和 `KeyboardEvent` 这样的原生事件的构造器，都接受特定于该事件类型的属性。例如，鼠标事件的 `clientX`。
-
-对于自定义事件，我们应该使用 `CustomEvent` 构造器。它有一个名为 `detail` 的附加选项，我们应该将事件特定的数据分配给它。然后，所有处理程序可以以 `event.detail` 的形式来访问它。
-
-尽管技术上有可能生成像 `click` 或 `keydown` 这样的浏览器事件，但我们还是应谨慎使用。
-
-我们不应该生成浏览器事件，因为这是运行处理程序的一种怪异（hacky）方式。大多数时候，这都是一种糟糕的架构。
-
-可以生成原生事件：
-
-- 如果第三方程序库不提供其他交互方式，那么这是使第三方程序库工作所需的一种肮脏手段。
-- 对于自动化测试，要在脚本中“点击按钮”并查看接口是否正确响应。
-
-使用我们自己的名称的自定义事件通常是出于架构的目的而创建的，以指示发生在菜单（menu），滑块（slider），轮播（carousel）等内部发生了什么。

@@ -79,9 +79,7 @@ function highlight(td) {
 
 ```html
 <td>
-  *!*
   <strong>Northwest</strong>
-  */!* ...
 </td>
 ```
 
@@ -123,12 +121,12 @@ table.onclick = function (event) {
 第一个想法可能是为每个按钮分配一个单独的处理程序。但是有一个更优雅的解决方案。我们可以为整个菜单添加一个处理程序，并为具有方法调用的按钮添加 `data-action` 特性（attribute）：
 
 ```html
-<button *!*data-action="save"*/!*>Click to Save</button>
+<button data-action="save">Click to Save</button>
 ```
 
 处理程序读取特性（attribute）并执行该方法。工作示例如下：
 
-```html autorun height=60 run untrusted
+```html
 <div id="menu">
   <button data-action="save">Save</button>
   <button data-action="load">Load</button>
@@ -136,35 +134,33 @@ table.onclick = function (event) {
 </div>
 
 <script>
-    class Menu {
-      constructor(elem) {
-        this._elem = elem;
-        elem.onclick = this.onClick.bind(this); // (*)
-      }
-
-      save() {
-        alert('saving');
-      }
-
-      load() {
-        alert('loading');
-      }
-
-      search() {
-        alert('searching');
-      }
-
-      onClick(event) {
-  *!*
-        let action = event.target.dataset.action;
-        if (action) {
-          this[action]();
-        }
-  */!*
-      };
+  class Menu {
+    constructor(elem) {
+      this._elem = elem;
+      elem.onclick = this.onClick.bind(this);
     }
 
-    new Menu(menu);
+    save() {
+      alert("saving");
+    }
+
+    load() {
+      alert("loading");
+    }
+
+    search() {
+      alert("searching");
+    }
+
+    onClick(event) {
+      let action = event.target.dataset.action;
+      if (action) {
+        this[action]();
+      }
+    }
+  }
+
+  new Menu(menu);
 </script>
 ```
 
@@ -192,7 +188,7 @@ table.onclick = function (event) {
 
 例如，这里的特性 `data-counter` 给按钮添加了一个“点击增加”的行为。
 
-```html run autorun height=60
+```html
 Counter: <input type="button" value="1" data-counter /> One more counter:
 <input type="button" value="2" data-counter />
 

@@ -21,36 +21,40 @@
 - `blur` 事件处理程序检查这个字段是否输入了电子邮箱，如果没有输入，则显示一个 error。
 - `focus` 事件处理程序隐藏 error 信息（在 `blur` 事件处理程序上会被再检查一遍）：
 
-```html run autorun height=60
+```html
 <style>
-  .invalid { border-color: red; }
-  #error { color: red }
+  .invalid {
+    border-color: red;
+  }
+  #error {
+    color: red;
+  }
 </style>
 
-Your email please: <input type="email" id="input">
+Your email please: <input type="email" id="input" />
 
 <div id="error"></div>
 
 <script>
-*!*input.onblur*/!* = function() {
-  if (!input.value.includes('@')) { // not email
-    input.classList.add('invalid');
-    error.innerHTML = 'Please enter a correct email.'
-  }
-};
+  input.onblur = function () {
+    if (!input.value.includes("@")) {
+      // not email
+      input.classList.add("invalid");
+      error.innerHTML = "Please enter a correct email.";
+    }
+  };
 
-*!*input.onfocus*/!* = function() {
-  if (this.classList.contains('invalid')) {
-    // 移除 "error" 指示，因为用户想要重新输入一些内容
-    this.classList.remove('invalid');
-    error.innerHTML = "";
-  }
-};
+  input.onfocus = function () {
+    if (this.classList.contains("invalid")) {
+      // 移除 "error" 指示，因为用户想要重新输入一些内容
+      this.classList.remove("invalid");
+      error.innerHTML = "";
+    }
+  };
 </script>
 ```
 
 现代 HTML 允许我们使用 `input` 特性（attribute）进行许多验证：`required`，`pattern` 等。有时它们正是我们所需要的。当我们需要更大的灵活性时，可以使用 JavaScript。如果数据是正确的，我们可以把它自动发送到服务器。
-
 
 ## focus/blur 方法
 
@@ -58,25 +62,29 @@ Your email please: <input type="email" id="input">
 
 例如，如果输入值无效，我们可以让焦点无法离开这个 `input` 字段：
 
-```html run autorun height=80
+```html
 <style>
   .error {
     background: red;
   }
 </style>
 
-Your email please: <input type="email" id="input">
-<input type="text" style="width:220px" placeholder="make email invalid and try to focus here">
+Your email please: <input type="email" id="input" />
+<input
+  type="text"
+  style="width:220px"
+  placeholder="make email invalid and try to focus here"
+/>
 
 <script>
-  input.onblur = function() {
-    if (!this.value.includes('@')) { // not email
+  input.onblur = function () {
+    if (!this.value.includes("@")) {
+      // not email
       // 显示 error
       this.classList.add("error");
-*!*
+
       // ...将焦点放回来
       input.focus();
-*/!*
     } else {
       this.classList.remove("error");
     }
@@ -90,8 +98,7 @@ Your email please: <input type="email" id="input">
 
 请注意，我们无法通过在 `onblur` 事件处理程序中调用 `event.preventDefault()` 来“阻止失去焦点”，因为 `onblur` 事件处理程序是在元素失去焦点 **之后** 运行的。
 
-```warn header="JavaScript 导致的焦点丢失"
-很多种原因可以导致焦点丢失。
+"JavaScript 导致的焦点丢失" 很多种原因可以导致焦点丢失。
 
 其中之一就是用户点击了其它位置。当然 JavaScript 自身也可能导致焦点丢失，例如：
 
@@ -101,7 +108,7 @@ Your email please: <input type="email" id="input">
 这些特性有时候会导致 `focus/blur` 处理程序发生异常 —— 在不需要它们时触发。
 
 最好的秘诀就是在使用这些事件时小心点。如果我们想要跟踪用户导致的焦点丢失，则应该避免自己造成的焦点丢失。
-```
+
 ## 允许在任何元素上聚焦：tabindex
 
 默认情况下，很多元素不支持聚焦。
@@ -124,14 +131,15 @@ Your email please: <input type="email" id="input">
 
 - `tabindex="0"` 会使该元素被与那些不具有 `tabindex` 的元素放在一起。也就是说，当我们切换元素时，具有 `tabindex="0"` 的元素将排在那些具有 `tabindex ≥ 1` 的元素的后面。
 
-    通常，它用于使元素具有焦点，但是保留默认的切换顺序。使元素成为与 `<input>` 一样的表单的一部分。
+  通常，它用于使元素具有焦点，但是保留默认的切换顺序。使元素成为与 `<input>` 一样的表单的一部分。
 
 - `tabindex="-1"` 只允许以编程的方式聚焦于元素。`key:Tab` 键会忽略这样的元素，但是 `elem.focus()` 有效。
 
 举个例子，这里有一个列表。点击第一项，然后按 `key:Tab` 键：
 
-```html autorun no-beautify
-点击第一项，然后按 Tab 键。跟踪顺序。请注意，多按几次 Tab 键后，会将焦点移到这个通过 iframe 嵌入的示例的外面。
+```html
+点击第一项，然后按 Tab 键。跟踪顺序。请注意，多按几次 Tab
+键后，会将焦点移到这个通过 iframe 嵌入的示例的外面。
 <ul>
   <li tabindex="1">One</li>
   <li tabindex="0">Zero</li>
@@ -140,16 +148,18 @@ Your email please: <input type="email" id="input">
 </ul>
 
 <style>
-  li { cursor: pointer; }
-  :focus { outline: 1px dashed green; }
+  li {
+    cursor: pointer;
+  }
+  :focus {
+    outline: 1px dashed green;
+  }
 </style>
 ```
 
 顺序就像这样：`1 - 2 - 0`。通常，`<li>` 不支持聚焦，但 `tabindex` 可以使它能聚焦，使这成为可能，并且还带有事件以及 `:focus` 样式。
 
-```smart header="属性 `elem.tabIndex` 也有效"
-我们可以使用 `elem.tabIndex` 通过 JavaScript 来添加 `tabindex`。效果是一样的。
-```
+属性 `elem.tabIndex`也有效" 我们可以使用`elem.tabIndex`通过 JavaScript 来添加`tabindex`。效果是一样的。
 
 ## focus/blur 委托
 
@@ -157,14 +167,18 @@ Your email please: <input type="email" id="input">
 
 例如，我们不能把 `onfocus` 放在 `<form>` 上来对其进行高亮，像这样：
 
-```html autorun height=80
+```html
 <!-- on focusing in the form -- add the class -->
-<form *!*onfocus="this.className='focused'"*/!*>
-  <input type="text" name="name" value="Name">
-  <input type="text" name="surname" value="Surname">
+<form onfocus="this.className='focused'">
+  <input type="text" name="name" value="Name" />
+  <input type="text" name="surname" value="Surname" />
 </form>
 
-<style> .focused { outline: 1px solid red; } </style>
+<style>
+  .focused {
+    outline: 1px solid red;
+  }
+</style>
 ```
 
 上面这个示例并不工作，因为当用户聚焦于 `<input>` 时，`focus` 事件只会在该 `<input>` 上触发。它不会向上冒泡。所以 `form.onfocus` 永远不会触发。
@@ -175,20 +189,22 @@ Your email please: <input type="email" id="input">
 
 这样可以生效：
 
-```html autorun height=80
+```html
 <form id="form">
-  <input type="text" name="name" value="Name">
-  <input type="text" name="surname" value="Surname">
+  <input type="text" name="name" value="Name" />
+  <input type="text" name="surname" value="Surname" />
 </form>
 
-<style> .focused { outline: 1px solid red; } </style>
+<style>
+  .focused {
+    outline: 1px solid red;
+  }
+</style>
 
 <script>
-*!*
   // 将处理程序置于捕获阶段（最后一个参数为 true）
-  form.addEventListener("focus", () => form.classList.add('focused'), true);
-  form.addEventListener("blur", () => form.classList.remove('focused'), true);
-*/!*
+  form.addEventListener("focus", () => form.classList.add("focused"), true);
+  form.addEventListener("blur", () => form.classList.remove("focused"), true);
 </script>
 ```
 
@@ -198,19 +214,21 @@ Your email please: <input type="email" id="input">
 
 所以，这是另一个可行的变体：
 
-```html autorun height=80
+```html
 <form id="form">
-  <input type="text" name="name" value="Name">
-  <input type="text" name="surname" value="Surname">
+  <input type="text" name="name" value="Name" />
+  <input type="text" name="surname" value="Surname" />
 </form>
 
-<style> .focused { outline: 1px solid red; } </style>
+<style>
+  .focused {
+    outline: 1px solid red;
+  }
+</style>
 
 <script>
-*!*
-  form.addEventListener("focusin", () => form.classList.add('focused'));
-  form.addEventListener("focusout", () => form.classList.remove('focused'));
-*/!*
+  form.addEventListener("focusin", () => form.classList.add("focused"));
+  form.addEventListener("focusout", () => form.classList.remove("focused"));
 </script>
 ```
 
@@ -219,7 +237,12 @@ Your email please: <input type="email" id="input">
 在元素获得/失去焦点时会触发 `focus` 和 `blur` 事件。
 
 它们的特点是：
+
 - 它们不会冒泡。但是可以改为在捕获阶段触发，或者使用 `focusin/focusout`。
 - 大多数元素默认不支持聚焦。使用 `tabindex` 可以使任何元素变成可聚焦的。
 
 可以通过 `document.activeElement` 来获取当前所聚焦的元素。
+
+<iframe src="https://liaojunjun.github.io/nice/root/forms-controls/focus-blur/edit-td-click/solution.view/index.html" width="100%" height="200"></iframe>
+<iframe src="https://liaojunjun.github.io/nice/root/forms-controls/focus-blur/editable-div/solution.view/index.html" width="100%" height="200"></iframe>
+<iframe src="https://liaojunjun.github.io/nice/root/forms-controls/focus-blur/keyboard-mouse/solution.view/index.html" width="100%" height="200"></iframe>

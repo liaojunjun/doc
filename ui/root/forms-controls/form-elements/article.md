@@ -10,19 +10,19 @@
 
 这就是所谓的“命名的集合”：既是被命名了的，也是有序的。我们既可以使用名字，也可以使用在文档中的编号来获取表单。
 
-```js no-beautify
-document.forms.my - name="my" 的表单
-document.forms[0] - 文档中的第一个表单
+```js
+document.forms.my; // name="my" 的表单
+document.forms[0]; // 文档中的第一个表单
 ```
 
 当我们有了一个表单时，其中的任何元素都可以通过命名的集合 `form.elements` 来获取到。
 
 例如：
 
-```html run height=40
+```html
 <form name="my">
-  <input name="one" value="1">
-  <input name="two" value="2">
+  <input name="one" value="1" />
+  <input name="two" value="2" />
 </form>
 
 <script>
@@ -40,57 +40,50 @@ document.forms[0] - 文档中的第一个表单
 
 在这种情况下，`form.elements[name]` 将会是一个集合，例如：
 
-```html run height=40
+```html
 <form>
-  <input type="radio" *!*name="age"*/!* value="10">
-  <input type="radio" *!*name="age"*/!* value="20">
+  <input type="radio" name="age" value="10" />
+  <input type="radio" name="age" value="20" />
 </form>
 
 <script>
-let form = document.forms[0];
+  let form = document.forms[0];
 
-let ageElems = form.elements.age;
+  let ageElems = form.elements.age;
 
-*!*
-alert(ageElems[0]); // [object HTMLInputElement]
-*/!*
+  alert(ageElems[0]); // [object HTMLInputElement]
 </script>
 ```
 
 这些导航（navigation）属性并不依赖于标签的结构。所有的控件元素，无论它们在表单中有多深，都可以通过 `form.elements` 获取到。
 
-
-````smart header="Fieldset 作为“子表单”"
+Fieldset 作为“子表单”"
 一个表单内会有一个或多个 `<fieldset>` 元素。它们也具有 `elements` 属性，该属性列出了 `<fieldset>` 中的表单控件。
 
 例如：
 
-```html run height=80
+```html
 <body>
   <form id="form">
     <fieldset name="userFields">
       <legend>info</legend>
-      <input name="login" type="text">
+      <input name="login" type="text" />
     </fieldset>
   </form>
 
   <script>
     alert(form.elements.login); // <input name="login">
 
-*!*
     let fieldset = form.elements.userFields;
     alert(fieldset); // HTMLFieldSetElement
 
     // 我们可以通过名字从表单和 fieldset 中获取 input
     alert(fieldset.elements.login == form.elements.login); // true
-*/!*
   </script>
 </body>
 ```
-````
 
-````warn header="更简短的表示方式：`form.name`"
-还有一个更简短的表示方式：我们可以通过 `form[index/name]` 来访问元素。
+更简短的表示方式：`form.name`" 还有一个更简短的表示方式：我们可以通过 `form[index/name]` 来访问元素。
 
 换句话说，我们可以将 `form.elements.login` 写成 `form.login`。
 
@@ -98,9 +91,9 @@ alert(ageElems[0]); // [object HTMLInputElement]
 
 我们可以很直观地通过一个例子看到这个情况：
 
-```html run height=40
+```html
 <form id="form">
-  <input name="login">
+  <input name="login" />
 </form>
 
 <script>
@@ -112,16 +105,12 @@ alert(ageElems[0]); // [object HTMLInputElement]
   alert(form.elements.login); // undefined
   alert(form.elements.username); // input
 
-*!*
   // form 允许我们使用两个名字：新的名字和旧的名字
   alert(form.username == form.login); // true
-*/!*
 </script>
 ```
 
 这通常来说并不是一个问题，因为我们很少修改表单元素的名字。
-
-````
 
 ## 反向引用：element.form
 
@@ -133,19 +122,17 @@ alert(ageElems[0]); // [object HTMLInputElement]
 
 例如：
 
-```html run height=40
+```html
 <form id="form">
-  <input type="text" name="login">
+  <input type="text" name="login" />
 </form>
 
 <script>
-*!*
   // form -> element
   let login = form.login;
 
   // element -> form
   alert(login.form); // HTMLFormElement
-*/!*
 </script>
 ```
 
@@ -166,11 +153,9 @@ textarea.value = "New text";
 input.checked = true; // 对于复选框（checkbox）或单选按钮（radio button）
 ```
 
-```warn header="使用 `textarea.value` 而不是 `textarea.innerHTML`"
-请注意，即使 `<textarea>...</textarea>` 将它们的 `value` 作为嵌套的 HTML 标签来保存，我们也绝不应该使用 `textarea.innerHTML` 来访问它。
+"使用 `textarea.value`而不是`textarea.innerHTML`" 请注意，即使 `<textarea>...</textarea>`将它们的`value`作为嵌套的 HTML 标签来保存，我们也绝不应该使用`textarea.innerHTML` 来访问它。
 
 它仅存储最初在页面上的 HTML，而不是存储的当前 `value`。
-```
 
 ### select 和 option
 
@@ -190,7 +175,7 @@ input.checked = true; // 对于复选框（checkbox）或单选按钮（radio bu
 
 下面是一个例子：
 
-```html run
+```html
 <select id="select">
   <option value="apple">Apple</option>
   <option value="pear">Pear</option>
@@ -201,7 +186,7 @@ input.checked = true; // 对于复选框（checkbox）或单选按钮（radio bu
   // 所有这三行做的是同一件事
   select.options[2].selected = true;
   select.selectedIndex = 2;
-  select.value = 'banana';
+  select.value = "banana";
 </script>
 ```
 
@@ -209,8 +194,8 @@ input.checked = true; // 对于复选框（checkbox）或单选按钮（radio bu
 
 我们可以通过 `select.options` 来获取它们的集合，例如：
 
-```html run
-<select id="select" *!*multiple*/!*>
+```html
+<select id="select" multiple>
   <option value="blues" selected>Blues</option>
   <option value="rock" selected>Rock</option>
   <option value="classic">Classic</option>
@@ -219,10 +204,10 @@ input.checked = true; // 对于复选框（checkbox）或单选按钮（radio bu
 <script>
   // 从 multi-select 中获取所有选定的 `value`
   let selected = Array.from(select.options)
-    .filter(option => option.selected)
-    .map(option => option.value);
+    .filter((option) => option.selected)
+    .map((option) => option.value);
 
-  alert(selected); // blues,rock  
+  alert(selected); // blues,rock
 </script>
 ```
 
@@ -275,23 +260,4 @@ let option = new Option("Text", "value", true, true);
 
 - 规范：<https://html.spec.whatwg.org/multipage/forms.html>.
 
-## 总结
-
-表单导航：
-
-`document.forms`
-: 一个表单元素可以通过 `document.forms[name/index]` 访问到。
-
-`form.elements`  
-: 表单元素可以通过 `form.elements[name/index]` 的方式访问，或者也可以使用 `form[name/index]`。`elements` 属性也适用于 `<fieldset>`。
-
-`element.form`
-: 元素通过 `form` 属性来引用它们所属的表单。
-
-`value` 可以被通过 `input.value`，`textarea.value`，`select.value` 等来获取到，对于单选按钮和复选框来说可以使用 `input.checked`。
-
-对于 `<select>` 元素，们可以通过索引 `select.selectedIndex` 来获取它的 `value`，也可以通过 `<option>` 集合 `select.options`。
-
-这些是开始使用表单的基础。我们将在本教程中进一步介绍更多示例。
-
-在下一章中，我们将介绍可能在任何元素上出现，但主要在表单上处理的 `focus` 和 `blur` 事件。
+<iframe src="https://liaojunjun.github.io/nice/root/event-details/events/form-elements/add-select-option/solution.html" width="100%" height="400"></iframe>
