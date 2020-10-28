@@ -1,4 +1,3 @@
-
 # 脚本：async，defer
 
 现代的网站中，脚本往往比 HTML 更“重”：它们的大小通常更大，处理时间也更长。
@@ -10,7 +9,7 @@
 1. 脚本不能访问到位于它们下面的 DOM 元素，因此，脚本无法给它们添加处理程序等。
 2. 如果页面顶部有一个笨重的脚本，它会“阻塞页面”。在该脚本下载并执行结束前，用户都不能看到页面内容：
 
-```html run height=100
+```html
 <p>...content before script...</p>
 
 <script src="https://javascript.info/article/script-async-defer/long.js?speed=1"></script>
@@ -41,10 +40,13 @@
 
 这是与上面那个相同的示例，但是带有 `defer` 特性：
 
-```html run height=100
+```html
 <p>...content before script...</p>
 
-<script defer src="https://javascript.info/article/script-async-defer/long.js?speed=1"></script>
+<script
+  defer
+  src="https://javascript.info/article/script-async-defer/long.js?speed=1"
+></script>
 
 <!-- 立即可见 -->
 <p>...content after script...</p>
@@ -55,14 +57,19 @@
 
 下面这个示例演示了这一过程：
 
-```html run height=100
+```html
 <p>...content before scripts...</p>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => alert("DOM ready after defer!")); // (2)
+  document.addEventListener("DOMContentLoaded", () =>
+    alert("DOM ready after defer!")
+  ); // (2)
 </script>
 
-<script defer src="https://javascript.info/article/script-async-defer/long.js?speed=1"></script>
+<script
+  defer
+  src="https://javascript.info/article/script-async-defer/long.js?speed=1"
+></script>
 
 <p>...content after scripts...</p>
 ```
@@ -75,20 +82,22 @@
 因此，如果我们有一个长脚本在前，一个短脚本在后，那么后者就会等待前者。
 
 ```html
-<script defer src="https://javascript.info/article/script-async-defer/long.js"></script>
-<script defer src="https://javascript.info/article/script-async-defer/small.js"></script>
+<script
+  defer
+  src="https://javascript.info/article/script-async-defer/long.js"
+></script>
+<script
+  defer
+  src="https://javascript.info/article/script-async-defer/small.js"
+></script>
 ```
 
-```smart header="短脚本先下载完成，但是后执行"
+短脚本先下载完成，但是后执行"
 浏览器扫描页面寻找脚本，然后并行下载它们，以提高性能。因此，在上面的示例中，两个脚本是并行下载的。`small.js` 可能会先下载完成。
 
 但是规范要求脚本按照文档顺序执行，因此，它需要等到 `long.js` 执行结束才会被执行。
-```
 
-```smart header="`defer` 特性仅适用于外部脚本"
-如果 `<script>` 脚本没有 `src`，则会忽略 `defer` 特性。
-```
-
+`defer`特性仅适用于外部脚本" 如果`<script>`脚本没有`src`，则会忽略 `defer` 特性。
 
 ## async
 
@@ -96,22 +105,27 @@
 
 - 页面不会等待异步脚本，它会继续处理并显示页面内容。
 - `DOMContentLoaded` 和异步脚本不会彼此等待：
-    - `DOMContentLoaded` 可能会发生在异步脚本之前（如果异步脚本在页面完成后才加载完成）
-    - `DOMContentLoaded` 也可能发生在异步脚本之后（如果异步脚本很短，或者是从 HTTP 缓存中加载的）
+  - `DOMContentLoaded` 可能会发生在异步脚本之前（如果异步脚本在页面完成后才加载完成）
+  - `DOMContentLoaded` 也可能发生在异步脚本之后（如果异步脚本很短，或者是从 HTTP 缓存中加载的）
 - 其他脚本不会等待 `async` 脚本加载完成，同样，`async` 脚本也不会等待其他脚本。
-
 
 因此，如果我们有几个 `async` 脚本，它们可能按任意次序执行。总之是先加载完成的就先执行：
 
-```html run height=100
+```html
 <p>...content before scripts...</p>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => alert("DOM ready!"));
+  document.addEventListener("DOMContentLoaded", () => alert("DOM ready!"));
 </script>
 
-<script async src="https://javascript.info/article/script-async-defer/long.js"></script>
-<script async src="https://javascript.info/article/script-async-defer/small.js"></script>
+<script
+  async
+  src="https://javascript.info/article/script-async-defer/long.js"
+></script>
+<script
+  async
+  src="https://javascript.info/article/script-async-defer/small.js"
+></script>
 
 <p>...content after scripts...</p>
 ```
@@ -127,13 +141,12 @@
 <script async src="https://google-analytics.com/analytics.js"></script>
 ```
 
-
 ## 动态脚本
 
 我们也可以使用 JavaScript 动态地添加脚本：
 
-```js run
-let script = document.createElement('script');
+```js
+let script = document.createElement("script");
 script.src = "/article/script-async-defer/long.js";
 document.body.append(script); // (*)
 ```
@@ -143,17 +156,15 @@ document.body.append(script); // (*)
 **默认情况下，动态脚本的行为是“异步”的。**
 
 也就是说：
+
 - 它们不会等待任何东西，也没有什么东西会等它们。
 - 先加载完成的脚本先执行（“加载优先”顺序）。
 
-
-```js run
-let script = document.createElement('script');
+```js
+let script = document.createElement("script");
 script.src = "/article/script-async-defer/long.js";
 
-*!*
 script.async = false;
-*/!*
 
 document.body.append(script);
 ```
@@ -162,10 +173,9 @@ document.body.append(script);
 
 例如，这里我们添加了两个脚本。在没有设置 `script.async=false` 时，它们执行顺序为加载优先顺序（即 `small.js` 可能先执行）。但是当设置了 `script.async=false` 后，脚本执行顺序就变成了“脚本在文档中的顺序”：
 
-
-```js run
+```js
 function loadScript(src) {
-  let script = document.createElement('script');
+  let script = document.createElement("script");
   script.src = src;
   script.async = false;
   document.body.append(script);
@@ -176,17 +186,16 @@ loadScript("/article/script-async-defer/long.js");
 loadScript("/article/script-async-defer/small.js");
 ```
 
-
 ## 总结
 
 `async` 和 `defer` 有一个共同点：加载这样的脚本都不会阻塞页面的渲染。因此，用户可以立即阅读并了解页面内容。
 
 但是，它们之间也存在一些本质的区别：
 
-|         | 顺序 | `DOMContentLoaded` |
-|---------|---------|---------|
+|         | 顺序                                                           | `DOMContentLoaded`                                                                                         |
+| ------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `async` | **加载优先顺序**。脚本在文档中的顺序不重要 —— 先加载完成先执行 | 不相关。可能在文档加载完成前加载并执行完毕。如果脚本很小或者来自于缓存，同时文档足够长，就会发生这种情况。 |
-| `defer` | **文档顺序**（它们在文档中的顺序） | 在文档加载和解析完成之后（如果需要，则会等待），即在 `DOMContentLoaded` 之前执行。 |
+| `defer` | **文档顺序**（它们在文档中的顺序）                             | 在文档加载和解析完成之后（如果需要，则会等待），即在 `DOMContentLoaded` 之前执行。                         |
 
 ```warn header="没有脚本的页面应该也是可用的"
 请注意，如果你使用的是 `defer`，那么该页面在脚本加载之前就“可见”。
