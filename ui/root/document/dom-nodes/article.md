@@ -1,9 +1,3 @@
-libs:
-  - d3
-  - domtree
-
----
-
 # DOM 树
 
 HTML 文档的主干是标签（tag）。
@@ -16,10 +10,10 @@ HTML 文档的主干是标签（tag）。
 
 运行这段代码会使 `<body>` 保持 3 秒红色状态:
 
-```js run
-document.body.style.background = 'red'; // 将背景设置为红色
+```js
+document.body.style.background = "red"; // 将背景设置为红色
 
-setTimeout(() => document.body.style.background = '', 3000); // 恢复回去
+setTimeout(() => (document.body.style.background = ""), 3000); // 恢复回去
 ```
 
 在这，我们使用了 `style.background` 来修改 `document.body` 的背景颜色，但是还有很多其他的属性，例如：
@@ -34,15 +28,15 @@ setTimeout(() => document.body.style.background = '', 3000); // 恢复回去
 
 让我们从下面这个简单的文档（document）开始：
 
-```html run no-beautify
-<!DOCTYPE HTML>
+```html
+<!DOCTYPE html>
 <html>
-<head>
-  <title>About elk</title>
-</head>
-<body>
-  The truth about elk.
-</body>
+  <head>
+    <title>About elk</title>
+  </head>
+  <body>
+    The truth about elk.
+  </body>
 </html>
 ```
 
@@ -55,10 +49,6 @@ let node1 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,
 
 drawHtmlTree(node1, 'div.domtree', 690, 320);
 </script>
-
-```online
-在上面的图片中，你可以点击元素（element）节点，它们的子节点会打开/折叠。
-```
 
 每个树的节点都是一个对象。
 
@@ -76,6 +66,7 @@ drawHtmlTree(node1, 'div.domtree', 690, 320);
 空格和换行符都是完全有效的字符，就像字母和数字。它们形成文本节点并成为 DOM 的一部分。所以，例如，在上面的示例中，`<head>` 标签中的 `<title>` 标签前面包含了一些空格，并且该文本变成了一个 `#text` 节点（它只包含一个换行符和一些空格）。
 
 只有两个顶级排除项：
+
 1. 由于历史原因，`<head>` 之前的空格和换行符均被忽略。
 2. 如果我们在 `</body>` 之后放置一些东西，那么它会被自动移动到 `body` 内，并处于 `body` 中的最下方，因为 HTML 规范要求所有内容必须位于 `<body>` 内。所以 `</body>` 之后不能有空格。
 
@@ -83,9 +74,16 @@ drawHtmlTree(node1, 'div.domtree', 690, 320);
 
 这是没有空格的文本节点：
 
-```html no-beautify
-<!DOCTYPE HTML>
-<html><head><title>About elk</title></head><body>The truth about elk.</body></html>
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>About elk</title>
+  </head>
+  <body>
+    The truth about elk.
+  </body>
+</html>
 ```
 
 <div class="domtree"></div>
@@ -96,14 +94,6 @@ let node2 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,
 drawHtmlTree(node2, 'div.domtree', 690, 210);
 </script>
 
-```smart header="字符串开头/结尾处的空格，以及只有空格的文本节点，通常会被工具隐藏"
-与 DOM 一起使用的浏览器工具（即将介绍）通常不会在文本的开始/结尾显示空格，并且在标签之间也不会显示空文本节点（换行符）。
-
-开发者工具通过这种方式节省屏幕空间。
-
-在本教程中，如果这些空格和空文本节点无关紧要时，我们在后面出现的关于 DOM 的示意图中会忽略它们。这样的空格通常不会影响文档的显示方式。
-```
-
 ## 自动修正
 
 如果浏览器遇到格式不正确的 HTML，它会在形成 DOM 时自动更正它。
@@ -111,7 +101,6 @@ drawHtmlTree(node2, 'div.domtree', 690, 210);
 例如，顶级标签总是 `<html>`。即使它不存在于文档中 — 它也会出现在 DOM 中，因为浏览器会创建它。对于 `<body>` 也是一样。
 
 例如，如果一个 HTML 文件中只有一个单词 "Hello"，浏览器则会把它包装到 `<html>` 和 `<body>` 中，并且会添加所需的 `<head>`，DOM 将会变成下面这样：
-
 
 <div class="domtree"></div>
 
@@ -125,11 +114,13 @@ drawHtmlTree(node3, 'div.domtree', 690, 150);
 
 一个没有关闭标签的文档：
 
-```html no-beautify
-<p>Hello
-<li>Mom
-<li>and
-<li>Dad
+```html
+<p>
+  Hello
+  <li>Mom</li>
+  <li>and</li>
+  <li>Dad</li>
+</p>
 ```
 
 ……将成为一个正常的 DOM，因为浏览器在读取标签时会填补缺失的部分：
@@ -142,16 +133,20 @@ let node4 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,
 drawHtmlTree(node4, 'div.domtree', 690, 360);
 </script>
 
-````warn header="表格永远有 `<tbody>`"
-表格是一个有趣的“特殊的例子”。按照 DOM 规范，它们必须具有 `<tbody>`，但 HTML 文本却（官方的）忽略了它。然后浏览器在创建 DOM 时，自动地创建了 `<tbody>`。
+表格永远有 `<tbody>`" 表格是一个有趣的“特殊的例子”。按照 DOM 规范，它们必须具有 `<tbody>`，但 HTML 文本却（官方的）忽略了它。然后浏览器在创建 DOM 时，自动地创建了 `<tbody>`。
 
 对于 HTML：
 
-```html no-beautify
-<table id="table"><tr><td>1</td></tr></table>
+```html
+<table id="table">
+  <tr>
+    <td>1</td>
+  </tr>
+</table>
 ```
 
 DOM 结构会变成：
+
 <div class="domtree"></div>
 
 <script>
@@ -161,7 +156,6 @@ drawHtmlTree(node5,  'div.domtree', 600, 200);
 </script>
 
 看到了吗？`<tbody>` 出现了。你应该记住这一点，以免在使用表格时，对这种情况感到惊讶。
-````
 
 ## 其他节点类型
 
@@ -170,18 +164,18 @@ drawHtmlTree(node5,  'div.domtree', 600, 200);
 例如，注释：
 
 ```html
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-<body>
-  The truth about elk.
-  <ol>
-    <li>An elk is a smart</li>
-*!*
-    <!-- comment -->
-*/!*
-    <li>...and cunning animal!</li>
-  </ol>
-</body>
+  <body>
+    The truth about elk.
+    <ol>
+      <li>An elk is a smart</li>
+
+      <!-- comment -->
+
+      <li>...and cunning animal!</li>
+    </ol>
+  </body>
 </html>
 ```
 
@@ -193,7 +187,7 @@ let node6 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,
 drawHtmlTree(node6, 'div.domtree', 690, 500);
 </script>
 
-在这里我们可以看到一个新的树节点类型 — *comment node*，被标记为 `#comment`，它在两个文本节点之间。
+在这里我们可以看到一个新的树节点类型 — _comment node_，被标记为 `#comment`，它在两个文本节点之间。
 
 我们可能会想 — 为什么要将注释添加到 DOM 中？它不会对视觉展现产生任何影响吗。但是有一条规则 — 如果一些内容存在于 HTML 中，那么它也必须在 DOM 树中。
 
@@ -233,6 +227,7 @@ drawHtmlTree(node6, 'div.domtree', 690, 500);
 ![](inspect.svg)
 
 在工具的右侧部分有以下子选项卡：
+
 - **Styles** — 我们可以看到按规则应用于当前元素的 CSS 规则，包括内置规则（灰色）。几乎所有内容都可以就地编辑，包括下面的方框的 dimension/margin/padding。
 - **Computed** — 按属性查看应用于元素的 CSS：对于每个属性，我们可以都可以看到赋予它的规则（包括 CSS 继承等）。
 - **Event Listeners** — 查看附加到 DOM 元素的事件侦听器（我们将在本教程的下一部分介绍它们）。
