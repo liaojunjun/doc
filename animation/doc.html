@@ -248,6 +248,7 @@
           window.onload  = ()=>{
             viewFieldset();
             setATarget();
+            loadIframe();
           };
           
           function toggleHash() {
@@ -258,6 +259,42 @@
           function setATarget() {
             $$('#page a').forEach(a=>a.target = '_blank');
           }
+          function elementInViewport(el) {
+            if (el instanceof Element) {
+              const { top, left, width, height } = el.getBoundingClientRect();
+              const { innerHeight, innerWidth } = window;
+              return (
+                top + height >= 0 &&
+                left + width >= 0 &&
+                top <= innerHeight &&
+                left <= innerWidth
+              );
+            }
+            return false;
+          }
+          function loadIframe() {
+            const query = "data-src";
+            const frames = Array.from($$(`iframe[${query}]`));
+
+            const load = (item) => {
+              frames.splice(
+                frames.findIndex((v) => v === item),
+                1
+              );
+              item.src = item.getAttribute(query);
+              item.removeAttribute(query);
+            };
+            const processScroll = () => {
+              frames.forEach((item) => {
+                if (elementInViewport(item)) {
+                  load(item);
+                }
+              });
+            };
+            processScroll();
+            window.addEventListener("scroll", processScroll, false);
+            window.removeEventListener("beforeunload", processScroll, false);
+          }
     </script>
 </head>
 
@@ -265,7 +302,7 @@
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
   </div><div id="page">
-      <fieldset id='_9cDSmA'>
+      <fieldset id='_cCTPi6'>
       <legend>article</legend>
       <h1 id="贝塞尔曲线">贝塞尔曲线</h1>
 <p>贝塞尔曲线用于计算机图形绘制形状，CSS 动画和许多其他地方。</p>
@@ -428,7 +465,7 @@
 
       </fieldset>
       
-      <fieldset id='_lCcBWv'>
+      <fieldset id='_gYeNle'>
       <legend>solution</legend>
       <p>使用 CSS 为 <code>width</code> 和 <code>height</code> 属性生成动效：</p>
 <pre><code class="language-css"><span class="hljs-comment">/* 原始类 */</span>
@@ -446,7 +483,7 @@
 
       </fieldset>
       
-      <fieldset id='_nLwjHZ'>
+      <fieldset id='_Onc34V'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -462,7 +499,7 @@
 
       </fieldset>
       
-      <fieldset id='_odNjq5'>
+      <fieldset id='_JzogYg'>
       <legend>solution</legend>
       <p>我们需要为此选择合适的贝塞尔曲线。它应该在某个地方拥有 <code>y &gt; 1</code>，来使得飞机『跳出来』。 </p>
 <p>举例来说，我们可以使两个控制点的 <code>y</code> 都大于 <code>1</code>：<code>cubic-bezier(0.25, 1.5, 0.75, 1.5)</code>。</p>
@@ -471,7 +508,7 @@
 
       </fieldset>
       
-      <fieldset id='_OWMYaR'>
+      <fieldset id='_JvOgkN'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -483,12 +520,12 @@
 
       </fieldset>
       
-      <fieldset id='_jGeGZS'>
+      <fieldset id='_G4rnvj'>
       <legend>solution</legend>
       
       </fieldset>
       
-      <fieldset id='_7FaW4V'>
+      <fieldset id='_dzbKuC'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -504,7 +541,7 @@
 
       </fieldset>
       
-      <fieldset id='_6LK3aA'>
+      <fieldset id='_08pnQC'>
       <legend>article</legend>
       <h1 id="css-动画">CSS 动画</h1>
 <p>CSS 动画可以在不借助 Javascript 的情况下做出一些简单的动画效果。</p>
@@ -806,7 +843,7 @@ growing.onclick = <span class="hljs-function"><span class="hljs-keyword">functio
 
       </fieldset>
       
-      <fieldset id='_6pffGp'>
+      <fieldset id='_7UIr44'>
       <legend>solution</legend>
       <p>为了达到反弹效果，我们可以在带有 <code>position:relative</code> 属性的区域内，给小球使用 <code>top</code> 和 <code>position:absolute</code> CSS 属性。</p>
 <p>field 区域的底部坐标是 <code>field.clientHeight</code>。<code>top</code> 属性给出了球顶部的坐标，在最底部时达到 <code>field.clientHeight - ball.clientHeight</code>。</p>
@@ -825,7 +862,7 @@ animate({
 
       </fieldset>
       
-      <fieldset id='_nTYl5g'>
+      <fieldset id='_9zCnDM'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -835,7 +872,7 @@ animate({
 
       </fieldset>
       
-      <fieldset id='_We6rHS'>
+      <fieldset id='_ac51Vq'>
       <legend>solution</legend>
       <p>在任务 <a href="info:task/animate-ball">info:task/animate-ball</a> 中，我们只有一个需要添加动画的属性。现在多了一个 <code>elem.style.left</code>。</p>
 <p>水平坐标由另一个定律改变：它不会“反弹”，而是逐渐增加使球逐渐向右移动。</p>
@@ -865,7 +902,7 @@ animate({
 
       </fieldset>
       
-      <fieldset id='_Ved2OM'>
+      <fieldset id='_TzIN1i'>
       <legend>task</legend>
       <p>importance: 5</p>
 <hr>
@@ -877,7 +914,7 @@ animate({
 
       </fieldset>
       
-      <fieldset id='_Z89e8F'>
+      <fieldset id='_ZeI3Ov'>
       <legend>article</legend>
       <h1 id="javascript-动画">JavaScript 动画</h1>
 <p>JavaScript 动画可以处理 CSS 无法处理的事情。</p>
@@ -1172,5 +1209,5 @@ bounceEaseInOut = makeEaseInOut(bounce);</code></pre>
 <p><code>draw</code> 也是如此：我们可以将任何东西动画化，而不仅仅是 CSS 属性。</p>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>bezier-curve</strong><br/></div><div style="margin-left:1em"><a href="#_9cDSmA">article</a><br/></div><div style="margin-left:0em"><strong>css-animations</strong><br/></div><div style="margin-left:1em"><strong>animate-logo-css</strong><br/></div><div style="margin-left:2em"><a href="#_lCcBWv">solution</a><br/></div><div style="margin-left:2em"><a href="#_nLwjHZ">task</a><br/></div><div style="margin-left:1em"><strong>animate-logo-bezier-css</strong><br/></div><div style="margin-left:2em"><a href="#_odNjq5">solution</a><br/></div><div style="margin-left:2em"><a href="#_OWMYaR">task</a><br/></div><div style="margin-left:1em"><strong>animate-circle</strong><br/></div><div style="margin-left:2em"><a href="#_jGeGZS">solution</a><br/></div><div style="margin-left:2em"><a href="#_7FaW4V">task</a><br/></div><div style="margin-left:1em"><a href="#_6LK3aA">article</a><br/></div><div style="margin-left:0em"><strong>js-animation</strong><br/></div><div style="margin-left:1em"><strong>animate-ball</strong><br/></div><div style="margin-left:2em"><a href="#_6pffGp">solution</a><br/></div><div style="margin-left:2em"><a href="#_nTYl5g">task</a><br/></div><div style="margin-left:1em"><strong>animate-ball-hops</strong><br/></div><div style="margin-left:2em"><a href="#_We6rHS">solution</a><br/></div><div style="margin-left:2em"><a href="#_Ved2OM">task</a><br/></div><div style="margin-left:1em"><a href="#_Z89e8F">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>bezier-curve</strong><br/></div><div style="margin-left:1em"><a href="#_cCTPi6">article</a><br/></div><div style="margin-left:0em"><strong>css-animations</strong><br/></div><div style="margin-left:1em"><strong>animate-logo-css</strong><br/></div><div style="margin-left:2em"><a href="#_gYeNle">solution</a><br/></div><div style="margin-left:2em"><a href="#_Onc34V">task</a><br/></div><div style="margin-left:1em"><strong>animate-logo-bezier-css</strong><br/></div><div style="margin-left:2em"><a href="#_JzogYg">solution</a><br/></div><div style="margin-left:2em"><a href="#_JvOgkN">task</a><br/></div><div style="margin-left:1em"><strong>animate-circle</strong><br/></div><div style="margin-left:2em"><a href="#_G4rnvj">solution</a><br/></div><div style="margin-left:2em"><a href="#_dzbKuC">task</a><br/></div><div style="margin-left:1em"><a href="#_08pnQC">article</a><br/></div><div style="margin-left:0em"><strong>js-animation</strong><br/></div><div style="margin-left:1em"><strong>animate-ball</strong><br/></div><div style="margin-left:2em"><a href="#_7UIr44">solution</a><br/></div><div style="margin-left:2em"><a href="#_9zCnDM">task</a><br/></div><div style="margin-left:1em"><strong>animate-ball-hops</strong><br/></div><div style="margin-left:2em"><a href="#_ac51Vq">solution</a><br/></div><div style="margin-left:2em"><a href="#_TzIN1i">task</a><br/></div><div style="margin-left:1em"><a href="#_ZeI3Ov">article</a><br/></div></div>
 </body></html>

@@ -248,6 +248,7 @@
           window.onload  = ()=>{
             viewFieldset();
             setATarget();
+            loadIframe();
           };
           
           function toggleHash() {
@@ -258,6 +259,42 @@
           function setATarget() {
             $$('#page a').forEach(a=>a.target = '_blank');
           }
+          function elementInViewport(el) {
+            if (el instanceof Element) {
+              const { top, left, width, height } = el.getBoundingClientRect();
+              const { innerHeight, innerWidth } = window;
+              return (
+                top + height >= 0 &&
+                left + width >= 0 &&
+                top <= innerHeight &&
+                left <= innerWidth
+              );
+            }
+            return false;
+          }
+          function loadIframe() {
+            const query = "data-src";
+            const frames = Array.from($$(`iframe[${query}]`));
+
+            const load = (item) => {
+              frames.splice(
+                frames.findIndex((v) => v === item),
+                1
+              );
+              item.src = item.getAttribute(query);
+              item.removeAttribute(query);
+            };
+            const processScroll = () => {
+              frames.forEach((item) => {
+                if (elementInViewport(item)) {
+                  load(item);
+                }
+              });
+            };
+            processScroll();
+            window.addEventListener("scroll", processScroll, false);
+            window.removeEventListener("beforeunload", processScroll, false);
+          }
     </script>
 </head>
 
@@ -265,7 +302,7 @@
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
   </div><div id="page">
-      <fieldset id='_FHO7Cs'>
+      <fieldset id='_yBacUW'>
       <legend>article</legend>
       <h1 id="弹窗和-window-的方法">弹窗和 window 的方法</h1>
 <p>弹窗（popup）是向用户显示其他文档的最古老的方法之一。</p>
@@ -445,7 +482,7 @@ newWindow.onload = <span class="hljs-function"><span class="hljs-keyword">functi
 
       </fieldset>
       
-      <fieldset id='_Of7aeU'>
+      <fieldset id='_VKlpft'>
       <legend>article</legend>
       <h1 id="跨窗口通信">跨窗口通信</h1>
 <p>“同源（Same Origin）”策略限制了窗口（window）和 frame 之间的相互访问。</p>
@@ -479,7 +516,7 @@ newWindow.onload = <span class="hljs-function"><span class="hljs-keyword">functi
 </ul>
 <p>当我们访问嵌入的窗口中的东西时，浏览器会检查 iframe 是否具有相同的源。如果不是，则会拒绝访问（对 <code>location</code> 进行写入是一个例外，它是会被允许的）。</p>
 <p>例如，让我们尝试对来自另一个源的 <code>&lt;iframe&gt;</code> 进行读取和写入：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://example.com&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;https://example.com&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   iframe.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
@@ -521,7 +558,7 @@ newWindow.onload = <span class="hljs-function"><span class="hljs-keyword">functi
 </ul>
 <p>与此相反，如果 <code>&lt;iframe&gt;</code> 具有相同的源，我们可以使用它做任何事情：</p>
 <pre><code class="language-html"><span class="hljs-comment">&lt;!-- 来自同一个网站的 iframe --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   iframe.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
@@ -549,7 +586,7 @@ document.domain = &#x27;site.com&#x27;;</code></pre>
 <p>在创建 iframe 后，iframe 会立即就拥有了一个文档。但是该文档不同于加载到其中的文档！</p>
 <p>因此，如果我们要立即对文档进行操作，就可能出问题。</p>
 <p>看一下下面这段代码：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-keyword">let</span> oldDoc = iframe.contentDocument;
@@ -565,7 +602,7 @@ document.domain = &#x27;site.com&#x27;;</code></pre>
 <p>如何检测文档就位（加载完成）的时刻呢？</p>
 <p>正确的文档在 <code>iframe.onload</code> 触发时肯定就位了。但是，只有在整个 iframe 和它所有资源都加载完成时，<code>iframe.onload</code> 才会触发。</p>
 <p>我们可以尝试通过在 <code>setInterval</code> 中进行检查，以更早地捕获该时刻：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-keyword">let</span> oldDoc = iframe.contentDocument;
@@ -587,7 +624,7 @@ document.domain = &#x27;site.com&#x27;;</code></pre>
 <li>通过名称获取：<code>window.frames.iframeName</code> —— 获取 <code>name=&quot;iframeName&quot;</code> 的 iframe 的 window 对象。</li>
 </ul>
 <p>例如：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;height:80px&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;win&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;height:80px&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;win&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   alert(iframe.contentWindow == frames[<span class="hljs-number">0</span>]); <span class="hljs-comment">// true</span>
@@ -642,7 +679,7 @@ document.domain = &#x27;site.com&#x27;;</code></pre>
 <p><code>targetOrigin</code> 是一种安全措施。请记住，如果目标窗口是非同源的，我们无法在发送方窗口读取它的 <code>location</code>。因此，我们无法确定当前在预期的窗口中打开的是哪个网站：用户随时可以导航离开，并且发送方窗口对此一无所知。</p>
 <p>指定 <code>targetOrigin</code> 可以确保窗口仅在当前仍处于正确的网站时接收数据。在有敏感数据时，这非常重要。</p>
 <p>例如，这里的 <code>win</code> 仅在它拥有来自 <code>http://example.com</code> 这个源的文档时，才会接收消息：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;http://example.com&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;example&quot;</span>&gt;</span>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;http://example.com&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;example&quot;</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-keyword">let</span> win = <span class="hljs-built_in">window</span>.frames.example;
@@ -650,7 +687,7 @@ document.domain = &#x27;site.com&#x27;;</code></pre>
   win.postMessage(<span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-string">&quot;http://example.com&quot;</span>);
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>如果我们不希望做这个检查，可以将 <code>targetOrigin</code> 设置为 <code>*</code>。</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;http://example.com&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;example&quot;</span>&gt;</span>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;http://example.com&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;example&quot;</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-keyword">let</span> win = <span class="hljs-built_in">window</span>.frames.example;
@@ -727,7 +764,7 @@ document.domain = &#x27;site.com&#x27;;</code></pre>
 
       </fieldset>
       
-      <fieldset id='_yOyluD'>
+      <fieldset id='_aJ4aIS'>
       <legend>article</legend>
       <h1 id="点击劫持攻击">点击劫持攻击</h1>
 <p>“点击劫持”攻击允许恶意页面 <strong>以用户的名义</strong> 点击“受害网站”。</p>
@@ -760,7 +797,7 @@ iframe { /* 来自受害网站的 iframe */
 
 <span class="hljs-comment">&lt;!-- 来自受害网站的 url --&gt;</span>
 *!*
-<span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/clickjacking/facebook.html&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/clickjacking/facebook.html&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>点这里！<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 */!*
@@ -768,7 +805,7 @@ iframe { /* 来自受害网站的 iframe */
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>……你很酷（我实际上是一名帅气的黑客）！<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 <p>完整的攻击示例如下：</p>
 <p>[codetabs src=&quot;clickjacking-visible&quot; height=160]</p>
-<p>在上面这个示例中，我们有一个半透明的 <code>&lt;iframe src=&quot;facebook.html&quot;&gt;</code>，我们可以看到，它位于按钮之上。点击按钮实际上会点击在 iframe 上，但这对用户不可见，因为 iframe 是透明的。</p>
+<p>在上面这个示例中，我们有一个半透明的 <code>&lt;iframe data-src=&quot;facebook.html&quot;&gt;</code>，我们可以看到，它位于按钮之上。点击按钮实际上会点击在 iframe 上，但这对用户不可见，因为 iframe 是透明的。</p>
 <p>结果，如果访问者登陆了 Facebook（“记住我”通常是打开的），那么这个行为就会点一个“赞”。Twitter 上是 &quot;Follow&quot; 按钮。</p>
 <p>下面是相同的示例，但 <code>iframe</code> 的透明度设置为了 <code>opacity:0</code>，更符合实际情况：</p>
 <p>[codetabs src=&quot;clickjacking&quot; height=160]</p>
@@ -818,11 +855,11 @@ iframe { /* 来自受害网站的 iframe */
 <pre><code class="language-online">结果如下：
 
 ```html
-&lt;iframe src=&quot;https://twitter.com&quot;&gt;&lt;/iframe&gt;
+&lt;iframe data-src=&quot;https://twitter.com&quot;&gt;&lt;/iframe&gt;
 ```
 
 &lt;!-- ebook: prerender/ chrome headless dies and timeouts on this iframe --&gt;
-&lt;iframe src=&quot;https://twitter.com&quot;&gt;&lt;/iframe&gt;
+&lt;iframe data-src=&quot;https://twitter.com&quot;&gt;&lt;/iframe&gt;
 
 上面这个 `iframe` 可能为空，或者通过 alert 告知你浏览器不允许以这种方式导航至该页面，这取决于你的浏览器。</code></pre>
 <h2 id="显示禁用的功能">显示禁用的功能</h2>
@@ -872,5 +909,5 @@ iframe { /* 来自受害网站的 iframe */
 </ul>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>popup-windows</strong><br/></div><div style="margin-left:1em"><a href="#_FHO7Cs">article</a><br/></div><div style="margin-left:0em"><strong>cross-window-communication</strong><br/></div><div style="margin-left:1em"><a href="#_Of7aeU">article</a><br/></div><div style="margin-left:0em"><strong>clickjacking</strong><br/></div><div style="margin-left:1em"><a href="#_yOyluD">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>popup-windows</strong><br/></div><div style="margin-left:1em"><a href="#_yBacUW">article</a><br/></div><div style="margin-left:0em"><strong>cross-window-communication</strong><br/></div><div style="margin-left:1em"><a href="#_VKlpft">article</a><br/></div><div style="margin-left:0em"><strong>clickjacking</strong><br/></div><div style="margin-left:1em"><a href="#_aJ4aIS">article</a><br/></div></div>
 </body></html>

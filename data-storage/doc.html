@@ -248,6 +248,7 @@
           window.onload  = ()=>{
             viewFieldset();
             setATarget();
+            loadIframe();
           };
           
           function toggleHash() {
@@ -258,6 +259,42 @@
           function setATarget() {
             $$('#page a').forEach(a=>a.target = '_blank');
           }
+          function elementInViewport(el) {
+            if (el instanceof Element) {
+              const { top, left, width, height } = el.getBoundingClientRect();
+              const { innerHeight, innerWidth } = window;
+              return (
+                top + height >= 0 &&
+                left + width >= 0 &&
+                top <= innerHeight &&
+                left <= innerWidth
+              );
+            }
+            return false;
+          }
+          function loadIframe() {
+            const query = "data-src";
+            const frames = Array.from($$(`iframe[${query}]`));
+
+            const load = (item) => {
+              frames.splice(
+                frames.findIndex((v) => v === item),
+                1
+              );
+              item.src = item.getAttribute(query);
+              item.removeAttribute(query);
+            };
+            const processScroll = () => {
+              frames.forEach((item) => {
+                if (elementInViewport(item)) {
+                  load(item);
+                }
+              });
+            };
+            processScroll();
+            window.addEventListener("scroll", processScroll, false);
+            window.removeEventListener("beforeunload", processScroll, false);
+          }
     </script>
 </head>
 
@@ -265,7 +302,7 @@
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
   </div><div id="page">
-      <fieldset id='_46EyCH'>
+      <fieldset id='_zYI9RW'>
       <legend>article</legend>
       <h1 id="cookie，documentcookie">Cookie，document.cookie</h1>
 <p>Cookie 是直接存储在浏览器中的一小串数据。它们是 HTTP 协议的一部分，由 <a href="https://tools.ietf.org/html/rfc6265">RFC 6265</a> 规范定义。</p>
@@ -548,12 +585,12 @@ setCookie(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-s
 
       </fieldset>
       
-      <fieldset id='_BHmv0z'>
+      <fieldset id='_QYfsQT'>
       <legend>solution</legend>
       
       </fieldset>
       
-      <fieldset id='_zy5hJR'>
+      <fieldset id='_bjI5N3'>
       <legend>task</legend>
       <h1 id="自动保存表单字段">自动保存表单字段</h1>
 <p>创建一个 <code>textarea</code> 字段，每当其值发生变化时，可以将其“自动保存”。</p>
@@ -563,7 +600,7 @@ setCookie(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-s
 
       </fieldset>
       
-      <fieldset id='_Yjb4vs'>
+      <fieldset id='_pjcDYo'>
       <legend>article</legend>
       <h1 id="localstorage，sessionstorage">LocalStorage，sessionStorage</h1>
 <p>Web 存储对象 <code>localStorage</code> 和 <code>sessionStorage</code> 允许我们在浏览器上保存键/值对。</p>
@@ -744,7 +781,7 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-built
 
       </fieldset>
       
-      <fieldset id='_iux6rw'>
+      <fieldset id='_ZqCBRl'>
       <legend>article</legend>
       <p>libs:</p>
 <ul>
@@ -1346,5 +1383,5 @@ request.onsuccess = <span class="hljs-function"><span class="hljs-keyword">funct
 <p>[codetabs src=&quot;books&quot; current=&quot;index.html&quot;]</p>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>cookie</strong><br/></div><div style="margin-left:1em"><a href="#_46EyCH">article</a><br/></div><div style="margin-left:0em"><strong>localstorage</strong><br/></div><div style="margin-left:1em"><strong>form-autosave</strong><br/></div><div style="margin-left:2em"><a href="#_BHmv0z">solution</a><br/></div><div style="margin-left:2em"><a href="#_zy5hJR">task</a><br/></div><div style="margin-left:1em"><a href="#_Yjb4vs">article</a><br/></div><div style="margin-left:0em"><strong>indexeddb</strong><br/></div><div style="margin-left:1em"><a href="#_iux6rw">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>cookie</strong><br/></div><div style="margin-left:1em"><a href="#_zYI9RW">article</a><br/></div><div style="margin-left:0em"><strong>localstorage</strong><br/></div><div style="margin-left:1em"><strong>form-autosave</strong><br/></div><div style="margin-left:2em"><a href="#_QYfsQT">solution</a><br/></div><div style="margin-left:2em"><a href="#_bjI5N3">task</a><br/></div><div style="margin-left:1em"><a href="#_pjcDYo">article</a><br/></div><div style="margin-left:0em"><strong>indexeddb</strong><br/></div><div style="margin-left:1em"><a href="#_ZqCBRl">article</a><br/></div></div>
 </body></html>

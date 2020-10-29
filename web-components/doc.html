@@ -248,6 +248,7 @@
           window.onload  = ()=>{
             viewFieldset();
             setATarget();
+            loadIframe();
           };
           
           function toggleHash() {
@@ -258,6 +259,42 @@
           function setATarget() {
             $$('#page a').forEach(a=>a.target = '_blank');
           }
+          function elementInViewport(el) {
+            if (el instanceof Element) {
+              const { top, left, width, height } = el.getBoundingClientRect();
+              const { innerHeight, innerWidth } = window;
+              return (
+                top + height >= 0 &&
+                left + width >= 0 &&
+                top <= innerHeight &&
+                left <= innerWidth
+              );
+            }
+            return false;
+          }
+          function loadIframe() {
+            const query = "data-src";
+            const frames = Array.from($$(`iframe[${query}]`));
+
+            const load = (item) => {
+              frames.splice(
+                frames.findIndex((v) => v === item),
+                1
+              );
+              item.src = item.getAttribute(query);
+              item.removeAttribute(query);
+            };
+            const processScroll = () => {
+              frames.forEach((item) => {
+                if (elementInViewport(item)) {
+                  load(item);
+                }
+              });
+            };
+            processScroll();
+            window.addEventListener("scroll", processScroll, false);
+            window.removeEventListener("beforeunload", processScroll, false);
+          }
     </script>
 </head>
 
@@ -265,7 +302,7 @@
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
   </div><div id="page">
-      <fieldset id='_iGnsis'>
+      <fieldset id='_NIbgPg'>
       <legend>article</legend>
       <h1 id="从星球轨道的高度讲起">从星球轨道的高度讲起</h1>
 <p>这一部分我们将会讲述关于「Web Components」的一系列现代标准。</p>
@@ -324,7 +361,7 @@
 
       </fieldset>
       
-      <fieldset id='_g9pKrL'>
+      <fieldset id='_EgiwlR'>
       <legend>solution</legend>
       <p>请注意：</p>
 <ol>
@@ -334,7 +371,7 @@
 
       </fieldset>
       
-      <fieldset id='_ttFQT7'>
+      <fieldset id='_zY0Vlr'>
       <legend>task</legend>
       <h1 id="计时器元素实例">计时器元素实例</h1>
 <p>我们已经创建了 <code>&lt;time-formatted&gt;</code> 元素用于展示格式化好的时间。</p>
@@ -355,7 +392,7 @@
 
       </fieldset>
       
-      <fieldset id='_KbaQeR'>
+      <fieldset id='_XYPy4u'>
       <legend>article</legend>
       <h1 id="custom-elements">Custom elements</h1>
 <p>我们可以通过描述带有自己的方法、属性和事件等的类来创建自定义 HTML 元素。</p>
@@ -682,7 +719,7 @@ customElements.define(<span class="hljs-string">&#x27;my-button&#x27;</span>, My
 
       </fieldset>
       
-      <fieldset id='_Ue9A7O'>
+      <fieldset id='_sXXQml'>
       <legend>article</legend>
       <h1 id="影子-dom（shadow-dom）">影子 DOM（Shadow DOM）</h1>
 <p>Shadow DOM 为封装而生。它可以让一个组件拥有自己的「影子」DOM 树，这个 DOM 树不能在主文档中被任意访问，可能拥有局部样式规则，还有其他特性。</p>
@@ -810,7 +847,7 @@ alert(elem.shadowRoot.host === elem); <span class="hljs-comment">// true</span><
 
       </fieldset>
       
-      <fieldset id='_7fISzd'>
+      <fieldset id='_ocGPWN'>
       <legend>article</legend>
       <h1 id="模板元素">模板元素</h1>
 <p>内建的 <code>&lt;template&gt;</code> 元素用来存储 HTML 模板。浏览器将忽略它的内容，仅检查语法的有效性，但是我们可以在 JavaScript 中访问和使用它来创建其他元素。</p>
@@ -899,7 +936,7 @@ alert(elem.shadowRoot.host === elem); <span class="hljs-comment">// true</span><
 
       </fieldset>
       
-      <fieldset id='_X9GbrT'>
+      <fieldset id='_dq6EKc'>
       <legend>article</legend>
       <h1 id="shadow-dom-插槽，组成">Shadow DOM 插槽，组成</h1>
 <p>许多类型的组件，例如标签、菜单、照片库等等，需要内容去渲染。</p>
@@ -1251,7 +1288,7 @@ customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, 
 
       </fieldset>
       
-      <fieldset id='_PTjbfE'>
+      <fieldset id='_OrmFiP'>
       <legend>article</legend>
       <h1 id="给-shadow-dom-添加样式">给 Shadow DOM 添加样式</h1>
 <p>shadow DOM 可以包含 <code>&lt;style&gt;</code> 和 <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;…&quot;&gt;</code> 标签。在后一种情况下，样式表是 HTTP 缓存的，因此不会为使用同一模板的多个组件重新下载样式表。</p>
@@ -1516,7 +1553,7 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
 
       </fieldset>
       
-      <fieldset id='_sG1s9a'>
+      <fieldset id='_0DbV9G'>
       <legend>article</legend>
       <h1 id="shadow-dom-和事件（events）">Shadow DOM 和事件（events）</h1>
 <p>Shadow tree 背后的思想是封装组件的内部实现细节。</p>
@@ -1677,5 +1714,5 @@ inner.dispatchEvent(new CustomEvent(&#x27;test&#x27;, {
 <p>请注意，如果是嵌套组件，一个 shadow DOM 可能嵌套到另外一个 shadow DOM 中。在这种情况下合成事件冒泡到所有 shadow DOM 边界。因此，如果一个事件仅用于直接封闭组件，我们也可以在 shadow host 上发送它并设置 <code>composed: false</code>。这样它就不在组件 shadow DOM 中，也不会冒泡到更高级别的 DOM。</p>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>webcomponents-intro</strong><br/></div><div style="margin-left:1em"><a href="#_iGnsis">article</a><br/></div><div style="margin-left:0em"><strong>custom-elements</strong><br/></div><div style="margin-left:1em"><strong>live-timer</strong><br/></div><div style="margin-left:2em"><a href="#_g9pKrL">solution</a><br/></div><div style="margin-left:2em"><a href="#_ttFQT7">task</a><br/></div><div style="margin-left:1em"><a href="#_KbaQeR">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom</strong><br/></div><div style="margin-left:1em"><a href="#_Ue9A7O">article</a><br/></div><div style="margin-left:0em"><strong>template-element</strong><br/></div><div style="margin-left:1em"><a href="#_7fISzd">article</a><br/></div><div style="margin-left:0em"><strong>slots-composition</strong><br/></div><div style="margin-left:1em"><a href="#_X9GbrT">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-style</strong><br/></div><div style="margin-left:1em"><a href="#_PTjbfE">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-events</strong><br/></div><div style="margin-left:1em"><a href="#_sG1s9a">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>webcomponents-intro</strong><br/></div><div style="margin-left:1em"><a href="#_NIbgPg">article</a><br/></div><div style="margin-left:0em"><strong>custom-elements</strong><br/></div><div style="margin-left:1em"><strong>live-timer</strong><br/></div><div style="margin-left:2em"><a href="#_EgiwlR">solution</a><br/></div><div style="margin-left:2em"><a href="#_zY0Vlr">task</a><br/></div><div style="margin-left:1em"><a href="#_XYPy4u">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom</strong><br/></div><div style="margin-left:1em"><a href="#_sXXQml">article</a><br/></div><div style="margin-left:0em"><strong>template-element</strong><br/></div><div style="margin-left:1em"><a href="#_ocGPWN">article</a><br/></div><div style="margin-left:0em"><strong>slots-composition</strong><br/></div><div style="margin-left:1em"><a href="#_dq6EKc">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-style</strong><br/></div><div style="margin-left:1em"><a href="#_OrmFiP">article</a><br/></div><div style="margin-left:0em"><strong>shadow-dom-events</strong><br/></div><div style="margin-left:1em"><a href="#_0DbV9G">article</a><br/></div></div>
 </body></html>

@@ -248,6 +248,7 @@
           window.onload  = ()=>{
             viewFieldset();
             setATarget();
+            loadIframe();
           };
           
           function toggleHash() {
@@ -258,6 +259,42 @@
           function setATarget() {
             $$('#page a').forEach(a=>a.target = '_blank');
           }
+          function elementInViewport(el) {
+            if (el instanceof Element) {
+              const { top, left, width, height } = el.getBoundingClientRect();
+              const { innerHeight, innerWidth } = window;
+              return (
+                top + height >= 0 &&
+                left + width >= 0 &&
+                top <= innerHeight &&
+                left <= innerWidth
+              );
+            }
+            return false;
+          }
+          function loadIframe() {
+            const query = "data-src";
+            const frames = Array.from($$(`iframe[${query}]`));
+
+            const load = (item) => {
+              frames.splice(
+                frames.findIndex((v) => v === item),
+                1
+              );
+              item.src = item.getAttribute(query);
+              item.removeAttribute(query);
+            };
+            const processScroll = () => {
+              frames.forEach((item) => {
+                if (elementInViewport(item)) {
+                  load(item);
+                }
+              });
+            };
+            processScroll();
+            window.addEventListener("scroll", processScroll, false);
+            window.removeEventListener("beforeunload", processScroll, false);
+          }
     </script>
 </head>
 
@@ -265,19 +302,19 @@
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
   </div><div id="page">
-      <fieldset id='_cK6QYr'>
+      <fieldset id='_VzlfgQ'>
       <legend>solution</legend>
       
       </fieldset>
       
-      <fieldset id='_6D5Qwv'>
+      <fieldset id='_0DmaEP'>
       <legend>task</legend>
       <h1 id="拼接类型化数组">拼接类型化数组</h1>
 <p>给定一个 <code>Uint8Array</code> 数组，请写一个函数 <code>concat(arrays)</code>，将数组拼接成一个单一数组并返回。</p>
 
       </fieldset>
       
-      <fieldset id='_7ePmtO'>
+      <fieldset id='_5O6DBP'>
       <legend>article</legend>
       <h1 id="arraybuffer，二进制数组">ArrayBuffer，二进制数组</h1>
 <p>在 Web 开发中，当我们处理文件时（创建，上传，下载），经常会遇到二进制数据。另一个典型的应用场景是图像处理。</p>
@@ -498,7 +535,7 @@ dataView.setUint32(<span class="hljs-number">0</span>, <span class="hljs-number"
 
       </fieldset>
       
-      <fieldset id='_8zd7zT'>
+      <fieldset id='_vJH4hB'>
       <legend>article</legend>
       <h1 id="textdecoder-和-textencoder">TextDecoder 和 TextEncoder</h1>
 <p>如果二进制数据实际上是一个字符串怎么办？例如，我们收到了一个包含文本数据的文件。</p>
@@ -554,7 +591,7 @@ alert(uint8Array); <span class="hljs-comment">// 72,101,108,108,111</span></code
 
       </fieldset>
       
-      <fieldset id='_E0Fs3P'>
+      <fieldset id='_9mVnZI'>
       <legend>article</legend>
       <h1 id="blob">Blob</h1>
 <p><code>ArrayBuffer</code> 和视图（view）都是 ECMA 标准的一部分，是 JavaScript 的一部分。</p>
@@ -721,7 +758,7 @@ fileReader.onload = <span class="hljs-function"><span class="hljs-keyword">funct
 
       </fieldset>
       
-      <fieldset id='_DOuaeJ'>
+      <fieldset id='_SKRLnC'>
       <legend>article</legend>
       <h1 id="file-和-filereader">File 和 FileReader</h1>
 <p><a href="https://www.w3.org/TR/FileAPI/#dfn-file">File</a> 对象继承自 <code>Blob</code>，并扩展了与文件系统相关的功能。 </p>
@@ -839,5 +876,5 @@ fileReader.onload = <span class="hljs-function"><span class="hljs-keyword">funct
 而且，如果我们要通过网络发送一个 `File`，那也很容易：像 `XMLHttpRequest` 或 `fetch` 等网络 API 本身就接受 `File` 对象。</code></pre>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>arraybuffer-binary-arrays</strong><br/></div><div style="margin-left:1em"><strong>concat</strong><br/></div><div style="margin-left:2em"><a href="#_cK6QYr">solution</a><br/></div><div style="margin-left:2em"><a href="#_6D5Qwv">task</a><br/></div><div style="margin-left:1em"><a href="#_7ePmtO">article</a><br/></div><div style="margin-left:0em"><strong>text-decoder</strong><br/></div><div style="margin-left:1em"><a href="#_8zd7zT">article</a><br/></div><div style="margin-left:0em"><strong>blob</strong><br/></div><div style="margin-left:1em"><a href="#_E0Fs3P">article</a><br/></div><div style="margin-left:0em"><strong>file</strong><br/></div><div style="margin-left:1em"><a href="#_DOuaeJ">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><strong>arraybuffer-binary-arrays</strong><br/></div><div style="margin-left:1em"><strong>concat</strong><br/></div><div style="margin-left:2em"><a href="#_VzlfgQ">solution</a><br/></div><div style="margin-left:2em"><a href="#_0DmaEP">task</a><br/></div><div style="margin-left:1em"><a href="#_5O6DBP">article</a><br/></div><div style="margin-left:0em"><strong>text-decoder</strong><br/></div><div style="margin-left:1em"><a href="#_vJH4hB">article</a><br/></div><div style="margin-left:0em"><strong>blob</strong><br/></div><div style="margin-left:1em"><a href="#_9mVnZI">article</a><br/></div><div style="margin-left:0em"><strong>file</strong><br/></div><div style="margin-left:1em"><a href="#_SKRLnC">article</a><br/></div></div>
 </body></html>
