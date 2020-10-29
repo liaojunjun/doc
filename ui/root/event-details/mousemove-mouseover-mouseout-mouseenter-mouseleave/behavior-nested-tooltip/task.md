@@ -22,4 +22,4 @@ importance: 5
 
 在 iframe 中的结果：
 
-[iframe src="solution" height=300 border=1]
+[iframe data-src="solution" height=300 border=1]

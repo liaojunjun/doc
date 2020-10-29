@@ -14,7 +14,7 @@
 <li><code>event.target</code> —— 是鼠标离开的元素。</li>
 <li><code>event.relatedTarget</code> —— 是鼠标移动到的，当前指针位置下的元素（<code>target</code> -&gt; <code>relatedTarget</code>）。</li>
 </ul>
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout.view/index.html" height="300" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout.view/index.html" height="300" width="100%"></iframe>
 
 <p><code>relatedTarget</code>属性可以为<code>null</code>。这是正常现象，仅仅是意味着鼠标不是来自另一个元素，而是来自窗口之外。或者它离开了窗口。</p>
 <h2 id="跳过元素">跳过元素</h2>
@@ -24,7 +24,7 @@
 <p>这对性能很有好处，因为可能有很多中间元素。我们并不真的想要处理每一个移入和离开的过程。</p>
 <p>特别是，鼠标指针可能会从窗口外跳到页面的中间。在这种情况下，<code>relatedTarget</code> 为 <code>null</code>：</p>
 <p><img src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseover-mouseout-from-outside.svg" alt=""></p>
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout-fast.view/index.html" height="400" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout-fast.view/index.html" height="400" width="100%"></iframe>
 
 <p>如果 <code>mouseover</code>被触发了，则必须有<code>mouseout</code>&quot; 在鼠标快速移动的情况下，中间元素可能会被忽略，
 但是我们可以肯定一件事：如果鼠标指针“正式地”进入了一个元素（生成了 <code>mouseover</code>事件），那么一旦它离开，我们就会得到<code>mouseout</code>。</p>
@@ -44,7 +44,7 @@
 <li><code>mouseout [target: parent]</code>（离开 parent），然后</li>
 <li><code>mouseover [target: child]</code>（来到 child，冒泡）。</li>
 </ol>
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout-child.view/index.html" height="400" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout-child.view/index.html" height="400" width="100%"></iframe>
 
 <p>如上例所示，当鼠标指针从 <code>#parent</code> 元素移动到 <code>#child</code> 时，会在父元素上触发两个处理程序：<code>mouseout</code> 和 <code>mouseover</code>：</p>
 <pre><code class="language-js">parent.onmouseout = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
@@ -68,7 +68,7 @@ parent.onmouseover = <span class="hljs-function"><span class="hljs-keyword">func
 <p>这些事件非常简单。</p>
 <p>当鼠标指针进入一个元素时 —— 会触发 <code>mouseenter</code>。而鼠标指针在元素或其后代中的确切位置无关紧要。</p>
 <p>当鼠标指针离开该元素时，事件 <code>mouseleave</code> 才会触发。</p>
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseleave.view/index.html" height="400" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseleave.view/index.html" height="400" width="100%"></iframe>
 
 <h2 id="事件委托">事件委托</h2>
 <p>假设我们要处理表格的单元格的鼠标进入/离开。并且这里有数百个单元格。</p>
@@ -86,7 +86,7 @@ table.onmouseout = <span class="hljs-function"><span class="hljs-keyword">functi
   <span class="hljs-keyword">let</span> target = event.target;
   target.style.background = <span class="hljs-string">&quot;&quot;</span>;
 };</code></pre>
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseenter-mouseleave-delegation.view/index.html" height="500" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseenter-mouseleave-delegation.view/index.html" height="500" width="100%"></iframe>
 
 <p>我们只关心单元格<code>&lt;td&gt;</code>，就需把其他过滤掉。</p>
 <p>我们可以这样做：</p>
@@ -161,4 +161,4 @@ table.onmouseout = <span class="hljs-function"><span class="hljs-keyword">functi
 <li>它使用事件委托来处理表格中任何 <code>&lt;td&gt;</code> 的进入/离开。因此，它依赖于 <code>mouseover/out</code> 而不是 <code>mouseenter/leave</code>，<code>mouseenter/leave</code> 不会冒泡，因此也不允许事件委托。</li>
 <li>额外的事件，例如在 <code>&lt;td&gt;</code> 的后代之间移动都会被过滤掉，因此 <code>onEnter/Leave</code> 仅在鼠标指针进入/离开 <code>&lt;td&gt;</code> 整体时才会运行。</li>
 </ol>
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseenter-mouseleave-delegation-2.view/index.html" height="500" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseenter-mouseleave-delegation-2.view/index.html" height="500" width="100%"></iframe>

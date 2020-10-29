@@ -16,7 +16,7 @@ importance: 5
 
 运行效果如下：
 
-[iframe src="solution" height=200 border=1]
+[iframe data-src="solution" height=200 border=1]
 
 在此任务中，我们假设所有具有 `data-tooltip` 的元素中都只有文本。尚无嵌套标签。
 

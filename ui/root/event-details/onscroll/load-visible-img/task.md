@@ -12,7 +12,7 @@
 
 这是在 `iframe` 中的一个示例：
 
-<iframe src="./root/event-details/onscroll/load-visible-img/solution.view/index.html" height="200" width="100%"></iframe>
+<iframe data-src="./root/event-details/onscroll/load-visible-img/solution.view/index.html" height="200" width="100%"></iframe>
 
 滚动它可以看到图像是“按需”加载的。
 

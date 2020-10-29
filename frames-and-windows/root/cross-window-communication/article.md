@@ -40,7 +40,7 @@
 例如，让我们尝试对来自另一个源的 `<iframe>` 进行读取和写入：
 
 ```html run
-<iframe src="https://example.com" id="iframe"></iframe>
+<iframe data-src="https://example.com" id="iframe"></iframe>
 
 <script>
   iframe.onload = function() {
@@ -86,7 +86,7 @@
 
 ```html run
 <!-- 来自同一个网站的 iframe -->
-<iframe src="/" id="iframe"></iframe>
+<iframe data-src="/" id="iframe"></iframe>
 
 <script>
   iframe.onload = function() {
@@ -128,7 +128,7 @@ document.domain = 'site.com';
 
 
 ```html run
-<iframe src="/" id="iframe"></iframe>
+<iframe data-src="/" id="iframe"></iframe>
 
 <script>
   let oldDoc = iframe.contentDocument;
@@ -151,7 +151,7 @@ document.domain = 'site.com';
 我们可以尝试通过在 `setInterval` 中进行检查，以更早地捕获该时刻：
 
 ```html run
-<iframe src="/" id="iframe"></iframe>
+<iframe data-src="/" id="iframe"></iframe>
 
 <script>
   let oldDoc = iframe.contentDocument;
@@ -178,7 +178,7 @@ document.domain = 'site.com';
 例如：
 
 ```html run
-<iframe src="/" style="height:80px" name="win" id="iframe"></iframe>
+<iframe data-src="/" style="height:80px" name="win" id="iframe"></iframe>
 
 <script>
   alert(iframe.contentWindow == frames[0]); // true
@@ -275,7 +275,7 @@ if (window == top) { // 当前 window == window.top?
 例如，这里的 `win` 仅在它拥有来自 `http://example.com` 这个源的文档时，才会接收消息：
 
 ```html no-beautify
-<iframe src="http://example.com" name="example">
+<iframe data-src="http://example.com" name="example">
 
 <script>
   let win = window.frames.example;
@@ -287,7 +287,7 @@ if (window == top) { // 当前 window == window.top?
 如果我们不希望做这个检查，可以将 `targetOrigin` 设置为 `*`。
 
 ```html no-beautify
-<iframe src="http://example.com" name="example">
+<iframe data-src="http://example.com" name="example">
 
 <script>
   let win = window.frames.example;

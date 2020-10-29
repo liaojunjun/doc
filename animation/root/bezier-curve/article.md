@@ -37,7 +37,7 @@
 
 尝试在下面的示例中使用鼠标移动控制点：
 
-[iframe src="demo.svg?nocpath=1&p=0,0,0.5,0,0.5,1,1,1" height=370]
+[iframe data-src="demo.svg?nocpath=1&p=0,0,0.5,0,0.5,1,1,1" height=370]
 
 **可以注意到，曲线沿切线 1 -> 2 和 3 -> 4 延伸。**
 
@@ -95,7 +95,7 @@
 
 控制点可以用鼠标移动，点击 “play” 运行演示。
 
-[iframe src="demo.svg?p=0,0,0.5,1,1,0&animate=1" height=370]
+[iframe data-src="demo.svg?p=0,0,0.5,1,1,0&animate=1" height=370]
 
 **德卡斯特里奥算法构造三点贝塞尔曲线：**
 
@@ -124,7 +124,7 @@
 
 4 个控制点的演示（点可以被鼠标移动）：
 
-[iframe src="demo.svg?p=0,0,0.5,0,0.5,1,1,1&animate=1" height=370]
+[iframe data-src="demo.svg?p=0,0,0.5,0,0.5,1,1,1&animate=1" height=370]
 
 算法：
 
@@ -146,19 +146,19 @@
 
 曲线的移动演示:
 
-[iframe src="demo.svg?p=0,0,0,0.75,0.25,1,1,1&animate=1" height=370]
+[iframe data-src="demo.svg?p=0,0,0,0.75,0.25,1,1,1&animate=1" height=370]
 
 和其它的点：
 
-[iframe src="demo.svg?p=0,0,1,0.5,0,0.5,1,1&animate=1" height=370]
+[iframe data-src="demo.svg?p=0,0,1,0.5,0,0.5,1,1&animate=1" height=370]
 
 环形：
 
-[iframe src="demo.svg?p=0,0,1,0.5,0,1,0.5,0&animate=1" height=370]
+[iframe data-src="demo.svg?p=0,0,1,0.5,0,1,0.5,0&animate=1" height=370]
 
 非平滑贝塞尔曲线：
 
-[iframe src="demo.svg?p=0,0,1,1,0,1,1,0&animate=1" height=370]
+[iframe data-src="demo.svg?p=0,0,1,1,0,1,1,0&animate=1" height=370]
 
 由于算法是递归的，我们可以构建任何顺序的贝塞尔曲线：使用 5 个、6 个或更多个控制点。但在实践中它们没那么有用。通常我们取 2-3 个点，对于复杂的线条，将几条曲线拼接在一起。这更容易开发和计算。
 

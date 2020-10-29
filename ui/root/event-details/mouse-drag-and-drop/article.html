@@ -48,7 +48,7 @@
 <p>如果我们运行这段代码，我们会发现一些奇怪的事情。在拖放的一开始，球“分叉”了：我们开始拖动它的“克隆”。</p>
 <pre><code class="language-online">这是一个正在运行中的示例：
 
-[iframe src=&quot;ball&quot; height=230]
+[iframe data-src=&quot;ball&quot; height=230]
 
 尝试使用鼠标进行拖放，你会看到这种奇怪的行为。</code></pre>
 <p>这是因为浏览器有自己的对图片和一些其他元素的拖放处理。它会在我们进行拖放操作时自动运行，并与我们的拖放处理产生了冲突。</p>
@@ -59,7 +59,7 @@
 <p>现在一切都正常了。</p>
 <pre><code class="language-online">这是一个正在运行中的示例：
 
-[iframe src=&quot;ball2&quot; height=230]</code></pre>
+[iframe data-src=&quot;ball2&quot; height=230]</code></pre>
 <p>另一个重要的方面是 —— 我们在 <code>document</code> 上跟踪 <code>mousemove</code>，而不是在 <code>ball</code> 上。乍一看，鼠标似乎总是在球的上方，我们可以将 <code>mousemove</code> 放在球上。</p>
 <p>但正如我们所记得的那样，<code>mousemove</code> 会经常被触发，但不会针对每个像素都如此。因此，在快速移动鼠标后，鼠标指针可能会从球上跳转至文档中间的某个位置（甚至跳转至窗口外）。</p>
 <p>因此，我们应该监听 <code>document</code> 以捕获它。</p>
@@ -127,7 +127,7 @@ ball.ondragstart = <span class="hljs-function"><span class="hljs-keyword">functi
 };</code></pre>
 <pre><code class="language-online">In action (inside `&lt;iframe&gt;`):
 
-[iframe src=&quot;ball3&quot; height=230]</code></pre>
+[iframe data-src=&quot;ball3&quot; height=230]</code></pre>
 <p>如果我们按住球的右下角来进行拖动，这种差异会尤其明显。在前面的示例中，球会在鼠标指针下“跳转”一下。现在，更新后的代码可以让我们从当前位置流畅地跟随鼠标。</p>
 <h2 id="潜在的放置目标">潜在的放置目标</h2>
 <p>在前面的示例中，球可以被放置（drop）到“任何地方”。在实际中，我们通常是将一个元素放到另一个元素上。例如，将一个“文件”放置到一个“文件夹”或者其他地方。</p>

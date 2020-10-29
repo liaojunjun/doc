@@ -13,4 +13,4 @@ importance: 5
 
 示例：
 
-[iframe src="solution" height=400]
+[iframe data-src="solution" height=400]

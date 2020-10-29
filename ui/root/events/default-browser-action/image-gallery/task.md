@@ -8,6 +8,6 @@ importance: 5
 
 像这样：
 
-[iframe src="solution" height=600]
+[iframe data-src="solution" height=600]
 
 P.S. 使用事件委托。

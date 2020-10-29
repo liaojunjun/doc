@@ -113,7 +113,7 @@
 ```online
 这是一个记录 `pointerdown` 和 `pointerup` 事件的演示:
 
-[iframe src=&quot;multitouch&quot; edit height=200]
+[iframe data-src=&quot;multitouch&quot; edit height=200]
 
 请注意：你使用的必须是一个多点触控设备（如平板或手机）才能看到区别。对于使用鼠标这样的单点触控设备，所有指针事件都会具有相同的 `pointerId` 和 `isPrimary=true` 属性。</code></pre>
 <h2 id="事件：pointercancel">事件：pointercancel</h2>
@@ -146,7 +146,7 @@
 <p>这里的问题就在于浏览器”劫持“了这一个互动操作，触发了 <code>pointercancel</code> 事件，而 <code>pointermove</code> 事件不再继续触发。</p>
 <pre><code class="language-online">这里是一个指针事件的演示（只包含 `up/down`、`move` 和 `cancel），事件的触发被记录在了文本框中：
 
-[iframe src=&quot;ball&quot; height=240 edit]</code></pre>
+[iframe data-src=&quot;ball&quot; height=240 edit]</code></pre>
 <p>我们想要实现自己的拖放操作，所以让我们来看看如何告诉浏览器不要接管拖放操作。</p>
 <p><strong>阻止浏览器的默认行为来防止 <code>pointercancel</code> 触发。</strong></p>
 <p>我们需要做两件事：</p>
@@ -165,7 +165,7 @@
 <p>经过上述操作，事件将会按照我们预期的方式触发，浏览器也不会劫持拖放过程来产生一个 <code>pointercancel</code> 事件。</p>
 <pre><code class="language-online">这个演示增加了以下几行：
 
-[iframe src=&quot;ball-2&quot; height=240 edit]
+[iframe data-src=&quot;ball-2&quot; height=240 edit]
 
 可以看到，`pointercancel` 事件不再被触发。</code></pre>
 <p>现在我们就可以添加让球的位置移动的代码了，并且我们的代码对鼠标和触控设备都有效。</p>
@@ -205,7 +205,7 @@ thumb.onpointermove = <span class="hljs-function"><span class="hljs-keyword">fun
 <span class="hljs-comment">// 它会在 pointerup 时自动调用</span></code></pre>
 <pre><code class="language-online">完整示例：
 
-[iframe src=&quot;slider&quot; height=100 edit]</code></pre>
+[iframe data-src=&quot;slider&quot; height=100 edit]</code></pre>
 <p><strong>言而总之：由于我们无需再在整个 <code>document</code> 上添加/移除处理程序，代码就变得整洁多了。这就是指针捕获的意义所在。</strong></p>
 <p>还有两个相关的指针捕获事件:</p>
 <ul>

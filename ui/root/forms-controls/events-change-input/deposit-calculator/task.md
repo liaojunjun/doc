@@ -8,7 +8,7 @@ importance: 5
 
 这是示例：
 
-[iframe src="solution" height="350" border="1"]
+[iframe data-src="solution" height="350" border="1"]
 
 当输入有变化时，应立即进行处理。
 

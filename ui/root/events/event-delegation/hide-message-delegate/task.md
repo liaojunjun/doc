@@ -8,6 +8,6 @@ importance: 5
 
 就像这样：
 
-[iframe src="solution" height=420]
+[iframe data-src="solution" height=420]
 
 P.S. 在容器上应该只有一个事件监听器，请使用事件委托。

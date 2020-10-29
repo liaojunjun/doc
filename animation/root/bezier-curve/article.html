@@ -24,7 +24,7 @@
 <p>由于最后一个属性，在计算机图形学中，可以优化相交测试。如果凸包不相交，则曲线也不相交。因此，首先检查凸包的交叉点可以非常快地给出“无交叉”结果。检查交叉区域或凸包更容易，因为它们是矩形，三角形等（见上图），比曲线简单的多。</p>
 <p>贝塞尔曲线绘制的主要重点 —— 通过移动曲线，曲线<strong>以直观明显的</strong>方式变化。</p>
 <p>尝试在下面的示例中使用鼠标移动控制点：</p>
-<p>[iframe src=&quot;demo.svg?nocpath=1&amp;p=0,0,0.5,0,0.5,1,1,1&quot; height=370]</p>
+<p>[iframe data-src=&quot;demo.svg?nocpath=1&amp;p=0,0,0.5,0,0.5,1,1,1&quot; height=370]</p>
 <p><strong>可以注意到，曲线沿切线 1 -&gt; 2 和 3 -&gt; 4 延伸。</strong></p>
 <p>经过一些练习后，很明显我们知道怎样通过放置控制点来获得所需要的曲线。通过连接几条曲线，我们几乎可以得到任何东西。</p>
 <p>这里有一些例子：</p>
@@ -64,7 +64,7 @@
 <p>让我们看看 3 个控制点的例子。</p>
 <p>这里是一个演示，随后会有解释。</p>
 <p>控制点可以用鼠标移动，点击 “play” 运行演示。</p>
-<p>[iframe src=&quot;demo.svg?p=0,0,0.5,1,1,0&amp;animate=1&quot; height=370]</p>
+<p>[iframe data-src=&quot;demo.svg?p=0,0,0.5,1,1,0&amp;animate=1&quot; height=370]</p>
 <p><strong>德卡斯特里奥算法构造三点贝塞尔曲线：</strong></p>
 <ol>
 <li><p>绘制控制点。在上面的演示中，它们标有：<code>1</code>、<code>2</code> 和 <code>3</code>。</p>
@@ -102,7 +102,7 @@
 </ol>
 <p>这是三控制点的处理过程，但是对于 4 个点同样适用。</p>
 <p>4 个控制点的演示（点可以被鼠标移动）：</p>
-<p>[iframe src=&quot;demo.svg?p=0,0,0.5,0,0.5,1,1,1&amp;animate=1&quot; height=370]</p>
+<p>[iframe data-src=&quot;demo.svg?p=0,0,0.5,0,0.5,1,1,1&amp;animate=1&quot; height=370]</p>
 <p>算法：</p>
 <ul>
 <li>控制点通过线段连接：1 -&gt; 2、2 -&gt; 3 和 3 -&gt; 4。 我们能得到 3 条<span style="color:#825E28">棕色</span>的线段。</li>
@@ -123,13 +123,13 @@
 <li>直到我们得到一个点。得到的这些点就形成了曲线。</li>
 </ul>
 <p>曲线的移动演示:</p>
-<p>[iframe src=&quot;demo.svg?p=0,0,0,0.75,0.25,1,1,1&amp;animate=1&quot; height=370]</p>
+<p>[iframe data-src=&quot;demo.svg?p=0,0,0,0.75,0.25,1,1,1&amp;animate=1&quot; height=370]</p>
 <p>和其它的点：</p>
-<p>[iframe src=&quot;demo.svg?p=0,0,1,0.5,0,0.5,1,1&amp;animate=1&quot; height=370]</p>
+<p>[iframe data-src=&quot;demo.svg?p=0,0,1,0.5,0,0.5,1,1&amp;animate=1&quot; height=370]</p>
 <p>环形：</p>
-<p>[iframe src=&quot;demo.svg?p=0,0,1,0.5,0,1,0.5,0&amp;animate=1&quot; height=370]</p>
+<p>[iframe data-src=&quot;demo.svg?p=0,0,1,0.5,0,1,0.5,0&amp;animate=1&quot; height=370]</p>
 <p>非平滑贝塞尔曲线：</p>
-<p>[iframe src=&quot;demo.svg?p=0,0,1,1,0,1,1,0&amp;animate=1&quot; height=370]</p>
+<p>[iframe data-src=&quot;demo.svg?p=0,0,1,1,0,1,1,0&amp;animate=1&quot; height=370]</p>
 <p>由于算法是递归的，我们可以构建任何顺序的贝塞尔曲线：使用 5 个、6 个或更多个控制点。但在实践中它们没那么有用。通常我们取 2-3 个点，对于复杂的线条，将几条曲线拼接在一起。这更容易开发和计算。</p>
 <pre><code class="language-smart">我们使用控制点制作贝塞尔曲线。正如我们所见，它们并不在曲线上。或者更准确地说，第一个和最后一个在曲线上，但其它的不在。
 

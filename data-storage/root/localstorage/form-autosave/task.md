@@ -7,4 +7,4 @@
 
 像这样：
 
-[iframe src="solution" height=120]
+[iframe data-src="solution" height=120]

@@ -41,7 +41,7 @@ new HoverIntent({
 
 示例：
 
-[iframe src="solution" height=140]
+[iframe data-src="solution" height=140]
 
 如果你将鼠标快速地从“时钟”上移动过去，那么什么都不会发生，如果你使用鼠标在“时钟”上慢慢移动，或者停在“时钟”上，则会出现一个工具提示。
 

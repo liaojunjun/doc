@@ -4,7 +4,7 @@
 
 像这样：
 
-<iframe src="./root/event-details/onscroll/endless-page/solution.view/index.html" height="200" width="100%"></iframe>
+<iframe data-src="./root/event-details/onscroll/endless-page/solution.view/index.html" height="200" width="100%"></iframe>
 
 请注意滚动的两个重要特性：
 

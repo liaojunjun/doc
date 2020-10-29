@@ -8,7 +8,7 @@
 
 ## 测试台 [#keyboard-test-stand]
 
-<iframe src="https://liaojunjun.github.io/nice/root/event-details/keyboard-events/keyboard-dump.view/index.html" width="100%" height="400"></iframe>
+<iframe data-src="https://liaojunjun.github.io/nice/root/event-details/keyboard-events/keyboard-dump.view/index.html" width="100%" height="400"></iframe>
 
 ## Keydown 和 keyup
 

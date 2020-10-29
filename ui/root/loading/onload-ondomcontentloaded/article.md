@@ -247,7 +247,7 @@ document.addEventListener("readystatechange", () =>
   window.onload = () => log("window onload");
 </script>
 
-<iframe src="iframe.html" onload="log('iframe onload')"></iframe>
+<iframe data-src="iframe.html" onload="log('iframe onload')"></iframe>
 
 <img src="http://en.js.cx/clipart/train.gif" id="img" />
 <script>

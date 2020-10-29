@@ -221,7 +221,7 @@ growing.onclick = <span class="hljs-function"><span class="hljs-keyword">functio
 <p>CSS 动画完成后，会触发 <code>transitionend</code> 事件。</p>
 <p>这被广泛用于在动画结束后执行某种操作。我们也可以用它来串联动画。</p>
 <p>举例来说，下面的小船会在点击后向右浮动，然后再回来。而且，每一次都会向右移动地更远一点：</p>
-<p>[iframe src=&quot;boat&quot; height=300 edit link]</p>
+<p>[iframe data-src=&quot;boat&quot; height=300 edit link]</p>
 <p>这个动画通过 <code>go</code> 函数初始化，并且在每次动画完成后都会重复执行，并转变方向：</p>
 <pre><code class="language-js">boat.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-comment">//...</span>

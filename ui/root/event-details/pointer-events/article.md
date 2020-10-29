@@ -87,7 +87,7 @@
 
 这是一个记录 `pointerdown` 和 `pointerup` 事件的演示:
 
-<iframe src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/multitouch.view/index.html" width="100%" height="400"></iframe>
+<iframe data-src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/multitouch.view/index.html" width="100%" height="400"></iframe>
 
 请注意：你使用的必须是一个多点触控设备（如平板或手机）才能看到区别。对于使用鼠标这样的单点触控设备，所有指针事件都会具有相同的 `pointerId` 和 `isPrimary=true` 属性。
 
@@ -121,7 +121,7 @@
 
 这里是一个指针事件的演示（只包含 `up/down`、`move` 和 `cancel），事件的触发被记录在了文本框中：
 
-<iframe src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/ball.view/index.html" width="100%" height="400"></iframe>
+<iframe data-src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/ball.view/index.html" width="100%" height="400"></iframe>
 
 我们想要实现自己的拖放操作，所以让我们来看看如何告诉浏览器不要接管拖放操作。
 
@@ -140,7 +140,7 @@
 
 这个演示增加了以下几行：
 
-<iframe src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/ball-2.view/index.html" width="100%" height="400"></iframe>
+<iframe data-src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/ball-2.view/index.html" width="100%" height="400"></iframe>
 
 可以看到，`pointercancel` 事件不再被触发。
 
@@ -194,7 +194,7 @@ thumb.onpointermove = function (event) {
 // 它会在 pointerup 时自动调用
 ```
 
-<iframe src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/slider.view/index.html" width="100%" height="400"></iframe>
+<iframe data-src="https://liaojunjun.github.io/nice/root/event-details/pointer-events/slider.view/index.html" width="100%" height="400"></iframe>
 
 **言而总之：由于我们无需再在整个 `document` 上添加/移除处理程序，代码就变得整洁多了。这就是指针捕获的意义所在。**
 

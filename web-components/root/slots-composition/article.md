@@ -314,7 +314,7 @@ customElements.define('custom-menu', class extends HTMLElement {
 
 这是完整的演示：
 
-[iframe src="menu" height=140 edit]
+[iframe data-src="menu" height=140 edit]
 
 当然我们可以为它添加更多的功能：事件、方法等。
 

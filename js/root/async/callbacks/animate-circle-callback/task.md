@@ -20,6 +20,6 @@ showCircle(150, 150, 100, div => {
 
 Demo：
 
-[iframe src="solution" height=260]
+[iframe data-src="solution" height=260]
 
 以 <info:task/animate-circle> 任务的答案作为解决本任务的基础。

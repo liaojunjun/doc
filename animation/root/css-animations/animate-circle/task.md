@@ -11,6 +11,6 @@ importance: 5
 
 点击下方的按钮以演示效果：
 
-[iframe src="solution" height=260]
+[iframe data-src="solution" height=260]
 
 源文件中提供了一个具有合适样式的圆样例，因此你需要做的就是创建合适的动画。

@@ -20,4 +20,4 @@
 
 例子：
 
-[iframe src="solution" height=40]
+[iframe data-src="solution" height=40]

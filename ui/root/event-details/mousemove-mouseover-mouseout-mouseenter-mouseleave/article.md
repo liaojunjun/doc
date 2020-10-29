@@ -20,7 +20,7 @@
 - `event.target` —— 是鼠标离开的元素。
 - `event.relatedTarget` —— 是鼠标移动到的，当前指针位置下的元素（`target` -> `relatedTarget`）。
 
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout.view/index.html" height="300" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout.view/index.html" height="300" width="100%"></iframe>
 
 `relatedTarget`属性可以为`null`。这是正常现象，仅仅是意味着鼠标不是来自另一个元素，而是来自窗口之外。或者它离开了窗口。
 
@@ -38,7 +38,7 @@
 
 ![](./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseover-mouseout-from-outside.svg)
 
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout-fast.view/index.html" height="400" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout-fast.view/index.html" height="400" width="100%"></iframe>
 
 如果 `mouseover`被触发了，则必须有`mouseout`" 在鼠标快速移动的情况下，中间元素可能会被忽略，
 但是我们可以肯定一件事：如果鼠标指针“正式地”进入了一个元素（生成了 `mouseover`事件），那么一旦它离开，我们就会得到`mouseout`。
@@ -70,7 +70,7 @@
 1. `mouseout [target: parent]`（离开 parent），然后
 2. `mouseover [target: child]`（来到 child，冒泡）。
 
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout-child.view/index.html" height="400" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseoverout-child.view/index.html" height="400" width="100%"></iframe>
 
 如上例所示，当鼠标指针从 `#parent` 元素移动到 `#child` 时，会在父元素上触发两个处理程序：`mouseout` 和 `mouseover`：
 
@@ -108,7 +108,7 @@ parent.onmouseover = function (event) {
 
 当鼠标指针离开该元素时，事件 `mouseleave` 才会触发。
 
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseleave.view/index.html" height="400" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseleave.view/index.html" height="400" width="100%"></iframe>
 
 ## 事件委托
 
@@ -135,7 +135,7 @@ table.onmouseout = function (event) {
 };
 ```
 
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseenter-mouseleave-delegation.view/index.html" height="500" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseenter-mouseleave-delegation.view/index.html" height="500" width="100%"></iframe>
 
 我们只关心单元格`<td>`，就需把其他过滤掉。
 
@@ -214,4 +214,4 @@ function onLeave(elem) {
 1. 它使用事件委托来处理表格中任何 `<td>` 的进入/离开。因此，它依赖于 `mouseover/out` 而不是 `mouseenter/leave`，`mouseenter/leave` 不会冒泡，因此也不允许事件委托。
 2. 额外的事件，例如在 `<td>` 的后代之间移动都会被过滤掉，因此 `onEnter/Leave` 仅在鼠标指针进入/离开 `<td>` 整体时才会运行。
 
-<iframe src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseenter-mouseleave-delegation-2.view/index.html" height="500" width="100%"></iframe>
+<iframe data-src="./root/event-details/mousemove-mouseover-mouseout-mouseenter-mouseleave/mouseenter-mouseleave-delegation-2.view/index.html" height="500" width="100%"></iframe>

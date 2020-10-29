@@ -252,7 +252,7 @@ alert( getComputedStyle(elem).width ); // 显示 elem 的 CSS width
 ```online
 如果你的浏览器保留了滚动条的空间（大多数 Windows 中的浏览器），那么你可以在下面测试它。
 
-[iframe src="cssWidthScroll" link border=1]
+[iframe data-src="cssWidthScroll" link border=1]
 
 带有文本的元素具有 `width:300px`。
 

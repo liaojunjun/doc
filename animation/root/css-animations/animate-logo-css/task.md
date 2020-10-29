@@ -6,7 +6,7 @@ importance: 5
 
 生成如下图的动画（点击显示）：
 
-[iframe src="solution" height=300]
+[iframe data-src="solution" height=300]
 
 - 点击后，图片会从 `40x24px` 变为 `400x240px` （变大十倍）。
 - 动画持续三秒。

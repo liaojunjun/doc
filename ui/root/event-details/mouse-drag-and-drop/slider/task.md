@@ -6,7 +6,7 @@ importance: 5
 
 创建一个滑动条（slider）：
 
-[iframe src="solution" height=60 border=1]
+[iframe data-src="solution" height=60 border=1]
 
 用鼠标拖动蓝色的滑块（thumb）并移动它。
 

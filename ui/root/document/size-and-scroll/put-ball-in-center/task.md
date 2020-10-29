@@ -6,13 +6,13 @@ importance: 5
 
 源文件的效果如下：
 
-[iframe src="source" edit link height=180]
+[iframe data-src="source" edit link height=180]
 
 区域（field）的中心坐标是多少？
 
 计算它们，并将小球置于绿色的区域（field）中心：
 
-[iframe src="solution" height=180]
+[iframe data-src="solution" height=180]
 
 - 该元素应该通过 JavaScript 移动，而不是 CSS。
 - 该代码应该适用于任何大小的球（`10`、`20`、`30` 像素）以及任意大小的区域（field），而不应该绑定到给定值。

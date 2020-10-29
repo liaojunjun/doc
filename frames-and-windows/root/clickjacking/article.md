@@ -37,7 +37,7 @@ iframe { /* 来自受害网站的 iframe */
 
 <!-- 来自受害网站的 url -->
 *!*
-<iframe src="/clickjacking/facebook.html"></iframe>
+<iframe data-src="/clickjacking/facebook.html"></iframe>
 
 <button>点这里！</button>
 */!*
@@ -49,7 +49,7 @@ iframe { /* 来自受害网站的 iframe */
 
 [codetabs src="clickjacking-visible" height=160]
 
-在上面这个示例中，我们有一个半透明的 `<iframe src="facebook.html">`，我们可以看到，它位于按钮之上。点击按钮实际上会点击在 iframe 上，但这对用户不可见，因为 iframe 是透明的。
+在上面这个示例中，我们有一个半透明的 `<iframe data-src="facebook.html">`，我们可以看到，它位于按钮之上。点击按钮实际上会点击在 iframe 上，但这对用户不可见，因为 iframe 是透明的。
 
 结果，如果访问者登陆了 Facebook（“记住我”通常是打开的），那么这个行为就会点一个“赞”。Twitter 上是 "Follow" 按钮。
 
@@ -143,11 +143,11 @@ window.onbeforeunload = function() {
 结果如下：
 
 ```html
-<iframe src="https://twitter.com"></iframe>
+<iframe data-src="https://twitter.com"></iframe>
 ```
 
 <!-- ebook: prerender/ chrome headless dies and timeouts on this iframe -->
-<iframe src="https://twitter.com"></iframe>
+<iframe data-src="https://twitter.com"></iframe>
 
 上面这个 `iframe` 可能为空，或者通过 alert 告知你浏览器不允许以这种方式导航至该页面，这取决于你的浏览器。
 ````

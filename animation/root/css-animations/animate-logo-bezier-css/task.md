@@ -8,6 +8,6 @@ importance: 5
 
 这里是效果演示（点击飞机）：
 
-[iframe src="solution" height=350]
+[iframe data-src="solution" height=350]
 
 在前一个解决方案的基础上做修改。

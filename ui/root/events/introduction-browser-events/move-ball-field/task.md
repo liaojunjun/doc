@@ -6,7 +6,7 @@ importance: 5
 
 点击球场中任意一点，让球在球场中移动。就像这样：
 
-[iframe src="solution" height="260" link]
+[iframe data-src="solution" height="260" link]
 
 要求：
 

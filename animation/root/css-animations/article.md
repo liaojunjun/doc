@@ -320,7 +320,7 @@ CSS 动画完成后，会触发 `transitionend` 事件。
 
 举例来说，下面的小船会在点击后向右浮动，然后再回来。而且，每一次都会向右移动地更远一点：
 
-[iframe src="boat" height=300 edit link]
+[iframe data-src="boat" height=300 edit link]
 
 这个动画通过 `go` 函数初始化，并且在每次动画完成后都会重复执行，并转变方向：
 

@@ -62,7 +62,7 @@ ball.onmousedown = function(event) {
 ```online
 这是一个正在运行中的示例：
 
-[iframe src="ball" height=230]
+[iframe data-src="ball" height=230]
 
 尝试使用鼠标进行拖放，你会看到这种奇怪的行为。
 ```
@@ -82,7 +82,7 @@ ball.ondragstart = function() {
 ```online
 这是一个正在运行中的示例：
 
-[iframe src="ball2" height=230]
+[iframe data-src="ball2" height=230]
 ```
 
 另一个重要的方面是 —— 我们在 `document` 上跟踪 `mousemove`，而不是在 `ball` 上。乍一看，鼠标似乎总是在球的上方，我们可以将 `mousemove` 放在球上。
@@ -175,7 +175,7 @@ ball.ondragstart = function() {
 ```online
 In action (inside `<iframe>`):
 
-[iframe src="ball3" height=230]
+[iframe data-src="ball3" height=230]
 ```
 
 如果我们按住球的右下角来进行拖动，这种差异会尤其明显。在前面的示例中，球会在鼠标指针下“跳转”一下。现在，更新后的代码可以让我们从当前位置流畅地跟随鼠标。

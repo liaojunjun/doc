@@ -15,4 +15,4 @@ importance: 5
 
 这是一个演示示例：
 
-[iframe src="solution" height="350" border="1" link]
+[iframe data-src="solution" height="350" border="1" link]

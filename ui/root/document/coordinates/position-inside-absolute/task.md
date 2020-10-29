@@ -23,6 +23,6 @@ positionAt(blockquote, "top-in", note);
 
 结果：
 
-[iframe src="solution" height="310" border="1" link]
+[iframe data-src="solution" height="310" border="1" link]
 
 可以以上一个任务 <info:task/position-at-absolute> 的解决方案为基础。

@@ -357,7 +357,7 @@ function onSocketConnect(ws) {
 
 这是运行示例：
 
-[iframe src="chat" height="100" zip]
+[iframe data-src="chat" height="100" zip]
 
 你也可以下载它（点击 iframe 右上角的按钮）然后在本地运行。运行之前请记得安装 [Node.js](https://nodejs.org/en/) 和 `npm install ws`。
 

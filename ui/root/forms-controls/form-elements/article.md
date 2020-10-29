@@ -260,4 +260,4 @@ let option = new Option("Text", "value", true, true);
 
 - 规范：<https://html.spec.whatwg.org/multipage/forms.html>.
 
-<iframe src="https://liaojunjun.github.io/nice/root/event-details/events/form-elements/add-select-option/solution.html" width="100%" height="400"></iframe>
+<iframe data-src="https://liaojunjun.github.io/nice/root/event-details/events/form-elements/add-select-option/solution.html" width="100%" height="400"></iframe>

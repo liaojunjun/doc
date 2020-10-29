@@ -28,6 +28,6 @@ showPrompt("Enter something<br>...smart :)", function(value) {
 
 使用 iframe 嵌入的一个示例：
 
-[iframe src="solution" height=160 border=1]
+[iframe data-src="solution" height=160 border=1]
 
 P.S. 源文档有给表单设定了固定位置的 HTML/CSS，但是做成模态框的方式取决于你。
