@@ -59,12 +59,12 @@ drawHtmlTree(selectPDomtree, 'div.select-p-domtree', 690, 320);
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;p&quot;</span>&gt;</span>Example: <span class="hljs-tag">&lt;<span class="hljs-name">i</span>&gt;</span>italic<span class="hljs-tag">&lt;/<span class="hljs-name">i</span>&gt;</span> and <span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>bold<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   <span class="hljs-keyword">let</span> range = <span class="hljs-keyword">new</span> Range();
 
   range.setStart(p, <span class="hljs-number">0</span>);
   range.setEnd(p, <span class="hljs-number">2</span>);
-*/!*
+
 
   <span class="hljs-comment">// 范围的 toString 以文本形式返回其内容（不带标签）</span>
   alert(range); <span class="hljs-comment">// Example: italic</span>
@@ -83,12 +83,12 @@ From <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class
 <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>Click to select<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   button.onclick = <span class="hljs-function">() =&gt;</span> {
-  *!*
+  
     <span class="hljs-keyword">let</span> range = <span class="hljs-keyword">new</span> Range();
 
     range.setStart(p, start.value);
     range.setEnd(p, end.value);
-  */!*
+  
 
     <span class="hljs-comment">// 应用选择，后文有解释</span>
     <span class="hljs-built_in">document</span>.getSelection().removeAllRanges();

@@ -17,12 +17,12 @@ code;</code></pre>
   <span class="hljs-attr">nextPrime</span>:
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">2</span>; i &lt; n; i++) {
 
-*!*
+
     <span class="hljs-comment">// 检测 i 是否是一个质数（素数）</span>
     <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">2</span>; j &lt; i; j++) {
       <span class="hljs-keyword">if</span> (i % j == <span class="hljs-number">0</span>) <span class="hljs-keyword">continue</span> nextPrime;
     }
-*/!*
+
 
     alert(i);
   }
@@ -31,7 +31,7 @@ code;</code></pre>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showPrimes</span>(<span class="hljs-params">n</span>) </span>{
 
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">2</span>; i &lt; n; i++) {
-    *!*<span class="hljs-keyword">if</span> (!isPrime(i)) <span class="hljs-keyword">continue</span>;*/!*
+    <span class="hljs-keyword">if</span> (!isPrime(i)) <span class="hljs-keyword">continue</span>;
 
     alert(i);  
   }

@@ -35,7 +35,7 @@
 
 这样写出来的代码实际上是一个嵌套循环：外部循环遍历数组所有元素，内部循环计算从当前元素开始的所有子数组各自的和。
 
-```js run
+```js
 function getMaxSubSum(arr) {
   let maxSum = 0; // 如果没有取到任何元素，就返回 0
 
@@ -67,7 +67,7 @@ alert( getMaxSubSum([100, -9, 2, -3, 5]) ); // 100
 
 如果文字描述不太好理解，就直接看下面的代码吧，真的很短：
 
-```js run
+```js
 function getMaxSubSum(arr) {
   let maxSum = 0;
   let partialSum = 0;

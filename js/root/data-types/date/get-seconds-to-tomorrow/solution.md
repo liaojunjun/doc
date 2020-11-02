@@ -2,12 +2,12 @@
 
 首先我们生成“明天”，然后对其进行减法操作：
 
-```js run
+```js
 function getSecondsToTomorrow() {
   let now = new Date();
 
   // tomorrow date
-  let tomorrow = new Date(now.getFullYear(), now.getMonth(), *!*now.getDate()+1*/!*);
+  let tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
 
   let diff = tomorrow - now; // difference in ms
   return Math.round(diff / 1000); // convert to seconds
@@ -16,7 +16,7 @@ function getSecondsToTomorrow() {
 
 另一种解法：
 
-```js run
+```js
 function getSecondsToTomorrow() {
   let now = new Date();
   let hour = now.getHours();

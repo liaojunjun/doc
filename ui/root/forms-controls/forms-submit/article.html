@@ -25,7 +25,7 @@
 <p>这是一个示例：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onsubmit</span>=<span class="hljs-string">&quot;return false&quot;</span>&gt;</span>
  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;30&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Focus here and press enter&quot;</span>&gt;</span>
- <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> *!*<span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;click&#x27;)&quot;</span>*/!*&gt;</span>
+ <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;click&#x27;)&quot;</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></code></pre>
 <pre><code>
 ## 方法：submit
@@ -36,7 +36,7 @@
 
 有时该方法被用来手动创建和发送表单，如下所示：
 
-```js run
+```js
 let form = document.createElement(&#x27;form&#x27;);
 form.action = &#x27;https://google.com/search&#x27;;
 form.method = &#x27;GET&#x27;;

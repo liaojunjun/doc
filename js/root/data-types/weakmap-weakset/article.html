@@ -8,9 +8,9 @@
 <span class="hljs-comment">// 覆盖引用</span>
 john = <span class="hljs-literal">null</span>;
 
-*!*
+
 <span class="hljs-comment">// 该对象将会被从内存中清除</span>
-*/!*</code></pre>
+</code></pre>
 <p>通常，当对象、数组这类数据结构在内存中时，它们的子元素，如对象的属性、数组的元素都是可以访问的。</p>
 <p>例如，如果把一个对象放入到数组中，那么只要这个数组存在，那么这个对象也就存在，即使没有其他对该对象的引用。</p>
 <p>就像这样:</p>
@@ -20,10 +20,10 @@ john = <span class="hljs-literal">null</span>;
 
 john = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 覆盖引用</span>
 
-*!*
+
 <span class="hljs-comment">// john 被存储在数组里, 所以它不会被垃圾回收机制回收</span>
 <span class="hljs-comment">// 我们可以通过 array[0] 来获取它</span>
-*/!*</code></pre>
+</code></pre>
 <p>类似的，如果我们使用对象作为常规 <code>Map</code> 的键，那么当 <code>Map</code> 存在时，该对象也将存在。它会占用内存，并且应该不会被（垃圾回收机制）回收。</p>
 <p>例如：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
@@ -33,10 +33,10 @@ map.set(john, <span class="hljs-string">&quot;...&quot;</span>);
 
 john = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 覆盖引用</span>
 
-*!*
+
 <span class="hljs-comment">// john 被存储在 map 中，</span>
 <span class="hljs-comment">// 我们可以使用 map.keys() 来获取它</span>
-*/!*</code></pre>
+</code></pre>
 <p><code>WeakMap</code> 在这方面有着根本上的不同。它不会阻止垃圾回收机制对作为键的对象（key object）的回收。</p>
 <p>让我们通过例子来看看这指的到底是什么。</p>
 <h2 id="weakmap">WeakMap</h2>
@@ -47,10 +47,10 @@ john = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 覆
 
 weakMap.set(obj, <span class="hljs-string">&quot;ok&quot;</span>); <span class="hljs-comment">// 正常工作（以对象作为键）</span>
 
-*!*
+
 <span class="hljs-comment">// 不能使用字符串作为键</span>
 weakMap.set(<span class="hljs-string">&quot;test&quot;</span>, <span class="hljs-string">&quot;Whoops&quot;</span>); <span class="hljs-comment">// Error，因为 &quot;test&quot; 不是一个对象</span>
-*/!*</code></pre>
+</code></pre>
 <p>现在，如果我们在 weakMap 中使用一个对象作为键，并且没有其他对这个对象的引用 —— 该对象将会被从内存（和map）中自动清除。</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> john = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
 
@@ -126,9 +126,9 @@ john = <span class="hljs-literal">null</span>;</code></pre>
   <span class="hljs-keyword">return</span> cache.get(obj);
 }
 
-*!*
+
 <span class="hljs-comment">// 现在我们在其它文件中使用 process()</span>
-*/!*
+
 
 <span class="hljs-comment">// 📁 main.js</span>
 <span class="hljs-keyword">let</span> obj = {<span class="hljs-comment">/* 假设我们有个对象 */</span>};
@@ -145,9 +145,9 @@ alert(cache.size); <span class="hljs-comment">// 1（啊！该对象依然在 ca
 <p>对于多次调用同一个对象，它只需在第一次调用时计算出结果，之后的调用可以直接从 <code>cache</code> 中获取。这样做的缺点是，当我们不再需要这个对象的时候需要清理 <code>cache</code>。</p>
 <p>如果我们用 <code>WeakMap</code> 替代 <code>Map</code>，这个问题便会消失：当对象被垃圾回收时，对应的缓存的结果也会被自动地从内存中清除。</p>
 <pre><code class="language-js"><span class="hljs-comment">// 📁 cache.js</span>
-*!*
+
 <span class="hljs-keyword">let</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>();
-*/!*
+
 
 <span class="hljs-comment">// 计算并记结果</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">process</span>(<span class="hljs-params">obj</span>) </span>{

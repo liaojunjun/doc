@@ -53,9 +53,9 @@
 <p>例如：</p>
 <pre><code class="language-js"><span class="hljs-built_in">Promise</span>.all([
   <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> resolve(<span class="hljs-number">1</span>), <span class="hljs-number">1000</span>)),
-*!*
+
   <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Whoops!&quot;</span>)), <span class="hljs-number">2000</span>)),
-*/!*
+
   <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> resolve(<span class="hljs-number">3</span>), <span class="hljs-number">3000</span>))
 ]).catch(alert); <span class="hljs-comment">// Error: Whoops!</span></code></pre>
 <p>这里的第二个 promise 在两秒后 reject。这立即导致了 <code>Promise.all</code> 的 reject，因此 <code>.catch</code> 执行了：被 reject 的 error 成为了整个 <code>Promise.all</code> 的结果。</p>
@@ -99,7 +99,7 @@ Promise.all([
 
 让我们使用 `Promise.allSettled`：
 
-```js run
+```js
 let urls = [
   &#x27;https://api.github.com/users/iliakan&#x27;,
   &#x27;https://api.github.com/users/remy&#x27;,
@@ -166,7 +166,7 @@ let promise = Promise.race(iterable);
 
 例如，这里的结果将是 `1`：
 
-```js run
+```js
 Promise.race([
   new Promise((resolve, reject) =&gt; setTimeout(() =&gt; resolve(1), 1000)),
   new Promise((resolve, reject) =&gt; setTimeout(() =&gt; reject(new Error(&quot;Whoops!&quot;)), 2000)),
@@ -202,9 +202,9 @@ let cache = new Map();
 
 function loadCached(url) {
   if (cache.has(url)) {
-*!*
+
     return Promise.resolve(cache.get(url)); // (*)
-*/!*
+
   }
 
   return fetch(url)

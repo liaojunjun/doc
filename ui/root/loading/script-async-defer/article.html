@@ -72,7 +72,7 @@
 
 因此，如果我们有几个 `async` 脚本，它们可能按任意次序执行。总之是先加载完成的就先执行：
 
-```html run height=100
+```html height=100
 &lt;p&gt;...content before scripts...&lt;/p&gt;
 
 &lt;script&gt;
@@ -106,9 +106,9 @@ script.src = <span class="hljs-string">&quot;/article/script-async-defer/long.js
 <pre><code class="language-js"><span class="hljs-keyword">let</span> script = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;script&#x27;</span>);
 script.src = <span class="hljs-string">&quot;/article/script-async-defer/long.js&quot;</span>;
 
-*!*
+
 script.async = <span class="hljs-literal">false</span>;
-*/!*
+
 
 <span class="hljs-built_in">document</span>.body.append(script);</code></pre>
 <p>我们可以通过将 <code>async</code> 特性显式地修改为 <code>false</code>，以将脚本的加载顺序更改为文档顺序（就像常规脚本一样）：</p>

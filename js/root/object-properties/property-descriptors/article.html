@@ -46,11 +46,11 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(descriptor, <span class
 <p>例如，这里创建了一个属性 <code>name</code>，该属性的所有标志都为 <code>false</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = {};
 
-*!*
+
 <span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;name&quot;</span>, {
   <span class="hljs-attr">value</span>: <span class="hljs-string">&quot;John&quot;</span>
 });
-*/!*
+
 
 <span class="hljs-keyword">let</span> descriptor = <span class="hljs-built_in">Object</span>.getOwnPropertyDescriptor(user, <span class="hljs-string">&#x27;name&#x27;</span>);
 
@@ -58,7 +58,7 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(descriptor, <span class
 <span class="hljs-comment">/*
 {
   &quot;value&quot;: &quot;John&quot;,
-*!*
+
   &quot;writable&quot;: false,
   &quot;enumerable&quot;: false,
   &quot;configurable&quot;: false
@@ -74,26 +74,26 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(descriptor, <span class
 };
 
 <span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;name&quot;</span>, {
-*!*
+
   writable: <span class="hljs-literal">false</span>
-*/!*
+
 });
 
-*!*
+
 user.name = <span class="hljs-string">&quot;Pete&quot;</span>; <span class="hljs-comment">// Error: Cannot assign to read only property &#x27;name&#x27;</span>
-*/!*</code></pre>
+</code></pre>
 <p>现在没有人可以改变我们 <code>user</code> 的 <code>name</code>，除非它们应用自己的 <code>defineProperty</code> 来覆盖我们的 <code>user</code> 的 <code>name</code>。</p>
 <pre><code class="language-smart">在非严格模式下，在对不可写的属性等进行写入操作时，不会出现错误。但是操作仍然不会成功。在非严格模式下，违反标志的行为（flag-violating action）只会被默默地忽略掉。</code></pre>
 <p>这是相同的示例，但针对的是属性不存在的情况：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = { };
 
 <span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;name&quot;</span>, {
-*!*
+
   value: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-comment">// 对于新属性，我们需要明确地列出哪些是 true</span>
   <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">true</span>,
   <span class="hljs-attr">configurable</span>: <span class="hljs-literal">true</span>
-*/!*
+
 });
 
 alert(user.name); <span class="hljs-comment">// John</span>
@@ -119,14 +119,14 @@ user.name = <span class="hljs-string">&quot;Pete&quot;</span>; <span class="hljs
 };
 
 <span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;toString&quot;</span>, {
-*!*
+
   enumerable: <span class="hljs-literal">false</span>
-*/!*
+
 });
 
-*!*
+
 <span class="hljs-comment">// 现在我们的 toString 消失了：</span>
-*/!*
+
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> user) alert(key); <span class="hljs-comment">// name</span></code></pre>
 <p>不可枚举的属性也会被 <code>Object.keys</code> 排除：</p>
 <pre><code class="language-js">alert(<span class="hljs-built_in">Object</span>.keys(user)); <span class="hljs-comment">// name</span></code></pre>
@@ -166,14 +166,14 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(descriptor, <span class
   <span class="hljs-attr">configurable</span>: <span class="hljs-literal">false</span>
 });
 
-*!*
+
 <span class="hljs-comment">// 不能修改 user.name 或它的标志</span>
 <span class="hljs-comment">// 下面的所有操作都不起作用：</span>
 <span class="hljs-comment">//   user.name = &quot;Pete&quot;</span>
 <span class="hljs-comment">//   delete user.name</span>
 <span class="hljs-comment">//   defineProperty(user, &quot;name&quot;, { value: &quot;Pete&quot; })</span>
 <span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&quot;name&quot;</span>, {<span class="hljs-attr">writable</span>: <span class="hljs-literal">true</span>}); <span class="hljs-comment">// Error</span>
-*/!*</code></pre>
+</code></pre>
 <pre><code class="language-smart">值得注意的例外情况：不可配置但可写的属性的值是可以被更改的。
 
 `configurable: false` 的思想是防止更改属性标志或删除属性标志，而不是更改它的值。</code></pre>

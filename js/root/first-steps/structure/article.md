@@ -12,13 +12,13 @@
 
 例如，我们将 "Hello World" 这条信息一分为二：
 
-```js run no-beautify
+```js no-beautify
 alert('Hello'); alert('World');
 ```
 
 通常，每条语句独占一行，以提高代码的可读性：
 
-```js run no-beautify
+```js no-beautify
 alert('Hello');
 alert('World');
 ```
@@ -29,7 +29,7 @@ alert('World');
 
 下面的代码也是可以运行的：
 
-```js run no-beautify
+```js no-beautify
 alert('Hello')
 alert('World')
 ```
@@ -40,7 +40,7 @@ alert('World')
 
 有很多换行并不是分号的例子，例如：
 
-```js run no-beautify
+```js no-beautify
 alert(3 +
 1
 + 2);
@@ -52,10 +52,10 @@ alert(3 +
 
 这种情况下发生的错误是很难被找到和解决的。
 
-````smart header="一个错误的例子"
+`一个错误的例子"
 如果你好奇地想知道一个这种错误的具体例子，那你可以看看下面这段代码：
 
-```js run
+```js
 [1, 2].forEach(alert)
 ```
 
@@ -63,7 +63,7 @@ alert(3 +
 
 现在我们在代码前面插入一个 `alert` 语句，并且不加分号：
 
-```js run no-beautify
+```js no-beautify
 alert("There will be an error")
 
 [1, 2].forEach(alert)
@@ -72,7 +72,7 @@ alert("There will be an error")
 现在，如果我们运行代码，只有第一个 `alert` 语句的内容被显示了出来，随后我们收到了一个错误！
 
 但是，如果我们在第一个 `alert` 语句末尾加上一个分号，就工作正常了：
-```js run
+```js
 alert("All fine now");
 
 [1, 2].forEach(alert)
@@ -84,7 +84,7 @@ alert("All fine now");
 
 所以，因为没有自动插入分号，第一个例子中的代码被视为了一条简单的语句，我们从引擎看到的是这样的：
 
-```js run no-beautify
+```js no-beautify
 alert("There will be an error")[1, 2].forEach(alert)
 ```
 
@@ -105,7 +105,7 @@ alert("There will be an error")[1, 2].forEach(alert)
 
 就像这样：
 
-```js run
+```js
 // 这行注释独占一行
 alert('Hello');
 
@@ -116,7 +116,7 @@ alert('World'); // 这行注释跟随在语句后面
 
 就像这样:
 
-```js run
+```js
 /* 两个消息的例子。
 这是一个多行注释。
 */
@@ -128,23 +128,23 @@ alert('World');
 
 有时候，可以很方便地临时禁用代码：
 
-```js run
+```js
 /* 注释代码
 alert('Hello');
 */
 alert('World');
 ```
 
-```smart header="使用热键！"
+使用热键！"
 在大多数的编辑器中，一行代码可以使用 `key:Ctrl+/` 热键进行单行注释，诸如 `key:Ctrl+Shift+/` 的热键可以进行多行注释（选择代码，然后按下热键）。对于 Mac 电脑，应使用 `key:Cmd` 而不是 `key:Ctrl`，使用 `key:Option` 而不是 `key:Shift`。
 ```
 
-````warn header="不支持注释嵌套！"
+`"不支持注释嵌套！"
 不要在 `/*...*/` 内嵌套另一个 `/*...*/`。
 
 下面这段代码报错而无法执行：
 
-```js run no-beautify
+```js no-beautify
 /*
   /* 嵌套注释 ?!? */
 */

@@ -1,6 +1,6 @@
 解决方案，分步进行：
 
-```html run
+```html
 <select id="genres">
   <option value="rock">Rock</option>
   <option value="blues" selected>Blues</option>

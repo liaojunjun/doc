@@ -1,7 +1,7 @@
 
 # Reference Type
 
-```warn header="深入的语言特性"
+"深入的语言特性"
 本文所讲的是一个高阶主题，能帮你更好地理解一些边缘情况。
 
 这仅是锦上添花。许多经验丰富的的开发者不甚了了也过得不错。如果你想了解代码运行的本质，那就继续读下去吧。
@@ -11,7 +11,7 @@
 
 例如：
 
-```js run
+```js
 let user = {
   name: "John",
   hi() { alert(this.name); },
@@ -21,9 +21,9 @@ let user = {
 user.hi(); // 正常运行
 
 // 现在让我们基于 name 来选择调用 user.hi 或 user.bye
-*!*
+
 (user.name == "John" ? user.hi : user.bye)(); // Error!
-*/!*
+
 ```
 
 在最后一行有个在 `user.hi` 和 `user.bye` 中做选择的条件（三元）运算符。当前情形下的结果是 `user.hi`。
@@ -55,17 +55,17 @@ user.hi();
 
 如果我们将这些操作放在不同的行，`this` 必定是会丢失的：
 
-```js run
+```js
 let user = {
   name: "John",
   hi() { alert(this.name); }
 }
 
-*!*
+
 // 把获取方法和调用方法拆成两行
 let hi = user.hi;
 hi(); // 报错了，因为 this 的值是 undefined
-*/!*
+
 ```
 
 这里 `hi = user.hi` 把函数赋值给了一个变量，接下来在最后一行它是完全独立的，所以这里没有 `this`。

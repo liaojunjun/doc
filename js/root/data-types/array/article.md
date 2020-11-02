@@ -27,7 +27,7 @@ let fruits = ["Apple", "Orange", "Plum"];
 
 我们可以通过方括号中的数字获取元素：
 
-```js run
+```js
 let fruits = ["Apple", "Orange", "Plum"];
 
 alert( fruits[0] ); // Apple
@@ -49,7 +49,7 @@ fruits[3] = 'Lemon'; // 现在变成 ["Apple", "Orange", "Pear", "Lemon"]
 
 `length` 属性的值是数组中元素的总个数：
 
-```js run
+```js
 let fruits = ["Apple", "Orange", "Plum"];
 
 alert( fruits.length ); // 3
@@ -57,7 +57,7 @@ alert( fruits.length ); // 3
 
 也可以用 `alert` 来显示整个数组。
 
-```js run
+```js
 let fruits = ["Apple", "Orange", "Plum"];
 
 alert( fruits ); // Apple,Orange,Plum
@@ -67,7 +67,7 @@ alert( fruits ); // Apple,Orange,Plum
 
 例如:
 
-```js run no-beautify
+```js no-beautify
 // 混合值
 let arr = [ 'Apple', { name: 'John' }, true, function() { alert('hello'); } ];
 
@@ -79,13 +79,13 @@ arr[3](); // hello
 ```
 
 
-````smart header="以逗号结尾"
+`以逗号结尾"
 数组就像对象一样，可以以逗号结尾：
 ```js 
 let fruits = [
   "Apple", 
   "Orange", 
-  "Plum"*!*,*/!*
+  "Plum",
 ];
 ```
 
@@ -130,7 +130,7 @@ JavaScript 中的数组既可以用作队列，也可以用作栈。它们允许
 `pop`
 : 取出并返回数组的最后一个元素：
 
-    ```js run
+    ```js
     let fruits = ["Apple", "Orange", "Pear"];
 
     alert( fruits.pop() ); // 移除 "Pear" 然后 alert 显示出来
@@ -141,7 +141,7 @@ JavaScript 中的数组既可以用作队列，也可以用作栈。它们允许
 `push`
 : 在数组末端添加元素：
 
-    ```js run
+    ```js
     let fruits = ["Apple", "Orange"];
 
     fruits.push("Pear");
@@ -156,7 +156,7 @@ JavaScript 中的数组既可以用作队列，也可以用作栈。它们允许
 `shift`
 : 取出数组的第一个元素并返回它：
 
-    ```js run
+    ```js
     let fruits = ["Apple", "Orange", "Pear"];
 
     alert( fruits.shift() ); // 移除 Apple 然后 alert 显示出来
@@ -167,7 +167,7 @@ JavaScript 中的数组既可以用作队列，也可以用作栈。它们允许
 `unshift`
 : 在数组的首端添加元素：
 
-    ```js run
+    ```js
     let fruits = ["Orange", "Pear"];
 
     fruits.unshift('Apple');
@@ -177,7 +177,7 @@ JavaScript 中的数组既可以用作队列，也可以用作栈。它们允许
 
 `push` 和 `unshift` 方法都可以一次添加多个元素：
 
-```js run
+```js
 let fruits = ["Apple"];
 
 fruits.push("Orange", "Peach");
@@ -197,7 +197,7 @@ alert( fruits );
 
 例如，它是通过引用来复制的：
 
-```js run
+```js
 let fruits = ["Banana"]
 
 let arr = fruits; // 通过引用复制 (两个变量引用的是相同的数组)
@@ -279,19 +279,19 @@ fruits.pop(); // 从末端取走一个元素
 
 遍历数组最古老的方式就是 `for` 循环：
 
-```js run
+```js
 let arr = ["Apple", "Orange", "Pear"];
 
-*!*
+
 for (let i = 0; i < arr.length; i++) {
-*/!*
+
   alert( arr[i] );
 }
 ```
 
 但对于数组来说还有另一种循环方式，`for..of`：
 
-```js run
+```js
 let fruits = ["Apple", "Orange", "Plum"];
 
 // 遍历数组元素
@@ -304,12 +304,12 @@ for (let fruit of fruits) {
 
 技术上来讲，因为数组也是对象，所以使用 `for..in` 也是可以的：
 
-```js run
+```js
 let arr = ["Apple", "Orange", "Pear"];
 
-*!*
+
 for (let key in arr) {
-*/!*
+
   alert( arr[key] ); // Apple, Orange, Pear
 }
 ```
@@ -331,7 +331,7 @@ for (let key in arr) {
 
 例如，一个数组只有一个元素，但是这个元素的索引值很大，那么这个数组的 `length` 也会很大：
 
-```js run
+```js
 let fruits = [];
 fruits[123] = "Apple";
 
@@ -344,7 +344,7 @@ alert( fruits.length ); // 124
 
 如果我们手动增加它，则不会发生任何有趣的事儿。但是如果我们减少它，数组就会被截断。该过程是不可逆的，下面是例子：
 
-```js run
+```js
 let arr = [1, 2, 3, 4, 5];
 
 arr.length = 2; // 截断到只剩 2 个元素
@@ -362,7 +362,7 @@ alert( arr[3] ); // undefined：被截断的那些数值并没有回来
 这是创建数组的另一种语法：
 
 ```js
-let arr = *!*new Array*/!*("Apple", "Pear", "etc");
+let arr = new Array("Apple", "Pear", "etc");
 ```
 
 它很少被使用，因为方括号 `[]` 更短更简洁。而且这种语法还存在一些诡异的特性。
@@ -371,7 +371,7 @@ let arr = *!*new Array*/!*("Apple", "Pear", "etc");
 
 让我们看看如何搬起石头砸自己的脚:
 
-```js run
+```js
 let arr = new Array(2); // 会创建一个 [2] 的数组吗？
 
 alert( arr[0] ); // undefined！没有元素。
@@ -387,7 +387,7 @@ alert( arr.length ); // length 2
 
 数组里的项也可以是数组。我们可以将其用于多维数组，例如存储矩阵：
 
-```js run
+```js
 let matrix = [
   [1, 2, 3],
   [4, 5, 6],
@@ -404,7 +404,7 @@ alert( matrix[1][1] ); // 最中间的那个数
 例如：
 
 
-```js run
+```js
 let arr = [1, 2, 3];
 
 alert( arr ); // 1,2,3
@@ -413,7 +413,7 @@ alert( String(arr) === '1,2,3' ); // true
 
 此外，我们试试运行一下这个：
 
-```js run
+```js
 alert( [] + 1 ); // "1"
 alert( [1] + 1 ); // "11"
 alert( [1,2] + 1 ); // "1,21"
@@ -423,7 +423,7 @@ alert( [1,2] + 1 ); // "1,21"
 
 当 `"+"` 运算符把一些项加到字符串后面时，加号后面的项也会被转换成字符串，所以下一步就会是这样：
 
-```js run
+```js
 alert( "" + 1 ); // "1"
 alert( "1" + 1 ); // "11"
 alert( "1,2" + 1 ); // "1,21"

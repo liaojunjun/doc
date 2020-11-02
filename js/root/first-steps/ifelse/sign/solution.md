@@ -1,6 +1,6 @@
 
 
-```js run
+```js
 let value = prompt('Type a number', 0);
 
 if (value > 0) {

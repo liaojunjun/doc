@@ -18,7 +18,7 @@ We'll use a regexp `pattern:^(\w+\s?)*$`, it specifies 0 or more such words.
 
 In action:
 
-```js run
+```js
 let regexp = /^(\w+\s?)*$/;
 
 alert( regexp.test("A good string") ); // true
@@ -27,9 +27,9 @@ alert( regexp.test("Bad characters: $@#") ); // false
 
 It seems to work. The result is correct. Although, on certain strings it takes a lot of time. So long that JavaScript engine "hangs" with 100% CPU consumption.
 
-If you run the example below, you probably won't see anything, as JavaScript will just "hang". A web-browser will stop reacting on events, the UI will stop working. After some time it will suggest to reloaad the page. So be careful with this:
+If you the example below, you probably won't see anything, as JavaScript will just "hang". A web-browser will stop reacting on events, the UI will stop working. After some time it will suggest to reloaad the page. So be careful with this:
 
-```js run
+```js
 let regexp = /^(\w+\s?)*$/;
 let str = "An input string that takes a long time or even makes this regexp to hang!";
 
@@ -49,7 +49,7 @@ And, to make things more obvious, let's replace `pattern:\w` with `pattern:\d`. 
 
 <!-- let str = `AnInputStringThatMakesItHang!`; -->
 
-```js run
+```js
 let regexp = /^(\d+)*$/;
 
 let str = "012345678901234567890123456789!";
@@ -188,7 +188,7 @@ Let's rewrite the regular expression as `pattern:^(\w+\s)*\w*` - we'll look for 
 
 This regexp is equivalent to the previous one (matches the same) and works well:
 
-```js run
+```js
 let regexp = /^(\w+\s)*\w*$/;
 let str = "An input string that takes a long time or even makes this regex to hang!";
 
@@ -201,7 +201,7 @@ Now the star `pattern:*` goes after `pattern:\w+\s` instead of `pattern:\w+\s?`.
 
 For example, the previous pattern `pattern:(\w+\s?)*` could match the word `subject:string` as two `pattern:\w+`:
 
-```js run
+```js
 \w+\w+
 string
 ```
@@ -255,7 +255,7 @@ For instance, in the word `subject:JavaScript` it may not only match `match:Java
 
 Here's the comparison of two patterns:
 
-```js run
+```js
 alert( "JavaScript".match(/\w+Script/)); // JavaScript
 alert( "JavaScript".match(/(?=(\w+))\1Script/)); // null
 ```
@@ -271,7 +271,7 @@ There's more about the relation between possessive quantifiers and lookahead in 
 
 Let's rewrite the first example using lookahead to prevent backtracking:
 
-```js run
+```js
 let regexp = /^((?=(\w+))\2\s?)*$/;
 
 alert( regexp.test("A good string") ); // true
@@ -283,7 +283,7 @@ alert( regexp.test(str) ); // false, works and fast!
 
 Here `pattern:\2` is used instead of `pattern:\1`, because there are additional outer parentheses. To avoid messing up with the numbers, we can give the parentheses a name, e.g. `pattern:(?<word>\w+)`.
 
-```js run
+```js
 // parentheses are named ?<word>, referenced as \k<word>
 let regexp = /^((?=(?<word>\w+))\k<word>\s?)*$/;
 

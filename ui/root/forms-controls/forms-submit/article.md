@@ -38,7 +38,7 @@
 ```html
 <form onsubmit="return false">
   <input type="text" size="30" value="Focus here and press enter" />
-  <input type="submit" value="Submit" *!*onclick="alert('click')"*/!*>
+  <input type="submit" value="Submit" onclick="alert('click')">
 </form>
 ```
 

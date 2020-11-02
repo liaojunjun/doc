@@ -43,7 +43,7 @@
 
 例如：
 
-```html run
+```html
 <template id="tmpl">
   <script>
     alert("Hello");
@@ -54,10 +54,10 @@
 <script>
   let elem = document.createElement('div');
 
-*!*
+
   // Clone the template content to reuse it multiple times
   elem.append(tmpl.content.cloneNode(true));
-*/!*
+
 
   document.body.append(elem);
   // Now the script from <template> runs
@@ -66,7 +66,7 @@
 
 让我们用 `<template>` 重写上一章的 Shadow DOM 示例：
 
-```html run untrusted autorun="no-epub" height=60
+```html untrusted autorun="no-epub" height=60
 <template id="tmpl">
   <style> p { font-weight: bold; } </style>
   <p id="message"></p>
@@ -78,9 +78,9 @@
   elem.onclick = function() {
     elem.attachShadow({mode: 'open'});
 
-*!*
+
     elem.shadowRoot.append(tmpl.content.cloneNode(true)); // (*)
-*/!*
+
 
     elem.shadowRoot.getElementById('message').innerHTML = "Hello from the shadows!";
   };

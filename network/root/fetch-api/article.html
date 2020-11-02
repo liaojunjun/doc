@@ -35,17 +35,17 @@
 <p><strong><code>referer</code> 选项允许设置在当前域的任何 <code>Referer</code>，或者移除它。</strong></p>
 <p>要不发送 referer，可以将 <code>referer</code> 设置为空字符串：</p>
 <pre><code class="language-js">fetch(<span class="hljs-string">&#x27;/page&#x27;</span>, {
-*!*
+
   referrer: <span class="hljs-string">&quot;&quot;</span> <span class="hljs-comment">// 没有 Referer header</span>
-*/!*
+
 });</code></pre>
 <p>设置在当前域内的另一个 url：</p>
 <pre><code class="language-js">fetch(<span class="hljs-string">&#x27;/page&#x27;</span>, {
   <span class="hljs-comment">// 假设我们在 https://javascript.info</span>
   <span class="hljs-comment">// 我们可以设置任何 Referer header，但必须是在当前域内的</span>
-*!*
+
   referrer: <span class="hljs-string">&quot;https://javascript.info/anotherpage&quot;</span>
-*/!*
+
 });</code></pre>
 <p><strong><code>referrerPolicy</code> 选项为 <code>Referer</code> 设置一般的规则。</strong></p>
 <p>请求分为 3 种类型：</p>
@@ -204,9 +204,9 @@ fetch(&#x27;http://site.com/file&#x27;, {
   fetch(<span class="hljs-string">&#x27;/analytics&#x27;</span>, {
     <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
     <span class="hljs-attr">body</span>: <span class="hljs-string">&quot;statistics&quot;</span>,
-*!*
+
     keepalive: <span class="hljs-literal">true</span>
-*/!*
+
   });
 };</code></pre>
 <p>通常，当一个文档被卸载时（unloaded），所有相关的网络请求都会被中止。但是，<code>keepalive</code> 选项告诉浏览器，即使在离开页面后，也要在后台执行请求。所以，此选项对于我们的请求成功至关重要。</p>

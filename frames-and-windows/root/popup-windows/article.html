@@ -92,9 +92,9 @@ alert(newWindow.location.href); <span class="hljs-comment">// (*) about:blank，
 
 newWindow.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">let</span> html = <span class="hljs-string">`&lt;div style=&quot;font-size:30px&quot;&gt;Welcome!&lt;/div&gt;`</span>;
-*!*
+
   newWindow.document.body.insertAdjacentHTML(<span class="hljs-string">&#x27;afterbegin&#x27;</span>, html);
-*/!*
+
 };</code></pre>
 <p>请注意：在刚刚进行了 <code>window.open</code> 的时候，新窗口还没有加载完成。我们可以通过 <code>(*)</code> 行中的 <code>alert</code> 证实这一点。因此，我们需要等待 <code>onload</code> 以对新窗口进行更改。我们也可以对 <code>newWin.document</code> 使用 <code>DOMContentLoaded</code> 处理程序。</p>
 <pre><code class="language-warn">只有在窗口是同源的时，窗口才能自由访问彼此的内容（`相同的协议://domain:port`）。

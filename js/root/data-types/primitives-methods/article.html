@@ -55,7 +55,7 @@ alert( str.toUpperCase() ); <span class="hljs-comment">// HELLO</span></code></p
 
 alert( n.toFixed(<span class="hljs-number">2</span>) ); <span class="hljs-comment">// 1.23</span></code></pre>
 <p>我们将在后面 <a href="info:number">info:number</a> 和 <a href="info:string">info:string</a> 章节中看到更多具体的方法。</p>
-<p>````warn header=&quot;构造器 <code>String/Number/Boolean</code> 仅供内部使用&quot;
+<p>`&quot;构造器 <code>String/Number/Boolean</code> 仅供内部使用&quot;
 像 Java 这样的一些语言允许我们使用 <code>new Number(1)</code> 或 <code>new Boolean(false)</code> 等语法，明确地为原始类型创建“对象包装器”。</p>
 <p>在 JavaScript 中，由于历史原因，这也是可以的，但极其 <strong>不推荐</strong>。因为这样会出问题。</p>
 <p>例如：</p>
@@ -73,12 +73,12 @@ alert( <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">new</
 <pre><code class="language-js"><span class="hljs-keyword">let</span> num = <span class="hljs-built_in">Number</span>(<span class="hljs-string">&quot;123&quot;</span>); <span class="hljs-comment">// 将字符串转成数字</span></code></pre>
 <pre><code>
 
-````warn header=&quot;null/undefined 没有任何方法&quot;
+`&quot;null/undefined 没有任何方法&quot;
 特殊的原始类型 `null` 和 `undefined` 是例外。它们没有对应的“对象包装器”，也没有提供任何方法。从某种意义上说，它们是“最原始的”。
 
 尝试访问这种值的属性会导致错误：
 
-```js run
+```js
 alert(null.test); // error</code></pre>
 <h2 id="总结">总结</h2>
 <ul>

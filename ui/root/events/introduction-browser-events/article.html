@@ -34,7 +34,7 @@
 <h3 id="html-特性">HTML 特性</h3>
 <p>处理程序可以设置在 HTML 中名为 <code>on&lt;event&gt;</code> 的特性（attribute）中。</p>
 <p>例如，要为一个 <code>input</code> 分配一个 <code>click</code> 处理程序，我们可以使用 <code>onclick</code>，像这样；</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Click me&quot;</span> *!*<span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;)&quot;</span>*/!* <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span></code></pre>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Click me&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;)&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span></code></pre>
 <p>在鼠标点击时，<code>onclick</code> 中的代码就会运行。</p>
 <p>请注意，在 <code>onclick</code> 中，我们使用单引号，因为特性本身使用的是双引号。如果我们忘记了代码是在特性中的，而使用了双引号，像这样：<code>onclick=&quot;alert(&quot;Click!&quot;)&quot;</code>，那么它就无法正确运行。</p>
 <p>HTML 特性不是编写大量代码的好位置，因此我们最好创建一个 JavaScript 函数，然后在 HTML 特性中调用这个函数。</p>
@@ -47,34 +47,34 @@
   }
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
-<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> *!*<span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;countRabbits()&quot;</span>*/!* <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Count rabbits!&quot;</span>&gt;</span></code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;countRabbits()&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Count rabbits!&quot;</span>&gt;</span></code></pre>
 <p>我们知道，HTML 特性名是大小写不敏感的，所以 <code>ONCLICK</code> 和 <code>onClick</code> 以及 <code>onCLICK</code> 都一样可以运行。但是特性通常是小写的：<code>onclick</code>。</p>
 <h3 id="dom-属性">DOM 属性</h3>
 <p>我们可以使用 DOM 属性（property）<code>on&lt;event&gt;</code> 来分配处理程序。</p>
 <p>例如 <code>elem.onclick</code>：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Click me&quot;</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   elem.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     alert(<span class="hljs-string">&#x27;Thank you&#x27;</span>);
   };
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>如果一个处理程序是通过 HTML 特性（attribute）分配的，那么随后浏览器读取它，并从特性的内容创建一个新函数，并将这个函数写入 DOM 属性（property）。</p>
 <p>因此，这种方法实际上与前一种方法相同。</p>
 <p>这两段代码工作相同：</p>
 <ol>
 <li><p>只有 HTML：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> *!*<span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;)&quot;</span>*/!* <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Button&quot;</span>&gt;</span></code></pre>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;)&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Button&quot;</span>&gt;</span></code></pre>
 </li>
 <li><p>HTML + JS：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Button&quot;</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   button.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     alert(<span class="hljs-string">&#x27;Click!&#x27;</span>);
   };
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 </li>
 </ol>
@@ -83,11 +83,11 @@
 <p>在下面这个示例中，我们使用 JavaScript 添加了一个处理程序，覆盖了现有的处理程序：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;Before&#x27;)&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Click me&quot;</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   elem.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// 覆盖了现有的处理程序</span>
     alert(<span class="hljs-string">&#x27;After&#x27;</span>); <span class="hljs-comment">// 只会显示此内容</span>
   };
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>要移除一个处理程序 —— 赋值 <code>elem.onclick = null</code>。</p>
 <h2 id="访问元素：this">访问元素：this</h2>
@@ -114,9 +114,9 @@ button.onclick = sayThanks();</code></pre>
 <p>这个区别很容易解释。当浏览器读取 HTML 特性（attribute）时，浏览器将会使用 <strong>特性中的内容</strong> 创建一个处理程序。</p>
 <p>所以，标记（markup）会生成下面这个属性：</p>
 <pre><code class="language-js">button.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-*!*
+
   sayThanks(); <span class="hljs-comment">// &lt;-- 特性（attribute）中的内容变到了这里</span>
-*/!*
+
 };</code></pre>
 <p><strong>不要对处理程序使用 <code>setAttribute</code>。</strong></p>
 <p>这样的调用会失效：</p>
@@ -183,14 +183,14 @@ input.removeEventListener(&quot;click&quot;, handler);
     alert(<span class="hljs-string">&#x27;Thanks again!&#x27;</span>);
   }
 
-*!*
+
   elem.onclick = <span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;Hello&quot;</span>);
   elem.addEventListener(<span class="hljs-string">&quot;click&quot;</span>, handler1); <span class="hljs-comment">// Thanks!</span>
   elem.addEventListener(<span class="hljs-string">&quot;click&quot;</span>, handler2); <span class="hljs-comment">// Thanks again!</span>
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>正如我们在上面这个例子中所看到的，我们可以 <strong>同时</strong> 使用 DOM 属性和 <code>addEventListener</code> 来设置处理程序。但通常我们只使用其中一种方式。</p>
-<p>````warn header=&quot;对于某些事件，只能通过 <code>addEventListener</code> 设置处理程序&quot;
+<p>`&quot;对于某些事件，只能通过 <code>addEventListener</code> 设置处理程序&quot;
 有些事件无法通过 DOM 属性进行分配。只能使用 <code>addEventListener</code>。</p>
 <p>例如，<code>DOMContentLoaded</code> 事件，该事件在文档加载完成并且 DOM 构建完成时触发。</p>
 <pre><code class="language-js"><span class="hljs-comment">// 永远不会运行</span>
@@ -211,11 +211,11 @@ input.removeEventListener(&quot;click&quot;, handler);
 
 下面是一个从 `event` 对象获取鼠标指针的坐标的示例：
 
-```html run
+```html
 &lt;input type=&quot;button&quot; value=&quot;Click me&quot; id=&quot;elem&quot;&gt;
 
 &lt;script&gt;
-  elem.onclick = function(*!*event*/!*) {
+  elem.onclick = function(event) {
     // 显示事件类型、元素和点击的坐标
     alert(event.type + &quot; at &quot; + event.currentTarget);
     alert(&quot;Coordinates: &quot; + event.clientX + &quot;:&quot; + event.clientY);
@@ -240,7 +240,7 @@ input.removeEventListener(&quot;click&quot;, handler);
 如果我们在 HTML 中分配了一个处理程序，那么我们也可以使用 `event` 对象，像这样：
 
 ```html autorun height=60
-&lt;input type=&quot;button&quot; onclick=&quot;*!*alert(event.type)*/!*&quot; value=&quot;Event type&quot;&gt;
+&lt;input type=&quot;button&quot; onclick=&quot;alert(event.type)&quot; value=&quot;Event type&quot;&gt;
 ```
 
 这是可能的，因为当浏览器读取特性（attribute）时，它会创建像这样的处理程序：`function(event) { alert(event.type) }`。也就是说：它的第一个参数是 `&quot;event&quot;`，而主体取自于该特性（attribute）。</code></pre>
@@ -276,11 +276,11 @@ input.removeEventListener(&quot;click&quot;, handler);
     }
   }
 
-*!*
+
   <span class="hljs-keyword">let</span> menu = <span class="hljs-keyword">new</span> Menu();
   elem.addEventListener(<span class="hljs-string">&#x27;mousedown&#x27;</span>, menu);
   elem.addEventListener(<span class="hljs-string">&#x27;mouseup&#x27;</span>, menu);
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>这里，同一个对象处理两个事件。请注意，我们需要使用 <code>addEventListener</code> 来显示设置事件，以指明要监听的事件。这里的 <code>menu</code> 对象只监听 <code>mousedown</code> 和 <code>mouseup</code>，而没有任何其他类型的事件。</p>
 <p><code>handleEvent</code> 方法不必通过自身完成所有的工作。它可以调用其他特定于事件的方法，例如：</p>

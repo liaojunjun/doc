@@ -44,21 +44,21 @@ alert( user.age ); <span class="hljs-comment">// 30</span></code></pre>
 <p>列表中的最后一个属性应以逗号结尾：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
   <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
-  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>*!*,*/!*
+  <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>,
 }</code></pre>
 <p>这叫做尾随（trailing）或悬挂（hanging）逗号。这样便于我们添加、删除和移动属性，因为所有的行都是相似的。</p>
 <pre><code class="language-smart">请注意：用 `const` 声明的对象 **能** 被修改。
 
 例如：
 
-```js run
+```js
 const user = {
   name: &quot;John&quot;
 };
 
-*!*
+
 user.name = &quot;Pete&quot;; // (*)
-*/!*
+
 
 alert(user.name); // Pete
 ```
@@ -116,9 +116,9 @@ alert( user.key ) <span class="hljs-comment">// undefined</span></code></pre>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> fruit = prompt(<span class="hljs-string">&quot;Which fruit to buy?&quot;</span>, <span class="hljs-string">&quot;apple&quot;</span>);
 
 <span class="hljs-keyword">let</span> bag = {
-*!*
+
   [fruit]: <span class="hljs-number">5</span>, <span class="hljs-comment">// 属性名是从 fruit 变量中得到的</span>
-*/!*
+
 };
 
 alert( bag.apple ); <span class="hljs-comment">// 5 如果 fruit=&quot;apple&quot;</span></code></pre>
@@ -154,13 +154,13 @@ alert(user.name); <span class="hljs-comment">// John</span></code></pre>
 <p>在上面的例子中，属性名跟变量名一样。这种通过变量生成属性的应用场景很常见，在这有一种特殊的 <strong>属性值缩写</strong> 方法，使属性名变得更短。</p>
 <p>可以用 <code>name</code> 来代替 <code>name:name</code> 像下面那样：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeUser</span>(<span class="hljs-params">name, age</span>) </span>{
-*!*
+
   <span class="hljs-keyword">return</span> {
     name, <span class="hljs-comment">// 与 name: name 相同</span>
     age,  <span class="hljs-comment">// 与 age: age 相同</span>
     <span class="hljs-comment">// ...</span>
   };
-*/!*
+
 }</code></pre>
 <p>我们可以把属性名简写方式和正常方式混用：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
@@ -213,7 +213,7 @@ alert( <span class="hljs-string">&quot;blabla&quot;</span> <span class="hljs-key
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = { <span class="hljs-attr">age</span>: <span class="hljs-number">30</span> };
 
 <span class="hljs-keyword">let</span> key = <span class="hljs-string">&quot;age&quot;</span>;
-alert( *!*key*<span class="hljs-regexp">/!* in user ); /</span><span class="hljs-regexp">/ true，属性 &quot;age&quot; 存在</span></code></pre>
+alert( key*<span class="hljs-regexp">/!* in user ); /</span><span class="hljs-regexp">/ true，属性 &quot;age&quot; 存在</span></code></pre>
 <p>为何会有 <code>in</code> 运算符呢？与 <code>undefined</code> 进行比较来判断还不够吗？</p>
 <p>确实，大部分情况下与 <code>undefined</code> 进行比较来判断就可以了。但有一个例外情况，这种比对方式会有问题，但 <code>in</code> 运算符的判断结果仍是对的。</p>
 <p>那就是属性存在，但存储的值是 <code>undefined</code> 的时候：</p>
@@ -259,11 +259,11 @@ alert( <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-keywo
   <span class="hljs-string">&quot;1&quot;</span>: <span class="hljs-string">&quot;USA&quot;</span>
 };
 
-*!*
+
 <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> code <span class="hljs-keyword">in</span> codes) {
   alert(code); <span class="hljs-comment">// 1, 41, 44, 49</span>
 }
-*/!*</code></pre>
+</code></pre>
 <p>对象可用于面向用户的建议选项列表。如果我们的网站主要面向德国观众，那么我们可能希望 <code>49</code> 排在第一。</p>
 <p>但如果我们执行代码，会看到完全不同的现象：</p>
 <ul>
@@ -275,7 +275,7 @@ alert( <span class="hljs-string">&quot;test&quot;</span> <span class="hljs-keywo
 
 所以，&quot;49&quot; 是一个整数属性名，因为我们把它转换成整数，再转换回来，它还是一样的。但是 &quot;+49&quot; 和 &quot;1.2&quot; 就不行了：
 
-```js run
+```js
 // Math.trunc 是内置的去除小数部分的方法。
 alert( String(Math.trunc(Number(&quot;49&quot;))) ); // &quot;49&quot;，相同，整数属性
 alert( String(Math.trunc(Number(&quot;+49&quot;))) ); // &quot;49&quot;，不同于 &quot;+49&quot; ⇒ 不是整数属性
@@ -288,9 +288,9 @@ alert( String(Math.trunc(Number(&quot;1.2&quot;))) ); // &quot;1&quot;，不同�
 };
 user.age = <span class="hljs-number">25</span>; <span class="hljs-comment">// 增加一个</span>
 
-*!*
+
 <span class="hljs-comment">// 非整数属性是按照创建的顺序来排列的</span>
-*/!*
+
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> prop <span class="hljs-keyword">in</span> user) {
   alert( prop ); <span class="hljs-comment">// name, surname, age</span>
 }</code></pre>

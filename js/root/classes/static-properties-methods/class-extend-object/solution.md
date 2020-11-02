@@ -4,12 +4,12 @@
 
 下面是修复后的代码：
 
-```js run
+```js
 class Rabbit extends Object {
   constructor(name) {
-*!*
+
     super(); // 需要在继承时调用父类的 constructor
-*/!*
+
     this.name = name;
   }
 }
@@ -30,7 +30,7 @@ alert( rabbit.hasOwnProperty('name') ); // true
 
 在我们的例子里，对于 `class Rabbit extends Object`，它意味着：
 
-```js run
+```js
 class Rabbit extends Object {}
 
 alert( Rabbit.prototype.__proto__ === Object.prototype ); // (1) true
@@ -39,30 +39,30 @@ alert( Rabbit.__proto__ === Object ); // (2) true
 
 所以，现在 `Rabbit` 可以通过 `Rabbit` 访问 `Object` 的静态方法，像这样：
 
-```js run
+```js
 class Rabbit extends Object {}
 
-*!*
+
 // 通常我们调用 Object.getOwnPropertyNames
 alert ( Rabbit.getOwnPropertyNames({a: 1, b: 2})); // a,b
-*/!*
+
 ```
 
 但是如果我们没有 `extends Object`，那么 `Rabbit.__proto__` 将不会被设置为 `Object`。
 
 下面是示例：
 
-```js run
+```js
 class Rabbit {}
 
 alert( Rabbit.prototype.__proto__ === Object.prototype ); // (1) true
 alert( Rabbit.__proto__ === Object ); // (2) false (!)
 alert( Rabbit.__proto__ === Function.prototype ); // true，所有函数都是默认如此
 
-*!*
+
 // error，Rabbit 中没有这样的函数
 alert ( Rabbit.getOwnPropertyNames({a: 1, b: 2})); // Error
-*/!*
+
 ```
 
 所以，在这种情况下，`Rabbit` 没有提供对 `Object` 的静态方法的访问。

@@ -4,12 +4,12 @@
 
 <span class="hljs-keyword">let</span> users = [ john, pete, mary ];
 
-*!*
+
 <span class="hljs-keyword">let</span> usersMapped = users.map(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> ({
   <span class="hljs-attr">fullName</span>: <span class="hljs-string">`<span class="hljs-subst">${user.name}</span> <span class="hljs-subst">${user.surname}</span>`</span>,
   <span class="hljs-attr">id</span>: user.id
 }));
-*/!*
+
 
 <span class="hljs-comment">/*
 usersMapped = [
@@ -23,13 +23,13 @@ alert( usersMapped[<span class="hljs-number">0</span>].id ); <span class="hljs-c
 alert( usersMapped[<span class="hljs-number">0</span>].fullName ); <span class="hljs-comment">// John Smith</span></code></pre>
 <p>请注意，在箭头函数中，我们需要使用额外的括号。 </p>
 <p>我们不能这样写：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> usersMapped = users.map(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> *!*{*/!*
+<pre><code class="language-js"><span class="hljs-keyword">let</span> usersMapped = users.map(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> {
   fullName: <span class="hljs-string">`<span class="hljs-subst">${user.name}</span> <span class="hljs-subst">${user.surname}</span>`</span>,
   <span class="hljs-attr">id</span>: user.id
 });</code></pre>
 <p>我们记得，有两种箭头函数的写法：直接返回值 <code>value =&gt; expr</code> 和带主体的 <code>value =&gt; {...}</code>。</p>
 <p>JavaScript 在这里会把 <code>{</code> 视为函数体的开始，而不是对象的开始。解决方法是将它们包装在普通括号 <code>()</code> 中：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> usersMapped = users.map(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> *!*({*/!*
+<pre><code class="language-js"><span class="hljs-keyword">let</span> usersMapped = users.map(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> ({
   fullName: <span class="hljs-string">`<span class="hljs-subst">${user.name}</span> <span class="hljs-subst">${user.surname}</span>`</span>,
   <span class="hljs-attr">id</span>: user.id
 }));</code></pre>

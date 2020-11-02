@@ -2,7 +2,7 @@
 
 例如，如果我们不触碰默认的 `"prototype"`，那么这段代码肯定可以正常运行：
 
-```js run
+```js
 function User(name) {
   this.name = name;
 }
@@ -19,13 +19,13 @@ alert( user2.name ); // Pete (worked!)
 
 例如：
 
-```js run
+```js
 function User(name) {
   this.name = name;
 }
-*!*
+
 User.prototype = {}; // (*)
-*/!*
+
 
 let user = new User('John');
 let user2 = new user.constructor('Pete');

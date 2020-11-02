@@ -9,9 +9,9 @@
 let links = document.querySelectorAll('a');
 
 for (let link of links) {
-*!*
+
   let href = link.getAttribute('href');
-*/!*
+
   if (!href) continue; // 没有特性
 
   if (!href.includes('://')) continue; // 没有协议

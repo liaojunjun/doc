@@ -31,30 +31,30 @@ n = 12.345;
 
     我们可以通过除以 0 来得到它：
 
-    ```js run
+    ```js
     alert( 1 / 0 ); // Infinity
     ```
 
     或者在代码中直接使用它：
 
-    ```js run
+    ```js
     alert( Infinity ); // Infinity
     ```
 - `NaN` 代表一个计算错误。它是一个不正确的或者一个未定义的数学操作所得到的结果，比如：
 
-    ```js run
+    ```js
     alert( "not a number" / 2 ); // NaN，这样的除法是错误的
     ```
 
     `NaN` 是粘性的。任何对 `NaN` 的进一步操作都会返回 `NaN`：
 
-    ```js run
+    ```js
     alert( "not a number" / 2 + 5 ); // NaN
     ```
 
     所以，如果在数学表达式中有一个 `NaN`，会被传播到最终结果。
 
-```smart header="数学运算是安全的"
+数学运算是安全的"
 在 JavaScript 中做数学运算是安全的。我们可以做任何事：除以 0，将非数字字符串视为数字，等等。
 
 脚本永远不会因为一个致命的错误（“死亡”）而停止。最坏的情况下，我们会得到 `NaN` 的结果。
@@ -82,7 +82,7 @@ const bigInt = 1234567890123456789012345678901234567890n;
 由于很少需要 `BigInt` 类型的数字，我们在这没有对其进行讲解，我们在单独的章节 <info:bigint> 中专门对其进行了介绍。当你需要使用那样的大数字的时候，可以去阅读该章节。
 
 
-```smart header="兼容性问题"
+兼容性问题"
 目前 Firefox/Chrome/Edge/Safari 已经支持 `BigInt` 了，但 IE 还没有。
 ```
 
@@ -108,26 +108,26 @@ let phrase = `can embed another ${str}`;
 
 反引号是 **功能扩展** 引号。它们允许我们通过将变量和表达式包装在 `${…}` 中，来将它们嵌入到字符串中。例如：
 
-```js run
+```js
 let name = "John";
 
 // 嵌入一个变量
-alert( `Hello, *!*${name}*/!*!` ); // Hello, John!
+alert( `Hello, ${name}!` ); // Hello, John!
 
 // 嵌入一个表达式
-alert( `the result is *!*${1 + 2}*/!*` ); // the result is 3
+alert( `the result is ${1 + 2}` ); // the result is 3
 ```
 
 `${…}` 内的表达式会被计算，计算结果会成为字符串的一部分。可以在 `${…}` 内放置任何东西：诸如名为 `name` 的变量，或者诸如 `1 + 2` 的算数表达式，或者其他一些更复杂的。
 
 需要注意的是，这仅仅在反引号内有效，其他引号不允许这种嵌入。
-```js run
+```js
 alert( "the result is ${1 + 2}" ); // the result is ${1 + 2}（使用双引号则不会计算 ${…} 中的内容）
 ```
 
 我们会在 <info:string> 一节中学习字符串的更多细节。
 
-```smart header="JavaScript 中没有 *character* 类型。"
+JavaScript 中没有 *character* 类型。"
 在一些语言中，单个字符有一个特殊的 "character" 类型，在 C 语言和 Java 语言中被称为 "char"。
 
 在 JavaScript 中没有这种类型。只有一种 `string` 类型，一个字符串可以包含零个（为空）、一个或多个字符。
@@ -148,7 +148,7 @@ let ageFieldChecked = false; // no, age field is not checked
 
 布尔值也可作为比较的结果：
 
-```js run
+```js
 let isGreater = 4 > 1;
 
 alert( isGreater ); // true（比较的结果是 "yes"）
@@ -180,7 +180,7 @@ JavaScript 中的 `null` 仅仅是一个代表“无”、“空”或“值未�
 
 如果一个变量已被声明，但未被赋值，那么它的值就是 `undefined`：
 
-```js run
+```js
 let age;
 
 alert(age); // 弹出 "undefined"
@@ -188,7 +188,7 @@ alert(age); // 弹出 "undefined"
 
 从技术上讲，可以显式地将 `undefined` 赋值给变量：
 
-```js run
+```js
 let age = 100;
 
 // 将值修改为 undefined
@@ -235,17 +235,17 @@ typeof "foo" // "string"
 
 typeof Symbol("id") // "symbol"
 
-*!*
+
 typeof Math // "object"  (1)
-*/!*
 
-*!*
+
+
 typeof null // "object"  (2)
-*/!*
 
-*!*
+
+
 typeof alert // "function"  (3)
-*/!*
+
 ```
 
 最后三行可能需要额外的说明：

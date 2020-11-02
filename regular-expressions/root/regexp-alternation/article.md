@@ -10,7 +10,7 @@
 
 用例如下：
 
-```js run
+```js
 let reg = /html|php|css|java(script)?/gi;
 
 let str = "First HTML appeared, then CSS, then JavaScript";
@@ -51,7 +51,7 @@ alert( str.match(reg) ); // 'HTML', 'CSS', 'JavaScript'
 快大功告成了，但仍然存在一个问题。选择符 `|` 在 `pattern:[01]\d` 和 `pattern:2[0-3]:[0-5]\d` 之间。这是错误的，因为它只匹配符号左侧或右侧任一表达式。
 
 
-```js run
+```js
 let reg = /[01]\d|2[0-3]:[0-5]\d/g;
 
 alert("12".match(reg)); // 12 (matched [01]\d)
@@ -63,7 +63,7 @@ alert("12".match(reg)); // 12 (matched [01]\d)
 
 以下为正确版本：
 
-```js run
+```js
 let reg = /([01]\d|2[0-3]):[0-5]\d/g;
 
 alert("00:00 10:10 23:59 25:99 1:2".match(reg)); // 00:00,10:10,23:59

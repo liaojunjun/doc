@@ -33,7 +33,7 @@ elem.style.top = top; // 例如 '456px'
 
 例如：
 
-```html run
+```html
 <body class="main page">
   <script>
     alert(document.body.className); // main page
@@ -49,13 +49,11 @@ elem.style.top = top; // 例如 '456px'
 
 例如：
 
-```html run
+```html
 <body class="main page">
   <script>
-*!*
     // 添加一个 class
-    document.body.classList.add('article');
-*/!*
+    document.body.classList.add("article");
 
     alert(document.body.className); // main page article
   </script>
@@ -72,7 +70,7 @@ elem.style.top = top; // 例如 '456px'
 
 此外，`classList` 是可迭代的，因此，我们可以像下面这样列出所有类：
 
-```html run
+```html
 <body class="main page">
   <script>
     for (let name of document.body.classList) {
@@ -96,20 +94,18 @@ border-left-width => elem.style.borderLeftWidth
 
 例如：
 
-```js run
-document.body.style.backgroundColor = prompt('background color?', 'green');
+```js
+document.body.style.backgroundColor = prompt("background color?", "green");
 ```
 
-````smart header="前缀属性"
-像 `-moz-border-radius` 和 `-webkit-border-radius` 这样的浏览器前缀属性，也遵循同样的规则：连字符 `-` 表示大写。
+`前缀属性" 像 `-moz-border-radius`和`-webkit-border-radius`这样的浏览器前缀属性，也遵循同样的规则：连字符`-` 表示大写。
 
 例如：
 
 ```js
-button.style.MozBorderRadius = '5px';
-button.style.WebkitBorderRadius = '5px';
+button.style.MozBorderRadius = "5px";
+button.style.WebkitBorderRadius = "5px";
 ```
-````
 
 ## 重置样式属性
 
@@ -119,26 +115,25 @@ button.style.WebkitBorderRadius = '5px';
 
 然后，稍后我们可能想要移除 `style.display`，就像它没有被设置一样。这里不应该使用 `delete elem.style.display`，而应该使用 `elem.style.display = ""` 将其赋值为空。
 
-```js run
+```js
 // 如果我们运行这段代码，<body> 将会闪烁
 document.body.style.display = "none"; // 隐藏
 
-setTimeout(() => document.body.style.display = "", 1000); // 恢复正常
+setTimeout(() => (document.body.style.display = ""), 1000); // 恢复正常
 ```
 
 如果我们将 `display` 设置为空字符串，那么浏览器通常会应用 CSS 类以及内置样式，就好像根本没有这样的 `style` 属性一样。
 
-````smart header="用 `style.cssText` 进行完全的重写"
-通常，我们使用 `style.*` 来对各个样式属性进行赋值。我们不能像这样的 `div.style="color: red; width: 100px"` 设置完整的属性，因为 `div.style` 是一个对象，并且它是只读的。
+`用 `style.cssText`进行完全的重写" 通常，我们使用`style.\*`来对各个样式属性进行赋值。我们不能像这样的`div.style="color: red; width: 100px"`设置完整的属性，因为`div.style` 是一个对象，并且它是只读的。
 
 想要以字符串的形式设置完整的样式，可以使用特殊属性 `style.cssText`：
 
-```html run
+```html
 <div id="div">Button</div>
 
 <script>
   // 我们可以在这里设置特殊的样式标记，例如 "important"
-  div.style.cssText=`color: red !important;
+  div.style.cssText = `color: red !important;
     background-color: yellow;
     width: 100px;
     text-align: center;
@@ -151,7 +146,6 @@ setTimeout(() => document.body.style.display = "", 1000); // 恢复正常
 我们很少使用这个属性，因为这样的赋值会删除所有现有样式：它不是进行添加，而是替换它们。有时可能会删除所需的内容。但是，当我们知道我们不会删除现有样式时，可以安全地将其用于新元素。
 
 可以通过设置一个特性（attribute）来实现同样的效果：`div.setAttribute('style', 'color: red...')`。
-````
 
 ## 注意单位
 
@@ -159,17 +153,15 @@ setTimeout(() => document.body.style.display = "", 1000); // 恢复正常
 
 例如，我们不应该将 `elem.style.top` 设置为 `10`，而应将其设置为 `10px`。否则设置会无效：
 
-```html run height=100
+```html
 <body>
   <script>
-  *!*
     // 无效！
     document.body.style.margin = 20;
     alert(document.body.style.margin); // ''（空字符串，赋值被忽略了）
-  */!*
 
     // 现在添加了 CSS 单位（px）— 生效了
-    document.body.style.margin = '20px';
+    document.body.style.margin = "20px";
     alert(document.body.style.margin); // 20px
 
     alert(document.body.style.marginTop); // 20px
@@ -192,18 +184,20 @@ setTimeout(() => document.body.style.display = "", 1000); // 恢复正常
 
 例如，这里的 `style` 看不到 margin：
 
-```html run height=60 no-beautify
+```html height=60 no-beautify
 <head>
-  <style> body { color: red; margin: 5px } </style>
+  <style>
+    body {
+      color: red;
+      margin: 5px;
+    }
+  </style>
 </head>
 <body>
-
   The red text
   <script>
-*!*
     alert(document.body.style.color); // 空的
     alert(document.body.style.marginTop); // 空的
-*/!*
   </script>
 </body>
 ```
@@ -215,38 +209,39 @@ setTimeout(() => document.body.style.display = "", 1000); // 恢复正常
 语法如下：
 
 ```js
-getComputedStyle(element, [pseudo])
+getComputedStyle(element, [pseudo]);
 ```
 
-element
-: 需要被读取样式值的元素。
+element: 需要被读取样式值的元素。
 
-pseudo
-: 伪元素（如果需要），例如 `::before`。空字符串或无参数则意味着元素本身。
+pseudo: 伪元素（如果需要），例如 `::before`。空字符串或无参数则意味着元素本身。
 
 结果是一个具有样式属性的对象，像 `elem.style`，但现在对于所有的 CSS 类来说都是如此。
 
 例如：
 
-```html run height=100
+```html
 <head>
-  <style> body { color: red; margin: 5px } </style>
+  <style>
+    body {
+      color: red;
+      margin: 5px;
+    }
+  </style>
 </head>
 <body>
-
   <script>
     let computedStyle = getComputedStyle(document.body);
 
     // 现在我们可以读取它的 margin 和 color 了
 
-    alert( computedStyle.marginTop ); // 5px
-    alert( computedStyle.color ); // rgb(255, 0, 0)
+    alert(computedStyle.marginTop); // 5px
+    alert(computedStyle.color); // rgb(255, 0, 0)
   </script>
-
 </body>
 ```
 
-```smart header="计算值和解析值"
+计算值和解析值"
 在 [CSS](https://drafts.csswg.org/cssom/#resolved-values) 中有两个概念：
 
 1. **计算 (computed)** 样式值是所有 CSS 规则和 CSS 继承都应用后的值，这是 CSS 级联（cascade）的结果。它看起来像 `height:1em` 或 `font-size:125%`。
@@ -255,16 +250,14 @@ pseudo
 很久以前，创建了 `getComputedStyle` 来获取计算（computed）值，但事实证明，解析（resolved）值要方便得多，标准也因此发生了变化。
 
 所以，现在 `getComputedStyle` 实际上返回的是属性的解析值（resolved）。
-```
 
-````warn header="`getComputedStyle` 需要完整的属性名"
-我们应该总是使用我们想要的确切的属性，例如 `paddingLeft`、`marginTop` 或 `borderTopWidth`。否则，就不能保证正确的结果。
+`getComputedStyle` 需要完整的属性名" 我们应该总是使用我们想要的确切的属性，例如 `paddingLeft`、`marginTop` 或 `borderTopWidth`。否则，就不能保证正确的结果。
 
 例如，如果有 `paddingLeft/paddingTop` 属性，那么对于 `getComputedStyle(elem).padding`，我们会得到什么？什么都没有，或者是从已知的 padding 中“生成”的值？这里没有标准的规则。
 
 还有其他不一致的地方。例如，在下面这个例子中，某些浏览器（Chrome）会显示 `10px`，而某些浏览器（Firefox）则没有：
 
-```html run
+```html
 <style>
   body {
     margin: 10px;
@@ -275,15 +268,13 @@ pseudo
   alert(style.margin); // 在 Firefox 中是空字符串
 </script>
 ```
-````
 
-```smart header="应用于 `:visited` 链接的样式被隐藏了！"
+应用于 `:visited` 链接的样式被隐藏了！"
 可以使用 CSS 伪类 `:visited` 对被访问过的链接进行着色。
 
 但 `getComputedStyle` 没有给出访问该颜色的方式，因为否则，任意页面都可以通过在页面上创建它，并通过检查样式来确定用户是否访问了某链接。
 
 JavaScript 看不到 `:visited` 所应用的样式。此外，CSS 中也有一个限制，即禁止在 `:visited` 中应用更改几何形状的样式。这是为了确保一个不好的页面无法测试链接是否被访问，进而窥探隐私。
-```
 
 ## 总结
 

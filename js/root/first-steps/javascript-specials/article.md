@@ -6,20 +6,20 @@
 
 语句用分号分隔：
 
-```js run no-beautify
+```js no-beautify
 alert('Hello'); alert('World');
 ```
 
 通常，换行符也被视为分隔符，因此下面的例子也能正常运行：
 
-```js run no-beautify
+```js no-beautify
 alert('Hello')
 alert('World')
 ```
 
 这就是所谓的「自动分号插入」。但有时它不起作用，例如：
 
-```js run
+```js
 alert("There will be an error after this message")
 
 [1, 2].forEach(alert)
@@ -116,7 +116,7 @@ typeof function(){} == "function" // 函数被特殊对待
 
 举个例子：
 
-```js run
+```js
 let userName = prompt("Your name?", "Alice");
 let isTeaWanted = confirm("Do you want some tea?");
 
@@ -135,7 +135,7 @@ JavaScript 支持以下运算符：
 
     二进制加号 `+` 可以连接字符串。如果任何一个操作数是一个字符串，那么另一个操作数也将被转换为字符串：
 
-    ```js run
+    ```js
     alert( '1' + 2 ); // '12'，字符串
     alert( 1 + '2' ); // '12'，字符串
     ```
@@ -158,7 +158,7 @@ JavaScript 支持以下运算符：
 比较运算符
 : 对不同类型的值进行相等检查时，运算符 `==` 会将不同类型的值转换为数字（除了 `null` 和 `undefined`，它们彼此相等而没有其他情况），所以下面的例子是相等的：
 
-    ```js run
+    ```js
     alert( 0 == false ); // true
     alert( 0 == '' ); // true
     ```
@@ -210,7 +210,7 @@ JavaScript 支持以下运算符：
 
 例如：
 
-```js run
+```js
 let age = prompt('Your age?', 18);
 
 switch (age) {

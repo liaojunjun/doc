@@ -31,21 +31,21 @@ alert( arr.length ); <span class="hljs-comment">// 3</span></code></pre>
 <p>让我们从删除开始：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;I&quot;</span>, <span class="hljs-string">&quot;study&quot;</span>, <span class="hljs-string">&quot;JavaScript&quot;</span>];
 
-*!*
+
 arr.splice(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// 从索引 1 开始删除 1 个元素</span>
-*/!*
+
 
 alert( arr ); <span class="hljs-comment">// [&quot;I&quot;, &quot;JavaScript&quot;]</span></code></pre>
 <p>简单，对吧？从索引 <code>1</code> 开始删除 <code>1</code> 个元素。</p>
 <p>在下一个例子中，我们删除了 3 个元素，并用另外两个元素替换它们：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [*!*<span class="hljs-string">&quot;I&quot;</span>, <span class="hljs-string">&quot;study&quot;</span>, <span class="hljs-string">&quot;JavaScript&quot;</span>,*/!* <span class="hljs-string">&quot;right&quot;</span>, <span class="hljs-string">&quot;now&quot;</span>];
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;I&quot;</span>, <span class="hljs-string">&quot;study&quot;</span>, <span class="hljs-string">&quot;JavaScript&quot;</span>, <span class="hljs-string">&quot;right&quot;</span>, <span class="hljs-string">&quot;now&quot;</span>];
 
 <span class="hljs-comment">// remove 3 first elements and replace them with another</span>
 arr.splice(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-string">&quot;Let&#x27;s&quot;</span>, <span class="hljs-string">&quot;dance&quot;</span>);
 
-alert( arr ) <span class="hljs-comment">// now [*!*&quot;Let&#x27;s&quot;, &quot;dance&quot;*/!*, &quot;right&quot;, &quot;now&quot;]</span></code></pre>
+alert( arr ) <span class="hljs-comment">// now [&quot;Let&#x27;s&quot;, &quot;dance&quot;, &quot;right&quot;, &quot;now&quot;]</span></code></pre>
 <p>在这里我们可以看到 <code>splice</code> 返回了已删除元素的数组：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [*!*<span class="hljs-string">&quot;I&quot;</span>, <span class="hljs-string">&quot;study&quot;</span>,*/!* <span class="hljs-string">&quot;JavaScript&quot;</span>, <span class="hljs-string">&quot;right&quot;</span>, <span class="hljs-string">&quot;now&quot;</span>];
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;I&quot;</span>, <span class="hljs-string">&quot;study&quot;</span>, <span class="hljs-string">&quot;JavaScript&quot;</span>, <span class="hljs-string">&quot;right&quot;</span>, <span class="hljs-string">&quot;now&quot;</span>];
 
 <span class="hljs-comment">// 删除前两个元素</span>
 <span class="hljs-keyword">let</span> removed = arr.splice(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>);
@@ -62,7 +62,7 @@ arr.splice(<span class="hljs-number">2</span>, <span class="hljs-number">0</span
 alert( arr ); <span class="hljs-comment">// &quot;I&quot;, &quot;study&quot;, &quot;complex&quot;, &quot;language&quot;, &quot;JavaScript&quot;</span></code></pre>
 <pre><code class="language-smart">在这里和其他数组方法中，负向索引都是被允许的。它们从数组末尾计算位置，如下所示：
 
-```js run
+```js
 let arr = [1, 2, 5];
 
 // 从索引 -1（尾端前一位）
@@ -118,9 +118,9 @@ alert( arr.concat(arrayLike) ); <span class="hljs-comment">// 1,2,[object Object
 <span class="hljs-keyword">let</span> arrayLike = {
   <span class="hljs-number">0</span>: <span class="hljs-string">&quot;something&quot;</span>,
   <span class="hljs-number">1</span>: <span class="hljs-string">&quot;else&quot;</span>,
-*!*
+
   [<span class="hljs-built_in">Symbol</span>.isConcatSpreadable]: <span class="hljs-literal">true</span>,
-*/!*
+
   length: <span class="hljs-number">2</span>
 };
 
@@ -230,7 +230,7 @@ alert(lengths); <span class="hljs-comment">// 5,7,6</span></code></pre>
 <span class="hljs-comment">// 该方法重新排列 arr 的内容</span>
 arr.sort();
 
-alert( arr );  <span class="hljs-comment">// *!*1, 15, 2*/!*</span></code></pre>
+alert( arr );  <span class="hljs-comment">// 1, 15, 2</span></code></pre>
 <p>你有没有注意到结果有什么奇怪的地方？</p>
 <p>顺序变成了 <code>1, 15, 2</code>。不对，但为什么呢？</p>
 <p><strong>这些元素默认情况下被按字符串进行排序。</strong></p>
@@ -251,11 +251,11 @@ alert( arr );  <span class="hljs-comment">// *!*1, 15, 2*/!*</span></code></pre>
 
 <span class="hljs-keyword">let</span> arr = [ <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">15</span> ];
 
-*!*
-arr.sort(compareNumeric);
-*/!*
 
-alert(arr);  <span class="hljs-comment">// *!*1, 2, 15*/!*</span></code></pre>
+arr.sort(compareNumeric);
+
+
+alert(arr);  <span class="hljs-comment">// 1, 2, 15</span></code></pre>
 <p>现在结果符合预期了。</p>
 <p>我们思考一下这儿发生了什么。<code>arr</code> 可以是由任何内容组成的数组，对吗？它可能包含数字、字符串、对象或其他任何内容。我们有一组 <strong>一些元素</strong>。要对其进行排序，我们需要一个 <strong>排序函数</strong> 来确认如何比较这些元素。默认是按字符串进行排序的。</p>
 <p><code>arr.sort(fn)</code> 方法实现了通用的排序算法。我们不需要关心它的内部工作原理（大多数情况下都是经过 <a href="https://en.wikipedia.org/wiki/Quicksort">快速排序</a> 算法优化的）。它将遍历数组，使用提供的函数比较其元素并对其重新排序，我们所需要的就是提供执行比较的函数 <code>fn</code>。</p>
@@ -268,12 +268,12 @@ alert(arr);  <span class="hljs-comment">// *!*1, 2, 15*/!*</span></code></pre>
 
 通过这个原理我们可以编写更短的函数：
 
-```js run
+```js
 let arr = [ 1, 2, 15 ];
 
 arr.sort(function(a, b) { return a - b; });
 
-alert(arr);  // *!*1, 2, 15*/!*
+alert(arr);  // 1, 2, 15
 ```</code></pre>
 <pre><code class="language-smart">你还记得 [箭头函数](info:arrow-functions-basics) 吗？这里使用箭头函数会更加简洁：
 
@@ -298,7 +298,7 @@ alert( countries.sort( <span class="hljs-function">(<span class="hljs-params">a,
 
 例如：
 
-```js run
+```js
 let arr = [1, 2, 3, 4, 5];
 arr.reverse();
 
@@ -315,7 +315,7 @@ alert( arr ); // 5,4,3,2,1
 
 在下面的例子中，我们用“逗号后跟着一个空格”作为分隔符：
 
-```js run
+```js
 let names = &#x27;Bilbo, Gandalf, Nazgul&#x27;;
 
 let arr = names.split(&#x27;, &#x27;);
@@ -327,7 +327,7 @@ for (let name of arr) {
 
 `split` 方法有一个可选的第二个数字参数 —— 对数组长度的限制。如果提供了，那么额外的元素会被忽略。但实际上它很少使用：
 
-```js run
+```js
 let arr = &#x27;Bilbo, Gandalf, Nazgul, Saruman&#x27;.split(&#x27;, &#x27;, 2);
 
 alert(arr); // Bilbo, Gandalf
@@ -336,7 +336,7 @@ alert(arr); // Bilbo, Gandalf
 ````smart header=&quot;拆分为字母&quot;
 调用带有空参数 `s` 的 `split(s)`，会将字符串拆分为字母数组：
 
-```js run
+```js
 let str = &quot;test&quot;;
 
 alert( str.split(&#x27;&#x27;) ); // t,e,s,t
@@ -478,10 +478,10 @@ arr.map(func, thisArg);
   {<span class="hljs-attr">age</span>: <span class="hljs-number">30</span>}
 ];
 
-*!*
+
 <span class="hljs-comment">// 找到 army.canJoin 返回 true 的 user</span>
 <span class="hljs-keyword">let</span> soldiers = users.filter(army.canJoin, army);
-*/!*
+
 
 alert(soldiers.length); <span class="hljs-comment">// 2</span>
 alert(soldiers[<span class="hljs-number">0</span>].age); <span class="hljs-comment">// 20</span>

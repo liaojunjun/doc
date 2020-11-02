@@ -26,12 +26,12 @@ alert(filteredArr.isEmpty()); <span class="hljs-comment">// false</span></code><
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.length === <span class="hljs-number">0</span>;
   }
 
-*!*
+
   <span class="hljs-comment">// 内建方法将使用这个作为 constructor</span>
   <span class="hljs-keyword">static</span> get [<span class="hljs-built_in">Symbol</span>.species]() {
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>;
   }
-*/!*
+
 }
 
 <span class="hljs-keyword">let</span> arr = <span class="hljs-keyword">new</span> PowerArray(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>, <span class="hljs-number">10</span>, <span class="hljs-number">50</span>);
@@ -40,9 +40,9 @@ alert(arr.isEmpty()); <span class="hljs-comment">// false</span>
 <span class="hljs-comment">// filter 使用 arr.constructor[Symbol.species] 作为 constructor 创建新数组</span>
 <span class="hljs-keyword">let</span> filteredArr = arr.filter(<span class="hljs-function"><span class="hljs-params">item</span> =&gt;</span> item &gt;= <span class="hljs-number">10</span>);
 
-*!*
+
 <span class="hljs-comment">// filteredArr 不是 PowerArray，而是 Array</span>
-*/!*
+
 alert(filteredArr.isEmpty()); <span class="hljs-comment">// Error: filteredArr.isEmpty is not a function</span></code></pre>
 <p>正如你所看到的，现在 <code>.filter</code> 返回 <code>Array</code>。所以扩展的功能不再传递。</p>
 <pre><code class="language-smart">其他集合，例如 `Map` 和 `Set` 的工作方式类似。它们也使用 `Symbol.species`。</code></pre>

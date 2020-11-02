@@ -107,9 +107,9 @@ range[<span class="hljs-built_in">Symbol</span>.iterator] = <span class="hljs-fu
 <span class="hljs-comment">// 和 for..of 做相同的事</span>
 <span class="hljs-comment">// for (let char of str) alert(char);</span>
 
-*!*
+
 <span class="hljs-keyword">let</span> iterator = str[<span class="hljs-built_in">Symbol</span>.iterator]();
-*/!*
+
 
 <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
   <span class="hljs-keyword">let</span> result = iterator.next();
@@ -134,10 +134,10 @@ range[<span class="hljs-built_in">Symbol</span>.iterator] = <span class="hljs-fu
   <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>
 };
 
-*!*
+
 <span class="hljs-comment">// Error (no Symbol.iterator)</span>
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> item <span class="hljs-keyword">of</span> arrayLike) {}
-*/!*</code></pre>
+</code></pre>
 <p>可迭代对象和类数组对象通常都 <strong>不是数组</strong>，它们没有 <code>push</code> 和 <code>pop</code> 等方法。如果我们有一个这样的对象，并想像数组那样操作它，那就非常不方便。例如，我们想使用数组方法操作 <code>range</code>，应该如何实现呢？</p>
 <h2 id="arrayfrom">Array.from</h2>
 <p>有一个全局方法 <a href="mdn:js/Array/from">Array.from</a> 可以接受一个可迭代或类数组的值，并从中获取一个“真正的”数组。然后我们就可以对其调用数组方法了。</p>
@@ -148,9 +148,9 @@ range[<span class="hljs-built_in">Symbol</span>.iterator] = <span class="hljs-fu
   <span class="hljs-attr">length</span>: <span class="hljs-number">2</span>
 };
 
-*!*
+
 <span class="hljs-keyword">let</span> arr = <span class="hljs-built_in">Array</span>.from(arrayLike); <span class="hljs-comment">// (*)</span>
-*/!*
+
 alert(arr.pop()); <span class="hljs-comment">// World（pop 方法有效）</span></code></pre>
 <p>在 <code>(*)</code> 行的 <code>Array.from</code> 方法接受对象，检查它是一个可迭代对象或类数组对象，然后创建一个新数组，并将该对象的所有元素复制到这个新数组。</p>
 <p>如果是可迭代对象，也是同样：</p>

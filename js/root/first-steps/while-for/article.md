@@ -21,7 +21,7 @@ while (condition) {
 
 例如，以下将循环输出当 `i < 3` 时的 `i` 值：
 
-```js run
+```js
 let i = 0;
 while (i < 3) { // 依次显示 0、1 和 2
   alert( i );
@@ -37,24 +37,24 @@ while (i < 3) { // 依次显示 0、1 和 2
 
 例如，`while (i != 0)` 可简写为 `while (i)`：
 
-```js run
+```js
 let i = 3;
-*!*
+
 while (i) { // 当 i 变成 0 时，条件为 false，循环终止
-*/!*
+
   alert( i );
   i--;
 }
 ```
 
-````smart header="单行循环体不需要大括号"
+`单行循环体不需要大括号"
 如果循环体只有一条语句，则可以省略大括号 `{…}`：
 
-```js run
+```js
 let i = 3;
-*!*
+
 while (i) alert(i--);
-*/!*
+
 ```
 ````
 
@@ -72,7 +72,7 @@ do {
 
 例如：
 
-```js run
+```js
 let i = 0;
 do {
   alert( i );
@@ -96,7 +96,7 @@ for (begin; condition; step) {
 
 我们通过示例来了解一下这三个部分的含义。下述循环从 `i` 等于 `0` 到 `3`（但不包括 `3`）运行 `alert(i)`：
 
-```js run
+```js
 for (let i = 0; i < 3; i++) { // 结果为 0、1、2
   alert(i);
 }
@@ -141,11 +141,11 @@ if (i < 3) { alert(i); i++ }
 // ……结束，因为现在 i == 3
 ```
 
-````smart header="内联变量声明"
+`内联变量声明"
 这里“计数”变量 `i` 是在循环中声明的。这叫做“内联”变量声明。这样的变量只在循环中可见。
 
-```js run
-for (*!*let*/!* i = 0; i < 3; i++) {
+```js
+for (let i = 0; i < 3; i++) {
   alert(i); // 0, 1, 2
 }
 alert(i); // 错误，没有这个变量。
@@ -153,7 +153,7 @@ alert(i); // 错误，没有这个变量。
 
 除了定义一个变量，我们也可以使用现有的变量：
 
-```js run
+```js
 let i = 0;
 
 for (i = 0; i < 3; i++) { // 使用现有的变量
@@ -174,7 +174,7 @@ alert(i); //3，可见，因为是在循环之外声明的
 
 就像这样：
 
-```js run
+```js
 let i = 0; // 我们已经声明了 i 并对它进行了赋值
 
 for (; i < 3; i++) { // 不再需要 "begin" 语句段
@@ -184,7 +184,7 @@ for (; i < 3; i++) { // 不再需要 "begin" 语句段
 
 我们也可以移除 `step` 语句段：
 
-```js run
+```js
 let i = 0;
 
 for (; i < 3;) {
@@ -212,16 +212,16 @@ for (;;) {
 
 例如，下面这个循环要求用户输入一系列数字，在输入的内容不是数字时“终止”循环。
 
-```js run
+```js
 let sum = 0;
 
 while (true) {
 
   let value = +prompt("Enter a number", '');
 
-*!*
+
   if (!value) break; // (*)
-*/!*
+
 
   sum += value;
 
@@ -241,11 +241,11 @@ alert( 'Sum: ' + sum );
 
 下面这个循环使用 `continue` 来只输出奇数：
 
-```js run no-beautify
+```js no-beautify
 for (let i = 0; i < 10; i++) {
 
   //如果为真，跳过循环体的剩余部分。
-  *!*if (i % 2 == 0) continue;*/!*
+  if (i % 2 == 0) continue;
 
   alert(i); // 1，然后 3，5，7，9
 }
@@ -253,10 +253,10 @@ for (let i = 0; i < 10; i++) {
 
 对于偶数的 `i` 值，`continue` 指令会停止本次循环的继续执行，将控制权传递给下一次 `for` 循环的迭代（使用下一个数字）。因此 `alert` 仅被奇数值调用。
 
-````smart header="`continue` 指令利于减少嵌套"
+``continue` 指令利于减少嵌套"
 显示奇数的循环可以像下面这样：
 
-```js run
+```js
 for (let i = 0; i < 10; i++) {
 
   if (i % 2) {
@@ -271,7 +271,7 @@ for (let i = 0; i < 10; i++) {
 但在副作用方面，它多创建了一层嵌套（大括号内的 `alert` 调用）。如果 `if` 中代码有多行，则可能会降低代码整体的可读性。
 ````
 
-````warn header="禁止 `break/continue` 在 ‘?’ 的右边"
+`"禁止 `break/continue` 在 ‘?’ 的右边"
 请注意非表达式的语法结构不能与三元运算符 `?` 一起使用。特别是 `break/continue` 这样的指令是不允许这样使用的。
 
 例如，我们使用如下代码：
@@ -288,7 +288,7 @@ if (i > 5) {
 
 
 ```js no-beautify
-(i > 5) ? alert(i) : *!*continue*/!*; // continue 不允许在这个位置
+(i > 5) ? alert(i) : continue; // continue 不允许在这个位置
 ```
 
 ……代码会停止运行，并显示有语法错误。
@@ -302,7 +302,7 @@ if (i > 5) {
 
 例如，下述代码中我们的循环使用了 `i` 和 `j`，从 `(0,0)` 到 `(3,3)` 提示坐标 `(i, j)`：
 
-```js run no-beautify
+```js no-beautify
 for (let i = 0; i < 3; i++) {
 
   for (let j = 0; j < 3; j++) {
@@ -329,15 +329,15 @@ labelName: for (...) {
 
 `break <labelName>` 语句跳出循环至标签处：
 
-```js run no-beautify
-*!*outer:*/!* for (let i = 0; i < 3; i++) {
+```js no-beautify
+outer: for (let i = 0; i < 3; i++) {
 
   for (let j = 0; j < 3; j++) {
 
     let input = prompt(`Value at coords (${i},${j})`, '');
 
     // 如果是空字符串或被取消，则中断并跳出这两个循环。
-    if (!input) *!*break outer*/!*; // (*)
+    if (!input) break outer; // (*)
 
     // 用得到的值做些事……
   }
@@ -358,7 +358,7 @@ for (let i = 0; i < 3; i++) { ... }
 
 `continue` 指令也可以与标签一起使用。在这种情况下，执行跳转到标记循环的下一次迭代。
 
-````warn header="标签并不允许“跳到”所有位置"
+`"标签并不允许“跳到”所有位置"
 标签不允许我们跳到代码的任意位置。
 
 例如，这样做是不可能的：

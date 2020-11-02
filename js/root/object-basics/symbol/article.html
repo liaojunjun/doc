@@ -14,37 +14,37 @@
 <pre><code class="language-js"><span class="hljs-keyword">let</span> id1 = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>);
 <span class="hljs-keyword">let</span> id2 = <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>);
 
-*!*
+
 alert(id1 == id2); <span class="hljs-comment">// false</span>
-*/!*</code></pre>
+</code></pre>
 <p>如果你熟悉 Ruby 或者其他有 &quot;Symbol&quot; 的语言 —— 别被误导。JavaScript 的 Symbol 是不同的。</p>
 <pre><code class="language-warn">JavaScript 中的大多数值都支持字符串的隐式转换。例如，我们可以 `alert` 任何值，都可以生效。Symbol 比较特殊，它不会被自动转换。
 
 例如，这个 `alert` 将会提示出错：
 
-```js run
+```js
 let id = Symbol(&quot;id&quot;);
-*!*
+
 alert(id); // 类型错误：无法将 Symbol 值转换为字符串。
-*/!*
+
 ```
 
 这是一种防止混乱的“语言保护”，因为字符串和 Symbol 有本质上的不同，不应该意外地将它们转换成另一个。
 
 如果我们真的想显示一个 Symbol，我们需要在它上面调用 `.toString()`，如下所示：
-```js run
+```js
 let id = Symbol(&quot;id&quot;);
-*!*
+
 alert(id.toString()); // Symbol(id)，现在它有效了
-*/!*
+
 ```
 
 或者获取 `symbol.description` 属性，只显示描述（description）：
-```js run
+```js
 let id = Symbol(&quot;id&quot;);
-*!*
+
 alert(id.description); // id
-*/!*
+
 ```
 </code></pre>
 <h2 id="隐藏属性">“隐藏”属性</h2>
@@ -86,9 +86,9 @@ user.id = <span class="hljs-string">&quot;Their id value&quot;</span>
 
 <span class="hljs-keyword">let</span> user = {
   <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
-*!*
+
   [id]: <span class="hljs-number">123</span> <span class="hljs-comment">// 而不是 &quot;id&quot;：123</span>
-*/!*
+
 };</code></pre>
 <p>这是因为我们需要变量 <code>id</code> 的值作为键，而不是字符串 &quot;id&quot;。</p>
 <h3 id="symbol-在-forin-中会被跳过">Symbol 在 for..in 中会被跳过</h3>
@@ -101,9 +101,9 @@ user.id = <span class="hljs-string">&quot;Their id value&quot;</span>
   [id]: <span class="hljs-number">123</span>
 };
 
-*!*
+
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> user) alert(key); <span class="hljs-comment">// name, age (no symbols)</span>
-*/!*
+
 
 <span class="hljs-comment">// 使用 Symbol 任务直接访问</span>
 alert( <span class="hljs-string">&quot;Direct: &quot;</span> + user[id] );</code></pre>

@@ -15,7 +15,7 @@
 
     接下来的例子将会查找一个五位数的数字：
 
-    ```js run
+    ```js
     alert( "I'm 12345 years old".match(/\d{5}/) ); //  "12345"
     ```
 
@@ -24,19 +24,19 @@
 某个范围的位数：`{3,5}`
 : 我们可以将限制范围的数字放入括号中，来查找位数为 3 至 5 位的数字：`pattern:\d{3,5}`
 
-    ```js run
+    ```js
     alert( "I'm not 12, but 1234 years old".match(/\d{3,5}/) ); // "1234"
     ```
 
     我们可以省略上限。那么正则表达式 `pattern:\d{3,}` 就会查找位数大于或等于 3 的数字：
 
-    ```js run
+    ```js
     alert( "I'm not 12, but 345678 years old".match(/\d{3,}/) ); // "345678"
     ```
 
 对于字符串 `+7(903)-123-45-67` 来说，我们如果需要一个或多个连续的数字，就使用 `pattern:\d{1,}`：
 
-```js run
+```js
 let str = "+7(903)-123-45-67";
 
 let numbers = str.match(/\d{1,}/g);
@@ -53,7 +53,7 @@ alert(numbers); // 7,903,123,45,67
 
     例如，`pattern:\d+` 用来查找所有数字：
 
-    ```js run
+    ```js
     let str = "+7(903)-123-45-67";
 
     alert( str.match(/\d+/g) ); // 7,903,123,45,67
@@ -66,7 +66,7 @@ alert(numbers); // 7,903,123,45,67
 
     所以他能够在 `subject:color` 中找到 `match:or`，以及在 `subject:colour` 中找到 `match:our`：
 
-    ```js run
+    ```js
     let str = "Should I write color or colour?";
 
     alert( str.match(/colou?r/g) ); // color, colour
@@ -77,13 +77,13 @@ alert(numbers); // 7,903,123,45,67
 
     接下来的例子将要寻找一个后跟任意数量的 0 的数字：
 
-    ```js run
+    ```js
     alert( "100 10 1".match(/\d0*/g) ); // 100, 10, 1
     ```
 
     将它与 `'+'`（一个或多个）作比较：
 
-    ```js run
+    ```js
     alert( "100 10 1".match(/\d0+/g) ); // 100, 10
     ```
 
@@ -93,14 +93,14 @@ alert(numbers); // 7,903,123,45,67
 
 正则表达式“浮点数”（带浮点的数字）：`pattern:\d+\.\d+`
 : 实现：
-    ```js run
+    ```js
     alert( "0 1 12.345 7890".match(/\d+\.\d+/g) ); // 12.345
     ```
 
 正则表达式“打开没有属性的 HTML 标记”，比如 `<span>` 或 `<p>`：`pattern:/<[a-z]+>/i`
 : 实现：
 
-    ```js run
+    ```js
     alert( "<body> ... </body>".match(/<[a-z]+>/gi) ); // <body>
     ```
 
@@ -109,18 +109,18 @@ alert(numbers); // 7,903,123,45,67
 正则表达式“打开没有属性的HTML标记”（改进版）：`pattern:/<[a-z][a-z0-9]*>/i`
 : 更好的表达式：根据标准，HTML 标记名称可以在除了第一个位置以外的任意一个位置有一个数字，比如 `<h1>`。
 
-    ```js run
+    ```js
     alert( "<h1>Hi!</h1>".match(/<[a-z][a-z0-9]*>/gi) ); // <h1>
     ```
 
 正则表达式“打开没有属性的HTML标记”：`pattern:/<\/?[a-z][a-z0-9]*>/i`
 : 我们在标记前加上了一个可选的斜杆 `pattern:/?`。必须用一个反斜杠来转义它，否则 JavaScript 就会认为它是这个模式的结束符。
 
-    ```js run
+    ```js
     alert( "<h1>Hi!</h1>".match(/<\/?[a-z][a-z0-9]*>/gi) ); // <h1>, </h1>
     ```
 
-```smart header="更精确意味着更复杂"
+更精确意味着更复杂"
 我们能够从这些例子中看到一个共同的规则：正则表达式越精确 —— 它就越长且越复杂。
 
 例如，HTML 标记能用一个简单的正则表达式：`pattern:<\w+>`。

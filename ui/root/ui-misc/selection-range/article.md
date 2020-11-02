@@ -76,16 +76,16 @@ drawHtmlTree(selectPDomtree, 'div.select-p-domtree', 690, 320);
 
 ![](range-example-p-0-1.svg)
 
-```html run
+```html
 <p id="p">Example: <i>italic</i> and <b>bold</b></p>
 
 <script>
-*!*
+
   let range = new Range();
 
   range.setStart(p, 0);
   range.setEnd(p, 2);
-*/!*
+
 
   // 范围的 toString 以文本形式返回其内容（不带标签）
   alert(range); // Example: italic
@@ -100,19 +100,19 @@ drawHtmlTree(selectPDomtree, 'div.select-p-domtree', 690, 320);
 
 这是一个更灵活的测试台，你可以在其中尝试更多不同的情况：
 
-```html run autorun
+```html autorun
 <p id="p">Example: <i>italic</i> and <b>bold</b></p>
 
 From <input id="start" type="number" value=1> – To <input id="end" type="number" value=4>
 <button id="button">Click to select</button>
 <script>
   button.onclick = () => {
-  *!*
+  
     let range = new Range();
 
     range.setStart(p, start.value);
     range.setEnd(p, end.value);
-  */!*
+  
 
     // 应用选择，后文有解释
     document.getSelection().removeAllRanges();
@@ -139,7 +139,7 @@ From <input id="start" type="number" value=1> – To <input id="end" type="numbe
 - 从 `<p>` 的第一个子节点的位置 2 开始（选择 "Ex<b>ample:</b> " 中除前两个字母外的所有字母）
 - 到 `<b>` 的第一个子节点的位置 3 结束（选择 "<b>bol</b>d" 的前三个字母，就这些）：
 
-```html run
+```html
 <p id="p">Example: <i>italic</i> and <b>bold</b></p>
 
 <script>
@@ -204,7 +204,7 @@ From <input id="start" type="number" value=1> – To <input id="end" type="numbe
 
 这是在测试台上看到它们的实际效果：
 
-```html run autorun height=260
+```html autorun height=260
 点击按钮运行所选内容上的方法，点击 "resetExample" 进行重置。
 
 <p id="p">Example: <i>italic</i> and <b>bold</b></p>
@@ -289,7 +289,7 @@ From <input id="start" type="number" value=1> – To <input id="end" type="numbe
 - `isCollapsed` —— 如果未选择任何内容（空范围）或不存在，则为 `true` 。
 - `rangeCount` —— 选择中的范围数，除 Firefox 外，其他浏览器最多为 `1`。
 
-````smart header="在文档中，选择的终点可能在起点之前"
+`在文档中，选择的终点可能在起点之前"
 有很多选择内容的方式，取决于用户的操作：鼠标，热键，手机上的点击等。
 
 其中的某些方式，例如鼠标，允许从两个方向创建相同的选择：“从左到右”和“从右到左”。
@@ -320,7 +320,7 @@ From <input id="start" type="number" value=1> – To <input id="end" type="numbe
 
 下面是一个小型演示，它随更改动态显示选择边界：
 
-```html run height=80
+```html height=80
 <p id="p">Select me: <i>italic</i> and <b>bold</b></p>
 
 From <input id="from" disabled> – To <input id="to" disabled>
@@ -342,7 +342,7 @@ From <input id="from" disabled> – To <input id="to" disabled>
 
 下面是将选择内容获取为文本和 DOM 节点的演示：
 
-```html run height=100
+```html height=100
 <p id="p">Select me: <i>italic</i> and <b>bold</b></p>
 
 Cloned: <span id="cloned"></span>
@@ -392,7 +392,7 @@ As text: <span id="astext"></span>
 
 例如，选择段落 `<p>` 的全部内容：
 
-```html run
+```html
 <p id="p">Select me: <i>italic</i> and <b>bold</b></p>
 
 <script>
@@ -403,7 +403,7 @@ As text: <span id="astext"></span>
 
 使用范围来完成同一个操作：
 
-```html run
+```html
 <p id="p">Select me: <i>italic</i> and <b>bold</b></p>
 
 <script>
@@ -415,7 +415,7 @@ As text: <span id="astext"></span>
 </script>
 ```
 
-```smart header="如要选择，请先移除现有的选择"
+如要选择，请先移除现有的选择"
 如果选择已存在，则首先使用 `removeAllRanges()` 将其清空。然后添加范围。否则，除 Firefox 外的所有浏览器都将忽略新范围。
 
 某些选择方法例外，它们会替换现有的选择，例如 `setBaseAndExtent`。
@@ -454,7 +454,7 @@ As text: <span id="astext"></span>
 
 例如，此段代码使用 `onselect` 事件来跟踪选择：
 
-```html run autorun
+```html autorun
 <textarea id="area" style="width:80%;height:60px">
 Selecting in this text updates values below.
 </textarea>
@@ -484,7 +484,7 @@ From <input id="from" disabled> – To <input id="to" disabled>
 
 例如：
 
-```html run autorun
+```html autorun
 <textarea id="area" style="width:80%;height:60px">
 Focus on me, the cursor will be at position 10.
 </textarea>
@@ -509,7 +509,7 @@ Focus on me, the cursor will be at position 10.
 
 例如，这里的用户的选择将被包装在 `*...*` 中：
 
-```html run autorun
+```html autorun
 <input id="input" style="width:200px" value="Select here and click the button">
 <button id="button">Wrap selection in stars *...*</button>
 
@@ -529,7 +529,7 @@ button.onclick = () => {
 
 在下面这个示例中，我们在输入文本中找到 `"THIS"`，将其替换，并保持替换文本的选中状态：
 
-```html run autorun
+```html autorun
 <input id="input" style="width:200px" value="Replace THIS in text">
 <button id="button">Replace THIS</button>
 
@@ -552,7 +552,7 @@ button.onclick = () => {
 
 这是一个按钮，按下后会在光标位置插入 `"HELLO"`，然后光标紧随其后。如果选择不为空，则将其替换（我们可以通过比较 `selectionStart!=selectionEnd` 来进行检查，为空则执行其他操作）：
 
-```html run autorun
+```html autorun
 <input id="input" style="width:200px" value="Text Text Text Text Text">
 <button id="button">Insert "HELLO" at cursor</button>
 
@@ -571,7 +571,7 @@ button.onclick = () => {
 
 1. 使用 CSS 属性 `user-select: none`。
 
-    ```html run
+    ```html
     <style>
     #elem {
       user-select: none;
@@ -587,7 +587,7 @@ button.onclick = () => {
 
 2. 防止 `onselectstart` 或 `mousedown` 事件中的默认行为。
 
-    ```html run
+    ```html
     <div>Selectable <div id="elem">Unselectable</div> Selectable</div>
 
     <script>
@@ -620,7 +620,7 @@ button.onclick = () => {
 最常用的方案一般是：
 
 1. 获取选择：
-    ```js run
+    ```js
     let selection = document.getSelection();
 
     let cloned = /* 要将所选的节点克隆到的元素 */;
@@ -632,7 +632,7 @@ button.onclick = () => {
     }
     ```
 2. 设置选择
-    ```js run
+    ```js
     let selection = document.getSelection();
 
     // 直接：

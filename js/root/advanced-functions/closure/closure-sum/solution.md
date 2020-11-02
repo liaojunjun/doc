@@ -2,7 +2,7 @@
 
 就像这样：
 
-```js run
+```js
 function sum(a) {
 
   return function(b) {

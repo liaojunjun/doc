@@ -16,9 +16,9 @@
   alert( <span class="hljs-string">&quot;Hello&quot;</span> );
 }
 
-*!*
+
 alert( sayHi ); <span class="hljs-comment">// 显示函数代码</span>
-*/!*</code></pre>
+</code></pre>
 <p>注意，最后一行代码并不会运行函数，因为 <code>sayHi</code> 后没有括号。在其他编程语言中，只要提到函数的名称都会导致函数的调用执行，但 JavaScript 可不是这样。</p>
 <p>在 JavaScript 中，函数是一个值，所以我们可以把它当成值对待。上面代码显示了一段字符串值，即函数的源码。</p>
 <p>的确，在某种意义上说一个函数是一个特殊值，我们可以像 <code>sayHi()</code> 这样调用它。</p>
@@ -55,7 +55,7 @@ function sayHi() {
 
 let sayHi = function() {
   // ...
-}*!*;*/!*
+};
 ```
 
 答案很简单：
@@ -71,12 +71,12 @@ let sayHi = function() {
 <p><code>no</code>
 : 当回答为 &quot;No&quot; 时，要运行的脚本</p>
 <p>函数需要提出 <code>question</code>（问题），并根据用户的回答，调用 <code>yes()</code> 或 <code>no()</code>：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ask</span>(<span class="hljs-params">question, yes, no</span>) </span>{
   <span class="hljs-keyword">if</span> (confirm(question)) yes()
   <span class="hljs-keyword">else</span> no();
 }
-*/!*
+
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showOk</span>(<span class="hljs-params"></span>) </span>{
   alert( <span class="hljs-string">&quot;You agreed.&quot;</span> );
@@ -97,13 +97,13 @@ ask(<span class="hljs-string">&quot;Do you agree?&quot;</span>, showOk, showCanc
   <span class="hljs-keyword">else</span> no();
 }
 
-*!*
+
 ask(
   <span class="hljs-string">&quot;Do you agree?&quot;</span>,
   <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-string">&quot;You agreed.&quot;</span>); },
   <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-string">&quot;You canceled the execution.&quot;</span>); }
 );
-*/!*</code></pre>
+</code></pre>
 <p>这里直接在 <code>ask(...)</code> 调用内进行函数声明。这两个函数没有名字，所以叫 <strong>匿名函数</strong>。这样的函数在 <code>ask</code> 外无法访问（因为没有对它们分配变量），不过这正是我们想要的。</p>
 <p>这样的代码在我们的脚本中非常常见，这正符合 JavaScript 语言的思想。</p>
 <pre><code class="language-smart">字符串或数字等常规值代表 **数据**。
@@ -138,18 +138,18 @@ ask(
 <p>这是内部算法的原故。当 JavaScript <strong>准备</strong> 运行脚本时，首先会在脚本中寻找全局函数声明，并创建这些函数。我们可以将其视为“初始化阶段”。</p>
 <p>在处理完所有函数声明后，代码才被执行。所以运行时能够使用这些函数。</p>
 <p>例如下面的代码会正常工作：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 sayHi(<span class="hljs-string">&quot;John&quot;</span>); <span class="hljs-comment">// Hello, John</span>
-*/!*
+
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">name</span>) </span>{
   alert( <span class="hljs-string">`Hello, <span class="hljs-subst">${name}</span>`</span> );
 }</code></pre>
 <p>函数声明 <code>sayHi</code> 是在 JavaScript 准备运行脚本时被创建的，在这个脚本的任何位置都可见。</p>
 <p>……如果它是一个函数表达式，它就不会工作：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 sayHi(<span class="hljs-string">&quot;John&quot;</span>); <span class="hljs-comment">// error!</span>
-*/!*
+
 
 <span class="hljs-keyword">let</span> sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">name</span>) </span>{  <span class="hljs-comment">// (*) no magic any more</span>
   alert( <span class="hljs-string">`Hello, <span class="hljs-subst">${name}</span>`</span> );
@@ -177,25 +177,25 @@ sayHi(<span class="hljs-string">&quot;John&quot;</span>); <span class="hljs-comm
 }
 
 <span class="hljs-comment">// ……稍后使用</span>
-*!*
+
 welcome(); <span class="hljs-comment">// Error: welcome is not defined</span>
-*/!*</code></pre>
+</code></pre>
 <p>这是因为函数声明只在它所在的代码块中可见。</p>
 <p>下面是另一个例子：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> age = <span class="hljs-number">16</span>; <span class="hljs-comment">// 拿 16 作为例子</span>
 
 <span class="hljs-keyword">if</span> (age &lt; <span class="hljs-number">18</span>) {
-*!*
+
   welcome();               <span class="hljs-comment">// \   (运行)</span>
-*/!*
+
                            <span class="hljs-comment">//  |</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">welcome</span>(<span class="hljs-params"></span>) </span>{     <span class="hljs-comment">//  |  </span>
     alert(<span class="hljs-string">&quot;Hello!&quot;</span>);       <span class="hljs-comment">//  |  函数声明在声明它的代码块内任意位置都可用</span>
   }                        <span class="hljs-comment">//  |  </span>
                            <span class="hljs-comment">//  |</span>
-*!*
+
   welcome();               <span class="hljs-comment">// /   (运行)</span>
-*/!*
+
 
 } <span class="hljs-keyword">else</span> {
 
@@ -207,9 +207,9 @@ welcome(); <span class="hljs-comment">// Error: welcome is not defined</span>
 <span class="hljs-comment">// 在这里，我们在花括号外部调用函数，我们看不到它们内部的函数声明。</span>
 
 
-*!*
+
 welcome(); <span class="hljs-comment">// Error: welcome is not defined</span>
-*/!*</code></pre>
+</code></pre>
 <p>我们怎么才能让 <code>welcome</code> 在 <code>if</code> 外可见呢？</p>
 <p>正确的做法是使用函数表达式，并将 <code>welcome</code> 赋值给在 <code>if</code> 外声明的变量，并具有正确的可见性。</p>
 <p>下面的代码可以如愿运行：</p>
@@ -231,9 +231,9 @@ welcome(); <span class="hljs-comment">// Error: welcome is not defined</span>
 
 }
 
-*!*
+
 welcome(); <span class="hljs-comment">// 现在可以了</span>
-*/!*</code></pre>
+</code></pre>
 <p>或者我们可以使用问号运算符 <code>?</code> 来进一步对代码进行简化：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> age = prompt(<span class="hljs-string">&quot;What is your age?&quot;</span>, <span class="hljs-number">18</span>);
 
@@ -241,9 +241,9 @@ welcome(); <span class="hljs-comment">// 现在可以了</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-string">&quot;Hello!&quot;</span>); } :
   <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-string">&quot;Greetings!&quot;</span>); };
 
-*!*
+
 welcome(); <span class="hljs-comment">// 现在可以了</span>
-*/!*</code></pre>
+</code></pre>
 <pre><code class="language-smart">根据经验，当我们需要声明一个函数时，首先考虑函数声明语法。它能够为组织代码提供更多的灵活性。因为我们可以在声明这些函数之前调用这些函数。
 
 这对代码可读性也更好，因为在代码中查找 `function f(…) {…}` 比 `let f = function(…) {…}` 更容易。函数声明更“醒目”。

@@ -31,43 +31,43 @@ let timerId = setTimeout(func|code, [delay], [arg1], [arg2], ...)
 
 例如，在下面这个示例中，`sayHi()` 方法会在 1 秒后执行：
 
-```js run
+```js
 function sayHi() {
   alert('Hello');
 }
 
-*!*
+
 setTimeout(sayHi, 1000);
-*/!*
+
 ```
 
 带参数的情况：
 
-```js run
+```js
 function sayHi(phrase, who) {
   alert( phrase + ', ' + who );
 }
 
-*!*
+
 setTimeout(sayHi, 1000, "Hello", "John"); // Hello, John
-*/!*
+
 ```
 
 如果第一个参数位传入的是字符串，JavaScript 会自动为其创建一个函数。
 
 所以这么写也是可以的：
 
-```js run no-beautify
+```js no-beautify
 setTimeout("alert('Hello')", 1000);
 ```
 
 但是，不建议使用字符串，我们可以使用箭头函数代替它们，如下所示：
 
-```js run no-beautify
+```js no-beautify
 setTimeout(() => alert('Hello'), 1000);
 ```
 
-````smart header="传入一个函数，但不要执行它"
+`传入一个函数，但不要执行它"
 新手开发者有时候会误将一对括号 `()` 加在函数后面：
 
 ```js
@@ -90,7 +90,7 @@ clearTimeout(timerId);
 
 在下面的代码中，我们对一个函数进行了调度，紧接着取消了这次调度（中途反悔了）。所以最后什么也没发生：
 
-```js run no-beautify
+```js no-beautify
 let timerId = setTimeout(() => alert("never happens"), 1000);
 alert(timerId); // 定时器标识符
 
@@ -118,7 +118,7 @@ let timerId = setInterval(func|code, [delay], [arg1], [arg2], ...)
 
 下面的例子将每间隔 2 秒就会输出一条消息。5 秒之后，输出停止：
 
-```js run
+```js
 // 每 2 秒重复一次
 let timerId = setInterval(() => alert('tick'), 2000);
 
@@ -126,7 +126,7 @@ let timerId = setInterval(() => alert('tick'), 2000);
 setTimeout(() => { clearInterval(timerId); alert('stop'); }, 5000);
 ```
 
-```smart header="alert 弹窗显示的时候计时器依然在进行计时"
+alert 弹窗显示的时候计时器依然在进行计时"
 在大多数浏览器中，包括 Chrome 和 Firefox，在显示 `alert/confirm/prompt` 弹窗时，内部的定时器仍旧会继续“嘀嗒”。
 
 所以，在运行上面的代码时，如果在一定时间内没有关掉 `alert` 弹窗，那么在你关闭弹窗后，下一个 `alert` 会立即显示。两次 `alert` 之间的时间间隔将小于 2 秒。
@@ -145,9 +145,9 @@ let timerId = setInterval(() => alert('tick'), 2000);
 
 let timerId = setTimeout(function tick() {
   alert('tick');
-*!*
+
   timerId = setTimeout(tick, 2000); // (*)
-*/!*
+
 }, 2000);
 ```
 
@@ -192,7 +192,7 @@ setInterval(function() {
 
 ```js
 let i = 1;
-setTimeout(function run() {
+setTimeout(function() {
   func(i++);
   setTimeout(run, 100);
 }, 100);
@@ -222,7 +222,7 @@ setTimeout(function run() {
 
 这是因为下一次调用是在前一次调用完成时再调度的。
 
-````smart header="垃圾回收和 setInterval/setTimeout 回调（callback）"
+`垃圾回收和 setInterval/setTimeout 回调（callback）"
 当一个函数传入 `setInterval/setTimeout` 时，将为其创建一个内部引用，并保存在调度程序中。这样，即使这个函数没有其他引用，也能防止垃圾回收器（GC）将其回收。
 
 ```js
@@ -245,7 +245,7 @@ setTimeout(function() {...}, 100);
 
 例如，下面这段代码会先输出 "Hello"，然后立即输出 "World"：
 
-```js run
+```js
 setTimeout(() => alert("World"));
 
 alert("Hello");
@@ -255,16 +255,16 @@ alert("Hello");
 
 此外，还有与浏览器相关的 0 延时 timeout 的高级用例，我们将在 <info:event-loop> 一章中详细讲解。
 
-````smart header="零延时实际上不为零（在浏览器中）"
+`零延时实际上不为零（在浏览器中）"
 在浏览器环境下，嵌套定时器的运行频率是受限制的。根据 [HTML5 标准](https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers) 所讲：“经过 5 重嵌套定时器之后，时间间隔被强制设定为至少 4 毫秒”。
 
 让我们用下面的示例来看看这到底是什么意思。其中 `setTimeout` 调用会以零延时重新调度自身的调用。每次调用都会在 `times` 数组中记录上一次调用的实际时间。那么真正的延迟是什么样的？让我们来看看：
 
-```js run
+```js
 let start = Date.now();
 let times = [];
 
-setTimeout(function run() {
+setTimeout(function() {
   times.push(Date.now() - start); // 保存前一个调用的延时
 
   if (start + 100 < Date.now()) alert(times); // 100 毫秒之后，显示延时信息
@@ -315,7 +315,7 @@ setTimeout(function run() {
 
 运行时，会观察到 CPU 挂起，服务器端 JS 表现的尤为明显。如果在浏览器下运行，试试点击页面的其他按钮，你会发现整个 JavaScript 的执行都暂停了，除非等这段代码运行完，否则什么也做不了。
 
-```js run
+```js
 let i = 0;
 
 let start = Date.now();
@@ -337,7 +337,7 @@ count();
 
 下面用 `setTimeout` 分割任务：
 
-```js run
+```js
 let i = 0;
 
 let start = Date.now();
@@ -378,7 +378,7 @@ count();
 
 将调度代码挪到 `count()` 函数开头位置：
 
-```js run
+```js
 let i = 0;
 
 let start = Date.now();
@@ -414,7 +414,7 @@ count();
 所以，如果运行一个非常耗时的函数，即便在这个函数中改变了文档内容，除非这个函数执行完，那么变化是不会立刻反映到页面上的。
 
 以下是一个示例：
-```html run
+```html
 <div id="progress"></div>
 
 <script>
@@ -437,7 +437,7 @@ count();
 
 接下来用 `setTimeout` 对任务进行分割，这样就能在每一轮运行的间隙观察到变化了，效果要好得多：
 
-```html run
+```html
 <div id="progress"></div>
 
 <script>

@@ -1,6 +1,6 @@
 
 
-```js run
+```js
 Function.prototype.defer = function(ms) {
   setTimeout(this, ms);
 };

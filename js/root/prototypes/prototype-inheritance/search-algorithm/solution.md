@@ -1,7 +1,7 @@
 
 1. 让我们添加 `__proto__`：
 
-    ```js run
+    ```js
     let head = {
       glasses: 1
     };

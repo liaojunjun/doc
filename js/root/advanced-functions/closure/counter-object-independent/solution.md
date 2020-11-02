@@ -3,7 +3,7 @@
 
 这两个嵌套函数都是在同一个词法环境中创建的，所以它们可以共享对同一个 count 变量的访问：
 
-```js run
+```js
 function Counter() {
   let count = 0;
 

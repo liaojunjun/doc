@@ -18,11 +18,11 @@
   <span class="hljs-attr">students</span>: [<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;Pete&quot;</span>, <span class="hljs-string">&quot;Alice&quot;</span>],
 
   showList() {
-*!*
+
     <span class="hljs-built_in">this</span>.students.forEach(
       <span class="hljs-function"><span class="hljs-params">student</span> =&gt;</span> alert(<span class="hljs-built_in">this</span>.title + <span class="hljs-string">&#x27;: &#x27;</span> + student)
     );
-*/!*
+
   }
 };
 
@@ -34,19 +34,19 @@ group.showList();</code></pre>
   <span class="hljs-attr">students</span>: [<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-string">&quot;Pete&quot;</span>, <span class="hljs-string">&quot;Alice&quot;</span>],
 
   showList() {
-*!*
+
     <span class="hljs-built_in">this</span>.students.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">student</span>) </span>{
       <span class="hljs-comment">// Error: Cannot read property &#x27;title&#x27; of undefined</span>
       alert(<span class="hljs-built_in">this</span>.title + <span class="hljs-string">&#x27;: &#x27;</span> + student)
     });
-*/!*
+
   }
 };
 
 group.showList();</code></pre>
 <p>报错是因为 <code>forEach</code> 运行它里面的这个函数，但是这个函数的 <code>this</code> 为默认值 <code>this=undefined</code>，因此就出现了尝试访问 <code>undefined.title</code> 的情况。</p>
 <p>但箭头函数就没事，因为它们没有 <code>this</code>。</p>
-<p>```warn header=&quot;不能对箭头函数进行 <code>new</code> 操作&quot;
+<p>&quot;不能对箭头函数进行 <code>new</code> 操作&quot;
 不具有 <code>this</code> 自然也就意味着另一个限制：箭头函数不能用作构造器（constructor）。不能用 <code>new</code> 调用它们。</p>
 <pre><code>
 ```smart header=&quot;箭头函数 VS bind&quot;

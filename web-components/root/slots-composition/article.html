@@ -21,14 +21,14 @@ customElements.define(&#x27;user-card&#x27;, class extends HTMLElement {
     this.attachShadow({mode: &#x27;open&#x27;});
     this.shadowRoot.innerHTML = `
       <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Name:
-*!*
+
         <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
-*/!*
+
       <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Birthday:
-*!*
+
         <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
-*/!*
+
       <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
     `;
   }
@@ -36,8 +36,8 @@ customElements.define(&#x27;user-card&#x27;, class extends HTMLElement {
 </span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> *!*<span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>*/!*&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> *!*<span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;birthday&quot;</span>*/!*&gt;</span>01.01.2001<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span>01.01.2001<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
 <p>在 shadow DOM 中，<code>&lt;slot name=&quot;X&quot;&gt;</code> 定义了一个“插入点”，一个带有 <code>slot=&quot;X&quot;</code> 的元素被渲染的地方。</p>
 <p>然后浏览器执行”组合“：它从 light DOM 中获取元素并且渲染到 shadow DOM 中的对应插槽中。最后，正是我们想要的 —— 一个能被填充数据的通用组件。</p>
@@ -129,9 +129,9 @@ customElements.define(&#x27;user-card&#x27;, class extends HTMLElement {
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">fieldset</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-name">legend</span>&gt;</span>Other information<span class="hljs-tag">&lt;/<span class="hljs-name">legend</span>&gt;</span>
-*!*
+
       <span class="hljs-tag">&lt;<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
-*/!*
+
     <span class="hljs-tag">&lt;/<span class="hljs-name">fieldset</span>&gt;</span>
     `;
   }
@@ -139,14 +139,14 @@ customElements.define(&#x27;user-card&#x27;, class extends HTMLElement {
 </span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
-*!*
+
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>I like to swim.<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-*/!*
+
   <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span>01.01.2001<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-*!*
+
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>...And play volleyball too!<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-*/!*
+
 <span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
 <p>所有未被插入的 light DOM 内容进入 “其他信息” 字段集。</p>
 <p>元素一个接一个的附加到插槽中，因此这两个未插入插槽的信息都在默认插槽中。</p>
@@ -165,12 +165,12 @@ customElements.define(&#x27;user-card&#x27;, class extends HTMLElement {
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">fieldset</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-name">legend</span>&gt;</span>About me<span class="hljs-tag">&lt;/<span class="hljs-name">legend</span>&gt;</span>
-*!*
+
       <span class="hljs-tag">&lt;<span class="hljs-name">slot</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Hello<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>I am John!<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
       <span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span>
-*/!*
+
     <span class="hljs-tag">&lt;/<span class="hljs-name">fieldset</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
 <h2 id="menu-example">Menu example</h2>
@@ -305,7 +305,7 @@ customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, 
     &lt;/div&gt;`</span>;
 
     <span class="hljs-comment">// 插槽能被添加/删除/代替</span>
-*!*
+
     <span class="hljs-built_in">this</span>.shadowRoot.firstElementChild.addEventListener(<span class="hljs-string">&#x27;slotchange&#x27;</span>, <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> {
       <span class="hljs-keyword">let</span> slot = e.target;
       <span class="hljs-keyword">if</span> (slot.name == <span class="hljs-string">&#x27;item&#x27;</span>) {
@@ -313,7 +313,7 @@ customElements.define(<span class="hljs-string">&#x27;custom-menu&#x27;</span>, 
         alert(<span class="hljs-string">&quot;Items: &quot;</span> + <span class="hljs-built_in">this</span>.items);
       }
     });
-*/!*
+
   }
 });
 

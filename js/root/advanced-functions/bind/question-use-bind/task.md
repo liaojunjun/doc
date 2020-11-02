@@ -10,7 +10,7 @@ importance: 5
 
 修改高亮的行，以使所有内容都能正常工作（其它行不用修改）。
 
-```js run
+```js
 function askPassword(ok, fail) {
   let password = prompt("Password?", '');
   if (password == "rockstar") ok();
@@ -30,7 +30,7 @@ let user = {
 
 };
 
-*!*
+
 askPassword(user.loginOk, user.loginFail);
-*/!*
+
 ```

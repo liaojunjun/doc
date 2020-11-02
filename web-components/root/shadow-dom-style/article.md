@@ -12,7 +12,7 @@ shadow DOM 可以包含 `<style>` 和 `<link rel="stylesheet" href="…">` 标�
 
 这正是 `:host` 所能做的：
 
-```html run autorun="no-epub" untrusted height=80
+```html autorun="no-epub" untrusted height=80
 <template id="tmpl">
   <style>
     /* 这些样式将从内部应用到 custom-dialog 元素上 */
@@ -70,12 +70,12 @@ custom-dialog {
 
 例如，我们希望仅当 `<custom-dialog>` 具有 `centered` 属性时才将其居中:
 
-```html run autorun="no-epub" untrusted height=80
+```html autorun="no-epub" untrusted height=80
 <template id="tmpl">
   <style>
-*!*
+
     :host([centered]) {
-*/!*
+
       position: fixed;
       left: 50%;
       top: 50%;
@@ -137,15 +137,15 @@ customElements.define('custom-dialog', class extends HTMLElement {
 
 在下面的例子中，按照文档样式，占槽的 `<span>` 是粗体，但是它不从局部样式中获取 `background`：
 
-```html run autorun="no-epub" untrusted height=80
+```html autorun="no-epub" untrusted height=80
 <style>
-*!*
+
   span { font-weight: bold }
-*/!*
+
 </style>
 
 <user-card>
-  <div slot="username">*!*<span>John Smith</span>*/!*</div>
+  <div slot="username"><span>John Smith</span></div>
 </user-card>
 
 <script>
@@ -154,9 +154,9 @@ customElements.define('user-card', class extends HTMLElement {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `
       <style>
-*!*
+
       span { background: red; }
-*/!*
+
       </style>
       Name: <slot name="username"></slot>
     `;
@@ -171,9 +171,9 @@ customElements.define('user-card', class extends HTMLElement {
 
 首先，我们可以对 `<slot>` 本身进行样式化，并借助 CSS 继承：
 
-```html run autorun="no-epub" untrusted height=80
+```html autorun="no-epub" untrusted height=80
 <user-card>
-  <div slot="username">*!*<span>John Smith</span>*/!*</div>
+  <div slot="username"><span>John Smith</span></div>
 </user-card>
 
 <script>
@@ -182,9 +182,9 @@ customElements.define('user-card', class extends HTMLElement {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `
       <style>
-*!*
+
       slot[name="username"] { font-weight: bold; }
-*/!*
+
       </style>
       Name: <slot name="username"></slot>
     `;
@@ -202,7 +202,7 @@ customElements.define('user-card', class extends HTMLElement {
 
 在我们的例子中，`::slotted(div)` 正好选择了 `<div slot="username">` ，但是没有选择它的子元素：
 
-```html run autorun="no-epub" untrusted height=80
+```html autorun="no-epub" untrusted height=80
 <user-card>
   <div slot="username">
     <div>John Smith</div>
@@ -215,9 +215,9 @@ customElements.define('user-card', class extends HTMLElement {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `
       <style>
-*!*
+
       ::slotted(div) { border: 1px solid red; }
-*/!*
+
       </style>
       Name: <slot name="username"></slot>
     `;
@@ -276,22 +276,22 @@ user-card {
 
 以下是完整的示例：
 
-```html run autorun="no-epub" untrusted height=80
+```html autorun="no-epub" untrusted height=80
 <style>
-*!*
+
   user-card {
     --user-card-field-color: green;
   }
-*/!*
+
 </style>
 
 <template id="tmpl">
   <style>
-*!*
+
     .field {
       color: var(--user-card-field-color, black);
     }
-*/!*
+
   </style>
   <div class="field">Name: <slot name="username"></slot></div>
   <div class="field">Birthday: <slot name="birthday"></slot></div>

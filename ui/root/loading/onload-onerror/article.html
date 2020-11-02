@@ -23,12 +23,12 @@ script.src = <span class="hljs-string">&quot;my.js&quot;</span>;
 script.src = <span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js&quot;</span>
 <span class="hljs-built_in">document</span>.head.append(script);
 
-*!*
+
 script.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-comment">// 该脚本创建了一个辅助函数 &quot;_&quot;</span>
   alert(_); <span class="hljs-comment">// 该函数可用</span>
 };
-*/!*</code></pre>
+</code></pre>
 <p>因此，在 <code>onload</code> 中我们可以使用脚本中的变量，运行函数等。</p>
 <p>……如果加载失败怎么办？例如，这里没有这样的脚本（error 404）或者服务器宕机（不可用）。</p>
 <h3 id="scriptonerror">script.onerror</h3>
@@ -38,11 +38,11 @@ script.onload = <span class="hljs-function"><span class="hljs-keyword">function<
 script.src = <span class="hljs-string">&quot;https://example.com/404.js&quot;</span>; <span class="hljs-comment">// 没有这个脚本</span>
 <span class="hljs-built_in">document</span>.head.append(script);
 
-*!*
+
 script.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Error loading &quot;</span> + <span class="hljs-built_in">this</span>.src); <span class="hljs-comment">// Error loading https://example.com/404.js</span>
 };
-*/!*</code></pre>
+</code></pre>
 <p>请注意，在这里我们无法获取更多 HTTP error 的详细信息。我们不知道 error 是 404 还是 500 或者其他情况。只知道是加载失败了。</p>
 <pre><code class="language-warn">`onload`/`onerror` 事件仅跟踪加载本身。
 
@@ -116,7 +116,7 @@ https://javascript.info/article/onload-onerror/crossorigin/error.js, 1:1</code><
   alert(<span class="hljs-string">`<span class="hljs-subst">${message}</span>\n<span class="hljs-subst">${url}</span>, <span class="hljs-subst">${line}</span>:<span class="hljs-subst">${col}</span>`</span>);
 };
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> *!*<span class="hljs-attr">crossorigin</span>=<span class="hljs-string">&quot;anonymous&quot;</span>*/!* <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cors.javascript.info/article/onload-onerror/crossorigin/error.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">crossorigin</span>=<span class="hljs-string">&quot;anonymous&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cors.javascript.info/article/onload-onerror/crossorigin/error.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>现在，假设服务器提供了 <code>Access-Control-Allow-Origin</code> header，一切都正常。我们有了完整的 error 报告。</p>
 <h2 id="总结">总结</h2>
 <p>图片 <code>&lt;img&gt;</code>，外部样式，脚本和其他资源都提供了 <code>load</code> 和 <code>error</code> 事件以跟踪它们的加载：</p>

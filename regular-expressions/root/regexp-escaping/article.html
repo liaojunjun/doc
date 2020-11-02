@@ -35,9 +35,9 @@ alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(reg) ); <s
 </ul>
 <p>所以调用 <code>new RegExp</code> 会获得一个没有反斜杠的字符串。</p>
 <p>如果要修复这个问题，我们需要双斜杠，因为引用会把 <code>\\</code> 变为 <code>\</code>：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> regStr = <span class="hljs-string">&quot;\\d\\.\\d&quot;</span>;
-*/!*
+
 alert(regStr); <span class="hljs-comment">// \d\.\d (correct now)</span>
 
 <span class="hljs-keyword">let</span> regexp = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(regStr);

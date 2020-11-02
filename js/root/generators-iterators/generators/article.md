@@ -22,7 +22,7 @@ Generator 函数与常规函数的行为不同。在此类函数被调用时，�
 
 我们来看一个例子：
 
-```js run
+```js
 function* generateSequence() {
   yield 1;
   yield 2;
@@ -31,9 +31,9 @@ function* generateSequence() {
 
 // "generator function" 创建了一个 "generator object"
 let generator = generateSequence();
-*!*
+
 alert(generator); // [object Generator]
-*/!*
+
 ```
 
 到目前为止，上面这段代码中的 **函数体** 代码还没有开始执行：
@@ -48,7 +48,7 @@ alert(generator); // [object Generator]
 
 例如，我们可以创建一个 generator 并获取其第一个产出的（yielded）值：
 
-```js run
+```js
 function* generateSequence() {
   yield 1;
   yield 2;
@@ -57,9 +57,9 @@ function* generateSequence() {
 
 let generator = generateSequence();
 
-*!*
+
 let one = generator.next();
-*/!*
+
 
 alert(JSON.stringify(one)); // {value: 1, done: false}
 ```
@@ -83,7 +83,7 @@ alert(JSON.stringify(two)); // {value: 2, done: false}
 ```js
 let three = generator.next();
 
-alert(JSON.stringify(three)); // {value: 3, *!*done: true*/!*}
+alert(JSON.stringify(three)); // {value: 3, done: true}
 ```
 
 ![](generateSequence-4.svg)
@@ -92,7 +92,7 @@ alert(JSON.stringify(three)); // {value: 3, *!*done: true*/!*}
 
 再对 `generator.next()` 进行新的调用不再有任何意义。如果我们这样做，它将返回相同的对象：`{done: true}`。
 
-```smart header="`function* f(…)` 或 `function *f(…)`？"
+`function* f(…)` 或 `function *f(…)`？"
 这两种语法都是对的。
 
 但是通常更倾向于第一种语法，因为星号 `*` 表示它是一个 generator 函数，它描述的是函数种类而不是名称，因此 `*` 应该和 `function` 关键字紧贴一起。
@@ -104,7 +104,7 @@ alert(JSON.stringify(three)); // {value: 3, *!*done: true*/!*}
 
 我们可以使用 `for..of` 循环遍历它所有的值：
 
-```js run
+```js
 function* generateSequence() {
   yield 1;
   yield 2;
@@ -124,13 +124,13 @@ for(let value of generator) {
 
 这是因为当 `done: true` 时，`for..of` 循环会忽略最后一个 `value`。因此，如果我们想要通过 `for..of` 循环显示所有的结果，我们必须使用 `yield` 返回它们：
 
-```js run
+```js
 function* generateSequence() {
   yield 1;
   yield 2;
-*!*
+
   yield 3;
-*/!*
+
 }
 
 let generator = generateSequence();
@@ -142,7 +142,7 @@ for(let value of generator) {
 
 因为 generator 是可迭代的，我们可以使用 iterator 的所有相关功能，例如：spread 语法 `...`：
 
-```js run
+```js
 function* generateSequence() {
   yield 1;
   yield 2;
@@ -162,7 +162,7 @@ alert(sequence); // 0, 1, 2, 3
 
 现在，我们回忆一下代码：
 
-```js run
+```js
 let range = {
   from: 1,
   to: 5,
@@ -196,7 +196,7 @@ alert([...range]); // 1,2,3,4,5
 
 下面是一个相同的 `range`，但紧凑得多：
 
-```js run
+```js
 let range = {
   from: 1,
   to: 5,
@@ -219,7 +219,7 @@ alert( [...range] ); // 1,2,3,4,5
 
 带有 generator 的变体比原来的 `range` 迭代代码简洁得多，并且保持了相同的功能。
 
-```smart header="Generator 可以永远产出（yield）值"
+Generator 可以永远产出（yield）值"
 在上面的示例中，我们生成了有限序列，但是我们也可以创建一个生成无限序列的 generator，它可以一直产出（yield）值。例如，无序的伪随机数序列。
 
 这种情况下肯定需要在 generator 的 `for..of` 循环中添加一个 `break`（或者 `return`）。否则循环将永远重复下去并挂起。
@@ -250,14 +250,14 @@ function* generateSequence(start, end) {
 
 组合的 generator 的例子：
 
-```js run
+```js
 function* generateSequence(start, end) {
   for (let i = start; i <= end; i++) yield i;
 }
 
 function* generatePasswordCodes() {
 
-*!*
+
   // 0..9
   yield* generateSequence(48, 57);
 
@@ -266,7 +266,7 @@ function* generatePasswordCodes() {
 
   // a..z
   yield* generateSequence(97, 122);
-*/!*
+
 
 }
 
@@ -283,14 +283,14 @@ alert(str); // 0..9A..Za..z
 
 执行结果与我们内联嵌套 generator 中的代码获得的结果相同：
 
-```js run
+```js
 function* generateSequence(start, end) {
   for (let i = start; i <= end; i++) yield i;
 }
 
 function* generateAlphaNum() {
 
-*!*
+
   // yield* generateSequence(48, 57);
   for (let i = 48; i <= 57; i++) yield i;
 
@@ -299,7 +299,7 @@ function* generateAlphaNum() {
 
   // yield* generateSequence(97, 122);
   for (let i = 97; i <= 122; i++) yield i;
-*/!*
+
 
 }
 
@@ -324,12 +324,12 @@ Generator 组合（composition）是将一个 generator 流插入到另一个 ge
 
 我们来看一个例子：
 
-```js run
+```js
 function* gen() {
-*!*
+
   // 向外部代码传递一个问题并等待答案
   let result = yield "2 + 2 = ?"; // (*)
-*/!*
+
 
   alert(result);
 }
@@ -360,7 +360,7 @@ setTimeout(() => generator.next(4), 1000);
 
 为了讲得更浅显易懂，我们来看另一个例子，其中包含了许多调用：
 
-```js run
+```js
 function* gen() {
   let ask1 = yield "2 + 2 = ?";
 
@@ -402,7 +402,7 @@ alert( generator.next(9).done ); // true
 
 例如，`"2 + 2?"` 的 yield 导致了一个 error：
 
-```js run
+```js
 function* gen() {
   try {
     let result = yield "2 + 2 = ?"; // (1)
@@ -417,9 +417,9 @@ let generator = gen();
 
 let question = generator.next().value;
 
-*!*
+
 generator.throw(new Error("The answer is not found in my database")); // (2)
-*/!*
+
 ```
 
 在 `(2)` 行引入到 generator 的 error 导致了在 `(1)` 行中的 `yield` 出现了一个异常。在上面这个例子中，`try..catch` 捕获并显示了这个 error。
@@ -428,7 +428,7 @@ generator.throw(new Error("The answer is not found in my database")); // (2)
 
 调用代码的当前行是 `generator.throw` 所在的那一行，标记为 `(2)`。所以我们可以在这里捕获它，就像这样：
 
-```js run
+```js
 function* generate() {
   let result = yield "2 + 2 = ?"; // 这行出现 error
 }
@@ -437,13 +437,13 @@ let generator = generate();
 
 let question = generator.next().value;
 
-*!*
+
 try {
   generator.throw(new Error("The answer is not found in my database"));
 } catch(e) {
   alert(e); // 显示这个 error
 }
-*/!*
+
 ```
 
 如果我们没有在那里捕获这个 error，那么，通常，它会掉入外部调用代码（如果有），如果在外部也没有被捕获，则会杀死脚本。

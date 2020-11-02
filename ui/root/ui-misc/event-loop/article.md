@@ -60,7 +60,7 @@
 
 如果你运行下面这段代码，你会看到引擎会“挂起”一段时间。对于服务端 JS 来说这显而易见，并且如果你在浏览器中运行它，尝试点击页面上其他按钮时，你会发现在计数结束之前不会处理其他事件。
 
-```js run
+```js
 let i = 0;
 
 let start = Date.now();
@@ -82,7 +82,7 @@ count();
 
 让我们使用嵌套的 `setTimeout` 调用来拆分这个任务：
 
-```js run
+```js
 let i = 0;
 
 let start = Date.now();
@@ -121,7 +121,7 @@ count();
 
 我们将要把调度（scheduling）移动到 `count()` 的开头：
 
-```js run
+```js
 let i = 0;
 
 let start = Date.now();
@@ -167,7 +167,7 @@ count();
 这是一个示例，对 `i` 的更改在该函数完成前不会显示出来，所以我们将只会看到最后的值：
 
 
-```html run
+```html
 <div id="progress"></div>
 
 <script>
@@ -189,7 +189,7 @@ count();
 
 这看起来更好看：
 
-```html run
+```html
 <div id="progress"></div>
 
 <script>
@@ -248,7 +248,7 @@ menu.onclick = function() {
 
 例如，看看下面这个示例：
 
-```js run
+```js
 setTimeout(() => alert("timeout"));
 
 Promise.resolve()
@@ -275,7 +275,7 @@ alert("code");
 
 这是一个与前面那个例子类似的，带有“计数进度条”的示例，但是它使用了 `queueMicrotask` 而不是 `setTimeout`。你可以看到它在最后才渲染。就像写的是同步代码一样：
 
-```html run
+```html
 <div id="progress"></div>
 
 <script>
@@ -290,9 +290,9 @@ alert("code");
     } while (i % 1e3 != 0);
 
     if (i < 1e6) {
-  *!*
+  
       queueMicrotask(count);
-  */!*
+  
     }
 
   }
@@ -328,7 +328,7 @@ alert("code");
 
 所以，我们可以使用 `queueMicrotask` 来在保持环境状态一致的情况下，异步地执行一个函数。
 
-```smart header="Web Workers"
+Web Workers"
 对于不应该阻塞事件循环的耗时长的繁重计算任务，我们可以使用 [Web Workers](https://html.spec.whatwg.org/multipage/workers.html)。
 
 这是在另一个并行线程中运行代码的方式。

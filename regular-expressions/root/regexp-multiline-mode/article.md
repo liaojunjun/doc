@@ -10,27 +10,27 @@
 
 在这个有多行文本的例子中，正则表达式 `/^\d+/gm` 将匹配每一行的开头数字：
 
-```js run
+```js
 let str = `1st place: Winnie
 2nd place: Piglet
 33rd place: Eeyore`;
 
-*!*
+
 alert( str.match(/^\d+/gm) ); // 1, 2, 33
-*/!*
+
 ```
 
 没有 flag  `/.../m` 时，仅仅是第一个数字被匹配到：
 
 
-```js run
+```js
 let str = `1st place: Winnie
 2nd place: Piglet
 33rd place: Eeyore`;
 
-*!*
+
 alert( str.match(/^\d+/g) ); // 1
-*/!*
+
 ```
 
 这是因为默认情况下，锚符 `^` 仅仅匹配文本的开头，在多行模式下，它匹配行的开头。
@@ -43,7 +43,7 @@ alert( str.match(/^\d+/g) ); // 1
 
 正则表达式 `\w+$ 会找到每一行的最后一个单词：
 
-```js run
+```js
 let str = `1st place: Winnie
 2nd place: Piglet
 33rd place: Eeyore`;
@@ -61,7 +61,7 @@ alert( str.match(/\w+$/gim) ); // Winnie,Piglet,Eeyore
 
 举个例子，我们在下面的代码中用它来替代 `$`：
 
-```js run
+```js
 let str = `1st place: Winnie
 2nd place: Piglet
 33rd place: Eeyore`;

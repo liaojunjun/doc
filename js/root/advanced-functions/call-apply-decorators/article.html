@@ -68,9 +68,9 @@ alert( <span class="hljs-string">&quot;Again: &quot;</span> + slow(<span class="
     <span class="hljs-keyword">if</span> (cache.has(x)) {
       <span class="hljs-keyword">return</span> cache.get(x);
     }
-*!*
+
     <span class="hljs-keyword">let</span> result = func(x); <span class="hljs-comment">// (**)</span>
-*/!*
+
     cache.set(x, result);
     <span class="hljs-keyword">return</span> result;
   };
@@ -80,9 +80,9 @@ alert( worker.slow(<span class="hljs-number">1</span>) ); <span class="hljs-comm
 
 worker.slow = cachingDecorator(worker.slow); <span class="hljs-comment">// 现在对其进行缓存</span>
 
-*!*
+
 alert( worker.slow(<span class="hljs-number">2</span>) ); <span class="hljs-comment">// 蛤！Error: Cannot read property &#x27;someMethod&#x27; of undefined</span>
-*/!*</code></pre>
+</code></pre>
 <p>错误发生在试图访问 <code>this.someMethod</code> 并失败了的 <code>(*)</code> 行中。你能看出来为什么吗？</p>
 <p>原因是包装器将原始函数调用为 <code>(**)</code> 行中的 <code>func(x)</code>。并且，当这样调用时，函数将得到 <code>this = undefined</code>。</p>
 <p>如果尝试运行下面这段代码，我们会观察到类似的问题：</p>
@@ -136,9 +136,9 @@ say.call( user, <span class="hljs-string">&quot;Hello&quot;</span> ); <span clas
     <span class="hljs-keyword">if</span> (cache.has(x)) {
       <span class="hljs-keyword">return</span> cache.get(x);
     }
-*!*
+
     <span class="hljs-keyword">let</span> result = func.call(<span class="hljs-built_in">this</span>, x); <span class="hljs-comment">// 现在 &quot;this&quot; 被正确地传递了</span>
-*/!*
+
     cache.set(x, result);
     <span class="hljs-keyword">return</span> result;
   };
@@ -186,16 +186,16 @@ worker.slow = cachingDecorator(worker.slow);</code></pre>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cachingDecorator</span>(<span class="hljs-params">func, hash</span>) </span>{
   <span class="hljs-keyword">let</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-*!*
+
     <span class="hljs-keyword">let</span> key = hash(<span class="hljs-built_in">arguments</span>); <span class="hljs-comment">// (*)</span>
-*/!*
+
     <span class="hljs-keyword">if</span> (cache.has(key)) {
       <span class="hljs-keyword">return</span> cache.get(key);
     }
 
-*!*
+
     <span class="hljs-keyword">let</span> result = func.call(<span class="hljs-built_in">this</span>, ...arguments); <span class="hljs-comment">// (**)</span>
-*/!*
+
 
     cache.set(key, result);
     <span class="hljs-keyword">return</span> result;
@@ -251,17 +251,17 @@ func.apply(context, args);   <span class="hljs-comment">// 与使用 call 相同
 <p>……不幸的是，这不行。因为我们正在调用 <code>hash(arguments)</code>，<code>arguments</code> 对象既是可迭代对象又是类数组对象，但它并不是真正的数组。</p>
 <p>所以在它上面调用 <code>join</code> 会失败，我们可以在下面看到：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hash</span>(<span class="hljs-params"></span>) </span>{
-*!*
+
   alert( <span class="hljs-built_in">arguments</span>.join() ); <span class="hljs-comment">// Error: arguments.join is not a function</span>
-*/!*
+
 }
 
 hash(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);</code></pre>
 <p>不过，有一种简单的方法可以使用数组的 join 方法：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hash</span>(<span class="hljs-params"></span>) </span>{
-*!*
+
   alert( [].join.call(<span class="hljs-built_in">arguments</span>) ); <span class="hljs-comment">// 1,2</span>
-*/!*
+
 }
 
 hash(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);</code></pre>

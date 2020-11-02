@@ -49,9 +49,9 @@ customElements.define(<span class="hljs-string">&#x27;custom-dialog&#x27;</span>
 <p>例如，我们希望仅当 <code>&lt;custom-dialog&gt;</code> 具有 <code>centered</code> 属性时才将其居中:</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
-*!*
+
     :host([centered]) {
-*/!*
+
       position: fixed;
       left: 50%;
       top: 50%;
@@ -100,13 +100,13 @@ customElements.define(<span class="hljs-string">&#x27;custom-dialog&#x27;</span>
 <p>占槽元素来自 light DOM，所以它们使用文档样式。局部样式不会影响占槽内容。</p>
 <p>在下面的例子中，按照文档样式，占槽的 <code>&lt;span&gt;</code> 是粗体，但是它不从局部样式中获取 <code>background</code>：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
-*!*
+
   span { font-weight: bold }
-*/!*
+
 <span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>*!*<span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>*/!*<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
@@ -115,9 +115,9 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
       &lt;style&gt;
-*!*
+
       span { background: red; }
-*/!*
+
       &lt;/style&gt;
       Name: &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
     `</span>;
@@ -128,7 +128,7 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
 <p>如果我们想要在我们的组件中设置占槽元素的样式，有两种选择。</p>
 <p>首先，我们可以对 <code>&lt;slot&gt;</code> 本身进行样式化，并借助 CSS 继承：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>*!*<span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>*/!*<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
@@ -137,9 +137,9 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
       &lt;style&gt;
-*!*
+
       slot[name=&quot;username&quot;] { font-weight: bold; }
-*/!*
+
       &lt;/style&gt;
       Name: &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
     `</span>;
@@ -165,9 +165,9 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
     <span class="hljs-built_in">this</span>.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
     <span class="hljs-built_in">this</span>.shadowRoot.innerHTML = <span class="hljs-string">`
       &lt;style&gt;
-*!*
+
       ::slotted(div) { border: 1px solid red; }
-*/!*
+
       &lt;/style&gt;
       Name: &lt;slot name=&quot;username&quot;&gt;&lt;/slot&gt;
     `</span>;
@@ -205,20 +205,20 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
 <p>自定义 CSS 属性穿透 shadow DOM，它们在任何地方都可见，因此内部的 <code>.field</code> 规则将使用它。</p>
 <p>以下是完整的示例：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
-*!*
+
   user-card {
     --user-card-field-color: green;
   }
-*/!*
+
 <span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tmpl&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
-*!*
+
     .field {
       color: var(--user-card-field-color, black);
     }
-*/!*
+
   <span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;field&quot;</span>&gt;</span>Name: <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;field&quot;</span>&gt;</span>Birthday: <span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;birthday&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>

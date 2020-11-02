@@ -1,5 +1,5 @@
 
-```js run
+```js
 let salaries = {
   John: 100,
   Ann: 160,

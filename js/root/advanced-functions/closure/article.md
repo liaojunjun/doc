@@ -7,7 +7,7 @@ JavaScript 是一种非常面向函数的语言。它给了我们很大的自由
 
 现在，让我们扩展知识，来看看更复杂的场景。
 
-```smart header="我们将在这探讨一下 `let/const`"
+我们将在这探讨一下 `let/const`"
 在 JavaScript 中，有三种声明变量的方式：`let`，`const`（现代方式），`var`（过去留下来的方式）。
 
 - 在本文的示例中，我们将使用 `let` 声明变量。
@@ -21,7 +21,7 @@ JavaScript 是一种非常面向函数的语言。它给了我们很大的自由
 
 例如：
 
-```js run
+```js
 {
   // 使用在代码块外不可见的局部变量做一些工作
 
@@ -35,7 +35,7 @@ alert(message); // Error: message is not defined
 
 我们可以使用它来隔离一段代码，该段代码执行自己的任务，并使用仅属于自己的变量：
 
-```js run
+```js
 {
   // 显示 message
   let message = "Hello";
@@ -49,25 +49,25 @@ alert(message); // Error: message is not defined
 }
 ```
 
-````smart header="这里如果没有代码块则会报错"
+`这里如果没有代码块则会报错"
 请注意，如果我们使用 `let` 对已存在的变量进行重复声明，如果对应的变量没有单独的代码块，则会出现错误：
 
-```js run
+```js
 // 显示 message
 let message = "Hello";
 alert(message);
 
 // 显示另一个 message
-*!*
+
 let message = "Goodbye"; // Error: variable already declared
-*/!*
+
 alert(message);
 ```
 ````
 
 对于 `if`，`for` 和 `while` 等，在 `{...}` 中声明的变量也仅在内部可见：
 
-```js run
+```js
 if (true) {
   let phrase = "Hello!";
 
@@ -83,7 +83,7 @@ alert(phrase); // Error, no such variable!
 
 对于 `for` 和 `while` 循环也是如此：
 
-```js run
+```js
 for (let i = 0; i < 3; i++) {
   // 变量 i 仅在这个 for 循环的内部可见
   alert(i); // 0，然后是 1，然后是 2
@@ -122,7 +122,7 @@ function sayHiBye(firstName, lastName) {
 
 下面的 `makeCounter` 创建了一个 "counter" 函数，该函数在每次调用时返回下一个数字：
 
-```js run
+```js
 function makeCounter() {
   let count = 0;
 
@@ -146,7 +146,7 @@ alert( counter() ); // 2
 
 ## 词法环境
 
-```warn header="这是龙！"
+"这是龙！"
 深入的技术讲解就在下面。
 
 尽管我很想避免编程语言的一些底层细节，但是如果没有这些细节，它们就不完整，所以请准备开始学习吧！
@@ -192,7 +192,7 @@ alert( counter() ); // 2
 - 变量是特殊内部对象的属性，与当前正在执行的（代码）块/函数/脚本有关。
 - 操作变量实际上是操作该对象的属性。
 
-```smart header="词法环境是一个规范对象"
+词法环境是一个规范对象"
 “词法环境”是一个规范对象（specification object）：它仅仅是存在于 [编程语言规范](https://tc39.es/ecma262/#sec-lexical-environments) 中的“理论上”存在的，用于描述事物如何运作的对象。我们无法在代码中获取该对象并直接对其进行操作。
 
 但 JavaScript 引擎同样可以优化它，比如清除未被使用的变量以节省内存和执行其他内部技巧等，但显性行为应该是和上述的无差。
@@ -296,7 +296,7 @@ let counter = makeCounter();
 
 如果我们调用 `counter()` 多次，`count` 变量将在同一位置增加到 `2`，`3` 等。
 
-```smart header="闭包"
+闭包"
 开发者通常应该都知道“闭包”这个通用的编程术语。
 
 [闭包](https://en.wikipedia.org/wiki/Closure_(computer_programming)) 是指内部函数总是可以访问其所在的外部函数中声明的变量和参数，即使在其外部函数被返回（寿命终结）了之后。在某些编程语言中，这是不可能的，或者应该以特殊的方式编写函数来实现。但是如上所述，在 JavaScript 中，所有函数都是天生闭包的（只有一个例外，将在 <info:new-function> 中讲到）。
@@ -371,7 +371,7 @@ g = null; // ……现在内存被清理了
 
 当代码执行暂停时，在控制台中输入 `alert(value)`。
 
-```js run
+```js
 function f() {
   let value = Math.random();
 
@@ -390,7 +390,7 @@ g();
 
 这可能会导致有趣的（如果不是那么耗时的）调试问题。其中之一 —— 我们可以看到的是一个同名的外部变量，而不是预期的变量：
 
-```js run global
+```js global
 let value = "Surprise!";
 
 function f() {
@@ -415,7 +415,7 @@ V8 引擎的这个特性你真的应该知道。如果你要使用 Chrome/Opera 
 
 ## 补充内容
 
-```smart header="说明"
+说明"
 为了更清晰地讲解闭包，本文经过大幅重写，以下内容是重写时部分被优化掉的内容，译者认为还是很有学习价值的，遂保留下来供大家学习。
 ```
 
@@ -429,7 +429,7 @@ V8 引擎的这个特性你真的应该知道。如果你要使用 Chrome/Opera 
 
 如果我们要避免这个，我们可以使用代码块来隔离整个脚本或其中一部分：
 
-```js run
+```js
 {
   // 用局部变量完成一些不应该被外面访问的工作
 

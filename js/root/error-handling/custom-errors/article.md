@@ -38,10 +38,10 @@ class Error {
 
 现在让我们从其中继承 `ValidationError`，并尝试进行运行：
 
-```js run untrusted
-*!*
+```js untrusted
+
 class ValidationError extends Error {
-*/!*
+
   constructor(message) {
     super(message); // (1)
     this.name = "ValidationError"; // (2)
@@ -67,7 +67,7 @@ try {
 
 让我们尝试在 `readUser(json)` 中使用它吧：
 
-```js run
+```js
 class ValidationError extends Error {
   constructor(message) {
     super(message);
@@ -95,9 +95,9 @@ try {
   let user = readUser('{ "age": 25 }');
 } catch (err) {
   if (err instanceof ValidationError) {
-*!*
+
     alert("Invalid data: " + err.message); // Invalid data: No field: name
-*/!*
+
   } else if (err instanceof SyntaxError) { // (*)
     alert("JSON Syntax Error: " + err.message);
   } else {
@@ -127,7 +127,7 @@ try {
 
 `ValidationError` 类是非常通用的。很多东西都可能出错。对象的属性可能缺失或者属性可能有格式错误（例如 `age` 属性的值为一个字符串）。让我们针对缺少属性的错误来制作一个更具体的 `PropertyRequiredError` 类。它将携带有关缺少的属性的相关信息。
 
-```js run
+```js
 class ValidationError extends Error {
   constructor(message) {
     super(message);
@@ -135,7 +135,7 @@ class ValidationError extends Error {
   }
 }
 
-*!*
+
 class PropertyRequiredError extends ValidationError {
   constructor(property) {
     super("No property: " + property);
@@ -143,7 +143,7 @@ class PropertyRequiredError extends ValidationError {
     this.property = property;
   }
 }
-*/!*
+
 
 // 用法
 function readUser(json) {
@@ -165,11 +165,11 @@ try {
   let user = readUser('{ "age": 25 }');
 } catch (err) {
   if (err instanceof ValidationError) {
-*!*
+
     alert("Invalid data: " + err.message); // Invalid data: No property: name
     alert(err.name); // PropertyRequiredError
     alert(err.property); // name
-*/!*
+
   } else if (err instanceof SyntaxError) {
     alert("JSON Syntax Error: " + err.message);
   } else {
@@ -186,13 +186,13 @@ try {
 
 这是带有 `MyError` 以及其他自定义的 error 类的代码，已进行简化：
 
-```js run
+```js
 class MyError extends Error {
   constructor(message) {
     super(message);
-*!*
+
     this.name = this.constructor.name;
-*/!*
+
   }
 }
 
@@ -251,7 +251,7 @@ try {
 
 下面的代码定义了 `ReadError`，并在 `readUser` 和 `try..catch` 中演示了其用法：
 
-```js run
+```js
 class ReadError extends Error {
   constructor(message, cause) {
     super(message);
@@ -279,25 +279,25 @@ function readUser(json) {
   try {
     user = JSON.parse(json);
   } catch (err) {
-*!*
+
     if (err instanceof SyntaxError) {
       throw new ReadError("Syntax Error", err);
     } else {
       throw err;
     }
-*/!*
+
   }
 
   try {
     validateUser(user);
   } catch (err) {
-*!*
+
     if (err instanceof ValidationError) {
       throw new ReadError("Validation Error", err);
     } else {
       throw err;
     }
-*/!*
+
   }
 
 }
@@ -306,11 +306,11 @@ try {
   readUser('{bad json}');
 } catch (e) {
   if (e instanceof ReadError) {
-*!*
+
     alert(e);
     // Original error: SyntaxError: Unexpected token b in JSON at position 1
     alert("Original error: " + e.cause);
-*/!*
+
   } else {
     throw e;
   }

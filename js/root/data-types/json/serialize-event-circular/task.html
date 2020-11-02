@@ -14,11 +14,11 @@
   <span class="hljs-attr">place</span>: room
 };
 
-*!*
+
 <span class="hljs-comment">// 循环引用</span>
 room.occupiedBy = meetup;
 meetup.self = meetup;
-*/!*
+
 
 alert( <span class="hljs-built_in">JSON</span>.stringify(meetup, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">replacer</span>(<span class="hljs-params">key, value</span>) </span>{
   <span class="hljs-comment">/* your code */</span>

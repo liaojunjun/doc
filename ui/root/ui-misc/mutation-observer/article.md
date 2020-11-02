@@ -48,7 +48,7 @@ observer.observe(node, config);
 
 例如，这里有一个 `<div>`，它具有 `contentEditable` 特性。该特性使我们可以聚焦和编辑元素。
 
-```html run
+```html
 <div contentEditable id="elem">Click and <b>edit</b>, please</div>
 
 <script>
@@ -156,10 +156,10 @@ articleElem.innerHTML = article;
 let article = /* 从服务器获取新内容 */
 articleElem.innerHTML = article;
 
-*!*
+
 let snippets = articleElem.querySelectorAll('pre[class*="language-"]');
 snippets.forEach(Prism.highlightElem);
-*/!*
+
 ```
 
 ……但是，想象一下，代码中有很多地方可以加载内容：文章，测验，论坛帖子。我们是否需要在每个地方都附加一个高亮显示调用？那不太方便，也很容易忘记。
@@ -178,7 +178,7 @@ snippets.forEach(Prism.highlightElem);
 
 如果你运行这段代码，它将开始观察下面的元素，并高亮显示现在此处的所有代码段：
 
-```js run
+```js
 let observer = new MutationObserver(mutations => {
 
   for(let mutation of mutations) {
@@ -215,7 +215,7 @@ observer.observe(demoElem, {childList: true, subtree: true});
 
 下面这段代码填充了其 `innerHTML`，这导致 `MutationObserver` 作出反应，并突出显示其内容：
 
-```js run
+```js
 let demoElem = document.getElementById('highlight-demo');
 
 // 动态插入带有代码段的内容
@@ -251,7 +251,7 @@ let mutationRecords = observer.takeRecords();
 ...
 ```
 
-```smart header="垃圾回收"
+垃圾回收"
 观察器在内部对节点使用弱引用。也就是说：如果一个节点被从 DOM 中删除了，并且该节点变得不可访问，那么它就会被垃圾回收。
 
 观察到 DOM 节点这一事实并不能阻止垃圾回收。

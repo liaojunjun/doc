@@ -8,7 +8,7 @@ importance: 5
 
 当我们喂其中一只的时候，另一只也吃饱了。为什么？如何修复它？
 
-```js run
+```js
 let hamster = {
   stomach: [],
 

@@ -4,7 +4,7 @@
 
 例如，让我们尝试向 `http://example.com` 发送 `fetch` 请求：
 
-```js run async
+```js async
 try {
   await fetch('http://example.com');
 } catch(err) {
@@ -40,14 +40,14 @@ CORS 的存在是为了保护互联网免受黑客攻击。
 
 ```html
 <!-- 表单目标 -->
-*!*
+
 <iframe name="iframe"></iframe>
-*/!*
+
 
 <!-- 表单可以由 JavaScript 动态生成并提交 -->
-*!*
+
 <form target="iframe" method="POST" action="http://another.com/…">
-*/!*
+
   ...
 </form>
 ```
@@ -138,9 +138,9 @@ CORS 的存在是为了保护互联网免受黑客攻击。
 ```http
 GET /request
 Host: anywhere.com
-*!*
+
 Origin: https://javascript.info
-*/!*
+
 ...
 ```
 
@@ -158,9 +158,9 @@ Origin: https://javascript.info
 ```http
 200 OK
 Content-Type:text/html; charset=UTF-8
-*!*
+
 Access-Control-Allow-Origin: https://javascript.info
-*/!*
+
 ```
 
 ## Response header
@@ -192,9 +192,9 @@ Content-Type:text/html; charset=UTF-8
 Content-Length: 12345
 API-Key: 2c9de507f2c54aa1
 Access-Control-Allow-Origin: https://javascript.info
-*!*
+
 Access-Control-Expose-Headers: Content-Length,API-Key
-*/!*
+
 ```
 
 有了这种 `Access-Control-Expose-Headers` header，此脚本就被允许读取响应的 `Content-Length` 和 `API-Key` header。

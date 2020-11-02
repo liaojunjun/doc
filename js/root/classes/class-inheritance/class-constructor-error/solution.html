@@ -10,14 +10,14 @@
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Animal</span> </span>{
   <span class="hljs-keyword">constructor</span>(name) {  
-    *!*
+    
     <span class="hljs-built_in">super</span>(name);
-    */!*
+    
     <span class="hljs-built_in">this</span>.created = <span class="hljs-built_in">Date</span>.now();
   }
 }
 
-*!*
+
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;White Rabbit&quot;</span>); <span class="hljs-comment">// 现在好了</span>
-*/!*
+
 alert(rabbit.name); <span class="hljs-comment">// White Rabbit</span></code></pre>

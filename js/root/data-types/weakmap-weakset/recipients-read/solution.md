@@ -1,6 +1,6 @@
 让我们将已读消息存储在 `WeakSet` 中：
 
-```js run
+```js
 let messages = [
   {text: "Hello", from: "John"},
   {text: "How goes?", from: "John"},

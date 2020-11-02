@@ -1,4 +1,4 @@
-```js run untrusted
+```js untrusted
 class FormatError extends SyntaxError {
   constructor(message) {
     super(message);

@@ -8,7 +8,7 @@ importance: 3
 
 但是前两次和后两次调用的结果不同，为什么呢？
 
-```js run no-beautify
+```js no-beautify
 let obj, method;
 
 obj = {

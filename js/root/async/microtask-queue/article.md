@@ -7,7 +7,7 @@ Promise 的处理程序（handlers）`.then`、`.catch` 和 `.finally` 都是异
 
 示例代码如下：
 
-```js run
+```js
 let promise = Promise.resolve();
 
 promise.then(() => alert("promise done!"));
@@ -44,7 +44,7 @@ Promise 的处理程序（handler）总是会经过这个内部队列。
 
 很简单，只需要像下面这样使用 `.then` 将其放入队列：
 
-```js run
+```js
 Promise.resolve()
   .then(() => alert("promise done!"))
   .then(() => alert("code finished"));
@@ -62,11 +62,11 @@ Promise.resolve()
 
 正常来说，如果我们预期可能会发生错误，我们会在 promise 链上添加 `.catch` 来处理 error：
 
-```js run
+```js
 let promise = Promise.reject(new Error("Promise Failed!"));
-*!*
+
 promise.catch(err => alert('caught'));
-*/!*
+
 
 // 不会运行：error 已经被处理
 window.addEventListener('unhandledrejection', event => alert(event.reason));
@@ -74,7 +74,7 @@ window.addEventListener('unhandledrejection', event => alert(event.reason));
 
 但是如果我们忘记添加 `.catch`，那么，微任务队列清空后，JavaScript 引擎会触发下面这事件：
 
-```js run
+```js
 let promise = Promise.reject(new Error("Promise Failed!"));
 
 // Promise Failed!
@@ -83,11 +83,11 @@ window.addEventListener('unhandledrejection', event => alert(event.reason));
 
 如果我们迟一点再处理这个 error 会怎样？例如：
 
-```js run
+```js
 let promise = Promise.reject(new Error("Promise Failed!"));
-*!*
+
 setTimeout(() => promise.catch(err => alert('caught')), 1000);
-*/!*
+
 
 // Error: Promise Failed!
 window.addEventListener('unhandledrejection', event => alert(event.reason));

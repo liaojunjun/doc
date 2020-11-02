@@ -17,12 +17,12 @@ alert(<span class="hljs-built_in">window</span>.gVar); <span class="hljs-comment
 
 alert(<span class="hljs-built_in">window</span>.gLet); <span class="hljs-comment">// undefined（不会成为全局对象的属性）</span></code></pre>
 <p>如果一个值非常重要，以至于你想使它在全局范围内可用，那么可以直接将其作为属性写入：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-comment">// 将当前用户信息全局化，以允许所有脚本访问它</span>
 <span class="hljs-built_in">window</span>.currentUser = {
   <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>
 };
-*/!*
+
 
 <span class="hljs-comment">// 代码中的另一个位置</span>
 alert(currentUser.name);  <span class="hljs-comment">// John</span>

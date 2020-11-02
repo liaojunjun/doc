@@ -22,17 +22,17 @@
   alert(<span class="hljs-string">&#x27;Hello&#x27;</span>);
 }
 
-*!*
+
 <span class="hljs-built_in">setTimeout</span>(sayHi, <span class="hljs-number">1000</span>);
-*/!*</code></pre>
+</code></pre>
 <p>带参数的情况：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params">phrase, who</span>) </span>{
   alert( phrase + <span class="hljs-string">&#x27;, &#x27;</span> + who );
 }
 
-*!*
+
 <span class="hljs-built_in">setTimeout</span>(sayHi, <span class="hljs-number">1000</span>, <span class="hljs-string">&quot;Hello&quot;</span>, <span class="hljs-string">&quot;John&quot;</span>); <span class="hljs-comment">// Hello, John</span>
-*/!*</code></pre>
+</code></pre>
 <p>如果第一个参数位传入的是字符串，JavaScript 会自动为其创建一个函数。</p>
 <p>所以这么写也是可以的：</p>
 <pre><code class="language-js"><span class="hljs-built_in">setTimeout</span>(<span class="hljs-string">&quot;alert(&#x27;Hello&#x27;)&quot;</span>, <span class="hljs-number">1000</span>);</code></pre>
@@ -82,9 +82,9 @@ let timerId = setInterval(() =&gt; alert(&#x27;tick&#x27;), 2000);
 
 <span class="hljs-keyword">let</span> timerId = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tick</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&#x27;tick&#x27;</span>);
-*!*
+
   timerId = <span class="hljs-built_in">setTimeout</span>(tick, <span class="hljs-number">2000</span>); <span class="hljs-comment">// (*)</span>
-*/!*
+
 }, <span class="hljs-number">2000</span>);</code></pre>
 <p>上面这个 <code>setTimeout</code> 在当前这一次函数执行完时 <code>(*)</code> 立即调度下一次调用。</p>
 <p>嵌套的 <code>setTimeout</code> 要比 <code>setInterval</code> 灵活得多。采用这种方式可以根据当前执行结果来调度下一次调用，因此下一次调用可以与当前这一次不同。</p>
@@ -152,11 +152,11 @@ alert(<span class="hljs-string">&quot;Hello&quot;</span>);</code></pre>
 
 让我们用下面的示例来看看这到底是什么意思。其中 `setTimeout` 调用会以零延时重新调度自身的调用。每次调用都会在 `times` 数组中记录上一次调用的实际时间。那么真正的延迟是什么样的？让我们来看看：
 
-```js run
+```js
 let start = Date.now();
 let times = [];
 
-setTimeout(function run() {
+setTimeout(function() {
   times.push(Date.now() - start); // 保存前一个调用的延时
 
   if (start + 100 &lt; Date.now()) alert(times); // 100 毫秒之后，显示延时信息
@@ -204,7 +204,7 @@ setTimeout(function run() {
 
 运行时，会观察到 CPU 挂起，服务器端 JS 表现的尤为明显。如果在浏览器下运行，试试点击页面的其他按钮，你会发现整个 JavaScript 的执行都暂停了，除非等这段代码运行完，否则什么也做不了。
 
-```js run
+```js
 let i = 0;
 
 let start = Date.now();
@@ -226,7 +226,7 @@ count();
 
 下面用 `setTimeout` 分割任务：
 
-```js run
+```js
 let i = 0;
 
 let start = Date.now();
@@ -267,7 +267,7 @@ count();
 
 将调度代码挪到 `count()` 函数开头位置：
 
-```js run
+```js
 let i = 0;
 
 let start = Date.now();
@@ -303,7 +303,7 @@ count();
 所以，如果运行一个非常耗时的函数，即便在这个函数中改变了文档内容，除非这个函数执行完，那么变化是不会立刻反映到页面上的。
 
 以下是一个示例：
-```html run
+```html
 <div id="progress"></div>
 
 <script>
@@ -326,7 +326,7 @@ count();
 
 接下来用 `setTimeout` 对任务进行分割，这样就能在每一轮运行的间隙观察到变化了，效果要好得多：
 
-```html run
+```html
 <div id="progress"></div>
 
 <script>

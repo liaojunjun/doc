@@ -5,13 +5,13 @@
 <p>我们可以通过在声明之前放置 <code>export</code> 来标记任意声明为导出，无论声明的是变量，函数还是类都可以。</p>
 <p>例如，这里的所有导出均有效：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 导出数组</span>
-*!*<span class="hljs-keyword">export</span>*/!* <span class="hljs-keyword">let</span> months = [<span class="hljs-string">&#x27;Jan&#x27;</span>, <span class="hljs-string">&#x27;Feb&#x27;</span>, <span class="hljs-string">&#x27;Mar&#x27;</span>,<span class="hljs-string">&#x27;Apr&#x27;</span>, <span class="hljs-string">&#x27;Aug&#x27;</span>, <span class="hljs-string">&#x27;Sep&#x27;</span>, <span class="hljs-string">&#x27;Oct&#x27;</span>, <span class="hljs-string">&#x27;Nov&#x27;</span>, <span class="hljs-string">&#x27;Dec&#x27;</span>];
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> months = [<span class="hljs-string">&#x27;Jan&#x27;</span>, <span class="hljs-string">&#x27;Feb&#x27;</span>, <span class="hljs-string">&#x27;Mar&#x27;</span>,<span class="hljs-string">&#x27;Apr&#x27;</span>, <span class="hljs-string">&#x27;Aug&#x27;</span>, <span class="hljs-string">&#x27;Sep&#x27;</span>, <span class="hljs-string">&#x27;Oct&#x27;</span>, <span class="hljs-string">&#x27;Nov&#x27;</span>, <span class="hljs-string">&#x27;Dec&#x27;</span>];
 
 <span class="hljs-comment">// 导出 const 声明的变量</span>
-*!*<span class="hljs-keyword">export</span>*/!* <span class="hljs-keyword">const</span> MODULES_BECAME_STANDARD_YEAR = <span class="hljs-number">2015</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> MODULES_BECAME_STANDARD_YEAR = <span class="hljs-number">2015</span>;
 
 <span class="hljs-comment">// 导出类</span>
-*!*<span class="hljs-keyword">export</span>*/!* <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
+<span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
   <span class="hljs-keyword">constructor</span>(name) {
     <span class="hljs-built_in">this</span>.name = name;
   }
@@ -25,7 +25,7 @@
 ```js
 export function sayHi(user) {
   alert(`Hello, ${user}!`);
-} *!* // 在这里没有分号 ; */!*
+}  // 在这里没有分号 ; 
 ```
 </code></pre>
 <h2 id="导出与声明分开">导出与声明分开</h2>
@@ -40,24 +40,24 @@ export function sayHi(user) {
   alert(<span class="hljs-string">`Bye, <span class="hljs-subst">${user}</span>!`</span>);
 }
 
-*!*
+
 <span class="hljs-keyword">export</span> {sayHi, sayBye}; <span class="hljs-comment">// 导出变量列表</span>
-*/!*</code></pre>
+</code></pre>
 <p>……从技术上讲，我们也可以把 <code>export</code> 放在函数上面。</p>
 <h2 id="import-">Import *</h2>
 <p>通常，我们把要导入的东西列在花括号 <code>import {...}</code> 中，就像这样：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 📁 main.js</span>
-*!*
+
 <span class="hljs-keyword">import</span> {sayHi, sayBye} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./say.js&#x27;</span>;
-*/!*
+
 
 sayHi(<span class="hljs-string">&#x27;John&#x27;</span>); <span class="hljs-comment">// Hello, John!</span>
 sayBye(<span class="hljs-string">&#x27;John&#x27;</span>); <span class="hljs-comment">// Bye, John!</span></code></pre>
 <p>但是如果有很多要导入的内容，我们可以使用 <code>import * as &lt;obj&gt;</code> 将所有内容导入为一个对象，例如：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 📁 main.js</span>
-*!*
+
 <span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> say <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./say.js&#x27;</span>;
-*/!*
+
 
 say.sayHi(<span class="hljs-string">&#x27;John&#x27;</span>);
 say.sayBye(<span class="hljs-string">&#x27;John&#x27;</span>);</code></pre>
@@ -84,9 +84,9 @@ say.sayBye(<span class="hljs-string">&#x27;John&#x27;</span>);</code></pre>
 <p>我们也可以使用 <code>as</code> 让导入具有不同的名字。</p>
 <p>例如，简洁起见，我们将 <code>sayHi</code> 导入到局部变量 <code>hi</code>，将 <code>sayBye</code> 导入到 <code>bye</code>：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 📁 main.js</span>
-*!*
+
 <span class="hljs-keyword">import</span> {sayHi <span class="hljs-keyword">as</span> hi, sayBye <span class="hljs-keyword">as</span> bye} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./say.js&#x27;</span>;
-*/!*
+
 
 hi(<span class="hljs-string">&#x27;John&#x27;</span>); <span class="hljs-comment">// Hello, John!</span>
 bye(<span class="hljs-string">&#x27;John&#x27;</span>); <span class="hljs-comment">// Bye, John!</span></code></pre>
@@ -100,8 +100,8 @@ export {sayHi <span class="hljs-keyword">as</span> hi, sayBye <span class="hljs-
 <pre><code class="language-js">// 📁 main.js
 import * as say from &#x27;./say.js&#x27;;
 
-say.*!*hi*/!*(&#x27;John&#x27;); // Hello, John!
-say.*!*bye*/!*(&#x27;John&#x27;); // Bye, John!</code></pre>
+say.hi(&#x27;John&#x27;); // Hello, John!
+say.bye(&#x27;John&#x27;); // Bye, John!</code></pre>
 <h2 id="export-default">Export default</h2>
 <p>在实际中，主要有两种模块。</p>
 <ul>
@@ -113,7 +113,7 @@ say.*!*bye*/!*(&#x27;John&#x27;); // Bye, John!</code></pre>
 <p>模块提供了一个特殊的默认导出 <code>export default</code> 语法，以使“一个模块只做一件事”的方式看起来更好。</p>
 <p>将 <code>export default</code> 放在要导出的实体前：</p>
 <pre><code class="language-js">// 📁 user.js
-export *!*default*/!* class User { // 只需要添加 &quot;default&quot; 即可
+export default class User { // 只需要添加 &quot;default&quot; 即可
   constructor(name) {
     this.name = name;
   }
@@ -121,7 +121,7 @@ export *!*default*/!* class User { // 只需要添加 &quot;default&quot; 即可
 <p>每个文件可能只有一个 <code>export default</code>：</p>
 <p>……然后将其导入而不需要花括号：</p>
 <pre><code class="language-js">// 📁 main.js
-import *!*User*/!* from &#x27;./user.js&#x27;; // 不需要花括号 {User}，只需要写成 User 即可
+import User from &#x27;./user.js&#x27;; // 不需要花括号 {User}，只需要写成 User 即可
 
 new User(&#x27;John&#x27;);</code></pre>
 <p>不用花括号的导入看起来很酷。刚开始使用模块时，一个常见的错误就是忘记写花括号。所以，请记住，<code>import</code> 命名的导出时需要花括号，而 <code>import</code> 默认的导出时不需要花括号。</p>
@@ -179,7 +179,7 @@ new User(&#x27;John&#x27;);</code></pre>
 }</code></pre>
 <p>这是导入默认的导出以及命名的导出的方法：</p>
 <pre><code class="language-js">// 📁 main.js
-import {*!*default as User*/!*, sayHi} from &#x27;./user.js&#x27;;
+import {default as User, sayHi} from &#x27;./user.js&#x27;;
 
 new User(&#x27;John&#x27;);</code></pre>
 <p>如果我们将所有东西 <code>*</code> 作为一个对象导入，那么 <code>default</code> 属性正是默认的导出：</p>

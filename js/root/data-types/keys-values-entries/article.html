@@ -77,12 +77,12 @@
   <span class="hljs-attr">meat</span>: <span class="hljs-number">4</span>,
 };
 
-*!*
+
 <span class="hljs-keyword">let</span> doublePrices = <span class="hljs-built_in">Object</span>.fromEntries(
   <span class="hljs-comment">// 转换为数组，之后使用 map 方法，然后通过 fromEntries 再转回到对象</span>
   <span class="hljs-built_in">Object</span>.entries(prices).map(<span class="hljs-function">(<span class="hljs-params">[key, value]</span>) =&gt;</span> [key, value * <span class="hljs-number">2</span>])
 );
-*/!*
+
 
 alert(doublePrices.meat); <span class="hljs-comment">// 8</span></code></pre>
 <p>乍一看，可能看起来很困难，但是使用一次或两次后，就很容易理解了。我们可以通过这种方式建立强大的转换链。</p>

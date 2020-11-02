@@ -1,13 +1,13 @@
 
 我们可以通过输出它，来看看它是属于哪个类的，像这样：
 
-```js run
+```js
 alert(document); // [object HTMLDocument]
 ```
 
 或者：
 
-```js run
+```js
 alert(document.constructor.name); // HTMLDocument
 ```
 
@@ -23,13 +23,13 @@ alert(document.constructor.name); // HTMLDocument
 
 此外，在 `prototype` 中还有一个对构造函数的引用：
 
-```js run
+```js
 alert(HTMLDocument.prototype.constructor === HTMLDocument); // true
 ```
 
 为了以字符串的形式获取一个类的 name，我们可以使用 `constructor.name`。让我们对整个 `document` 的原型链执行该操作，直到 class `Node`：
 
-```js run
+```js
 alert(HTMLDocument.prototype.constructor.name); // HTMLDocument
 alert(HTMLDocument.prototype.__proto__.constructor.name); // Document
 alert(HTMLDocument.prototype.__proto__.__proto__.constructor.name); // Node

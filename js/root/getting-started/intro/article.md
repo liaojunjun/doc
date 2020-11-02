@@ -12,7 +12,7 @@
 
 这方面，JavaScript 和 [Java](https://en.wikipedia.org/wiki/Java_(programming_language)) 有很大的区别。
 
-```smart header="为什么叫 <u>Java</u>Script？"
+为什么叫 <u>Java</u>Script？"
 JavaScript 在刚诞生的时候，它的名字叫 "LiveScript"。但是因为当时 Java 很流行，所以决定将一种新语言定位为 Java 的“弟弟”会有助于它的流行。
 
 随着 JavaScript 的发展，它已经成为了一门完全独立的语言，并且也拥有了自己的语言规范 [ECMAScript](http://en.wikipedia.org/wiki/ECMAScript)。现在，它和 Java 之间没有任何关系。
@@ -30,7 +30,7 @@ JavaScript 在刚诞生的时候，它的名字叫 "LiveScript"。但是因为�
 
 上面这些术语很容易记住，因为它们经常出现在开发者的文章中。我们也会用到这些术语。例如，如果“V8 支持某个功能”，那么我们可以认为这个功能大概能在 Chrome 和 Opera 中正常运行。
 
-```smart header="引擎是如何工作的？"
+引擎是如何工作的？"
 
 引擎很复杂，但是基本原理很简单。
 

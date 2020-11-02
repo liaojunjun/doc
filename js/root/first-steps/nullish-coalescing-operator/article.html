@@ -17,9 +17,9 @@
 <span class="hljs-keyword">let</span> nickName = <span class="hljs-string">&quot;Supercoder&quot;</span>;
 
 <span class="hljs-comment">// 显示第一个不是 null/undefined 的值</span>
-*!*
+
 alert(firstName ?? lastName ?? nickName ?? <span class="hljs-string">&quot;Anonymous&quot;</span>); <span class="hljs-comment">// Supercoder</span>
-*/!*</code></pre>
+</code></pre>
 <h2 id="与--比较">与 || 比较</h2>
 <p>或运算符 <code>||</code> 可以与 <code>??</code> 运算符以同样的方式使用。正如 <a href="info:logical-operators#or-finds-the-first-truthy-value">上一章</a> 所讲的，我们可以用 <code>||</code> 替换上面示例中的 <code>??</code>，也可以获得相同的结果。</p>
 <p>重要的区别是：</p>
@@ -60,9 +60,9 @@ alert(area); <span class="hljs-comment">// 5000</span></code></pre>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> x = <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-number">2</span> ?? <span class="hljs-number">3</span>; <span class="hljs-comment">// Syntax error</span></code></pre>
 <p>这个限制无疑是值得商榷的，但是它被添加到语言规范中是为了避免编程错误，因为人们开始使用 <code>??</code> 替代 <code>||</code>。</p>
 <p>可以明确地使用括号来解决这个问题：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> x = (<span class="hljs-number">1</span> &amp;&amp; <span class="hljs-number">2</span>) ?? <span class="hljs-number">3</span>; <span class="hljs-comment">// 起作用</span>
-*/!*
+
 
 alert(x); <span class="hljs-comment">// 2</span></code></pre>
 <h2 id="总结">总结</h2>

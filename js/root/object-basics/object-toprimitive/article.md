@@ -62,7 +62,7 @@
 
     实际上，我们没有必要记住这些奇特的细节，除了一种情况（`Date` 对象，我们稍后会学到它）之外，所有内建对象都以和 `"number"` 相同的方式实现 `"default"` 转换。我们也可以这样做。
 
-```smart header="没有 `\"boolean\"` hint"
+没有 `\"boolean\"` hint"
 请注意 —— 只有三种 hint。就这么简单。
 
 没有 "boolean" hint（在布尔上下文中所有对象都是 `true`）或其他任何东西。如果我们将 `"default"` 和 `"number"` 视为相同，就像大多数内建函数一样，那么就只有两种转换了。
@@ -89,7 +89,7 @@ obj[Symbol.toPrimitive] = function(hint) {
 
 例如，这里 `user` 对象实现了它：
 
-```js run
+```js
 let user = {
   name: "John",
   money: 1000,
@@ -127,7 +127,7 @@ alert(user + 500); // hint: default -> 1500
 
 下面是一个示例：
 
-```js run
+```js
 let user = {name: "John"};
 
 alert(user); // [object Object]
@@ -142,7 +142,7 @@ alert(user.valueOf() === user); // true
 
 例如，这里的 `user` 执行和前面提到的那个 `user` 一样的操作，使用 `toString` 和 `valueOf` 的组合（而不是 `Symbol.toPrimitive`）：
 
-```js run
+```js
 let user = {
   name: "John",
   money: 1000,
@@ -168,7 +168,7 @@ alert(user + 500); // valueOf -> 1500
 
 通常我们希望有一个“全能”的地方来处理所有原始转换。在这种情况下，我们可以只实现 `toString`，就像这样：
 
-```js run
+```js
 let user = {
   name: "John",
 
@@ -191,7 +191,7 @@ alert(user + 500); // toString -> John500
 
 唯一强制性的事情是：这些方法必须返回一个原始值，而不是对象。
 
-```smart header="历史原因"
+历史原因"
 由于历史原因，如果 `toString` 或 `valueOf` 返回一个对象，则不会出现 error，但是这种值会被忽略（就像这种方法根本不存在）。这是因为在 JavaScript 语言发展初期，没有很好的 "error" 的概念。
 
 相反，`Symbol.toPrimitive` **必须** 返回一个原始值，否则就会出现 error。
@@ -207,7 +207,7 @@ alert(user + 500); // toString -> John500
 
 例如：
 
-```js run
+```js
 let obj = {
   // toString 在没有其他方法的情况下处理所有转换
   toString() {
@@ -223,7 +223,7 @@ alert(obj * 2); // 4，对象被转换为原始值字符串 "2"，之后它被�
 
 二元加法在同样的情况下会将其连接成字符串，因为它更愿意接受字符串：
 
-```js run
+```js
 let obj = {
   toString() {
     return "2";

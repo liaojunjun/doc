@@ -1,11 +1,11 @@
 简单的解决方案可以是：
 
-```js run
-*!*
+```js
+
 function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
 }
-*/!*
+
 
 let arr = [1, 2, 3];
 shuffle(arr);
@@ -18,7 +18,7 @@ alert(arr);
 
 例如，请考虑下面的代码。它运行 100 万次 `shuffle` 并计算所有可能结果的出现次数：
 
-```js run
+```js
 function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
 }
@@ -81,7 +81,7 @@ function shuffle(array) {
 
 让我们以相同的方式测试一下：
 
-```js run
+```js
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));

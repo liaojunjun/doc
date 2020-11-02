@@ -22,9 +22,9 @@ alert( <span class="hljs-literal">false</span> || <span class="hljs-literal">fal
 <p>例如：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> hour = <span class="hljs-number">9</span>;
 
-*!*
+
 <span class="hljs-keyword">if</span> (hour &lt; <span class="hljs-number">10</span> || hour &gt; <span class="hljs-number">18</span>) {
-*/!*
+
   alert( <span class="hljs-string">&#x27;The office is closed.&#x27;</span> );
 }</code></pre>
 <p>我们可以传入更多的条件：</p>
@@ -63,9 +63,9 @@ alert( <span class="hljs-literal">undefined</span> || <span class="hljs-literal"
 <span class="hljs-keyword">let</span> lastName = <span class="hljs-string">&quot;&quot;</span>;
 <span class="hljs-keyword">let</span> nickName = <span class="hljs-string">&quot;SuperCoder&quot;</span>;
 
-*!*
+
 alert( firstName || lastName || nickName || <span class="hljs-string">&quot;Anonymous&quot;</span>); <span class="hljs-comment">// SuperCoder</span>
-*/!*</code></pre>
+</code></pre>
 <p> 如果所有变量都为假（falsy)，结果就是 <code>Anonymous</code>。</p>
 </li>
 <li><p><strong>短路求值（Short-circuit evaluation）。</strong></p>
@@ -73,8 +73,8 @@ alert( firstName || lastName || nickName || <span class="hljs-string">&quot;Anon
 <p> 它的意思是，<code>||</code> 对其参数进行处理，直到达到第一个真值，然后立即返回该值，而无需处理其他参数。</p>
 <p> 如果操作数不仅仅是一个值，而是一个有副作用的表达式，例如变量赋值或函数调用，那么这一特性的重要性就变得显而易见了。</p>
 <p> 在下面这个例子中，只会打印第二条信息：</p>
-<pre><code class="language-js">*!*<span class="hljs-literal">true</span>*/!* || alert(<span class="hljs-string">&quot;not printed&quot;</span>);
-*!*<span class="hljs-literal">false</span>*/!* || alert(<span class="hljs-string">&quot;printed&quot;</span>);</code></pre>
+<pre><code class="language-js"><span class="hljs-literal">true</span> || alert(<span class="hljs-string">&quot;not printed&quot;</span>);
+<span class="hljs-literal">false</span> || alert(<span class="hljs-string">&quot;printed&quot;</span>);</code></pre>
 <p> 在第一行中，或运算符 <code>||</code> 在遇到 <code>true</code> 时立即停止运算，所以 <code>alert</code> 没有运行。</p>
 <p> 有时，人们利用这个特性，只在左侧的条件为假时才执行命令。</p>
 </li>
@@ -127,12 +127,12 @@ alert( <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-string">&
 与运算 <code>&amp;&amp;</code> 的优先级比或运算 <code>||</code> 要高。</p>
 <p>所以代码 <code>a &amp;&amp; b || c &amp;&amp; d</code> 完全跟 <code>&amp;&amp;</code> 表达式加了括号一样：<code>(a &amp;&amp; b) || (c &amp;&amp; d)</code>。</p>
 <pre><code>
-````warn header=&quot;不要用 || 或 &amp;&amp; 来取代 `if`&quot;
+`&quot;不要用 || 或 &amp;&amp; 来取代 `if`&quot;
 有时候，有人会用与运算符 `&amp;&amp;` 来“简化 `if`”。
 
 例如：
 
-```js run
+```js
 let x = 1;
 
 (x &gt; 0) &amp;&amp; alert( &#x27;Greater than zero!&#x27; );
@@ -142,7 +142,7 @@ let x = 1;
 
 所以我们基本可以类似地得到：
 
-```js run
+```js
 let x = 1;
 
 if (x &gt; 0) alert( &#x27;Greater than zero!&#x27; );

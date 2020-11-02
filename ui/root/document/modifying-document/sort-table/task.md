@@ -6,7 +6,7 @@ importance: 5
 
 下面是一个表格：
 
-```html run
+```html
 <table>
 <thead>
   <tr>

@@ -1,4 +1,3 @@
-
 # 特性和属性（Attributes and properties）
 
 当浏览器加载页面时，它会“读取”（或者称之为：“解析”）HTML 并从中生成 DOM 对象。对于元素节点，大多数标准的 HTML 特性（attributes）会自动变成 DOM 对象的属性（properties）。（译注：attribute 和 property 两词意思相近，为作区分，全文将 attribute 译为“特性”，property 译为“属性”，请读者注意区分。）
@@ -15,10 +14,10 @@ DOM 节点是常规的 JavaScript 对象。我们可以 alert 它们。
 
 例如，让我们在 `document.body` 中创建一个新的属性：
 
-```js run
+```js
 document.body.myData = {
-  name: 'Caesar',
-  title: 'Imperator'
+  name: "Caesar",
+  title: "Imperator",
 };
 
 alert(document.body.myData.title); // Imperator
@@ -26,8 +25,8 @@ alert(document.body.myData.title); // Imperator
 
 我们也可以像下面这样添加一个方法：
 
-```js run
-document.body.sayTagName = function() {
+```js
+document.body.sayTagName = function () {
   alert(this.tagName);
 };
 
@@ -36,8 +35,8 @@ document.body.sayTagName(); // BODY（这个方法中的 "this" 的值是 docume
 
 我们还可以修改内建属性的原型，例如修改 `Element.prototype` 为所有元素添加一个新方法：
 
-```js run
-Element.prototype.sayHi = function() {
+```js
+Element.prototype.sayHi = function () {
   alert(`Hello, I'm ${this.tagName}`);
 };
 
@@ -57,14 +56,14 @@ document.body.sayHi(); // Hello, I'm BODY
 所以，当一个元素有 `id` 或其他 **标准的** 特性，那么就会生成对应的 DOM 属性。但是非 **标准的** 特性则不会。
 
 例如：
-```html run
+
+```html
 <body id="test" something="non-standard">
   <script>
     alert(document.body.id); // test
-*!*
+
     // 非标准的特性没有获得对应的属性
     alert(document.body.something); // undefined
-*/!*
   </script>
 </body>
 ```
@@ -72,14 +71,14 @@ document.body.sayHi(); // Hello, I'm BODY
 请注意，一个元素的标准的特性对于另一个元素可能是未知的。例如 `"type"` 是 `<input>` 的一个标准的特性（[HTMLInputElement](https://html.spec.whatwg.org/#htmlinputelement)），但对于 `<body>`（[HTMLBodyElement](https://html.spec.whatwg.org/#htmlbodyelement)）来说则不是。规范中对相应元素类的标准的属性进行了详细的描述。
 
 这里我们可以看到：
-```html run
+
+```html
 <body id="body" type="...">
-  <input id="input" type="text">
+  <input id="input" type="text" />
   <script>
     alert(input.type); // text
-*!*
+
     alert(body.type); // undefined：DOM 属性没有被创建，因为它不是一个标准的特性
-*/!*
   </script>
 </body>
 ```
@@ -99,12 +98,10 @@ document.body.sayHi(); // Hello, I'm BODY
 
 下面是一个读取非标准的特性的示例：
 
-```html run
+```html
 <body something="non-standard">
   <script>
-*!*
-    alert(document.body.getAttribute('something')); // 非标准的
-*/!*
+    alert(document.body.getAttribute("something")); // 非标准的
   </script>
 </body>
 ```
@@ -116,19 +113,20 @@ HTML 特性有以下几个特征：
 
 下面是一个使用特性的扩展示例：
 
-```html run
+```html
 <body>
   <div id="elem" about="Elephant"></div>
 
   <script>
-    alert( elem.getAttribute('About') ); // (1) 'Elephant'，读取
+    alert(elem.getAttribute("About")); // (1) 'Elephant'，读取
 
-    elem.setAttribute('Test', 123); // (2) 写入
+    elem.setAttribute("Test", 123); // (2) 写入
 
-    alert( elem.outerHTML ); // (3) 查看特性是否在 HTML 中（在）
+    alert(elem.outerHTML); // (3) 查看特性是否在 HTML 中（在）
 
-    for (let attr of elem.attributes) { // (4) 列出所有
-      alert( `${attr.name} = ${attr.value}` );
+    for (let attr of elem.attributes) {
+      // (4) 列出所有
+      alert(`${attr.name} = ${attr.value}`);
     }
   </script>
 </body>
@@ -147,43 +145,42 @@ HTML 特性有以下几个特征：
 
 在下面这个示例中，`id` 被修改为特性，我们可以看到对应的属性也发生了变化。然后反过来也是同样的效果：
 
-```html run
-<input>
+```html
+<input />
 
 <script>
-  let input = document.querySelector('input');
+  let input = document.querySelector("input");
 
   // 特性 => 属性
-  input.setAttribute('id', 'id');
+  input.setAttribute("id", "id");
   alert(input.id); // id（被更新了）
 
   // 属性 => 特性
-  input.id = 'newId';
-  alert(input.getAttribute('id')); // newId（被更新了）
+  input.id = "newId";
+  alert(input.getAttribute("id")); // newId（被更新了）
 </script>
 ```
 
 但这里也有些例外，例如 `input.value` 只能从特性同步到属性，反过来则不行：
 
-```html run
-<input>
+```html
+<input />
 
 <script>
-  let input = document.querySelector('input');
+  let input = document.querySelector("input");
 
   // 特性 => 属性
-  input.setAttribute('value', 'text');
+  input.setAttribute("value", "text");
   alert(input.value); // text
 
-*!*
   // 这个操作无效，属性 => 特性
-  input.value = 'newValue';
-  alert(input.getAttribute('value')); // text（没有被更新！）
-*/!*
+  input.value = "newValue";
+  alert(input.getAttribute("value")); // text（没有被更新！）
 </script>
 ```
 
 在上面这个例子中：
+
 - 改变特性值 `value` 会更新属性。
 - 但是属性的更改不会影响特性。
 
@@ -193,23 +190,23 @@ HTML 特性有以下几个特征：
 
 DOM 属性不总是字符串类型的。例如，`input.checked` 属性（对于 checkbox 的）是布尔型的。
 
-```html run
-<input id="input" type="checkbox" checked> checkbox
+```html
+<input id="input" type="checkbox" checked /> checkbox
 
 <script>
-  alert(input.getAttribute('checked')); // 特性值是：空字符串
+  alert(input.getAttribute("checked")); // 特性值是：空字符串
   alert(input.checked); // 属性值是：true
 </script>
 ```
 
 还有其他的例子。`style` 特性是字符串类型的，但 `style` 属性是一个对象：
 
-```html run
+```html
 <div id="div" style="color:red;font-size:120%">Hello</div>
 
 <script>
   // 字符串
-  alert(div.getAttribute('style')); // color:red;font-size:120%
+  alert(div.getAttribute("style")); // color:red;font-size:120%
 
   // 对象
   alert(div.style); // [object CSSStyleDeclaration]
@@ -223,19 +220,18 @@ DOM 属性不总是字符串类型的。例如，`input.checked` 属性（对于
 
 这里有一个例子：
 
-```html height=30 run
+```html
 <a id="a" href="#hello">link</a>
 <script>
   // 特性
-  alert(a.getAttribute('href')); // #hello
+  alert(a.getAttribute("href")); // #hello
 
   // 属性
-  alert(a.href ); // http://site.com/page#hello 形式的完整 URL 
+  alert(a.href); // http://site.com/page#hello 形式的完整 URL
 </script>
 ```
 
 如果我们需要 `href` 特性的值，或者其他与 HTML 中所写的完全相同的特性，则可以使用 `getAttribute`。
-
 
 ## 非标准的特性，dataset
 
@@ -245,22 +241,22 @@ DOM 属性不总是字符串类型的。例如，`input.checked` 属性（对于
 
 像这样：
 
-```html run
+```html
 <!-- 标记这个 div 以在这显示 "name" -->
-<div *!*show-info="name"*/!*></div>
+<div show-info="name"></div>
 <!-- 标记这个 div 以在这显示 "age" -->
-<div *!*show-info="age"*/!*></div>
+<div show-info="age"></div>
 
 <script>
   // 这段代码找到带有标记的元素，并显示需要的内容
   let user = {
     name: "Pete",
-    age: 25
+    age: 25,
   };
 
-  for(let div of document.querySelectorAll('[show-info]')) {
+  for (let div of document.querySelectorAll("[show-info]")) {
     // 在字段中插入相应的信息
-    let field = div.getAttribute('show-info');
+    let field = div.getAttribute("show-info");
     div.innerHTML = user[field]; // 首先 "name" 变为 Pete，然后 "age" 变为 25
   }
 </script>
@@ -270,7 +266,7 @@ DOM 属性不总是字符串类型的。例如，`input.checked` 属性（对于
 
 例如，这里使用 `order-state` 特性来设置订单状态：
 
-```html run
+```html
 <style>
   /* 样式依赖于自定义特性 "order-state" */
   .order[order-state="new"] {
@@ -286,17 +282,11 @@ DOM 属性不总是字符串类型的。例如，`input.checked` 属性（对于
   }
 </style>
 
-<div class="order" order-state="new">
-  A new order.
-</div>
+<div class="order" order-state="new">A new order.</div>
 
-<div class="order" order-state="pending">
-  A pending order.
-</div>
+<div class="order" order-state="pending">A pending order.</div>
 
-<div class="order" order-state="canceled">
-  A canceled order.
-</div>
+<div class="order" order-state="canceled">A canceled order.</div>
 ```
 
 为什么使用特性比使用 `.order-state-new`，`.order-state-pending`，`order-state-canceled` 这些样式类要好？
@@ -305,12 +295,12 @@ DOM 属性不总是字符串类型的。例如，`input.checked` 属性（对于
 
 ```js
 // 比删除旧的或者添加一个新的类要简单一些
-div.setAttribute('order-state', 'canceled');
+div.setAttribute("order-state", "canceled");
 ```
 
 但是自定义的特性也存在问题。如果我们出于我们的目的使用了非标准的特性，之后它被引入到了标准中并有了其自己的用途，该怎么办？HTML 语言是在不断发展的，并且更多的特性出现在了标准中，以满足开发者的需求。在这种情况下，自定义的属性可能会产生意料不到的影响。
 
-为了避免冲突，存在 [data-*](https://html.spec.whatwg.org/#embedding-custom-non-visible-data-with-the-data-*-attributes) 特性。
+为了避免冲突，存在 [data-\*](https://html.spec.whatwg.org/#embedding-custom-non-visible-data-with-the-data-*-attributes) 特性。
 
 **所有以 "data-" 开头的特性均被保留供程序员使用。它们可在 `dataset` 属性中使用。**
 
@@ -318,18 +308,19 @@ div.setAttribute('order-state', 'canceled');
 
 像这样：
 
-```html run
+```html
 <body data-about="Elephants">
-<script>
-  alert(document.body.dataset.about); // Elephants
-</script>
+  <script>
+    alert(document.body.dataset.about); // Elephants
+  </script>
+</body>
 ```
 
 像 `data-order-state` 这样的多词特性可以以驼峰式进行调用：`dataset.orderState`。
 
 这里是 "order state" 那个示例的重构版：
 
-```html run
+```html
 <style>
   .order[data-order-state="new"] {
     color: green;
@@ -344,9 +335,7 @@ div.setAttribute('order-state', 'canceled');
   }
 </style>
 
-<div id="order" class="order" data-order-state="new">
-  A new order.
-</div>
+<div id="order" class="order" data-order-state="new">A new order.</div>
 
 <script>
   // 读取
@@ -368,10 +357,10 @@ div.setAttribute('order-state', 'canceled');
 
 简略的对比：
 
-|            | 属性 | 特性 |
-|------------|------------|------------|
-|类型|任何值，标准的属性具有规范中描述的类型|字符串|
-|名字|名字（name）是大小写敏感的|名字（name）是大小写不敏感的|
+|      | 属性                                   | 特性                         |
+| ---- | -------------------------------------- | ---------------------------- |
+| 类型 | 任何值，标准的属性具有规范中描述的类型 | 字符串                       |
+| 名字 | 名字（name）是大小写敏感的             | 名字（name）是大小写不敏感的 |
 
 操作特性的方法：
 

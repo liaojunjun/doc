@@ -6,7 +6,7 @@
 
 我们可以用 `pattern:[\s\S]`，而不是用点（.）来匹配“任何东西”：
 
-```js run
+```js
 let reg = /<!--[\s\S]*?-->/g;
 
 let str = `... <!-- My -- comment

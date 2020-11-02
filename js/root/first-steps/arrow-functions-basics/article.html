@@ -22,10 +22,10 @@ alert( sum(<span class="hljs-number">1</span>, <span class="hljs-number">2</span
 <ul>
 <li><p>如果我们只有一个参数，还可以省略掉参数外的圆括号，使代码更短。</p>
 <p>  例如：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> double = <span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> n * <span class="hljs-number">2</span>;
 <span class="hljs-comment">// 差不多等同于：let double = function(n) { return n * 2 }</span>
-*/!*
+
 
 alert( double(<span class="hljs-number">3</span>) ); <span class="hljs-comment">// 6</span></code></pre>
 </li>
@@ -52,9 +52,9 @@ welcome();</code></pre>
 <p>就像这样：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> sum = <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> {  <span class="hljs-comment">// 花括号表示开始一个多行函数</span>
   <span class="hljs-keyword">let</span> result = a + b;
-*!*
+
   <span class="hljs-keyword">return</span> result; <span class="hljs-comment">// 如果我们使用了花括号，那么我们需要一个显式的 “return” </span>
-*/!*
+
 };
 
 alert( sum(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>) ); <span class="hljs-comment">// 3</span></code></pre>

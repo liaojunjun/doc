@@ -10,22 +10,20 @@ DOM 修改是创建“实时”页面的关键。
 
 它的外观如下：
 
-```html autorun height="80"
+```html
 <style>
-.alert {
-  padding: 15px;
-  border: 1px solid #d6e9c6;
-  border-radius: 4px;
-  color: #3c763d;
-  background-color: #dff0d8;
-}
+  .alert {
+    padding: 15px;
+    border: 1px solid #d6e9c6;
+    border-radius: 4px;
+    color: #3c763d;
+    background-color: #dff0d8;
+  }
 </style>
 
-*!*
 <div class="alert">
   <strong>Hi there!</strong> You've read an important message.
 </div>
-*/!*
 ```
 
 这是一个 HTML 示例。现在，让我们使用 JavaScript 创建一个相同的 `div`（假设样式已经在 HTML/CSS 文件中）。
@@ -56,7 +54,7 @@ DOM 修改是创建“实时”页面的关键。
 
 ```js
 // 1. 创建 <div> 元素
-let div = document.createElement('div');
+let div = document.createElement("div");
 
 // 2. 将元素的类设置为 "alert"
 div.className = "alert";
@@ -75,25 +73,24 @@ div.innerHTML = "<strong>Hi there!</strong> You've read an important message.";
 
 这是完整代码：
 
-```html run height="80"
+```html
 <style>
-.alert {
-  padding: 15px;
-  border: 1px solid #d6e9c6;
-  border-radius: 4px;
-  color: #3c763d;
-  background-color: #dff0d8;
-}
+  .alert {
+    padding: 15px;
+    border: 1px solid #d6e9c6;
+    border-radius: 4px;
+    color: #3c763d;
+    background-color: #dff0d8;
+  }
 </style>
 
 <script>
-  let div = document.createElement('div');
+  let div = document.createElement("div");
   div.className = "alert";
-  div.innerHTML = "<strong>Hi there!</strong> You've read an important message.";
+  div.innerHTML =
+    "<strong>Hi there!</strong> You've read an important message.";
 
-*!*
   document.body.append(div);
-*/!*
 </script>
 ```
 
@@ -113,7 +110,7 @@ div.innerHTML = "<strong>Hi there!</strong> You've read an important message.";
 
 下面是使用这些方法将列表项添加到列表中，以及将文本添加到列表前面和后面的示例：
 
-```html autorun
+```html
 <ol id="ol">
   <li>0</li>
   <li>1</li>
@@ -121,15 +118,15 @@ div.innerHTML = "<strong>Hi there!</strong> You've read an important message.";
 </ol>
 
 <script>
-  ol.before('before'); // 将字符串 "before" 插入到 <ol> 前面
-  ol.after('after'); // 将字符串 "after" 插入到 <ol> 后面
+  ol.before("before"); // 将字符串 "before" 插入到 <ol> 前面
+  ol.after("after"); // 将字符串 "after" 插入到 <ol> 后面
 
-  let liFirst = document.createElement('li');
-  liFirst.innerHTML = 'prepend';
+  let liFirst = document.createElement("li");
+  liFirst.innerHTML = "prepend";
   ol.prepend(liFirst); // 将 liFirst 插入到 <ol> 的最开始
 
-  let liLast = document.createElement('li');
-  liLast.innerHTML = 'append';
+  let liLast = document.createElement("li");
+  liLast.innerHTML = "append";
   ol.append(liLast); // 将 liLast 插入到 <ol> 的最末尾
 </script>
 ```
@@ -156,10 +153,10 @@ after
 
 例如，在这里插入了一个字符串和一个元素：
 
-```html run
+```html
 <div id="div"></div>
 <script>
-  div.before('<p>Hello</p>', document.createElement('hr'));
+  div.before("<p>Hello</p>", document.createElement("hr"));
 </script>
 ```
 
@@ -167,11 +164,10 @@ after
 
 所以，最终的 HTML 为：
 
-```html run
-*!*
+```html
 &lt;p&gt;Hello&lt;/p&gt;
-*/!*
-<hr>
+
+<hr />
 <div id="div"></div>
 ```
 
@@ -196,17 +192,17 @@ after
 
 例如：
 
-```html run
+```html
 <div id="div"></div>
 <script>
-  div.insertAdjacentHTML('beforebegin', '<p>Hello</p>');
-  div.insertAdjacentHTML('afterend', '<p>Bye</p>');
+  div.insertAdjacentHTML("beforebegin", "<p>Hello</p>");
+  div.insertAdjacentHTML("afterend", "<p>Bye</p>");
 </script>
 ```
 
 ……将导致：
 
-```html run
+```html
 <p>Hello</p>
 <div id="div"></div>
 <p>Bye</p>
@@ -229,21 +225,24 @@ after
 
 所以，下面是显示一条消息的另一种变体：
 
-```html run
+```html
 <style>
-.alert {
-  padding: 15px;
-  border: 1px solid #d6e9c6;
-  border-radius: 4px;
-  color: #3c763d;
-  background-color: #dff0d8;
-}
+  .alert {
+    padding: 15px;
+    border: 1px solid #d6e9c6;
+    border-radius: 4px;
+    color: #3c763d;
+    background-color: #dff0d8;
+  }
 </style>
 
 <script>
-  document.body.insertAdjacentHTML("afterbegin", `<div class="alert">
+  document.body.insertAdjacentHTML(
+    "afterbegin",
+    `<div class="alert">
     <strong>Hi there!</strong> You've read an important message.
-  </div>`);
+  </div>`
+  );
 </script>
 ```
 
@@ -253,26 +252,26 @@ after
 
 让我们的消息在一秒后消失：
 
-```html run untrusted
+```html
 <style>
-.alert {
-  padding: 15px;
-  border: 1px solid #d6e9c6;
-  border-radius: 4px;
-  color: #3c763d;
-  background-color: #dff0d8;
-}
+  .alert {
+    padding: 15px;
+    border: 1px solid #d6e9c6;
+    border-radius: 4px;
+    color: #3c763d;
+    background-color: #dff0d8;
+  }
 </style>
 
 <script>
-  let div = document.createElement('div');
+  let div = document.createElement("div");
   div.className = "alert";
-  div.innerHTML = "<strong>Hi there!</strong> You've read an important message.";
+  div.innerHTML =
+    "<strong>Hi there!</strong> You've read an important message.";
 
   document.body.append(div);
-*!*
+
   setTimeout(() => div.remove(), 1000);
-*/!*
 </script>
 ```
 
@@ -282,7 +281,7 @@ after
 
 例如，让我们进行元素交换：
 
-```html run height=50
+```html
 <div id="first">First</div>
 <div id="second">Second</div>
 <script>
@@ -303,15 +302,15 @@ after
 
 一个拷贝消息的示例：
 
-```html run height="120"
+```html
 <style>
-.alert {
-  padding: 15px;
-  border: 1px solid #d6e9c6;
-  border-radius: 4px;
-  color: #3c763d;
-  background-color: #dff0d8;
-}
+  .alert {
+    padding: 15px;
+    border: 1px solid #d6e9c6;
+    border-radius: 4px;
+    color: #3c763d;
+    background-color: #dff0d8;
+  }
 </style>
 
 <div class="alert" id="div">
@@ -319,12 +318,10 @@ after
 </div>
 
 <script>
-*!*
   let div2 = div.cloneNode(true); // 克隆消息
-  div2.querySelector('strong').innerHTML = 'Bye there!'; // 修改克隆
+  div2.querySelector("strong").innerHTML = "Bye there!"; // 修改克隆
 
   div.after(div2); // 在已有的 div 后显示克隆
-*/!*
 </script>
 ```
 
@@ -336,25 +333,23 @@ after
 
 例如，下面这段代码中的 `getListContent` 会生成带有 `<li>` 列表项的片段，然后将其插入到 `<ul>` 中：
 
-```html run
+```html
 <ul id="ul"></ul>
 
 <script>
-function getListContent() {
-  let fragment = new DocumentFragment();
+  function getListContent() {
+    let fragment = new DocumentFragment();
 
-  for(let i=1; i<=3; i++) {
-    let li = document.createElement('li');
-    li.append(i);
-    fragment.append(li);
+    for (let i = 1; i <= 3; i++) {
+      let li = document.createElement("li");
+      li.append(i);
+      fragment.append(li);
+    }
+
+    return fragment;
   }
 
-  return fragment;
-}
-
-*!*
-ul.append(getListContent()); // (*)
-*/!*
+  ul.append(getListContent()); // (*)
 </script>
 ```
 
@@ -370,25 +365,23 @@ ul.append(getListContent()); // (*)
 
 `DocumentFragment` 很少被显式使用。如果可以改为返回一个节点数组，那为什么还要附加到特殊类型的节点上呢？重写示例：
 
-```html run
+```html
 <ul id="ul"></ul>
 
 <script>
-function getListContent() {
-  let result = [];
+  function getListContent() {
+    let result = [];
 
-  for(let i=1; i<=3; i++) {
-    let li = document.createElement('li');
-    li.append(i);
-    result.push(li);
+    for (let i = 1; i <= 3; i++) {
+      let li = document.createElement("li");
+      li.append(i);
+      result.push(li);
+    }
+
+    return result;
   }
 
-  return result;
-}
-
-*!*
-ul.append(...getListContent()); // append + "..." operator = friends!
-*/!*
+  ul.append(...getListContent()); // append + "..." operator = friends!
 </script>
 ```
 
@@ -404,12 +397,11 @@ ul.append(...getListContent()); // append + "..." operator = friends!
 
 我们在这儿列出这些方法的唯一原因是，你可能会在许多脚本中遇到它们。
 
-`parentElem.appendChild(node)`
-: 将 `node` 附加为 `parentElem` 的最后一个子元素。
+`parentElem.appendChild(node)`: 将 `node` 附加为 `parentElem` 的最后一个子元素。
 
     下面这个示例在 `<ol>` 的末尾添加了一个新的 `<li>`：
 
-    ```html run height=100
+    ```html
     <ol id="list">
       <li>0</li>
       <li>1</li>
@@ -424,12 +416,11 @@ ul.append(...getListContent()); // append + "..." operator = friends!
     </script>
     ```
 
-`parentElem.insertBefore(node, nextSibling)`
-: 在 `parentElem` 的 `nextSibling` 前插入 `node`。
+`parentElem.insertBefore(node, nextSibling)`: 在 `parentElem` 的 `nextSibling` 前插入 `node`。
 
-    下面这段代码在第二个 `<li>` 前插入了一个新的列表项：
+下面这段代码在第二个 `<li>` 前插入了一个新的列表项：
 
-    ```html run height=100
+    ```html
     <ol id="list">
       <li>0</li>
       <li>1</li>
@@ -439,9 +430,9 @@ ul.append(...getListContent()); // append + "..." operator = friends!
       let newLi = document.createElement('li');
       newLi.innerHTML = 'Hello, world!';
 
-    *!*
+
       list.insertBefore(newLi, list.children[1]);
-    */!*
+
     </script>
     ```
     如果要将 `newLi` 插入为第一个元素，我们可以这样做：
@@ -450,15 +441,13 @@ ul.append(...getListContent()); // append + "..." operator = friends!
     list.insertBefore(newLi, list.firstChild);
     ```
 
-`parentElem.replaceChild(node, oldChild)`
-: 将 `parentElem` 的后代中的 `oldChild` 替换为 `node`。
+`parentElem.replaceChild(node, oldChild)`: 将 `parentElem` 的后代中的 `oldChild` 替换为 `node`。
 
-`parentElem.removeChild(node)`
-: 从 `parentElem` 中删除 `node`（假设 `node` 为 `parentElem` 的后代）。
+`parentElem.removeChild(node)`： 从 `parentElem` 中删除 `node`（假设 `node` 为 `parentElem` 的后代）。
 
     下面这个示例从 `<ol>` 中删除了 `<li>`：
 
-    ```html run height=100
+    ```html
     <ol id="list">
       <li>0</li>
       <li>1</li>
@@ -471,7 +460,7 @@ ul.append(...getListContent()); // append + "..." operator = friends!
     </script>
     ```
 
-所有这些方法都会返回插入/删除的节点。换句话说，`parentElem.appendChild(node)` 返回 `node`。但是通常我们不会使用返沪值，我们只是使用对应的方法。
+所有这些方法都会返回插入/删除的节点。换句话说，`parentElem.appendChild(node)` 返回 `node`。但是通常我们不会使用返回值，我们只是使用对应的方法。
 
 ## 聊一聊 "document.write"
 
@@ -479,13 +468,13 @@ ul.append(...getListContent()); // append + "..." operator = friends!
 
 语法如下：
 
-```html run
+```html
 <p>Somewhere in the page...</p>
-*!*
+
 <script>
-  document.write('<b>Hello from JS</b>');
+  document.write("<b>Hello from JS</b>");
 </script>
-*/!*
+
 <p>The end</p>
 ```
 
@@ -501,15 +490,14 @@ ul.append(...getListContent()); // append + "..." operator = friends!
 
 例如：
 
-```html run
+```html
 <p>After one second the contents of this page will be replaced...</p>
-*!*
+
 <script>
   // 1 秒后调用 document.write
   // 这时页面已经加载完成，所以它会擦除现有内容
-  setTimeout(() => document.write('<b>...By this.</b>'), 1000);
+  setTimeout(() => document.write("<b>...By this.</b>"), 1000);
 </script>
-*/!*
 ```
 
 因此，在某种程度上讲，它在“加载完成”阶段是不可用的，这与我们上面介绍的其他 DOM 方法不同。
@@ -525,37 +513,41 @@ ul.append(...getListContent()); // append + "..." operator = friends!
 ## 总结
 
 - 创建新节点的方法：
-    - `document.createElement(tag)` — 用给定的标签创建一个元素节点，
-    - `document.createTextNode(value)` — 创建一个文本节点（很少使用），
-    - `elem.cloneNode(deep)` — 克隆元素，如果 `deep==true` 则与其后代一起克隆。
+
+  - `document.createElement(tag)` — 用给定的标签创建一个元素节点，
+  - `document.createTextNode(value)` — 创建一个文本节点（很少使用），
+  - `elem.cloneNode(deep)` — 克隆元素，如果 `deep==true` 则与其后代一起克隆。
 
 - 插入和移除节点的方法：
-    - `node.append(...nodes or strings)` — 在 `node` 末尾插入，
-    - `node.prepend(...nodes or strings)` — 在 `node` 开头插入，
-    - `node.before(...nodes or strings)` — 在 `node` 之前插入，
-    - `node.after(...nodes or strings)` — 在 `node` 之后插入，
-    - `node.replaceWith(...nodes or strings)` — 替换 `node`。
-    - `node.remove()` — 移除 `node`。
 
-    文本字符串被“作为文本”插入。
+  - `node.append(...nodes or strings)` — 在 `node` 末尾插入，
+  - `node.prepend(...nodes or strings)` — 在 `node` 开头插入，
+  - `node.before(...nodes or strings)` — 在 `node` 之前插入，
+  - `node.after(...nodes or strings)` — 在 `node` 之后插入，
+  - `node.replaceWith(...nodes or strings)` — 替换 `node`。
+  - `node.remove()` — 移除 `node`。
+
+  文本字符串被“作为文本”插入。
 
 - 这里还有“旧式”的方法：
-    - `parent.appendChild(node)`
-    - `parent.insertBefore(node, nextSibling)`
-    - `parent.removeChild(node)`
-    - `parent.replaceChild(newElem, node)`
 
-    这些方法都返回 `node`。
+  - `parent.appendChild(node)`
+  - `parent.insertBefore(node, nextSibling)`
+  - `parent.removeChild(node)`
+  - `parent.replaceChild(newElem, node)`
+
+  这些方法都返回 `node`。
 
 - 在 `html` 中给定一些 HTML，`elem.insertAdjacentHTML(where, html)` 会根据 `where` 的值来插入它：
-    - `"beforebegin"` — 将 `html` 插入到 `elem` 前面，
-    - `"afterbegin"` — 将 `html` 插入到 `elem` 的开头，
-    - `"beforeend"` — 将 `html` 插入到 `elem` 的末尾，
-    - `"afterend"` — 将 `html` 插入到 `elem` 后面。
+  - `"beforebegin"` — 将 `html` 插入到 `elem` 前面，
+  - `"afterbegin"` — 将 `html` 插入到 `elem` 的开头，
+  - `"beforeend"` — 将 `html` 插入到 `elem` 的末尾，
+  - `"afterend"` — 将 `html` 插入到 `elem` 后面。
 
 另外，还有类似的方法，`elem.insertAdjacentText` 和 `elem.insertAdjacentElement`，它们会插入文本字符串和元素，但很少使用。
 
 - 要在页面加载完成之前将 HTML 附加到页面：
-    - `document.write(html)`
 
-    页面加载完成后，这样的调用将会擦除文档。多见于旧脚本。
+  - `document.write(html)`
+
+  页面加载完成后，这样的调用将会擦除文档。多见于旧脚本。

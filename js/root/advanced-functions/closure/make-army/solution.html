@@ -44,9 +44,9 @@
 
   <span class="hljs-keyword">let</span> shooters = [];
 
-*!*
+
   <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
-*/!*
+
     <span class="hljs-keyword">let</span> shooter = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// shooter 函数</span>
       alert( i ); <span class="hljs-comment">// 应该显示它自己的编号</span>
     };
@@ -70,11 +70,11 @@ army[<span class="hljs-number">5</span>](); <span class="hljs-comment">// 5</spa
 
   let i = 0;
   while (i &lt; 10) {
-*!*
+
     let j = i;
-*/!*
+
     let shooter = function() { // shooter 函数
-      alert( *!*j*/!* ); // 应该显示当前的编号
+      alert( j ); // 应该显示当前的编号
     };
     shooters.push(shooter);
     i++;

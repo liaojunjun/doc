@@ -5,7 +5,7 @@
 
 <span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;0 12 -5 123 -18&quot;</span>;
 
-<span class="hljs-built_in">console</span>.log( str.match(regexp) ); <span class="hljs-comment">// 0, 12, 123, *!*8*/!*</span></code></pre>
+<span class="hljs-built_in">console</span>.log( str.match(regexp) ); <span class="hljs-comment">// 0, 12, 123, 8</span></code></pre>
 <p>As you can see, it matches <code>match:8</code>, from <code>subject:-18</code>. To exclude it, we need to ensure that the regexp starts matching a number not from the middle of another (non-matching) number.</p>
 <p>We can do it by specifying another negative lookbehind: <code>pattern:(?&lt;!-)(?&lt;!\d)\d+</code>. Now <code>pattern:(?&lt;!\d)</code> ensures that a match does not start after another digit, just what we need.</p>
 <p>We can also join them into a single lookbehind here:</p>

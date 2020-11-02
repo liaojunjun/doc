@@ -142,7 +142,7 @@ alert( num.toFixed(<span class="hljs-number">5</span>) ); <span class="hljs-comm
 <pre><code class="language-js">alert( <span class="hljs-number">1e500</span> ); <span class="hljs-comment">// Infinity</span></code></pre>
 <p>这可能不那么明显，但经常会发生的是，精度的损失。</p>
 <p>考虑下这个（falsy！）测试：</p>
-<pre><code class="language-js">alert( <span class="hljs-number">0.1</span> + <span class="hljs-number">0.2</span> == <span class="hljs-number">0.3</span> ); <span class="hljs-comment">// *!*false*/!*</span></code></pre>
+<pre><code class="language-js">alert( <span class="hljs-number">0.1</span> + <span class="hljs-number">0.2</span> == <span class="hljs-number">0.3</span> ); <span class="hljs-comment">// false</span></code></pre>
 <p>没错，如果我们检查 <code>0.1</code> 和 <code>0.2</code> 的总和是否为 <code>0.3</code>，我们会得到 <code>false</code>。</p>
 <p>奇了怪了！如果不是 <code>0.3</code>，那能是啥？</p>
 <pre><code class="language-js">alert( <span class="hljs-number">0.1</span> + <span class="hljs-number">0.2</span> ); <span class="hljs-comment">// 0.30000000000000004</span></code></pre>
@@ -173,7 +173,7 @@ alert( (<span class="hljs-number">0.28</span> * <span class="hljs-number">100</s
 <p>有时候我们可以尝试完全避免小数。例如，我们正在创建一个电子购物网站，那么我们可以用角而不是元来存储价格。但是，如果我们要打 30% 的折扣呢？实际上，完全避免小数处理几乎是不可能的。只需要在必要时剪掉其“尾巴”来对其进行舍入即可。</p>
 <pre><code class="language-smart">尝试运行下面这段代码：
 
-```js run
+```js
 // Hello！我是一个会自我增加的数字！
 alert( 9999999999999999 ); // 显示 10000000000000000
 ```
@@ -226,7 +226,7 @@ alert( <span class="hljs-built_in">isFinite</span>(num) );</code></pre>
 
 使用加号 `+` 或 `Number()` 的数字转换是严格的。如果一个值不完全是一个数字，就会失败：
 
-```js run
+```js
 alert( +&quot;100px&quot; ); // NaN</code></pre>
 <p>唯一的例外是字符串开头或结尾的空格，因为它们会被忽略。</p>
 <p>但在现实生活中，我们经常会有带有单位的值，例如 CSS 中的 <code>&quot;100px&quot;</code> 或 <code>&quot;12pt&quot;</code>。并且，在很多国家，货币符号是紧随金额之后的，所以我们有 <code>&quot;19€&quot;</code>，并希望从中提取出一个数值。</p>
@@ -254,7 +254,7 @@ JavaScript 有一个内建的 [Math](https://developer.mozilla.org/en/docs/Web/J
 `Math.random()`
 : 返回一个从 0 到 1 的随机数（不包括 1）
 
-    ```js run
+    ```js
     alert( Math.random() ); // 0.1234567894322
     alert( Math.random() ); // 0.5435252343232
     alert( Math.random() ); // ... (任何随机数)
@@ -263,7 +263,7 @@ JavaScript 有一个内建的 [Math](https://developer.mozilla.org/en/docs/Web/J
 `Math.max(a, b, c...)` / `Math.min(a, b, c...)`
 : 从任意数量的参数中返回最大/最小值。
 
-    ```js run
+    ```js
     alert( Math.max(3, 5, -10, 0, 1) ); // 5
     alert( Math.min(1, 2) ); // 1
     ```
@@ -271,7 +271,7 @@ JavaScript 有一个内建的 [Math](https://developer.mozilla.org/en/docs/Web/J
 `Math.pow(n, power)`
 : 返回 `n` 的给定（power）次幂
 
-    ```js run
+    ```js
     alert( Math.pow(2, 10) ); // 2 的 10 次幂 = 1024
     ```
 

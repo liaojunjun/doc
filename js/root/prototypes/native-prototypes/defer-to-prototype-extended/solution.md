@@ -1,6 +1,6 @@
 
 
-```js run
+```js
 Function.prototype.defer = function(ms) {
   let f = this;
   return function(...args) {
@@ -20,7 +20,7 @@ f.defer(1000)(1, 2); // 1 秒后显示 3
 
 因此，如果将包装器函数作为对象方法调用，那么 `this` 将会被传递给原始方法 `f`。
 
-```js run
+```js
 Function.prototype.defer = function(ms) {
   let f = this;
   return function(...args) {

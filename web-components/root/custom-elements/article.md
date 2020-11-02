@@ -65,7 +65,7 @@ customElements.define("my-element", MyElement);
 
 现在当任何带有 `<my-element>` 标签的元素被创建的时候，一个 `MyElement` 的实例也会被创建，并且前面提到的方法也会被调用。我们同样可以使用 `document.createElement('my-element')` 在 JavaScript 里创建元素。
 
-```smart header="Custom element 名称必须包括一个短横线 `-`"
+Custom element 名称必须包括一个短横线 `-`"
 Custom element 名称必须包括一个短横线 `-`, 比如 `my-element` 和 `super-button` 都是有效的元素名，但 `myelement` 并不是。
 
 这是为了确保 custom element 和内置 HTML 元素之间不会发生命名冲突。
@@ -78,11 +78,11 @@ Custom element 名称必须包括一个短横线 `-`, 比如 `my-element` 和 `s
 让我们来创建一个可以展示适用于当前浏览器语言的时间格式的 `<time-formatted>` 元素：
 
 
-```html run height=50 autorun="no-epub"
+```html height=50 autorun="no-epub"
 <script>
-*!*
+
 class TimeFormatted extends HTMLElement { // (1)
-*/!*
+
 
   connectedCallback() {
     let date = new Date(this.getAttribute('datetime') || Date.now());
@@ -100,15 +100,15 @@ class TimeFormatted extends HTMLElement { // (1)
 
 }
 
-*!*
+
 customElements.define("time-formatted", TimeFormatted); // (2)
-*/!*
+
 </script>
 
 <!-- (3) -->
-*!*
+
 <time-formatted datetime="2019-12-01"
-*/!*
+
   year="numeric" month="long" day="numeric"
   hour="numeric" minute="numeric" second="numeric"
   time-zone-name="short"
@@ -120,7 +120,7 @@ customElements.define("time-formatted", TimeFormatted); // (2)
 3. 接下来在任何地方我们都可以使用这个新元素了。
 
 
-```smart header="Custom elements 升级"
+Custom elements 升级"
 如果浏览器在 `customElements.define` 之前的任何地方见到了 `<time-formatted>` 元素，并不会报错。但会把这个元素当作未知元素，就像任何非标准标签一样。
 
 `:not(:defined)` CSS 选择器可以对这样「未定义」的元素加上样式。
@@ -133,7 +133,7 @@ customElements.define("time-formatted", TimeFormatted); // (2)
 
 ```
 
-```smart header="在 `connectedCallback` 中渲染，而不是 `constructor` 中"
+在 `connectedCallback` 中渲染，而不是 `constructor` 中"
 在上面的例子中，元素里面的内容是在 `connectedCallback` 中渲染（创建）的。
 
 为什么不在 `constructor` 中渲染？
@@ -153,13 +153,13 @@ customElements.define("time-formatted", TimeFormatted); // (2)
 
 以下是 `<time-formatted>` 的新版本，它会在属性变化的时候自动更新：
 
-```html run autorun="no-epub" height=50
+```html autorun="no-epub" height=50
 <script>
 class TimeFormatted extends HTMLElement {
 
-*!*
+
   render() { // (1)
-*/!*
+
     let date = new Date(this.getAttribute('datetime') || Date.now());
 
     this.innerHTML = new Intl.DateTimeFormat("default", {
@@ -173,24 +173,24 @@ class TimeFormatted extends HTMLElement {
     }).format(date);
   }
 
-*!*
+
   connectedCallback() { // (2)
-*/!*
+
     if (!this.rendered) {
       this.render();
       this.rendered = true;
     }
   }
 
-*!*
+
   static get observedAttributes() { // (3)
-*/!*
+
     return ['datetime', 'year', 'month', 'day', 'hour', 'minute', 'second', 'time-zone-name'];
   }
 
-*!*
+
   attributeChangedCallback(name, oldValue, newValue) { // (4)
-*/!*
+
     this.render();
   }
 
@@ -202,9 +202,9 @@ customElements.define("time-formatted", TimeFormatted);
 <time-formatted id="elem" hour="numeric" minute="numeric" second="numeric"></time-formatted>
 
 <script>
-*!*
+
 setInterval(() => elem.setAttribute('datetime', new Date()), 1000); // (5)
-*/!*
+
 </script>
 ```
 
@@ -222,22 +222,22 @@ setInterval(() => elem.setAttribute('datetime', new Date()), 1000); // (5)
 
 比如，如果一个 custom element 想要在 `connectedCallback` 内访问 `innerHTML`，它什么也拿不到:
 
-```html run height=40
+```html height=40
 <script>
 customElements.define('user-info', class extends HTMLElement {
 
   connectedCallback() {
-*!*
+
     alert(this.innerHTML); // empty (*)
-*/!*
+
   }
 
 });
 </script>
 
-*!*
+
 <user-info>John</user-info>
-*/!*
+
 ```
 
 如果你运行上面的代码，`alert` 出来的内容是空的。
@@ -250,22 +250,22 @@ customElements.define('user-info', class extends HTMLElement {
 
 这样是可行的：
 
-```html run height=40
+```html height=40
 <script>
 customElements.define('user-info', class extends HTMLElement {
 
   connectedCallback() {
-*!*
+
     setTimeout(() => alert(this.innerHTML)); // John (*)
-*/!*
+
   }
 
 });
 </script>
 
-*!*
+
 <user-info>John</user-info>
-*/!*
+
 ```
 
 现在 `alert` 在 `(*)` 行展示了 「John」，因为我们是在 HTML 解析完成之后，才异步执行了这段程序。我们在这个时候处理必要的子元素并且结束初始化过程。
@@ -276,7 +276,7 @@ customElements.define('user-info', class extends HTMLElement {
 
 让我们用一个例子来说明：
 
-```html run height=0
+```html height=0
 <script>
 customElements.define('user-info', class extends HTMLElement {
   connectedCallback() {
@@ -286,11 +286,11 @@ customElements.define('user-info', class extends HTMLElement {
 });
 </script>
 
-*!*
+
 <user-info id="outer">
   <user-info id="inner"></user-info>
 </user-info>
-*/!*
+
 ```
 
 输出顺序：
@@ -322,7 +322,7 @@ customElements.define('user-info', class extends HTMLElement {
 
 2. 给 `customElements.define` 提供定义标签的第三个参数：
     ```js
-    customElements.define('hello-button', HelloButton, *!*{extends: 'button'}*/!*);
+    customElements.define('hello-button', HelloButton, {extends: 'button'});
     ```
     这一步是必要的，因为不同的标签会共享同一个类。
 
@@ -333,30 +333,30 @@ customElements.define('user-info', class extends HTMLElement {
 
 下面是一个完整的例子：
 
-```html run autorun="no-epub"
+```html autorun="no-epub"
 <script>
 // 这个按钮在被点击的时候说 "hello"
 class HelloButton extends HTMLButtonElement {
-*!*
+
   constructor() {
-*/!*
+
     super();
     this.addEventListener('click', () => alert("Hello!"));
   }
 }
 
-*!*
+
 customElements.define('hello-button', HelloButton, {extends: 'button'});
-*/!*
+
 </script>
 
-*!*
-<button is="hello-button">Click me</button>
-*/!*
 
-*!*
+<button is="hello-button">Click me</button>
+
+
+
 <button is="hello-button" disabled>Disabled</button>
-*/!*
+
 ```
 
 我们新定义的按钮继承了内置按钮，所以它拥有和内置按钮相同的样式和标准特性，比如 `disabled` 属性。

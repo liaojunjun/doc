@@ -15,9 +15,9 @@
 ```js
 function update() {
   let clock = document.getElementById('clock');
-*!*
+
   let date = new Date(); // (*)
-*/!*
+
   let hours = date.getHours();
   if (hours < 10) hours = '0' + hours;
   clock.children[0].innerHTML = hours;

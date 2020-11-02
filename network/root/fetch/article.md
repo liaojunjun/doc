@@ -70,20 +70,20 @@ if (response.ok) { // 如果 HTTP 状态码为 200-299
 
 例如，我们从 GitHub 获取最新 commits 的 JSON 对象：
 
-```js run async
+```js async
 let url = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
 let response = await fetch(url);
 
-*!*
+
 let commits = await response.json(); // 读取 response body，并将其解析为 JSON
-*/!*
+
 
 alert(commits[0].author.login);
 ```
 
 也可以使用纯 promise 语法，不使用 `await`：
 
-```js run
+```js
 fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits')
   .then(response => response.json())
   .then(commits => alert(commits[0].author.login));
@@ -91,7 +91,7 @@ fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commi
 
 要获取响应文本，可以使用 `await response.text()` 代替 `.json()`：
 
-```js run async
+```js async
 let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
 
 let text = await response.text(); // 将 response body 读取为文本
@@ -101,12 +101,12 @@ alert(text.slice(0, 80) + '...');
 
 作为一个读取为二进制格式的演示示例，让我们 fetch 并显示一张 ["fetch" 规范](https://fetch.spec.whatwg.org) 中的图片（`Blob` 操作的有关内容请见 [Blob](info:blob)）：
 
-```js async run
+```js async
 let response = await fetch('/article/fetch/logo-fetch.svg');
 
-*!*
+
 let blob = await response.blob(); // 下载为 Blob 对象
-*/!*
+
 
 // 为其创建一个 <img>
 let img = document.createElement('img');
@@ -139,7 +139,7 @@ Response header 位于 `response.headers` 中的一个类似于 Map 的 header �
 
 它不是真正的 Map，但是它具有类似的方法，我们可以按名称（name）获取各个 header，或迭代它们：
 
-```js run async
+```js async
 let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
 
 // 获取一个 header
@@ -203,13 +203,13 @@ JSON 形式是最常用的。
 
 例如，下面这段代码以 JSON 形式发送 `user` 对象：
 
-```js run async
+```js async
 let user = {
   name: 'John',
   surname: 'Smith'
 };
 
-*!*
+
 let response = await fetch('/article/fetch/post/user', {
   method: 'POST',
   headers: {
@@ -217,7 +217,7 @@ let response = await fetch('/article/fetch/post/user', {
   },
   body: JSON.stringify(user)
 });
-*/!*
+
 
 let result = await response.json();
 alert(result.message);
@@ -233,7 +233,7 @@ alert(result.message);
 
 例如，这里有一个 `<canvas>`，我们可以通过在其上移动鼠标来进行绘制。点击 "submit" 按钮将图片发送到服务器：
 
-```html run autorun height="90"
+```html autorun height="90"
 <body style="margin:0">
   <canvas id="canvasElem" width="100" height="80" style="border:1px solid"></canvas>
 

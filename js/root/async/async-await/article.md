@@ -16,7 +16,7 @@ async function f() {
 
 例如，下面这个函数返回一个结果为 `1` 的 resolved promise，让我们测试一下：
 
-```js run
+```js
 async function f() {
   return 1;
 }
@@ -26,7 +26,7 @@ f().then(alert); // 1
 
 ……我们也可以显式地返回一个 promise，结果是一样的：
 
-```js run
+```js
 async function f() {
   return Promise.resolve(1);
 }
@@ -48,16 +48,16 @@ let value = await promise;
 关键字 `await` 让 JavaScript 引擎等待直到 promise 完成（settle）并返回结果。
 
 这里的例子就是一个 1 秒后 resolve 的 promise：
-```js run
+```js
 async function f() {
 
   let promise = new Promise((resolve, reject) => {
     setTimeout(() => resolve("done!"), 1000)
   });
 
-*!*
+
   let result = await promise; // 等待，直到 promise resolve (*)
-*/!*
+
 
   alert(result); // "done!"
 }
@@ -71,15 +71,15 @@ f();
 
 相比于 `promise.then`，它只是获取 promise 的结果的一个更优雅的语法，同时也更易于读写。
 
-````warn header="不能在普通函数中使用 `await`"
+`"不能在普通函数中使用 `await`"
 如果我们尝试在非 async 函数中使用 `await` 的话，就会报语法错误：
 
-```js run
+```js
 function f() {
   let promise = Promise.resolve(1);
-*!*
+
   let result = await promise; // Syntax error
-*/!*
+
 }
 ```
 
@@ -91,7 +91,7 @@ function f() {
 1. 我们需要用 `await` 替换掉 `.then` 的调用。
 2. 另外，我们需要在函数前面加上 `async` 关键字，以使它们能工作。
 
-```js run
+```js
 async function showAvatar() {
 
   // 读取我们的 JSON
@@ -121,10 +121,10 @@ showAvatar();
 
 简洁明了，是吧？比之前可强多了。
 
-````smart header="`await` 不能在顶层代码运行"
+``await` 不能在顶层代码运行"
 刚开始使用 `await` 的人常常会忘记 `await` 不能用在顶层代码中。例如，下面这样就不行：
 
-```js run
+```js
 // 用在顶层代码中会报语法错误
 let response = await fetch('/article/promise-chaining/user.json');
 let user = await response.json();
@@ -142,12 +142,12 @@ let user = await response.json();
 
 
 ````
-````smart header="`await` 接受 \"thenables\""
+``await` 接受 \"thenables\""
 像 `promise.then` 那样，`await` 允许我们使用 thenable 对象（那些具有可调用的 `then` 方法的对象）。这里的想法是，第三方对象可能不是一个 promise，但却是 promise 兼容的：如果这些对象支持 `.then`，那么就可以对它们使用 `await`。
 
 这有一个用于演示的 `Thenable` 类，下面的 `await` 接受了该类的实例：
 
-```js run
+```js
 class Thenable {
   constructor(num) {
     this.num = num;
@@ -171,14 +171,14 @@ f();
 如果 `await` 接收了一个非 promise 的但是提供了 `.then` 方法的对象，它就会调用这个 `.then` 方法，并将内建的函数 `resolve` 和 `reject` 作为参数传入（就像它对待一个常规的 `Promise` executor 时一样）。然后 `await` 等待直到这两个函数中的某个被调用（在上面这个例子中发生在 `(*)` 行），然后使用得到的结果继续执行后续任务。
 ````
 
-````smart header="Class 中的 async 方法"
+`Class 中的 async 方法"
 要声明一个 class 中的 async 方法，只需在对应方法前面加上 `async` 即可：
 
-```js run
+```js
 class Waiter {
-*!*
+
   async wait() {
-*/!*
+
     return await Promise.resolve(1);
   }
 }
@@ -198,9 +198,9 @@ new Waiter()
 
 ```js
 async function f() {
-*!*
+
   await Promise.reject(new Error("Whoops!"));
-*/!*
+
 }
 ```
 
@@ -208,9 +208,9 @@ async function f() {
 
 ```js
 async function f() {
-*!*
+
   throw new Error("Whoops!");
-*/!*
+
 }
 ```
 
@@ -218,15 +218,15 @@ async function f() {
 
 我们可以用 `try..catch` 来捕获上面提到的那个 error，与常规的 `throw` 使用的是一样的方式：
 
-```js run
+```js
 async function f() {
 
   try {
     let response = await fetch('http://no-such-url');
   } catch(err) {
-*!*
+
     alert(err); // TypeError: failed to fetch
-*/!*
+
   }
 }
 
@@ -235,7 +235,7 @@ f();
 
 如果有 error 发生，执行控制权马上就会被移交至 `catch` 块。我们也可以用 `try` 包装多行 `await` 代码：
 
-```js run
+```js
 async function f() {
 
   try {
@@ -252,27 +252,27 @@ f();
 
 如果我们没有 `try..catch`，那么由异步函数 `f()` 的调用生成的 promise 将变为 rejected。我们可以在函数调用后面添加 `.catch` 来处理这个 error：
 
-```js run
+```js
 async function f() {
   let response = await fetch('http://no-such-url');
 }
 
 // f() 变成了一个 rejected 的 promise
-*!*
+
 f().catch(alert); // TypeError: failed to fetch // (*)
-*/!*
+
 ```
 
 如果我们忘了在这添加 `.catch`，那么我们就会得到一个未处理的 promise error（可以在控制台中查看）。我们可以使用在 <info:promise-error-handling> 一章中所讲的全局事件处理程序 `unhandledrejection` 来捕获这类 error。
 
 
-```smart header="`async/await` 和 `promise.then/catch`"
+`async/await` 和 `promise.then/catch`"
 当我们使用 `async/await` 时，几乎就不会用到 `.then` 了，因为 `await` 为我们处理了等待。并且我们使用常规的 `try..catch` 而不是 `.catch`。这通常（但不总是）更加方便。
 
 但是当我们在代码的顶层时，也就是在所有 `async` 函数之外，我们在语法上就不能使用 `await` 了，所以这时候通常的做法是添加 `.then/catch` 来处理最终的结果（result）或掉出来的（falling-through）error，例如像上面那个例子中的 `(*)` 行那样。
 ```
 
-````smart header="`async/await` 可以和 `Promise.all` 一起使用"
+``async/await` 可以和 `Promise.all` 一起使用"
 当我们需要同时等待多个 promise 时，我们可以用 `Promise.all` 把它们包装起来，然后使用 `await`：
 
 ```js

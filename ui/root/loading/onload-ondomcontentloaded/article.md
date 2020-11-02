@@ -219,7 +219,7 @@ if (document.readyState == "loading") {
 
 还有一个 `readystatechange` 事件，会在状态发生改变时触发，因此我们可以打印所有这些状态，就像这样：
 
-```js run
+```js
 // 当前状态
 console.log(document.readyState);
 

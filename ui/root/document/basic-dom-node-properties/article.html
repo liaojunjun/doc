@@ -61,28 +61,28 @@ alert( <span class="hljs-built_in">document</span>.body <span class="hljs-keywor
 
 ```js
 // 定义 HTMLInputElement
-*!*
+
 // 冒号 &quot;:&quot; 表示 HTMLInputElement 继承自 HTMLElement
-*/!*
+
 interface HTMLInputElement: HTMLElement {
   // 接下来是 &lt;input&gt; 元素的属性和方法
 
-*!*
+
   // &quot;DOMString&quot; 表示属性的值是字符串
-*/!*
+
   attribute DOMString accept;
   attribute DOMString alt;
   attribute DOMString autocomplete;
   attribute DOMString value;
 
-*!*
+
   // 布尔值属性（true/false）
   attribute boolean autofocus;
-*/!*
+
   ...
-*!*
+
   // 现在方法：&quot;void&quot; 表示方法没有返回值
-*/!*
+
   void select();
   ...
 }</code></pre>
@@ -99,7 +99,7 @@ interface HTMLInputElement: HTMLElement {
 
 例如：
 
-```html run
+```html
 &lt;body&gt;
   &lt;script&gt;  
   let elem = document.body;
@@ -124,7 +124,7 @@ interface HTMLInputElement: HTMLElement {
 
 例如：
 
-```js run
+```js
 alert( document.body.nodeName ); // BODY
 alert( document.body.tagName ); // BODY
 ```
@@ -143,7 +143,7 @@ tagName 和 nodeName 之间有什么不同吗？
 例如，我们比较一下 `document` 的 `tagName` 和 `nodeName`，以及一个注释节点：
 
 
-```html run
+```html
 &lt;body&gt;&lt;!-- comment --&gt;
 
   &lt;script&gt;
@@ -177,7 +177,7 @@ tagName 和 nodeName 之间有什么不同吗？
 
 下面这个示例显示了 `document.body` 中的内容，然后将其完全替换：
 
-```html run
+```html
 &lt;body&gt;
   &lt;p&gt;A paragraph&lt;/p&gt;
   &lt;div&gt;A div&lt;/div&gt;
@@ -192,7 +192,7 @@ tagName 和 nodeName 之间有什么不同吗？
 
 我们可以尝试插入无效的 HTML，浏览器会修复我们的错误：
 
-```html run
+```html
 &lt;body&gt;
 
   &lt;script&gt;
@@ -225,9 +225,9 @@ chatDiv.innerHTML += &quot;How goes?&quot;;
 ```js
 elem.innerHTML += &quot;...&quot;;
 // 进行写入的一种更简短的方式：
-*!*
+
 elem.innerHTML = elem.innerHTML + &quot;...&quot;
-*/!*
+
 ```
 
 换句话说，`innerHTML+=` 做了以下工作：
@@ -249,7 +249,7 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 下面是一个示例：
 
-```html run
+```html
 &lt;div id=&quot;elem&quot;&gt;Hello &lt;b&gt;World&lt;/b&gt;&lt;/div&gt;
 
 &lt;script&gt;
@@ -263,20 +263,20 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 考虑下面这个示例：
 
-```html run
+```html
 &lt;div&gt;Hello, world!&lt;/div&gt;
 
 &lt;script&gt;
   let div = document.querySelector(&#x27;div&#x27;);
 
-*!*
+
   // 使用 &lt;p&gt;...&lt;/p&gt; 替换 div.outerHTML
-*/!*
+
   div.outerHTML = &#x27;&lt;p&gt;A new element&lt;/p&gt;&#x27;; // (*)
 
-*!*
+
   // 蛤！&#x27;div&#x27; 还是原来那样！
-*/!*
+
   alert(div.outerHTML); // &lt;div&gt;Hello, world!&lt;/div&gt; (**)
 &lt;/script&gt;
 ```
@@ -304,20 +304,20 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 读取文本节点和注释节点的内容的示例：
 
-```html run height=&quot;50&quot;
+```html height=&quot;50&quot;
 &lt;body&gt;
   Hello
   &lt;!-- Comment --&gt;
   &lt;script&gt;
     let text = document.body.firstChild;
-*!*
+
     alert(text.data); // Hello
-*/!*
+
 
     let comment = text.nextSibling;
-*!*
+
     alert(comment.data); // Comment
-*/!*
+
   &lt;/script&gt;
 &lt;/body&gt;
 ```
@@ -340,7 +340,7 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 例如：
 
-```html run
+```html
 &lt;div id=&quot;news&quot;&gt;
   &lt;h1&gt;Headline!&lt;/h1&gt;
   &lt;p&gt;Martians attack people!&lt;/p&gt;
@@ -365,7 +365,7 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 比较两者：
 
-```html run
+```html
 &lt;div id=&quot;elem1&quot;&gt;&lt;/div&gt;
 &lt;div id=&quot;elem2&quot;&gt;&lt;/div&gt;
 
@@ -388,7 +388,7 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 我们可以在 HTML 中使用它，或者使用 JavaScript 进行赋值，如下所示：
 
-```html run height=&quot;80&quot;
+```html height=&quot;80&quot;
 &lt;div&gt;Both divs below are hidden&lt;/div&gt;
 
 &lt;div hidden&gt;With the attribute &quot;hidden&quot;&lt;/div&gt;
@@ -405,7 +405,7 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 这里有一个 blinking 元素：
 
 
-```html run height=50
+```html height=50
 &lt;div id=&quot;elem&quot;&gt;A blinking element&lt;/div&gt;
 
 &lt;script&gt;
@@ -424,7 +424,7 @@ DOM 元素还有其他属性，特别是那些依赖于 class 的属性：
 
 例如：
 
-```html run height=&quot;80&quot;
+```html height=&quot;80&quot;
 &lt;input type=&quot;text&quot; id=&quot;elem&quot; value=&quot;value&quot;&gt;
 
 &lt;script&gt;

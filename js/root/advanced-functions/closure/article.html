@@ -36,15 +36,15 @@ alert(message); <span class="hljs-comment">// Error: message is not defined</spa
 }</code></pre>
 <pre><code class="language-smart">请注意，如果我们使用 `let` 对已存在的变量进行重复声明，如果对应的变量没有单独的代码块，则会出现错误：
 
-```js run
+```js
 // 显示 message
 let message = &quot;Hello&quot;;
 alert(message);
 
 // 显示另一个 message
-*!*
+
 let message = &quot;Goodbye&quot;; // Error: variable already declared
-*/!*
+
 alert(message);
 ```</code></pre>
 <p>对于 <code>if</code>，<code>for</code> 和 <code>while</code> 等，在 <code>{...}</code> 中声明的变量也仅在内部可见：</p>
@@ -282,7 +282,7 @@ g();</code></pre>
 
 ## 补充内容
 
-```smart header="说明"
+说明"
 为了更清晰地讲解闭包，本文经过大幅重写，以下内容是重写时部分被优化掉的内容，译者认为还是很有学习价值的，遂保留下来供大家学习。
 ```
 
@@ -296,7 +296,7 @@ g();</code></pre>
 
 如果我们要避免这个，我们可以使用代码块来隔离整个脚本或其中一部分：
 
-```js run
+```js
 {
   // 用局部变量完成一些不应该被外面访问的工作
 

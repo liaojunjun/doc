@@ -13,11 +13,11 @@
   <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>
 };
 
-*!*
+
 user.sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Hello!&quot;</span>);
 };
-*/!*
+
 
 user.sayHi(); <span class="hljs-comment">// Hello!</span></code></pre>
 <p>这里我们使用函数表达式创建了一个函数，并将其指定给对象的 <code>user.sayHi</code> 属性。</p>
@@ -29,7 +29,7 @@ user.sayHi(); <span class="hljs-comment">// Hello!</span></code></pre>
   <span class="hljs-comment">// ...</span>
 };
 
-*!*
+
 <span class="hljs-comment">// 首先，声明函数</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Hello!&quot;</span>);
@@ -37,7 +37,7 @@ user.sayHi(); <span class="hljs-comment">// Hello!</span></code></pre>
 
 <span class="hljs-comment">// 然后将其作为一个方法添加</span>
 user.sayHi = sayHi;
-*/!*
+
 
 user.sayHi(); <span class="hljs-comment">// Hello!</span></code></pre>
 <pre><code class="language-smart">当我们在代码中用对象表示实体时，就是所谓的 [面向对象编程](https://en.wikipedia.org/wiki/Object-oriented_programming)，简称为 &quot;OOP&quot;。
@@ -55,9 +55,9 @@ user = {
 
 <span class="hljs-comment">// 方法简写看起来更好，对吧？</span>
 <span class="hljs-keyword">let</span> user = {
-*!*
+
   sayHi() { <span class="hljs-comment">// 与 &quot;sayHi: function()&quot; 一样</span>
-*/!*
+
     alert(<span class="hljs-string">&quot;Hello&quot;</span>);
   }
 };</code></pre>
@@ -74,10 +74,10 @@ user = {
   <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>,
 
   sayHi() {
-*!*
+
     <span class="hljs-comment">// &quot;this&quot; 指的是“当前的对象”</span>
     alert(<span class="hljs-built_in">this</span>.name);
-*/!*
+
   }
 
 };
@@ -90,9 +90,9 @@ user.sayHi(); <span class="hljs-comment">// John</span></code></pre>
   <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>,
 
   sayHi() {
-*!*
+
     alert(user.name); <span class="hljs-comment">// &quot;user&quot; 替代 &quot;this&quot;</span>
-*/!*
+
   }
 
 };</code></pre>
@@ -103,9 +103,9 @@ user.sayHi(); <span class="hljs-comment">// John</span></code></pre>
   <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>,
 
   sayHi() {
-*!*
+
     alert( user.name ); <span class="hljs-comment">// 导致错误</span>
-*/!*
+
   }
 
 };
@@ -120,7 +120,7 @@ admin.sayHi(); <span class="hljs-comment">// 噢哟！在 sayHi() 使用了旧�
 <p>在 JavaScript 中，<code>this</code> 关键字与其他大多数编程语言中的不同。JavaScript 中的 <code>this</code> 可以用于任何函数。</p>
 <p>下面这样的代码没有语法错误：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
-  alert( *!*<span class="hljs-built_in">this</span>*/!*.name );
+  alert( <span class="hljs-built_in">this</span>.name );
 }</code></pre>
 <p><code>this</code> 的值是在代码运行时计算出来的，它取决于代码上下文。</p>
 <p>例如，这里相同的函数被分配给两个不同的对象，在调用中有着不同的 &quot;this&quot; 值：</p>
@@ -131,11 +131,11 @@ admin.sayHi(); <span class="hljs-comment">// 噢哟！在 sayHi() 使用了旧�
   alert( <span class="hljs-built_in">this</span>.name );
 }
 
-*!*
+
 <span class="hljs-comment">// 在两个对象中使用相同的函数</span>
 user.f = sayHi;
 admin.f = sayHi;
-*/!*
+
 
 <span class="hljs-comment">// 这两个调用有不同的 this 值</span>
 <span class="hljs-comment">// 函数内部的 &quot;this&quot; 是“点符号前面”的那个对象</span>
@@ -171,7 +171,7 @@ sayHi(); <span class="hljs-comment">// undefined</span></code></pre>
 
 举个例子，这里的 `arrow()` 使用的 `this` 来自于外部的 `user.sayHi()` 方法：
 
-```js run
+```js
 let user = {
   firstName: &quot;Ilya&quot;,
   sayHi() {

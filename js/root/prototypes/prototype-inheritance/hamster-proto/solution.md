@@ -14,15 +14,15 @@
 
 请注意，在简单的赋值 `this.stomach=` 的情况下不会出现这种情况：
 
-```js run
+```js
 let hamster = {
   stomach: [],
 
   eat(food) {
-*!*
+
     // 分配给 this.stomach 而不是 this.stomach.push
     this.stomach = [food];
-*/!*
+
   }
 };
 
@@ -46,7 +46,7 @@ alert( lazy.stomach ); // <nothing>
 
 此外，我们还可以通过确保每只仓鼠都有自己的胃来完全回避这个问题：
 
-```js run
+```js
 let hamster = {
   stomach: [],
 
@@ -57,16 +57,16 @@ let hamster = {
 
 let speedy = {
   __proto__: hamster,
-*!*
+
   stomach: []
-*/!*
+
 };
 
 let lazy = {
   __proto__: hamster,
-*!*
+
   stomach: []
-*/!*
+
 };
 
 // 仓鼠 Speedy 找到了食物

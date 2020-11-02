@@ -2,7 +2,7 @@
 <p>我们在前面章节中介绍的导出和导入语句称为“静态”导入。语法非常简单且严格。</p>
 <p>首先，我们不能动态生成 <code>import</code> 的任何参数。</p>
 <p>模块路径必须是原始类型字符串，不能是函数调用，下面这样的 <code>import</code> 行不通：</p>
-<pre><code class="language-js"><span class="hljs-keyword">import</span> ... from *!*getModuleName()*<span class="hljs-regexp">/!*; /</span><span class="hljs-regexp">/ Error, only from &quot;string&quot; is allowed</span></code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">import</span> ... from getModuleName()*<span class="hljs-regexp">/!*; /</span><span class="hljs-regexp">/ Error, only from &quot;string&quot; is allowed</span></code></pre>
 <p>其次，我们无法根据条件或者在运行时导入：</p>
 <pre><code class="language-js"><span class="hljs-keyword">if</span>(...) {
   <span class="hljs-keyword">import</span> ...; <span class="hljs-comment">// Error, not allowed!</span>

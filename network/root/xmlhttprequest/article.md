@@ -78,7 +78,7 @@ XMLHttpRequest 有两种执行模式：同步（synchronous）和异步（asynch
 
 下面是一个完整的示例。它从服务器加载 `/article/xmlhttprequest/example/load`，并打印加载进度：
 
-```js run
+```js
 // 1. 创建一个 new XMLHttpRequest 对象
 let xhr = new XMLHttpRequest();
 
@@ -130,7 +130,7 @@ xhr.timeout = 10000; // timeout 单位是 ms，此处即 10 秒
 
 如果在给定时间内请求没有成功执行，请求就会被取消，并且触发 `timeout` 事件。
 
-````smart header="URL 搜索参数（URL search parameters）"
+`URL 搜索参数（URL search parameters）"
 为了向 URL 添加像 `?name=value` 这样的参数，并确保正确的编码，我们可以使用 [URL](info:url) 对象：
 
 ```js
@@ -156,14 +156,14 @@ xhr.open('GET', url); // https://google.com/search?q=test+me%21
 
 例如，我们以 JSON 格式获取响应：
 
-```js run
+```js
 let xhr = new XMLHttpRequest();
 
 xhr.open('GET', '/article/xmlhttprequest/example/json');
 
-*!*
+
 xhr.responseType = 'json';
-*/!*
+
 
 xhr.send();
 
@@ -232,7 +232,7 @@ xhr.abort(); // 终止请求
 ```js
 let xhr = new XMLHttpRequest();
 
-xhr.open('GET', '/article/xmlhttprequest/hello.txt', *!*false*/!*);
+xhr.open('GET', '/article/xmlhttprequest/hello.txt', false);
 
 try {
   xhr.send();
@@ -267,14 +267,14 @@ HTTP-header 有三种方法：
     xhr.setRequestHeader('Content-Type', 'application/json');
     ```
 
-    ```warn header="Header 的限制"
+    "Header 的限制"
     一些 header 是由浏览器专门管理的，例如 `Referer` 和 `Host`。
     完整列表请见 [规范](http://www.w3.org/TR/XMLHttpRequest/#the-setrequestheader-method)。
 
     为了用户安全和请求的正确性，`XMLHttpRequest` 不允许更改它们。
     ```
 
-    ````warn header="不能移除 header"
+    `"不能移除 header"
     `XMLHttpRequest` 的另一个特点是不能撤销 `setRequestHeader`。
 
     一旦设置了 header，就无法撤销了。其他调用会向 header 中添加信息，但不会覆盖它。
@@ -348,7 +348,7 @@ formData.append(name, value); // 附加一个字段
 
 例如：
 
-```html run refresh
+```html refresh
 <form name="person">
   <input name="name" value="John">
   <input name="surname" value="Smith">
@@ -430,7 +430,7 @@ xhr.upload.onerror = function() {
 
 这是一个真实示例：带有进度指示的文件上传：
 
-```html run
+```html
 <input type="file" onchange="upload(this.files[0])">
 
 <script>
@@ -438,11 +438,11 @@ function upload(file) {
   let xhr = new XMLHttpRequest();
 
   // 跟踪上传进度
-*!*
+
   xhr.upload.onprogress = function(event) {
     console.log(`Uploaded ${event.loaded} of ${event.total}`);
   };
-*/!*
+
 
   // 跟踪完成：无论成功与否
   xhr.onloadend = function() {
@@ -467,9 +467,9 @@ function upload(file) {
 
 ```js
 let xhr = new XMLHttpRequest();
-*!*
+
 xhr.withCredentials = true;
-*/!*
+
 
 xhr.open('POST', 'http://anywhere.com/request');
 ...

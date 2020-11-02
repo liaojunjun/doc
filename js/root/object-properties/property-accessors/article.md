@@ -13,11 +13,11 @@
 
 ```js
 let obj = {
-  *!*get propName()*/!* {
+  get propName() {
     // 当读取 obj.propName 时，getter 起作用
   },
 
-  *!*set propName(value)*/!* {
+  set propName(value) {
     // 当执行 obj.propName = value 操作时，setter 起作用
   }
 };
@@ -36,42 +36,42 @@ let user = {
 
 现在我们想添加一个 `fullName` 属性，该属性值应该为 `"John Smith"`。当然，我们不想复制粘贴已有的信息，因此我们可以使用访问器来实现：
 
-```js run
+```js
 let user = {
   name: "John",
   surname: "Smith",
 
-*!*
+
   get fullName() {
     return `${this.name} ${this.surname}`;
   }
-*/!*
+
 };
 
-*!*
+
 alert(user.fullName); // John Smith
-*/!*
+
 ```
 
 从外表看，访问器属性看起来就像一个普通属性。这就是访问器属性的设计思想。我们不以函数的方式 **调用** `user.fullName`，我们正常 **读取** 它：getter 在幕后运行。
 
 截至目前，`fullName` 只有一个 getter。如果我们尝试赋值操作 `user.fullName=`，将会出现错误：
 
-```js run
+```js
 let user = {
   get fullName() {
     return `...`;
   }
 };
 
-*!*
+
 user.fullName = "Test"; // Error（属性只有一个 getter）
-*/!*
+
 ```
 
 让我们通过为 `user.fullName` 添加一个 setter 来修复它：
 
-```js run
+```js
 let user = {
   name: "John",
   surname: "Smith",
@@ -80,11 +80,11 @@ let user = {
     return `${this.name} ${this.surname}`;
   },
 
-*!*
+
   set fullName(value) {
     [this.name, this.surname] = value.split(" ");
   }
-*/!*
+
 };
 
 // set fullName 将以给定值执行
@@ -111,13 +111,13 @@ alert(user.surname); // Cooper
 
 例如，要使用 `defineProperty` 创建一个 `fullName` 访问器，我们可以使用 `get` 和 `set` 来传递描述符：
 
-```js run
+```js
 let user = {
   name: "John",
   surname: "Smith"
 };
 
-*!*
+
 Object.defineProperty(user, 'fullName', {
   get() {
     return `${this.name} ${this.surname}`;
@@ -126,7 +126,7 @@ Object.defineProperty(user, 'fullName', {
   set(value) {
     [this.name, this.surname] = value.split(" ");
   }
-*/!*
+
 });
 
 alert(user.fullName); // John Smith
@@ -138,10 +138,10 @@ for(let key in user) alert(key); // name, surname
 
 如果我们试图在同一个描述符中同时提供 `get` 和 `value`，则会出现错误：
 
-```js run
-*!*
+```js
+
 // Error: Invalid property descriptor.
-*/!*
+
 Object.defineProperty({}, 'prop', {
   get() {
     return 1
@@ -157,7 +157,7 @@ Getter/setter 可以用作“真实”属性值的包装器，以便对它们进
 
 例如，如果我们想禁止太短的 `user` 的 name，我们可以创建一个 setter `name`，并将值存储在一个单独的属性 `_name` 中：
 
-```js run
+```js
 let user = {
   get name() {
     return this._name;
@@ -219,12 +219,12 @@ let john = new User("John", new Date(1992, 6, 1));
 
 为 `age` 添加一个 getter 来解决这个问题：
 
-```js run no-beautify
+```js no-beautify
 function User(name, birthday) {
   this.name = name;
   this.birthday = birthday;
 
-*!*
+
   // 年龄是根据当前日期和生日计算得出的
   Object.defineProperty(this, "age", {
     get() {
@@ -232,7 +232,7 @@ function User(name, birthday) {
       return todayYear - this.birthday.getFullYear();
     }
   });
-*/!*
+
 }
 
 let john = new User("John", new Date(1992, 6, 1));

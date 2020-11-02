@@ -58,11 +58,11 @@ Custom element 名称必须包括一个短横线 <code>-</code>, 比如 <code>my
 让我们来创建一个可以展示适用于当前浏览器语言的时间格式的 `&lt;time-formatted&gt;` 元素：
 
 
-```html run height=50 autorun=&quot;no-epub&quot;
+```html height=50 autorun=&quot;no-epub&quot;
 &lt;script&gt;
-*!*
+
 class TimeFormatted extends HTMLElement { // (1)
-*/!*
+
 
   connectedCallback() {
     let date = new Date(this.getAttribute(&#x27;datetime&#x27;) || Date.now());
@@ -80,15 +80,15 @@ class TimeFormatted extends HTMLElement { // (1)
 
 }
 
-*!*
+
 customElements.define(&quot;time-formatted&quot;, TimeFormatted); // (2)
-*/!*
+
 &lt;/script&gt;
 
 &lt;!-- (3) --&gt;
-*!*
+
 &lt;time-formatted datetime=&quot;2019-12-01&quot;
-*/!*
+
   year=&quot;numeric&quot; month=&quot;long&quot; day=&quot;numeric&quot;
   hour=&quot;numeric&quot; minute=&quot;numeric&quot; second=&quot;numeric&quot;
   time-zone-name=&quot;short&quot;
@@ -123,13 +123,13 @@ customElements.define(&quot;time-formatted&quot;, TimeFormatted); // (2)
 
 以下是 `&lt;time-formatted&gt;` 的新版本，它会在属性变化的时候自动更新：
 
-```html run autorun=&quot;no-epub&quot; height=50
+```html autorun=&quot;no-epub&quot; height=50
 &lt;script&gt;
 class TimeFormatted extends HTMLElement {
 
-*!*
+
   render() { // (1)
-*/!*
+
     let date = new Date(this.getAttribute(&#x27;datetime&#x27;) || Date.now());
 
     this.innerHTML = new Intl.DateTimeFormat(&quot;default&quot;, {
@@ -143,24 +143,24 @@ class TimeFormatted extends HTMLElement {
     }).format(date);
   }
 
-*!*
+
   connectedCallback() { // (2)
-*/!*
+
     if (!this.rendered) {
       this.render();
       this.rendered = true;
     }
   }
 
-*!*
+
   static get observedAttributes() { // (3)
-*/!*
+
     return [&#x27;datetime&#x27;, &#x27;year&#x27;, &#x27;month&#x27;, &#x27;day&#x27;, &#x27;hour&#x27;, &#x27;minute&#x27;, &#x27;second&#x27;, &#x27;time-zone-name&#x27;];
   }
 
-*!*
+
   attributeChangedCallback(name, oldValue, newValue) { // (4)
-*/!*
+
     this.render();
   }
 
@@ -172,9 +172,9 @@ customElements.define(&quot;time-formatted&quot;, TimeFormatted);
 &lt;time-formatted id=&quot;elem&quot; hour=&quot;numeric&quot; minute=&quot;numeric&quot; second=&quot;numeric&quot;&gt;&lt;/time-formatted&gt;
 
 &lt;script&gt;
-*!*
+
 setInterval(() =&gt; elem.setAttribute(&#x27;datetime&#x27;, new Date()), 1000); // (5)
-*/!*
+
 &lt;/script&gt;</code></pre>
 <ol>
 <li>渲染逻辑被移动到了 <code>render()</code> 这个辅助方法里面。</li>
@@ -191,17 +191,17 @@ setInterval(() =&gt; elem.setAttribute(&#x27;datetime&#x27;, new Date()), 1000);
 customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
 
   connectedCallback() {
-*!*
+
     alert(<span class="hljs-built_in">this</span>.innerHTML); <span class="hljs-comment">// empty (*)</span>
-*/!*
+
   }
 
 });
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
-*!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">user-info</span>&gt;</span>John<span class="hljs-tag">&lt;/<span class="hljs-name">user-info</span>&gt;</span>
-*/!*</code></pre>
+</code></pre>
 <p>如果你运行上面的代码，<code>alert</code> 出来的内容是空的。</p>
 <p>这正是因为在那个阶段，子元素还不存在，DOM 还没有完成构建。HTML 解析器先连接 custom element <code>&lt;user-info&gt;</code>，然后再处理子元素，但是那时候子元素还并没有加载上。</p>
 <p>如果我们要给 custom element 传入信息，我们可以使用元素属性。它们是即时生效的。</p>
@@ -211,17 +211,17 @@ customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <s
 customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLElement</span> </span>{
 
   connectedCallback() {
-*!*
+
     <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> alert(<span class="hljs-built_in">this</span>.innerHTML)); <span class="hljs-comment">// John (*)</span>
-*/!*
+
   }
 
 });
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
-*!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">user-info</span>&gt;</span>John<span class="hljs-tag">&lt;/<span class="hljs-name">user-info</span>&gt;</span>
-*/!*</code></pre>
+</code></pre>
 <p>现在 <code>alert</code> 在 <code>(*)</code> 行展示了 「John」，因为我们是在 HTML 解析完成之后，才异步执行了这段程序。我们在这个时候处理必要的子元素并且结束初始化过程。</p>
 <p>另一方面，这个方案并不是完美的。如果嵌套的 custom element 同样使用了 <code>setTimeout</code> 来初始化自身，那么它们会按照先后顺序执行：外层的 <code>setTimeout</code> 首先触发，然后才是内层的。</p>
 <p>这样外层元素还是早于内层元素结束初始化。</p>
@@ -235,11 +235,11 @@ customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <s
 });
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
-*!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">user-info</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;outer&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">user-info</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;inner&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">user-info</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">user-info</span>&gt;</span>
-*/!*</code></pre>
+</code></pre>
 <p>输出顺序：</p>
 <ol>
 <li>outer 已连接。</li>
@@ -259,7 +259,7 @@ customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <s
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLButtonElement</span> </span>{ <span class="hljs-comment">/* custom element 方法 */</span> }</code></pre>
 </li>
 <li><p>给 <code>customElements.define</code> 提供定义标签的第三个参数：</p>
-<pre><code class="language-js">customElements.define(<span class="hljs-string">&#x27;hello-button&#x27;</span>, HelloButton, *!*{<span class="hljs-attr">extends</span>: <span class="hljs-string">&#x27;button&#x27;</span>}*/!*);</code></pre>
+<pre><code class="language-js">customElements.define(<span class="hljs-string">&#x27;hello-button&#x27;</span>, HelloButton, {<span class="hljs-attr">extends</span>: <span class="hljs-string">&#x27;button&#x27;</span>});</code></pre>
 <p> 这一步是必要的，因为不同的标签会共享同一个类。</p>
 </li>
 <li><p>最后，插入一个普通的 <code>&lt;button&gt;</code> 标签，但添加 <code>is=&quot;hello-button&quot;</code> 到这个元素，这样就可以使用我们的 custom element：</p>
@@ -270,26 +270,26 @@ customElements.define(<span class="hljs-string">&#x27;user-info&#x27;</span>, <s
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
 <span class="hljs-comment">// 这个按钮在被点击的时候说 &quot;hello&quot;</span>
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">HTMLButtonElement</span> </span>{
-*!*
+
   <span class="hljs-keyword">constructor</span>() {
-*/!*
+
     <span class="hljs-built_in">super</span>();
     <span class="hljs-built_in">this</span>.addEventListener(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;Hello!&quot;</span>));
   }
 }
 
-*!*
+
 customElements.define(<span class="hljs-string">&#x27;hello-button&#x27;</span>, HelloButton, {<span class="hljs-attr">extends</span>: <span class="hljs-string">&#x27;button&#x27;</span>});
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
-*!*
-<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;hello-button&quot;</span>&gt;</span>Click me<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-*/!*
 
-*!*
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;hello-button&quot;</span>&gt;</span>Click me<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+
+
+
 <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;hello-button&quot;</span> <span class="hljs-attr">disabled</span>&gt;</span>Disabled<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-*/!*</code></pre>
+</code></pre>
 <p>我们新定义的按钮继承了内置按钮，所以它拥有和内置按钮相同的样式和标准特性，比如 <code>disabled</code> 属性。</p>
 <h2 id="引用参考">引用参考</h2>
 <ul>

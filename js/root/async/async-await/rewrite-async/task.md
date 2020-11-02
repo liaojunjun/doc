@@ -3,7 +3,7 @@
 
 重写下面这个来自 <info:promise-chaining> 一章的示例代码，使用 `async/await` 而不是 `.then/catch`：
 
-```js run
+```js
 function loadJson(url) {
   return fetch(url)
     .then(response => {

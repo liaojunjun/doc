@@ -26,14 +26,14 @@ let str = decoder.decode([input], [options]);
 
 例如：
 
-```js run
+```js
 let uint8Array = new Uint8Array([72, 101, 108, 108, 111]);
 
 alert( new TextDecoder().decode(uint8Array) ); // Hello
 ```
 
 
-```js run
+```js
 let uint8Array = new Uint8Array([228, 189, 160, 229, 165, 189]);
 
 alert( new TextDecoder().decode(uint8Array) ); // 你好
@@ -42,7 +42,7 @@ alert( new TextDecoder().decode(uint8Array) ); // 你好
 我们可以通过为其创建子数组视图来解码部分缓冲区：
 
 
-```js run
+```js
 let uint8Array = new Uint8Array([0, 72, 101, 108, 108, 111, 0]);
 
 // 该字符串位于中间
@@ -68,7 +68,7 @@ let encoder = new TextEncoder();
 - **`encode(str)`** —— 从字符串返回 `Uint8Array`。
 - **`encodeInto(str, destination)`** —— 将 `str` 编码到 `destination` 中，该目标必须为 `Uint8Array`。
 
-```js run
+```js
 let encoder = new TextEncoder();
 
 let uint8Array = encoder.encode("Hello");

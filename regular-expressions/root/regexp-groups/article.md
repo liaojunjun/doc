@@ -17,7 +17,7 @@
 
 括号将字符组合，所以 `pattern:(go)+` 匹配 `match:go`，`match:gogo`，`match:gogogo`等。
 
-```js run
+```js
 alert( 'Gogogo now!'.match(/(go)+/i) ); // "Gogogo"
 ```
 
@@ -37,7 +37,7 @@ smith.users.mail.com
 
 在正则表达式中是 `pattern:(\w+\.)+\w+`：
 
-```js run
+```js
 let regexp = /(\w+\.)+\w+/g;
 
 alert( "site.com my.site.com".match(regexp) ); // site.com,my.site.com
@@ -55,7 +55,7 @@ email 格式为：`name@domain`。名称可以是任何单词，可以使用连�
 
 模式：
 
-```js run
+```js
 let regexp = /[-.\w]+@([\w-]+\.)+[\w-]+/g;
 
 alert("my@mail.com @ his@site.com.uk".match(regexp)); // my@mail.com, his@site.com.uk
@@ -80,7 +80,7 @@ alert("my@mail.com @ his@site.com.uk".match(regexp)); // my@mail.com, his@site.c
 
 现在，我们能在结果数组中获取标签的整体 `match:<h1>` 及其内容 `match:h1`：
 
-```js run
+```js
 let str = '<h1>Hello, world!</h1>';
 
 let tag = str.match(/<(.*?)>/);
@@ -107,7 +107,7 @@ alert( tag[1] ); // h1
 
 实际上：
 
-```js run
+```js
 let str = '<span class="my">';
 
 let regexp = /<(([a-z]+)\s*([^>]*))>/;
@@ -137,7 +137,7 @@ alert(result[3]); // class="my"
 
 如果我们在单个字母的字符串上运行 `subject:a`，则结果为：
 
-```js run
+```js
 let match = 'a'.match(/a(z)?(c)?/);
 
 alert( match.length ); // 3
@@ -150,7 +150,7 @@ alert( match[2] ); // undefined
 
 这是字符串的一个更复杂的匹配 `subject:ac`：
 
-```js run
+```js
 let match = 'ac'.match(/a(z)?(c)?/)
 
 alert( match.length ); // 3
@@ -163,7 +163,7 @@ alert( match[2] ); // c
 
 ## 搜索所有具有组的匹配项：matchAll
 
-```warn header="`matchAll` 是一个新方法，可能需要使用 polyfill"
+"`matchAll` 是一个新方法，可能需要使用 polyfill"
 旧的浏览器不支持 `matchAll`。
 
 可能需要一个 polyfill，例如 <https://github.com/ljharb/String.prototype.matchAll>.
@@ -173,7 +173,7 @@ alert( match[2] ); // c
 
 例如，让我们查找字符串中的所有标签：
 
-```js run
+```js
 let str = '<h1> <h2>';
 
 let tags = str.match(/<(.*?)>/g);
@@ -195,7 +195,7 @@ alert( tags ); // <h1>,<h2>
 
 例如：
 
-```js run
+```js
 let results = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
 
 // results - is not an array, but an iterable object
@@ -213,7 +213,7 @@ alert(results[1]); // <h2>,h2 (2nd tag)
 
 如果我们不需要遍历结果，则 `Array.from` 没有必要：
 
-```js run
+```js
 let results = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
 
 for(let result of results) {
@@ -231,7 +231,7 @@ let [tag1, tag2] = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
 
 由 `matchAll` 所返回的每个匹配，其格式与不带标志 `pattern:g` 的 `match` 所返回的格式相同：它是一个具有额外的 `index`（字符串中的匹配索引）属性和 `input`（源字符串）的数组：
 
-```js run
+```js
 let results = '<h1> <h2>'.matchAll(/<(.*?)>/gi);
 
 let [tag1, tag2] = results;
@@ -242,7 +242,7 @@ alert( tag1.index ); // 0
 alert( tag1.input ); // <h1> <h2>
 ```
 
-```smart header="为什么 `matchAll` 的结果是可迭代对象而不是数组？"
+为什么 `matchAll` 的结果是可迭代对象而不是数组？"
 为什么这个方法这样设计？原因很简单 — 为了优化。
 
 调用 `matchAll` 不会执行搜索。相反，它返回一个可迭代的对象，最初没有结果。每当我们对它进行迭代时才会执行搜索，例如在循环中。
@@ -260,10 +260,10 @@ alert( tag1.input ); // <h1> <h2>
 
 例如，让我们查找 "year-month-day" 格式的日期：
 
-```js run
-*!*
+```js
+
 let dateRegexp = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/;
-*/!*
+
 let str = "2019-04-30";
 
 let groups = str.match(dateRegexp).groups;
@@ -280,7 +280,7 @@ alert(groups.day); // 30
 We'll also need `matchAll` to obtain full matches, together with groups:
 我们还需要 `matchAll` 获取完整的组匹配：
 
-```js run
+```js
 let dateRegexp = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g;
 
 let str = "2019-10-30 2020-01-01";
@@ -302,7 +302,7 @@ for(let result of results) {
 
 例如，
 
-```js run
+```js
 let str = "John Bull";
 let regexp = /(\w+) (\w+)/;
 
@@ -313,7 +313,7 @@ alert( str.replace(regexp, '$2, $1') ); // Bull, John
 
 例如，让我们将日期格式从 "year-month-day" 更改为 "day.month.year"：
 
-```js run
+```js
 let regexp = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g;
 
 let str = "2019-10-30, 2020-01-01";
@@ -332,13 +332,13 @@ alert( str.replace(regexp, '$<day>.$<month>.$<year>') );
 
 在下面的示例中，我们仅将名称 `match:John` 作为匹配项的单独成员：
 
-```js run
+```js
 let str = "Gogogo John!";
 
-*!*
+
 // ?: 从捕获组中排除 'go'
 let regexp = /(?:go)+ (\w+)/i;
-*/!*
+
 
 let result = str.match(regexp);
 

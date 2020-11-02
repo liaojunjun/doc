@@ -22,10 +22,10 @@
 - [Node](http://dom.spec.whatwg.org/#interface-node) — 也是一个“抽象”类，充当 DOM 节点的基础。它提供了树的核心功能：`parentNode`，`nextSibling`，`childNodes` 等（它们都是 getter）。`Node` 类的对象从未被创建。但是有一些继承自它的具体的节点类，例如：文本节点的 `Text`，元素节点的 `Element`，以及更多异域（exotic）类，例如注释节点的 `Comment`。
 - [Element](http://dom.spec.whatwg.org/#interface-element) — 是 DOM 元素的基本类。它提供了元素级的导航（navigation），例如 `nextElementSibling`，`children`，以及像 `getElementsByTagName` 和 `querySelector` 这样的搜索方法。浏览器中不仅有 HTML，还会有 XML 和 SVG。`Element` 类充当更多特定类的基本类：`SVGElement`，`XMLElement` 和 `HTMLElement`。
 - [HTMLElement](https://html.spec.whatwg.org/multipage/dom.html#htmlelement) — 最终是所有 HTML 元素的基本类。各种 HTML 元素均继承自它：
-    - [HTMLInputElement](https://html.spec.whatwg.org/multipage/forms.html#htmlinputelement) — `<input>` 元素的类，
-    - [HTMLBodyElement](https://html.spec.whatwg.org/multipage/semantics.html#htmlbodyelement) — `<body>` 元素的类，
-    - [HTMLAnchorElement](https://html.spec.whatwg.org/multipage/semantics.html#htmlanchorelement) — `<a>` 元素的类，
-    - ……等，每个标签都有自己的类，这些类可以提供特定的属性和方法。
+  - [HTMLInputElement](https://html.spec.whatwg.org/multipage/forms.html#htmlinputelement) — `<input>` 元素的类，
+  - [HTMLBodyElement](https://html.spec.whatwg.org/multipage/semantics.html#htmlbodyelement) — `<body>` 元素的类，
+  - [HTMLAnchorElement](https://html.spec.whatwg.org/multipage/semantics.html#htmlanchorelement) — `<a>` 元素的类，
+  - ……等，每个标签都有自己的类，这些类可以提供特定的属性和方法。
 
 因此，给定节点的全部属性和方法都是继承的结果。
 
@@ -42,31 +42,31 @@
 
 我们可以通过回调来查看 DOM 节点类名，因为对象通常都具有 `constructor` 属性。它引用类的 constructor，`constructor.name` 就是它的名称：
 
-```js run
-alert( document.body.constructor.name ); // HTMLBodyElement
+```js
+alert(document.body.constructor.name); // HTMLBodyElement
 ```
 
 ……或者我们可以对其使用 `toString` 方法：
 
-```js run
-alert( document.body ); // [object HTMLBodyElement]
+```js
+alert(document.body); // [object HTMLBodyElement]
 ```
 
 我们还可以使用 `instanceof` 来检查继承：
 
-```js run
-alert( document.body instanceof HTMLBodyElement ); // true
-alert( document.body instanceof HTMLElement ); // true
-alert( document.body instanceof Element ); // true
-alert( document.body instanceof Node ); // true
-alert( document.body instanceof EventTarget ); // true
+```js
+alert(document.body instanceof HTMLBodyElement); // true
+alert(document.body instanceof HTMLElement); // true
+alert(document.body instanceof Element); // true
+alert(document.body instanceof Node); // true
+alert(document.body instanceof EventTarget); // true
 ```
 
 正如我们所看到的，DOM 节点是常规的 JavaScript 对象。它们使用基于原型的类进行继承。
 
 在浏览器中，使用 `console.dir(elem)` 输出元素来查看也是非常容易的。在控制台中，你可以看到 `HTMLElement.prototype` 和 `Element.prototype` 等。
 
-```smart header="`console.dir(elem)` 与 `console.log(elem)`"
+`console.dir(elem)` 与 `console.log(elem)`"
 大多数浏览器在其开发者工具中都支持这两个命令：`console.log` 和 `console.dir`。它们将它们的参数输出到控制台中。对于 JavaScript 对象，这些命令通常做的是相同的事。
 
 但对于 DOM 元素，它们是不同的：
@@ -75,9 +75,8 @@ alert( document.body instanceof EventTarget ); // true
 - `console.dir(elem)` 将元素显示为 DOM 对象，非常适合探索其属性。
 
 你可以在 `document.body` 上尝试一下。
-```
 
-````smart header="规范中的 IDL"
+`规范中的 IDL"
 在规范中，DOM 类不是使用 JavaScript 来描述的，而是一种特殊的 [接口描述语言（Interface description language）](https://en.wikipedia.org/wiki/Interface_description_language)，简写为 IDL，它通常很容易理解。
 
 在 IDL 中，所有属性以其类型开头。例如，`DOMString` 和 `boolean` 等。
@@ -86,39 +85,39 @@ alert( document.body instanceof EventTarget ); // true
 
 ```js
 // 定义 HTMLInputElement
-*!*
+
 // 冒号 ":" 表示 HTMLInputElement 继承自 HTMLElement
-*/!*
+
 interface HTMLInputElement: HTMLElement {
   // 接下来是 <input> 元素的属性和方法
 
-*!*
+
   // "DOMString" 表示属性的值是字符串
-*/!*
+
   attribute DOMString accept;
   attribute DOMString alt;
   attribute DOMString autocomplete;
   attribute DOMString value;
 
-*!*
+
   // 布尔值属性（true/false）
   attribute boolean autofocus;
-*/!*
+
   ...
-*!*
+
   // 现在方法："void" 表示方法没有返回值
-*/!*
+
   void select();
   ...
 }
 ```
-````
 
 ## "nodeType" 属性
 
 `nodeType` 属性提供了另一种“过时的”用来获取 DOM 节点类型的方法。
 
 它有一个数值型值（numeric value）：
+
 - 对于元素节点 `elem.nodeType == 1`，
 - 对于文本节点 `elem.nodeType == 3`，
 - 对于 document 对象 `elem.nodeType == 9`，
@@ -126,19 +125,19 @@ interface HTMLInputElement: HTMLElement {
 
 例如：
 
-```html run
+```html
 <body>
-  <script>  
-  let elem = document.body;
+  <script>
+    let elem = document.body;
 
-  // 让我们检查一下它是什么？
-  alert(elem.nodeType); // 1 => element
+    // 让我们检查一下它是什么？
+    alert(elem.nodeType); // 1 => element
 
-  // 第一个子节点是
-  alert(elem.firstChild.nodeType); // 3 => text
+    // 第一个子节点是
+    alert(elem.firstChild.nodeType); // 3 => text
 
-  // 对于 document 对象，类型是 9
-  alert( document.nodeType ); // 9
+    // 对于 document 对象，类型是 9
+    alert(document.nodeType); // 9
   </script>
 </body>
 ```
@@ -151,9 +150,9 @@ interface HTMLInputElement: HTMLElement {
 
 例如：
 
-```js run
-alert( document.body.nodeName ); // BODY
-alert( document.body.tagName ); // BODY
+```js
+alert(document.body.nodeName); // BODY
+alert(document.body.tagName); // BODY
 ```
 
 tagName 和 nodeName 之间有什么不同吗？
@@ -162,39 +161,37 @@ tagName 和 nodeName 之间有什么不同吗？
 
 - `tagName` 属性仅适用于 `Element` 节点。
 - `nodeName` 是为任意 `Node` 定义的：
-    - 对于元素，它的意义与 `tagName` 相同。
-    - 对于其他节点类型（text，comment 等），它拥有一个对应节点类型的字符串。
+  - 对于元素，它的意义与 `tagName` 相同。
+  - 对于其他节点类型（text，comment 等），它拥有一个对应节点类型的字符串。
 
 换句话说，`tagName` 仅受元素节点支持（因为它起源于 `Element` 类），而 `nodeName` 则可以说明其他节点类型。
 
 例如，我们比较一下 `document` 的 `tagName` 和 `nodeName`，以及一个注释节点：
 
-
-```html run
-<body><!-- comment -->
+```html
+<body>
+  <!-- comment -->
 
   <script>
     // for comment
-    alert( document.body.firstChild.tagName ); // undefined（不是一个元素）
-    alert( document.body.firstChild.nodeName ); // #comment
+    alert(document.body.firstChild.tagName); // undefined（不是一个元素）
+    alert(document.body.firstChild.nodeName); // #comment
 
     // for document
-    alert( document.tagName ); // undefined（不是一个元素）
-    alert( document.nodeName ); // #document
+    alert(document.tagName); // undefined（不是一个元素）
+    alert(document.nodeName); // #document
   </script>
 </body>
 ```
 
 如果我们只处理元素，那么 `tagName` 和 `nodeName` 这两种方法，我们都可以使用，没有区别。
 
-```smart header="标签名称始终是大写的，除非是在 XML 模式下"
+标签名称始终是大写的，除非是在 XML 模式下"
 浏览器有两种处理文档（document）的模式：HTML 和 XML。通常，HTML 模式用于网页。只有在浏览器接收到带有 header `Content-Type: application/xml+xhtml` 的 XML-document 时，XML 模式才会被启用。
 
 在 HTML 模式下，`tagName/nodeName` 始终是大写的：它是 `BODY`，而不是 `<body>` 或 `<BoDy>`。
 
 在 XML 模式中，大小写保持为“原样”。如今，XML 模式很少被使用。
-```
-
 
 ## innerHTML：内容
 
@@ -204,35 +201,31 @@ tagName 和 nodeName 之间有什么不同吗？
 
 下面这个示例显示了 `document.body` 中的内容，然后将其完全替换：
 
-```html run
+```html
 <body>
   <p>A paragraph</p>
   <div>A div</div>
 
   <script>
-    alert( document.body.innerHTML ); // 读取当前内容
-    document.body.innerHTML = 'The new BODY!'; // 替换它
+    alert(document.body.innerHTML); // 读取当前内容
+    document.body.innerHTML = "The new BODY!"; // 替换它
   </script>
-
 </body>
 ```
 
 我们可以尝试插入无效的 HTML，浏览器会修复我们的错误：
 
-```html run
+```html
 <body>
-
   <script>
-    document.body.innerHTML = '<b>test'; // 忘记闭合标签
-    alert( document.body.innerHTML ); // <b>test</b>（被修复了）
+    document.body.innerHTML = "<b>test"; // 忘记闭合标签
+    alert(document.body.innerHTML); // <b>test</b>（被修复了）
   </script>
-
 </body>
 ```
 
-```smart header="脚本不会执行"
+脚本不会执行"
 如果 `innerHTML` 将一个 `<script>` 标签插入到 document 中 — 它会成为 HTML 的一部分，但是不会执行。
-```
 
 ### 小心："innerHTML+=" 会进行完全重写
 
@@ -252,9 +245,8 @@ chatDiv.innerHTML += "How goes?";
 ```js
 elem.innerHTML += "...";
 // 进行写入的一种更简短的方式：
-*!*
-elem.innerHTML = elem.innerHTML + "..."
-*/!*
+
+elem.innerHTML = elem.innerHTML + "...";
 ```
 
 换句话说，`innerHTML+=` 做了以下工作：
@@ -276,7 +268,7 @@ elem.innerHTML = elem.innerHTML + "..."
 
 下面是一个示例：
 
-```html run
+```html
 <div id="elem">Hello <b>World</b></div>
 
 <script>
@@ -290,20 +282,18 @@ elem.innerHTML = elem.innerHTML + "..."
 
 考虑下面这个示例：
 
-```html run
+```html
 <div>Hello, world!</div>
 
 <script>
-  let div = document.querySelector('div');
+  let div = document.querySelector("div");
 
-*!*
   // 使用 <p>...</p> 替换 div.outerHTML
-*/!*
-  div.outerHTML = '<p>A new element</p>'; // (*)
 
-*!*
+  div.outerHTML = "<p>A new element</p>"; // (*)
+
   // 蛤！'div' 还是原来那样！
-*/!*
+
   alert(div.outerHTML); // <div>Hello, world!</div> (**)
 </script>
 ```
@@ -315,6 +305,7 @@ elem.innerHTML = elem.innerHTML + "..."
 `outerHTML` 赋值不会修改 DOM 元素（在这个例子中是被 'div' 引用的对象），而是将其从 DOM 中删除并在其位置插入新的 HTML。
 
 所以，在 `div.outerHTML=...` 中发生的事情是：
+
 - `div` 被从文档（document）中移除。
 - 另一个 HTML 片段 `<p>A new element</p>` 被插入到其位置上。
 - `div` 仍拥有其旧的值。新的 HTML 没有被赋值给任何变量。
@@ -331,20 +322,18 @@ elem.innerHTML = elem.innerHTML + "..."
 
 读取文本节点和注释节点的内容的示例：
 
-```html run height="50"
+```html
 <body>
   Hello
   <!-- Comment -->
   <script>
     let text = document.body.firstChild;
-*!*
+
     alert(text.data); // Hello
-*/!*
 
     let comment = text.nextSibling;
-*!*
+
     alert(comment.data); // Comment
-*/!*
   </script>
 </body>
 ```
@@ -355,7 +344,7 @@ elem.innerHTML = elem.innerHTML + "..."
 
 ```html
 <!-- if isAdmin -->
-  <div>Welcome, Admin!</div>
+<div>Welcome, Admin!</div>
 <!-- /if -->
 ```
 
@@ -367,7 +356,7 @@ elem.innerHTML = elem.innerHTML + "..."
 
 例如：
 
-```html run
+```html
 <div id="news">
   <h1>Headline!</h1>
   <p>Martians attack people!</p>
@@ -392,7 +381,7 @@ elem.innerHTML = elem.innerHTML + "..."
 
 比较两者：
 
-```html run
+```html
 <div id="elem1"></div>
 <div id="elem2"></div>
 
@@ -415,7 +404,7 @@ elem.innerHTML = elem.innerHTML + "..."
 
 我们可以在 HTML 中使用它，或者使用 JavaScript 进行赋值，如下所示：
 
-```html run height="80"
+```html
 <div>Both divs below are hidden</div>
 
 <div hidden>With the attribute "hidden"</div>
@@ -431,12 +420,11 @@ elem.innerHTML = elem.innerHTML + "..."
 
 这里有一个 blinking 元素：
 
-
-```html run height=50
+```html
 <div id="elem">A blinking element</div>
 
 <script>
-  setInterval(() => elem.hidden = !elem.hidden, 1000);
+  setInterval(() => (elem.hidden = !elem.hidden), 1000);
 </script>
 ```
 
@@ -451,8 +439,8 @@ DOM 元素还有其他属性，特别是那些依赖于 class 的属性：
 
 例如：
 
-```html run height="80"
-<input type="text" id="elem" value="value">
+```html
+<input type="text" id="elem" value="value" />
 
 <script>
   alert(elem.type); // "text"

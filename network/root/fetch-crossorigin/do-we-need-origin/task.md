@@ -14,10 +14,10 @@ Accept-Charset: utf-8
 Accept-Encoding: gzip,deflate,sdch
 Connection: keep-alive
 Host: google.com
-*!*
+
 Origin: http://javascript.info
 Referer: http://javascript.info/some/url
-*/!*
+
 ```
 
 正如你所看到的，存在 `Referer` 和 `Origin`。

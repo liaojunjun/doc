@@ -10,14 +10,14 @@
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
 
 <span class="hljs-comment">// rabbit 是 Rabbit class 的对象吗？</span>
-*!*
+
 alert( rabbit <span class="hljs-keyword">instanceof</span> Rabbit ); <span class="hljs-comment">// true</span>
-*/!*</code></pre>
+</code></pre>
 <p>它还可以与构造函数一起使用：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-comment">// 这里是构造函数，而不是 class</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
-*/!*
+
 
 alert( <span class="hljs-keyword">new</span> Rabbit() <span class="hljs-keyword">instanceof</span> Rabbit ); <span class="hljs-comment">// true</span></code></pre>
 <p>……与诸如 <code>Array</code> 之类的内建 class 一起使用：</p>
@@ -56,14 +56,14 @@ obj.__proto__.__proto__.__proto__ === Class.prototype?
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Animal</span> </span>{}
 
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
-*!*
+
 alert(rabbit <span class="hljs-keyword">instanceof</span> Animal); <span class="hljs-comment">// true</span>
-*/!*
+
 
 <span class="hljs-comment">// rabbit.__proto__ === Rabbit.prototype</span>
-*!*
+
 <span class="hljs-comment">// rabbit.__proto__.__proto__ === Animal.prototype（匹配！）</span>
-*/!*</code></pre>
+</code></pre>
 </li>
 </ol>
 <p>下图展示了 <code>rabbit instanceof Animal</code> 的执行过程中，<code>Animal.prototype</code> 是如何参与比较的：</p>
@@ -79,9 +79,9 @@ alert(rabbit <span class="hljs-keyword">instanceof</span> Animal); <span class="
 Rabbit.prototype = {};
 
 <span class="hljs-comment">// ...再也不是 rabbit 了！</span>
-*!*
+
 alert( rabbit <span class="hljs-keyword">instanceof</span> Rabbit ); <span class="hljs-comment">// false</span>
-*/!*</code></pre>
+</code></pre>
 <h2 id="福利：使用-objectprototypetostring-方法来揭示类型">福利：使用 Object.prototype.toString 方法来揭示类型</h2>
 <p>大家都知道，一个普通对象被转化为字符串时为 <code>[object Object]</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {};
@@ -106,7 +106,7 @@ alert(obj.toString()); <span class="hljs-comment">// 同上</span></code></pre>
 <span class="hljs-comment">// 它是什么类型的？</span>
 <span class="hljs-keyword">let</span> arr = [];
 
-alert( objectToString.call(arr) ); <span class="hljs-comment">// [object *!*Array*/!*]</span></code></pre>
+alert( objectToString.call(arr) ); <span class="hljs-comment">// [object Array]</span></code></pre>
 <p>这里我们用到了在 <a href="info:call-apply-decorators"></a> 一章中讲过的 <a href="mdn:js/function/call">call</a> 方法来在上下文 <code>this=arr</code> 中执行函数 <code>objectToString</code>。</p>
 <p>在内部，<code>toString</code> 的算法会检查 <code>this</code>，并返回相应的结果。再举几个例子：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> s = <span class="hljs-built_in">Object</span>.prototype.toString;

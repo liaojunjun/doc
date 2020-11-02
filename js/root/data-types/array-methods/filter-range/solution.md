@@ -1,4 +1,4 @@
-```js run demo
+```js demo
 function filterRange(arr, a, b) {
   // 在表达式周围添加了括号，以提高可读性
   return arr.filter(item => (a <= item && item <= b));

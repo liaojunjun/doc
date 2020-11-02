@@ -1,9 +1,9 @@
 <h1 id="使用-promise-进行错误处理">使用 promise 进行错误处理</h1>
 <p>Promise 链在错误（error）处理中十分强大。当一个 promise 被 reject 时，控制权将移交至最近的 rejection 处理程序（handler）。这在实际开发中非常方便。</p>
 <p>例如，下面代码中所 <code>fetch</code> 的 URL 是错的（没有这个网站），<code>.catch</code> 对这个 error 进行了处理：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 fetch(<span class="hljs-string">&#x27;https://no-such-server.blabla&#x27;</span>) <span class="hljs-comment">// rejects</span>
-*/!*
+
   .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
   .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> alert(err)) <span class="hljs-comment">// TypeError: failed to fetch（这里的文字可能有所不同）</span></code></pre>
 <p>正如你所看到的，<code>.catch</code> 不必是立即的。它可能在一个或多个 <code>.then</code> 之后出现。</p>
@@ -23,23 +23,23 @@ fetch(<span class="hljs-string">&#x27;https://no-such-server.blabla&#x27;</span>
       resolve(githubUser);
     }, <span class="hljs-number">3000</span>);
   }))
-*!*
+
   .catch(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> alert(error.message));
-*/!*</code></pre>
+</code></pre>
 <p>通常情况下，这样的 <code>.catch</code> 根本不会被触发。但是如果上述任意一个 promise 被 reject（网络问题或者无效的 json 或其他），<code>.catch</code> 就会捕获它。</p>
 <h2 id="隐式-trycatch">隐式 try..catch</h2>
 <p>Promise 的执行者（executor）和 promise 的处理程序（handler）周围有一个“隐式的 <code>try..catch</code>”。如果发生异常，它（译注：指异常）就会被捕获，并被视为 rejection 进行处理。</p>
 <p>例如，下面这段代码：</p>
 <pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-*!*
+
   <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Whoops!&quot;</span>);
-*/!*
+
 }).catch(alert); <span class="hljs-comment">// Error: Whoops!</span></code></pre>
 <p>……与下面这段代码工作上完全相同：</p>
 <pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-*!*
+
   reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Whoops!&quot;</span>));
-*/!*
+
 }).catch(alert); <span class="hljs-comment">// Error: Whoops!</span></code></pre>
 <p>在 executor 周围的“隐式 <code>try..catch</code>”自动捕获了 error，并将其变为 rejected promise。</p>
 <p>这不仅仅发生在 executor 函数中，同样也发生在其 handler 中。如果我们在 <code>.then</code> 处理程序（handler）中 <code>throw</code>，这意味着 promise 被 rejected，因此控制权移交至最近的 error 处理程序（handler）。</p>
@@ -47,17 +47,17 @@ fetch(<span class="hljs-string">&#x27;https://no-such-server.blabla&#x27;</span>
 <pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
   resolve(<span class="hljs-string">&quot;ok&quot;</span>);
 }).then(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> {
-*!*
+
   <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Whoops!&quot;</span>); <span class="hljs-comment">// reject 这个 promise</span>
-*/!*
+
 }).catch(alert); <span class="hljs-comment">// Error: Whoops!</span></code></pre>
 <p>对于所有的 error 都会发生这种情况，而不仅仅是由 <code>throw</code> 语句导致的这些 error。例如，一个编程错误：</p>
 <pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
   resolve(<span class="hljs-string">&quot;ok&quot;</span>);
 }).then(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> {
-*!*
+
   blabla(); <span class="hljs-comment">// 没有这个函数</span>
-*/!*
+
 }).catch(alert); <span class="hljs-comment">// ReferenceError: blabla is not defined</span></code></pre>
 <p>最后的 <code>.catch</code> 不仅会捕获显式的 rejection，还会捕获它上面的处理程序（handler）中意外出现的 error。</p>
 <h2 id="再次抛出（rethrowing）">再次抛出（Rethrowing）</h2>
@@ -89,9 +89,9 @@ fetch(<span class="hljs-string">&#x27;https://no-such-server.blabla&#x27;</span>
   } <span class="hljs-keyword">else</span> {
     alert(<span class="hljs-string">&quot;Can&#x27;t handle such error&quot;</span>);
 
-*!*
+
     <span class="hljs-keyword">throw</span> error; <span class="hljs-comment">// 再次抛出此 error 或另外一个 error，执行将跳转至下一个 catch</span>
-*/!*
+
   }
 
 }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
@@ -116,13 +116,13 @@ fetch(<span class="hljs-string">&#x27;https://no-such-server.blabla&#x27;</span>
 <p>当发生一个常规的错误（error）并且未被 <code>try..catch</code> 捕获时会发生什么？脚本死了，并在控制台（console）中留下了一个信息。对于在 promise 中未被处理的 rejection，也会发生类似的事儿。</p>
 <p>JavaScript 引擎会跟踪此类 rejection，在这种情况下会生成一个全局的 error。如果你运行上面这个代码，你可以在控制台（console）中看到。</p>
 <p>在浏览器中，我们可以使用 <code>unhandledrejection</code> 事件来捕获这类 error：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&#x27;unhandledrejection&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
   <span class="hljs-comment">// 这个事件对象有两个特殊的属性：</span>
   alert(event.promise); <span class="hljs-comment">// [object Promise] - 生成该全局 error 的 promise</span>
   alert(event.reason); <span class="hljs-comment">// Error: Whoops! - 未处理的 error 对象</span>
 });
-*/!*
+
 
 <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Whoops!&quot;</span>);
@@ -191,9 +191,9 @@ loadJson(<span class="hljs-string">&#x27;no-such-user.json&#x27;</span>) <span c
       <span class="hljs-keyword">return</span> user;
     })
     .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
-*!*
+
       <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> HttpError &amp;&amp; err.response.status == <span class="hljs-number">404</span>) {
-*/!*
+
         alert(<span class="hljs-string">&quot;No such user, please reenter.&quot;</span>);
         <span class="hljs-keyword">return</span> demoGithubUser();
       } <span class="hljs-keyword">else</span> {
@@ -210,17 +210,17 @@ demoGithubUser();</code></pre>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">demoGithubUser</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">let</span> name = prompt(<span class="hljs-string">&quot;Enter a name?&quot;</span>, <span class="hljs-string">&quot;iliakan&quot;</span>);
 
-*!*
+
   <span class="hljs-built_in">document</span>.body.style.opacity = <span class="hljs-number">0.3</span>; <span class="hljs-comment">// (1) 开始指示（indication）</span>
-*/!*
+
 
   <span class="hljs-keyword">return</span> loadJson(<span class="hljs-string">`https://api.github.com/users/<span class="hljs-subst">${name}</span>`</span>)
-*!*
+
     .finally(<span class="hljs-function">() =&gt;</span> { <span class="hljs-comment">// (2) 停止指示（indication）</span>
       <span class="hljs-built_in">document</span>.body.style.opacity = <span class="hljs-string">&#x27;&#x27;</span>;
       <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve)); <span class="hljs-comment">// (*)</span>
     })
-*/!*
+
     .then(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> {
       alert(<span class="hljs-string">`Full name: <span class="hljs-subst">${user.name}</span>.`</span>);
       <span class="hljs-keyword">return</span> user;

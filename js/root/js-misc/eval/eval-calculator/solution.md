@@ -1,6 +1,6 @@
 让我们使用 `eval` 来计算数学表达式：
 
-```js demo run
+```js demo
 let expr = prompt("Type an arithmetic expression?", '2*3+2');
 
 alert( eval(expr) );

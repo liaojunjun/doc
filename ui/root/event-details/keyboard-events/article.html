@@ -45,7 +45,7 @@
 有几种广泛应用的键盘布局，该规范给出了每种布局的按键代码。
 
 有关更多按键代码，请参见 [规范的字母数字部分](https://www.w3.org/TR/uievents-code/#key-alphanumeric-section)，或者只需在上面的 [测试台](#keyboard-test-stand) 中按下一个按键。</code></pre>
-<p>```warn header=&quot;大小写敏感：<code>\&quot;KeyZ\&quot;</code>，不是 <code>\&quot;keyZ\&quot;</code>&quot;
+<p>&quot;大小写敏感：<code>\&quot;KeyZ\&quot;</code>，不是 <code>\&quot;keyZ\&quot;</code>&quot;
 这是显而易见的，但人们仍会搞错。</p>
 <p>请规避错误类型：它是 <code>KeyZ</code>，而不是 <code>keyZ</code>。像 <code>event.code==&quot;keyZ&quot;</code> 这样的检查不起作用：<code>&quot;Key&quot;</code> 的首字母必须大写。</p>
 <pre><code>
@@ -67,7 +67,7 @@
 
 像这样：
 
-```js run
+```js
 document.addEventListener(&#x27;keydown&#x27;, function(event) {
   if (event.code == &#x27;KeyZ&#x27; &amp;&amp; (event.ctrlKey || event.metaKey)) {
     alert(&#x27;Undo!&#x27;)
@@ -106,7 +106,7 @@ document.addEventListener(&#x27;keydown&#x27;, function(event) {
   <span class="hljs-keyword">return</span> (key &gt;= <span class="hljs-string">&#x27;0&#x27;</span> &amp;&amp; key &lt;= <span class="hljs-string">&#x27;9&#x27;</span>) || key == <span class="hljs-string">&#x27;+&#x27;</span> || key == <span class="hljs-string">&#x27;(&#x27;</span> || key == <span class="hljs-string">&#x27;)&#x27;</span> || key == <span class="hljs-string">&#x27;-&#x27;</span>;
 }
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">input</span> *!*<span class="hljs-attr">onkeydown</span>=<span class="hljs-string">&quot;return checkPhoneKey(event.key)&quot;</span>*/!* <span class="hljs-attr">placeholder</span>=<span class="hljs-string">&quot;Phone, please&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;tel&quot;</span>&gt;</span></code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">onkeydown</span>=<span class="hljs-string">&quot;return checkPhoneKey(event.key)&quot;</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">&quot;Phone, please&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;tel&quot;</span>&gt;</span></code></pre>
 <p>请注意，像 <code>key:Backspace</code>，<code>key:Left</code>，<code>key:Right</code>，<code>key:Ctrl+V</code> 这样的特殊按键在输入中无效。这是严格过滤器 <code>checkPhoneKey</code> 的副作用。</p>
 <p>让我们将过滤条件放松一下：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">

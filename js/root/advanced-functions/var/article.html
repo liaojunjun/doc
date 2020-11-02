@@ -21,26 +21,26 @@ alert(message); <span class="hljs-comment">// Hi</span></code></pre>
   <span class="hljs-keyword">var</span> test = <span class="hljs-literal">true</span>; <span class="hljs-comment">// 使用 &quot;var&quot; 而不是 &quot;let&quot;</span>
 }
 
-*!*
+
 alert(test); <span class="hljs-comment">// true，变量在 if 结束后仍存在</span>
-*/!*</code></pre>
+</code></pre>
 <p>由于 <code>var</code> 会忽略代码块，因此我们有了一个全局变量 <code>test</code>。</p>
 <p>如果我们在第二行使用 <code>let test</code> 而不是 <code>var test</code>，那么该变量将仅在 <code>if</code> 内部可见：</p>
 <pre><code class="language-js"><span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
   <span class="hljs-keyword">let</span> test = <span class="hljs-literal">true</span>; <span class="hljs-comment">// 使用 &quot;let&quot;</span>
 }
 
-*!*
+
 alert(test); <span class="hljs-comment">// Error: test is not defined</span>
-*/!*</code></pre>
+</code></pre>
 <p>对于循环也是这样的，<code>var</code> 声明的变量没有块级作用域也没有循环局部作用域：</p>
 <pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
   <span class="hljs-comment">// ...</span>
 }
 
-*!*
+
 alert(i); <span class="hljs-comment">// 10，&quot;i&quot; 在循环结束后仍可见，它是一个全局变量</span>
-*/!*</code></pre>
+</code></pre>
 <p>如果一个代码块位于函数内部，那么 <code>var</code> 声明的变量的作用域将为函数作用域：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) {
@@ -73,16 +73,16 @@ alert(user); <span class="hljs-comment">// John</span></code></pre>
 
   alert(phrase);
 
-*!*
+
   <span class="hljs-keyword">var</span> phrase;
-*/!*
+
 }
 sayHi();</code></pre>
 <p>……从技术上讲，它与下面这种情况是一样的（<code>var phrase</code> 被上移至函数开头）：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
-*!*
+
   <span class="hljs-keyword">var</span> phrase;
-*/!*
+
 
   phrase = <span class="hljs-string">&quot;Hello&quot;</span>;
 
@@ -93,11 +93,11 @@ sayHi();</code></pre>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
   phrase = <span class="hljs-string">&quot;Hello&quot;</span>; <span class="hljs-comment">// (*)</span>
 
-  *!*
+  
   <span class="hljs-keyword">if</span> (<span class="hljs-literal">false</span>) {
     <span class="hljs-keyword">var</span> phrase;
   }
-  */!*
+  
 
   alert(phrase);
 }
@@ -109,9 +109,9 @@ sayHi();</code></pre>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
   alert(phrase);  
 
-*!*
+
   <span class="hljs-keyword">var</span> phrase = <span class="hljs-string">&quot;Hello&quot;</span>;
-*/!*
+
 }
 
 sayHi();</code></pre>
@@ -122,15 +122,15 @@ sayHi();</code></pre>
 </ol>
 <p>声明在函数刚开始执行的时候（“提升”）就被处理了，但是赋值操作始终是在它出现的地方才起作用。所以这段代码实际上是这样工作的：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
-*!*
+
   <span class="hljs-keyword">var</span> phrase; <span class="hljs-comment">// 在函数刚开始时进行变量声明</span>
-*/!*
+
 
   alert(phrase); <span class="hljs-comment">// undefined</span>
 
-*!*
+
   phrase = <span class="hljs-string">&quot;Hello&quot;</span>; <span class="hljs-comment">// ……赋值 — 当程序执行到这一行时。</span>
-*/!*
+
 }
 
 sayHi();</code></pre>
@@ -168,17 +168,17 @@ sayHi();</code></pre>
 
 (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Parentheses around the function&quot;</span>);
-}*!*)*/!*();
+})();
 
 (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Parentheses around the whole thing&quot;</span>);
-}()*!*)*/!*;
+}());
 
-*!*!*/!*<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+!<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Bitwise NOT operator starts the expression&quot;</span>);
 }();
 
-*!*+*/!*<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
++<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Unary plus starts the expression&quot;</span>);
 }();</code></pre>
 <p>在上面的所有情况中，我们都声明了一个函数表达式并立即运行它。请再注意一下：如今我们没有理由来编写这样的代码。</p>

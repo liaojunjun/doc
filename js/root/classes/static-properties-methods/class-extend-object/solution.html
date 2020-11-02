@@ -3,9 +3,9 @@
 <p>下面是修复后的代码：</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Object</span> </span>{
   <span class="hljs-keyword">constructor</span>(name) {
-*!*
+
     <span class="hljs-built_in">super</span>(); <span class="hljs-comment">// 需要在继承时调用父类的 constructor</span>
-*/!*
+
     <span class="hljs-built_in">this</span>.name = name;
   }
 }
@@ -28,10 +28,10 @@ alert( Rabbit.__proto__ === <span class="hljs-built_in">Object</span> ); <span c
 <p>所以，现在 <code>Rabbit</code> 可以通过 <code>Rabbit</code> 访问 <code>Object</code> 的静态方法，像这样：</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Object</span> </span>{}
 
-*!*
+
 <span class="hljs-comment">// 通常我们调用 Object.getOwnPropertyNames</span>
 alert ( Rabbit.getOwnPropertyNames({<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">b</span>: <span class="hljs-number">2</span>})); <span class="hljs-comment">// a,b</span>
-*/!*</code></pre>
+</code></pre>
 <p>但是如果我们没有 <code>extends Object</code>，那么 <code>Rabbit.__proto__</code> 将不会被设置为 <code>Object</code>。</p>
 <p>下面是示例：</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Rabbit</span> </span>{}
@@ -40,10 +40,10 @@ alert( Rabbit.prototype.__proto__ === <span class="hljs-built_in">Object</span>.
 alert( Rabbit.__proto__ === <span class="hljs-built_in">Object</span> ); <span class="hljs-comment">// (2) false (!)</span>
 alert( Rabbit.__proto__ === <span class="hljs-built_in">Function</span>.prototype ); <span class="hljs-comment">// true，所有函数都是默认如此</span>
 
-*!*
+
 <span class="hljs-comment">// error，Rabbit 中没有这样的函数</span>
 alert ( Rabbit.getOwnPropertyNames({<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">b</span>: <span class="hljs-number">2</span>})); <span class="hljs-comment">// Error</span>
-*/!*</code></pre>
+</code></pre>
 <p>所以，在这种情况下，<code>Rabbit</code> 没有提供对 <code>Object</code> 的静态方法的访问。</p>
 <p>顺便说一下，<code>Function.prototype</code> 有一些“通用”函数方法，例如 <code>call</code> 和 <code>bind</code> 等。在上述的两种情况下它们都是可用的，因为对于内建的 <code>Object</code> 构造函数而言，<code>Object.__proto__ === Function.prototype</code>。</p>
 <p>我们用一张图来解释：</p>

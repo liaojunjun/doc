@@ -2,7 +2,7 @@
 
 基于循环的解法：
 
-```js run
+```js
 let list = {
   value: 1,
   next: {
@@ -35,7 +35,7 @@ printList(list);
 ```js
 function printList(list) {
 
-  while(*!*list*/!*) {
+  while(list) {
     alert(list.value);
     list = list.next;
   }
@@ -53,7 +53,7 @@ function printList(list) {
 
 `printList(list)` 的递归实现遵循一个简单的逻辑：为了输出链表，我们应该输出 `list` 的当前的元素，`list.next` 同理：
 
-```js run
+```js
 let list = {
   value: 1,
   next: {

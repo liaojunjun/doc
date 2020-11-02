@@ -1,5 +1,5 @@
 让我们使用下个月创建日期，但将零作为天数（day）传递：
-```js run demo
+```js demo
 function getLastDayOfMonth(year, month) {
   let date = new Date(year, month + 1, 0);
   return date.getDate();

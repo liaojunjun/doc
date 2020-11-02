@@ -12,7 +12,7 @@ function(event) {
 
 修复起来很简单：
 
-```html run
+```html
 <script>
   function handler() {
     alert("...");
@@ -20,20 +20,20 @@ function(event) {
   }
 </script>
 
-<a href="https://w3.org" onclick="*!*return handler()*/!*">w3.org</a>
+<a href="https://w3.org" onclick="return handler()">w3.org</a>
 ```
 
 我们也可以使用 `event.preventDefault()`，像这样：
 
-```html run
+```html
 <script>
-*!*
+
   function handler(event) {
     alert("...");
     event.preventDefault();
   }
-*/!*
+
 </script>
 
-<a href="https://w3.org" onclick="*!*handler(event)*/!*">w3.org</a>
+<a href="https://w3.org" onclick="handler(event)">w3.org</a>
 ```

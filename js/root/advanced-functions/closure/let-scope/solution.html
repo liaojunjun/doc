@@ -3,9 +3,9 @@
 <pre><code class="language-js"><span class="hljs-keyword">let</span> x = <span class="hljs-number">1</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">func</span>(<span class="hljs-params"></span>) </span>{
-*!*
+
   <span class="hljs-built_in">console</span>.log(x); <span class="hljs-comment">// ReferenceError: Cannot access &#x27;x&#x27; before initialization</span>
-*/!*
+
   <span class="hljs-keyword">let</span> x = <span class="hljs-number">2</span>;
 }
 
@@ -15,11 +15,11 @@ func();</code></pre>
 <p>换句话说，一个变量从技术的角度来讲是存在的，但是在 <code>let</code> 之前还不能使用。</p>
 <p>下面的这段代码证实了这一点。</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">func</span>(<span class="hljs-params"></span>) </span>{
-*!*
+
   <span class="hljs-comment">// 引擎从函数开始就知道局部变量 x，</span>
   <span class="hljs-comment">// 但是变量 x 一直处于“未初始化”（无法使用）的状态，直到结束 let（“死区”）</span>
   <span class="hljs-comment">// 因此答案是 error</span>
-*/!*
+
 
   <span class="hljs-built_in">console</span>.log(x); <span class="hljs-comment">// ReferenceError: Cannot access &#x27;x&#x27; before initialization</span>
 

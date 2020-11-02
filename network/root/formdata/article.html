@@ -21,9 +21,9 @@
 
     <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/formdata/post/user&#x27;</span>, {
       <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
-*!*
+
       body: <span class="hljs-keyword">new</span> FormData(formElem)
-*/!*
+
     });
 
     <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
@@ -71,9 +71,9 @@ formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="
 
     <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/formdata/post/user-avatar&#x27;</span>, {
       <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
-*!*
+
       body: <span class="hljs-keyword">new</span> FormData(formElem)
-*/!*
+
     });
 
     <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
@@ -101,11 +101,11 @@ formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="
     <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">submit</span>(<span class="hljs-params"></span>) </span>{
       <span class="hljs-keyword">let</span> imageBlob = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> canvasElem.toBlob(resolve, <span class="hljs-string">&#x27;image/png&#x27;</span>));
 
-*!*
+
       <span class="hljs-keyword">let</span> formData = <span class="hljs-keyword">new</span> FormData();
       formData.append(<span class="hljs-string">&quot;firstName&quot;</span>, <span class="hljs-string">&quot;John&quot;</span>);
       formData.append(<span class="hljs-string">&quot;image&quot;</span>, imageBlob, <span class="hljs-string">&quot;image.png&quot;</span>);
-*/!*    
+    
 
       <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/formdata/post/image-form&#x27;</span>, {
         <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,

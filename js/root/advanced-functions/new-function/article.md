@@ -15,7 +15,7 @@ let func = new Function ([arg1, arg2, ...argN], functionBody);
 
 下面这个例子可以帮助你理解创建语法。这是一个带有两个参数的函数：
 
-```js run
+```js
 let sum = new Function('a', 'b', 'return a + b');
 
 alert( sum(1, 2) ); // 3
@@ -23,7 +23,7 @@ alert( sum(1, 2) ); // 3
 
 这里有一个没有参数的函数，只有函数体：
 
-```js run
+```js
 let sayHi = new Function('alert("Hello")');
 
 sayHi(); // Hello
@@ -52,13 +52,13 @@ func();
 
 因此，此类函数无法访问外部（outer）变量，只能访问全局变量。
 
-```js run
+```js
 function getFunc() {
   let value = "test";
 
-*!*
+
   let func = new Function('alert(value)');
-*/!*
+
 
   return func;
 }
@@ -68,18 +68,18 @@ getFunc()(); // error: value is not defined
 
 将其与常规行为进行比较：
 
-```js run
+```js
 function getFunc() {
   let value = "test";
 
-*!*
+
   let func = function() { alert(value); };
-*/!*
+
 
   return func;
 }
 
-getFunc()(); // *!*"test"*/!*，从 getFunc 的词法环境中获取的
+getFunc()(); // "test"，从 getFunc 的词法环境中获取的
 ```
 
 `new Function` 的这种特性看起来有点奇怪，不过在实际中却非常实用。

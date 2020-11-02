@@ -8,17 +8,17 @@ importance: 5
 
 但是运行不了：
 
-```js run
+```js
 let map = new Map();
 
 map.set("name", "John");
 
 let keys = map.keys();
 
-*!*
+
 // Error: keys.push is not a function
 keys.push("more");
-*/!*
+
 ```
 
 为什么？我们应该如何修改代码让 `keys.push` 工作？

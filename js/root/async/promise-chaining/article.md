@@ -9,7 +9,7 @@ Promise 提供了一些方案来做到这一点。
 
 它看起来就像这样：
 
-```js run
+```js
 new Promise(function(resolve, reject) {
 
   setTimeout(() => resolve(1), 1000); // (*)
@@ -51,7 +51,7 @@ new Promise(function(resolve, reject) {
 **新手常犯的一个经典错误：从技术上讲，我们也可以将多个 `.then` 添加到一个 promise 上。但这并不是 promise 链（chaining）。**
 
 例如：
-```js run
+```js
 let promise = new Promise(function(resolve, reject) {
   setTimeout(() => resolve(1), 1000);
 });
@@ -90,7 +90,7 @@ promise.then(function(result) {
 
 例如：
 
-```js run
+```js
 new Promise(function(resolve, reject) {
 
   setTimeout(() => resolve(1), 1000);
@@ -99,11 +99,11 @@ new Promise(function(resolve, reject) {
 
   alert(result); // 1
 
-*!*
+
   return new Promise((resolve, reject) => { // (*)
     setTimeout(() => resolve(result * 2), 1000);
   });
-*/!*
+
 
 }).then(function(result) { // (**)
 
@@ -130,7 +130,7 @@ new Promise(function(resolve, reject) {
 
 让我们将本章所讲的这个特性与在 [上一章](info:promise-basics#loadscript) 中定义的 promise 化的 `loadScript` 结合使用，按顺序依次加载脚本：
 
-```js run
+```js
 loadScript("/article/promise-chaining/one.js")
   .then(function(script) {
     return loadScript("/article/promise-chaining/two.js");
@@ -149,7 +149,7 @@ loadScript("/article/promise-chaining/one.js")
 
 我们可以用箭头函数来重写代码，让其变得简短一些：
 
-```js run
+```js
 loadScript("/article/promise-chaining/one.js")
   .then(script => loadScript("/article/promise-chaining/two.js"))
   .then(script => loadScript("/article/promise-chaining/three.js"))
@@ -168,7 +168,7 @@ loadScript("/article/promise-chaining/one.js")
 
 从技术上讲，我们可以向每个 `loadScript` 直接添加 `.then`，就像这样：
 
-```js run
+```js
 loadScript("/article/promise-chaining/one.js").then(script1 => {
   loadScript("/article/promise-chaining/two.js").then(script2 => {
     loadScript("/article/promise-chaining/three.js").then(script3 => {
@@ -188,14 +188,14 @@ loadScript("/article/promise-chaining/one.js").then(script1 => {
 有时候直接写 `.then` 也是可以的，因为嵌套的函数可以访问外部作用域。在上面的例子中，嵌套在最深层的那个回调（callback）可以访问所有变量 `script1`，`script2` 和 `script3`。但这是一个例外，而不是一条规则。
 
 
-````smart header="Thenables"
+`Thenables"
 确切地说，处理程序（handler）返回的不完全是一个 promise，而是返回的被称为 "thenable" 对象 — 一个具有方法 `.then` 的任意对象。它会被当做一个 promise 来对待。
 
 这个想法是，第三方库可以实现自己的“promise 兼容（promise-compatible）”对象。它们可以具有扩展的方法集，但也与原生的 promise 兼容，因为它们实现了 `.then` 方法。
 
 这是一个 thenable 对象的示例：
 
-```js run
+```js
 class Thenable {
   constructor(num) {
     this.num = num;
@@ -209,9 +209,9 @@ class Thenable {
 
 new Promise(resolve => resolve(1))
   .then(result => {
-*!*
+
     return new Thenable(result); // (*)
-*/!*
+
   })
   .then(alert); // 1000ms 后显示 2
 ```
@@ -238,7 +238,7 @@ let promise = fetch(url);
 
 下面这段代码向 `user.json` 发送请求，并从服务器加载该文本：
 
-```js run
+```js
 fetch('/article/promise-chaining/user.json')
   // 当远程服务器响应时，下面的 .then 开始执行
   .then(function(response) {
@@ -256,7 +256,7 @@ fetch('/article/promise-chaining/user.json')
 
 为了简洁，我们还将使用箭头函数：
 
-```js run
+```js
 // 同上，但是使用 response.json() 将远程内容解析为 JSON
 fetch('/article/promise-chaining/user.json')
   .then(response => response.json())
@@ -267,7 +267,7 @@ fetch('/article/promise-chaining/user.json')
 
 例如，我们可以多发一个到 GitHub 的请求，加载用户个人资料并显示头像：
 
-```js run
+```js
 // 发送一个对 user.json 的请求
 fetch('/article/promise-chaining/user.json')
   // 将其加载为 JSON
@@ -295,14 +295,14 @@ fetch('/article/promise-chaining/user.json')
 
 就像这样：
 
-```js run
+```js
 fetch('/article/promise-chaining/user.json')
   .then(response => response.json())
   .then(user => fetch(`https://api.github.com/users/${user.name}`))
   .then(response => response.json())
-*!*
+
   .then(githubUser => new Promise(function(resolve, reject) { // (*)
-*/!*
+
     let img = document.createElement('img');
     img.src = githubUser.avatar_url;
     img.className = "promise-avatar-example";
@@ -310,9 +310,9 @@ fetch('/article/promise-chaining/user.json')
 
     setTimeout(() => {
       img.remove();
-*!*
+
       resolve(githubUser); // (**)
-*/!*
+
     }, 3000);
   }))
   // 3 秒后触发
@@ -325,7 +325,7 @@ fetch('/article/promise-chaining/user.json')
 
 最后，我们可以将代码拆分为可重用的函数：
 
-```js run
+```js
 function loadJson(url) {
   return fetch(url)
     .then(response => response.json());

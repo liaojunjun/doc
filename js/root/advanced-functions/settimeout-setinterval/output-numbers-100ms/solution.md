@@ -1,7 +1,7 @@
 
 使用 `setInterval`：
 
-```js run
+```js
 function printNumbers(from, to) {
   let current = from;
 
@@ -21,7 +21,7 @@ printNumbers(5, 10);
 使用嵌套的 `setTimeout`：
 
 
-```js run
+```js
 function printNumbers(from, to) {
   let current = from;
 
@@ -42,7 +42,7 @@ printNumbers(5, 10);
 
 如果我们还希望函数立即运行，那么我们可以在单独的一行上添加一个额外的调用，像这样：
 
-```js run
+```js
 function printNumbers(from, to) {
   let current = from;
 
@@ -54,9 +54,9 @@ function printNumbers(from, to) {
     current++;
   }
 
-*!*
+
   go();
-*/!*
+
   let timerId = setInterval(go, 1000);
 }
 

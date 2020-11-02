@@ -47,16 +47,16 @@ let admin = user; // 拷贝引用
 
 我们可以用任何变量来访问该对象并修改它的内容：
 
-```js run
+```js
 let user = { name: 'John' };
 
 let admin = user;
 
-*!*
-admin.name = 'Pete'; // 通过 "admin" 引用来修改
-*/!*
 
-alert(*!*user.name*/!*); // 'Pete'，修改能通过 "user" 引用看到
+admin.name = 'Pete'; // 通过 "admin" 引用来修改
+
+
+alert(user.name); // 'Pete'，修改能通过 "user" 引用看到
 ```
 
 上面的例子说明这里只有一个对象。就像我们有个带两把钥匙的锁柜，并使用其中一把钥匙（`admin`）来打开它。那么，我们如果之后用另外一把钥匙（`user`），就也能看到所作的改变。
@@ -69,7 +69,7 @@ alert(*!*user.name*/!*); // 'Pete'，修改能通过 "user" 引用看到
 
 这里两个变量都引用同一个对象，所以它们相等：
 
-```js run
+```js
 let a = {};
 let b = a; // 拷贝引用
 
@@ -79,7 +79,7 @@ alert( a === b ); // true
 
 而这里两个独立的对象则并不相等，即使它们都为空：
 
-```js run
+```js
 let a = {};
 let b = {}; // 两个独立的对象
 
@@ -100,20 +100,20 @@ alert( a == b ); // false
 
 就像这样：
 
-```js run
+```js
 let user = {
   name: "John",
   age: 30
 };
 
-*!*
+
 let clone = {}; // 新的空对象
 
 // 将 user 中所有的属性拷贝到其中
 for (let key in user) {
   clone[key] = user[key];
 }
-*/!*
+
 
 // 现在 clone 是带有相同内容的完全独立的对象
 clone.name = "Pete"; // 改变了其中的数据
@@ -141,17 +141,17 @@ let user = { name: "John" };
 let permissions1 = { canView: true };
 let permissions2 = { canEdit: true };
 
-*!*
+
 // 将 permissions1 和 permissions2 中的所有属性都拷贝到 user 中
 Object.assign(user, permissions1, permissions2);
-*/!*
+
 
 // 现在 user = { name: "John", canView: true, canEdit: true }
 ```
 
 如果被拷贝的属性的属性名已经存在，那么它会被覆盖：
 
-```js run
+```js
 let user = { name: "John" };
 
 Object.assign(user, { name: "Pete" });
@@ -167,9 +167,9 @@ let user = {
   age: 30
 };
 
-*!*
+
 let clone = Object.assign({}, user);
-*/!*
+
 ```
 
 它将 `user` 中的所有属性拷贝到了一个空对象中，并返回这个新的对象。
@@ -179,7 +179,7 @@ let clone = Object.assign({}, user);
 到现在为止，我们都假设 `user` 的所有属性均为原始类型。但属性可以是对其他对象的引用。那应该怎样处理它们呢？
 
 例如：
-```js run
+```js
 let user = {
   name: "John",
   sizes: {
@@ -195,7 +195,7 @@ alert( user.sizes.height ); // 182
 
 就像这样：
 
-```js run
+```js
 let user = {
   name: "John",
   sizes: {

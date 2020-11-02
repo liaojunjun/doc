@@ -26,7 +26,7 @@ ball.style.top = Math.round(field.clientHeight / 2 - ball.offsetHeight / 2) + 'p
 
 现在，球终于居中了。
 
-````warn header="注意：陷阱！"
+`"注意：陷阱！"
 
 当 `<img>` 没有 width/height 时，代码将无法可靠地工作：
 
@@ -44,7 +44,7 @@ ball.style.top = Math.round(field.clientHeight / 2 - ball.offsetHeight / 2) + 'p
 我们应该通过在 `<img>` 中添加 `width/height` 来解决这个问题：
 
 ```html
-<img src="ball.png" *!*width="40" height="40"*/!* id="ball">
+<img src="ball.png" width="40" height="40" id="ball">
 ```
 
 ……或者在 CSS 中提供大小：

@@ -10,7 +10,7 @@ let result = eval(code);
 
 例如：
 
-```js run
+```js
 let code = 'alert("Hello")';
 eval(code); // Hello
 ```
@@ -20,27 +20,27 @@ eval(code); // Hello
 `eval` 的结果是最后一条语句的结果。
 
 例如：
-```js run
+```js
 let value = eval('1+1');
 alert(value); // 2
 ```
 
-```js run
+```js
 let value = eval('let i = 0; ++i');
 alert(value); // 1
 ```
 
 `eval` 内的代码在当前词法环境（lexical environment）中执行，因此它能访问外部变量：
 
-```js run no-beautify
+```js no-beautify
 let a = 1;
 
 function f() {
   let a = 2;
 
-*!*
+
   eval('alert(a)'); // 2
-*/!*
+
 }
 
 f();
@@ -48,7 +48,7 @@ f();
 
 它也可以更改外部变量：
 
-```js untrusted refresh run
+```js untrusted refresh
 let x = 5;
 eval("x = 10");
 alert(x); // 10，值被更改了
@@ -56,7 +56,7 @@ alert(x); // 10，值被更改了
 
 严格模式下，`eval` 有属于自己的词法环境。因此我们不能从外部访问在 `eval` 中声明的函数和变量：
 
-```js untrusted refresh run
+```js untrusted refresh
 // 提示：本教程所有可运行的示例都默认启用了严格模式 'use strict'
 
 eval("let x = 5; function f() {}");
@@ -87,7 +87,7 @@ alert(typeof x); // undefined（没有这个变量）
 
 通过这种方式，该代码便会在全局作用域内执行：
 
-```js untrusted refresh run
+```js untrusted refresh
 let x = 1;
 {
   let x = 5;
@@ -97,7 +97,7 @@ let x = 1;
 
 **如果 `eval` 中的代码需要访问局部变量，我们可以使用 `new Function` 替代 `eval`，并将它们作为参数传递：** 
 
-```js run
+```js
 let f = new Function('a', 'alert(a)');
 
 f(5); // 5

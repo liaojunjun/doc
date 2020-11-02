@@ -19,16 +19,16 @@
 
 这是恶意页面看起来的样子。为了清楚起见，我们将 `<iframe>` 设置成了半透明的（在真正的恶意页面中，它是全透明的）：
 
-```html run height=120 no-beautify
+```html height=120 no-beautify
 <style>
 iframe { /* 来自受害网站的 iframe */
   width: 400px;
   height: 100px;
   position: absolute;
   top:0; left:-20px;
-*!*
+
   opacity: 0.5; /* 在实际中为 opacity:0 */
-*/!*
+
   z-index: 1;
 }
 </style>
@@ -36,11 +36,11 @@ iframe { /* 来自受害网站的 iframe */
 <div>点击即可变得富有：</div>
 
 <!-- 来自受害网站的 url -->
-*!*
+
 <iframe data-src="/clickjacking/facebook.html"></iframe>
 
 <button>点这里！</button>
-*/!*
+
 
 <div>……你很酷（我实际上是一名帅气的黑客）！</div>
 ```
@@ -59,7 +59,7 @@ iframe { /* 来自受害网站的 iframe */
 
 我们进行攻击所需要做的 —— 就是将 `<iframe>` 放置在恶意页面中，使得按钮恰好位于链接的正上方。这样当用户点击链接时，他们实际上点击的是按钮。这通常可以通过 CSS 实现。
 
-```smart header="点击劫持是对点击事件，而非键盘事件"
+点击劫持是对点击事件，而非键盘事件"
 此攻击仅影响鼠标行为（或者类似的行为，例如在手机上的点击）。
 
 键盘输入很难重定向。从技术上讲，我们可以用 iframe 的文本区域覆盖原有的文本区域实现攻击。因此，当访问者试图聚焦页面中的输入时，实际上聚焦的是 iframe 中的输入。
@@ -114,7 +114,7 @@ window.onbeforeunload = function() {
 代码如下：
 
 ```html
-<iframe *!*sandbox="allow-scripts allow-forms"*/!* src="facebook.html"></iframe>
+<iframe sandbox="allow-scripts allow-forms" src="facebook.html"></iframe>
 ```
 
 还有其他方式可以绕过这个弱鸡防御。

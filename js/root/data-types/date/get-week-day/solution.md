@@ -2,7 +2,7 @@
 
 我们创建一个关于星期的数组，这样我们就可以通过编号获取正确的日期名称：
 
-```js run demo
+```js demo
 function getWeekDay(date) {
   let days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 

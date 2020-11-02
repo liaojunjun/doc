@@ -20,7 +20,7 @@ let func = function(arg1, arg2, ...argN) {
 
 让我们来看一个具体的例子：
 
-```js run
+```js
 let sum = (a, b) => a + b;
 
 /* 这个箭头函数是下面这个函数的更短的版本：
@@ -39,18 +39,18 @@ alert( sum(1, 2) ); // 3
 
     例如：
 
-    ```js run
-    *!*
+    ```js
+    
     let double = n => n * 2;
     // 差不多等同于：let double = function(n) { return n * 2 }
-    */!*
+    
 
     alert( double(3) ); // 6
     ```
 
 - 如果没有参数，括号将是空的（但括号应该保留）：
 
-    ```js run
+    ```js
     let sayHi = () => alert("Hello!");
 
     sayHi();
@@ -60,7 +60,7 @@ alert( sum(1, 2) ); // 3
 
 例如，动态创建一个函数：
 
-```js run
+```js
 let age = prompt("What is your age?", 18);
 
 let welcome = (age < 18) ?
@@ -82,18 +82,18 @@ welcome();
 
 就像这样：
 
-```js run
+```js
 let sum = (a, b) => {  // 花括号表示开始一个多行函数
   let result = a + b;
-*!*
+
   return result; // 如果我们使用了花括号，那么我们需要一个显式的 “return” 
-*/!*
+
 };
 
 alert( sum(1, 2) ); // 3
 ```
 
-```smart header="更多内容"
+更多内容"
 在这里，我们赞扬了箭头函数的简洁性。但还不止这些！
 
 箭头函数还有其他有趣的特性。

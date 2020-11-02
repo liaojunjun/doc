@@ -27,7 +27,7 @@ alert( <span class="hljs-string">&quot;Hello, Java!&quot;</span>.match(<span cla
 <p>例如，模式 <code>pattern:\b\d\d\b</code> 查找独立的两位数。换句话说，它查找的是两位数，其周围是与 <code>pattern:\w</code> 不同的字符，例如空格或标点符号（或文本开头/结尾）。</p>
 <pre><code class="language-js">alert( <span class="hljs-string">&quot;1 23 456 78&quot;</span>.match(<span class="hljs-regexp">/\b\d\d\b/g</span>) ); <span class="hljs-comment">// 23,78</span>
 alert( <span class="hljs-string">&quot;12,34,56&quot;</span>.match(<span class="hljs-regexp">/\b\d\d\b/g</span>) ); <span class="hljs-comment">// 12,34,56</span></code></pre>
-<p>```warn header=&quot;词边界 <code>pattern:\b</code> 不适用于非拉丁字母&quot;
+<p>&quot;词边界 <code>pattern:\b</code> 不适用于非拉丁字母&quot;
 词边界测试 <code>pattern:\b</code> 检查位置的一侧是否匹配 <code>pattern:\w</code>，而另一侧则不匹配 &quot;<code>pattern:\w</code>&quot;。</p>
 <p>但是，<code>pattern:\w</code> 表示拉丁字母 <code>a-z</code>（或数字或下划线），因此此检查不适用于其他字符，如西里尔字母（cyrillic letters）或象形文字（hieroglyphs）。</p>
 <pre><code></code></pre>

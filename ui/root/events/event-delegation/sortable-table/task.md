@@ -12,10 +12,10 @@ importance: 4
 <table id="grid">
   <thead>
     <tr>
-*!*
+
       <th data-type="number">Age</th>
       <th data-type="string">Name</th>
-*/!*
+
     </tr>
   </thead>
   <tbody>

@@ -2,7 +2,7 @@
 
 最简单但错误的解决方案是生成一个范围在 `min` 到 `max` 的值，并取对其进行四舍五入后的值：
 
-```js run
+```js
 function randomInteger(min, max) {
   let rand = min + Math.random() * (max - min); 
   return Math.round(rand);
@@ -29,28 +29,28 @@ values from 2.5  ... to 2.9999999999  become 3
 
 这个题目有很多正确的解决方案。其中之一是调整取值范围的边界。为了确保相同的取值范围，我们可以生成从 0.5 到 3.5 的值，从而将所需的概率添加到取值范围的边界：
 
-```js run
-*!*
+```js
+
 function randomInteger(min, max) {
   // 现在范围是从  (min-0.5) 到 (max+0.5)
   let rand = min - 0.5 + Math.random() * (max - min + 1);
   return Math.round(rand);
 }
-*/!*
+
 
 alert( randomInteger(1, 3) );
 ```
 
 另一种方法是使用 `Math.floor` 来取范围从 `min` 到 `max+1` 的随机数：
 
-```js run
-*!*
+```js
+
 function randomInteger(min, max) {
   // here rand is from min to (max+1)
   let rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
 }
-*/!*
+
 
 alert( randomInteger(1, 3) );
 ```

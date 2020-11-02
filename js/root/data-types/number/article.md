@@ -20,7 +20,7 @@ let billion = 1000000000;
 
 在 JavaScript 中，我们通过在数字后附加字母 "e"，并指定零的数量来缩短数字：
 
-```js run
+```js
 let billion = 1e9;  // 10 亿，字面意思：数字 1 后面跟 9 个 0
 
 alert( 7.3e9 );  // 73 亿（7,300,000,000）
@@ -63,7 +63,7 @@ let ms = 1e-6; // 1 的左边有 6 个 0
 
 例如：
 
-```js run
+```js
 alert( 0xff ); // 255
 alert( 0xFF ); // 255（一样，大小写没影响）
 ```
@@ -71,7 +71,7 @@ alert( 0xFF ); // 255（一样，大小写没影响）
 二进制和八进制数字系统很少使用，但也支持使用 `0b` 和 `0o` 前缀：
 
 
-```js run
+```js
 let a = 0b11111111; // 二进制形式的 255
 let b = 0o377; // 八进制形式的 255
 
@@ -85,7 +85,7 @@ alert( a == b ); // true，两边是相同的数字，都是 255
 方法 `num.toString(base)` 返回在给定 `base` 进制数字系统中 `num` 的字符串表示形式。
 
 举个例子：
-```js run
+```js
 let num = 255;
 
 alert( num.toString(16) );  // ff
@@ -100,11 +100,11 @@ alert( num.toString(2) );   // 11111111
 - **base=2** 主要用于调试按位操作，数字可以是 `0` 或 `1`。
 - **base=36** 是最大进制，数字可以是 `0..9` 或 `A..Z`。所有拉丁字母都被用于了表示数字。对于 `36` 进制来说，一个有趣且有用的例子是，当我们需要将一个较长的数字标识符转换成较短的时候，例如做一个短的 URL。可以简单地使用基数为 `36` 的数字系统表示：
 
-    ```js run
+    ```js
     alert( 123456..toString(36) ); // 2n9c
     ```
 
-```warn header="使用两个点来调用一个方法"
+"使用两个点来调用一个方法"
 请注意 `123456..toString(36)` 中的两个点不是打错了。如果我们想直接在一个数字上调用一个方法，比如上面例子中的 `toString`，那么我们需要在它后面放置两个点 `..`。
 
 如果我们放置一个点：`123456.toString(36)`，那么就会出现一个 error，因为 JavaScript 语法隐含了第一个点之后的部分为小数部分。如果我们再放一个点，那么 JavaScript 就知道小数部分为空，现在使用该方法。
@@ -149,7 +149,7 @@ alert( num.toString(2) );   // 11111111
 1. 乘除法
 
     例如，要将数字舍入到小数点后两位，我们可以将数字乘以 `100`（或更大的 10 的整数次幂），调用舍入函数，然后再将其除回。
-    ```js run
+    ```js
     let num = 1.23456;
 
     alert( Math.floor(num * 100) / 100 ); // 1.23456 -> 123.456 -> 123 -> 1.23
@@ -157,21 +157,21 @@ alert( num.toString(2) );   // 11111111
 
 2. 函数 [toFixed(n)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed) 将数字舍入到小数点后 `n` 位，并以字符串形式返回结果。
         
-    ```js run
+    ```js
     let num = 12.34;
     alert( num.toFixed(1) ); // "12.3"
     ```
 
     这会向上或向下舍入到最接近的值，类似于 `Math.round`：
 
-    ```js run
+    ```js
     let num = 12.36;
     alert( num.toFixed(1) ); // "12.4"
     ```
 
     请注意 `toFixed` 的结果是一个字符串。如果小数部分比所需要的短，则在结尾添加零：
 
-    ```js run
+    ```js
     let num = 12.34;
     alert( num.toFixed(5) ); // "12.34000"，在结尾添加了 0，以达到小数点后五位
     ```
@@ -184,7 +184,7 @@ alert( num.toString(2) );   // 11111111
 
 如果一个数字太大，则会溢出 64 位存储，并可能会导致无穷大：
 
-```js run
+```js
 alert( 1e500 ); // Infinity
 ```
 
@@ -192,15 +192,15 @@ alert( 1e500 ); // Infinity
 
 考虑下这个（falsy！）测试：
 
-```js run
-alert( 0.1 + 0.2 == 0.3 ); // *!*false*/!*
+```js
+alert( 0.1 + 0.2 == 0.3 ); // false
 ```
 
 没错，如果我们检查 `0.1` 和 `0.2` 的总和是否为 `0.3`，我们会得到 `false`。
 
 奇了怪了！如果不是 `0.3`，那能是啥？
 
-```js run
+```js
 alert( 0.1 + 0.2 ); // 0.30000000000000004
 ```
 
@@ -219,7 +219,7 @@ alert( 0.1 + 0.2 ); // 0.30000000000000004
 IEEE-754 数字格式通过将数字舍入到最接近的可能数字来解决此问题。这些舍入规则通常不允许我们看到“极小的精度损失”，但是它确实存在。
 
 我们可以看到：
-```js run
+```js
 alert( 0.1.toFixed(20) ); // 0.10000000000000000555
 ```
 
@@ -227,7 +227,7 @@ alert( 0.1.toFixed(20) ); // 0.10000000000000000555
 
 这就是为什么 `0.1 + 0.2` 不等于 `0.3`。
 
-```smart header="不仅仅是 JavaScript"
+不仅仅是 JavaScript"
 许多其他编程语言也存在同样的问题。
 
 PHP，Java，C，Perl，Ruby 给出的也是完全相同的结果，因为它们基于的是相同的数字格式。
@@ -235,21 +235,21 @@ PHP，Java，C，Perl，Ruby 给出的也是完全相同的结果，因为它们
 
 我们能解决这个问题吗？当然，最可靠的方法是借助方法 [toFixed(n)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed) 对结果进行舍入：
 
-```js run
+```js
 let sum = 0.1 + 0.2;
 alert( sum.toFixed(2) ); // 0.30
 ```
 
 请注意，`toFixed` 总是返回一个字符串。它确保小数点后有 2 位数字。如果我们有一个电子购物网站，并需要显示 `¥ 0.30`，这实际上很方便。对于其他情况，我们可以使用一元加号将其强制转换为一个数字：
 
-```js run
+```js
 let sum = 0.1 + 0.2;
 alert( +sum.toFixed(2) ); // 0.3
 ```
 
 我们可以将数字临时乘以 100（或更大的数字），将其转换为整数，进行数学运算，然后再除回。当我们使用整数进行数学运算时，误差会有所减少，但仍然可以在除法中得到：
 
-```js run
+```js
 alert( (0.1 * 10 + 0.2 * 10) / 10 ); // 0.3
 alert( (0.28 * 100 + 0.14 * 100) / 100); // 0.4200000000000001
 ```
@@ -258,10 +258,10 @@ alert( (0.28 * 100 + 0.14 * 100) / 100); // 0.4200000000000001
 
 有时候我们可以尝试完全避免小数。例如，我们正在创建一个电子购物网站，那么我们可以用角而不是元来存储价格。但是，如果我们要打 30% 的折扣呢？实际上，完全避免小数处理几乎是不可能的。只需要在必要时剪掉其“尾巴”来对其进行舍入即可。
 
-````smart header="有趣的事儿"
+`有趣的事儿"
 尝试运行下面这段代码：
 
-```js run
+```js
 // Hello！我是一个会自我增加的数字！
 alert( 9999999999999999 ); // 显示 10000000000000000
 ```
@@ -271,7 +271,7 @@ alert( 9999999999999999 ); // 显示 10000000000000000
 JavaScript 不会在此类事件中触发 error。它会尽最大努力使数字符合所需的格式，但不幸的是，这种格式不够大到满足需求。
 ````
 
-```smart header="两个零"
+两个零"
 数字内部表示的另一个有趣结果是存在两个零：`0` 和 `-0`。
 
 这是因为在存储时，使用一位来存储符号，因此对于包括零在内的任何数字，可以设置这一位或者不设置。
@@ -291,20 +291,20 @@ JavaScript 不会在此类事件中触发 error。它会尽最大努力使数字
 
 - `isNaN(value)` 将其参数转换为数字，然后测试它是否为 `NaN`：
 
-    ```js run
+    ```js
     alert( isNaN(NaN) ); // true
     alert( isNaN("str") ); // true
     ```
 
     但是我们需要这个函数吗？我们不能只使用 `=== NaN` 比较吗？不好意思，这不行。值 "NaN" 是独一无二的，它不等于任何东西，包括它自身：
 
-    ```js run
+    ```js
     alert( NaN === NaN ); // false
     ```
 
 - `isFinite(value)` 将其参数转换为数字，如果是常规数字，则返回 `true`，而不是 `NaN/Infinity/-Infinity`：
 
-    ```js run
+    ```js
     alert( isFinite("15") ); // true
     alert( isFinite("str") ); // false，因为是一个特殊的值：NaN
     alert( isFinite(Infinity) ); // false，因为是一个特殊的值：Infinity
@@ -313,7 +313,7 @@ JavaScript 不会在此类事件中触发 error。它会尽最大努力使数字
 有时 `isFinite` 被用于验证字符串值是否为常规数字：
 
 
-```js run
+```js
 let num = +prompt("Enter a number", '');
 
 // 结果会是 true，除非你输入的是 Infinity、-Infinity 或不是数字
@@ -322,7 +322,7 @@ alert( isFinite(num) );
 
 请注意，在所有数字函数中，包括 `isFinite`，空字符串或仅有空格的字符串均被视为 `0`。
 
-```smart header="与 `Object.is` 进行比较"
+与 `Object.is` 进行比较"
 
 有一个特殊的内建方法 [`Object.is`](mdn:js/Object/is)，它类似于 `===` 一样对值进行比较，但它对于两种边缘情况更可靠：
 
@@ -339,7 +339,7 @@ alert( isFinite(num) );
 
 使用加号 `+` 或 `Number()` 的数字转换是严格的。如果一个值不完全是一个数字，就会失败：
 
-```js run
+```js
 alert( +"100px" ); // NaN
 ```
 
@@ -351,7 +351,7 @@ alert( +"100px" ); // NaN
 
 它们可以从字符串中“读取”数字，直到无法读取为止。如果发生 error，则返回收集到的数字。函数 `parseInt` 返回一个整数，而 `parseFloat` 返回一个浮点数：
 
-```js run
+```js
 alert( parseInt('100px') ); // 100
 alert( parseFloat('12.5em') ); // 12.5
 
@@ -361,14 +361,14 @@ alert( parseFloat('12.3.4') ); // 12.3，在第二个点出停止了读取
 
 某些情况下，`parseInt/parseFloat` 会返回 `NaN`。当没有数字可读时会发生这种情况：
 
-```js run
+```js
 alert( parseInt('a123') ); // NaN，第一个符号停止了读取
 ```
 
-````smart header="parseInt(str, radix)` 的第二个参数"
+`parseInt(str, radix)` 的第二个参数"
 `parseInt()` 函数具有可选的第二个参数。它指定了数字系统的基数，因此 `parseInt` 还可以解析十六进制数字、二进制数字等的字符串：
 
-```js run
+```js
 alert( parseInt('0xff', 16) ); // 255
 alert( parseInt('ff', 16) ); // 255，没有 0x 仍然有效
 
@@ -385,7 +385,7 @@ JavaScript 有一个内建的 [Math](https://developer.mozilla.org/en/docs/Web/J
 `Math.random()`
 : 返回一个从 0 到 1 的随机数（不包括 1）
 
-    ```js run
+    ```js
     alert( Math.random() ); // 0.1234567894322
     alert( Math.random() ); // 0.5435252343232
     alert( Math.random() ); // ... (任何随机数)
@@ -394,7 +394,7 @@ JavaScript 有一个内建的 [Math](https://developer.mozilla.org/en/docs/Web/J
 `Math.max(a, b, c...)` / `Math.min(a, b, c...)`
 : 从任意数量的参数中返回最大/最小值。
 
-    ```js run
+    ```js
     alert( Math.max(3, 5, -10, 0, 1) ); // 5
     alert( Math.min(1, 2) ); // 1
     ```
@@ -402,7 +402,7 @@ JavaScript 有一个内建的 [Math](https://developer.mozilla.org/en/docs/Web/J
 `Math.pow(n, power)`
 : 返回 `n` 的给定（power）次幂
 
-    ```js run
+    ```js
     alert( Math.pow(2, 10) ); // 2 的 10 次幂 = 1024
     ```
 

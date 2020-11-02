@@ -26,11 +26,11 @@
 
 <span class="hljs-keyword">let</span> admin = user;
 
-*!*
-admin.name = <span class="hljs-string">&#x27;Pete&#x27;</span>; <span class="hljs-comment">// 通过 &quot;admin&quot; 引用来修改</span>
-*/!*
 
-alert(*!*user.name*<span class="hljs-regexp">/!*); /</span><span class="hljs-regexp">/ &#x27;Pete&#x27;，修改能通过 &quot;user&quot; 引用看到</span></code></pre>
+admin.name = <span class="hljs-string">&#x27;Pete&#x27;</span>; <span class="hljs-comment">// 通过 &quot;admin&quot; 引用来修改</span>
+
+
+alert(user.name*<span class="hljs-regexp">/!*); /</span><span class="hljs-regexp">/ &#x27;Pete&#x27;，修改能通过 &quot;user&quot; 引用看到</span></code></pre>
 <p>上面的例子说明这里只有一个对象。就像我们有个带两把钥匙的锁柜，并使用其中一把钥匙（<code>admin</code>）来打开它。那么，我们如果之后用另外一把钥匙（<code>user</code>），就也能看到所作的改变。</p>
 <h2 id="通过引用来比较">通过引用来比较</h2>
 <p>对于对象来说，普通相等 <code>==</code> 和严格相等 <code>===</code> 是两个作用结果完全一样的运算符。</p>
@@ -58,14 +58,14 @@ alert( a == b ); <span class="hljs-comment">// false</span></code></pre>
   <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>
 };
 
-*!*
+
 <span class="hljs-keyword">let</span> clone = {}; <span class="hljs-comment">// 新的空对象</span>
 
 <span class="hljs-comment">// 将 user 中所有的属性拷贝到其中</span>
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> user) {
   clone[key] = user[key];
 }
-*/!*
+
 
 <span class="hljs-comment">// 现在 clone 是带有相同内容的完全独立的对象</span>
 clone.name = <span class="hljs-string">&quot;Pete&quot;</span>; <span class="hljs-comment">// 改变了其中的数据</span>
@@ -86,10 +86,10 @@ alert( user.name ); <span class="hljs-comment">// 原来的对象中的 name 属
 <span class="hljs-keyword">let</span> permissions1 = { <span class="hljs-attr">canView</span>: <span class="hljs-literal">true</span> };
 <span class="hljs-keyword">let</span> permissions2 = { <span class="hljs-attr">canEdit</span>: <span class="hljs-literal">true</span> };
 
-*!*
+
 <span class="hljs-comment">// 将 permissions1 和 permissions2 中的所有属性都拷贝到 user 中</span>
 <span class="hljs-built_in">Object</span>.assign(user, permissions1, permissions2);
-*/!*
+
 
 <span class="hljs-comment">// 现在 user = { name: &quot;John&quot;, canView: true, canEdit: true }</span></code></pre>
 <p>如果被拷贝的属性的属性名已经存在，那么它会被覆盖：</p>
@@ -104,9 +104,9 @@ alert(user.name); <span class="hljs-comment">// 现在 user = { name: &quot;Pete
   <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>
 };
 
-*!*
+
 <span class="hljs-keyword">let</span> clone = <span class="hljs-built_in">Object</span>.assign({}, user);
-*/!*</code></pre>
+</code></pre>
 <p>它将 <code>user</code> 中的所有属性拷贝到了一个空对象中，并返回这个新的对象。</p>
 <h2 id="深层克隆">深层克隆</h2>
 <p>到现在为止，我们都假设 <code>user</code> 的所有属性均为原始类型。但属性可以是对其他对象的引用。那应该怎样处理它们呢？</p>

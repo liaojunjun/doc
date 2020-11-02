@@ -20,7 +20,7 @@ result = a || b;
 
 下面是四种可能的逻辑组合：
 
-```js run
+```js
 alert( true || true );   // true
 alert( false || true );  // true
 alert( true || false );  // true
@@ -33,7 +33,7 @@ alert( false || false ); // false
 
 例如，数字 `1` 将会被作为 `true`，数字 `0` 则作为 `false`：
 
-```js run
+```js
 if (1 || 0) { // 工作原理相当于 if( true || false )
   alert( 'truthy!' );
 }
@@ -43,19 +43,19 @@ if (1 || 0) { // 工作原理相当于 if( true || false )
 
 例如：
 
-```js run
+```js
 let hour = 9;
 
-*!*
+
 if (hour < 10 || hour > 18) {
-*/!*
+
   alert( 'The office is closed.' );
 }
 ```
 
 我们可以传入更多的条件：
 
-```js run
+```js
 let hour = 12;
 let isWeekend = true;
 
@@ -88,7 +88,7 @@ result = value1 || value2 || value3;
 
 例如：
 
-```js run
+```js
 alert( 1 || 0 ); // 1（1 是真值）
 
 alert( null || 1 ); // 1（1 是第一个真值）
@@ -105,14 +105,14 @@ alert( undefined || null || 0 ); // 0（所有的转化结果都是 false，返�
 
     我们用或运算 `||` 来选择有值的那一个，并显示出来（如果没有设置，则用 `匿名（anonymous）`）：
 
-    ```js run
+    ```js
     let firstName = "";
     let lastName = "";
     let nickName = "SuperCoder";
 
-    *!*
+    
     alert( firstName || lastName || nickName || "Anonymous"); // SuperCoder
-    */!*
+    
     ```
 
     如果所有变量都为假（falsy)，结果就是 `Anonymous`。
@@ -127,9 +127,9 @@ alert( undefined || null || 0 ); // 0（所有的转化结果都是 false，返�
 
     在下面这个例子中，只会打印第二条信息：
 
-    ```js run no-beautify
-    *!*true*/!* || alert("not printed");
-    *!*false*/!* || alert("printed");
+    ```js no-beautify
+    true || alert("not printed");
+    false || alert("printed");
     ```
 
     在第一行中，或运算符 `||` 在遇到 `true` 时立即停止运算，所以 `alert` 没有运行。
@@ -146,7 +146,7 @@ result = a && b;
 
 传统的编程中，当两个操作数都是真值，与操作返回 `true`，否则返回 `false`：
 
-```js run
+```js
 alert( true && true );   // true
 alert( false && true );  // false
 alert( true && false );  // false
@@ -155,7 +155,7 @@ alert( false && false ); // false
 
 使用 `if` 语句的例子：
 
-```js run
+```js
 let hour = 12;
 let minute = 30;
 
@@ -166,7 +166,7 @@ if (hour == 12 && minute == 30) {
 
 就像或运算一样，与运算的操作数可以是任意类型的值：
 
-```js run
+```js
 if (1 && 0) { // 作为 true && false 来执行
   alert( "won't work, because the result is falsy" );
 }
@@ -193,7 +193,7 @@ result = value1 && value2 && value3;
 
 例如：
 
-```js run
+```js
 // 如果第一个运算符是真值，
 // 与操作返回第二个操作数：
 alert( 1 && 0 ); // 0
@@ -207,28 +207,28 @@ alert( 0 && "no matter what" ); // 0
 
 我们也可以在一行代码上串联多个值。查看第一个假值是否被返回：
 
-```js run
+```js
 alert( 1 && 2 && null && 3 ); // null
 ```
 
 如果所有的值都是真值，最后一个值将会被返回：
 
-```js run
+```js
 alert( 1 && 2 && 3 ); // 3，最后一个值
 ```
 
-````smart header="与运算 `&&` 在或运算符 `||` 之前执行"
+`与运算 `&&` 在或运算符 `||` 之前执行"
 与运算 `&&` 的优先级比或运算 `||` 要高。
 
 所以代码 `a && b || c && d` 完全跟 `&&` 表达式加了括号一样：`(a && b) || (c && d)`。
 ````
 
-````warn header="不要用 || 或 && 来取代 `if`"
+`"不要用 || 或 && 来取代 `if`"
 有时候，有人会用与运算符 `&&` 来“简化 `if`”。
 
 例如：
 
-```js run
+```js
 let x = 1;
 
 (x > 0) && alert( 'Greater than zero!' );
@@ -238,7 +238,7 @@ let x = 1;
 
 所以我们基本可以类似地得到：
 
-```js run
+```js
 let x = 1;
 
 if (x > 0) alert( 'Greater than zero!' );
@@ -265,14 +265,14 @@ result = !value;
 
 例如：
 
-```js run
+```js
 alert( !true ); // false
 alert( !0 ); // true
 ```
 
 两个非运算 `!!` 有时候用来将某个值转化为布尔类型：
 
-```js run
+```js
 alert( !!"non-empty string" ); // true
 alert( !!null ); // false
 ```
@@ -281,7 +281,7 @@ alert( !!null ); // false
 
 有更多详细的方法可以完成同样的事 —— 一个内置的 `Boolean` 函数：
 
-```js run
+```js
 alert( Boolean("non-empty string") ); // true
 alert( Boolean(null) ); // false
 ```

@@ -1,6 +1,6 @@
 答案：**John**。
 
-```js run no-beautify
+```js no-beautify
 function f() {
   alert(this.name);
 }

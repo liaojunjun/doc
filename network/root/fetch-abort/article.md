@@ -24,7 +24,7 @@
 
     就像这样（目前还没有 `fetch`）：
 
-    ```js run
+    ```js
     let controller = new AbortController();
     let signal = controller.signal;
 
@@ -57,7 +57,7 @@
 
 当一个 fetch 被中止，它的 promise 就会以一个 error `AbortError` reject，因此我们应该对其进行处理：
 
-```js run async
+```js async
 // 1 秒后中止
 let controller = new AbortController();
 setTimeout(() => controller.abort(), 1000);

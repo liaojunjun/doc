@@ -2,7 +2,7 @@
 
 不同之处在于，如果 `f1` 中出现 error，那么在这儿它会被 `.catch` 处理：
 
-```js run
+```js
 promise
   .then(f1)
   .catch(f2);
@@ -10,7 +10,7 @@ promise
 
 ……在这儿则不会：
 
-```js run
+```js
 promise
   .then(f1, f2);
 ```

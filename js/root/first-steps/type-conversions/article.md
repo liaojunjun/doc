@@ -6,7 +6,7 @@
 
 在某些情况下，我们需要将值显式地转换为我们期望的类型。
 
-```smart header="对象还未纳入讨论中"
+对象还未纳入讨论中"
 在本章中，我们不会讨论 object 类型。目前，我们将只学习原始类型。
 
 之后，在我们学习完 object 类型后，我们会在 <info:object-toprimitive> 一章中学习对象 — 原始值转换。
@@ -20,14 +20,14 @@
 
 我们也可以显式地调用 `String(value)` 来将 `value` 转换为字符串类型：
 
-```js run
+```js
 let value = true;
 alert(typeof value); // boolean
 
-*!*
+
 value = String(value); // 现在，值是一个字符串形式的 "true"
 alert(typeof value); // string
-*/!*
+
 ```
 
 字符串转换最明显。`false` 变成 `"false"`，`null` 变成 `"null"` 等。
@@ -38,13 +38,13 @@ alert(typeof value); // string
 
 比如，当把除法 `/` 用于非 number 类型：
 
-```js run
+```js
 alert( "6" / "2" ); // 3, string 类型的值被自动转换成 number 类型后进行计算
 ```
 
 我们也可以使用 `Number(value)` 显式地将这个 `value` 转换为 number 类型。
 
-```js run
+```js
 let str = "123";
 alert(typeof str); // string
 
@@ -57,7 +57,7 @@ alert(typeof num); // number
 
 如果该字符串不是一个有效的数字，转换的结果会是 `NaN`。例如：
 
-```js run
+```js
 let age = Number("an arbitrary string instead of a number");
 
 alert(age); // NaN，转换失败
@@ -74,7 +74,7 @@ number 类型转换规则：
 
 例子：
 
-```js run
+```js
 alert( Number("   123   ") ); // 123
 alert( Number("123z") );      // NaN（从字符串“读取”数字，读到 "z" 时出现错误）
 alert( Number(true) );        // 1
@@ -98,7 +98,7 @@ alert( Number(false) );       // 0
 
 比如：
 
-```js run
+```js
 alert( Boolean(1) ); // true
 alert( Boolean(0) ); // false
 
@@ -106,10 +106,10 @@ alert( Boolean("hello") ); // true
 alert( Boolean("") ); // false
 ```
 
-````warn header="请注意：包含 0 的字符串 `\"0\"` 是 `true`"
+`"请注意：包含 0 的字符串 `\"0\"` 是 `true`"
 一些编程语言（比如 PHP）视 `"0"` 为 `false`。但在 JavaScript 中，非空的字符串总是 `true`。
 
-```js run
+```js
 alert( Boolean("0") ); // true
 alert( Boolean(" ") ); // 空白，也是 true（任何非空字符串都是 true）
 ```

@@ -145,10 +145,10 @@ numbers = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Prox
   }
 });
 
-*!*
+
 alert( numbers[<span class="hljs-number">1</span>] ); <span class="hljs-comment">// 1</span>
 alert( numbers[<span class="hljs-number">123</span>] ); <span class="hljs-comment">// 0（没有这个数组项）</span>
-*/!*</code></pre>
+</code></pre>
 <p>正如我们所看到的，使用 <code>get</code> 捕捉器很容易实现。</p>
 <p>我们可以用 <code>Proxy</code> 来实现“默认”值的任何逻辑。</p>
 <p>想象一下，我们有一本词典，上面有短语及其翻译：</p>
@@ -167,9 +167,9 @@ alert( dictionary[<span class="hljs-string">&#x27;Welcome&#x27;</span>] ); <span
 };
 
 dictionary = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(dictionary, {
-*!*
+
   get(target, phrase) { <span class="hljs-comment">// 拦截读取属性操作</span>
-*/!*
+
     <span class="hljs-keyword">if</span> (phrase <span class="hljs-keyword">in</span> target) { <span class="hljs-comment">//如果词典中有该短语</span>
       <span class="hljs-keyword">return</span> target[phrase]; <span class="hljs-comment">// 返回其翻译</span>
     } <span class="hljs-keyword">else</span> {
@@ -182,9 +182,9 @@ dictionary = <span class="hljs-keyword">new</span> <span class="hljs-built_in">P
 <span class="hljs-comment">// 在词典中查找任意短语！</span>
 <span class="hljs-comment">// 最坏的情况也只是它们没有被翻译。</span>
 alert( dictionary[<span class="hljs-string">&#x27;Hello&#x27;</span>] ); <span class="hljs-comment">// Hola</span>
-*!*
+
 alert( dictionary[<span class="hljs-string">&#x27;Welcome to Proxy&#x27;</span>]); <span class="hljs-comment">// Welcome to Proxy（没有被翻译）</span>
-*/!*</code></pre>
+</code></pre>
 <pre><code class="language-smart">请注意代理如何覆盖变量：
 
 ```js
@@ -207,9 +207,9 @@ dictionary = new Proxy(dictionary, ...);
 <pre><code class="language-js"><span class="hljs-keyword">let</span> numbers = [];
 
 numbers = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(numbers, { <span class="hljs-comment">// (*)</span>
-*!*
+
   set(target, prop, val) { <span class="hljs-comment">// 拦截写入属性操作</span>
-*/!*
+
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> val == <span class="hljs-string">&#x27;number&#x27;</span>) {
       target[prop] = val;
       <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
@@ -223,15 +223,15 @@ numbers.push(<span class="hljs-number">1</span>); <span class="hljs-comment">// 
 numbers.push(<span class="hljs-number">2</span>); <span class="hljs-comment">// 添加成功</span>
 alert(<span class="hljs-string">&quot;Length is: &quot;</span> + numbers.length); <span class="hljs-comment">// 2</span>
 
-*!*
+
 numbers.push(<span class="hljs-string">&quot;test&quot;</span>); <span class="hljs-comment">// TypeError（proxy 的 &#x27;set&#x27; 返回 false）</span>
-*/!*
+
 
 alert(<span class="hljs-string">&quot;This line is never reached (error in the line above)&quot;</span>);</code></pre>
 <p>请注意：数组的内建方法依然有效！值被使用 <code>push</code> 方法添加到数组。当值被添加到数组后，数组的 <code>length</code> 属性会自动增加。我们的代理对象 proxy 不会破坏任何东西。</p>
 <p>我们不必重写诸如 <code>push</code> 和 <code>unshift</code> 等添加元素的数组方法，就可以在其中添加检查，因为在内部它们使用代理所拦截的 <code>[[Set]]</code> 操作。</p>
 <p>因此，代码简洁明了。</p>
-<p>```warn header=&quot;别忘了返回 <code>true</code>&quot;
+<p>&quot;别忘了返回 <code>true</code>&quot;
 如上所述，要保持不变量。</p>
 <p>对于 <code>set</code> 操作，它必须在成功写入时返回 <code>true</code>。</p>
 <p>如果我们忘记这样做，或返回任何假（falsy）值，则该操作将触发 <code>TypeError</code>。</p>
@@ -250,7 +250,7 @@ alert(<span class="hljs-string">&quot;This line is never reached (error in the l
 
 在下面这个示例中，我们使用 `ownKeys` 捕捉器拦截 `for..in` 对 `user` 的遍历，并使用 `Object.keys` 和 `Object.values` 来跳过以下划线 `_` 开头的属性：
 
-```js run
+```js
 let user = {
   name: &quot;John&quot;,
   age: 30,
@@ -258,9 +258,9 @@ let user = {
 };
 
 user = new Proxy(user, {
-*!*
+
   ownKeys(target) {
-*/!*
+
     return Object.keys(target).filter(key =&gt; !key.startsWith(&#x27;_&#x27;));
   }
 });
@@ -276,9 +276,9 @@ alert( Object.values(user) ); // John,30</code></pre>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = { };
 
 user = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(user, {
-*!*
+
   ownKeys(target) {
-*/!*
+
     <span class="hljs-keyword">return</span> [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>];
   }
 });
@@ -330,18 +330,18 @@ alert(user._password); <span class="hljs-comment">// secret</span></code></pre>
 };
 
 user = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(user, {
-*!*
+
   get(target, prop) {
-*/!*
+
     <span class="hljs-keyword">if</span> (prop.startsWith(<span class="hljs-string">&#x27;_&#x27;</span>)) {
       <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Access denied&quot;</span>);
     }
     <span class="hljs-keyword">let</span> value = target[prop];
     <span class="hljs-keyword">return</span> (<span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;function&#x27;</span>) ? value.bind(target) : value; <span class="hljs-comment">// (*)</span>
   },
-*!*
+
   set(target, prop, val) { <span class="hljs-comment">// 拦截属性写入</span>
-*/!*
+
     <span class="hljs-keyword">if</span> (prop.startsWith(<span class="hljs-string">&#x27;_&#x27;</span>)) {
       <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Access denied&quot;</span>);
     } <span class="hljs-keyword">else</span> {
@@ -349,9 +349,9 @@ user = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</
       <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     }
   },
-*!*
+
   deleteProperty(target, prop) { <span class="hljs-comment">// 拦截属性删除</span>
-*/!*
+
     <span class="hljs-keyword">if</span> (prop.startsWith(<span class="hljs-string">&#x27;_&#x27;</span>)) {
       <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Access denied&quot;</span>);
     } <span class="hljs-keyword">else</span> {
@@ -359,9 +359,9 @@ user = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</
       <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     }
   },
-*!*
+
   ownKeys(target) { <span class="hljs-comment">// 拦截读取属性列表</span>
-*/!*
+
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.keys(target).filter(<span class="hljs-function"><span class="hljs-params">key</span> =&gt;</span> !key.startsWith(<span class="hljs-string">&#x27;_&#x27;</span>));
   }
 });
@@ -387,9 +387,9 @@ user = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</
 <pre><code class="language-js">get(target, prop) {
   <span class="hljs-comment">// ...</span>
   <span class="hljs-keyword">let</span> value = target[prop];
-*!*
+
   <span class="hljs-keyword">return</span> (<span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;function&#x27;</span>) ? value.bind(target) : value; <span class="hljs-comment">// (*)</span>
-*/!*
+
 }</code></pre>
 <p>为什么我们需要一个函数去调用 <code>value.bind(target)</code>？</p>
 <p>原因是对象方法（例如 <code>user.checkPassword()</code>）必须能够访问 <code>_password</code>：</p>
@@ -429,17 +429,17 @@ user = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</
 };
 
 range = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(range, {
-*!*
+
   has(target, prop) {
-*/!*
+
     <span class="hljs-keyword">return</span> prop &gt;= target.start &amp;&amp; prop &lt;= target.end;
   }
 });
 
-*!*
+
 alert(<span class="hljs-number">5</span> <span class="hljs-keyword">in</span> range); <span class="hljs-comment">// true</span>
 alert(<span class="hljs-number">50</span> <span class="hljs-keyword">in</span> range); <span class="hljs-comment">// false</span>
-*/!*</code></pre>
+</code></pre>
 <p>漂亮的语法糖，不是吗？而且实现起来非常简单。</p>
 <h2 id="包装函数：apply-proxy-apply">包装函数：&quot;apply&quot; [#proxy-apply]</h2>
 <p>我们也可以将代理（proxy）包装在函数周围。</p>
@@ -479,15 +479,15 @@ sayHi(<span class="hljs-string">&quot;John&quot;</span>); <span class="hljs-comm
   alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${user}</span>!`</span>);
 }
 
-*!*
+
 alert(sayHi.length); <span class="hljs-comment">// 1（函数的 length 是函数声明中的参数个数）</span>
-*/!*
+
 
 sayHi = delay(sayHi, <span class="hljs-number">3000</span>);
 
-*!*
+
 alert(sayHi.length); <span class="hljs-comment">// 0（在包装器声明中，参数个数为 0)</span>
-*/!*</code></pre>
+</code></pre>
 <p><code>Proxy</code> 的功能要强大得多，因为它可以将所有东西转发到目标对象。</p>
 <p>让我们使用 <code>Proxy</code> 来替换掉包装函数：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">delay</span>(<span class="hljs-params">f, ms</span>) </span>{
@@ -504,9 +504,9 @@ alert(sayHi.length); <span class="hljs-comment">// 0（在包装器声明中，�
 
 sayHi = delay(sayHi, <span class="hljs-number">3000</span>);
 
-*!*
+
 alert(sayHi.length); <span class="hljs-comment">// 1 (*) proxy 将“获取 length”的操作转发给目标对象</span>
-*/!*
+
 
 sayHi(<span class="hljs-string">&quot;John&quot;</span>); <span class="hljs-comment">// Hello, John!（3 秒后）</span></code></pre>
 <p>结果是相同的，但现在不仅仅调用，而且代理上的所有操作都能被转发到原始函数。所以在 <code>(*)</code> 行包装后的 <code>sayHi.length</code> 会返回正确的结果。</p>
@@ -568,15 +568,15 @@ alert(user.name); <span class="hljs-comment">// John</span></code></pre>
 user = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(user, {
   get(target, prop, receiver) {
     alert(<span class="hljs-string">`GET <span class="hljs-subst">${prop}</span>`</span>);
-*!*
+
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">Reflect</span>.get(target, prop, receiver); <span class="hljs-comment">// (1)</span>
-*/!*
+
   },
   set(target, prop, val, receiver) {
     alert(<span class="hljs-string">`SET <span class="hljs-subst">${prop}</span>=<span class="hljs-subst">${val}</span>`</span>);
-*!*
+
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">Reflect</span>.set(target, prop, val, receiver); <span class="hljs-comment">// (2)</span>
-*/!*
+
   }
 });
 
@@ -600,13 +600,13 @@ user.name = <span class="hljs-string">&quot;Pete&quot;</span>; <span class="hljs
   }
 };
 
-*!*
+
 <span class="hljs-keyword">let</span> userProxy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(user, {
   get(target, prop, receiver) {
     <span class="hljs-keyword">return</span> target[prop];
   }
 });
-*/!*
+
 
 alert(userProxy.name); <span class="hljs-comment">// Guest</span></code></pre>
 <p>其 <code>get</code> 捕捉器在这里是“透明的”，它返回原来的属性，不会做任何其他的事。这对于我们的示例而言就足够了。</p>
@@ -625,7 +625,7 @@ alert(userProxy.name); <span class="hljs-comment">// Guest</span></code></pre>
   }
 });
 
-*!*
+
 <span class="hljs-keyword">let</span> admin = {
   <span class="hljs-attr">__proto__</span>: userProxy,
   <span class="hljs-attr">_name</span>: <span class="hljs-string">&quot;Admin&quot;</span>
@@ -633,7 +633,7 @@ alert(userProxy.name); <span class="hljs-comment">// Guest</span></code></pre>
 
 <span class="hljs-comment">// 期望输出：Admin</span>
 alert(admin.name); <span class="hljs-comment">// 输出：Guest (?!?)</span>
-*/!*</code></pre>
+</code></pre>
 <p>读取 <code>admin.name</code> 应该返回 <code>&quot;Admin&quot;</code>，而不是 <code>&quot;Guest&quot;</code>！</p>
 <p>发生了什么？或许我们在继承方面做错了什么？</p>
 <p>但是，如果我们移除代理，那么一切都会按预期进行。</p>
@@ -660,9 +660,9 @@ alert(admin.name); <span class="hljs-comment">// 输出：Guest (?!?)</span>
 
 <span class="hljs-keyword">let</span> userProxy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(user, {
   get(target, prop, receiver) { <span class="hljs-comment">// receiver = admin</span>
-*!*
+
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">Reflect</span>.get(target, prop, receiver); <span class="hljs-comment">// (*)</span>
-*/!*
+
   }
 });
 
@@ -672,13 +672,13 @@ alert(admin.name); <span class="hljs-comment">// 输出：Guest (?!?)</span>
   <span class="hljs-attr">_name</span>: <span class="hljs-string">&quot;Admin&quot;</span>
 };
 
-*!*
+
 alert(admin.name); <span class="hljs-comment">// Admin</span>
-*/!*</code></pre>
+</code></pre>
 <p>现在 <code>receiver</code> 保留了对正确 <code>this</code> 的引用（即 <code>admin</code>），该引用是在 <code>(*)</code> 行中被通过 <code>Reflect.get</code> 传递给 getter 的。</p>
 <p>我们可以把捕捉器重写得更短：</p>
 <pre><code class="language-js">get(target, prop, receiver) {
-  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Reflect</span>.get(*!*...arguments*/!*);
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Reflect</span>.get(...arguments);
 }</code></pre>
 <p><code>Reflect</code> 调用的命名与捕捉器的命名完全相同，并且接受相同的参数。它们是以这种方式专门设计的。</p>
 <p>因此，<code>return Reflect...</code> 提供了一个安全的方式，可以轻松地转发操作，并确保我们不会忘记与此相关的任何内容。</p>
@@ -694,9 +694,9 @@ alert(admin.name); <span class="hljs-comment">// Admin</span>
 
 <span class="hljs-keyword">let</span> proxy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(map, {});
 
-*!*
+
 proxy.set(<span class="hljs-string">&#x27;test&#x27;</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// Error</span>
-*/!*</code></pre>
+</code></pre>
 <p>在内部，一个 <code>Map</code> 将所有数据存储在其 <code>[[MapData]]</code> 内部插槽中。代理对象没有这样的插槽。<a href="https://tc39.es/ecma262/#sec-map.prototype.set">内建方法 <code>Map.prototype.set</code></a> 方法试图访问内部属性 <code>this.[[MapData]]</code>，但由于 <code>this=proxy</code>，在 <code>proxy</code> 中无法找到它，只能失败。</p>
 <p>幸运的是，这儿有一种解决方法：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> map = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Map</span>();
@@ -704,9 +704,9 @@ proxy.set(<span class="hljs-string">&#x27;test&#x27;</span>, <span class="hljs-n
 <span class="hljs-keyword">let</span> proxy = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(map, {
   get(target, prop, receiver) {
     <span class="hljs-keyword">let</span> value = <span class="hljs-built_in">Reflect</span>.get(...arguments);
-*!*
+
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value == <span class="hljs-string">&#x27;function&#x27;</span> ? value.bind(target) : value;
-*/!*
+
   }
 });
 
@@ -724,7 +724,7 @@ alert(proxy.get(<span class="hljs-string">&#x27;test&#x27;</span>)); <span class
 
 例如，`getName()` 方法访问私有的 `#name` 属性，并在代理后中断（break）：
 
-```js run
+```js
 class User {
   #name = &quot;Guest&quot;;
 
@@ -737,9 +737,9 @@ let user = new User();
 
 user = new Proxy(user, {});
 
-*!*
+
 alert(user.getName()); // Error
-*/!*</code></pre>
+</code></pre>
 <p>原因是私有字段是通过内部插槽实现的。JavaScript 在访问它们时不使用 <code>[[Get]]/[[Set]]</code>。</p>
 <p>在调用 <code>getName()</code> 时，<code>this</code> 的值是代理后的 <code>user</code>，它没有带有私有字段的插槽。</p>
 <p>再次，带有 <code>bind</code> 方法的解决方案使它恢复正常：</p>
@@ -780,11 +780,11 @@ alert(allUsers.has(user)); <span class="hljs-comment">// true</span>
 
 user = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Proxy</span>(user, {});
 
-*!*
+
 alert(allUsers.has(user)); <span class="hljs-comment">// false</span>
-*/!*</code></pre>
+</code></pre>
 <p>如我们所见，进行代理后，我们在 <code>allUsers</code> 中找不到 <code>user</code>，因为代理是一个不同的对象。</p>
-<p>```warn header=&quot;Proxy 无法拦截严格相等性检查 <code>===</code>&quot;
+<p>&quot;Proxy 无法拦截严格相等性检查 <code>===</code>&quot;
 Proxy 可以拦截许多操作符，例如 <code>new</code>（使用 <code>construct</code>），<code>in</code>（使用 <code>has</code>），<code>delete</code>（使用 <code>deleteProperty</code>）等。</p>
 <p>但是没有办法拦截对于对象的严格相等性检查。一个对象只严格等于其自身，没有其他值。</p>
 <p>因此，比较对象是否相等的所有操作和内建类都会区分对象和代理。这里没有透明的替代品。</p>
@@ -819,9 +819,9 @@ revoke();
 alert(proxy.data); <span class="hljs-comment">// Error</span></code></pre>
 <p>调用 <code>revoke()</code> 会从代理中删除对目标对象的所有内部引用，因此它们之间再无连接。之后可以对目标对象进行垃圾回收。</p>
 <p>我们还可以将 <code>revoke</code> 存储在 <code>WeakMap</code> 中，以更便于通过代理对象轻松找到它：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> revokes = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>();
-*/!*
+
 
 <span class="hljs-keyword">let</span> object = {
   <span class="hljs-attr">data</span>: <span class="hljs-string">&quot;Valuable data&quot;</span>

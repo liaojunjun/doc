@@ -41,7 +41,7 @@ if (n < 0) {
 <p>单行构造（如 <code>if (condition) doSomething()</code>）也是一个重要的用例。我们是否应该使用花括号？如果是，那么在哪里？</p>
 <p>下面是这几种情况的注释，你可以自己判断一下它们的可读性：</p>
 <ol>
-<li>😠 初学者常这样写。非常不好！这里不需要花括号：<pre><code class="language-js"><span class="hljs-keyword">if</span> (n &lt; <span class="hljs-number">0</span>) *!*{*<span class="hljs-regexp">/!*alert(`Power ${n} is not supported`);*!*}*/</span>!*</code></pre>
+<li>😠 初学者常这样写。非常不好！这里不需要花括号：<pre><code class="language-js"><span class="hljs-keyword">if</span> (n &lt; <span class="hljs-number">0</span>) {*<span class="hljs-regexp">/!*alert(`Power ${n} is not supported`);}*/</span>!*</code></pre>
 </li>
 <li>😠 拆分为单独的行，不带花括号。永远不要这样做，添加新行很容易出错：<pre><code class="language-js"><span class="hljs-keyword">if</span> (n &lt; <span class="hljs-number">0</span>)
   alert(<span class="hljs-string">`Power <span class="hljs-subst">${n}</span> is not supported`</span>);</code></pre>
@@ -117,7 +117,7 @@ if (n < 0) {
 }</code></pre>
 <p>我们可以这样写：</p>
 <pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
-  <span class="hljs-keyword">if</span> (!cond) *!*<span class="hljs-keyword">continue</span>*/!*;
+  <span class="hljs-keyword">if</span> (!cond) <span class="hljs-keyword">continue</span>;
   ...  <span class="hljs-comment">// &lt;- 没有额外的嵌套</span>
 }</code></pre>
 <p>使用 <code>if/else</code> 和 <code>return</code> 也可以做类似的事情。</p>
@@ -156,7 +156,7 @@ if (n < 0) {
 <p>如果你正在写几个“辅助”函数和一些使用它们的代码，那么有三种方式来组织这些函数。</p>
 <ol>
 <li><p>在调用这些函数的代码的 <strong>上方</strong> 声明这些函数：</p>
-<pre><code class="language-js"><span class="hljs-comment">// *!*函数声明*/!*</span>
+<pre><code class="language-js"><span class="hljs-comment">// 函数声明</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createElement</span>(<span class="hljs-params"></span>) </span>{
   ...
 }
@@ -169,18 +169,18 @@ if (n < 0) {
   ...
 }
 
-<span class="hljs-comment">// *!*调用函数的代码*/!*</span>
+<span class="hljs-comment">// 调用函数的代码</span>
 <span class="hljs-keyword">let</span> elem = createElement();
 setHandler(elem);
 walkAround();</code></pre>
 </li>
 <li><p>先写调用代码，再写函数</p>
-<pre><code class="language-js"><span class="hljs-comment">// *!*调用函数的代码*/!*</span>
+<pre><code class="language-js"><span class="hljs-comment">// 调用函数的代码</span>
 <span class="hljs-keyword">let</span> elem = createElement();
 setHandler(elem);
 walkAround();
 
-<span class="hljs-comment">// --- *!*辅助函数*/!* ---</span>
+<span class="hljs-comment">// --- 辅助函数 ---</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createElement</span>(<span class="hljs-params"></span>) </span>{
   ...
 }

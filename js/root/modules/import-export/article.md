@@ -12,20 +12,20 @@
 
 ```js
 // 导出数组
-*!*export*/!* let months = ['Jan', 'Feb', 'Mar','Apr', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+export let months = ['Jan', 'Feb', 'Mar','Apr', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 // 导出 const 声明的变量
-*!*export*/!* const MODULES_BECAME_STANDARD_YEAR = 2015;
+export const MODULES_BECAME_STANDARD_YEAR = 2015;
 
 // 导出类
-*!*export*/!* class User {
+export class User {
   constructor(name) {
     this.name = name;
   }
 }
 ```
 
-````smart header="导出 class/function 后没有分号"
+`导出 class/function 后没有分号"
 注意，在类或者函数前的 `export` 不会让它们变成 [函数表达式](info:function-expressions)。尽管被导出了，但它仍然是一个函数声明。
 
 大部分 JavaScript 样式指南都不建议在函数和类声明后使用分号。
@@ -35,7 +35,7 @@
 ```js
 export function sayHi(user) {
   alert(`Hello, ${user}!`);
-} *!* // 在这里没有分号 ; */!*
+}  // 在这里没有分号 ; 
 ```
 
 ````
@@ -56,9 +56,9 @@ function sayBye(user) {
   alert(`Bye, ${user}!`);
 }
 
-*!*
+
 export {sayHi, sayBye}; // 导出变量列表
-*/!*
+
 ```
 
 ……从技术上讲，我们也可以把 `export` 放在函数上面。
@@ -69,9 +69,9 @@ export {sayHi, sayBye}; // 导出变量列表
 
 ```js
 // 📁 main.js
-*!*
+
 import {sayHi, sayBye} from './say.js';
-*/!*
+
 
 sayHi('John'); // Hello, John!
 sayBye('John'); // Bye, John!
@@ -81,9 +81,9 @@ sayBye('John'); // Bye, John!
 
 ```js
 // 📁 main.js
-*!*
+
 import * as say from './say.js';
-*/!*
+
 
 say.sayHi('John');
 say.sayBye('John');
@@ -121,9 +121,9 @@ say.sayBye('John');
 
 ```js
 // 📁 main.js
-*!*
+
 import {sayHi as hi, sayBye as bye} from './say.js';
-*/!*
+
 
 hi('John'); // Hello, John!
 bye('John'); // Bye, John!
@@ -147,8 +147,8 @@ export {sayHi as hi, sayBye as bye};
 // 📁 main.js
 import * as say from './say.js';
 
-say.*!*hi*/!*('John'); // Hello, John!
-say.*!*bye*/!*('John'); // Bye, John!
+say.hi('John'); // Hello, John!
+say.bye('John'); // Bye, John!
 ```
 
 ## Export default
@@ -168,7 +168,7 @@ say.*!*bye*/!*('John'); // Bye, John!
 
 ```js
 // 📁 user.js
-export *!*default*/!* class User { // 只需要添加 "default" 即可
+export default class User { // 只需要添加 "default" 即可
   constructor(name) {
     this.name = name;
   }
@@ -181,7 +181,7 @@ export *!*default*/!* class User { // 只需要添加 "default" 即可
 
 ```js
 // 📁 main.js
-import *!*User*/!* from './user.js'; // 不需要花括号 {User}，只需要写成 User 即可
+import User from './user.js'; // 不需要花括号 {User}，只需要写成 User 即可
 
 new User('John');
 ```
@@ -260,7 +260,7 @@ export function sayHi(user) {
 
 ```js
 // 📁 main.js
-import {*!*default as User*/!*, sayHi} from './user.js';
+import {default as User, sayHi} from './user.js';
 
 new User('John');
 ```

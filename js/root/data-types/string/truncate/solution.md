@@ -2,7 +2,7 @@
 
 请注意，省略号实际上有一个单独的 unicode 字符，而不是三个点。
 
-```js run demo
+```js demo
 function truncate(str, maxlength) {
   return (str.length > maxlength) ?
     str.slice(0, maxlength - 1) + '…' : str;

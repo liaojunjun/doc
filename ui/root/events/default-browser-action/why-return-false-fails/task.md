@@ -6,7 +6,7 @@ importance: 3
 
 为什么下面这段代码中的 `return false` 不起作用？
 
-```html autorun run
+```html autorun
 <script>
   function handler() {
     alert( "..." );

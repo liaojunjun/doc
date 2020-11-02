@@ -1,7 +1,7 @@
 
 # 旧时的 "var"
 
-```smart header="本文用于帮助理解旧脚本"
+本文用于帮助理解旧脚本"
 本文所讲的内容对于帮助理解旧脚本很有用。
 
 但这不是我们编写新代码的方式。
@@ -15,7 +15,7 @@
 
 `var` 声明与 `let` 相似。大部分情况下，我们可以用 `let` 代替 `var` 或者 `var` 代替 `let`，都能达到预期的效果：
 
-```js run
+```js
 var message = "Hi";
 alert(message); // Hi
 ```
@@ -32,28 +32,28 @@ alert(message); // Hi
 
 举个例子：
 
-```js run
+```js
 if (true) {
   var test = true; // 使用 "var" 而不是 "let"
 }
 
-*!*
+
 alert(test); // true，变量在 if 结束后仍存在
-*/!*
+
 ```
 
 由于 `var` 会忽略代码块，因此我们有了一个全局变量 `test`。
 
 如果我们在第二行使用 `let test` 而不是 `var test`，那么该变量将仅在 `if` 内部可见：
 
-```js run
+```js
 if (true) {
   let test = true; // 使用 "let"
 }
 
-*!*
+
 alert(test); // Error: test is not defined
-*/!*
+
 ```
 
 对于循环也是这样的，`var` 声明的变量没有块级作用域也没有循环局部作用域：
@@ -63,14 +63,14 @@ for (var i = 0; i < 10; i++) {
   // ...
 }
 
-*!*
+
 alert(i); // 10，"i" 在循环结束后仍可见，它是一个全局变量
-*/!*
+
 ```
 
 如果一个代码块位于函数内部，那么 `var` 声明的变量的作用域将为函数作用域：
 
-```js run
+```js
 function sayHi() {
   if (true) {
     var phrase = "Hello";
@@ -89,14 +89,14 @@ alert(phrase); // Error: phrase is not defined（检查开发者控制台）
 
 如果我们用 `let` 在同一作用域下将同一个变量声明两次，则会出现错误：
 
-```js run
+```js
 let user;
 let user; // SyntaxError: 'user' has already been declared
 ```
 
 使用 `var`，我们可以重复声明一个变量，不管多少次都行。如果我们对一个已经声明的变量使用 `var`，这条新的声明语句会被忽略：
 
-```js run
+```js
 var user = "Pete";
 
 var user = "John"; // 这个 "var" 无效（因为变量已经声明过了）
@@ -113,26 +113,26 @@ alert(user); // John
 
 那么看一下这段代码：
 
-```js run
+```js
 function sayHi() {
   phrase = "Hello";
 
   alert(phrase);
 
-*!*
+
   var phrase;
-*/!*
+
 }
 sayHi();
 ```
 
 ……从技术上讲，它与下面这种情况是一样的（`var phrase` 被上移至函数开头）：
 
-```js run
+```js
 function sayHi() {
-*!*
+
   var phrase;
-*/!*
+
 
   phrase = "Hello";
 
@@ -143,15 +143,15 @@ sayHi();
 
 ……甚至与这种情况也一样（记住，代码块是会被忽略的）：
 
-```js run
+```js
 function sayHi() {
   phrase = "Hello"; // (*)
 
-  *!*
+  
   if (false) {
     var phrase;
   }
-  */!*
+  
 
   alert(phrase);
 }
@@ -166,13 +166,13 @@ sayHi();
 
 我们最好用例子来说明：
 
-```js run
+```js
 function sayHi() {
   alert(phrase);  
 
-*!*
+
   var phrase = "Hello";
-*/!*
+
 }
 
 sayHi();
@@ -185,17 +185,17 @@ sayHi();
 
 声明在函数刚开始执行的时候（“提升”）就被处理了，但是赋值操作始终是在它出现的地方才起作用。所以这段代码实际上是这样工作的：
 
-```js run
+```js
 function sayHi() {
-*!*
+
   var phrase; // 在函数刚开始时进行变量声明
-*/!*
+
 
   alert(phrase); // undefined
 
-*!*
+
   phrase = "Hello"; // ……赋值 — 当程序执行到这一行时。
-*/!*
+
 }
 
 sayHi();
@@ -213,7 +213,7 @@ sayHi();
 
 IIFE 看起来像这样：
 
-```js run
+```js
 (function() {
 
   let message = "Hello";
@@ -227,7 +227,7 @@ IIFE 看起来像这样：
 
 函数表达式被括号 `(function {...})` 包裹起来，因为在 JavaScript 中，当主代码流遇到 `"function"` 时，它会把它当成一个函数声明的开始。但函数声明必须有一个函数名，所以这样的代码会导致错误：
 
-```js run
+```js
 // 尝试声明并立即调用一个函数
 function() { // <-- Error: Function statements require a function name
 
@@ -240,7 +240,7 @@ function() { // <-- Error: Function statements require a function name
 
 即使我们说：“好吧，那我们加一个名称吧”，但它仍然不工作，因为 JavaScript 不允许立即调用函数声明：
 
-```js run
+```js
 // 下面的括号会导致语法错误
 function go() {
 
@@ -251,22 +251,22 @@ function go() {
 
 除了使用括号，还有其他方式可以告诉 JavaScript 在这我们指的是函数表达式：
 
-```js run
+```js
 // 创建 IIFE 的方法
 
 (function() {
   alert("Parentheses around the function");
-}*!*)*/!*();
+})();
 
 (function() {
   alert("Parentheses around the whole thing");
-}()*!*)*/!*;
+}());
 
-*!*!*/!*function() {
+!function() {
   alert("Bitwise NOT operator starts the expression");
 }();
 
-*!*+*/!*function() {
++function() {
   alert("Unary plus starts the expression");
 }();
 ```

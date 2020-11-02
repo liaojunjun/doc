@@ -22,15 +22,15 @@ x = (a !== null && a !== undefined) ? a : b;
 
 让我们使用 `??` 运算符选择第一个已定义的变量：
 
-```js run
+```js
 let firstName = null;
 let lastName = null;
 let nickName = "Supercoder";
 
 // 显示第一个不是 null/undefined 的值
-*!*
+
 alert(firstName ?? lastName ?? nickName ?? "Anonymous"); // Supercoder
-*/!*
+
 ```
 
 ## 与 || 比较
@@ -53,7 +53,7 @@ height = height ?? 100;
 
 让我们将其与 `||` 进行比较：
 
-```js run
+```js
 let height = 0;
 
 alert(height || 100); // 100
@@ -74,7 +74,7 @@ alert(height ?? 100); // 0
 
 如果我们需要在复杂表达式中使用 `??` 进行取值，需要考虑加括号：
 
-```js run
+```js
 let height = null;
 let width = null;
 
@@ -99,7 +99,7 @@ let area = height ?? (100 * width) ?? 50;
 
 下面的代码会触发一个语法错误：
 
-```js run
+```js
 let x = 1 && 2 ?? 3; // Syntax error
 ```
 
@@ -107,10 +107,10 @@ let x = 1 && 2 ?? 3; // Syntax error
 
 可以明确地使用括号来解决这个问题：
 
-```js run
-*!*
+```js
+
 let x = (1 && 2) ?? 3; // 起作用
-*/!*
+
 
 alert(x); // 2
 ```

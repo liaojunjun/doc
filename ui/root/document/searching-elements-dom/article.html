@@ -10,16 +10,16 @@
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-comment">// 获取该元素</span>
-*!*
+
   <span class="hljs-keyword">let</span> elem = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;elem&#x27;</span>);
-*/!*
+
 
   <span class="hljs-comment">// 将该元素背景改为红色</span>
   elem.style.background = <span class="hljs-string">&#x27;red&#x27;</span>;
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>此外，还有一个通过 <code>id</code> 命名的全局变量，它引用了元素：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;*!*elem*/!*&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;*!*elem-content*/!*&quot;</span>&gt;</span>Element<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem-content&quot;</span>&gt;</span>Element<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
@@ -48,7 +48,7 @@
 <code>id</code> 必须是唯一的。在文档中，只能有一个元素带有给定的 <code>id</code>。</p>
 <p>如果有多个元素都带有同一个 <code>id</code>，那么使用它的方法的行为是不可预测的，例如 <code>document.getElementById</code> 可能会随机返回其中一个元素。因此，请遵守规则，保持 <code>id</code> 的唯一性。</p>
 <pre><code>
-```warn header=&quot;只有 `document.getElementById`，没有 `anyElem.getElementById`&quot;
+&quot;只有 `document.getElementById`，没有 `anyElem.getElementById`&quot;
 `getElementById` 方法只能被在 `document` 对象上调用。它会在整个文档中查找给定的 `id`。</code></pre>
 <h2 id="queryselectorall-queryselectorall">querySelectorAll [#querySelectorAll]</h2>
 <p>到目前为止，最通用的方法是 <code>elem.querySelectorAll(css)</code>，它返回 <code>elem</code> 中与给定 CSS 选择器匹配的所有元素。</p>
@@ -62,9 +62,9 @@
   <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>passed<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   <span class="hljs-keyword">let</span> elements = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;ul &gt; li:last-child&#x27;</span>);
-*/!*
+
 
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> elem <span class="hljs-keyword">of</span> elements) {
     alert(elem.innerHTML); <span class="hljs-comment">// &quot;test&quot;, &quot;passed&quot;</span>
@@ -86,9 +86,9 @@
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-comment">// 不一定是 document.body.children，还可以是任何集合</span>
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> elem <span class="hljs-keyword">of</span> <span class="hljs-built_in">document</span>.body.children) {
-*!*
+
     <span class="hljs-keyword">if</span> (elem.matches(<span class="hljs-string">&#x27;a[href$=&quot;zip&quot;]&#x27;</span>)) {
-*/!*
+
       alert(<span class="hljs-string">&quot;The archive reference: &quot;</span> + elem.href );
     }
   }
@@ -147,19 +147,19 @@
 <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   <span class="hljs-keyword">let</span> inputs = table.getElementsByTagName(<span class="hljs-string">&#x27;input&#x27;</span>);
-*/!*
+
 
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> input <span class="hljs-keyword">of</span> inputs) {
     alert( input.value + <span class="hljs-string">&#x27;: &#x27;</span> + input.checked );
   }
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
-<p>```warn header=&quot;不要忘记字母 <code>\&quot;s\&quot;</code>！&quot;
+<p>&quot;不要忘记字母 <code>\&quot;s\&quot;</code>！&quot;
 新手开发者有时会忘记字符 <code>&quot;s&quot;</code>。也就是说，他们会调用 <code>getElementByTagName</code> 而不是 <code>getElement<b>s</b>ByTagName</code>。</p>
 <p><code>getElementById</code> 中没有字母 <code>&quot;s&quot;</code>，是因为它只返回单个元素。但是 <code>getElementsByTagName</code> 返回的是元素的集合，所以里面有 <code>&quot;s&quot;</code>。</p>
 <pre><code>
-````warn header=&quot;它返回的是一个集合，不是一个元素！&quot;
+`&quot;它返回的是一个集合，不是一个元素！&quot;
 新手的另一个普遍的错误是写：
 
 ```js
@@ -172,7 +172,7 @@ document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
 <pre><code>
 查找 `.article` 元素：
 
-```html run height=50
+```html height=50
 &lt;form name=&quot;my-form&quot;&gt;
   &lt;div class=&quot;article&quot;&gt;Article&lt;/div&gt;
   &lt;div class=&quot;long article&quot;&gt;Long article&lt;/div&gt;
@@ -197,7 +197,7 @@ document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
 1. 第一个创建了对 `&lt;div&gt;` 的集合的引用。截至目前，它的长度是 `1`。
 2. 第二个脚本在浏览器再遇到一个 `&lt;div&gt;` 时运行，所以它的长度是 `2`。
 
-```html run
+```html
 &lt;div&gt;First div&lt;/div&gt;
 
 &lt;script&gt;
@@ -208,9 +208,9 @@ document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
 &lt;div&gt;Second div&lt;/div&gt;
 
 &lt;script&gt;
-*!*
+
   alert(divs.length); // 2
-*/!*
+
 &lt;/script&gt;
 ```
 
@@ -219,7 +219,7 @@ document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
 如果我们使用它，那么两个脚本都会输出 `1`：
 
 
-```html run
+```html
 &lt;div&gt;First div&lt;/div&gt;
 
 &lt;script&gt;
@@ -230,9 +230,9 @@ document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
 &lt;div&gt;Second div&lt;/div&gt;
 
 &lt;script&gt;
-*!*
+
   alert(divs.length); // 1
-*/!*
+
 &lt;/script&gt;
 ```
 

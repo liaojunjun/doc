@@ -36,7 +36,7 @@ let descriptor = Object.getOwnPropertyDescriptor(obj, propertyName);
 
 例如：
 
-```js run
+```js
 let user = {
   name: "John"
 };
@@ -72,14 +72,14 @@ Object.defineProperty(obj, propertyName, descriptor)
 
 例如，这里创建了一个属性 `name`，该属性的所有标志都为 `false`：
 
-```js run
+```js
 let user = {};
 
-*!*
+
 Object.defineProperty(user, "name", {
   value: "John"
 });
-*/!*
+
 
 let descriptor = Object.getOwnPropertyDescriptor(user, 'name');
 
@@ -87,11 +87,11 @@ alert( JSON.stringify(descriptor, null, 2 ) );
 /*
 {
   "value": "John",
-*!*
+
   "writable": false,
   "enumerable": false,
   "configurable": false
-*/!*
+
 }
  */
 ```
@@ -104,40 +104,40 @@ alert( JSON.stringify(descriptor, null, 2 ) );
 
 让我们通过更改 `writable` 标志来把 `user.name` 设置为只读（`user.name` 不能被重新赋值）：
 
-```js run
+```js
 let user = {
   name: "John"
 };
 
 Object.defineProperty(user, "name", {
-*!*
+
   writable: false
-*/!*
+
 });
 
-*!*
+
 user.name = "Pete"; // Error: Cannot assign to read only property 'name'
-*/!*
+
 ```
 
 现在没有人可以改变我们 `user` 的 `name`，除非它们应用自己的 `defineProperty` 来覆盖我们的 `user` 的 `name`。
 
-```smart header="只在严格模式下会出现 Errors"
+只在严格模式下会出现 Errors"
 在非严格模式下，在对不可写的属性等进行写入操作时，不会出现错误。但是操作仍然不会成功。在非严格模式下，违反标志的行为（flag-violating action）只会被默默地忽略掉。
 ```
 
 这是相同的示例，但针对的是属性不存在的情况：
 
-```js run
+```js
 let user = { };
 
 Object.defineProperty(user, "name", {
-*!*
+
   value: "John",
   // 对于新属性，我们需要明确地列出哪些是 true
   enumerable: true,
   configurable: true
-*/!*
+
 });
 
 alert(user.name); // John
@@ -150,7 +150,7 @@ user.name = "Pete"; // Error
 
 通常，对象的内置 `toString` 是不可枚举的，它不会显示在 `for..in` 中。但是如果我们添加我们自己的 `toString`，那么默认情况下它将显示在 `for..in` 中，如下所示：
 
-```js run
+```js
 let user = {
   name: "John",
   toString() {
@@ -164,7 +164,7 @@ for (let key in user) alert(key); // name, toString
 
 如果我们不喜欢它，那么我们可以设置 `enumerable:false`。之后它就不会出现在 `for..in` 循环中了，就像内建的 `toString` 一样：
 
-```js run
+```js
 let user = {
   name: "John",
   toString() {
@@ -173,14 +173,14 @@ let user = {
 };
 
 Object.defineProperty(user, "toString", {
-*!*
+
   enumerable: false
-*/!*
+
 });
 
-*!*
+
 // 现在我们的 toString 消失了：
-*/!*
+
 for (let key in user) alert(key); // name
 ```
 
@@ -198,7 +198,7 @@ alert(Object.keys(user)); // name
 
 例如，`Math.PI` 是只读的、不可枚举和不可配置的：
 
-```js run
+```js
 let descriptor = Object.getOwnPropertyDescriptor(Math, 'PI');
 
 alert( JSON.stringify(descriptor, null, 2 ) );
@@ -213,7 +213,7 @@ alert( JSON.stringify(descriptor, null, 2 ) );
 ```
 因此，开发人员无法修改 `Math.PI` 的值或覆盖它。
 
-```js run
+```js
 Math.PI = 3; // Error
 
 // 删除 Math.PI 也不会起作用
@@ -229,7 +229,7 @@ Math.PI = 3; // Error
 
 在这里，我们将 `user.name` 设置为“永久密封”的常量：
 
-```js run
+```js
 let user = { };
 
 Object.defineProperty(user, "name", {
@@ -238,17 +238,17 @@ Object.defineProperty(user, "name", {
   configurable: false
 });
 
-*!*
+
 // 不能修改 user.name 或它的标志
 // 下面的所有操作都不起作用：
 //   user.name = "Pete"
 //   delete user.name
 //   defineProperty(user, "name", { value: "Pete" })
 Object.defineProperty(user, "name", {writable: true}); // Error
-*/!*
+
 ```
 
-```smart header="\"Non-configurable\" 并不意味着 \"non-writable\""
+\"Non-configurable\" 并不意味着 \"non-writable\""
 值得注意的例外情况：不可配置但可写的属性的值是可以被更改的。
 
 `configurable: false` 的思想是防止更改属性标志或删除属性标志，而不是更改它的值。

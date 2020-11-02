@@ -22,7 +22,7 @@ let formData = new FormData([form]);
 
 正如你所看到的，它几乎就是一行代码：
 
-```html run autorun
+```html autorun
 <form id="formElem">
   <input type="text" name="name" value="John">
   <input type="text" name="surname" value="Smith">
@@ -35,9 +35,9 @@ let formData = new FormData([form]);
 
     let response = await fetch('/article/formdata/post/user', {
       method: 'POST',
-*!*
+
       body: new FormData(formElem)
-*/!*
+
     });
 
     let result = await response.json();
@@ -68,7 +68,7 @@ let formData = new FormData([form]);
 
 我们也可以使用 `for..of` 循环迭代 formData 字段：
 
-```js run
+```js
 let formData = new FormData();
 formData.append('key1', 'value1');
 formData.append('key2', 'value2');
@@ -85,7 +85,7 @@ for(let [name, value] of formData) {
 
 这是具有这种形式的示例：
 
-```html run autorun
+```html autorun
 <form id="formElem">
   <input type="text" name="firstName" value="John">
   Picture: <input type="file" name="picture" accept="image/*">
@@ -98,9 +98,9 @@ for(let [name, value] of formData) {
 
     let response = await fetch('/article/formdata/post/user-avatar', {
       method: 'POST',
-*!*
+
       body: new FormData(formElem)
-*/!*
+
     });
 
     let result = await response.json();
@@ -120,7 +120,7 @@ for(let [name, value] of formData) {
 
 下面这个例子使用 `FormData` 将一个来自 `<canvas>` 的图片和一些其他字段一起作为一个表单提交：
 
-```html run autorun height="90"
+```html autorun height="90"
 <body style="margin:0">
   <canvas id="canvasElem" width="100" height="80" style="border:1px solid"></canvas>
 
@@ -136,11 +136,11 @@ for(let [name, value] of formData) {
     async function submit() {
       let imageBlob = await new Promise(resolve => canvasElem.toBlob(resolve, 'image/png'));
 
-*!*
+
       let formData = new FormData();
       formData.append("firstName", "John");
       formData.append("image", imageBlob, "image.png");
-*/!*    
+    
 
       let response = await fetch('/article/formdata/post/image-form', {
         method: 'POST',

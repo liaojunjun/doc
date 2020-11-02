@@ -7,7 +7,7 @@
 
 运行代码如下：
 
-```js run
+```js
 let reg = /\[(b|url|quote)\][\s\S]*?\[\/\1\]/g;
 
 let str = `

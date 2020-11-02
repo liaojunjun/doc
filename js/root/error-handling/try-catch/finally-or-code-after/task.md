@@ -14,9 +14,9 @@ importance: 5
     } catch (e) {
       handle errors
     } finally {
-    *!*
+    
       cleanup the working space
-    */!*
+    
     }
     ```
 2. 第二个代码片段，将清空工作空间的代码放在了 `try..catch` 之后：
@@ -28,9 +28,9 @@ importance: 5
       handle errors
     }
 
-    *!*
+    
     cleanup the working space
-    */!*
+    
     ```
 
 我们肯定需要在工作后进行清理，无论工作过程中是否有 error 都不影响。

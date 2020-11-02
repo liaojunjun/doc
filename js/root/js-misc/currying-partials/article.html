@@ -9,7 +9,7 @@
 <p>柯里化不会调用函数。它只是对函数进行转换。</p>
 <p>让我们先来看一个例子，以更好地理解我们正在讲的内容，然后再进行一个实际应用。</p>
 <p>我们将创建一个辅助函数 <code>curry(f)</code>，该函数将对两个参数的函数 <code>f</code> 执行柯里化。换句话说，对于两个参数的函数 <code>f(a, b)</code> 执行 <code>curry(f)</code> 会将其转换为以 <code>f(a)(b)</code> 形式运行的函数：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">curry</span>(<span class="hljs-params">f</span>) </span>{ <span class="hljs-comment">// curry(f) 执行柯里化转换</span>
   <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">a</span>) </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">b</span>) </span>{
@@ -17,7 +17,7 @@
     };
   };
 }
-*/!*
+
 
 <span class="hljs-comment">// 用法</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a, b</span>) </span>{

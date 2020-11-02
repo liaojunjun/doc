@@ -51,7 +51,7 @@
 
 在下面这个例子中，内部的 `&lt;div&gt;` 有 `&lt;main&gt;` 作为 `offsetParent`，并且 `offsetLeft/offsetTop` 让它从左上角位移（`180`）：
 
-```html run height=10
+```html height=10
 &lt;main style=&quot;position: relative&quot; id=&quot;main&quot;&gt;
   &lt;article&gt;
     &lt;div id=&quot;example&quot; style=&quot;position: absolute; left: 180px; top: 180px&quot;&gt;...&lt;/div&gt;
@@ -155,7 +155,7 @@ element.style.height = <span class="hljs-string">`<span class="hljs-subst">${ele
 
 那为什么不像这样用 `getComputedStyle` 读取元素的 width 呢？
 
-```js run
+```js
 let elem = document.body;
 
 alert( getComputedStyle(elem).width ); // 显示 elem 的 CSS width
@@ -166,13 +166,13 @@ alert( getComputedStyle(elem).width ); // 显示 elem 的 CSS width
 1. 首先，CSS `width/height` 取决于另一个属性：`box-sizing`，它定义了“什么是” CSS 宽度和高度。出于 CSS 的目的而对 `box-sizing` 进行的更改可能会破坏此类 JavaScript 操作。
 2. 其次，CSS 的 `width/height` 可能是 `auto`，例如内联（inline）元素：
 
-    ```html run
+    ```html
     &lt;span id=&quot;elem&quot;&gt;Hello!&lt;/span&gt;
 
     &lt;script&gt;
-    *!*
+    
       alert( getComputedStyle(elem).width ); // auto
-    */!*
+    
     &lt;/script&gt;
     ```
 

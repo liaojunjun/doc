@@ -57,10 +57,10 @@ n = <span class="hljs-number">12.345</span>;</code></pre>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> name = <span class="hljs-string">&quot;John&quot;</span>;
 
 <span class="hljs-comment">// 嵌入一个变量</span>
-alert( <span class="hljs-string">`Hello, *!*<span class="hljs-subst">${name}</span>*/!*!`</span> ); <span class="hljs-comment">// Hello, John!</span>
+alert( <span class="hljs-string">`Hello, <span class="hljs-subst">${name}</span>!`</span> ); <span class="hljs-comment">// Hello, John!</span>
 
 <span class="hljs-comment">// 嵌入一个表达式</span>
-alert( <span class="hljs-string">`the result is *!*<span class="hljs-subst">${<span class="hljs-number">1</span> + <span class="hljs-number">2</span>}</span>*/!*`</span> ); <span class="hljs-comment">// the result is 3</span></code></pre>
+alert( <span class="hljs-string">`the result is <span class="hljs-subst">${<span class="hljs-number">1</span> + <span class="hljs-number">2</span>}</span>`</span> ); <span class="hljs-comment">// the result is 3</span></code></pre>
 <p><code>${…}</code> 内的表达式会被计算，计算结果会成为字符串的一部分。可以在 <code>${…}</code> 内放置任何东西：诸如名为 <code>name</code> 的变量，或者诸如 <code>1 + 2</code> 的算数表达式，或者其他一些更复杂的。</p>
 <p>需要注意的是，这仅仅在反引号内有效，其他引号不允许这种嵌入。</p>
 <pre><code class="language-js">alert( <span class="hljs-string">&quot;the result is ${1 + 2}&quot;</span> ); <span class="hljs-comment">// the result is ${1 + 2}（使用双引号则不会计算 ${…} 中的内容）</span></code></pre>
@@ -127,17 +127,17 @@ alert(age); <span class="hljs-comment">// &quot;undefined&quot;</span></code></p
 
 <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">Symbol</span>(<span class="hljs-string">&quot;id&quot;</span>) <span class="hljs-comment">// &quot;symbol&quot;</span>
 
-*!*
+
 <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">Math</span> <span class="hljs-comment">// &quot;object&quot;  (1)</span>
-*/!*
 
-*!*
+
+
 <span class="hljs-keyword">typeof</span> <span class="hljs-literal">null</span> <span class="hljs-comment">// &quot;object&quot;  (2)</span>
-*/!*
 
-*!*
+
+
 <span class="hljs-keyword">typeof</span> alert <span class="hljs-comment">// &quot;function&quot;  (3)</span>
-*/!*</code></pre>
+</code></pre>
 <p>最后三行可能需要额外的说明：</p>
 <ol>
 <li><code>Math</code> 是一个提供数学运算的内建 <code>object</code>。我们会在 <a href="info:number">info:number</a> 一节中学习它。此处仅作为一个 <code>object</code> 的示例。</li>

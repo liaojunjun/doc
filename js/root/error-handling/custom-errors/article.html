@@ -20,9 +20,9 @@
   }
 }</span></code></pre>
 <p>现在让我们从其中继承 <code>ValidationError</code>，并尝试进行运行：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ValidationError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span> </span>{
-*/!*
+
   <span class="hljs-keyword">constructor</span>(message) {
     <span class="hljs-built_in">super</span>(message); <span class="hljs-comment">// (1)</span>
     <span class="hljs-built_in">this</span>.name = <span class="hljs-string">&quot;ValidationError&quot;</span>; <span class="hljs-comment">// (2)</span>
@@ -70,9 +70,9 @@
   <span class="hljs-keyword">let</span> user = readUser(<span class="hljs-string">&#x27;{ &quot;age&quot;: 25 }&#x27;</span>);
 } <span class="hljs-keyword">catch</span> (err) {
   <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> ValidationError) {
-*!*
+
     alert(<span class="hljs-string">&quot;Invalid data: &quot;</span> + err.message); <span class="hljs-comment">// Invalid data: No field: name</span>
-*/!*
+
   } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span>) { <span class="hljs-comment">// (*)</span>
     alert(<span class="hljs-string">&quot;JSON Syntax Error: &quot;</span> + err.message);
   } <span class="hljs-keyword">else</span> {
@@ -97,7 +97,7 @@
   }
 }
 
-*!*
+
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PropertyRequiredError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ValidationError</span> </span>{
   <span class="hljs-keyword">constructor</span>(property) {
     <span class="hljs-built_in">super</span>(<span class="hljs-string">&quot;No property: &quot;</span> + property);
@@ -105,7 +105,7 @@
     <span class="hljs-built_in">this</span>.property = property;
   }
 }
-*/!*
+
 
 <span class="hljs-comment">// 用法</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readUser</span>(<span class="hljs-params">json</span>) </span>{
@@ -127,11 +127,11 @@
   <span class="hljs-keyword">let</span> user = readUser(<span class="hljs-string">&#x27;{ &quot;age&quot;: 25 }&#x27;</span>);
 } <span class="hljs-keyword">catch</span> (err) {
   <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> ValidationError) {
-*!*
+
     alert(<span class="hljs-string">&quot;Invalid data: &quot;</span> + err.message); <span class="hljs-comment">// Invalid data: No property: name</span>
     alert(err.name); <span class="hljs-comment">// PropertyRequiredError</span>
     alert(err.property); <span class="hljs-comment">// name</span>
-*/!*
+
   } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span>) {
     alert(<span class="hljs-string">&quot;JSON Syntax Error: &quot;</span> + err.message);
   } <span class="hljs-keyword">else</span> {
@@ -145,9 +145,9 @@
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Error</span> </span>{
   <span class="hljs-keyword">constructor</span>(message) {
     <span class="hljs-built_in">super</span>(message);
-*!*
+
     <span class="hljs-built_in">this</span>.name = <span class="hljs-built_in">this</span>.constructor.name;
-*/!*
+
   }
 }
 
@@ -218,25 +218,25 @@ alert( <span class="hljs-keyword">new</span> PropertyRequiredError(<span class="
   <span class="hljs-keyword">try</span> {
     user = <span class="hljs-built_in">JSON</span>.parse(json);
   } <span class="hljs-keyword">catch</span> (err) {
-*!*
+
     <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span>) {
       <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ReadError(<span class="hljs-string">&quot;Syntax Error&quot;</span>, err);
     } <span class="hljs-keyword">else</span> {
       <span class="hljs-keyword">throw</span> err;
     }
-*/!*
+
   }
 
   <span class="hljs-keyword">try</span> {
     validateUser(user);
   } <span class="hljs-keyword">catch</span> (err) {
-*!*
+
     <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> ValidationError) {
       <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ReadError(<span class="hljs-string">&quot;Validation Error&quot;</span>, err);
     } <span class="hljs-keyword">else</span> {
       <span class="hljs-keyword">throw</span> err;
     }
-*/!*
+
   }
 
 }
@@ -245,11 +245,11 @@ alert( <span class="hljs-keyword">new</span> PropertyRequiredError(<span class="
   readUser(<span class="hljs-string">&#x27;{bad json}&#x27;</span>);
 } <span class="hljs-keyword">catch</span> (e) {
   <span class="hljs-keyword">if</span> (e <span class="hljs-keyword">instanceof</span> ReadError) {
-*!*
+
     alert(e);
     <span class="hljs-comment">// Original error: SyntaxError: Unexpected token b in JSON at position 1</span>
     alert(<span class="hljs-string">&quot;Original error: &quot;</span> + e.cause);
-*/!*
+
   } <span class="hljs-keyword">else</span> {
     <span class="hljs-keyword">throw</span> e;
   }

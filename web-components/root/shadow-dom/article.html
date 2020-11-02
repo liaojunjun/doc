@@ -73,9 +73,9 @@ alert(elem.shadowRoot.host === elem); <span class="hljs-comment">// true</span><
 </ol>
 <p>比如：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span>
-*!*
+
   /* 文档样式对 #elem 内的 shadow tree 无作用 (1) */
-*/!*
+
   p { color: red; }
 <span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
 
@@ -83,17 +83,17 @@ alert(elem.shadowRoot.host === elem); <span class="hljs-comment">// true</span><
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
   elem.attachShadow({mode: &#x27;open&#x27;});
-*!*
+
     // shadow tree 有自己的样式 (2)
-*/!*
+
   elem.shadowRoot.innerHTML = `
     <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-tag">p</span> { <span class="hljs-attribute">font-weight</span>: bold; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Hello, John!<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
   `;
 
-*!*
+
   // <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span> 只对 shadow tree 里面的查询可见 (3)
-*/!*
+
   alert(document.querySelectorAll(&#x27;p&#x27;).length); // 0
   alert(elem.shadowRoot.querySelectorAll(&#x27;p&#x27;).length); // 1
 </span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>  </code></pre>

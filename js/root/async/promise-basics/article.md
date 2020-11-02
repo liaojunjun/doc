@@ -46,12 +46,12 @@ let promise = new Promise(function(resolve, reject) {
 
 下面是一个 promise 构造器和一个简单的 executor 函数，该 executor 函数具有包含时间（即 `setTimeout`）的“生产者代码”：
 
-```js run
+```js
 let promise = new Promise(function(resolve, reject) {
   // 当 promise 被构造完成时，自动执行此函数
 
   // 1 秒后发出工作已经被完成的信号，并带有结果 "done"
-  setTimeout(() => *!*resolve("done")*/!*, 1000);
+  setTimeout(() => resolve("done"), 1000);
 });
 ```
 
@@ -71,7 +71,7 @@ let promise = new Promise(function(resolve, reject) {
 ```js
 let promise = new Promise(function(resolve, reject) {
   // 1 秒后发出工作已经被完成的信号，并带有 error
-  setTimeout(() => *!*reject(new Error("Whoops!"))*/!*, 1000);
+  setTimeout(() => reject(new Error("Whoops!")), 1000);
 });
 ```
 
@@ -83,16 +83,16 @@ let promise = new Promise(function(resolve, reject) {
 
 与最初的 "pending" promise 相反，一个 resolved 或 rejected 的 promise 都会被称为 "settled"。
 
-````smart header="这儿只能有一个结果或一个 error"
+`这儿只能有一个结果或一个 error"
 executor 只能调用一个 `resolve` 或一个 `reject`。任何状态的更改都是最终的。
 
 所有其他的再对 `resolve` 和 `reject` 的调用都会被忽略：
 
 ```js
 let promise = new Promise(function(resolve, reject) {
-*!*
+
   resolve("done");
-*/!*
+
 
   reject(new Error("…")); // 被忽略
   setTimeout(() => resolve("…")); // 被忽略
@@ -104,11 +104,11 @@ let promise = new Promise(function(resolve, reject) {
 并且，`resolve/reject` 只需要一个参数（或不包含任何参数），并且将忽略额外的参数。
 ````
 
-```smart header="以 `Error` 对象 reject"
+以 `Error` 对象 reject"
 如果什么东西出了问题， executor 应该调用 `reject`。这可以使用任何类型的参数来完成（就像 `resolve` 一样）。但是建议使用 `Error` 对象（或继承自 `Error` 的对象）。这样做的理由很快就会显而易见。
 ```
 
-````smart header="Resolve/reject 可以立即进行"
+`Resolve/reject 可以立即进行"
 实际上，executor 通常是异步执行某些操作，并在一段时间后调用 `resolve/reject`，但这不是必须的。我们还可以立即调用 `resolve` 或 `reject`，就像这样：
 
 ```js
@@ -123,7 +123,7 @@ let promise = new Promise(function(resolve, reject) {
 这挺好。我们立即就有了一个 resolved 的 promise。
 ````
 
-```smart header="`state` 和 `result` 都是内部的"
+`state` 和 `result` 都是内部的"
 Promise 对象的 `state` 和 `result` 属性都是内部的。我们无法直接访问它们。但我们可以对它们使用 `.then`/`.catch`/`.finally` 方法。我们在下面对这些方法进行了描述。
 ```
 
@@ -139,8 +139,8 @@ Promise 对象充当的是 executor（“生产者代码”或“歌手”）和
 
 ```js
 promise.then(
-  function(result) { *!*/* handle a successful result */*/!* },
-  function(error) { *!*/* handle an error */*/!* }
+  function(result) { /* handle a successful result */ },
+  function(error) { /* handle an error */ }
 );
 ```
 
@@ -150,16 +150,16 @@ promise.then(
 
 例如，以下是对成功 resolved 的 promise 做出的反应：
 
-```js run
+```js
 let promise = new Promise(function(resolve, reject) {
   setTimeout(() => resolve("done!"), 1000);
 });
 
 // resolve 运行 .then 中的第一个函数
 promise.then(
-*!*
+
   result => alert(result), // 1 秒后显示 "done!"
-*/!*
+
   error => alert(error) // 不运行
 );
 ```
@@ -168,7 +168,7 @@ promise.then(
 
 在 reject 的情况下，运行第二个：
 
-```js run
+```js
 let promise = new Promise(function(resolve, reject) {
   setTimeout(() => reject(new Error("Whoops!")), 1000);
 });
@@ -176,22 +176,22 @@ let promise = new Promise(function(resolve, reject) {
 // reject 运行 .then 中的第二个函数
 promise.then(
   result => alert(result), // 不运行
-*!*
+
   error => alert(error) // 1 秒后显示 "Error: Whoops!"
-*/!*
+
 );
 ```
 
 如果我们只对成功完成的情况感兴趣，那么我们可以只为 `.then` 提供一个函数参数：
 
-```js run
+```js
 let promise = new Promise(resolve => {
   setTimeout(() => resolve("done!"), 1000);
 });
 
-*!*
+
 promise.then(alert); // 1 秒后显示 "done!"
-*/!*
+
 ```
 
 ### catch
@@ -199,15 +199,15 @@ promise.then(alert); // 1 秒后显示 "done!"
 如果我们只对 error 感兴趣，那么我们可以使用 `null` 作为第一个参数：`.then(null, errorHandlingFunction)`。或者我们也可以使用 `.catch(errorHandlingFunction)`，其实是一样的：
 
 
-```js run
+```js
 let promise = new Promise((resolve, reject) => {
   setTimeout(() => reject(new Error("Whoops!")), 1000);
 });
 
-*!*
+
 // .catch(f) 与 promise.then(null, f) 一样
 promise.catch(alert); // 1 秒后显示 "Error: Whoops!"
-*/!*
+
 ```
 
 `.catch(f)` 调用是 `.then(null, f)` 的完全的模拟，它只是一个简写形式。
@@ -226,10 +226,10 @@ promise.catch(alert); // 1 秒后显示 "Error: Whoops!"
 new Promise((resolve, reject) => {
   /* 做一些需要时间的事儿，然后调用 resolve/reject */
 })
-*!*
+
   // 在 promise 被 settled 时运行，无论成功与否
   .finally(() => stop loading indicator)
-*/!*
+
   .then(result => show result, err => show error)
 ```
 
@@ -239,7 +239,7 @@ new Promise((resolve, reject) => {
 2. `finally` 处理程序将结果和 error 传递给下一个处理程序。
 
     例如，在这儿结果被从 `finally` 传递给了 `then`：
-    ```js run
+    ```js
     new Promise((resolve, reject) => {
       setTimeout(() => resolve("result"), 2000)
     })
@@ -249,7 +249,7 @@ new Promise((resolve, reject) => {
 
     在这儿，promise 中有一个 error，这个 error 被从 `finally` 传递给了 `catch`：
 
-    ```js run
+    ```js
     new Promise((resolve, reject) => {
       throw new Error("error");
     })
@@ -263,10 +263,10 @@ new Promise((resolve, reject) => {
 
 3. 最后，但并非最不重要的一点是，`.finally(f)` 是比 `.then(f, f)` 更为方便的语法：无需重复函数 `f`。
 
-````smart header="在 settled 的 promise 上，`then` 会立即运行"
+`在 settled 的 promise 上，`then` 会立即运行"
 如果 promise 为 pending 状态，`.then/catch/finally` 处理程序（handler）将等待它。否则，如果 promise 已经是 settled 状态，它们就会立即执行：
 
-```js run
+```js
 // the promise becomes resolved immediately upon creation
 let promise = new Promise(resolve => resolve("done!"));
 
@@ -302,7 +302,7 @@ function loadScript(src, callback) {
 
 新函数 `loadScript` 将不需要回调。取而代之的是，它将创建并返回一个在加载完成时解析（resolve）的 promise 对象。外部代码可以使用 `.then` 向其添加处理程序（订阅函数）：
 
-```js run
+```js
 function loadScript(src) {
   return new Promise(function(resolve, reject) {
     let script = document.createElement('script');
@@ -318,7 +318,7 @@ function loadScript(src) {
 
 用法：
 
-```js run
+```js
 let promise = loadScript("https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js");
 
 promise.then(

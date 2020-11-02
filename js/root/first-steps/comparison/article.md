@@ -22,7 +22,7 @@
 
 示例：
 
-```js run
+```js
 alert( 2 > 1 );  // true（正确）
 alert( 2 == 1 ); // false（错误）
 alert( 2 != 1 ); // true（正确）
@@ -30,7 +30,7 @@ alert( 2 != 1 ); // true（正确）
 
 和其他类型的值一样，比较的结果可以被赋值给任意变量：
 
-```js run
+```js
 let result = 5 > 4; // 把比较的结果赋值给 result
 alert( result ); // true
 ```
@@ -43,7 +43,7 @@ alert( result ); // true
 
 例如：
 
-```js run
+```js
 alert( 'Z' > 'A' ); // true
 alert( 'Glow' > 'Glee' ); // true
 alert( 'Bee' > 'Be' ); // true
@@ -63,7 +63,7 @@ alert( 'Bee' > 'Be' ); // true
 2. `l` 和 `l` 相等。
 3. `o` 比 `e` 大，算法停止，第一个字符串大于第二个。
 
-```smart header="非真正的字典顺序，而是 Unicode 编码顺序"
+非真正的字典顺序，而是 Unicode 编码顺序"
 在上面的算法中，比较大小的逻辑与字典或电话簿中的排序很像，但也不完全相同。
 
 比如说，字符串比较对字母大小写是敏感的。大写的 `"A"` 并不等于小写的 `"a"`。哪一个更大呢？实际上小写的 `"a"` 更大。这是因为在 JavaScript 使用的内部编码表中（Unicode），小写字母的字符索引值更大。我们会在 <info:string> 这章讨论更多关于字符串的细节。
@@ -75,7 +75,7 @@ alert( 'Bee' > 'Be' ); // true
 
 例如：
 
-```js run
+```js
 alert( '2' > 1 ); // true，字符串 '2' 会被转化为数字 2
 alert( '01' == 1 ); // true，字符串 '01' 会被转化为数字 1
 ```
@@ -84,12 +84,12 @@ alert( '01' == 1 ); // true，字符串 '01' 会被转化为数字 1
 
 例如：
 
-```js run
+```js
 alert( true == 1 ); // true
 alert( false == 0 ); // true
 ```
 
-````smart header="一个有趣的现象"
+`一个有趣的现象"
 有时候，以下两种情况会同时发生：
 
 - 若直接比较两个值，其结果是相等的。
@@ -97,7 +97,7 @@ alert( false == 0 ); // true
 
 例如：
 
-```js run
+```js
 let a = 0;
 alert( Boolean(a) ); // false
 
@@ -114,13 +114,13 @@ alert(a == b); // true!
 
 普通的相等性检查 `==` 存在一个问题，它不能区分出 `0` 和 `false`：
 
-```js run
+```js
 alert( 0 == false ); // true
 ```
 
 也同样无法区分空字符串和 `false`：
 
-```js run
+```js
 alert( '' == false ); // true
 ```
 
@@ -134,7 +134,7 @@ alert( '' == false ); // true
 
 让我们试试：
 
-```js run
+```js
 alert( 0 === false ); // false，因为被比较值的数据类型不同
 ```
 
@@ -149,14 +149,14 @@ alert( 0 === false ); // false，因为被比较值的数据类型不同
 当使用严格相等 `===` 比较二者时 
 : 它们不相等，因为它们属于不同的类型。
 
-    ```js run
+    ```js
     alert( null === undefined ); // false
     ```
 
 当使用非严格相等 `==` 比较二者时
 : JavaScript 存在一个特殊的规则，会判定它们相等。它们俩就像“一对恋人”，仅仅等于对方而不等于其他任何的值（只在非严格相等下成立）。
 
-    ```js run
+    ```js
     alert( null == undefined ); // true
     ```
 
@@ -169,10 +169,10 @@ alert( 0 === false ); // false，因为被比较值的数据类型不同
 
 通过比较 `null` 和 0 可得：
 
-```js run
+```js
 alert( null > 0 );  // (1) false
 alert( null == 0 ); // (2) false
-alert( null >= 0 ); // (3) *!*true*/!*
+alert( null >= 0 ); // (3) true
 ```
 
 是的，上面的结果完全打破了你对数学的认识。在最后一行代码显示“`null` 大于等于 0”的情况下，前两行代码中一定会有一个是正确的，然而事实表明它们的结果都是 false。
@@ -185,7 +185,7 @@ alert( null >= 0 ); // (3) *!*true*/!*
 
 `undefined` 不应该被与其他值进行比较：
 
-```js run
+```js
 alert( undefined > 0 ); // false (1)
 alert( undefined < 0 ); // false (2)
 alert( undefined == 0 ); // false (3)

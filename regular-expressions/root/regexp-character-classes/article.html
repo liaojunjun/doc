@@ -78,7 +78,7 @@ alert( <span class="hljs-string">&quot;CS 4&quot;</span>.match(regexp) ); <span 
 
 幸运的是，有一种替代方法可以在任何地方使用。我们可以使用诸如 `pattern:[\s\S]` 之类的正则表达式来匹配“任何字符”。
 
-```js run
+```js
 alert( &quot;A\nB&quot;.match(/A[\s\S]B/) ); // A\nB (match!)
 ```
 
@@ -91,13 +91,13 @@ alert( &quot;A\nB&quot;.match(/A[\s\S]B/) ); // A\nB (match!)
 
 让我们尝试查找由连字符（-）分隔的数字：
 
-```js run
+```js
 alert( &quot;1 - 5&quot;.match(/\d-\d/) ); // null, no match!
 ```
 
 让我们修复一下，在正则表达式中添加空格：\ d-\ d`：
 
-```js run
+```js
 alert( &quot;1 - 5&quot;.match(/\d - \d/) ); // 1 - 5, now it works
 // or we can use \s class:
 alert( &quot;1 - 5&quot;.match(/\d\s-\s\d/) ); // 1 - 5, also works

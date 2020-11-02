@@ -2,9 +2,9 @@
 <p>我们可以把一个方法赋值给类的函数本身，而不是赋给它的 <code>&quot;prototype&quot;</code>。这样的方法被称为 <strong>静态的（static）</strong>。</p>
 <p>在一个类中，它们以 <code>static</code> 关键字开头，如下所示：</p>
 <pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
-*!*
+
   <span class="hljs-keyword">static</span> staticMethod() {
-*/!*
+
     alert(<span class="hljs-built_in">this</span> === User);
   }
 }
@@ -27,11 +27,11 @@ User.staticMethod(); <span class="hljs-comment">// true</span></code></pre>
     <span class="hljs-built_in">this</span>.date = date;
   }
 
-*!*
+
   <span class="hljs-keyword">static</span> compare(articleA, articleB) {
     <span class="hljs-keyword">return</span> articleA.date - articleB.date;
   }
-*/!*
+
 }
 
 <span class="hljs-comment">// 用法</span>
@@ -41,9 +41,9 @@ User.staticMethod(); <span class="hljs-comment">// true</span></code></pre>
   <span class="hljs-keyword">new</span> Article(<span class="hljs-string">&quot;JavaScript&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2019</span>, <span class="hljs-number">11</span>, <span class="hljs-number">1</span>))
 ];
 
-*!*
+
 articles.sort(Article.compare);
-*/!*
+
 
 alert( articles[<span class="hljs-number">0</span>].title ); <span class="hljs-comment">// CSS</span></code></pre>
 <p>这里 <code>Article.compare</code> 代表“上面的”文章，意思是比较它们。它不是文章的方法，而是整个 class 的方法。</p>
@@ -61,12 +61,12 @@ alert( articles[<span class="hljs-number">0</span>].title ); <span class="hljs-c
     <span class="hljs-built_in">this</span>.date = date;
   }
 
-*!*
+
   <span class="hljs-keyword">static</span> createTodays() {
     <span class="hljs-comment">// 记住 this = Article</span>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">this</span>(<span class="hljs-string">&quot;Today&#x27;s digest&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>());
   }
-*/!*
+
 }
 
 <span class="hljs-keyword">let</span> article = Article.createTodays();
@@ -98,16 +98,16 @@ alert( Article.publisher ); <span class="hljs-comment">// Levi Ding</span></code
     <span class="hljs-built_in">this</span>.name = name;
   }
 
-  run(speed = <span class="hljs-number">0</span>) {
+ (speed = <span class="hljs-number">0</span>) {
     <span class="hljs-built_in">this</span>.speed += speed;
     alert(<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> runs with speed <span class="hljs-subst">${<span class="hljs-built_in">this</span>.speed}</span>.`</span>);
   }
 
-*!*
+
   <span class="hljs-keyword">static</span> compare(animalA, animalB) {
     <span class="hljs-keyword">return</span> animalA.speed - animalB.speed;
   }
-*/!*
+
 
 }
 
@@ -123,9 +123,9 @@ alert( Article.publisher ); <span class="hljs-comment">// Levi Ding</span></code
   <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;Black Rabbit&quot;</span>, <span class="hljs-number">5</span>)
 ];
 
-*!*
+
 rabbits.sort(Rabbit.compare);
-*/!*
+
 
 rabbits[<span class="hljs-number">0</span>].run(); <span class="hljs-comment">// Black Rabbit runs with speed 5.</span>
 

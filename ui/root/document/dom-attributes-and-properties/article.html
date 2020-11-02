@@ -37,10 +37,10 @@ alert(<span class="hljs-built_in">document</span>.body.myData.title); <span clas
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;test&quot;</span> <span class="hljs-attr">something</span>=<span class="hljs-string">&quot;non-standard&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
     alert(<span class="hljs-built_in">document</span>.body.id); <span class="hljs-comment">// test</span>
-*!*
+
     <span class="hljs-comment">// 非标准的特性没有获得对应的属性</span>
     alert(<span class="hljs-built_in">document</span>.body.something); <span class="hljs-comment">// undefined</span>
-*/!*
+
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
 <p>请注意，一个元素的标准的特性对于另一个元素可能是未知的。例如 <code>&quot;type&quot;</code> 是 <code>&lt;input&gt;</code> 的一个标准的特性（<a href="https://html.spec.whatwg.org/#htmlinputelement">HTMLInputElement</a>），但对于 <code>&lt;body&gt;</code>（<a href="https://html.spec.whatwg.org/#htmlbodyelement">HTMLBodyElement</a>）来说则不是。规范中对相应元素类的标准的属性进行了详细的描述。</p>
@@ -49,9 +49,9 @@ alert(<span class="hljs-built_in">document</span>.body.myData.title); <span clas
   <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;input&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
     alert(input.type); <span class="hljs-comment">// text</span>
-*!*
+
     alert(body.type); <span class="hljs-comment">// undefined：DOM 属性没有被创建，因为它不是一个标准的特性</span>
-*/!*
+
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
 <p>所以，如果一个特性不是标准的，那么就没有相对应的 DOM 属性。那我们有什么方法来访问这些特性吗？</p>
@@ -67,9 +67,9 @@ alert(<span class="hljs-built_in">document</span>.body.myData.title); <span clas
 <p>下面是一个读取非标准的特性的示例：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">something</span>=<span class="hljs-string">&quot;non-standard&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
     alert(<span class="hljs-built_in">document</span>.body.getAttribute(<span class="hljs-string">&#x27;something&#x27;</span>)); <span class="hljs-comment">// 非标准的</span>
-*/!*
+
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
 <p>HTML 特性有以下几个特征：</p>
@@ -126,11 +126,11 @@ alert(<span class="hljs-built_in">document</span>.body.myData.title); <span clas
   input.setAttribute(<span class="hljs-string">&#x27;value&#x27;</span>, <span class="hljs-string">&#x27;text&#x27;</span>);
   alert(input.value); <span class="hljs-comment">// text</span>
 
-*!*
+
   <span class="hljs-comment">// 这个操作无效，属性 =&gt; 特性</span>
   input.value = <span class="hljs-string">&#x27;newValue&#x27;</span>;
   alert(input.getAttribute(<span class="hljs-string">&#x27;value&#x27;</span>)); <span class="hljs-comment">// text（没有被更新！）</span>
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>在上面这个例子中：</p>
 <ul>
@@ -174,9 +174,9 @@ alert(<span class="hljs-built_in">document</span>.body.myData.title); <span clas
 <p>有时，非标准的特性常常用于将自定义的数据从 HTML 传递到 JavaScript，或者用于为 JavaScript “标记” HTML 元素。</p>
 <p>像这样：</p>
 <pre><code class="language-html"><span class="hljs-comment">&lt;!-- 标记这个 div 以在这显示 &quot;name&quot; --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">div</span> *!*<span class="hljs-attr">show-info</span>=<span class="hljs-string">&quot;name&quot;</span>*/!*&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">show-info</span>=<span class="hljs-string">&quot;name&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-comment">&lt;!-- 标记这个 div 以在这显示 &quot;age&quot; --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">div</span> *!*<span class="hljs-attr">show-info</span>=<span class="hljs-string">&quot;age&quot;</span>*/!*&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">show-info</span>=<span class="hljs-string">&quot;age&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-comment">// 这段代码找到带有标记的元素，并显示需要的内容</span>

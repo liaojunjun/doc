@@ -10,7 +10,7 @@ importance: 5
 
 为什么会这样？修正它。结果应该是 `3`。
 
-```js run
+```js
 let a = prompt("First number?", 1);
 let b = prompt("Second number?", 2);
 

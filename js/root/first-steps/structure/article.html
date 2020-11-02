@@ -25,7 +25,7 @@ alert(<span class="hljs-string">&#x27;World&#x27;</span>)</code></pre>
 <p>这种情况下发生的错误是很难被找到和解决的。</p>
 <pre><code class="language-smart">如果你好奇地想知道一个这种错误的具体例子，那你可以看看下面这段代码：
 
-```js run
+```js
 [1, 2].forEach(alert)
 ```
 
@@ -33,7 +33,7 @@ alert(<span class="hljs-string">&#x27;World&#x27;</span>)</code></pre>
 
 现在我们在代码前面插入一个 `alert` 语句，并且不加分号：
 
-```js run no-beautify
+```js no-beautify
 alert(&quot;There will be an error&quot;)
 
 [1, 2].forEach(alert)
@@ -42,7 +42,7 @@ alert(&quot;There will be an error&quot;)
 现在，如果我们运行代码，只有第一个 `alert` 语句的内容被显示了出来，随后我们收到了一个错误！
 
 但是，如果我们在第一个 `alert` 语句末尾加上一个分号，就工作正常了：
-```js run
+```js
 alert(&quot;All fine now&quot;);
 
 [1, 2].forEach(alert)
@@ -54,7 +54,7 @@ alert(&quot;All fine now&quot;);
 
 所以，因为没有自动插入分号，第一个例子中的代码被视为了一条简单的语句，我们从引擎看到的是这样的：
 
-```js run no-beautify
+```js no-beautify
 alert(&quot;There will be an error&quot;)[1, 2].forEach(alert)
 ```
 
@@ -88,7 +88,7 @@ alert(<span class="hljs-string">&#x27;World&#x27;</span>);</code></pre>
 
 下面这段代码报错而无法执行：
 
-```js run no-beautify
+```js no-beautify
 /*
   /* 嵌套注释 ?!? */
 */

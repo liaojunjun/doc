@@ -6,16 +6,16 @@
 
 我们可以像这样实现转换：
 
-```js run
+```js
 let user = {
   name: "John",
   age: 30,
 
-*!*
+
   toString() {
     return `{name: "${this.name}", age: ${this.age}}`;
   }
-*/!*
+
 };
 
 alert(user); // {name: "John", age: 30}
@@ -35,7 +35,7 @@ JavaScript 提供了如下方法：
 - `JSON.parse` 将 JSON 转换回对象。
 
 例如，在这里我们 `JSON.stringify` 一个 `student` 对象：
-```js run
+```js
 let student = {
   name: 'John',
   age: 30,
@@ -44,14 +44,14 @@ let student = {
   wife: null
 };
 
-*!*
+
 let json = JSON.stringify(student);
-*/!*
+
 
 alert(typeof json); // we've got a string!
 
 alert(json);
-*!*
+
 /* JSON 编码的对象：
 {
   "name": "John",
@@ -61,7 +61,7 @@ alert(json);
   "wife": null
 }
 */
-*/!*
+
 ```
 
 方法 `JSON.stringify(student)` 接收对象并将其转换为字符串。
@@ -88,7 +88,7 @@ JSON 支持以下数据类型：
 
 例如：
 
-```js run
+```js
 // 数字在 JSON 还是数字
 alert( JSON.stringify(1) ) // 1
 
@@ -108,7 +108,7 @@ JSON 是语言无关的纯数据规范，因此一些特定于 JavaScript 的对
 - Symbol 类型的属性。
 - 存储 `undefined` 的属性。
 
-```js run
+```js
 let user = {
   sayHi() { // 被忽略
     alert("Hello");
@@ -126,15 +126,15 @@ alert( JSON.stringify(user) ); // {}（空对象）
 
 例如：
 
-```js run
+```js
 let meetup = {
   title: "Conference",
-*!*
+
   room: {
     number: 23,
     participants: ["john", "ann"]
   }
-*/!*
+
 };
 
 alert( JSON.stringify(meetup) );
@@ -150,7 +150,7 @@ alert( JSON.stringify(meetup) );
 
 例如：
 
-```js run
+```js
 let room = {
   number: 23
 };
@@ -163,9 +163,9 @@ let meetup = {
 meetup.place = room;       // meetup 引用了 room
 room.occupiedBy = meetup; // room 引用了 meetup
 
-*!*
+
 JSON.stringify(meetup); // Error: Converting circular structure to JSON
-*/!*
+
 ```
 
 在这里，转换失败了，因为循环引用：`room.occupiedBy` 引用了 `meetup`，`meetup.place` 引用了 `room`：
@@ -196,7 +196,7 @@ space
 
 例如：
 
-```js run
+```js
 let room = {
   number: 23
 };
@@ -209,7 +209,7 @@ let meetup = {
 
 room.occupiedBy = meetup; // room 引用了 meetup
 
-alert( JSON.stringify(meetup, *!*['title', 'participants']*/!*) );
+alert( JSON.stringify(meetup, ['title', 'participants']) );
 // {"title":"Conference","participants":[{},{}]}
 ```
 
@@ -217,7 +217,7 @@ alert( JSON.stringify(meetup, *!*['title', 'participants']*/!*) );
 
 让我们包含除了会导致循环引用的 `room.occupiedBy` 之外的所有属性：
 
-```js run
+```js
 let room = {
   number: 23
 };
@@ -230,7 +230,7 @@ let meetup = {
 
 room.occupiedBy = meetup; // room 引用了 meetup
 
-alert( JSON.stringify(meetup, *!*['title', 'participants', 'place', 'name', 'number']*/!*) );
+alert( JSON.stringify(meetup, ['title', 'participants', 'place', 'name', 'number']) );
 /*
 {
   "title":"Conference",
@@ -248,7 +248,7 @@ alert( JSON.stringify(meetup, *!*['title', 'participants', 'place', 'name', 'num
 
 在我们的例子中，我们可以为 `occupiedBy` 以外的所有内容按原样返回 `value`。为了 `occupiedBy`，下面的代码返回 `undefined`：
 
-```js run
+```js
 let room = {
   number: 23
 };
@@ -294,7 +294,7 @@ number:       23
 
 这里的 `space = 2` 告诉 JavaScript 在多行中显示嵌套的对象，对象内部缩紧 2 个空格：
 
-```js run
+```js
 let user = {
   name: "John",
   age: 25,
@@ -336,7 +336,7 @@ alert(JSON.stringify(user, null, 2));
 
 例如：
 
-```js run
+```js
 let room = {
   number: 23
 };
@@ -351,9 +351,9 @@ alert( JSON.stringify(meetup) );
 /*
   {
     "title":"Conference",
-*!*
+
     "date":"2017-01-01T00:00:00.000Z",  // (1)
-*/!*
+
     "room": {"number":23}               // (2)
   }
 */
@@ -363,14 +363,14 @@ alert( JSON.stringify(meetup) );
 
 现在让我们为对象 `room` 添加一个自定义的 `toJSON`：
 
-```js run
+```js
 let room = {
   number: 23,
-*!*
+
   toJSON() {
     return this.number;
   }
-*/!*
+
 };
 
 let meetup = {
@@ -378,17 +378,17 @@ let meetup = {
   room
 };
 
-*!*
+
 alert( JSON.stringify(room) ); // 23
-*/!*
+
 
 alert( JSON.stringify(meetup) );
 /*
   {
     "title":"Conference",
-*!*
+
     "room": 23
-*/!*
+
   }
 */
 ```
@@ -413,7 +413,7 @@ reviver
 
 例如：
 
-```js run
+```js
 // 字符串化数组
 let numbers = "[0, 1, 2, 3]";
 
@@ -424,7 +424,7 @@ alert( numbers[1] ); // 1
 
 对于嵌套对象：
 
-```js run
+```js
 let userData = '{ "name": "John", "age": 35, "isAdmin": false, "friends": [0,1,2,3] }';
 
 let user = JSON.parse(userData);
@@ -438,10 +438,10 @@ JSON 可能会非常复杂，对象和数组可以包含其他对象和数组。
 
 ```js
 let json = `{
-  *!*name*/!*: "John",                     // 错误：属性名没有双引号
-  "surname": *!*'Smith'*/!*,               // 错误：值使用的是单引号（必须使用双引号）
-  *!*'isAdmin'*/!*: false                  // 错误：键使用的是单引号（必须使用双引号）
-  "birthday": *!*new Date(2000, 2, 3)*/!*, // 错误：不允许使用 "new"，只能是裸值
+  name: "John",                     // 错误：属性名没有双引号
+  "surname": 'Smith',               // 错误：值使用的是单引号（必须使用双引号）
+  'isAdmin': false                  // 错误：键使用的是单引号（必须使用双引号）
+  "birthday": new Date(2000, 2, 3), // 错误：不允许使用 "new"，只能是裸值
   "friends": [0,1,2,3]              // 这个没问题
 }`;
 ```
@@ -467,14 +467,14 @@ let str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
 
 让我们通过调用 `JSON.parse` 来完成：
 
-```js run
+```js
 let str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
 
 let meetup = JSON.parse(str);
 
-*!*
+
 alert( meetup.date.getDate() ); // Error!
-*/!*
+
 ```
 
 啊！报错了！
@@ -483,22 +483,22 @@ alert( meetup.date.getDate() ); // Error!
 
 让我们将 reviver 函数传递给 `JSON.parse` 作为第二个参数，该函数按照“原样”返回所有值，但是 `date` 会变成 `Date`：
 
-```js run
+```js
 let str = '{"title":"Conference","date":"2017-11-30T12:00:00.000Z"}';
 
-*!*
+
 let meetup = JSON.parse(str, function(key, value) {
   if (key == 'date') return new Date(value);
   return value;
 });
-*/!*
+
 
 alert( meetup.date.getDate() ); // 现在正常运行了！
 ```
 
 顺便说一下，这也适用于嵌套对象：
 
-```js run
+```js
 let schedule = `{
   "meetups": [
     {"title":"Conference","date":"2017-11-30T12:00:00.000Z"},
@@ -511,9 +511,9 @@ schedule = JSON.parse(schedule, function(key, value) {
   return value;
 });
 
-*!*
+
 alert( schedule.meetups[1].date.getDate() ); // 正常运行了！
-*/!*
+
 ```
 
 

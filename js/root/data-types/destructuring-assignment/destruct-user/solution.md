@@ -1,5 +1,5 @@
 
-```js run
+```js
 let user = {
   name: "John",
   years: 30

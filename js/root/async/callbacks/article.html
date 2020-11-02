@@ -29,18 +29,18 @@ loadScript(<span class="hljs-string">&#x27;/my/script.js&#x27;</span>);</code></
 <p>但如果我们在 <code>loadScript(…)</code> 调用后立即执行此操作，这将不会有效。</p>
 <pre><code class="language-js">loadScript(<span class="hljs-string">&#x27;/my/script.js&#x27;</span>); <span class="hljs-comment">// 这个脚本有 &quot;function newFunction() {…}&quot;</span>
 
-*!*
+
 newFunction(); <span class="hljs-comment">// 没有这个函数！</span>
-*/!*</code></pre>
+</code></pre>
 <p>自然情况下，浏览器可能没有时间加载脚本。到目前为止，<code>loadScript</code> 函数并没有提供跟踪加载完成的方法。脚本加载并最终运行，仅此而已。但我们希望了解脚本何时加载完成，以使用其中的新函数和变量。</p>
 <p>让我们添加一个 <code>callback</code> 函数作为 <code>loadScript</code> 的第二个参数，该函数应在脚本加载完成时执行：</p>
-<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadScript</span>(<span class="hljs-params">src, *!*callback*/!*</span>) </span>{
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadScript</span>(<span class="hljs-params">src, callback</span>) </span>{
   <span class="hljs-keyword">let</span> script = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;script&#x27;</span>);
   script.src = src;
 
-*!*
+
   script.onload = <span class="hljs-function">() =&gt;</span> callback(script);
-*/!*
+
 
   <span class="hljs-built_in">document</span>.head.append(script);
 }</code></pre>
@@ -59,12 +59,12 @@ newFunction(); <span class="hljs-comment">// 没有这个函数！</span>
   <span class="hljs-built_in">document</span>.head.append(script);
 }
 
-*!*
+
 loadScript(<span class="hljs-string">&#x27;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js&#x27;</span>, <span class="hljs-function"><span class="hljs-params">script</span> =&gt;</span> {
   alert(<span class="hljs-string">`Cool, the script <span class="hljs-subst">${script.src}</span> is loaded`</span>);
   alert( _ ); <span class="hljs-comment">// 所加载的脚本中声明的函数</span>
 });
-*/!*</code></pre>
+</code></pre>
 <p>这被称为“基于回调”的异步编程风格。异步执行某项功能的函数应该提供一个 <code>callback</code> 参数用于在相应事件完成时调用。（译注：上面这个例子中的相应事件是指脚本加载）</p>
 <p>这里我们在 <code>loadScript</code> 中就是这么做的，但当然这是一种通用方法。</p>
 <h2 id="在回调中回调">在回调中回调</h2>
@@ -74,11 +74,11 @@ loadScript(<span class="hljs-string">&#x27;https://cdnjs.cloudflare.com/ajax/lib
 
   alert(<span class="hljs-string">`Cool, the <span class="hljs-subst">${script.src}</span> is loaded, let&#x27;s load one more`</span>);
 
-*!*
+
   loadScript(<span class="hljs-string">&#x27;/my/script2.js&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">script</span>) </span>{
     alert(<span class="hljs-string">`Cool, the second script is loaded`</span>);
   });
-*/!*
+
 
 });</code></pre>
 <p>在外部 <code>loadScript</code> 执行完成时，内部回调就会被回调。</p>
@@ -87,11 +87,11 @@ loadScript(<span class="hljs-string">&#x27;https://cdnjs.cloudflare.com/ajax/lib
 
   loadScript(<span class="hljs-string">&#x27;/my/script2.js&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">script</span>) </span>{
 
-*!*
+
     loadScript(<span class="hljs-string">&#x27;/my/script3.js&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">script</span>) </span>{
       <span class="hljs-comment">// ...加载完所有脚本后继续</span>
     });
-*/!*
+
 
   })
 
@@ -104,10 +104,10 @@ loadScript(<span class="hljs-string">&#x27;https://cdnjs.cloudflare.com/ajax/lib
   <span class="hljs-keyword">let</span> script = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;script&#x27;</span>);
   script.src = src;
 
-*!*
+
   script.onload = <span class="hljs-function">() =&gt;</span> callback(<span class="hljs-literal">null</span>, script);
   script.onerror = <span class="hljs-function">() =&gt;</span> callback(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`Script load error for <span class="hljs-subst">${src}</span>`</span>));
-*/!*
+
 
   <span class="hljs-built_in">document</span>.head.append(script);
 }</code></pre>
@@ -145,9 +145,9 @@ loadScript(<span class="hljs-string">&#x27;https://cdnjs.cloudflare.com/ajax/lib
           <span class="hljs-keyword">if</span> (error) {
             handleError(error);
           } <span class="hljs-keyword">else</span> {
-  *!*
+  
             <span class="hljs-comment">// ...加载完所有脚本后继续 (*)</span>
-  */!*
+  
           }
         });
 

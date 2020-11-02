@@ -18,7 +18,7 @@
 : 另一个被广泛使用的 DOM 节点是 <code>&lt;body&gt;</code> 元素 — <code>document.body</code>。</p>
 <p><code>&lt;head&gt;</code> = <code>document.head</code>
 : <code>&lt;head&gt;</code> 标签可以通过 <code>document.head</code> 访问。</p>
-<p>````warn header=&quot;这里有个问题：<code>document.body</code> 的值可能是 <code>null</code>&quot;
+<p>`&quot;这里有个问题：<code>document.body</code> 的值可能是 <code>null</code>&quot;
 脚本无法访问在运行时不存在的元素。</p>
 <p>尤其是，如果一个脚本是在 <code>&lt;head&gt;</code> 中，那么脚本是访问不到 <code>document.body</code> 元素的，因为浏览器还没有读到它。</p>
 <p>所以，下面例子中的第一个 <code>alert</code> 显示 <code>null</code>：</p>
@@ -26,9 +26,9 @@
 
 <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
     alert( <span class="hljs-string">&quot;From HEAD: &quot;</span> + <span class="hljs-built_in">document</span>.body ); <span class="hljs-comment">// null，这里目前还没有 &lt;body&gt;</span>
-*/!*
+
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
 
@@ -54,7 +54,7 @@
 
 例如，这里 `&lt;body&gt;` 有子元素 `&lt;div&gt;` 和 `&lt;ul&gt;`（以及一些空白的文本节点）：
 
-```html run
+```html
 &lt;html&gt;
 &lt;body&gt;
   &lt;div&gt;Begin&lt;/div&gt;
@@ -74,7 +74,7 @@
 
 下面这个例子显示了 `document.body` 的子元素：
 
-```html run
+```html
 &lt;html&gt;
 &lt;body&gt;
   &lt;div&gt;Begin&lt;/div&gt;
@@ -86,11 +86,11 @@
   &lt;div&gt;End&lt;/div&gt;
 
   &lt;script&gt;
-*!*
+
     for (let i = 0; i &lt; document.body.childNodes.length; i++) {
       alert( document.body.childNodes[i] ); // Text, DIV, Text, UL, ..., SCRIPT
     }
-*/!*
+
   &lt;/script&gt;
   ...more stuff...
 &lt;/body&gt;
@@ -124,17 +124,17 @@ elem.childNodes[elem.childNodes.length - 1] === elem.lastChild
   这是因为集合是可迭代的（提供了所需要的 `Symbol.iterator` 属性）。
 
 2. 无法使用数组的方法，因为它不是一个数组：
-  ```js run
+  ```js
   alert(document.body.childNodes.filter); // undefined（这里没有 filter 方法！）
   ```
 
 集合的性质所得到的第一个结果很不错。第二个结果也还可以忍受，因为如果我们想要使用数组的方法的话，我们可以使用 `Array.from` 方法来从集合创建一个“真”数组：
 
-  ```js run
+  ```js
   alert( Array.from(document.body.childNodes).filter ); // function
   ```
 
-```warn header=&quot;DOM 集合是只读的&quot;
+&quot;DOM 集合是只读的&quot;
 DOM 集合，甚至可以说本章中列出的 **所有** 导航（navigation）属性都是只读的。
 
 我们不能通过类似 `childNodes[i] = ...` 的操作来替换一个子节点。
@@ -142,18 +142,18 @@ DOM 集合，甚至可以说本章中列出的 **所有** 导航（navigation）
 修改子节点需要使用其它方法。我们将会在下一章中看到它们。
 ```
 
-```warn header=&quot;DOM 集合是实时的&quot;
+&quot;DOM 集合是实时的&quot;
 除小部分例外，几乎所有的 DOM 集合都是 **实时** 的。换句话说，它们反映了 DOM 的当前状态。
 
 如果我们保留一个对 `elem.childNodes` 的引用，然后向 DOM 中添加/移除节点，那么这些节点的更新会自动出现在集合中。
 ```
 
-````warn header=&quot;不要使用 `for..in` 来遍历集合&quot;
+`&quot;不要使用 `for..in` 来遍历集合&quot;
 可以使用 `for..of` 对集合进行迭代。但有时候人们会尝试使用 `for..in` 来迭代集合。
 
 请不要这么做。`for..in` 循环遍历的是所有可枚举的（enumerable）属性。集合还有一些“额外的”很少被用到的属性，通常这些属性也是我们不期望得到的：
 
-```html run
+```html
 &lt;body&gt;
 &lt;script&gt;
   // 显示 0，1，length，item，values 及其他。
@@ -206,7 +206,7 @@ alert( <span class="hljs-built_in">document</span>.documentElement.parentElement
 <pre><code>
 让我们修改上面的一个示例：用 `children` 来替换 `childNodes`。现在它只显示元素：
 
-```html run
+```html
 &lt;html&gt;
 &lt;body&gt;
   &lt;div&gt;Begin&lt;/div&gt;
@@ -218,11 +218,11 @@ alert( <span class="hljs-built_in">document</span>.documentElement.parentElement
   &lt;div&gt;End&lt;/div&gt;
 
   &lt;script&gt;
-*!*
+
     for (let elem of document.body.children) {
       alert(elem); // DIV, UL, DIV, SCRIPT
     }
-*/!*
+
   &lt;/script&gt;
   ...
 &lt;/body&gt;
@@ -255,7 +255,7 @@ alert( <span class="hljs-built_in">document</span>.documentElement.parentElement
 
 用法示例：
 
-```html run height=100
+```html height=100
 &lt;table id=&quot;table&quot;&gt;
   &lt;tr&gt;
     &lt;td&gt;one&lt;/td&gt;&lt;td&gt;two&lt;/td&gt;
@@ -267,7 +267,7 @@ alert( <span class="hljs-built_in">document</span>.documentElement.parentElement
 
 &lt;script&gt;
   // 获取带有 &quot;two&quot; 的 td（第一行，第二列）
-  let td = table.*!*rows[0].cells[1]*/!*;
+  let td = table.rows[0].cells[1];
   td.style.backgroundColor = &quot;red&quot;; // highlight it
 &lt;/script&gt;
 ```

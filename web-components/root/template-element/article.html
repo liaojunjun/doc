@@ -34,10 +34,10 @@
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-keyword">let</span> elem = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
 
-*!*
+
   <span class="hljs-comment">// Clone the template content to reuse it multiple times</span>
   elem.append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>));
-*/!*
+
 
   <span class="hljs-built_in">document</span>.body.append(elem);
   <span class="hljs-comment">// Now the script from &lt;template&gt; runs</span>
@@ -54,9 +54,9 @@
   elem.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     elem.attachShadow({<span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span>});
 
-*!*
+
     elem.shadowRoot.append(tmpl.content.cloneNode(<span class="hljs-literal">true</span>)); <span class="hljs-comment">// (*)</span>
-*/!*
+
 
     elem.shadowRoot.getElementById(<span class="hljs-string">&#x27;message&#x27;</span>).innerHTML = <span class="hljs-string">&quot;Hello from the shadows!&quot;</span>;
   };

@@ -2,7 +2,7 @@
 
 这里是修正后的代码：
 
-```js run
+```js
 class Animal {
 
   constructor(name) {
@@ -13,15 +13,15 @@ class Animal {
 
 class Rabbit extends Animal {
   constructor(name) {  
-    *!*
+    
     super(name);
-    */!*
+    
     this.created = Date.now();
   }
 }
 
-*!*
+
 let rabbit = new Rabbit("White Rabbit"); // 现在好了
-*/!*
+
 alert(rabbit.name); // White Rabbit
 ```

@@ -8,7 +8,7 @@ Here the pattern `pattern:[a-f0-9]{3}` is enclosed in parentheses to apply the q
 
 In action:
 
-```js run
+```js
 let regexp = /#([a-f0-9]{3}){1,2}/gi;
 
 let str = "color: #3f3; background-color: #AA00ef; and: #abcd";
@@ -18,7 +18,7 @@ alert( str.match(regexp) ); // #3f3 #AA00ef #abc
 
 There's a minor problem here: the pattern found `match:#abc` in `subject:#abcd`. To prevent that we can add `pattern:\b` to the end:
 
-```js run
+```js
 let regexp = /#([a-f0-9]{3}){1,2}\b/gi;
 
 let str = "color: #3f3; background-color: #AA00ef; and: #abcd";

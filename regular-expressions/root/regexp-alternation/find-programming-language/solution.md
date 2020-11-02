@@ -3,7 +3,7 @@
 
 但是运行不如所愿：
 
-```js run
+```js
 let reg = /Java|JavaScript|PHP|C|C\+\+/g;
 
 let str = "Java, JavaScript, PHP, C, C++";
@@ -24,7 +24,7 @@ alert( str.match(reg) ); // Java,Java,PHP,C,C
 
 运行代码如下：
 
-```js run
+```js
 let reg = /Java(Script)?|C(\+\+)?|PHP/g;
 
 let str = "Java, JavaScript, PHP, C, C++";

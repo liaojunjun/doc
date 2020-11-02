@@ -62,7 +62,7 @@
 </tbody></table>
 <p>大多数鼠标设备只有左键和右键，对应的值就是 <code>0</code> 和 <code>2</code>。触屏设备中的点按操作也会触发类似的事件。</p>
 <p>另外，还有一个 <code>event.buttons</code> 属性，其中以整数的形式存储着当前所有按下的鼠标按键，每个按键一个比特位。在实际开发中，很少会用到这个属性，如果有需要的话，你可以在 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/buttons">MDN</a> 中找到更多细节。</p>
-<p>```warn header=&quot;过时的 <code>event.which</code>&quot;
+<p>&quot;过时的 <code>event.which</code>&quot;
 一些老代码可能会使用 <code>event.which</code> 属性来获得按下的按键。这是一个古老的非标准的方式，具有以下可能值：</p>
 <ul>
 <li><code>event.which == 1</code> —— 鼠标左键，</li>
@@ -91,14 +91,14 @@
 
 &lt;script&gt;
   button.onclick = function(event) {
-*!*
+
     if (event.altKey &amp;&amp; event.shiftKey) {
-*/!*
+
       alert(&#x27;Hooray!&#x27;);
     }
   };
 &lt;/script&gt;</code></pre>
-<p>```warn header=&quot;注意：在 Mac 上我们通常使用 <code>Cmd</code> 代替 <code>Ctrl</code>&quot;
+<p>&quot;注意：在 Mac 上我们通常使用 <code>Cmd</code> 代替 <code>Ctrl</code>&quot;
 在 Windows 和 Linux 上有 <code>key:Alt</code>，<code>key:Shift</code> 和 <code>key:Ctrl</code>。在 Mac 上还有：<code>key:Cmd</code>，它对应于属性 <code>metaKey</code>。</p>
 <p>在大多数情况下，当在 Windows/Linux 上使用 <code>key:Ctrl</code> 时，在 Mac 是使用 <code>key:Cmd</code>。</p>
 <p>也就说：当 Windows 用户按下 <code>key:Ctrl+Enter</code> 或 <code>key:Ctrl+A</code> 时，Mac 用户会按下 <code>key:Cmd+Enter</code> 或 <code>key:Cmd+A</code>，以此类推。</p>
@@ -107,7 +107,7 @@
 <p>因此，如果我们想让所有操作系统的用户都感到舒适，那么我们应该将 <code>ctrlKey</code> 与 <code>metaKey</code> 一起进行检查。</p>
 <p>对于 JS 代码，这意味着我们应该检查 <code>if (event.ctrlKey || event.metaKey)</code>。</p>
 <pre><code>
-```warn header=&quot;还有移动设备&quot;
+&quot;还有移动设备&quot;
 键盘组合是工作流的一个补充。这样，如果访客使用键盘操作 —— 它们就会起作用。
 
 但是，如果访客的设备没有键盘 —— 那么这里应该有另一种不使用键盘也能做到这一点的方式。</code></pre>
@@ -134,7 +134,7 @@
 <p>有多种防止选择的方法，你可以在 <a href="info:selection-range">info:selection-range</a> 一章中详细阅读。</p>
 <p>在这种情况下，最合理的方式是防止浏览器对 <code>mousedown</code> 进行操作。这样能够阻止刚刚提到的两种选择：</p>
 <pre><code class="language-html">Before...
-<span class="hljs-tag">&lt;<span class="hljs-name">b</span> <span class="hljs-attr">ondblclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;)&quot;</span> *!*<span class="hljs-attr">onmousedown</span>=<span class="hljs-string">&quot;return false&quot;</span>*/!*&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">b</span> <span class="hljs-attr">ondblclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;)&quot;</span> <span class="hljs-attr">onmousedown</span>=<span class="hljs-string">&quot;return false&quot;</span>&gt;</span>
   Double-click me
 <span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span>
 ...After</code></pre>
@@ -143,7 +143,7 @@
 <pre><code class="language-smart">如果我们想禁用选择以保护我们页面的内容不被复制粘贴，那么我们可以使用另一个事件：`oncopy`。
 
 ```html autorun height=80 no-beautify
-&lt;div *!*oncopy=&quot;alert(&#x27;Copying forbidden!&#x27;);return false&quot;*/!*&gt;
+&lt;div oncopy=&quot;alert(&#x27;Copying forbidden!&#x27;);return false&quot;&gt;
   Dear user,
   The copying is forbidden for you.
   If you know JS or HTML, then you can get everything from the page source though.

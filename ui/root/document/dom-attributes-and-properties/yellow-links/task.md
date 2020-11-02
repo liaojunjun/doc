@@ -12,7 +12,7 @@ importance: 3
 
 例如：
 
-```html run
+```html
 <a name="list">the list</a>
 <ul>
   <li><a href="http://google.com">http://google.com</a></li>

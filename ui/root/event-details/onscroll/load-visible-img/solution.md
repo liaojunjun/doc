@@ -40,10 +40,10 @@ function showVisible() {
   }
 }
 
-*!*
+
 showVisible();
 window.onscroll = showVisible;
-*/!*
+
 ```
 
 P.S. 此解决方案还有一个 `isVisible` 的变体，可以“预加载”当前文档滚动上方/下方 1 页内的图像

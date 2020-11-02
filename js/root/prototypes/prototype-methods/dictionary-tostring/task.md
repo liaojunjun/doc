@@ -13,9 +13,9 @@ importance: 5
 ```js
 let dictionary = Object.create(null);
 
-*!*
+
 // 你的添加 dictionary.toString 方法的代码
-*/!*
+
 
 // 添加一些数据
 dictionary.apple = "Apple";

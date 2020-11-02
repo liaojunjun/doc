@@ -15,7 +15,7 @@ libs:
 
 下面是使用 `setTimeout` 时 `this` 是如何丢失的：
 
-```js run
+```js
 let user = {
   firstName: "John",
   sayHi() {
@@ -23,9 +23,9 @@ let user = {
   }
 };
 
-*!*
+
 setTimeout(user.sayHi, 1000); // Hello, undefined!
-*/!*
+
 ```
 
 正如我们所看到的，输出没有像 `this.firstName` 那样显示 "John"，而显示了 `undefined`！
@@ -45,7 +45,7 @@ setTimeout(f, 1000); // 丢失了 user 上下文
 
 最简单的解决方案是使用一个包装函数：
 
-```js run
+```js
 let user = {
   firstName: "John",
   sayHi() {
@@ -53,11 +53,11 @@ let user = {
   }
 };
 
-*!*
+
 setTimeout(function() {
   user.sayHi(); // Hello, John!
 }, 1000);
-*/!*
+
 ```
 
 现在它可以正常工作了，因为它从外部词法环境中获取到了 `user`，就可以正常地调用方法了。
@@ -73,7 +73,7 @@ setTimeout(() => user.sayHi(), 1000); // Hello, John!
 如果在 `setTimeout` 触发之前（有一秒的延迟！）`user` 的值改变了怎么办？那么，突然间，它将调用错误的对象！
 
 
-```js run
+```js
 let user = {
   firstName: "John",
   sayHi() {
@@ -110,7 +110,7 @@ let boundFunc = func.bind(context);
 
 举个例子，这里的 `funcUser` 将调用传递给了 `func` 同时 `this=user`：
 
-```js run  
+```js  
 let user = {
   firstName: "John"
 };
@@ -119,17 +119,17 @@ function func() {
   alert(this.firstName);
 }
 
-*!*
+
 let funcUser = func.bind(user);
 funcUser(); // John  
-*/!*
+
 ```
 
 这里的 `func.bind(user)` 作为 `func` 的“绑定的（bound）变体”，绑定了 `this=user`。
 
 所有的参数（arguments）都被“原样”传递给了初始的 `func`，例如：
 
-```js run  
+```js  
 let user = {
   firstName: "John"
 };
@@ -141,15 +141,15 @@ function func(phrase) {
 // 将 this 绑定到 user
 let funcUser = func.bind(user);
 
-*!*
+
 funcUser("Hello"); // Hello, John（参数 "Hello" 被传递，并且 this=user）
-*/!*
+
 ```
 
 现在我们来尝试一个对象方法：
 
 
-```js run
+```js
 let user = {
   firstName: "John",
   sayHi() {
@@ -157,9 +157,9 @@ let user = {
   }
 };
 
-*!*
+
 let sayHi = user.sayHi.bind(user); // (*)
-*/!*
+
 
 // 可以在没有对象（译注：与对象分离）的情况下运行它
 sayHi(); // Hello, John!
@@ -177,7 +177,7 @@ user = {
 
 这里我们能够看到参数（arguments）都被“原样”传递了，只是 `this` 被 `bind` 绑定了：
 
-```js run
+```js
 let user = {
   firstName: "John",
   say(phrase) {
@@ -191,7 +191,7 @@ say("Hello"); // Hello, John（参数 "Hello" 被传递给了 say）
 say("Bye"); // Bye, John（参数 "Bye" 被传递给了 say）
 ```
 
-````smart header="便捷方法：`bindAll`"
+`便捷方法：`bindAll`"
 如果一个对象有很多方法，并且我们都打算将它们都传递出去，那么我们可以在一个循环中完成所有方法的绑定：
 
 ```js
@@ -229,14 +229,14 @@ function mul(a, b) {
 
 让我们使用 `bind` 在该函数基础上创建一个 `double` 函数：
 
-```js run
+```js
 function mul(a, b) {
   return a * b;
 }
 
-*!*
+
 let double = mul.bind(null, 2);
-*/!*
+
 
 alert( double(3) ); // = mul(2, 3) = 6
 alert( double(4) ); // = mul(2, 4) = 8
@@ -251,14 +251,14 @@ alert( double(5) ); // = mul(2, 5) = 10
 
 下面这段代码中的 `triple` 函数将值乘了三倍：
 
-```js run
+```js
 function mul(a, b) {
   return a * b;
 }
 
-*!*
+
 let triple = mul.bind(null, 3);
-*/!*
+
 
 alert( triple(3) ); // = mul(3, 3) = 9
 alert( triple(4) ); // = mul(3, 4) = 12
@@ -283,14 +283,14 @@ alert( triple(5) ); // = mul(3, 5) = 15
 
 像这样：
 
-```js run
-*!*
+```js
+
 function partial(func, ...argsBound) {
   return function(...args) { // (*)
     return func.call(this, ...argsBound, ...args);
   }
 }
-*/!*
+
 
 // 用法：
 let user = {

@@ -22,7 +22,7 @@
 
 假设我们有 3 层嵌套 `FORM > DIV > P`，它们各自拥有一个处理程序：
 
-```html run autorun
+```html autorun
 <style>
   body * {
     margin: 10px;

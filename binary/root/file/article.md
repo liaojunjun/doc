@@ -23,7 +23,7 @@ new File(fileParts, fileName, [options])
 
 这就是我们从 `<input type="file">` 中获取 `File` 对象的方式：
 
-```html run
+```html
 <input type="file" onchange="showFile(this)">
 
 <script>
@@ -81,7 +81,7 @@ let reader = new FileReader(); // 没有参数
 
 这是一个读取文件的示例：
 
-```html run
+```html
 <input type="file" onchange="readFile(this)">
 
 <script>
@@ -104,7 +104,7 @@ function readFile(input) {
 </script>
 ```
 
-```smart header="`FileReader` 用于 blob"
+`FileReader` 用于 blob"
 正如我们在 <info:blob> 一章中所提到的，`FileReader` 不仅可读取文件，还可读取任何 blob。
 
 我们可以使用它将 blob 转换为其他格式：
@@ -114,7 +114,7 @@ function readFile(input) {
 ```
 
 
-```smart header="在 Web Workers 中可以使用 `FileReaderSync`"
+在 Web Workers 中可以使用 `FileReaderSync`"
 对于 Web Worker，还有一种同步的 `FileReader` 变体，称为 [FileReaderSync](https://www.w3.org/TR/FileAPI/#FileReaderSync)。
 
 它的读取方法 `read*` 不会生成事件，但是会像常规函数那样返回一个结果。

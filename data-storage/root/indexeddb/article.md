@@ -51,7 +51,7 @@ let openRequest = indexedDB.open(name, version);
 接下来我们就可以打开版本 `1` 中的 IndexedDB 数据库，并在 `upgradeneeded` 处理程序中执行初始化，如下所示：
 
 ```js
-let openRequest = indexedDB.open("store", *!*1*/!*);
+let openRequest = indexedDB.open("store", 1);
 
 openRequest.onupgradeneeded = function() {
   // 如果客户端没有数据库则触发
@@ -73,7 +73,7 @@ openRequest.onsuccess = function() {
 我们可以打开版本 `2` 中的 IndexedDB 数据库，并像这样进行升级：
 
 ```js
-let openRequest = indexedDB.open("store", *!*2*/!*);
+let openRequest = indexedDB.open("store", 2);
 
 openRequest.onupgradeneeded = function(event) {
   // 现有的数据库版本小于 2（或不存在）
@@ -100,7 +100,7 @@ let deleteRequest = indexedDB.deleteDatabase(name)
 // deleteRequest.onsuccess/onerror 追踪（tracks）结果
 ```
 
-```warn header="我们无法打开旧版本的数据库"
+"我们无法打开旧版本的数据库"
 如果当前用户的数据库版本比 `open` 调用的版本更高（比如当前的数据库版本为 `3`，我们却尝试运行 `open(...2)`，就会产生错误并触发 `openRequest.onerror`）。
 
 这有些奇怪，但这样的事情可能会在用户加载了一个过时的 JavaScript 代码时发生（例如用户从一个代理缓存中加载 JS）。在这种情况下，代码是过时的，但数据库却是最新的。
@@ -138,24 +138,24 @@ openRequest.onerror = ...;
 openRequest.onsuccess = function() {
   let db = openRequest.result;
 
-  *!*
+  
   db.onversionchange = function() {
     db.close();
     alert("Database is outdated, please reload the page.")
   };
-  */!*
+  
 
   // ……数据库已经准备好，请使用它……
 };
 
-*!*
+
 openRequest.onblocked = function() {
   // 如果我们正确处理了 onversionchange 事件，这个事件就不应该触发
 
   // 这意味着还有另一个指向同一数据库的连接
   // 并且在 db.onversionchange 被触发后，该连接没有被关闭
 };
-*/!*
+
 ```
 在这我们做两件事：
 
@@ -261,7 +261,7 @@ db.deleteObjectStore('books')
 
 启动事务：
 
-```js run
+```js
 db.transaction(store[, type]);
 ```
 
@@ -272,7 +272,7 @@ db.transaction(store[, type]);
 
 还有 `versionchange` 事务类型：这种事务可以做任何事情，但不能被手动创建。IndexedDB 在打开数据库时，会自动为 `updateneeded` 处理程序创建 `versionchange` 事务。这就是它为什么可以更新数据库结构、创建/删除 对象库的原因。
 
-```smart header="为什么存在不同类型的事务？"
+为什么存在不同类型的事务？"
 性能是事务需要标记为 `只读（readonly）` 和 `读写（readwrite）` 的原因。
 
 许多只读事务能够同时访问同一存储区，但读写事务不能。因为读写事务会“锁定”存储区进行写操作。下一个事务必须等待前一个事务完成，才能访问相同的存储区。
@@ -284,9 +284,9 @@ db.transaction(store[, type]);
 let transaction = db.transaction("books", "readwrite"); // (1)
 
 // 获取对象库进行操作
-*!*
+
 let books = transaction.objectStore("books"); // (2)
-*/!*
+
 
 let book = {
   id: 'js',
@@ -294,9 +294,9 @@ let book = {
   created: new Date()
 };
 
-*!*
+
 let request = books.add(book); // (3)
-*/!*
+
 
 request.onsuccess = function() { // (4)
   // 书已添加到存储区
@@ -348,9 +348,9 @@ let request1 = books.add(book);
 
 request1.onsuccess = function() {
   fetch('/').then(response => {
-*!*
+
     let request2 = books.add(anotherBook); // (*)
-*/!*
+
     request2.onerror = function() {
       console.log(request2.error.name); // TransactionInactiveError
     };
@@ -512,7 +512,7 @@ books.getAll()
 books.getAllKeys(IDBKeyRange.lowerBound('js', true))
 ```
 
-```smart header="对象库始终是有序的"
+对象库始终是有序的"
 对象库按键对值进行内部排序。
 
 因此，请求的返回值，是按照键的顺序排列的。
@@ -547,9 +547,9 @@ objectStore.createIndex(name, keyPath, [options]);
 openRequest.onupgradeneeded = function() {
   // 在 versionchange 事务中，我们必须在这里创建索引
   let books = db.createObjectStore('books', {keyPath: 'id'});
-*!*
+
   let index = inventory.createIndex('price_idx', 'price');
-*/!*
+
 };
 ```
 
@@ -572,9 +572,9 @@ let transaction = db.transaction("books"); // 只读
 let books = transaction.objectStore("books");
 let priceIndex = books.index("price_idx");
 
-*!*
+
 let request = priceIndex.getAll(10);
-*/!*
+
 
 request.onsuccess = function() {
   if (request.result !== undefined) {

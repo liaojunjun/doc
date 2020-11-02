@@ -32,15 +32,15 @@ function name(parameters) {
 
 例如：
 
-```js run
+```js
 function showMessage() {
   alert( 'Hello everyone!' );
 }
 
-*!*
+
 showMessage();
 showMessage();
-*/!*
+
 ```
 
 调用 `showMessage()` 执行函数的代码。这里我们会看到显示两次消息。
@@ -55,11 +55,11 @@ showMessage();
 
 例如：
 
-```js run
+```js
 function showMessage() {
-*!*
+
   let message = "Hello, I'm JavaScript!"; // 局部变量
-*/!*
+
 
   alert( message );
 }
@@ -73,11 +73,11 @@ alert( message ); // <-- 错误！变量是函数的局部变量
 
 函数也可以访问外部变量，例如：
 
-```js run no-beautify
-let *!*userName*/!* = 'John';
+```js no-beautify
+let userName = 'John';
 
 function showMessage() {
-  let message = 'Hello, ' + *!*userName*/!*;
+  let message = 'Hello, ' + userName;
   alert(message);
 }
 
@@ -88,46 +88,46 @@ showMessage(); // Hello, John
 
 例如：
 
-```js run
-let *!*userName*/!* = 'John';
+```js
+let userName = 'John';
 
 function showMessage() {
-  *!*userName*/!* = "Bob"; // (1) 改变外部变量
+  userName = "Bob"; // (1) 改变外部变量
 
-  let message = 'Hello, ' + *!*userName*/!*;
+  let message = 'Hello, ' + userName;
   alert(message);
 }
 
-alert( userName ); // *!*John*/!* 在函数调用之前
+alert( userName ); // John 在函数调用之前
 
 showMessage();
 
-alert( userName ); // *!*Bob*/!*，值被函数修改了
+alert( userName ); // Bob，值被函数修改了
 ```
 
 只有在没有局部变量的情况下才会使用外部变量。
 
 如果在函数内部声明了同名变量，那么函数会 **遮蔽** 外部变量。例如，在下面的代码中，函数使用局部的 `userName`，而外部变量被忽略：
 
-```js run
+```js
 let userName = 'John';
 
 function showMessage() {
-*!*
-  let userName = "Bob"; // 声明一个局部变量
-*/!*
 
-  let message = 'Hello, ' + userName; // *!*Bob*/!*
+  let userName = "Bob"; // 声明一个局部变量
+
+
+  let message = 'Hello, ' + userName; // Bob
   alert(message);
 }
 
 // 函数会创建并使用它自己的 userName
 showMessage();
 
-alert( userName ); // *!*John*/!*，未被更改，函数没有访问外部变量。
+alert( userName ); // John，未被更改，函数没有访问外部变量。
 ```
 
-```smart header="全局变量"
+全局变量"
 任何函数之外声明的变量，例如上述代码中的外部变量 `userName`，都被称为 **全局** 变量。
 
 全局变量在任意函数中都是可见的（除非被局部变量遮蔽）。
@@ -141,15 +141,15 @@ alert( userName ); // *!*John*/!*，未被更改，函数没有访问外部变�
 
 在如下示例中，函数有两个参数：`from` 和 `text`。
 
-```js run
-function showMessage(*!*from, text*/!*) { // 参数：from 和 text
+```js
+function showMessage(from, text) { // 参数：from 和 text
   alert(from + ': ' + text);
 }
 
-*!*
+
 showMessage('Ann', 'Hello!'); // Ann: Hello! (*)
 showMessage('Ann', "What's up?"); // Ann: What's up? (**)
-*/!*
+
 ```
 
 当函数在 `(*)` 和 `(**)` 行中被调用时，给定值被复制到了局部变量 `from` 和 `text`。然后函数使用它们进行计算。
@@ -157,12 +157,12 @@ showMessage('Ann', "What's up?"); // Ann: What's up? (**)
 这里还有一个例子：我们有一个变量 `from`，并将它传递给函数。请注意：函数会修改 `from`，但在函数外部看不到更改，因为函数修改的是复制的变量值副本：
 
 
-```js run
+```js
 function showMessage(from, text) {
 
-*!*
+
   from = '*' + from + '*'; // 让 "from" 看起来更优雅
-*/!*
+
 
   alert( from + ': ' + text );
 }
@@ -189,8 +189,8 @@ showMessage("Ann");
 
 如果我们想在本示例中设定“默认”的 `text`，那么我们可以在 `=` 之后指定它：
 
-```js run
-function showMessage(from, *!*text = "no text given"*/!*) {
+```js
+function showMessage(from, text = "no text given") {
   alert( from + ": " + text );
 }
 
@@ -201,14 +201,14 @@ showMessage("Ann"); // Ann: no text given
 
 这里 `"no text given"` 是一个字符串，但它可以是更复杂的表达式，并且只会在缺少参数时才会被计算和分配。所以，这也是可能的：
 
-```js run
+```js
 function showMessage(from, text = anotherFunction()) {
   // anotherFunction() 仅在没有给定 text 时执行
   // 其运行结果将成为 text 的值 
 }
 ```
 
-```smart header="默认参数的计算"
+默认参数的计算"
 在 JavaScript 中，每次函数在没带个别参数的情况下被调用，默认参数会被计算出来。
 
 在上面的例子中，每次 `showMessage()` 不带 `text` 参数被调用时，`anotherFunction()` 就会被调用。
@@ -220,13 +220,13 @@ function showMessage(from, text = anotherFunction()) {
 
 为了判断参数是否被省略掉，我们可以拿它跟 `undefined` 做比较：
 
-```js run
+```js
 function showMessage(text) {
-*!*
+
   if (text === undefined) {
     text = 'empty message';
   }
-*/!*
+
 
   alert(text);
 }
@@ -246,7 +246,7 @@ function showMessage(text) {
 
 现代 JavaScript 引擎支持 [空值合并运算符](info:nullish-coalescing-operator) `??`，当可能遇到其他假值时它更有优势，如 `0` 会被视为正常值不被合并：
 
-```js run
+```js
 // 如果没有传入 "count" 参数，则显示 "unknown"
 function showCount(count) {
   alert(count ?? "unknown");
@@ -263,9 +263,9 @@ showCount(); // unknown
 
 最简单的例子是将两个值相加的函数：
 
-```js run no-beautify
+```js no-beautify
 function sum(a, b) {
-  *!*return*/!* a + b;
+  return a + b;
 }
 
 let result = sum(1, 2);
@@ -276,16 +276,16 @@ alert( result ); // 3
 
 在一个函数中可能会出现很多次 `return`。例如：
 
-```js run
+```js
 function checkAge(age) {
   if (age >= 18) {
-*!*
+
     return true;
-*/!*
+
   } else {
-*!*
+
     return confirm('Got a permission from the parents?');
-*/!*
+
   }
 }
 
@@ -305,9 +305,9 @@ if ( checkAge(age) ) {
 ```js
 function showMovie(age) {
   if ( !checkAge(age) ) {
-*!*
+
     return;
-*/!*
+
   }
 
   alert( "Showing you the movie" ); // (*)
@@ -317,10 +317,10 @@ function showMovie(age) {
 
 在上述代码中，如果 `checkAge(age)` 返回 `false`，那么 `showMovie` 将不会运行到 `alert`。
 
-````smart header="空值的 `return` 或没有 `return` 的函数返回值为 `undefined`"
+`空值的 `return` 或没有 `return` 的函数返回值为 `undefined`"
 如果函数无返回值，它就会像返回 `undefined` 一样：
 
-```js run
+```js
 function doNothing() { /* 没有代码 */ }
 
 alert( doNothing() === undefined ); // true
@@ -328,7 +328,7 @@ alert( doNothing() === undefined ); // true
 
 空值的 `return` 和 `return undefined` 等效：
 
-```js run
+```js
 function doNothing() {
   return;
 }
@@ -337,7 +337,7 @@ alert( doNothing() === undefined ); // true
 ```
 ````
 
-````warn header="不要在 `return` 与返回值之间添加新行"
+`"不要在 `return` 与返回值之间添加新行"
 对于 `return` 的长表达式，可能你会很想将其放在单独一行，如下所示：
 
 ```js
@@ -347,7 +347,7 @@ return
 但这不行，因为 JavaScript 默认会在 `return` 之后加上分号。上面这段代码和下面这段代码运行流程相同：
 
 ```js
-return*!*;*/!*
+return;
  (some + long + expression + or + whatever * f(a) + f(b))
 ```
 
@@ -392,7 +392,7 @@ checkPermission(..) // 检查权限并返回 true/false
 
 有了前缀，只需瞥一眼函数名，就可以了解它的功能是什么，返回什么样的值。
 
-```smart header="一个函数 —— 一个行为"
+一个函数 —— 一个行为"
 一个函数应该只包含函数名所指定的功能，而不是做更多与函数名无关的功能。
 
 两个独立的行为通常需要两个函数，即使它们通常被一起调用（在这种情况下，我们可以创建第三个函数来调用这两个函数）。
@@ -406,7 +406,7 @@ checkPermission(..) // 检查权限并返回 true/false
 这些例子假设函数名前缀具有通用的含义。你和你的团队可以自定义这些函数名前缀的含义，但是通常都没有太大的不同。无论怎样，你都应该对函数名前缀的含义、带特定前缀的函数可以做什么以及不可以做什么有深刻的了解。所有相同前缀的函数都应该遵守相同的规则。并且，团队成员应该形成共识。
 ```
 
-```smart header="非常短的函数命名"
+非常短的函数命名"
 常用的函数有时会有**非常短**的名字。
 
 例如，[jQuery](http://jquery.com) 框架用 `$` 定义一个函数。[LoDash](http://lodash.com/) 库的核心函数用 `_` 命名。
@@ -443,7 +443,7 @@ function showPrimes(n) {
 function showPrimes(n) {
 
   for (let i = 2; i < n; i++) {
-    *!*if (!isPrime(i)) continue;*/!*
+    if (!isPrime(i)) continue;
 
     alert(i);  // 一个素数
   }

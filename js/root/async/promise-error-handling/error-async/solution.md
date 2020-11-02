@@ -1,6 +1,6 @@
 答案是：**不，它不会被触发**：
 
-```js run
+```js
 new Promise(function(resolve, reject) {
   setTimeout(() => {
     throw new Error("Whoops!");

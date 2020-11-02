@@ -2,7 +2,7 @@
 
 所以变量的值分别为 `"1"` 和 `"2"`。
 
-```js run
+```js
 let a = "1"; // prompt("First number?", 1);
 let b = "2"; // prompt("Second number?", 2);
 
@@ -13,7 +13,7 @@ alert(a + b); // 12
 
 例如，就在 `prompt` 之前加 `+`：
 
-```js run
+```js
 let a = +prompt("First number?", 1);
 let b = +prompt("Second number?", 2);
 
@@ -22,7 +22,7 @@ alert(a + b); // 3
 
 或在 `alert` 中：
 
-```js run
+```js
 let a = prompt("First number?", 1);
 let b = prompt("Second number?", 2);
 

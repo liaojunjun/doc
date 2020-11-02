@@ -17,7 +17,7 @@ To make each of these parts a separate element of the result array, let's enclos
 
 In action:
 
-```js run
+```js
 let regexp = /(-?\d+(\.\d+)?)\s*([-+*\/])\s*(-?\d+(\.\d+)?)/;
 
 alert( "1.2 + 12".match(regexp) );
@@ -40,7 +40,7 @@ Groups that contain decimal parts (number 2 and 4) `pattern:(.\d+)` can be exclu
 
 The final solution:
 
-```js run
+```js
 function parse(expr) {
   let regexp = /(-?\d+(?:\.\d+)?)\s*([-+*\/])\s*(-?\d+(?:\.\d+)?)/;
 

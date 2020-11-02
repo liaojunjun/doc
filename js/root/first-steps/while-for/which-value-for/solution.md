@@ -1,6 +1,6 @@
 **答案：在这两种情况下都是从 `0` 到 `4`。**
 
-```js run
+```js
 for (let i = 0; i < 5; ++i) alert( i );
 
 for (let i = 0; i < 5; i++) alert( i );

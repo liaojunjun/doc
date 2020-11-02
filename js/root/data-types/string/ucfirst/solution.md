@@ -15,7 +15,7 @@ let newStr = str[0].toUpperCase() + str.slice(1);
 
 这是第二种变体：
 
-```js run demo
+```js demo
 function ucFirst(str) {
   if (!str) return str;
 

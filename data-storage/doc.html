@@ -820,7 +820,7 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-built
 <p>当数据库还不存在时（从技术上讲，该版本为 <code>0</code>），也会触发 <code>upgradeneeded</code> 事件。因此，我们可以执行初始化。</p>
 <p>假设我们发布了应用程序的第一个版本。</p>
 <p>接下来我们就可以打开版本 <code>1</code> 中的 IndexedDB 数据库，并在 <code>upgradeneeded</code> 处理程序中执行初始化，如下所示：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> openRequest = indexedDB.open(<span class="hljs-string">&quot;store&quot;</span>, *!*<span class="hljs-number">1</span>*/!*);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> openRequest = indexedDB.open(<span class="hljs-string">&quot;store&quot;</span>, <span class="hljs-number">1</span>);
 
 openRequest.onupgradeneeded = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-comment">// 如果客户端没有数据库则触发</span>
@@ -837,7 +837,7 @@ openRequest.onsuccess = <span class="hljs-function"><span class="hljs-keyword">f
 };</code></pre>
 <p>之后不久，我们发布了第二个版本。</p>
 <p>我们可以打开版本 <code>2</code> 中的 IndexedDB 数据库，并像这样进行升级：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> openRequest = indexedDB.open(<span class="hljs-string">&quot;store&quot;</span>, *!*<span class="hljs-number">2</span>*/!*);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> openRequest = indexedDB.open(<span class="hljs-string">&quot;store&quot;</span>, <span class="hljs-number">2</span>);
 
 openRequest.onupgradeneeded = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
   <span class="hljs-comment">// 现有的数据库版本小于 2（或不存在）</span>
@@ -883,24 +883,24 @@ openRequest.onerror = ...;
 openRequest.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">let</span> db = openRequest.result;
 
-  *!*
+  
   db.onversionchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     db.close();
     alert(<span class="hljs-string">&quot;Database is outdated, please reload the page.&quot;</span>)
   };
-  */!*
+  
 
   <span class="hljs-comment">// ……数据库已经准备好，请使用它……</span>
 };
 
-*!*
+
 openRequest.onblocked = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-comment">// 如果我们正确处理了 onversionchange 事件，这个事件就不应该触发</span>
 
   <span class="hljs-comment">// 这意味着还有另一个指向同一数据库的连接</span>
   <span class="hljs-comment">// 并且在 db.onversionchange 被触发后，该连接没有被关闭</span>
 };
-*/!*</code></pre>
+</code></pre>
 <p>在这我们做两件事：</p>
 <ol>
 <li>成功打开后添加 <code>db.onversionchange</code> 监听器，以得到尝试并行更新的消息。</li>
@@ -983,9 +983,9 @@ openRequest.onupgradeneeded = <span class="hljs-function"><span class="hljs-keyw
 <pre><code class="language-js"><span class="hljs-keyword">let</span> transaction = db.transaction(<span class="hljs-string">&quot;books&quot;</span>, <span class="hljs-string">&quot;readwrite&quot;</span>); <span class="hljs-comment">// (1)</span>
 
 <span class="hljs-comment">// 获取对象库进行操作</span>
-*!*
+
 <span class="hljs-keyword">let</span> books = transaction.objectStore(<span class="hljs-string">&quot;books&quot;</span>); <span class="hljs-comment">// (2)</span>
-*/!*
+
 
 <span class="hljs-keyword">let</span> book = {
   <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;js&#x27;</span>,
@@ -993,9 +993,9 @@ openRequest.onupgradeneeded = <span class="hljs-function"><span class="hljs-keyw
   <span class="hljs-attr">created</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()
 };
 
-*!*
+
 <span class="hljs-keyword">let</span> request = books.add(book); <span class="hljs-comment">// (3)</span>
-*/!*
+
 
 request.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// (4)</span>
   <span class="hljs-comment">// 书已添加到存储区</span>
@@ -1039,9 +1039,9 @@ request.onerror = <span class="hljs-function"><span class="hljs-keyword">functio
 
 request1.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   fetch(<span class="hljs-string">&#x27;/&#x27;</span>).then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {
-*!*
+
     <span class="hljs-keyword">let</span> request2 = books.add(anotherBook); <span class="hljs-comment">// (*)</span>
-*/!*
+
     request2.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
       <span class="hljs-built_in">console</span>.log(request2.error.name); <span class="hljs-comment">// TransactionInactiveError</span>
     };
@@ -1178,9 +1178,9 @@ books.getAllKeys(IDBKeyRange.lowerBound(<span class="hljs-string">&#x27;js&#x27;
 <pre><code class="language-js">openRequest.onupgradeneeded = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-comment">// 在 versionchange 事务中，我们必须在这里创建索引</span>
   <span class="hljs-keyword">let</span> books = db.createObjectStore(<span class="hljs-string">&#x27;books&#x27;</span>, {<span class="hljs-attr">keyPath</span>: <span class="hljs-string">&#x27;id&#x27;</span>});
-*!*
+
   <span class="hljs-keyword">let</span> index = inventory.createIndex(<span class="hljs-string">&#x27;price_idx&#x27;</span>, <span class="hljs-string">&#x27;price&#x27;</span>);
-*/!*
+
 };</code></pre>
 <ul>
 <li>该索引将跟踪 <code>price</code> 字段。</li>
@@ -1196,9 +1196,9 @@ books.getAllKeys(IDBKeyRange.lowerBound(<span class="hljs-string">&#x27;js&#x27;
 <span class="hljs-keyword">let</span> books = transaction.objectStore(<span class="hljs-string">&quot;books&quot;</span>);
 <span class="hljs-keyword">let</span> priceIndex = books.index(<span class="hljs-string">&quot;price_idx&quot;</span>);
 
-*!*
+
 <span class="hljs-keyword">let</span> request = priceIndex.getAll(<span class="hljs-number">10</span>);
-*/!*
+
 
 request.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">if</span> (request.result !== <span class="hljs-literal">undefined</span>) {

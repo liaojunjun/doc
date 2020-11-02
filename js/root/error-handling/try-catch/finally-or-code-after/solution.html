@@ -4,9 +4,9 @@
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">try</span> {
     alert(<span class="hljs-string">&#x27;start&#x27;</span>);
-*!*
+
     <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;result&quot;</span>;
-*/!*
+
   } <span class="hljs-keyword">catch</span> (e) {
     <span class="hljs-comment">/// ...</span>
   } <span class="hljs-keyword">finally</span> {
@@ -23,9 +23,9 @@ f(); <span class="hljs-comment">// cleanup!</span></code></pre>
   } <span class="hljs-keyword">catch</span> (e) {
     <span class="hljs-comment">// ...</span>
     <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;can&#x27;t handle the error&quot;</span>) {
-*!*
+
       <span class="hljs-keyword">throw</span> e;
-*/!*
+
     }
 
   } <span class="hljs-keyword">finally</span> {

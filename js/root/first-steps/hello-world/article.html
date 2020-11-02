@@ -12,11 +12,11 @@
 
   <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>script 标签之前...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
 
-*!*
+
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
     alert(<span class="hljs-string">&#x27;Hello, world!&#x27;</span>);
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-*/!*
+
 
   <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>...script 标签之后<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
 
@@ -58,10 +58,10 @@
 之后，其他页面想要相同的脚本就会从缓存中获取，而不是下载它。所以文件实际上只会下载一次。
 
 这可以节省流量，并使得页面（加载）更快。</code></pre>
-<p>````warn header=&quot;如果设置了 <code>src</code> 特性，<code>script</code> 标签内容将会被忽略。&quot;
+<p>`&quot;如果设置了 <code>src</code> 特性，<code>script</code> 标签内容将会被忽略。&quot;
 一个单独的 <code>&lt;script&gt;</code> 标签不能同时有 <code>src</code> 特性和内部包裹的代码。</p>
 <p>这将不会工作：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> *!*<span class="hljs-attr">src</span>*/!*=<span class="hljs-string">&quot;file.js&quot;</span>&gt;</span><span class="javascript">
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;file.js&quot;</span>&gt;</span><span class="javascript">
   alert(<span class="hljs-number">1</span>); <span class="hljs-comment">// 此内容会被忽略，因为设定了 src</span>
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>我们必须进行选择，要么使用外部的 <code>&lt;script src=&quot;…&quot;&gt;</code>，要么使用正常包裹代码的 <code>&lt;script&gt;</code>。</p>

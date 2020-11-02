@@ -18,7 +18,7 @@
 
 其中之一就是使用特殊的名字 `__proto__`，就像这样：
 
-```js run
+```js
 let animal = {
   eats: true
 };
@@ -26,12 +26,12 @@ let rabbit = {
   jumps: true
 };
 
-*!*
+
 rabbit.__proto__ = animal;
-*/!*
+
 ```
 
-```smart header="`__proto__` 是 `[[Prototype]]` 的因历史原因而留下来的 getter/setter"
+`__proto__` 是 `[[Prototype]]` 的因历史原因而留下来的 getter/setter"
 请注意，`__proto__` 与 `[[Prototype]]` **不一样**。`__proto__` 是 `[[Prototype]]` 的 getter/setter。
 
 `__proto__` 的存在是历史的原因。在现代编程语言中，将其替换为函数 `Object.getPrototypeOf/Object.setPrototypeOf` 也能 get/set 原型。我们稍后将学习造成这种情况的原因以及这些函数。
@@ -51,14 +51,14 @@ let rabbit = {
   jumps: true
 };
 
-*!*
+
 rabbit.__proto__ = animal; // (*)
-*/!*
+
 
 // 现在这两个属性我们都能在 rabbit 中找到：
-*!*
+
 alert( rabbit.eats ); // true (**)
-*/!*
+
 alert( rabbit.jumps ); // true
 ```
 
@@ -74,14 +74,14 @@ alert( rabbit.jumps ); // true
 
 如果我们在 `animal` 中有一个方法，它可以在 `rabbit` 中被调用：
 
-```js run
+```js
 let animal = {
   eats: true,
-*!*
+
   walk() {
     alert("Animal walk");
   }
-*/!*
+
 };
 
 let rabbit = {
@@ -90,9 +90,9 @@ let rabbit = {
 };
 
 // walk 方法是从原型中获得的
-*!*
+
 rabbit.walk(); // Animal walk
-*/!*
+
 ```
 
 该方法是自动地从原型中获得的，像这样：
@@ -101,7 +101,7 @@ rabbit.walk(); // Animal walk
 
 原型链可以很长：
 
-```js run
+```js
 let animal = {
   eats: true,
   walk() {
@@ -111,16 +111,16 @@ let animal = {
 
 let rabbit = {
   jumps: true,
-*!*
+
   __proto__: animal
-*/!*
+
 };
 
 let longEar = {
   earLength: 10,
-*!*
+
   __proto__: rabbit
-*/!*
+
 };
 
 // walk 是通过原型链获得的
@@ -145,7 +145,7 @@ alert(longEar.jumps); // true（从 rabbit）
 
 在下面的示例中，我们将为 `rabbit` 分配自己的 `walk`：
 
-```js run
+```js
 let animal = {
   eats: true,
   walk() {
@@ -157,11 +157,11 @@ let rabbit = {
   __proto__: animal
 };
 
-*!*
+
 rabbit.walk = function() {
   alert("Rabbit! Bounce-bounce!");
 };
-*/!*
+
 
 rabbit.walk(); // Rabbit! Bounce-bounce!
 ```
@@ -174,7 +174,7 @@ rabbit.walk(); // Rabbit! Bounce-bounce!
 
 也就是这个原因，所以下面这段代码中的 `admin.fullName` 能够正常运行：
 
-```js run
+```js
 let user = {
   name: "John",
   surname: "Smith",
@@ -217,7 +217,7 @@ admin.fullName = "Alice Cooper"; // (**)
 
 调用 `rabbit.sleep()` 会在 `rabbit` 对象上设置 `this.isSleeping`：
 
-```js run
+```js
 // animal 有一些方法
 let animal = {
   walk() {
@@ -256,7 +256,7 @@ alert(animal.isSleeping); // undefined（原型中没有此属性）
 
 例如：
 
-```js run
+```js
 let animal = {
   eats: true
 };
@@ -266,22 +266,22 @@ let rabbit = {
   __proto__: animal
 };
 
-*!*
+
 // Object.keys 只返回自己的 key
 alert(Object.keys(rabbit)); // jumps
-*/!*
 
-*!*
+
+
 // for..in 会遍历自己以及继承的键
 for(let prop in rabbit) alert(prop); // jumps，然后是 eats
-*/!*
+
 ```
 
 如果这不是我们想要的，并且我们想排除继承的属性，那么这儿有一个内建方法 [obj.hasOwnProperty(key)](mdn:js/Object/hasOwnProperty)：如果 `obj` 具有自己的（非继承的）名为 `key` 的属性，则返回 `true`。
 
 因此，我们可以过滤掉继承的属性（或对它们进行其他操作）：
 
-```js run
+```js
 let animal = {
   eats: true
 };
@@ -312,7 +312,7 @@ for(let prop in rabbit) {
 
 答案很简单：它是不可枚举的。就像 `Object.prototype` 的其他属性，`hasOwnProperty` 有 `enumerable:false` 标志。并且 `for..in` 只会列出可枚举的属性。这就是为什么它和其余的 `Object.prototype` 属性都未被列出。
 
-```smart header="几乎所有其他键/值获取方法都忽略继承的属性"
+几乎所有其他键/值获取方法都忽略继承的属性"
 几乎所有其他键/值获取方法，例如 `Object.keys` 和 `Object.values` 等，都会忽略继承的属性。
 
 它们只会对对象自身进行操作。**不考虑** 继承自原型的属性。

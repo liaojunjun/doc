@@ -72,11 +72,11 @@ promise.then(<span class="hljs-function"><span class="hljs-keyword">function</sp
 
   alert(result); <span class="hljs-comment">// 1</span>
 
-*!*
+
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> { <span class="hljs-comment">// (*)</span>
     <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> resolve(result * <span class="hljs-number">2</span>), <span class="hljs-number">1000</span>);
   });
-*/!*
+
 
 }).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">result</span>) </span>{ <span class="hljs-comment">// (**)</span>
 
@@ -142,7 +142,7 @@ promise.then(<span class="hljs-function"><span class="hljs-keyword">function</sp
 
 这是一个 thenable 对象的示例：
 
-```js run
+```js
 class Thenable {
   constructor(num) {
     this.num = num;
@@ -156,9 +156,9 @@ class Thenable {
 
 new Promise(resolve =&gt; resolve(1))
   .then(result =&gt; {
-*!*
+
     return new Thenable(result); // (*)
-*/!*
+
   })
   .then(alert); // 1000ms 后显示 2
 ```
@@ -217,9 +217,9 @@ fetch(<span class="hljs-string">&#x27;/article/promise-chaining/user.json&#x27;<
   .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
   .then(<span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> fetch(<span class="hljs-string">`https://api.github.com/users/<span class="hljs-subst">${user.name}</span>`</span>))
   .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
-*!*
+
   .then(<span class="hljs-function"><span class="hljs-params">githubUser</span> =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">resolve, reject</span>) </span>{ <span class="hljs-comment">// (*)</span>
-*/!*
+
     <span class="hljs-keyword">let</span> img = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;img&#x27;</span>);
     img.src = githubUser.avatar_url;
     img.className = <span class="hljs-string">&quot;promise-avatar-example&quot;</span>;
@@ -227,9 +227,9 @@ fetch(<span class="hljs-string">&#x27;/article/promise-chaining/user.json&#x27;<
 
     <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
       img.remove();
-*!*
+
       resolve(githubUser); <span class="hljs-comment">// (**)</span>
-*/!*
+
     }, <span class="hljs-number">3000</span>);
   }))
   <span class="hljs-comment">// 3 秒后触发</span>

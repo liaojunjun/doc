@@ -17,16 +17,16 @@ let user = {
 
 function wrap(target) {
   return new Proxy(target, {
-*!*
+
       /* 你的代码 */
-*/!*
+
   });
 }
 
 user = wrap(user);
 
 alert(user.name); // John
-*!*
+
 alert(user.age); // ReferenceError: Property doesn't exist "age"
-*/!*
+
 ```

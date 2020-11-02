@@ -22,17 +22,17 @@ JavaScript 的精髓在于创建一个函数并将其传递到某个地方。
 
 例如，我们可以使用它在对象方法内部进行迭代：
 
-```js run
+```js
 let group = {
   title: "Our Group",
   students: ["John", "Pete", "Alice"],
 
   showList() {
-*!*
+
     this.students.forEach(
       student => alert(this.title + ': ' + student)
     );
-*/!*
+
   }
 };
 
@@ -43,18 +43,18 @@ group.showList();
 
 如果我们使用正常的函数，则会出现错误：
 
-```js run
+```js
 let group = {
   title: "Our Group",
   students: ["John", "Pete", "Alice"],
 
   showList() {
-*!*
+
     this.students.forEach(function(student) {
       // Error: Cannot read property 'title' of undefined
       alert(this.title + ': ' + student)
     });
-*/!*
+
   }
 };
 
@@ -65,11 +65,11 @@ group.showList();
 
 但箭头函数就没事，因为它们没有 `this`。
 
-```warn header="不能对箭头函数进行 `new` 操作"
+"不能对箭头函数进行 `new` 操作"
 不具有 `this` 自然也就意味着另一个限制：箭头函数不能用作构造器（constructor）。不能用 `new` 调用它们。
 ```
 
-```smart header="箭头函数 VS bind"
+箭头函数 VS bind"
 箭头函数 `=>` 和使用 `.bind(this)` 调用的常规函数之间有细微的差别：
 
 - `.bind(this)` 创建了一个该函数的“绑定版本”。
@@ -84,7 +84,7 @@ group.showList();
 
 例如，`defer(f, ms)` 获得了一个函数，并返回一个包装器，该包装器将调用延迟 `ms` 毫秒：
 
-```js run
+```js
 function defer(f, ms) {
   return function() {
     setTimeout(() => f.apply(this, arguments), ms)

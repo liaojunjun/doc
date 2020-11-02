@@ -4,7 +4,7 @@
 
 这是一个例子：
 
-```html run height=80
+```html height=80
 <div id="elem1"></div>
 <div id="elem2"></div>
 <div id="elem3"></div>

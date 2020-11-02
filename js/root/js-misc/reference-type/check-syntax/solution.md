@@ -2,7 +2,7 @@
 
 试一下：
 
-```js run
+```js
 let user = {
   name: "John",
   go: function() { alert(this.name) }
@@ -25,11 +25,11 @@ let user = { go:... }(user.go)()
 
 如果我们插入该分号，一切都变得正常：
 
-```js run
+```js
 let user = {
   name: "John",
   go: function() { alert(this.name) }
-}*!*;*/!*
+};
 
 (user.go)() // John
 ```

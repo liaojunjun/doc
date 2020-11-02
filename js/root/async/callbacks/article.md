@@ -2,7 +2,7 @@
 
 # 简介：回调
 
-```warn header="我们在这里的示例中使用了浏览器方法"
+"我们在这里的示例中使用了浏览器方法"
 为了演示回调、promise 和其他抽象概念的使用，我们将使用一些浏览器方法：具体地说，是加载脚本和执行简单的文档操作的方法。
 
 如果你不熟悉这些方法，并且对它们在这些示例中的用法感到疑惑，那么你可能需要阅读本教程 [下一部分](/document) 中的几章。
@@ -55,9 +55,9 @@ loadScript('/my/script.js');
 ```js
 loadScript('/my/script.js'); // 这个脚本有 "function newFunction() {…}"
 
-*!*
+
 newFunction(); // 没有这个函数！
-*/!*
+
 ```
 
 自然情况下，浏览器可能没有时间加载脚本。到目前为止，`loadScript` 函数并没有提供跟踪加载完成的方法。脚本加载并最终运行，仅此而已。但我们希望了解脚本何时加载完成，以使用其中的新函数和变量。
@@ -65,13 +65,13 @@ newFunction(); // 没有这个函数！
 让我们添加一个 `callback` 函数作为 `loadScript` 的第二个参数，该函数应在脚本加载完成时执行：
 
 ```js
-function loadScript(src, *!*callback*/!*) {
+function loadScript(src, callback) {
   let script = document.createElement('script');
   script.src = src;
 
-*!*
+
   script.onload = () => callback(script);
-*/!*
+
 
   document.head.append(script);
 }
@@ -91,7 +91,7 @@ loadScript('/my/script.js', function() {
 
 这是一个带有真实脚本的可运行的示例：
 
-```js run
+```js
 function loadScript(src, callback) {
   let script = document.createElement('script');
   script.src = src;
@@ -99,12 +99,12 @@ function loadScript(src, callback) {
   document.head.append(script);
 }
 
-*!*
+
 loadScript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js', script => {
   alert(`Cool, the script ${script.src} is loaded`);
   alert( _ ); // 所加载的脚本中声明的函数
 });
-*/!*
+
 ```
 
 这被称为“基于回调”的异步编程风格。异步执行某项功能的函数应该提供一个 `callback` 参数用于在相应事件完成时调用。（译注：上面这个例子中的相应事件是指脚本加载）
@@ -122,11 +122,11 @@ loadScript('/my/script.js', function(script) {
 
   alert(`Cool, the ${script.src} is loaded, let's load one more`);
 
-*!*
+
   loadScript('/my/script2.js', function(script) {
     alert(`Cool, the second script is loaded`);
   });
-*/!*
+
 
 });
 ```
@@ -140,11 +140,11 @@ loadScript('/my/script.js', function(script) {
 
   loadScript('/my/script2.js', function(script) {
 
-*!*
+
     loadScript('/my/script3.js', function(script) {
       // ...加载完所有脚本后继续
     });
-*/!*
+
 
   })
 
@@ -164,10 +164,10 @@ function loadScript(src, callback) {
   let script = document.createElement('script');
   script.src = src;
 
-*!*
+
   script.onload = () => callback(null, script);
   script.onerror = () => callback(new Error(`Script load error for ${src}`));
-*/!*
+
 
   document.head.append(script);
 }
@@ -216,9 +216,9 @@ loadScript('1.js', function(error, script) {
           if (error) {
             handleError(error);
           } else {
-  *!*
+  
             // ...加载完所有脚本后继续 (*)
-  */!*
+  
           }
         });
 

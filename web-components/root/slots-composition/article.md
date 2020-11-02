@@ -29,21 +29,21 @@
 
 在这里 `<user-card>` shadow DOM 提供两个插槽, 从 light DOM 填充：
 
-```html run autorun="no-epub" untrusted height=80
+```html autorun="no-epub" untrusted height=80
 <script>
 customElements.define('user-card', class extends HTMLElement {
   connectedCallback() {
     this.attachShadow({mode: 'open'});
     this.shadowRoot.innerHTML = `
       <div>Name:
-*!*
+
         <slot name="username"></slot>
-*/!*
+
       </div>
       <div>Birthday:
-*!*
+
         <slot name="birthday"></slot>
-*/!*
+
       </div>
     `;
   }
@@ -51,8 +51,8 @@ customElements.define('user-card', class extends HTMLElement {
 </script>
 
 <user-card>
-  <span *!*slot="username"*/!*>John Smith</span>
-  <span *!*slot="birthday"*/!*>01.01.2001</span>
+  <span slot="username">John Smith</span>
+  <span slot="birthday">01.01.2001</span>
 </user-card>
 ```
 
@@ -112,7 +112,7 @@ alert( document.querySelector('user-card span').length ); // 2
 
 因此，扁平化 DOM 是通过插入插槽从 shadow DOM 派生出来的。浏览器渲染它并且用于样式继承、事件传播。但是 JavaScript 在展平前仍按原样看到文档。
 
-````warn header="仅顶层子元素可以设置 slot=\"...\" 特性"
+`"仅顶层子元素可以设置 slot=\"...\" 特性"
 `slot="..."` 属性仅仅对 shadow host 的直接子代 (在我们的例子中的 `<user-card>` 元素) 有效。对于嵌套元素它将被忽略。
 
 例如，这里的第二个 `<span>` 被忽略了(因为它不是 `<user-card>` 的顶层子元素)：
@@ -172,7 +172,7 @@ shadow DOM 中第一个没有名字的 `<slot>` 是一个默认插槽。它从 l
 
 例如，让我们把默认插槽添加到 `<user-card>`，该位置可以收集有关用户的所有未开槽（unslotted）的信息：
 
-```html run autorun="no-epub" untrusted height=140
+```html autorun="no-epub" untrusted height=140
 <script>
 customElements.define('user-card', class extends HTMLElement {
   connectedCallback() {
@@ -186,9 +186,9 @@ customElements.define('user-card', class extends HTMLElement {
     </div>
     <fieldset>
       <legend>Other information</legend>
-*!*
+
       <slot></slot>
-*/!*
+
     </fieldset>
     `;
   }
@@ -196,14 +196,14 @@ customElements.define('user-card', class extends HTMLElement {
 </script>
 
 <user-card>
-*!*
+
   <div>I like to swim.</div>
-*/!*
+
   <span slot="username">John Smith</span>
   <span slot="birthday">01.01.2001</span>
-*!*
+
   <div>...And play volleyball too!</div>
-*/!*
+
 </user-card>
 ```
 
@@ -228,12 +228,12 @@ customElements.define('user-card', class extends HTMLElement {
     </div>
     <fieldset>
       <legend>About me</legend>
-*!*
+
       <slot>
         <div>Hello</div>
         <div>I am John!</div>
       </slot>
-*/!*
+
     </fieldset>
 </user-card>
 ```
@@ -330,7 +330,7 @@ customElements.define('custom-menu', class extends HTMLElement {
 
 例如，这里的菜单项在 1 秒后动态插入，而且标题在 2 秒后改变。
 
-```html run untrusted height=80
+```html untrusted height=80
 <custom-menu id="menu">
   <span slot="title">Candy menu</span>
 </custom-menu>
@@ -390,7 +390,7 @@ setTimeout(() => {
 
 例如，如果 `<custom-menu>` 组件想知道它所显示的内容，那么它可以跟踪 `slotchange` 并从 `slot.assignedElements` 获取：
 
-```html run untrusted height=120
+```html untrusted height=120
 <custom-menu id="menu">
   <span slot="title">Candy menu</span>
   <li slot="item">Lollipop</li>
@@ -409,7 +409,7 @@ customElements.define('custom-menu', class extends HTMLElement {
     </div>`;
 
     // 插槽能被添加/删除/代替
-*!*
+
     this.shadowRoot.firstElementChild.addEventListener('slotchange', e => {
       let slot = e.target;
       if (slot.name == 'item') {
@@ -417,7 +417,7 @@ customElements.define('custom-menu', class extends HTMLElement {
         alert("Items: " + this.items);
       }
     });
-*/!*
+
   }
 });
 

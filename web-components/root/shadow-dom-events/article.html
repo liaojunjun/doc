@@ -30,9 +30,9 @@ customElements.define(<span class="hljs-string">&#x27;user-card&#x27;</span>, <s
 <p><strong>如果事件发生在 slotted 元素上，实际存在于 light DOM 上，则不会发生重定向。</strong></p>
 <p>例如，在下面的例子中，如果用户点击了 <code>&lt;span slot=&quot;username&quot;&gt;</code>，那么对于 shadow 和 light 处理程序来说，事件目标就是当前这个 <code>span</code> 元素。</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;userCard&quot;</span>&gt;</span>
-*!*
+
   <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span>John Smith<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-*/!*
+
 <span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
@@ -67,7 +67,7 @@ userCard.onclick = <span class="hljs-function"><span class="hljs-params">e</span
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span></code></pre>
 <p>因此，对于 <code>&lt;span slot=&quot;username&quot;&gt;</code> 上的点击事件，会调用 <code>event.composedPath()</code> 并返回一个数组：[<code>span</code>, <code>slot</code>, <code>div</code>, <code>shadow-root</code>, <code>user-card</code>, <code>body</code>, <code>html</code>, <code>document</code>, <code>window</code>]。在组合之后，这正是扁平 DOM 中目标元素的父链。</p>
-<p>```warn header=&quot;Shadow 树详细信息仅提供给 <code>{mode:&#39;open&#39;}</code> 树&quot;
+<p>&quot;Shadow 树详细信息仅提供给 <code>{mode:&#39;open&#39;}</code> 树&quot;
 如果 shadow 树是用 <code>{mode: &#39;closed&#39;}</code> 创建的，那么组合路径就从 host 开始：<code>user-card</code> 及其更上层。</p>
 <p>这与使用 shadow DOM 的其他方法的原理类似。closed 树内部是完全隐藏的。</p>
 <pre><code>
@@ -103,7 +103,7 @@ userCard.onclick = <span class="hljs-function"><span class="hljs-params">e</span
 
 例如，我们在 `div#outer` shadow DOM 内部创建 `div#inner` 并在其上触发两个事件。只有 `composed: true` 的那个自定义事件才会让该事件本身冒泡到文档外面：
 
-```html run untrusted height=0
+```html untrusted height=0
 &lt;div id=&quot;outer&quot;&gt;&lt;/div&gt;
 
 &lt;script&gt;
@@ -122,17 +122,17 @@ document.addEventListener(&#x27;test&#x27;, event =&gt; alert(event.detail));
 
 inner.dispatchEvent(new CustomEvent(&#x27;test&#x27;, {
   bubbles: true,
-*!*
+
   composed: true,
-*/!*
+
   detail: &quot;composed&quot;
 }));
 
 inner.dispatchEvent(new CustomEvent(&#x27;test&#x27;, {
   bubbles: true,
-*!*
+
   composed: false,
-*/!*
+
   detail: &quot;not composed&quot;
 }));
 &lt;/script&gt;</code></pre>

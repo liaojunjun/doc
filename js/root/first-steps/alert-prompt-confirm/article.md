@@ -8,7 +8,7 @@
 
 例如：
 
-```js run
+```js
 alert("Hello");
 ```
 
@@ -30,7 +30,7 @@ result = prompt(title, [default]);
 `default`
 : 可选的第二个参数，指定 input 框的初始值。
 
-```smart header="语法中的方括号 `[...]`"
+语法中的方括号 `[...]`"
 上述语法中 `default` 周围的方括号表示该参数是可选的，不是必需的。
 ```
 
@@ -40,24 +40,24 @@ result = prompt(title, [default]);
 
 举个例子：
 
-```js run
+```js
 let age = prompt('How old are you?', 100);
 
 alert(`You are ${age} years old!`); // You are 100 years old!
 ```
 
-````warn header="IE 浏览器会提供默认值"
+`"IE 浏览器会提供默认值"
 第二个参数是可选的。但是如果我们不提供的话，Internet Explorer 会把 `"undefined"` 插入到 prompt。
 
 我们可以在 Internet Explorer 中运行下面这行代码来看看效果：
 
-```js run
+```js
 let test = prompt("Test");
 ```
 
 所以，为了 prompt 在 IE 中有好的效果，我们建议始终提供第二个参数：
 
-```js run
+```js
 let test = prompt("Test", ''); // <-- 用于 IE 浏览器
 ```
 ````
@@ -76,7 +76,7 @@ result = confirm(question);
 
 例如：
 
-```js run
+```js
 let isBoss = confirm("Are you the boss?");
 
 alert( isBoss ); // 如果“确定”按钮被按下，则显示 true

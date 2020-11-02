@@ -1,7 +1,7 @@
 
 答案是 `pattern:<[^<>]+>`。
 
-```js run
+```js
 let reg = /<[^<>]+>/g;
 
 let str = '<> <a href="/"> <input type="radio" checked> <b>';

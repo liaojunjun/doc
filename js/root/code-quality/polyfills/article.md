@@ -40,8 +40,8 @@ JavaScript 引擎背后的团队关于首先要实现什么有着他们自己想
 ````online
 大多数例子都是可运行的，例如：
 
-```js run
-alert('Press the "Play" button in the upper-right corner to run');
+```js
+alert('Press the "Play" button in the upper-right corner to');
 ```
 
 只有在你的浏览器支持它时才会工作的现代 JS 例子。

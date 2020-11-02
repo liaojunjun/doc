@@ -62,7 +62,7 @@ pow(x, n) =
 
 在这儿，我们可以使用条件运算符 `?` 而不是 `if` 语句，从而使 `pow(x, n)` 更简洁并且可读性依然很高：
 
-```js run
+```js
 function pow(x, n) {
   return (n == 1) ? x : (x * pow(x, n - 1));
 }
@@ -98,9 +98,9 @@ function pow(x, n) {
   <span class="hljs-keyword">if</span> (n == <span class="hljs-number">1</span>) {
     <span class="hljs-keyword">return</span> x;
   } <span class="hljs-keyword">else</span> {
-*!*
+
     <span class="hljs-keyword">return</span> x * pow(x, n - <span class="hljs-number">1</span>);
-*/!*
+
   }
 }
 
@@ -162,9 +162,9 @@ alert( pow(<span class="hljs-number">2</span>, <span class="hljs-number">3</span
 <p>在执行 <code>pow(2, 1)</code> 时，与之前的不同，条件 <code>n == 1</code> 为 true，因此 <code>if</code> 的第一个分支生效：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pow</span>(<span class="hljs-params">x, n</span>) </span>{
   <span class="hljs-keyword">if</span> (n == <span class="hljs-number">1</span>) {
-*!*
+
     <span class="hljs-keyword">return</span> x;
-*/!*
+
   } <span class="hljs-keyword">else</span> {
     <span class="hljs-keyword">return</span> x * pow(x, n - <span class="hljs-number">1</span>);
   }
@@ -266,7 +266,7 @@ alert( pow(<span class="hljs-number">2</span>, <span class="hljs-number">3</span
 };
 
 <span class="hljs-comment">// 用来完成任务的函数</span>
-*!*
+
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sumSalaries</span>(<span class="hljs-params">department</span>) </span>{
   <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(department)) { <span class="hljs-comment">// 情况（1）</span>
     <span class="hljs-keyword">return</span> department.reduce(<span class="hljs-function">(<span class="hljs-params">prev, current</span>) =&gt;</span> prev + current.salary, <span class="hljs-number">0</span>); <span class="hljs-comment">// 求数组的和</span>
@@ -278,7 +278,7 @@ alert( pow(<span class="hljs-number">2</span>, <span class="hljs-number">3</span
     <span class="hljs-keyword">return</span> sum;
   }
 }
-*/!*
+
 
 alert(sumSalaries(company)); <span class="hljs-comment">// 7700</span></code></pre>
 <p>代码很短也容易理解（希望是这样？）。这就是递归的能力。它适用于任何层次的子部门嵌套。</p>
@@ -355,10 +355,10 @@ list.next = { <span class="hljs-attr">value</span>: <span class="hljs-number">2<
 list.next.next = { <span class="hljs-attr">value</span>: <span class="hljs-number">3</span> };
 list.next.next.next = { <span class="hljs-attr">value</span>: <span class="hljs-number">4</span> };
 
-*!*
+
 <span class="hljs-comment">// 将新值添加到链表头部</span>
 list = { <span class="hljs-attr">value</span>: <span class="hljs-string">&quot;new item&quot;</span>, <span class="hljs-attr">next</span>: list };
-*/!*</code></pre>
+</code></pre>
 <p><img src="linked-list-0.svg" alt="链表"></p>
 <p>要从中间删除一个值，可以修改前一个元素的 <code>next</code>：</p>
 <pre><code class="language-js">list.next = list.next.next;</code></pre>

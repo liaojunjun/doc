@@ -1,7 +1,7 @@
 
 # inBetween 筛选器
 
-```js run
+```js
 function inBetween(a, b) {
   return function(x) {
     return x >= a && x <= b;
@@ -14,7 +14,7 @@ alert( arr.filter(inBetween(3, 6)) ); // 3,4,5,6
 
 # inArray 筛选器
 
-```js run demo
+```js demo
 function inArray(arr) {
   return function(x) {
     return arr.includes(x);

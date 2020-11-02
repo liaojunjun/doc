@@ -2,7 +2,7 @@
 
 然后，它的全宽度 `offsetWidth` 和内部内容宽度 `clientWidth` 之间的差值就是滚动条的宽度：
 
-```js run
+```js
 // 创建一个包含滚动条的 div
 let div = document.createElement('div');
 

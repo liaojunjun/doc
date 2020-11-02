@@ -15,7 +15,7 @@
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
   <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">go</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ alert(<span class="hljs-built_in">this</span>.name) }
-}*!*;*/!*
+};
 
 (user.go)() <span class="hljs-comment">// John</span></code></pre>
 <p>要注意的是，<code>(user.go)</code> 外边这层括号在这没有任何作用。通常用它们来设置操作的顺序，但在这里点符号 <code>.</code> 总是会先执行，所以并没有什么影响。分号是唯一重要的。</p>

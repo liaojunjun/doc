@@ -2,7 +2,7 @@
 
 所以调用 `arr[2]` 函数也就是调用对象函数。自然地，它接收 `this` 引用的对象 `arr` 然后输出该数组：
 
-```js run
+```js
 let arr = ["a", "b"];
 
 arr.push(function() {

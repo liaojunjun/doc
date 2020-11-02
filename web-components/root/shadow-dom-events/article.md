@@ -10,7 +10,7 @@ Shadow tree 背后的思想是封装组件的内部实现细节。
 
 这里有个简单的例子：
 
-```html run autorun="no-epub" untrusted height=60
+```html autorun="no-epub" untrusted height=60
 <user-card></user-card>
 
 <script>
@@ -41,11 +41,11 @@ document.onclick =
 
 例如，在下面的例子中，如果用户点击了 `<span slot="username">`，那么对于 shadow 和 light 处理程序来说，事件目标就是当前这个 `span` 元素。
 
-```html run autorun="no-epub" untrusted height=60
+```html autorun="no-epub" untrusted height=60
 <user-card id="userCard">
-*!*
+
   <span slot="username">John Smith</span>
-*/!*
+
 </user-card>
 
 <script>
@@ -94,7 +94,7 @@ userCard.onclick = e => alert(`Outer target: ${e.target.tagName}`);
 
 因此，对于 `<span slot="username">` 上的点击事件，会调用 `event.composedPath()` 并返回一个数组：[`span`, `slot`, `div`, `shadow-root`, `user-card`, `body`, `html`, `document`, `window`]。在组合之后，这正是扁平 DOM 中目标元素的父链。
 
-```warn header="Shadow 树详细信息仅提供给 `{mode:'open'}` 树"
+"Shadow 树详细信息仅提供给 `{mode:'open'}` 树"
 如果 shadow 树是用 `{mode: 'closed'}` 创建的，那么组合路径就从 host 开始：`user-card` 及其更上层。
 
 这与使用 shadow DOM 的其他方法的原理类似。closed 树内部是完全隐藏的。
@@ -132,7 +132,7 @@ userCard.onclick = e => alert(`Outer target: ${e.target.tagName}`);
 
 例如，我们在 `div#outer` shadow DOM 内部创建 `div#inner` 并在其上触发两个事件。只有 `composed: true` 的那个自定义事件才会让该事件本身冒泡到文档外面：
 
-```html run untrusted height=0
+```html untrusted height=0
 <div id="outer"></div>
 
 <script>
@@ -151,17 +151,17 @@ document.addEventListener('test', event => alert(event.detail));
 
 inner.dispatchEvent(new CustomEvent('test', {
   bubbles: true,
-*!*
+
   composed: true,
-*/!*
+
   detail: "composed"
 }));
 
 inner.dispatchEvent(new CustomEvent('test', {
   bubbles: true,
-*!*
+
   composed: false,
-*/!*
+
   detail: "not composed"
 }));
 </script>

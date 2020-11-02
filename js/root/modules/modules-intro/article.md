@@ -57,7 +57,7 @@ sayHi('John'); // Hello, John!
 
 浏览器会自动获取并解析（evaluate）导入的模块（如果需要，还可以分析该模块的导入），然后运行该脚本。
 
-```warn header="模块只通过 HTTP(s) 工作，在本地文件则不行"
+"模块只通过 HTTP(s) 工作，在本地文件则不行"
 如果你尝试通过 `file://` 协议在本地打开一个网页，你会发现 `import/export` 指令不起作用。你可以使用本地 Web 服务器，例如 [static-server](https://www.npmjs.com/package/static-server#getting-started)，或者使用编辑器的“实时服务器”功能，例如 VS Code 的 [Live Server Extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) 来测试模块。
 ```
 
@@ -71,7 +71,7 @@ sayHi('John'); // Hello, John!
 
 模块始终默认使用 `use strict`，例如，对一个未声明的变量赋值将产生错误（译注：在浏览器控制台可以看到 error 信息）。
 
-```html run
+```html
 <script type="module">
   a = 5; // error
 </script>
@@ -95,16 +95,16 @@ sayHi('John'); // Hello, John!
 
 在浏览器中，每个 `<script type="module">` 也存在独立的顶级作用域（译注：在浏览器控制台可以看到 error 信息）。
 
-```html run
+```html
 <script type="module">
   // 变量仅在这个 module script 内可见
   let user = "John";
 </script>
 
 <script type="module">
-  *!*
+  
   alert(user); // Error: user is not defined
-  */!*
+  
 </script>
 ```
 
@@ -159,10 +159,10 @@ admin.name = "Pete";
 import {admin} from './admin.js';
 alert(admin.name); // Pete
 
-*!*
+
 // 1.js 和 2.js 导入的是同一个对象
 // 在 1.js 中对对象做的更改，在 2.js 中也是可见的
-*/!*
+
 ```
 
 所以，让我们重申一下 —— 模块只被执行一次。生成导出，然后它被分享给所有对其的导入，所以如果某个地方修改了 `admin` 对象，其他的模块也能看到这个修改。
@@ -194,9 +194,9 @@ admin.name = "Pete";
 // 📁 other.js
 import {admin, sayHi} from './admin.js';
 
-alert(admin.name); // *!*Pete*/!*
+alert(admin.name); // Pete
 
-sayHi(); // Ready to serve, *!*Pete*/!*!
+sayHi(); // Ready to serve, Pete!
 ```
 
 ### import.meta
@@ -205,7 +205,7 @@ sayHi(); // Ready to serve, *!*Pete*/!*!
 
 它的内容取决于其所在的环境。在浏览器环境中，它包含当前脚本的 URL，或者如果它是在 HTML 中的话，则包含当前页面的 URL。
 
-```html run height=0
+```html height=0
 <script type="module">
   alert(import.meta.url); // 脚本的 URL（对于内嵌脚本来说，则是当前 HTML 页面的 URL）
 </script>
@@ -219,7 +219,7 @@ sayHi(); // Ready to serve, *!*Pete*/!*!
 
 将其与非模块脚本进行比较会发现，非模块脚本的顶级 `this` 是全局对象：
 
-```html run height=0
+```html height=0
 <script>
   alert(this); // window
 </script>
@@ -248,20 +248,20 @@ sayHi(); // Ready to serve, *!*Pete*/!*!
 
 例如：
 
-```html run
+```html
 <script type="module">
-*!*
+
   alert(typeof button); // object：脚本可以“看见”下面的 button
-*/!*
+
   // 因为模块是被延迟的（deferred，所以模块脚本会在整个页面加载完成后才运行
 </script>
 
 相较于下面这个常规脚本：
 
 <script>
-*!*
+
   alert(typeof button); // Error: button is undefined，脚本看不到下面的元素
-*/!*
+
   // 常规脚本会立即运行，常规脚本的运行是在在处理页面的其余部分之前进行的
 </script>
 
@@ -289,7 +289,7 @@ sayHi(); // Ready to serve, *!*Pete*/!*!
 ```html
 <!-- 所有依赖都获取完成（analytics.js）然后脚本开始运行 -->
 <!-- 不会等待 HTML 文档或者其他 <script> 标签 -->
-<script *!*async*/!* type="module">
+<script async type="module">
   import {counter} from './analytics.js';
 
   counter.count();
@@ -311,7 +311,7 @@ sayHi(); // Ready to serve, *!*Pete*/!*!
     ```html
     <!-- another-site.com 必须提供 Access-Control-Allow-Origin -->
     <!-- 否则，脚本将无法执行 -->
-    <script type="module" src="*!*http://another-site.com/their.js*/!*"></script>
+    <script type="module" src="http://another-site.com/their.js"></script>
     ```
 
     默认这样做可以确保更好的安全性。
@@ -332,7 +332,7 @@ import {sayHi} from 'sayHi'; // Error，“裸”模块
 
 旧时的浏览器不理解 `type="module"`。未知类型的脚本会被忽略。对此，我们可以使用 `nomodule` 特性来提供一个后备：
 
-```html run
+```html
 <script type="module">
   alert("Runs in modern browsers");
 </script>

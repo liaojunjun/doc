@@ -10,7 +10,7 @@ importance: 5
 
 编写 `replacer` 函数，移除引用 `meetup` 的属性，并将其他所有属性序列化：
 
-```js run
+```js
 let room = {
   number: 23
 };
@@ -21,11 +21,11 @@ let meetup = {
   place: room
 };
 
-*!*
+
 // 循环引用
 room.occupiedBy = meetup;
 meetup.self = meetup;
-*/!*
+
 
 alert( JSON.stringify(meetup, function replacer(key, value) {
   /* your code */

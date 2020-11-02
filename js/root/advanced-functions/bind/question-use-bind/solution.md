@@ -5,7 +5,7 @@
 
 让我们 `bind` 上下文：
 
-```js run
+```js
 function askPassword(ok, fail) {
   let password = prompt("Password?", '');
   if (password == "rockstar") ok();
@@ -25,9 +25,9 @@ let user = {
 
 };
 
-*!*
+
 askPassword(user.loginOk.bind(user), user.loginFail.bind(user));
-*/!*
+
 ```
 
 现在它能正常工作了。

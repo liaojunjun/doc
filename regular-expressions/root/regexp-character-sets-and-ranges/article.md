@@ -8,7 +8,7 @@
 
 这被叫做一个**集合**。集合可以在正则表达式中和其它常规字符一起使用。
 
-```js run
+```js
 // 查找 [t 或者 m]，然后再匹配 “op”
 alert( "Mop top".match(/[tm]op/gi) ); // "Mop", "top"
 ```
@@ -17,7 +17,7 @@ alert( "Mop top".match(/[tm]op/gi) ); // "Mop", "top"
 
 所以下面的示例并不会匹配上：
 
-```js run
+```js
 // 查找 “V”，然后匹配 [o 或者 i]，之后再匹配 “la”
 alert( "Voila".match(/V[oi]la/) ); // null，并没有匹配上
 ```
@@ -38,7 +38,7 @@ alert( "Voila".match(/V[oi]la/) ); // null，并没有匹配上
 
 在下面的示例中，我们会查询首先匹配 `"x"` 字符，再匹配两个数字或者位于 `A` 到 `F` 范围内的字符。
 
-```js run
+```js
 alert( "Exception 0xAF".match(/x[0-9A-F][0-9A-F]/g) ); // xAF
 ```
 
@@ -52,7 +52,7 @@ alert( "Exception 0xAF".match(/x[0-9A-F][0-9A-F]/g) ); // xAF
 
 也可以组合多个类，例如 `pattern:[\s\d]` 表示 “空格字符或数字”。
 
-```smart header="字符类是某些字符集的简写"
+字符类是某些字符集的简写"
 例如：
 
 * **\d** —— 和 `pattern:[0-9]` 相同，
@@ -76,7 +76,7 @@ alert( "Exception 0xAF".match(/x[0-9A-F][0-9A-F]/g) ); // xAF
 
 使用示例：
 
-```js run
+```js
 let regexp = /[\p{Alpha}\p{M}\p{Nd}\p{Pc}\p{Join_C}]/gu;
 
 let str = `Hi 你好 12`;
@@ -87,7 +87,7 @@ alert( str.match(regexp) ); // H,i,你,好,1,2
 
 当然，我们可以编辑此模式：添加 unicode 属性或删除它们。文章 <info:regexp-unicode> 中包含了更多 Unicode 属性的细节。
 
-```warn header="Edge 和 Firefox 不支持 Unicode 属性"
+"Edge 和 Firefox 不支持 Unicode 属性"
 Edge 和 Firefox 尚未实现 Unicode 属性 `pattern:p{…}`。如果确实需要它们，可以使用库 [XRegExp](http://xregexp.com/)。
 
 或者只使用我们想要的语言范围的字符，例如西里尔字母 `pattern:[а-я]`。
@@ -107,7 +107,7 @@ Edge 和 Firefox 尚未实现 Unicode 属性 `pattern:p{…}`。如果确实需�
 
 下面的示例查询除了字母，数字和空格之外的任意字符：
 
-```js run
+```js
 alert( "alice15@gmail.com".match(/[^\d\sA-Z]/gi) ); // @ and .
 ```
 
@@ -130,7 +130,7 @@ alert( "alice15@gmail.com".match(/[^\d\sA-Z]/gi) ); // @ and .
 
 在下面的示例中，`pattern:[-().^+]` 会查找 `-().^+` 的其中任意一个字符：
 
-```js run
+```js
 // 并不需要转义
 let reg = /[-().^+]/g;
 
@@ -139,7 +139,7 @@ alert( "1 + 2 - 3".match(reg) ); // 匹配 +，-
 
 。。。但是如果你为了“以防万一”转义了它们，这也不会有任何问题：
 
-```js run
+```js
 //转义其中的所有字符
 let reg = /[\-\(\)\.\^\+]/g;
 
@@ -152,7 +152,7 @@ alert( "1 + 2 - 3".match(reg) ); // 仍能正常工作：+，-
 
 例如，让我们在字符串 `subject:𝒳` 中查找 `pattern:[𝒳𝒴]`：
 
-```js run
+```js
 alert( '𝒳'.match(/[𝒳𝒴]/) ); // 显示一个奇怪的字符，像 [?]
 //（搜索执行不正确，返回了半个字符）
 ```
@@ -167,7 +167,7 @@ alert( '𝒳'.match(/[𝒳𝒴]/) ); // 显示一个奇怪的字符，像 [?]
 
 我们可以看到它们的代码，如下所示：
 
-```js run
+```js
 for(let i=0; i<'𝒳𝒴'.length; i++) {
   alert('𝒳𝒴'.charCodeAt(i)); // 55349, 56499, 55349, 56500
 };
@@ -177,7 +177,7 @@ for(let i=0; i<'𝒳𝒴'.length; i++) {
 
 如果我们添加标志 `pattern:u`，那么行为将是正确的：
 
-```js run
+```js
 alert( '𝒳'.match(/[𝒳𝒴]/u) ); // 𝒳
 ```
 
@@ -185,7 +185,7 @@ alert( '𝒳'.match(/[𝒳𝒴]/u) ); // 𝒳
 
 如果我们忘记添加标志 `pattern:u`，则会出现错误：
 
-```js run
+```js
 '𝒳'.match(/[𝒳-𝒴]/); // 错误：无效的正则表达式
 ```
 
@@ -193,7 +193,7 @@ alert( '𝒳'.match(/[𝒳𝒴]/u) ); // 𝒳
 
 使用标志 `pattern:u`，该模式可以正常匹配：
 
-```js run
+```js
 // 查找字符从 𝒳 到 𝒵
 alert( '𝒴'.match(/[𝒳-𝒵]/u) ); // 𝒴
 ```

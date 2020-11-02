@@ -1,5 +1,5 @@
 
-```js run demo
+```js demo
 function readNumber() {
   let num;
 

@@ -1,7 +1,7 @@
 答案：`null`。
 
 
-```js run
+```js
 function f() {
   alert( this ); // null
 }

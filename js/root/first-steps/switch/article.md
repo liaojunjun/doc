@@ -34,18 +34,18 @@ switch(x) {
 
 `switch` 的例子（高亮的部分是执行的 `case` 部分）：
 
-```js run
+```js
 let a = 2 + 2;
 
 switch (a) {
   case 3:
     alert( 'Too small' );
     break;
-*!*
+
   case 4:
     alert( 'Exactly!' );
     break;
-*/!*
+
   case 5:
     alert( 'Too large' );
     break;
@@ -62,20 +62,20 @@ switch (a) {
 
 无 `break` 的例子：
 
-```js run
+```js
 let a = 2 + 2;
 
 switch (a) {
   case 3:
     alert( 'Too small' );
-*!*
+
   case 4:
     alert( 'Exactly!' );
   case 5:
     alert( 'Too big' );
   default:
     alert( "I don't know such values" );
-*/!*
+
 }
 ```
 
@@ -87,24 +87,24 @@ alert( 'Too big' );
 alert( "I don't know such values" );
 ```
 
-````smart header="任何表达式都可以成为 `switch/case` 的参数"
+`任何表达式都可以成为 `switch/case` 的参数"
 `switch` 和 `case` 都允许任意表达式。
 
 比如：
 
-```js run
+```js
 let a = "1";
 let b = 0;
 
 switch (+a) {
-*!*
+
   case b + 1:
     alert("this runs, because +a is 1, exactly equals b+1");
     break;
-*/!*
+
 
   default:
-    alert("this doesn't run");
+    alert("this doesn't");
 }
 ```
 这里 `+a` 返回 `1`，这个值跟 `case` 中 `b + 1` 相比较，然后执行对应的代码。
@@ -116,7 +116,7 @@ switch (+a) {
 
 比如，如果我们想让 `case 3` 和 `case 5` 执行同样的代码：
 
-```js run no-beautify
+```js no-beautify
 let a = 3;
 
 switch (a) {
@@ -124,13 +124,13 @@ switch (a) {
     alert('Right!');
     break;
 
-*!*
+
   case 3: // (*) 下面这两个 case 被分在一组
   case 5:
     alert('Wrong!');
     alert("Why don't you take a math class?");
     break;
-*/!*
+
 
   default:
     alert('The result is strange. Really.');
@@ -147,7 +147,7 @@ switch (a) {
 
 比如，我们来看下面的代码：
 
-```js run
+```js
 let arg = prompt("Enter a value?")
 switch (arg) {
   case '0':

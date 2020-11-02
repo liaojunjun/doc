@@ -1,6 +1,6 @@
 JavaScript 代码：
 
-```js demo run
+```js demo
 let name = prompt("What is your name?", "");
 alert(name);
 ```

@@ -2,13 +2,13 @@
 
 你运行一下试试：
 
-```js run
+```js
 let x = 1;
 
 function func() {
-*!*
+
   console.log(x); // ReferenceError: Cannot access 'x' before initialization
-*/!*
+
   let x = 2;
 }
 
@@ -25,11 +25,11 @@ func();
 
 ```js
 function func() {
-*!*
+
   // 引擎从函数开始就知道局部变量 x，
   // 但是变量 x 一直处于“未初始化”（无法使用）的状态，直到结束 let（“死区”）
   // 因此答案是 error
-*/!*
+
 
   console.log(x); // ReferenceError: Cannot access 'x' before initialization
 

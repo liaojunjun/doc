@@ -63,7 +63,7 @@
 
 首先，让我们做一个简单的咖啡机类：
 
-```js run
+```js
 class CoffeeMachine {
   waterAmount = 0; // 内部的水量
 
@@ -91,7 +91,7 @@ coffeeMachine.waterAmount = 200;
 
 所以我们的属性将被命名为 `_waterAmount`：
 
-```js run
+```js
 class CoffeeMachine {
   _waterAmount = 0;
 
@@ -127,7 +127,7 @@ coffeeMachine.waterAmount = -10; // Error: Negative water
 
 要做到这一点，我们只需要设置 getter，而不设置 setter：
 
-```js run
+```js
 class CoffeeMachine {
   // ...
 
@@ -149,7 +149,7 @@ alert(`Power is: ${coffeeMachine.power}W`); // 功率是：100W
 coffeeMachine.power = 25; // Error（没有 setter）
 ```
 
-````smart header="Getter/setter 函数"
+`Getter/setter 函数"
 这里我们使用了 getter/setter 语法。
 
 但大多数时候首选 `get.../set...` 函数，像这样：
@@ -158,12 +158,12 @@ coffeeMachine.power = 25; // Error（没有 setter）
 class CoffeeMachine {
   _waterAmount = 0;
 
-  *!*setWaterAmount(value)*/!* {
+  setWaterAmount(value) {
     if (value < 0) throw new Error("Negative water");
     this._waterAmount = value;
   }
 
-  *!*getWaterAmount()*/!* {
+  getWaterAmount() {
     return this._waterAmount;
   }
 }
@@ -176,7 +176,7 @@ new CoffeeMachine().setWaterAmount(100);
 另一方面，get/set 语法更短，所以最终没有严格的规定，而是由你自己来决定。
 ````
 
-```smart header="受保护的字段是可以被继承的"
+受保护的字段是可以被继承的"
 如果我们继承 `class MegaMachine extends CoffeeMachine`，那么什么都无法阻止我们从新的类中的方法访问 `this._waterAmount` 或 `this._power`。
 
 所以受保护的字段是自然可被继承的。与我们接下来将看到的私有字段不同。
@@ -192,28 +192,28 @@ new CoffeeMachine().setWaterAmount(100);
 
 例如，这儿有一个私有属性 `#waterLimit` 和检查水量的私有方法 `#checkWater`：
 
-```js run
+```js
 class CoffeeMachine {
-*!*
-  #waterLimit = 200;
-*/!*
 
-*!*
+  #waterLimit = 200;
+
+
+
   #checkWater(value) {
     if (value < 0) throw new Error("Negative water");
     if (value > this.#waterLimit) throw new Error("Too much water");
   }
-*/!*
+
 
 }
 
 let coffeeMachine = new CoffeeMachine();
 
-*!*
+
 // 不能从类的外部访问类的私有属性和方法
 coffeeMachine.#checkWater(); // Error
 coffeeMachine.#waterLimit = 1000; // Error
-*/!*
+
 ```
 
 在语言级别，`#` 是该字段为私有的特殊标志。我们无法从外部或从继承的类中访问它。
@@ -222,7 +222,7 @@ coffeeMachine.#waterLimit = 1000; // Error
 
 例如，让我们使 `waterAmount` 成为 `#waterAmount` 的一个访问器：
 
-```js run
+```js
 class CoffeeMachine {
 
   #waterAmount = 0;
@@ -250,16 +250,16 @@ alert(machine.#waterAmount); // Error
 ```js
 class MegaCoffeeMachine extends CoffeeMachine {
   method() {
-*!*
+
     alert( this.#waterAmount ); // Error: can only access from CoffeeMachine
-*/!*
+
   }
 }
 ```
 
 在许多情况下，这种限制太严重了。如果我们扩展 `CoffeeMachine`，则可能有正当理由访问其内部。这就是为什么大多数时候都会使用受保护字段，即使它们不受语言语法的支持。
 
-````warn header="私有字段不能通过 this[name] 访问"
+`"私有字段不能通过 this[name] 访问"
 私有字段很特别。
 
 正如我们所知道的，通常我们可以使用 `this[name]` 访问字段：
@@ -269,7 +269,7 @@ class User {
   ...
   sayHi() {
     let fieldName = "name";
-    alert(`Hello, ${*!*this[fieldName]*/!*}`);
+    alert(`Hello, ${this[fieldName]}`);
   }
 }
 ```

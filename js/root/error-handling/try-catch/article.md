@@ -36,14 +36,14 @@ try {
 
 - 没有 error 的例子：显示 `alert` `(1)` 和 `(2)`：
 
-    ```js run
+    ```js
     try {
 
-      alert('Start of try runs');  // *!*(1) <--*/!*
+      alert('Start of try runs');  // (1) <--
 
       // ...这里没有 error
 
-      alert('End of try runs');   // *!*(2) <--*/!*
+      alert('End of try runs');   // (2) <--
 
     } catch(err) {
 
@@ -53,31 +53,31 @@ try {
     ```
 - 包含 error 的例子：显示 `(1)` 和 `(3)` 行的 `alert` 中的内容：
 
-    ```js run
+    ```js
     try {
 
-      alert('Start of try runs');  // *!*(1) <--*/!*
+      alert('Start of try runs');  // (1) <--
 
-    *!*
+    
       lalala; // Error，变量未定义！
-    */!*
+    
 
       alert('End of try (never reached)');  // (2)
 
     } catch(err) {
 
-      alert(`Error has occurred!`); // *!*(3) <--*/!*
+      alert(`Error has occurred!`); // (3) <--
 
     }
     ```
 
 
-````warn header="`try..catch` 仅对运行时的 error 有效"
+`"`try..catch` 仅对运行时的 error 有效"
 要使得 `try..catch` 能工作，代码必须是可执行的。换句话说，它必须是有效的 JavaScript 代码。
 
 如果代码包含语法错误，那么 `try..catch` 将无法正常工作，例如含有不匹配的花括号：
 
-```js run
+```js
 try {
   error
 } catch(e) {
@@ -91,10 +91,10 @@ JavaScript 引擎首先会读取代码，然后运行它。在读取阶段发生
 ````
 
 
-````warn header="`try..catch` 同步工作"
+`"`try..catch` 同步工作"
 如果在“计划的（scheduled）”代码中发生异常，例如在 `setTimeout` 中，则 `try..catch` 不会捕获到异常：
 
-```js run
+```js
 try {
   setTimeout(function() {
     noSuchVariable; // 脚本将在这里停止运行
@@ -107,7 +107,7 @@ try {
 因为 `try..catch` 包裹了计划要执行的函数，该函数本身要稍后才执行，这时引擎已经离开了 `try..catch` 结构。
 
 为了捕获到计划的（scheduled）函数中的异常，那么 `try..catch` 必须在这个函数内：
-```js run
+```js
 setTimeout(function() {
   try {
     noSuchVariable; // try..catch 处理 error 了！
@@ -145,11 +145,11 @@ try {
 
 例如：
 
-```js run untrusted
+```js untrusted
 try {
-*!*
+
   lalala; // error, variable is not defined!
-*/!*
+
 } catch(err) {
   alert(err.name); // ReferenceError
   alert(err.message); // lalala is not defined
@@ -185,12 +185,12 @@ try {
 
 我们收到数据后，然后像下面这样调用 `JSON.parse`：
 
-```js run
+```js
 let json = '{"name":"John", "age": 30}'; // 来自服务器的数据
 
-*!*
+
 let user = JSON.parse(json); // 将文本表示转换成 JS 对象
-*/!*
+
 
 // 现在 user 是一个解析自 json 字符串的有自己属性的对象
 alert( user.name ); // John
@@ -207,23 +207,23 @@ alert( user.age );  // 30
 
 让我们用 `try..catch` 来处理这个 error：
 
-```js run
+```js
 let json = "{ bad json }";
 
 try {
 
-*!*
+
   let user = JSON.parse(json); // <-- 当出现一个 error 时...
-*/!*
+
   alert( user.name ); // 不工作
 
 } catch (e) {
-*!*
+
   // ...执行会跳转到这里并继续执行
   alert( "Our apologies, the data has errors, we'll try to request it one more time." );
   alert( e.name );
   alert( e.message );
-*/!*
+
 }
 ```
 
@@ -235,15 +235,15 @@ try {
 
 像这样：
 
-```js run
+```js
 let json = '{ "age": 30 }'; // 不完整的数据
 
 try {
 
   let user = JSON.parse(json); // <-- 没有 error
-*!*
+
   alert( user.name ); // 没有 name！
-*/!*
+
 
 } catch (e) {
   alert( "doesn't execute" );
@@ -282,7 +282,7 @@ let error = new ReferenceError(message);
 
 例如：
 
-```js run
+```js
 let error = new Error("Things happen o_O");
 
 alert(error.name); // Error
@@ -291,13 +291,13 @@ alert(error.message); // Things happen o_O
 
 让我们来看看 `JSON.parse` 会生成什么样的 error：
 
-```js run
+```js
 try {
   JSON.parse("{ bad json o_O }");
 } catch(e) {
-*!*
+
   alert(e.name); // SyntaxError
-*/!*
+
   alert(e.message); // Unexpected token b in JSON at position 2
 }
 ```
@@ -308,7 +308,7 @@ try {
 
 所以，让我们抛出这个 error。
 
-```js run
+```js
 let json = '{ "age": 30 }'; // 不完整的数据
 
 try {
@@ -316,9 +316,9 @@ try {
   let user = JSON.parse(json); // <-- 没有 error
 
   if (!user.name) {
-*!*
+
     throw new SyntaxError("Incomplete data: no name"); // (*)
-*/!*
+
   }
 
   alert( user.name );
@@ -338,7 +338,7 @@ try {
 
 例如：
 
-```js run
+```js
 let json = '{ "age": 30 }'; // 不完整的数据
 
 try {
@@ -367,13 +367,13 @@ try {
 
 通常，我们可以使用 `instanceof` 操作符判断错误类型：
 
-```js run
+```js
 try {
   user = { /*...*/ };
 } catch(err) {
-*!*
+
   if (err instanceof ReferenceError) {
-*/!*
+
     alert('ReferenceError'); // 访问一个未定义（undefined）的变量产生了 "ReferenceError"
   }
 }
@@ -383,7 +383,7 @@ try {
 
 在下面的代码中，我们使用“再次抛出”，以达到在 `catch` 中只处理 `SyntaxError` 的目的：
 
-```js run
+```js
 let json = '{ "age": 30 }'; // 不完整的数据
 try {
 
@@ -393,21 +393,21 @@ try {
     throw new SyntaxError("Incomplete data: no name");
   }
 
-*!*
+
   blabla(); // 预料之外的 error
-*/!*
+
 
   alert( user.name );
 
 } catch(e) {
 
-*!*
+
   if (e instanceof SyntaxError) {
     alert( "JSON Error: " + e.message );
   } else {
     throw e; // 再次抛出 (*)
   }
-*/!*
+
 
 }
 ```
@@ -418,21 +418,21 @@ try {
 
 下面这个示例演示了这种类型的 error 是如何被另外一级 `try..catch` 捕获的：
 
-```js run
+```js
 function readData() {
   let json = '{ "age": 30 }';
 
   try {
     // ...
-*!*
+
     blabla(); // error!
-*/!*
+
   } catch (e) {
     // ...
     if (!(e instanceof SyntaxError)) {
-*!*
+
       throw e; // 再次抛出（不知道如何处理它）
-*/!*
+
     }
   }
 }
@@ -440,9 +440,9 @@ function readData() {
 try {
   readData();
 } catch (e) {
-*!*
+
   alert( "External catch got: " + e ); // 捕获了它！
-*/!*
+
 }
 ```
 
@@ -462,18 +462,18 @@ try {
 该扩展语法如下所示：
 
 ```js
-*!*try*/!* {
+try {
    ... 尝试执行的代码 ...
-} *!*catch*/!*(e) {
+} catch(e) {
    ... 处理 error ...
-} *!*finally*/!* {
+} finally {
    ... 总是会执行的代码 ...
 }
 ```
 
 试试运行这段代码：
 
-```js run
+```js
 try {
   alert( 'try' );
   if (confirm('Make an error?')) BAD_CODE();
@@ -497,7 +497,7 @@ try {
 
 在这儿，`finally` 能够保证在两种情况下都能正确地测量时间 — 成功执行 `fib` 以及 `fib` 中出现 error 时：
 
-```js run
+```js
 let num = +prompt("Enter a positive integer number?", 35)
 
 let diff, result;
@@ -515,11 +515,11 @@ try {
   result = fib(num);
 } catch (e) {
   result = 0;
-*!*
+
 } finally {
   diff = Date.now() - start;
 }
-*/!*
+
 
 alert(result || "error occurred");
 
@@ -531,31 +531,31 @@ alert( `execution took ${diff}ms` );
 换句话说，函数 `fib` 以 `return` 还是 `throw` 完成都无关紧要。在这两种情况下都会执行 `finally` 子句。
 
 
-```smart header="变量和 `try..catch..finally` 中的局部变量"
+变量和 `try..catch..finally` 中的局部变量"
 请注意，上面代码中的 `result` 和 `diff` 变量都是在 `try..catch` **之前** 声明的。
 
 否则，如果我们使用 `let` 在 `try` 块中声明变量，那么该变量将只在 `try` 块中可见。
 ```
 
-````smart header="`finally` 和 `return`"
+``finally` 和 `return`"
 `finally` 子句适用于 `try..catch` 的 **任何** 出口。这包括显式的 `return`。
 
 在下面这个例子中，在 `try` 中有一个 `return`。在这种情况下，`finally` 会在控制转向外部代码前被执行。
 
-```js run
+```js
 function func() {
 
   try {
-*!*
+
     return 1;
-*/!*
+
 
   } catch (e) {
     /* ... */
   } finally {
-*!*
+
     alert( 'finally' );
-*/!*
+
   }
 }
 
@@ -563,7 +563,7 @@ alert( func() ); // 先执行 finally 中的 alert，然后执行这个 alert
 ```
 ````
 
-````smart header="`try..finally`"
+``try..finally`"
 
 没有 `catch` 子句的 `try..finally` 结构也很有用。当我们不想在这儿处理 error（让它们 fall through），但是需要确保我们启动的处理需要被完成。
 
@@ -582,7 +582,7 @@ function func() {
 
 ## 全局 catch
 
-```warn header="环境特定"
+"环境特定"
 这个部分的内容并不是 JavaScript 核心的一部分。
 ```
 
@@ -614,13 +614,13 @@ window.onerror = function(message, url, line, col, error) {
 
 例如：
 
-```html run untrusted refresh height=1
+```html untrusted refresh height=1
 <script>
-*!*
+
   window.onerror = function(message, url, line, col, error) {
     alert(`${message}\n At ${line}:${col} of ${url}`);
   };
-*/!*
+
 
   function readData() {
     badFunc(); // 啊，出问题了！

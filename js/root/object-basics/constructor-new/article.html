@@ -13,9 +13,9 @@
   <span class="hljs-built_in">this</span>.isAdmin = <span class="hljs-literal">false</span>;
 }
 
-*!*
+
 <span class="hljs-keyword">let</span> user = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&quot;Jack&quot;</span>);
-*/!*
+
 
 alert(user.name); <span class="hljs-comment">// Jack</span>
 alert(user.isAdmin); <span class="hljs-comment">// false</span></code></pre>
@@ -27,17 +27,17 @@ alert(user.isAdmin); <span class="hljs-comment">// false</span></code></pre>
 </ol>
 <p>换句话说，<code>new User(...)</code> 做的就是类似的事情：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User</span>(<span class="hljs-params">name</span>) </span>{
-*!*
+
   <span class="hljs-comment">// this = {};（隐式创建）</span>
-*/!*
+
 
   <span class="hljs-comment">// 添加属性到 this</span>
   <span class="hljs-built_in">this</span>.name = name;
   <span class="hljs-built_in">this</span>.isAdmin = <span class="hljs-literal">false</span>;
 
-*!*
+
   <span class="hljs-comment">// return this;（隐式返回）</span>
-*/!*
+
 }</code></pre>
 <p>所以 <code>new User(&quot;Jack&quot;)</code> 的结果是相同的对象：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
@@ -70,14 +70,14 @@ let user = new function() {
 }
 
 <span class="hljs-comment">// 不带 &quot;new&quot;：</span>
-*!*
+
 User(); <span class="hljs-comment">// undefined</span>
-*/!*
+
 
 <span class="hljs-comment">// 带 &quot;new&quot;：</span>
-*!*
+
 <span class="hljs-keyword">new</span> User(); <span class="hljs-comment">// function User { ... }</span>
-*/!*</code></pre>
+</code></pre>
 <p>它可以被用在函数内部，来判断该函数是被通过 <code>new</code> 调用的“构造器模式”，还是没被通过 <code>new</code> 调用的“常规模式”。</p>
 <p>我们也可以让 <code>new</code> 调用和常规调用做相同的工作，像这样：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User</span>(<span class="hljs-params">name</span>) </span>{
@@ -140,11 +140,11 @@ let user = new User();
   };
 }
 
-*!*
+
 <span class="hljs-keyword">let</span> john = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&quot;John&quot;</span>);
 
 john.sayHi(); <span class="hljs-comment">// My name is: John</span>
-*/!*
+
 
 <span class="hljs-comment">/*
 john = {

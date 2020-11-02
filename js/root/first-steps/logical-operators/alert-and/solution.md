@@ -1,6 +1,6 @@
 答案：`1`，然后 `undefined`。
 
-```js run
+```js
 alert( alert(1) && alert(2) );
 ```
 

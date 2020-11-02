@@ -1,6 +1,6 @@
 
 
-```js run
+```js
 let styles = ["Jazz", "Blues"];
 styles.push("Rock-n-Roll");
 styles[Math.floor((styles.length - 1) / 2)] = "Classics";

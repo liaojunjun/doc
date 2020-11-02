@@ -88,10 +88,10 @@ ask(<span class="hljs-string">&quot;Question?&quot;</span>, <span class="hljs-fu
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sayHi</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Hi&quot;</span>);
 
-  *!*
+  
   <span class="hljs-comment">// 计算调用次数</span>
   sayHi.counter++;
-  */!*
+  
 }
 sayHi.counter = <span class="hljs-number">0</span>; <span class="hljs-comment">// 初始值</span>
 
@@ -135,10 +135,10 @@ alert( counter() ); <span class="hljs-comment">// 1</span></code></pre>
 
 <span class="hljs-keyword">let</span> counter = makeCounter();
 
-*!*
+
 counter.count = <span class="hljs-number">10</span>;
 alert( counter() ); <span class="hljs-comment">// 10</span>
-*/!*</code></pre>
+</code></pre>
 <p>所以，选择哪种实现方式取决于我们的需求是什么。</p>
 <h2 id="命名函数表达式">命名函数表达式</h2>
 <p>命名函数表达式（NFE，Named Function Expression），指带有名字的函数表达式的术语。</p>
@@ -147,14 +147,14 @@ alert( counter() ); <span class="hljs-comment">// 10</span>
   alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${who}</span>`</span>);
 };</code></pre>
 <p>然后给它加一个名字：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span> *!*<span class="hljs-title">func</span>*/!*(<span class="hljs-params">who</span>) </span>{
+<pre><code class="language-js"><span class="hljs-keyword">let</span> sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">func</span>(<span class="hljs-params">who</span>) </span>{
   alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${who}</span>`</span>);
 };</code></pre>
 <p>我们这里得到了什么吗？为它添加一个 <code>&quot;func&quot;</code> 名字的目的是什么？</p>
 <p>首先请注意，它仍然是一个函数表达式。在 <code>function</code> 后面加一个名字 <code>&quot;func&quot;</code> 没有使它成为一个函数声明，因为它仍然是作为赋值表达式中的一部分被创建的。</p>
 <p>添加这个名字当然也没有打破任何东西。</p>
 <p>函数依然可以通过 <code>sayHi()</code> 来调用：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span> *!*<span class="hljs-title">func</span>*/!*(<span class="hljs-params">who</span>) </span>{
+<pre><code class="language-js"><span class="hljs-keyword">let</span> sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">func</span>(<span class="hljs-params">who</span>) </span>{
   alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${who}</span>`</span>);
 };
 
@@ -165,13 +165,13 @@ sayHi(<span class="hljs-string">&quot;John&quot;</span>); <span class="hljs-comm
 <li>它在函数外是不可见的。</li>
 </ol>
 <p>例如，下面的函数 <code>sayHi</code> 会在没有入参 <code>who</code> 时，以 <code>&quot;Guest&quot;</code> 为入参调用自己：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span> *!*<span class="hljs-title">func</span>*/!*(<span class="hljs-params">who</span>) </span>{
+<pre><code class="language-js"><span class="hljs-keyword">let</span> sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">func</span>(<span class="hljs-params">who</span>) </span>{
   <span class="hljs-keyword">if</span> (who) {
     alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${who}</span>`</span>);
   } <span class="hljs-keyword">else</span> {
-*!*
+
     func(<span class="hljs-string">&quot;Guest&quot;</span>); <span class="hljs-comment">// 使用 func 再次调用函数自身</span>
-*/!*
+
   }
 };
 
@@ -185,9 +185,9 @@ func(); <span class="hljs-comment">// Error, func is not defined（在函数外�
   <span class="hljs-keyword">if</span> (who) {
     alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${who}</span>`</span>);
   } <span class="hljs-keyword">else</span> {
-*!*
+
     sayHi(<span class="hljs-string">&quot;Guest&quot;</span>);
-*/!*
+
   }
 };</code></pre>
 <p>上面这段代码的问题在于 <code>sayHi</code> 的值可能会被函数外部的代码改变。如果该函数被赋值给另外一个变量（译注：也就是原变量被修改），那么函数就会开始报错：</p>
@@ -195,9 +195,9 @@ func(); <span class="hljs-comment">// Error, func is not defined（在函数外�
   <span class="hljs-keyword">if</span> (who) {
     alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${who}</span>`</span>);
   } <span class="hljs-keyword">else</span> {
-*!*
+
     sayHi(<span class="hljs-string">&quot;Guest&quot;</span>); <span class="hljs-comment">// Error: sayHi is not a function</span>
-*/!*
+
   }
 };
 
@@ -208,13 +208,13 @@ welcome(); <span class="hljs-comment">// Error，嵌套调用 sayHi 不再有效
 <p>发生这种情况是因为该函数从它的外部词法环境获取 <code>sayHi</code>。没有局部的 <code>sayHi</code> 了，所以使用外部变量。而当调用时，外部的 <code>sayHi</code> 是 <code>null</code>。</p>
 <p>我们给函数表达式添加的可选的名字，正是用来解决这类问题的。</p>
 <p>让我们使用它来修复我们的代码：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span> *!*<span class="hljs-title">func</span>*/!*(<span class="hljs-params">who</span>) </span>{
+<pre><code class="language-js"><span class="hljs-keyword">let</span> sayHi = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">func</span>(<span class="hljs-params">who</span>) </span>{
   <span class="hljs-keyword">if</span> (who) {
     alert(<span class="hljs-string">`Hello, <span class="hljs-subst">${who}</span>`</span>);
   } <span class="hljs-keyword">else</span> {
-*!*
+
     func(<span class="hljs-string">&quot;Guest&quot;</span>); <span class="hljs-comment">// 现在一切正常</span>
-*/!*
+
   }
 };
 

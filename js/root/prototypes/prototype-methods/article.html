@@ -14,19 +14,19 @@
 };
 
 <span class="hljs-comment">// 创建一个以 animal 为原型的新对象</span>
-*!*
+
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-built_in">Object</span>.create(animal);
-*/!*
+
 
 alert(rabbit.eats); <span class="hljs-comment">// true</span>
 
-*!*
-alert(<span class="hljs-built_in">Object</span>.getPrototypeOf(rabbit) === animal); <span class="hljs-comment">// true</span>
-*/!*
 
-*!*
+alert(<span class="hljs-built_in">Object</span>.getPrototypeOf(rabbit) === animal); <span class="hljs-comment">// true</span>
+
+
+
 <span class="hljs-built_in">Object</span>.setPrototypeOf(rabbit, {}); <span class="hljs-comment">// 将 rabbit 的原型修改为 {}</span>
-*/!*</code></pre>
+</code></pre>
 <p><code>Object.create</code> 有一个可选的第二参数：属性描述器。我们可以在此处为新对象提供额外的属性，就像这样：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
   <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>
@@ -54,7 +54,7 @@ alert(rabbit.jumps); <span class="hljs-comment">// true</span></code></pre>
 </ul>
 <p>目前为止，我们拥有了所有这些方式。</p>
 <p>为什么将 <code>__proto__</code> 替换成函数 <code>getPrototypeOf/setPrototypeOf</code>？这是一个有趣的问题，需要我们理解为什么 <code>__proto__</code> 不好。继续阅读，你就会知道答案。</p>
-<p>```warn header=&quot;如果速度很重要，就请不要修改已存在的对象的 <code>[[Prototype]]</code>&quot;
+<p>&quot;如果速度很重要，就请不要修改已存在的对象的 <code>[[Prototype]]</code>&quot;
 从技术上来讲，我们可以在任何时候 get/set <code>[[Prototype]]</code>。但是通常我们只在创建对象的时候设置它一次，自那之后不再修改：<code>rabbit</code> 继承自 <code>animal</code>，之后不再更改。</p>
 <p>并且，JavaScript 引擎对此进行了高度优化。用 <code>Object.setPrototypeOf</code> 或 <code>obj.__proto__=</code> “即时”更改原型是一个非常缓慢的操作，因为它破坏了对象属性访问操作的内部优化。因此，除非你知道自己在做什么，或者 JavaScript 的执行速度对你来说完全不重要，否则请避免使用它。</p>
 <pre><code>
@@ -66,7 +66,7 @@ alert(rabbit.jumps); <span class="hljs-comment">// true</span></code></pre>
 
 看一下这个例子：
 
-```js run
+```js
 let obj = {};
 
 let key = prompt(&quot;What&#x27;s the key?&quot;, &quot;__proto__&quot;);
@@ -87,9 +87,9 @@ alert(obj[key]); // [object Object]，并不是 &quot;some value&quot;！</code>
 <p>因此，如果 <code>obj.__proto__</code> 被读取或者赋值，那么对应的 getter/setter 会被从它的原型中调用，它会 set/get <code>[[Prototype]]</code>。</p>
 <p>就像在本部分教程的开头所说的那样：<code>__proto__</code> 是一种访问 <code>[[Prototype]]</code> 的方式，而不是 <code>[[prototype]]</code> 本身。</p>
 <p>现在，我们想要将一个对象用作关联数组，并且摆脱此类问题，我们可以使用一些小技巧：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> obj = <span class="hljs-built_in">Object</span>.create(<span class="hljs-literal">null</span>);
-*/!*
+
 
 <span class="hljs-keyword">let</span> key = prompt(<span class="hljs-string">&quot;What&#x27;s the key?&quot;</span>, <span class="hljs-string">&quot;__proto__&quot;</span>);
 obj[key] = <span class="hljs-string">&quot;some value&quot;</span>;
@@ -100,9 +100,9 @@ alert(obj[key]); <span class="hljs-comment">// &quot;some value&quot;</span></co
 <p>因此，它没有继承 <code>__proto__</code> 的 getter/setter 方法。现在，它被作为正常的数据属性进行处理，因此上面的这个示例能够正常工作。</p>
 <p>我们可以把这样的对象称为 &quot;very plain&quot; 或 &quot;pure dictionary&quot; 对象，因为它们甚至比通常的普通对象（plain object）<code>{...}</code> 还要简单。</p>
 <p>缺点是这样的对象没有任何内建的对象的方法，例如 <code>toString</code>：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> obj = <span class="hljs-built_in">Object</span>.create(<span class="hljs-literal">null</span>);
-*/!*
+
 
 alert(obj); <span class="hljs-comment">// Error (no toString)</span></code></pre>
 <p>……但是它们通常对关联数组而言还是很友好。</p>

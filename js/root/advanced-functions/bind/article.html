@@ -16,9 +16,9 @@
   }
 };
 
-*!*
+
 <span class="hljs-built_in">setTimeout</span>(user.sayHi, <span class="hljs-number">1000</span>); <span class="hljs-comment">// Hello, undefined!</span>
-*/!*</code></pre>
+</code></pre>
 <p>正如我们所看到的，输出没有像 <code>this.firstName</code> 那样显示 &quot;John&quot;，而显示了 <code>undefined</code>！</p>
 <p>这是因为 <code>setTimeout</code> 获取到了函数 <code>user.sayHi</code>，但它和对象分离开了。最后一行可以被重写为：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> f = user.sayHi;
@@ -34,11 +34,11 @@
   }
 };
 
-*!*
+
 <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   user.sayHi(); <span class="hljs-comment">// Hello, John!</span>
 }, <span class="hljs-number">1000</span>);
-*/!*</code></pre>
+</code></pre>
 <p>现在它可以正常工作了，因为它从外部词法环境中获取到了 <code>user</code>，就可以正常地调用方法了。</p>
 <p>相同的功能，但是更简短：</p>
 <pre><code class="language-js"><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> user.sayHi(), <span class="hljs-number">1000</span>); <span class="hljs-comment">// Hello, John!</span></code></pre>
@@ -76,10 +76,10 @@ user = {
   alert(<span class="hljs-built_in">this</span>.firstName);
 }
 
-*!*
+
 <span class="hljs-keyword">let</span> funcUser = func.bind(user);
 funcUser(); <span class="hljs-comment">// John  </span>
-*/!*</code></pre>
+</code></pre>
 <p>这里的 <code>func.bind(user)</code> 作为 <code>func</code> 的“绑定的（bound）变体”，绑定了 <code>this=user</code>。</p>
 <p>所有的参数（arguments）都被“原样”传递给了初始的 <code>func</code>，例如：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
@@ -93,9 +93,9 @@ funcUser(); <span class="hljs-comment">// John  </span>
 <span class="hljs-comment">// 将 this 绑定到 user</span>
 <span class="hljs-keyword">let</span> funcUser = func.bind(user);
 
-*!*
+
 funcUser(<span class="hljs-string">&quot;Hello&quot;</span>); <span class="hljs-comment">// Hello, John（参数 &quot;Hello&quot; 被传递，并且 this=user）</span>
-*/!*</code></pre>
+</code></pre>
 <p>现在我们来尝试一个对象方法：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
   <span class="hljs-attr">firstName</span>: <span class="hljs-string">&quot;John&quot;</span>,
@@ -104,9 +104,9 @@ funcUser(<span class="hljs-string">&quot;Hello&quot;</span>); <span class="hljs-
   }
 };
 
-*!*
+
 <span class="hljs-keyword">let</span> sayHi = user.sayHi.bind(user); <span class="hljs-comment">// (*)</span>
-*/!*
+
 
 <span class="hljs-comment">// 可以在没有对象（译注：与对象分离）的情况下运行它</span>
 sayHi(); <span class="hljs-comment">// Hello, John!</span>
@@ -164,14 +164,14 @@ function mul(a, b) {
 
 让我们使用 `bind` 在该函数基础上创建一个 `double` 函数：
 
-```js run
+```js
 function mul(a, b) {
   return a * b;
 }
 
-*!*
+
 let double = mul.bind(null, 2);
-*/!*
+
 
 alert( double(3) ); // = mul(2, 3) = 6
 alert( double(4) ); // = mul(2, 4) = 8
@@ -186,14 +186,14 @@ alert( double(5) ); // = mul(2, 5) = 10
 
 下面这段代码中的 `triple` 函数将值乘了三倍：
 
-```js run
+```js
 function mul(a, b) {
   return a * b;
 }
 
-*!*
+
 let triple = mul.bind(null, 3);
-*/!*
+
 
 alert( triple(3) ); // = mul(3, 3) = 9
 alert( triple(4) ); // = mul(3, 4) = 12
@@ -218,14 +218,14 @@ alert( triple(5) ); // = mul(3, 5) = 15
 
 像这样：
 
-```js run
-*!*
+```js
+
 function partial(func, ...argsBound) {
   return function(...args) { // (*)
     return func.call(this, ...argsBound, ...args);
   }
 }
-*/!*
+
 
 // 用法：
 let user = {

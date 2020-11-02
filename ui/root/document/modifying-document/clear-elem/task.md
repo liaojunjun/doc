@@ -6,7 +6,7 @@ importance: 5
 
 创建一个函数 `clear(elem)` 用来移除元素里的内容。
 
-```html run height=60
+```html height=60
 <ol id="elem">
   <li>Hello</li>
   <li>World</li>

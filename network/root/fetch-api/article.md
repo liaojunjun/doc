@@ -55,9 +55,9 @@ let promise = fetch(url, {
 要不发送 referer，可以将 `referer` 设置为空字符串：
 ```js
 fetch('/page', {
-*!*
+
   referrer: "" // 没有 Referer header
-*/!*
+
 });
 ```
 
@@ -67,9 +67,9 @@ fetch('/page', {
 fetch('/page', {
   // 假设我们在 https://javascript.info
   // 我们可以设置任何 Referer header，但必须是在当前域内的
-*!*
+
   referrer: "https://javascript.info/anotherpage"
-*/!*
+
 });
 ```
 
@@ -126,7 +126,7 @@ fetch('https://another.com/page', {
 
 与默认行为相比，它的唯一区别在于，对于跨源请求，`fetch` 只发送 URL 域的部分（例如 `https://javascript.info`，没有路径）。对于同源请求，我们仍然可以获得完整的 `Referer`（可能对于调试目的是有用的）。
 
-```smart header="Referrer policy 不仅适用于 `fetch`"
+Referrer policy 不仅适用于 `fetch`"
 在 [规范](https://w3c.github.io/webappsec-referrer-policy/) 中描述的 referrer policy，不仅适用于 `fetch`，它还具有全局性。
 
 特别是，可以使用 `Referrer-Policy` HTTP header，或者为每个链接设置 `<a rel="noreferrer">`，来为整个页面设置默认策略（policy）。
@@ -201,14 +201,14 @@ fetch('http://site.com/file', {
 
 我们可以使用 `window.onunload` 事件来实现：
 
-```js run
+```js
 window.onunload = function() {
   fetch('/analytics', {
     method: 'POST',
     body: "statistics",
-*!*
+
     keepalive: true
-*/!*
+
   });
 };
 ```

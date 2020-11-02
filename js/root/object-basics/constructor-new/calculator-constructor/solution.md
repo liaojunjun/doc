@@ -1,4 +1,4 @@
-```js run demo
+```js demo
 function Calculator() {
 
   this.read = function() {

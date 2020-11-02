@@ -33,7 +33,7 @@ regexp = /pattern/gmi; // 伴随修饰符 g、m 和 i（后面会讲到）
 
 下面是示例：
 
-```js run
+```js
 let str = "I love JavaScript!"; // 将在这里搜索
 
 let regexp = /love/;
@@ -44,7 +44,7 @@ alert( str.search(regexp) ); // 2
 
 上面的代码等同于：
 
-```js run
+```js
 let str = "I love JavaScript!"; // 将在这里搜索
 
 let substr = 'love';
@@ -55,7 +55,7 @@ alert( str.search(substr) ); // 2
 
 但这只是暂时的。很快我们就会接触更复杂的正则表达式，其搜索功能将更强大。
 
-```smart header="配色"
+配色"
 本文中的配色方案如下：
 
 - regexp -- `pattern:red`
@@ -64,14 +64,14 @@ alert( str.search(substr) ); // 2
 ```
 
 
-````smart header="什么时候使用 `new RegExp`?"
+`什么时候使用 `new RegExp`?"
 通常我们使用的都是简短语法 `/.../`。但是它不接受任何变量插入，所以我们必须在写代码的时候就知道确切的 regexp。
 
 另一方面，`new RegExp` 允许从字符串中动态地构造模式。
 
 所以我们可以找出需要搜索的字段，然后根据搜索字段创建 `new RegExp`：
 
-```js run
+```js
 let search = prompt("What you want to search?", "love");
 let regexp = new RegExp(search);
 
@@ -109,7 +109,7 @@ alert( "I love JavaScript".search(regexp));
 
 示例代码如下：
 
-```js run
+```js
 let str = "I love JavaScript!";
 
 alert( str.search(/LOVE/) ); // -1（没找到）

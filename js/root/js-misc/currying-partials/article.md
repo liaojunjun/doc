@@ -15,8 +15,8 @@ libs:
 
 我们将创建一个辅助函数 `curry(f)`，该函数将对两个参数的函数 `f` 执行柯里化。换句话说，对于两个参数的函数 `f(a, b)` 执行 `curry(f)` 会将其转换为以 `f(a)(b)` 形式运行的函数：
 
-```js run
-*!*
+```js
+
 function curry(f) { // curry(f) 执行柯里化转换
   return function(a) {
     return function(b) {
@@ -24,7 +24,7 @@ function curry(f) { // curry(f) 执行柯里化转换
     };
   };
 }
-*/!*
+
 
 // 用法
 function sum(a, b) {
@@ -44,7 +44,7 @@ alert( curriedSum(1)(2) ); // 3
 
 柯里化更高级的实现，例如 lodash 库的 [_.curry](https://lodash.com/docs#curry)，会返回一个包装器，该包装器允许函数被正常调用或者以偏函数（partial）的方式调用：
 
-```js run
+```js
 function sum(a, b) {
   return a + b;
 }
@@ -177,13 +177,13 @@ function curried(...args) {
 
 如果这还不够清楚，那你可以把函数调用顺序在你的脑海中或者在纸上过一遍。
 
-```smart header="只允许确定参数长度的函数"
+只允许确定参数长度的函数"
 柯里化要求函数具有固定数量的参数。
 
 使用 rest 参数的函数，例如 `f(...args)`，不能以这种方式进行柯里化。
 ```
 
-```smart header="比柯里化多一点"
+比柯里化多一点"
 根据定义，柯里化应该将 `sum(a, b, c)` 转换为 `sum(a)(b)(c)`。
 
 但是，如前所述，JavaScript 中大多数的柯里化实现都是高级版的：它们使得函数可以被多参数变体调用。

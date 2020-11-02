@@ -6,9 +6,9 @@
 <p>例如：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> year = prompt(<span class="hljs-string">&#x27;In which year was ECMAScript-2015 specification published?&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
 
-*!*
+
 <span class="hljs-keyword">if</span> (year == <span class="hljs-number">2015</span>) alert( <span class="hljs-string">&#x27;You are right!&#x27;</span> );
-*/!*</code></pre>
+</code></pre>
 <p>在上面这个例子中，条件是一个简单的相等性检查（<code>year == 2015</code>），但它还可以更复杂。</p>
 <p>如果有多个语句要执行，我们必须将要执行的代码块封装在大括号内：</p>
 <pre><code class="language-js"><span class="hljs-keyword">if</span> (year == <span class="hljs-number">2015</span>) {
@@ -67,13 +67,13 @@
 <pre><code class="language-js"><span class="hljs-keyword">let</span> accessAllowed;
 <span class="hljs-keyword">let</span> age = prompt(<span class="hljs-string">&#x27;How old are you?&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
 
-*!*
+
 <span class="hljs-keyword">if</span> (age &gt; <span class="hljs-number">18</span>) {
   accessAllowed = <span class="hljs-literal">true</span>;
 } <span class="hljs-keyword">else</span> {
   accessAllowed = <span class="hljs-literal">false</span>;
 }
-*/!*
+
 
 alert(accessAllowed);</code></pre>
 <p>所谓的“条件”或“问号”运算符让我们可以更简短地达到目的。</p>
@@ -127,10 +127,10 @@ alert( message );</code></pre>
 <p>有时可以使用问号 <code>?</code> 来代替 <code>if</code> 语句：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> company = prompt(<span class="hljs-string">&#x27;Which company created JavaScript?&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
 
-*!*
+
 (company == <span class="hljs-string">&#x27;Netscape&#x27;</span>) ?
    alert(<span class="hljs-string">&#x27;Right!&#x27;</span>) : alert(<span class="hljs-string">&#x27;Wrong.&#x27;</span>);
-*/!*</code></pre>
+</code></pre>
 <p>根据条件 <code>company ==&#39;Netscape&#39;</code>，要么执行 <code>?</code> 后面的第一个表达式并显示对应内容，要么执行第二个表达式并显示对应内容。</p>
 <p>在这里我们不是把结果赋值给变量。而是根据条件执行不同的代码。</p>
 <p><strong>不建议这样使用问号运算符。</strong></p>
@@ -138,12 +138,12 @@ alert( message );</code></pre>
 <p>下面是使用 <code>if</code> 语句实现相同功能的代码，进行下比较：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> company = prompt(<span class="hljs-string">&#x27;Which company created JavaScript?&#x27;</span>, <span class="hljs-string">&#x27;&#x27;</span>);
 
-*!*
+
 <span class="hljs-keyword">if</span> (company == <span class="hljs-string">&#x27;Netscape&#x27;</span>) {
   alert(<span class="hljs-string">&#x27;Right!&#x27;</span>);
 } <span class="hljs-keyword">else</span> {
   alert(<span class="hljs-string">&#x27;Wrong.&#x27;</span>);
 }
-*/!*</code></pre>
+</code></pre>
 <p>因为我们的眼睛垂直扫描代码。所以，跨越几行的代码块比长而水平的代码更易于理解。</p>
 <p>问号 <code>?</code> 的作用是根据条件返回一个或另一个值。请正确使用它。当需要执行不同的代码分支时，请使用 <code>if</code>。</p>

@@ -27,9 +27,9 @@
     alert(<span class="hljs-string">`Image size: <span class="hljs-subst">${img.offsetWidth}</span>x<span class="hljs-subst">${img.offsetHeight}</span>`</span>);
   }
 
-*!*
+
   <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&quot;DOMContentLoaded&quot;</span>, ready);
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;img&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://en.js.cx/clipart/train.gif?speed=1&amp;cache=0&quot;</span>&gt;</span></code></pre>
@@ -51,7 +51,7 @@
   alert(<span class="hljs-string">&quot;Library loaded, inline script executed&quot;</span>);
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>在上面这个例子中，我们首先会看到 &quot;Library loaded...&quot;，然后才会看到 &quot;DOM ready!&quot;（所有脚本都已经执行结束）。</p>
-<p>```warn header=&quot;不会阻塞 <code>DOMContentLoaded</code> 的脚本&quot;
+<p>&quot;不会阻塞 <code>DOMContentLoaded</code> 的脚本&quot;
 此规则有两个例外：</p>
 <ol>
 <li>具有 <code>async</code> 特性（attribute）的脚本不会阻塞 <code>DOMContentLoaded</code>，<a href="info:script-async-defer">稍后</a> 我们会讲到。</li>

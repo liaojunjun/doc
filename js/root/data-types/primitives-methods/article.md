@@ -16,7 +16,7 @@ JavaScript 允许我们像使用对象一样使用原始类型（字符串，数
 
 关于对象的最好的事儿之一是，我们可以把一个函数作为对象的属性存储到对象中。
 
-```js run
+```js
 let john = {
   name: "John",
   sayHi: function() {
@@ -54,7 +54,7 @@ john.sayHi(); // Hi buddy!
 
 用法演示如下：
 
-```js run
+```js
 let str = "Hello";
 
 alert( str.toUpperCase() ); // HELLO
@@ -72,7 +72,7 @@ JavaScript 引擎高度优化了这个过程。它甚至可能跳过创建额外
 
 数字有其自己的方法，例如，[toFixed(n)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed) 将数字舍入到给定的精度：
 
-```js run
+```js
 let n = 1.23456;
 
 alert( n.toFixed(2) ); // 1.23
@@ -81,14 +81,14 @@ alert( n.toFixed(2) ); // 1.23
 我们将在后面 <info:number> 和 <info:string> 章节中看到更多具体的方法。
 
 
-````warn header="构造器 `String/Number/Boolean` 仅供内部使用"
+`"构造器 `String/Number/Boolean` 仅供内部使用"
 像 Java 这样的一些语言允许我们使用 `new Number(1)` 或 `new Boolean(false)` 等语法，明确地为原始类型创建“对象包装器”。
 
 在 JavaScript 中，由于历史原因，这也是可以的，但极其 **不推荐**。因为这样会出问题。
 
 例如：
 
-```js run
+```js
 alert( typeof 0 ); // "number"
 
 alert( typeof new Number(0) ); // "object"!
@@ -96,7 +96,7 @@ alert( typeof new Number(0) ); // "object"!
 
 对象在 `if` 中始终是 `true`，因此此处的 alert 将显示：
 
-```js run
+```js
 let zero = new Number(0);
 
 if (zero) { // zero 为 true，因为它是一个对象
@@ -113,12 +113,12 @@ let num = Number("123"); // 将字符串转成数字
 ````
 
 
-````warn header="null/undefined 没有任何方法"
+`"null/undefined 没有任何方法"
 特殊的原始类型 `null` 和 `undefined` 是例外。它们没有对应的“对象包装器”，也没有提供任何方法。从某种意义上说，它们是“最原始的”。
 
 尝试访问这种值的属性会导致错误：
 
-```js run
+```js
 alert(null.test); // error
 ````
 

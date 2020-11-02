@@ -6,11 +6,11 @@
   <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>,
 
-*!*
+
   toString() {
     <span class="hljs-keyword">return</span> <span class="hljs-string">`{name: &quot;<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span>&quot;, age: <span class="hljs-subst">${<span class="hljs-built_in">this</span>.age}</span>}`</span>;
   }
-*/!*
+
 };
 
 alert(user); <span class="hljs-comment">// {name: &quot;John&quot;, age: 30}</span></code></pre>
@@ -32,14 +32,14 @@ alert(user); <span class="hljs-comment">// {name: &quot;John&quot;, age: 30}</sp
   <span class="hljs-attr">wife</span>: <span class="hljs-literal">null</span>
 };
 
-*!*
+
 <span class="hljs-keyword">let</span> json = <span class="hljs-built_in">JSON</span>.stringify(student);
-*/!*
+
 
 alert(<span class="hljs-keyword">typeof</span> json); <span class="hljs-comment">// we&#x27;ve got a string!</span>
 
 alert(json);
-*!*
+
 <span class="hljs-comment">/* JSON 编码的对象：
 {
   &quot;name&quot;: &quot;John&quot;,
@@ -49,7 +49,7 @@ alert(json);
   &quot;wife&quot;: null
 }
 */</span>
-*/!*</code></pre>
+</code></pre>
 <p>方法 <code>JSON.stringify(student)</code> 接收对象并将其转换为字符串。</p>
 <p>得到的 <code>json</code> 字符串是一个被称为 <strong>JSON 编码（JSON-encoded）</strong> 或 <strong>序列化（serialized）</strong> 或 <strong>字符串化（stringified）</strong> 或 <strong>编组化（marshalled）</strong> 的对象。我们现在已经准备好通过有线发送它或将其放入普通数据存储。</p>
 <p>请注意，JSON 编码的对象与对象字面量有几个重要的区别：</p>
@@ -101,12 +101,12 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(user) ); <span class="h
 <p>例如：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> meetup = {
   <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;Conference&quot;</span>,
-*!*
+
   room: {
     <span class="hljs-attr">number</span>: <span class="hljs-number">23</span>,
     <span class="hljs-attr">participants</span>: [<span class="hljs-string">&quot;john&quot;</span>, <span class="hljs-string">&quot;ann&quot;</span>]
   }
-*/!*
+
 };
 
 alert( <span class="hljs-built_in">JSON</span>.stringify(meetup) );
@@ -130,9 +130,9 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(meetup) );
 meetup.place = room;       <span class="hljs-comment">// meetup 引用了 room</span>
 room.occupiedBy = meetup; <span class="hljs-comment">// room 引用了 meetup</span>
 
-*!*
+
 <span class="hljs-built_in">JSON</span>.stringify(meetup); <span class="hljs-comment">// Error: Converting circular structure to JSON</span>
-*/!*</code></pre>
+</code></pre>
 <p>在这里，转换失败了，因为循环引用：<code>room.occupiedBy</code> 引用了 <code>meetup</code>，<code>meetup.place</code> 引用了 <code>room</code>：</p>
 <p><img src="json-meetup.svg" alt=""></p>
 <h2 id="排除和转换：replacer">排除和转换：replacer</h2>
@@ -159,7 +159,7 @@ room.occupiedBy = meetup; <span class="hljs-comment">// room 引用了 meetup</s
 
 room.occupiedBy = meetup; <span class="hljs-comment">// room 引用了 meetup</span>
 
-alert( <span class="hljs-built_in">JSON</span>.stringify(meetup, *!*[<span class="hljs-string">&#x27;title&#x27;</span>, <span class="hljs-string">&#x27;participants&#x27;</span>]*/!*) );
+alert( <span class="hljs-built_in">JSON</span>.stringify(meetup, [<span class="hljs-string">&#x27;title&#x27;</span>, <span class="hljs-string">&#x27;participants&#x27;</span>]) );
 <span class="hljs-comment">// {&quot;title&quot;:&quot;Conference&quot;,&quot;participants&quot;:[{},{}]}</span></code></pre>
 <p>这里我们可能过于严格了。属性列表应用于了整个对象结构。所以 <code>participants</code> 是空的，因为 <code>name</code> 不在列表中。</p>
 <p>让我们包含除了会导致循环引用的 <code>room.occupiedBy</code> 之外的所有属性：</p>
@@ -175,7 +175,7 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(meetup, *!*[<span class
 
 room.occupiedBy = meetup; <span class="hljs-comment">// room 引用了 meetup</span>
 
-alert( <span class="hljs-built_in">JSON</span>.stringify(meetup, *!*[<span class="hljs-string">&#x27;title&#x27;</span>, <span class="hljs-string">&#x27;participants&#x27;</span>, <span class="hljs-string">&#x27;place&#x27;</span>, <span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-string">&#x27;number&#x27;</span>]*/!*) );
+alert( <span class="hljs-built_in">JSON</span>.stringify(meetup, [<span class="hljs-string">&#x27;title&#x27;</span>, <span class="hljs-string">&#x27;participants&#x27;</span>, <span class="hljs-string">&#x27;place&#x27;</span>, <span class="hljs-string">&#x27;name&#x27;</span>, <span class="hljs-string">&#x27;number&#x27;</span>]) );
 <span class="hljs-comment">/*
 {
   &quot;title&quot;:&quot;Conference&quot;,
@@ -271,7 +271,7 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(meetup) );
 <span class="hljs-comment">/*
   {
     &quot;title&quot;:&quot;Conference&quot;,
-*!*
+
     &quot;date&quot;:&quot;2017-01-01T00:00:00.000Z&quot;,  // (1)
 */</span>!*
     <span class="hljs-string">&quot;room&quot;</span>: {<span class="hljs-string">&quot;number&quot;</span>:<span class="hljs-number">23</span>}               <span class="hljs-comment">// (2)</span>
@@ -281,11 +281,11 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(meetup) );
 <p>现在让我们为对象 <code>room</code> 添加一个自定义的 <code>toJSON</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> room = {
   <span class="hljs-attr">number</span>: <span class="hljs-number">23</span>,
-*!*
+
   toJSON() {
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.number;
   }
-*/!*
+
 };
 
 <span class="hljs-keyword">let</span> meetup = {
@@ -293,15 +293,15 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(meetup) );
   room
 };
 
-*!*
+
 alert( <span class="hljs-built_in">JSON</span>.stringify(room) ); <span class="hljs-comment">// 23</span>
-*/!*
+
 
 alert( <span class="hljs-built_in">JSON</span>.stringify(meetup) );
 <span class="hljs-comment">/*
   {
     &quot;title&quot;:&quot;Conference&quot;,
-*!*
+
     &quot;room&quot;: 23
 */</span>!*
   }
@@ -331,10 +331,10 @@ alert( user.friends[<span class="hljs-number">1</span>] ); <span class="hljs-com
 <p>JSON 可能会非常复杂，对象和数组可以包含其他对象和数组。但是它们必须遵循相同的 JSON 格式。</p>
 <p>以下是手写 JSON 时的典型错误（有时我们必须出于调试目的编写它）：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> json = <span class="hljs-string">`{
-  *!*name*/!*: &quot;John&quot;,                     // 错误：属性名没有双引号
-  &quot;surname&quot;: *!*&#x27;Smith&#x27;*/!*,               // 错误：值使用的是单引号（必须使用双引号）
-  *!*&#x27;isAdmin&#x27;*/!*: false                  // 错误：键使用的是单引号（必须使用双引号）
-  &quot;birthday&quot;: *!*new Date(2000, 2, 3)*/!*, // 错误：不允许使用 &quot;new&quot;，只能是裸值
+  name: &quot;John&quot;,                     // 错误：属性名没有双引号
+  &quot;surname&quot;: &#x27;Smith&#x27;,               // 错误：值使用的是单引号（必须使用双引号）
+  &#x27;isAdmin&#x27;: false                  // 错误：键使用的是单引号（必须使用双引号）
+  &quot;birthday&quot;: new Date(2000, 2, 3), // 错误：不允许使用 &quot;new&quot;，只能是裸值
   &quot;friends&quot;: [0,1,2,3]              // 这个没问题
 }`</span>;</code></pre>
 <p>此外，JSON 不支持注释。向 JSON 添加注释无效。</p>
@@ -351,20 +351,20 @@ alert( user.friends[<span class="hljs-number">1</span>] ); <span class="hljs-com
 
 <span class="hljs-keyword">let</span> meetup = <span class="hljs-built_in">JSON</span>.parse(str);
 
-*!*
+
 alert( meetup.date.getDate() ); <span class="hljs-comment">// Error!</span>
-*/!*</code></pre>
+</code></pre>
 <p>啊！报错了！</p>
 <p><code>meetup.date</code> 的值是一个字符串，而不是 <code>Date</code> 对象。<code>JSON.parse</code> 怎么知道应该将字符串转换为 <code>Date</code> 呢？</p>
 <p>让我们将 reviver 函数传递给 <code>JSON.parse</code> 作为第二个参数，该函数按照“原样”返回所有值，但是 <code>date</code> 会变成 <code>Date</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27;{&quot;title&quot;:&quot;Conference&quot;,&quot;date&quot;:&quot;2017-11-30T12:00:00.000Z&quot;}&#x27;</span>;
 
-*!*
+
 <span class="hljs-keyword">let</span> meetup = <span class="hljs-built_in">JSON</span>.parse(str, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">key, value</span>) </span>{
   <span class="hljs-keyword">if</span> (key == <span class="hljs-string">&#x27;date&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(value);
   <span class="hljs-keyword">return</span> value;
 });
-*/!*
+
 
 alert( meetup.date.getDate() ); <span class="hljs-comment">// 现在正常运行了！</span></code></pre>
 <p>顺便说一下，这也适用于嵌套对象：</p>
@@ -380,9 +380,9 @@ schedule = <span class="hljs-built_in">JSON</span>.parse(schedule, <span class="
   <span class="hljs-keyword">return</span> value;
 });
 
-*!*
+
 alert( schedule.meetups[<span class="hljs-number">1</span>].date.getDate() ); <span class="hljs-comment">// 正常运行了！</span>
-*/!*</code></pre>
+</code></pre>
 <h2 id="总结">总结</h2>
 <ul>
 <li>JSON 是一种数据格式，具有自己的独立标准和大多数编程语言的库。</li>

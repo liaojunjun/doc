@@ -1,6 +1,6 @@
 前两个检查为前两个 `case`，第三个检查分为两种情况：
 
-```js run
+```js
 let a = +prompt('a?', '');
 
 switch (a) {
@@ -15,9 +15,9 @@ switch (a) {
   case 2:
   case 3:
     alert( '2,3' );
-*!*
+
     break;
-*/!*
+
 }
 ```
 

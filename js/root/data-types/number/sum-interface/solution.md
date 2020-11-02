@@ -1,6 +1,6 @@
 
 
-```js run demo
+```js demo
 let a = +prompt("The first number?", "");
 let b = +prompt("The second number?", "");
 

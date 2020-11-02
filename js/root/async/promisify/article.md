@@ -6,7 +6,7 @@
 
 例如，在 <info:callbacks> 一章中我们有 `loadScript(src, callback)`。
 
-```js run
+```js
 function loadScript(src, callback) {
   let script = document.createElement('script');
   script.src = src;
@@ -80,12 +80,12 @@ loadScriptPromise(...).then(...);
 function promisify(f, manyArgs = false) {
   return function (...args) {
     return new Promise((resolve, reject) => {
-      function *!*callback(err, ...results*/!*) { // 我们自定义的 f 的回调
+      function callback(err, ...results) { // 我们自定义的 f 的回调
         if (err) {
           reject(err);
         } else {
           // 如果 manyArgs 被指定，则使用所有回调的结果 resolve
-          *!*resolve(manyArgs ? results : results[0]);*/!*
+          resolve(manyArgs ? results : results[0]);
         }
       }
 

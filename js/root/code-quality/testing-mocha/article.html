@@ -88,9 +88,9 @@
 
   it(<span class="hljs-string">&quot;raises to n-th power&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     assert.equal(pow(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>), <span class="hljs-number">8</span>);
-*!*
+
     assert.equal(pow(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>), <span class="hljs-number">81</span>);
-*/!*
+
   });
 
 });</code></pre>
@@ -151,9 +151,9 @@
 <p>使用嵌套的 <code>describe</code> 来进行分组：</p>
 <pre><code class="language-js">describe(<span class="hljs-string">&quot;pow&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
 
-*!*
+
   describe(<span class="hljs-string">&quot;raises x to power 3&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-*/!*
+
 
     <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeTest</span>(<span class="hljs-params">x</span>) </span>{
       <span class="hljs-keyword">let</span> expected = x * x * x;
@@ -166,9 +166,9 @@
       makeTest(x);
     }
 
-*!*
+
   });
-*/!*
+
 
   <span class="hljs-comment">// ……可以在这里写更多的测试代码，describe 和 it 都可以添加在这。</span>
 });</code></pre>
@@ -218,15 +218,15 @@ describe(&quot;pow&quot;, function() {
   // ...
 
   it(&quot;for negative n the result is NaN&quot;, function() {
-*!*
+
     assert.isNaN(pow(2, -1));
-*/!*
+
   });
 
   it(&quot;for non-integer n the result is NaN&quot;, function() {
-*!*
+
     assert.isNaN(pow(2, 1.5));    
-*/!*
+
   });
 
 });
@@ -255,10 +255,10 @@ describe(&quot;pow&quot;, function() {
 
 ```js
 function pow(x, n) {
-*!*
+
   if (n &lt; 0) return NaN;
   if (Math.round(n) != n) return NaN;
-*/!*
+
 
   let result = 1;
 

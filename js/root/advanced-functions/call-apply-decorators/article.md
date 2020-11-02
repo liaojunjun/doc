@@ -12,7 +12,7 @@ JavaScript 在处理函数时提供了非凡的灵活性。它们可以被传递
 
 下面是代码和解释：
 
-```js run
+```js
 function slow(x) {
   // 这里可能会有重负载的 CPU 密集型工作
   alert(`Called with ${x}`);
@@ -67,7 +67,7 @@ alert( "Again: " + slow(2) ); // 和前面一行结果相同
 
 例如，在下面的代码中，`worker.slow()` 在装饰后停止工作：
 
-```js run
+```js
 // 我们将对 worker.slow 的结果进行缓存
 let worker = {
   someMethod() {
@@ -88,9 +88,9 @@ function cachingDecorator(func) {
     if (cache.has(x)) {
       return cache.get(x);
     }
-*!*
+
     let result = func(x); // (**)
-*/!*
+
     cache.set(x, result);
     return result;
   };
@@ -100,9 +100,9 @@ alert( worker.slow(1) ); // 原始方法有效
 
 worker.slow = cachingDecorator(worker.slow); // 现在对其进行缓存
 
-*!*
+
 alert( worker.slow(2) ); // 蛤！Error: Cannot read property 'someMethod' of undefined
-*/!*
+
 ```
 
 错误发生在试图访问 `this.someMethod` 并失败了的 `(*)` 行中。你能看出来为什么吗？
@@ -140,7 +140,7 @@ func.call(obj, 1, 2, 3)
 
 例如，在下面的代码中，我们在不同对象的上下文中调用 `sayHi`：`sayHi.call(user)` 运行 `sayHi` 并提供了 `this=user`，然后下一行设置 `this=admin`：
 
-```js run
+```js
 function sayHi() {
   alert(this.name);
 }
@@ -156,7 +156,7 @@ sayHi.call( admin ); // Admin
 在这里我们用带有给定上下文和 phrase 的 `call` 调用 `say`：
 
 
-```js run
+```js
 function say(phrase) {
   alert(this.name + ': ' + phrase);
 }
@@ -169,7 +169,7 @@ say.call( user, "Hello" ); // John: Hello
 
 在我们的例子中，我们可以在包装器中使用 `call` 将上下文传递给原始函数：
 
-```js run
+```js
 let worker = {
   someMethod() {
     return 1;
@@ -187,9 +187,9 @@ function cachingDecorator(func) {
     if (cache.has(x)) {
       return cache.get(x);
     }
-*!*
+
     let result = func.call(this, x); // 现在 "this" 被正确地传递了
-*/!*
+
     cache.set(x, result);
     return result;
   };
@@ -240,7 +240,7 @@ worker.slow = cachingDecorator(worker.slow);
 
 这是一个更强大的 `cachingDecorator`：
 
-```js run
+```js
 let worker = {
   slow(min, max) {
     alert(`Called with ${min},${max}`);
@@ -251,16 +251,16 @@ let worker = {
 function cachingDecorator(func, hash) {
   let cache = new Map();
   return function() {
-*!*
+
     let key = hash(arguments); // (*)
-*/!*
+
     if (cache.has(key)) {
       return cache.get(key);
     }
 
-*!*
+
     let result = func.call(this, ...arguments); // (**)
-*/!*
+
 
     cache.set(key, result);
     return result;
@@ -350,11 +350,11 @@ function hash(args) {
 
 所以在它上面调用 `join` 会失败，我们可以在下面看到：
 
-```js run
+```js
 function hash() {
-*!*
+
   alert( arguments.join() ); // Error: arguments.join is not a function
-*/!*
+
 }
 
 hash(1, 2);
@@ -362,11 +362,11 @@ hash(1, 2);
 
 不过，有一种简单的方法可以使用数组的 join 方法：
 
-```js run
+```js
 function hash() {
-*!*
+
   alert( [].join.call(arguments) ); // 1,2
-*/!*
+
 }
 
 hash(1, 2);

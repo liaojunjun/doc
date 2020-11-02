@@ -13,15 +13,15 @@
 
 例如：
 
-```js run
+```js
 function User(name) {
   this.name = name;
   this.isAdmin = false;
 }
 
-*!*
+
 let user = new User("Jack");
-*/!*
+
 
 alert(user.name); // Jack
 alert(user.isAdmin); // false
@@ -37,17 +37,17 @@ alert(user.isAdmin); // false
 
 ```js
 function User(name) {
-*!*
+
   // this = {};（隐式创建）
-*/!*
+
 
   // 添加属性到 this
   this.name = name;
   this.isAdmin = false;
 
-*!*
+
   // return this;（隐式返回）
-*/!*
+
 }
 ```
 
@@ -66,7 +66,7 @@ let user = {
 
 让我们再强调一遍 —— 从技术上讲，任何函数都可以用作构造器。即：任何函数都可以通过 `new` 来运行，它会执行上面的算法。“首字母大写”是一个共同的约定，以明确表示一个函数将被使用 `new` 来运行。
 
-````smart header="new function() { ... }"
+`new function() { ... }"
 如果我们有许多行用于创建单个复杂对象的代码，我们可以将它们封装在构造函数中，像这样：
 
 ```js
@@ -85,7 +85,7 @@ let user = new function() {
 
 ## 构造器模式测试：new.target
 
-```smart header="进阶内容"
+进阶内容"
 本节涉及的语法内容很少使用，除非你想了解所有内容，否则你可以直接跳过该语法。
 ```
 
@@ -93,27 +93,27 @@ let user = new function() {
 
 对于常规调用，它为空，对于使用 `new` 的调用，则等于该函数：
 
-```js run
+```js
 function User() {
   alert(new.target);
 }
 
 // 不带 "new"：
-*!*
+
 User(); // undefined
-*/!*
+
 
 // 带 "new"：
-*!*
+
 new User(); // function User { ... }
-*/!*
+
 ```
 
 它可以被用在函数内部，来判断该函数是被通过 `new` 调用的“构造器模式”，还是没被通过 `new` 调用的“常规模式”。
 
 我们也可以让 `new` 调用和常规调用做相同的工作，像这样：
 
-```js run
+```js
 function User(name) {
   if (!new.target) { // 如果你没有通过 new 运行我
     return new User(name); // ……我会给你添加 new
@@ -143,7 +143,7 @@ alert(john.name); // John
 
 例如，这里 `return` 通过返回一个对象覆盖 `this`：
 
-```js run
+```js
 function BigUser() {
 
   this.name = "John";
@@ -156,7 +156,7 @@ alert( new BigUser().name );  // Godzilla，得到了那个对象
 
 这里有一个 `return` 为空的例子（或者我们可以在它之后放置一个原始类型，没有什么影响）：
 
-```js run
+```js
 function SmallUser() {
 
   this.name = "John";
@@ -169,7 +169,7 @@ alert( new SmallUser().name );  // John
 
 通常构造器没有 `return` 语句。这里我们主要为了完整性而提及返回对象的特殊行为。
 
-````smart header="省略括号"
+`省略括号"
 顺便说一下，如果没有参数，我们可以省略 `new` 后的括号：
 
 ```js
@@ -189,7 +189,7 @@ let user = new User();
 
 例如，下面的 `new User(name)` 用给定的 `name` 和方法 `sayHi` 创建了一个对象：
 
-```js run
+```js
 function User(name) {
   this.name = name;
 
@@ -198,11 +198,11 @@ function User(name) {
   };
 }
 
-*!*
+
 let john = new User("John");
 
 john.sayHi(); // My name is: John
-*/!*
+
 
 /*
 john = {
@@ -223,7 +223,7 @@ john = {
 
 JavaScript 为许多内置的对象提供了构造函数：比如日期 `Date`、集合 `Set` 以及其他我们计划学习的内容。
 
-```smart header="对象，我们还会回来哒！"
+对象，我们还会回来哒！"
 在本章中，我们只介绍了关于对象和构造器的基础知识。它们对于我们在下一章中，学习更多关于数据类型和函数的相关知识非常重要。
 
 在我们学习了那些之后，我们将回到对象，在 <info:prototypes> 和 <info:classes> 章节中深入介绍它们。

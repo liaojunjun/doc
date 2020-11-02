@@ -39,20 +39,20 @@
 
 例如，让我们尝试对来自另一个源的 `<iframe>` 进行读取和写入：
 
-```html run
+```html
 <iframe data-src="https://example.com" id="iframe"></iframe>
 
 <script>
   iframe.onload = function() {
     // 我们可以获取对内部 window 的引用
-*!*
+
     let iframeWindow = iframe.contentWindow; // OK
-*/!*
+
     try {
       // ...但是无法获取其中的文档
-*!*
+
       let doc = iframe.contentDocument; // ERROR
-*/!*
+
     } catch(e) {
       alert(e); // Security Error（另一个源）
     }
@@ -60,17 +60,17 @@
     // 并且，我们也无法 **读取** iframe 中页面的 URL
     try {
       // 无法从 location 对象中读取 URL
-*!*
+
       let href = iframe.contentWindow.location.href; // ERROR
-*/!*
+
     } catch(e) {
       alert(e); // Security Error
     }
 
     // ...我们可以 **写入** location（所以，在 iframe 中加载了其他内容）！
-*!*
+
     iframe.contentWindow.location = '/'; // OK
-*/!*
+
 
     iframe.onload = null; // 清空处理程序，在 location 更改后不要再运行它
   };
@@ -84,7 +84,7 @@
 
 与此相反，如果 `<iframe>` 具有相同的源，我们可以使用它做任何事情：
 
-```html run
+```html
 <!-- 来自同一个网站的 iframe -->
 <iframe data-src="/" id="iframe"></iframe>
 
@@ -96,7 +96,7 @@
 </script>
 ```
 
-```smart header="`iframe.onload` vs `iframe.contentWindow.onload`"
+`iframe.onload` vs `iframe.contentWindow.onload`"
 `iframe.onload` 事件（在 `<iframe>` 标签上）与 `iframe.contentWindow.onload`（在嵌入的 window 对象上）基本相同。当嵌入的窗口的所有资源都完全加载完毕时触发。
 
 ……但是，我们无法使用 `iframe.contentWindow.onload` 访问不同源的 iframe。因此，请使用 `iframe.onload`，
@@ -127,17 +127,17 @@ document.domain = 'site.com';
 看一下下面这段代码：
 
 
-```html run
+```html
 <iframe data-src="/" id="iframe"></iframe>
 
 <script>
   let oldDoc = iframe.contentDocument;
   iframe.onload = function() {
     let newDoc = iframe.contentDocument;
-*!*
+
     // 加载的文档与初始的文档不同！
     alert(oldDoc == newDoc); // false
-*/!*
+
   };
 </script>
 ```
@@ -150,7 +150,7 @@ document.domain = 'site.com';
 
 我们可以尝试通过在 `setInterval` 中进行检查，以更早地捕获该时刻：
 
-```html run
+```html
 <iframe data-src="/" id="iframe"></iframe>
 
 <script>
@@ -177,7 +177,7 @@ document.domain = 'site.com';
 
 例如：
 
-```html run
+```html
 <iframe data-src="/" style="height:80px" name="win" id="iframe"></iframe>
 
 <script>
@@ -196,13 +196,13 @@ document.domain = 'site.com';
 
 例如：
 
-```js run
+```js
 window.frames[0].parent === window; // true
 ```
 
 我们可以使用 `top` 属性来检查当前的文档是否是在 iframe 内打开的：
 
-```js run
+```js
 if (window == top) { // 当前 window == window.top?
   alert('The script is in the topmost window, not in a frame');
 } else {
@@ -292,9 +292,9 @@ if (window == top) { // 当前 window == window.top?
 <script>
   let win = window.frames.example;
 
-*!*
+
   win.postMessage("message", "*");
-*/!*
+
 </script>
 ```
 

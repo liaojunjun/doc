@@ -134,7 +134,7 @@ alert(event.clientX); // undefined，未知的属性被忽略了！
 
 例如：
 
-```html run refresh
+```html refresh
 <h1 id="elem">Hello for John!</h1>
 
 <script>

@@ -43,7 +43,7 @@ arr[<span class="hljs-number">3</span>](); <span class="hljs-comment">// hello</
 let fruits = [
   &quot;Apple&quot;, 
   &quot;Orange&quot;, 
-  &quot;Plum&quot;*!*,*/!*
+  &quot;Plum&quot;,
 ];
 ```
 
@@ -72,7 +72,7 @@ let fruits = [
 <p><strong>作用于数组末端的方法：</strong></p>
 <p><code>pop</code>
 : 取出并返回数组的最后一个元素：</p>
-<pre><code>```js run
+<pre><code>```js
 let fruits = [&quot;Apple&quot;, &quot;Orange&quot;, &quot;Pear&quot;];
 
 alert( fruits.pop() ); // 移除 &quot;Pear&quot; 然后 alert 显示出来
@@ -81,7 +81,7 @@ alert( fruits ); // Apple, Orange
 ```</code></pre>
 <p><code>push</code>
 : 在数组末端添加元素：</p>
-<pre><code>```js run
+<pre><code>```js
 let fruits = [&quot;Apple&quot;, &quot;Orange&quot;];
 
 fruits.push(&quot;Pear&quot;);
@@ -93,7 +93,7 @@ alert( fruits ); // Apple, Orange, Pear
 <p><strong>作用于数组首端的方法：</strong></p>
 <p><code>shift</code>
 : 取出数组的第一个元素并返回它：</p>
-<pre><code>```js run
+<pre><code>```js
 let fruits = [&quot;Apple&quot;, &quot;Orange&quot;, &quot;Pear&quot;];
 
 alert( fruits.shift() ); // 移除 Apple 然后 alert 显示出来
@@ -102,7 +102,7 @@ alert( fruits ); // Orange, Pear
 ```</code></pre>
 <p><code>unshift</code>
 : 在数组的首端添加元素：</p>
-<pre><code>```js run
+<pre><code>```js
 let fruits = [&quot;Orange&quot;, &quot;Pear&quot;];
 
 fruits.unshift(&#x27;Apple&#x27;);
@@ -173,9 +173,9 @@ fruits.age = <span class="hljs-number">25</span>; <span class="hljs-comment">// 
 <p>遍历数组最古老的方式就是 <code>for</code> 循环：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Orange&quot;</span>, <span class="hljs-string">&quot;Pear&quot;</span>];
 
-*!*
+
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; arr.length; i++) {
-*/!*
+
   alert( arr[i] );
 }</code></pre>
 <p>但对于数组来说还有另一种循环方式，<code>for..of</code>：</p>
@@ -189,9 +189,9 @@ fruits.age = <span class="hljs-number">25</span>; <span class="hljs-comment">// 
 <p>技术上来讲，因为数组也是对象，所以使用 <code>for..in</code> 也是可以的：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> arr = [<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Orange&quot;</span>, <span class="hljs-string">&quot;Pear&quot;</span>];
 
-*!*
+
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> arr) {
-*/!*
+
   alert( arr[key] ); <span class="hljs-comment">// Apple, Orange, Pear</span>
 }</code></pre>
 <p>但这其实是一个很不好的想法。会有一些潜在问题存在：</p>
@@ -223,7 +223,7 @@ alert( arr[<span class="hljs-number">3</span>] ); <span class="hljs-comment">// 
 <p>所以，清空数组最简单的方法就是：<code>arr.length = 0;</code>。</p>
 <h2 id="new-array-new-array">new Array() [#new-array]</h2>
 <p>这是创建数组的另一种语法：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = *!*<span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>*/!*(<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Pear&quot;</span>, <span class="hljs-string">&quot;etc&quot;</span>);</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> arr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(<span class="hljs-string">&quot;Apple&quot;</span>, <span class="hljs-string">&quot;Pear&quot;</span>, <span class="hljs-string">&quot;etc&quot;</span>);</code></pre>
 <p>它很少被使用，因为方括号 <code>[]</code> 更短更简洁。而且这种语法还存在一些诡异的特性。</p>
 <p>如果使用单个参数（即数字）调用 <code>new Array</code>，那么它会创建一个 <strong>指定了长度，却没有任何项</strong> 的数组。</p>
 <p>让我们看看如何搬起石头砸自己的脚:</p>

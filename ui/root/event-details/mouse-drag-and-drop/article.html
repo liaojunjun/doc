@@ -82,17 +82,17 @@ ball.style.top = pageY - ball.offsetHeight / <span class="hljs-number">2</span> 
 <li><p>然后，在拖动球时，我们将鼠标指针相对于球的这个偏移也考虑在内，像这样：</p>
 <pre><code class="language-js"><span class="hljs-comment">// onmousemove</span>
 <span class="hljs-comment">// 球具有 position:absoute</span>
-ball.style.left = event.pageX - *!*shiftX*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;
-ball.style.top = event.pageY - *!*shiftY*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;</code></pre>
+ball.style.left = event.pageX - shiftX + <span class="hljs-string">&#x27;px&#x27;</span>;
+ball.style.top = event.pageY - shiftY + <span class="hljs-string">&#x27;px&#x27;</span>;</code></pre>
 </li>
 </ol>
 <p>能够更好地进行定位的最终代码：</p>
 <pre><code class="language-js">ball.onmousedown = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
 
-*!*
+
   <span class="hljs-keyword">let</span> shiftX = event.clientX - ball.getBoundingClientRect().left;
   <span class="hljs-keyword">let</span> shiftY = event.clientY - ball.getBoundingClientRect().top;
-*/!*
+
 
   ball.style.position = <span class="hljs-string">&#x27;absolute&#x27;</span>;
   ball.style.zIndex = <span class="hljs-number">1000</span>;
@@ -103,8 +103,8 @@ ball.style.top = event.pageY - *!*shiftY*/!* + <span class="hljs-string">&#x27;p
   <span class="hljs-comment">// 移动现在位于坐标 (pageX, pageY) 上的球</span>
   <span class="hljs-comment">// 将初始的偏移考虑在内</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">moveAt</span>(<span class="hljs-params">pageX, pageY</span>) </span>{
-    ball.style.left = pageX - *!*shiftX*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;
-    ball.style.top = pageY - *!*shiftY*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;
+    ball.style.left = pageX - shiftX + <span class="hljs-string">&#x27;px&#x27;</span>;
+    ball.style.top = pageY - shiftY + <span class="hljs-string">&#x27;px&#x27;</span>;
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onMouseMove</span>(<span class="hljs-params">event</span>) </span>{

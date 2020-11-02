@@ -24,7 +24,7 @@ Shadow DOM 为封装而生。它可以让一个组件拥有自己的「影子」
 
 在上面的例子中，我们可以看到一个有用的属性 `pseudo`。这是一个因为历史原因而存在的属性，并不在标准中。我们可以使用它来给子元素加上 CSS 样式，像这样：
 
-```html run autorun
+```html autorun
 <style>
 /* 让滑块轨道变红 */
 input::-webkit-slider-runnable-track {
@@ -52,7 +52,7 @@ input::-webkit-slider-runnable-track {
 
 比如，这个 `<show-hello>` 元素将它的内部 DOM 隐藏在了影子里面：
 
-```html run autorun height=60
+```html autorun height=60
 <script>
 customElements.define('show-hello', class extends HTMLElement {
   connectedCallback() {
@@ -103,11 +103,11 @@ Shadow DOM 被非常明显地和主文档分开：
 
 比如：
 
-```html run untrusted height=40
+```html untrusted height=40
 <style>
-*!*
+
   /* 文档样式对 #elem 内的 shadow tree 无作用 (1) */
-*/!*
+
   p { color: red; }
 </style>
 
@@ -115,17 +115,17 @@ Shadow DOM 被非常明显地和主文档分开：
 
 <script>
   elem.attachShadow({mode: 'open'});
-*!*
+
     // shadow tree 有自己的样式 (2)
-*/!*
+
   elem.shadowRoot.innerHTML = `
     <style> p { font-weight: bold; } </style>
     <p>Hello, John!</p>
   `;
 
-*!*
+
   // <p> 只对 shadow tree 里面的查询可见 (3)
-*/!*
+
   alert(document.querySelectorAll('p').length); // 0
   alert(elem.shadowRoot.querySelectorAll('p').length); // 1
 </script>  

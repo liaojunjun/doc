@@ -8,9 +8,9 @@
 <h2 id="一个-mixin-实例">一个 Mixin 实例</h2>
 <p>在 JavaScript 中构造一个 mixin 最简单的方式就是构造一个拥有实用方法的对象，以便我们可以轻松地将这些实用的方法合并到任何类的原型中。</p>
 <p>例如，这个名为 <code>sayHiMixin</code> 的 mixin 用于给 <code>User</code> 添加一些“语言功能”：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-comment">// mixin</span>
-*/!*
+
 <span class="hljs-keyword">let</span> sayHiMixin = {
   sayHi() {
     alert(<span class="hljs-string">`Hello <span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span>`</span>);
@@ -20,9 +20,9 @@
   }
 };
 
-*!*
+
 <span class="hljs-comment">// 用法：</span>
-*/!*
+
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
   <span class="hljs-keyword">constructor</span>(name) {
     <span class="hljs-built_in">this</span>.name = name;
@@ -52,9 +52,9 @@
   <span class="hljs-attr">__proto__</span>: sayMixin, <span class="hljs-comment">// (或者，我们可以在这儿使用 Object.create 来设置原型)</span>
 
   sayHi() {
-    *!*
+    
     <span class="hljs-comment">// 调用父类方法</span>
-    */!*
+    
     <span class="hljs-built_in">super</span>.say(<span class="hljs-string">`Hello <span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span>`</span>); <span class="hljs-comment">// (*)</span>
   },
   sayBye() {
@@ -147,9 +147,9 @@
 <span class="hljs-keyword">let</span> menu = <span class="hljs-keyword">new</span> Menu();
 
 <span class="hljs-comment">// 添加一个事件处理程序（handler），在被选择时被调用：</span>
-*!*
+
 menu.on(<span class="hljs-string">&quot;select&quot;</span>, <span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> alert(<span class="hljs-string">`Value selected: <span class="hljs-subst">${value}</span>`</span>));
-*/!*
+
 
 <span class="hljs-comment">// 触发事件 =&gt; 运行上述的事件处理程序（handler）并显示：</span>
 <span class="hljs-comment">// 被选中的值：123</span>

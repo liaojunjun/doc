@@ -15,30 +15,30 @@ obj instanceof Class
 
 例如：
 
-```js run
+```js
 class Rabbit {}
 let rabbit = new Rabbit();
 
 // rabbit 是 Rabbit class 的对象吗？
-*!*
+
 alert( rabbit instanceof Rabbit ); // true
-*/!*
+
 ```
 
 它还可以与构造函数一起使用：
 
-```js run
-*!*
+```js
+
 // 这里是构造函数，而不是 class
 function Rabbit() {}
-*/!*
+
 
 alert( new Rabbit() instanceof Rabbit ); // true
 ```
 
 ……与诸如 `Array` 之类的内建 class 一起使用：
 
-```js run
+```js
 let arr = [1, 2, 3];
 alert( arr instanceof Array ); // true
 alert( arr instanceof Object ); // true
@@ -54,7 +54,7 @@ alert( arr instanceof Object ); // true
 
     例如：
 
-    ```js run
+    ```js
     // 设置 instanceOf 检查
     // 并假设具有 canEat 属性的都是 animal
     class Animal {
@@ -84,19 +84,19 @@ alert( arr instanceof Object ); // true
 
     而在继承的例子中，匹配将在第二步进行：
 
-    ```js run
+    ```js
     class Animal {}
     class Rabbit extends Animal {}
 
     let rabbit = new Rabbit();
-    *!*
+    
     alert(rabbit instanceof Animal); // true
-    */!*
+    
 
     // rabbit.__proto__ === Rabbit.prototype
-    *!*
+    
     // rabbit.__proto__.__proto__ === Animal.prototype（匹配！）
-    */!*
+    
     ```
 
 下图展示了 `rabbit instanceof Animal` 的执行过程中，`Animal.prototype` 是如何参与比较的：
@@ -111,7 +111,7 @@ alert( arr instanceof Object ); // true
 
 就像这样：
 
-```js run
+```js
 function Rabbit() {}
 let rabbit = new Rabbit();
 
@@ -119,16 +119,16 @@ let rabbit = new Rabbit();
 Rabbit.prototype = {};
 
 // ...再也不是 rabbit 了！
-*!*
+
 alert( rabbit instanceof Rabbit ); // false
-*/!*
+
 ```
 
 ## 福利：使用 Object.prototype.toString 方法来揭示类型
 
 大家都知道，一个普通对象被转化为字符串时为 `[object Object]`：
 
-```js run
+```js
 let obj = {};
 
 alert(obj); // [object Object]
@@ -150,21 +150,21 @@ alert(obj.toString()); // 同上
 
 让我们演示一下：
 
-```js run
+```js
 // 方便起见，将 toString 方法复制到一个变量中
 let objectToString = Object.prototype.toString;
 
 // 它是什么类型的？
 let arr = [];
 
-alert( objectToString.call(arr) ); // [object *!*Array*/!*]
+alert( objectToString.call(arr) ); // [object Array]
 ```
 
 这里我们用到了在 [](info:call-apply-decorators) 一章中讲过的 [call](mdn:js/function/call) 方法来在上下文 `this=arr` 中执行函数 `objectToString`。
 
 在内部，`toString` 的算法会检查 `this`，并返回相应的结果。再举几个例子：
 
-```js run
+```js
 let s = Object.prototype.toString;
 
 alert( s.call(123) ); // [object Number]
@@ -178,7 +178,7 @@ alert( s.call(alert) ); // [object Function]
 
 例如：
 
-```js run
+```js
 let user = {
   [Symbol.toStringTag]: "User"
 };
@@ -188,7 +188,7 @@ alert( {}.toString.call(user) ); // [object User]
 
 对于大多数特定于环境的对象，都有一个这样的属性。下面是一些特定于浏览器的示例：
 
-```js run
+```js
 // 特定于环境的对象和类的 toStringTag：
 alert( window[Symbol.toStringTag]); // Window
 alert( XMLHttpRequest.prototype[Symbol.toStringTag] ); // XMLHttpRequest

@@ -9,12 +9,12 @@
 要打开一个 WebSocket 连接，我们需要在 url 中使用特殊的协议 `ws` 创建 `new WebSocket`：
 
 ```js
-let socket = new WebSocket("*!*ws*/!*://javascript.info");
+let socket = new WebSocket("ws://javascript.info");
 ```
 
 同样也有一个加密的 `wss://` 协议。类似于 WebSocket 中的 HTTPS。
 
-```smart header="始终使用 `wss://`"
+始终使用 `wss://`"
 `wss://` 协议不仅是被加密的，而且更可靠。
 
 因为 `ws://` 数据不是加密的，对于任何中间人来说其数据都是可见的。并且，旧的代理服务器不了解 WebSocket，它们可能会因为看到“奇怪的” header 而中止连接。
@@ -32,7 +32,7 @@ let socket = new WebSocket("*!*ws*/!*://javascript.info");
 
 这是一个示例：
 
-```js run
+```js
 let socket = new WebSocket("wss://javascript.info/article/websocket/demo/hello");
 
 socket.onopen = function(e) {
@@ -94,7 +94,7 @@ Sec-WebSocket-Version: 13
 - `Sec-WebSocket-Key` —— 浏览器随机生成的安全密钥。
 - `Sec-WebSocket-Version` —— WebSocket 协议版本，当前为 13。
 
-```smart header="无法模拟 WebSocket 握手"
+无法模拟 WebSocket 握手"
 我们不能使用 `XMLHttpRequest` 或 `fetch` 来进行这种 HTTP 请求，因为不允许 JavaScript 设置这些 header。
 ```
 
@@ -139,10 +139,10 @@ Connection: Upgrade
 Origin: https://javascript.info
 Sec-WebSocket-Key: Iv8io/9s+lYFgZWcXczP8Q==
 Sec-WebSocket-Version: 13
-*!*
+
 Sec-WebSocket-Extensions: deflate-frame
 Sec-WebSocket-Protocol: soap, wamp
-*/!*
+
 ```
 
 响应：
@@ -152,10 +152,10 @@ Sec-WebSocket-Protocol: soap, wamp
 Upgrade: websocket
 Connection: Upgrade
 Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=
-*!*
+
 Sec-WebSocket-Extensions: deflate-frame
 Sec-WebSocket-Protocol: soap
-*/!*
+
 ```
 
 在这里服务器响应 —— 它支持扩展 "deflate-frame"，并且仅支持所请求的子协议中的 SOAP。

@@ -1,7 +1,7 @@
 
 这里没有什么技巧。只需要将 `demoGithubUser` 中的 `.catch` 替换为 `try...catch`，然后在需要的地方加上 `async/await` 即可：
 
-```js run
+```js
 class HttpError extends Error {
   constructor(response) {
     super(`${response.status} for ${response.url}`);

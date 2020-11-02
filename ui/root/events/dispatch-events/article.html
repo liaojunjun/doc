@@ -75,9 +75,9 @@
   <span class="hljs-attr">clientY</span>: <span class="hljs-number">100</span>
 });
 
-*!*
+
 alert(event.clientX); <span class="hljs-comment">// 100</span>
-*/!*</code></pre>
+</code></pre>
 <p>请注意：通用的 <code>Event</code> 构造器不允许这样做。</p>
 <p>让我们试试：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> event = <span class="hljs-keyword">new</span> Event(<span class="hljs-string">&quot;click&quot;</span>, {
@@ -87,9 +87,9 @@ alert(event.clientX); <span class="hljs-comment">// 100</span>
   <span class="hljs-attr">clientY</span>: <span class="hljs-number">100</span>
 });
 
-*!*
+
 alert(event.clientX); <span class="hljs-comment">// undefined，未知的属性被忽略了！</span>
-*/!*</code></pre>
+</code></pre>
 <p>从技术上讲，我们可以通过在创建后直接分配 <code>event.clientX=100</code> 来解决这个问题。所以，这是一个方便和遵守规则的问题。浏览器生成的事件始终具有正确的类型。</p>
 <p>规范中提供了不同 UI 事件的属性的完整列表，例如 <a href="https://www.w3.org/TR/uievents/#mouseevent">MouseEvent</a>。</p>
 <h2 id="自定义事件">自定义事件</h2>
@@ -101,13 +101,13 @@ alert(event.clientX); <span class="hljs-comment">// undefined，未知的属性�
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-comment">// 事件附带给处理程序的其他详细信息</span>
   elem.addEventListener(<span class="hljs-string">&quot;hello&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
-    alert(*!*event.detail.name*/!*);
+    alert(event.detail.name);
   });
 
   elem.dispatchEvent(<span class="hljs-keyword">new</span> CustomEvent(<span class="hljs-string">&quot;hello&quot;</span>, {
-*!*
+
     detail: { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> }
-*/!*
+
   }));
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p><code>detail</code> 属性可以有任何数据。从技术上讲，我们可以不用，因为我们可以在创建后将任何属性分配给常规的 <code>new Event</code> 对象中。但是 <code>CustomEvent</code> 提供了特殊的 <code>detail</code> 字段，以避免与其他事件属性的冲突。</p>

@@ -5,11 +5,11 @@
 
 在一个类中，它们以 `static` 关键字开头，如下所示：
 
-```js run
+```js
 class User {
-*!*
+
   static staticMethod() {
-*/!*
+
     alert(this === User);
   }
 }
@@ -19,7 +19,7 @@ User.staticMethod(); // true
 
 这实际上跟直接将其作为属性赋值的作用相同：
 
-```js run
+```js
 class User { }
 
 User.staticMethod = function() {
@@ -35,18 +35,18 @@ User.staticMethod(); // true
 
 例如，我们有对象 `Article`，并且需要一个方法来比较它们。一个自然的解决方案就是添加 `Article.compare` 方法，像下面这样：
 
-```js run
+```js
 class Article {
   constructor(title, date) {
     this.title = title;
     this.date = date;
   }
 
-*!*
+
   static compare(articleA, articleB) {
     return articleA.date - articleB.date;
   }
-*/!*
+
 }
 
 // 用法
@@ -56,9 +56,9 @@ let articles = [
   new Article("JavaScript", new Date(2019, 11, 1))
 ];
 
-*!*
+
 articles.sort(Article.compare);
-*/!*
+
 
 alert( articles[0].title ); // CSS
 ```
@@ -75,19 +75,19 @@ alert( articles[0].title ); // CSS
 
 就像这里的 `Article.createTodays()`：
 
-```js run
+```js
 class Article {
   constructor(title, date) {
     this.title = title;
     this.date = date;
   }
 
-*!*
+
   static createTodays() {
     // 记住 this = Article
     return new this("Today's digest", new Date());
   }
-*/!*
+
 }
 
 let article = Article.createTodays();
@@ -111,7 +111,7 @@ Article.remove({id: 12345});
 
 静态的属性也是可能的，它们看起来就像常规的类属性，但前面加有 `static`：
 
-```js run
+```js
 class Article {
   static publisher = "Levi Ding";
 }
@@ -131,7 +131,7 @@ Article.publisher = "Levi Ding";
 
 例如，下面这段代码中的 `Animal.compare` 和 `Animal.planet` 是可被继承的，可以通过 `Rabbit.compare` 和 `Rabbit.planet` 来访问：
 
-```js run
+```js
 class Animal {
   static planet = "Earth";
 
@@ -140,16 +140,16 @@ class Animal {
     this.name = name;
   }
 
-  run(speed = 0) {
+ (speed = 0) {
     this.speed += speed;
     alert(`${this.name} runs with speed ${this.speed}.`);
   }
 
-*!*
+
   static compare(animalA, animalB) {
     return animalA.speed - animalB.speed;
   }
-*/!*
+
 
 }
 
@@ -165,9 +165,9 @@ let rabbits = [
   new Rabbit("Black Rabbit", 5)
 ];
 
-*!*
+
 rabbits.sort(Rabbit.compare);
-*/!*
+
 
 rabbits[0].run(); // Black Rabbit runs with speed 5.
 
@@ -189,7 +189,7 @@ alert(Rabbit.planet); // Earth
 
 这里，让我们通过代码来检验一下：
 
-```js run
+```js
 class Animal {}
 class Rabbit extends Animal {}
 

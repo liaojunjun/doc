@@ -66,7 +66,7 @@ alert(document.cookie); // ...; my%20name=John%20Smith
 ```
 
 
-```warn header="限制"
+"限制"
 存在一些限制：
 - `encodeURIComponent` 编码后的 `name=value` 对，大小不能超过 4kb。因此，我们不能在一个 cookie 中保存大的东西。
 - 每个域的 cookie 总数不得超过 20+ 左右，具体限制取决于浏览器。
@@ -343,7 +343,7 @@ function deleteCookie(name) {
 }
 ```
 
-```warn header="更新或删除必须使用相同的路径和域"
+"更新或删除必须使用相同的路径和域"
 请注意：当我们更新或删除一个 cookie 时，我们应该使用和设置 cookie 时相同的路径和域选项。
 ```
 

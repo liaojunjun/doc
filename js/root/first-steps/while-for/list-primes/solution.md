@@ -12,7 +12,7 @@
 
 使用标签的代码：
 
-```js run
+```js
 let n = 10;
 
 nextPrime:

@@ -13,7 +13,7 @@
 alert( regexp.test(<span class="hljs-string">&quot;A good string&quot;</span>) ); <span class="hljs-comment">// true</span>
 alert( regexp.test(<span class="hljs-string">&quot;Bad characters: $@#&quot;</span>) ); <span class="hljs-comment">// false</span></code></pre>
 <p>It seems to work. The result is correct. Although, on certain strings it takes a lot of time. So long that JavaScript engine &quot;hangs&quot; with 100% CPU consumption.</p>
-<p>If you run the example below, you probably won&#39;t see anything, as JavaScript will just &quot;hang&quot;. A web-browser will stop reacting on events, the UI will stop working. After some time it will suggest to reloaad the page. So be careful with this:</p>
+<p>If you the example below, you probably won&#39;t see anything, as JavaScript will just &quot;hang&quot;. A web-browser will stop reacting on events, the UI will stop working. After some time it will suggest to reloaad the page. So be careful with this:</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^(\w+\s?)*$/</span>;
 <span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;An input string that takes a long time or even makes this regexp to hang!&quot;</span>;
 

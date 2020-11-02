@@ -9,7 +9,7 @@
 
 运行代码如下：
 
-```js run
+```js
 let reg = /<style(>|\s.*?>)/g;
 
 alert( '<style> <styler> <style test="...">'.match(reg) ); // <style>, <style test="...">

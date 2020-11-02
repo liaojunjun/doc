@@ -4,9 +4,9 @@
 <pre><code class="language-js"><span class="hljs-keyword">let</span> links = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;a&#x27;</span>);
 
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> link <span class="hljs-keyword">of</span> links) {
-*!*
+
   <span class="hljs-keyword">let</span> href = link.getAttribute(<span class="hljs-string">&#x27;href&#x27;</span>);
-*/!*
+
   <span class="hljs-keyword">if</span> (!href) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 没有特性</span>
 
   <span class="hljs-keyword">if</span> (!href.includes(<span class="hljs-string">&#x27;://&#x27;</span>)) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 没有协议</span>

@@ -3,7 +3,7 @@
 <p>对于需要连续数据交换的服务，例如网络游戏，实时交易系统等，WebSocket 尤其有用。</p>
 <h2 id="一个简单例子">一个简单例子</h2>
 <p>要打开一个 WebSocket 连接，我们需要在 url 中使用特殊的协议 <code>ws</code> 创建 <code>new WebSocket</code>：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> socket = <span class="hljs-keyword">new</span> WebSocket(<span class="hljs-string">&quot;*!*ws*/!*://javascript.info&quot;</span>);</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> socket = <span class="hljs-keyword">new</span> WebSocket(<span class="hljs-string">&quot;ws://javascript.info&quot;</span>);</code></pre>
 <p>同样也有一个加密的 <code>wss://</code> 协议。类似于 WebSocket 中的 HTTPS。</p>
 <p>```smart header=&quot;始终使用 <code>wss://</code>&quot;
 <code>wss://</code> 协议不仅是被加密的，而且更可靠。</p>
@@ -20,7 +20,7 @@
 
 这是一个示例：
 
-```js run
+```js
 let socket = new WebSocket(&quot;wss://javascript.info/article/websocket/demo/hello&quot;);
 
 socket.onopen = function(e) {
@@ -97,19 +97,19 @@ Connection: Upgrade
 Origin: https://javascript.info
 Sec-WebSocket-Key: Iv8io/9s+lYFgZWcXczP8Q==
 Sec-WebSocket-Version: 13
-*!*
+
 Sec-WebSocket-Extensions: deflate-frame
 Sec-WebSocket-Protocol: soap, wamp
-*/!*</code></pre>
+</code></pre>
 <p>响应：</p>
 <pre><code>101 Switching Protocols
 Upgrade: websocket
 Connection: Upgrade
 Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=
-*!*
+
 Sec-WebSocket-Extensions: deflate-frame
 Sec-WebSocket-Protocol: soap
-*/!*</code></pre>
+</code></pre>
 <p>在这里服务器响应 —— 它支持扩展 &quot;deflate-frame&quot;，并且仅支持所请求的子协议中的 SOAP。</p>
 <h2 id="数据传输">数据传输</h2>
 <p>WebSocket 通信由 &quot;frames&quot;（即数据片段）组成，可以从任何一方发送，并且有以下几种类型：</p>

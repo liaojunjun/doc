@@ -19,10 +19,10 @@
   alert( <span class="hljs-string">&#x27;Hello everyone!&#x27;</span> );
 }
 
-*!*
+
 showMessage();
 showMessage();
-*/!*</code></pre>
+</code></pre>
 <p>调用 <code>showMessage()</code> 执行函数的代码。这里我们会看到显示两次消息。</p>
 <p>这个例子清楚地演示了函数的主要目的之一：避免代码重复。</p>
 <p>如果我们需要更改消息或其显示方式，只需在一个地方修改代码：输出它的函数。</p>
@@ -30,9 +30,9 @@ showMessage();
 <p>在函数中声明的变量只在该函数内部可见。</p>
 <p>例如：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showMessage</span>(<span class="hljs-params"></span>) </span>{
-*!*
+
   <span class="hljs-keyword">let</span> message = <span class="hljs-string">&quot;Hello, I&#x27;m JavaScript!&quot;</span>; <span class="hljs-comment">// 局部变量</span>
-*/!*
+
 
   alert( message );
 }
@@ -42,47 +42,47 @@ showMessage(); <span class="hljs-comment">// Hello, I&#x27;m JavaScript!</span>
 alert( message ); <span class="hljs-comment">// &lt;-- 错误！变量是函数的局部变量</span></code></pre>
 <h2 id="外部变量">外部变量</h2>
 <p>函数也可以访问外部变量，例如：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> *!*userName*/!* = <span class="hljs-string">&#x27;John&#x27;</span>;
+<pre><code class="language-js"><span class="hljs-keyword">let</span> userName = <span class="hljs-string">&#x27;John&#x27;</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showMessage</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&#x27;Hello, &#x27;</span> + *!*userName*/!*;
+  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&#x27;Hello, &#x27;</span> + userName;
   alert(message);
 }
 
 showMessage(); <span class="hljs-comment">// Hello, John</span></code></pre>
 <p>函数对外部变量拥有全部的访问权限。函数也可以修改外部变量。</p>
 <p>例如：</p>
-<pre><code class="language-js">let *!*userName*/!* = &#x27;John&#x27;;
+<pre><code class="language-js">let userName = &#x27;John&#x27;;
 
 function showMessage() {
-  *!*userName*/!* = &quot;Bob&quot;; // (1) 改变外部变量
+  userName = &quot;Bob&quot;; // (1) 改变外部变量
 
-  let message = &#x27;Hello, &#x27; + *!*userName*/!*;
+  let message = &#x27;Hello, &#x27; + userName;
   alert(message);
 }
 
-alert( userName ); // *!*John*/!* 在函数调用之前
+alert( userName ); // John 在函数调用之前
 
 showMessage();
 
-alert( userName ); // *!*Bob*/!*，值被函数修改了</code></pre>
+alert( userName ); // Bob，值被函数修改了</code></pre>
 <p>只有在没有局部变量的情况下才会使用外部变量。</p>
 <p>如果在函数内部声明了同名变量，那么函数会 <strong>遮蔽</strong> 外部变量。例如，在下面的代码中，函数使用局部的 <code>userName</code>，而外部变量被忽略：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> userName = <span class="hljs-string">&#x27;John&#x27;</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showMessage</span>(<span class="hljs-params"></span>) </span>{
-*!*
-  <span class="hljs-keyword">let</span> userName = <span class="hljs-string">&quot;Bob&quot;</span>; <span class="hljs-comment">// 声明一个局部变量</span>
-*/!*
 
-  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&#x27;Hello, &#x27;</span> + userName; <span class="hljs-comment">// *!*Bob*/!*</span>
+  <span class="hljs-keyword">let</span> userName = <span class="hljs-string">&quot;Bob&quot;</span>; <span class="hljs-comment">// 声明一个局部变量</span>
+
+
+  <span class="hljs-keyword">let</span> message = <span class="hljs-string">&#x27;Hello, &#x27;</span> + userName; <span class="hljs-comment">// Bob</span>
   alert(message);
 }
 
 <span class="hljs-comment">// 函数会创建并使用它自己的 userName</span>
 showMessage();
 
-alert( userName ); <span class="hljs-comment">// *!*John*/!*，未被更改，函数没有访问外部变量。</span></code></pre>
+alert( userName ); <span class="hljs-comment">// John，未被更改，函数没有访问外部变量。</span></code></pre>
 <pre><code class="language-smart">任何函数之外声明的变量，例如上述代码中的外部变量 `userName`，都被称为 **全局** 变量。
 
 全局变量在任意函数中都是可见的（除非被局部变量遮蔽）。
@@ -91,21 +91,21 @@ alert( userName ); <span class="hljs-comment">// *!*John*/!*，未被更改，�
 <h2 id="参数">参数</h2>
 <p>我们可以使用参数（也称“函数参数”）来将任意数据传递给函数。</p>
 <p>在如下示例中，函数有两个参数：<code>from</code> 和 <code>text</code>。</p>
-<pre><code class="language-js">function showMessage(*!*from, text*/!*) { // 参数：from 和 text
+<pre><code class="language-js">function showMessage(from, text) { // 参数：from 和 text
   alert(from + &#x27;: &#x27; + text);
 }
 
-*!*
+
 showMessage(&#x27;Ann&#x27;, &#x27;Hello!&#x27;); // Ann: Hello! (*)
 showMessage(&#x27;Ann&#x27;, &quot;What&#x27;s up?&quot;); // Ann: What&#x27;s up? (**)
-*/!*</code></pre>
+</code></pre>
 <p>当函数在 <code>(*)</code> 和 <code>(**)</code> 行中被调用时，给定值被复制到了局部变量 <code>from</code> 和 <code>text</code>。然后函数使用它们进行计算。</p>
 <p>这里还有一个例子：我们有一个变量 <code>from</code>，并将它传递给函数。请注意：函数会修改 <code>from</code>，但在函数外部看不到更改，因为函数修改的是复制的变量值副本：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showMessage</span>(<span class="hljs-params">from, text</span>) </span>{
 
-*!*
+
   <span class="hljs-keyword">from</span> = <span class="hljs-string">&#x27;*&#x27;</span> + <span class="hljs-keyword">from</span> + <span class="hljs-string">&#x27;*&#x27;</span>; <span class="hljs-comment">// 让 &quot;from&quot; 看起来更优雅</span>
-*/!*
+
 
   alert( <span class="hljs-keyword">from</span> + <span class="hljs-string">&#x27;: &#x27;</span> + text );
 }
@@ -122,7 +122,7 @@ alert( <span class="hljs-keyword">from</span> ); <span class="hljs-comment">// A
 <pre><code class="language-js">showMessage(<span class="hljs-string">&quot;Ann&quot;</span>);</code></pre>
 <p>那不是错误，这样调用将输出 <code>&quot;*Ann*: undefined&quot;</code>。这里没有参数 <code>text</code>，所以程序假定 <code>text === undefined</code>。</p>
 <p>如果我们想在本示例中设定“默认”的 <code>text</code>，那么我们可以在 <code>=</code> 之后指定它：</p>
-<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showMessage</span>(<span class="hljs-params">from, *!*text = <span class="hljs-string">&quot;no text given&quot;</span>*/!*</span>) </span>{
+<pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showMessage</span>(<span class="hljs-params">from, text = <span class="hljs-string">&quot;no text given&quot;</span></span>) </span>{
   alert( <span class="hljs-keyword">from</span> + <span class="hljs-string">&quot;: &quot;</span> + text );
 }
 
@@ -140,11 +140,11 @@ showMessage(<span class="hljs-string">&quot;Ann&quot;</span>); <span class="hljs
 <p>有些时候，将参数默认值的设置放在函数执行（相较更后期）而不是函数声明的时候，也能行得通。</p>
 <p>为了判断参数是否被省略掉，我们可以拿它跟 <code>undefined</code> 做比较：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showMessage</span>(<span class="hljs-params">text</span>) </span>{
-*!*
+
   <span class="hljs-keyword">if</span> (text === <span class="hljs-literal">undefined</span>) {
     text = <span class="hljs-string">&#x27;empty message&#x27;</span>;
   }
-*/!*
+
 
   alert(text);
 }
@@ -169,7 +169,7 @@ showCount(); <span class="hljs-comment">// unknown</span></code></pre>
 <p>函数可以将一个值返回到调用代码中作为结果。</p>
 <p>最简单的例子是将两个值相加的函数：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a, b</span>) </span>{
-  *!*<span class="hljs-keyword">return</span>*/!* a + b;
+  <span class="hljs-keyword">return</span> a + b;
 }
 
 <span class="hljs-keyword">let</span> result = sum(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);
@@ -178,13 +178,13 @@ alert( result ); <span class="hljs-comment">// 3</span></code></pre>
 <p>在一个函数中可能会出现很多次 <code>return</code>。例如：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkAge</span>(<span class="hljs-params">age</span>) </span>{
   <span class="hljs-keyword">if</span> (age &gt;= <span class="hljs-number">18</span>) {
-*!*
+
     <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
-*/!*
+
   } <span class="hljs-keyword">else</span> {
-*!*
+
     <span class="hljs-keyword">return</span> confirm(<span class="hljs-string">&#x27;Got a permission from the parents?&#x27;</span>);
-*/!*
+
   }
 }
 
@@ -199,9 +199,9 @@ alert( result ); <span class="hljs-comment">// 3</span></code></pre>
 <p>例如：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showMovie</span>(<span class="hljs-params">age</span>) </span>{
   <span class="hljs-keyword">if</span> ( !checkAge(age) ) {
-*!*
+
     <span class="hljs-keyword">return</span>;
-*/!*
+
   }
 
   alert( <span class="hljs-string">&quot;Showing you the movie&quot;</span> ); <span class="hljs-comment">// (*)</span>
@@ -220,7 +220,7 @@ alert( doNothing() === <span class="hljs-literal">undefined</span> ); <span clas
 
 alert( doNothing() === <span class="hljs-literal">undefined</span> ); <span class="hljs-comment">// true</span></code></pre>
 <pre><code>
-````warn header=&quot;不要在 `return` 与返回值之间添加新行&quot;
+`&quot;不要在 `return` 与返回值之间添加新行&quot;
 对于 `return` 的长表达式，可能你会很想将其放在单独一行，如下所示：
 
 ```js
@@ -230,7 +230,7 @@ return
 但这不行，因为 JavaScript 默认会在 `return` 之后加上分号。上面这段代码和下面这段代码运行流程相同：
 
 ```js
-return*!*;*/!*
+return;
  (some + long + expression + or + whatever * f(a) + f(b))
 ```
 
@@ -299,7 +299,7 @@ checkPermission(..) <span class="hljs-comment">// 检查权限并返回 true/fal
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showPrimes</span>(<span class="hljs-params">n</span>) </span>{
 
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">2</span>; i &lt; n; i++) {
-    *!*<span class="hljs-keyword">if</span> (!isPrime(i)) <span class="hljs-keyword">continue</span>;*/!*
+    <span class="hljs-keyword">if</span> (!isPrime(i)) <span class="hljs-keyword">continue</span>;
 
     alert(i);  <span class="hljs-comment">// 一个素数</span>
   }

@@ -8,7 +8,7 @@ importance: 5
 
 每个函数都应该输出其编号。但好像出了点问题……
 
-```js run
+```js
 function makeArmy() {
   let shooters = [];
 

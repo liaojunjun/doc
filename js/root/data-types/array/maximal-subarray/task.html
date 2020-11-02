@@ -5,12 +5,12 @@
 <p>任务是：找出所有项的和最大的 <code>arr</code> 数组的连续子数组。</p>
 <p>写出函数 <code>getMaxSubSum(arr)</code>，用其找出并返回最大和。</p>
 <p>例如：</p>
-<pre><code class="language-js">getMaxSubSum([<span class="hljs-number">-1</span>, *!*<span class="hljs-number">2</span>, <span class="hljs-number">3</span>*/!*, <span class="hljs-number">-9</span>]) == <span class="hljs-number">5</span>（高亮项的加和）
-getMaxSubSum([*!*<span class="hljs-number">2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>*/!*, <span class="hljs-number">-9</span>]) == <span class="hljs-number">6</span>
-getMaxSubSum([<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">-9</span>, *!*<span class="hljs-number">11</span>*/!*]) == <span class="hljs-number">11</span>
-getMaxSubSum([<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, *!*<span class="hljs-number">1</span>, <span class="hljs-number">2</span>*/!*]) == <span class="hljs-number">3</span>
-getMaxSubSum([*!*<span class="hljs-number">100</span>*/!*, <span class="hljs-number">-9</span>, <span class="hljs-number">2</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">5</span>]) == <span class="hljs-number">100</span>
-getMaxSubSum([*!*<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>*/!*]) == <span class="hljs-number">6</span>（所有项的和）</code></pre>
+<pre><code class="language-js">getMaxSubSum([<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">-9</span>]) == <span class="hljs-number">5</span>（高亮项的加和）
+getMaxSubSum([<span class="hljs-number">2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">-9</span>]) == <span class="hljs-number">6</span>
+getMaxSubSum([<span class="hljs-number">-1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">-9</span>, <span class="hljs-number">11</span>]) == <span class="hljs-number">11</span>
+getMaxSubSum([<span class="hljs-number">-2</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]) == <span class="hljs-number">3</span>
+getMaxSubSum([<span class="hljs-number">100</span>, <span class="hljs-number">-9</span>, <span class="hljs-number">2</span>, <span class="hljs-number">-3</span>, <span class="hljs-number">5</span>]) == <span class="hljs-number">100</span>
+getMaxSubSum([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]) == <span class="hljs-number">6</span>（所有项的和）</code></pre>
 <p>如果所有项都是负数，那就一个项也不取（子数组是空的），所以返回的是 0：</p>
 <pre><code class="language-js">getMaxSubSum([<span class="hljs-number">-1</span>, <span class="hljs-number">-2</span>, <span class="hljs-number">-3</span>]) = <span class="hljs-number">0</span></code></pre>
 <p>请尝试想出一个快速的解决方案：复杂度可以是 <a href="https://en.wikipedia.org/wiki/Big_O_notation">O(n<sup>2</sup>)</a>，有能力达到 O(n) 则更好。</p>

@@ -32,13 +32,13 @@ Web 存储对象 `localStorage` 和 `sessionStorage` 允许我们在浏览器上
 
 例如，如果你运行此代码……
 
-```js run
+```js
 localStorage.setItem('test', 1);
 ```
 
 ……然后关闭/重新打开浏览器，或者只是在不同的窗口打开同一页面，然后你可以这样获取它：
 
-```js run
+```js
 alert( localStorage.getItem('test') ); // 1
 ```
 
@@ -50,7 +50,7 @@ alert( localStorage.getItem('test') ); // 1
 
 我们还可以像使用一个普通对象那样，读取/设置键，像这样：
 
-```js run
+```js
 // 设置 key
 localStorage.test = 2;
 
@@ -64,7 +64,7 @@ delete localStorage.test;
 这是历史原因造成的，并且大多数情况下都可行，但通常不建议这样做，因为：
 
 1. 如果键是由用户生成的，那么它可以是任何内容，例如 `length` 或 `toString`，也可以是 `localStorage` 的另一种内建方法。在这种情况下，`getItem/setItem` 可以正常工作，而类对象访问的方式则会失败：
-    ```js run
+    ```js
     let key = 'length';
     localStorage[key] = 5; // Error，无法对 length 进行赋值
     ```
@@ -79,7 +79,7 @@ delete localStorage.test;
 
 一种方法是像遍历数组那样遍历它们：
 
-```js run
+```js
 for(let i = 0; i < localStorage.length; i++) {
   let key = localStorage.key(i);
   alert(`${key}: ${localStorage.getItem(key)}`);
@@ -90,7 +90,7 @@ for(let i = 0; i < localStorage.length; i++) {
 
 它会遍历所有的键，但也会输出一些我们不需要的内建字段。
 
-```js run
+```js
 // 不好的尝试
 for(let key in localStorage) {
   alert(key); // 显示 getItem，setItem 和其他内建的东西
@@ -99,7 +99,7 @@ for(let key in localStorage) {
 
 ……因此，我们需要使用 `hasOwnProperty` 检查来过滤掉原型中的字段：
 
-```js run
+```js
 for(let key in localStorage) {
   if (!localStorage.hasOwnProperty(key)) {
     continue; // 跳过像 "setItem"，"getItem" 等这样的键
@@ -110,7 +110,7 @@ for(let key in localStorage) {
 
 ……或者，使用 `Object.keys` 获取只属于“自己”的键，然后如果需要，可以遍历它们：
 
-```js run
+```js
 let keys = Object.keys(localStorage);
 for(let key of keys) {
   alert(`${key}: ${localStorage.getItem(key)}`);
@@ -126,14 +126,14 @@ for(let key of keys) {
 
 如果是任何其他类型，例数字或对象，它会被自动转换为字符串。
 
-```js run
+```js
 sessionStorage.user = {name: "John"};
 alert(sessionStorage.user); // [object Object]
 ```
 
 我们可以使用 `JSON` 来存储对象：
 
-```js run
+```js
 sessionStorage.user = JSON.stringify({name: "John"});
 
 // sometime later
@@ -143,7 +143,7 @@ alert( user.name ); // John
 
 也可以对整个存储对象进行字符串化处理，例如出于调试目的：
 
-```js run
+```js
 // 为 JSON.stringify 增加了格式设置选项，以使对象看起来更美观
 alert( JSON.stringify(localStorage, null, 2) );
 ```
@@ -164,13 +164,13 @@ alert( JSON.stringify(localStorage, null, 2) );
 
 运行此代码……
 
-```js run
+```js
 sessionStorage.setItem('test', 1);
 ```
 
 ……然后刷新页面。这时你仍然可以获取到数据：
 
-```js run
+```js
 alert( sessionStorage.getItem('test') ); // after refresh: 1
 ```
 
@@ -200,7 +200,7 @@ alert( sessionStorage.getItem('test') ); // after refresh: 1
 
 如果两个窗口都在监听 `window.onstorage` 事件，那么每个窗口都会对另一个窗口中发生的更新作出反应。
 
-```js run
+```js
 // 在其他文档对同一存储进行更新时触发
 window.onstorage = event => { // 等同于 window.addEventListener('storage', () => {
   if (event.key != 'now') return;

@@ -14,7 +14,7 @@
 仔细阅读本文，找出你是谁 —— 一个忍者、一个新手、或者一个代码审查者？
 
 
-```warn header="检测到讽刺意味"
+"检测到讽刺意味"
 许多人试图追随忍者的脚步。只有极少数成功了。
 ```
 
@@ -182,10 +182,10 @@ function ninjaFunction(elem) {
 对函数内部和外部的变量，使用相同的名称。很简单，不用费劲想新的名称。
 
 ```js
-let *!*user*/!* = authenticateUser();
+let user = authenticateUser();
 
 function render() {
-  let *!*user*/!* = anotherValue();
+  let user = anotherValue();
   ...
   ...许多行代码...
   ...

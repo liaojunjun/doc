@@ -22,7 +22,7 @@ let promise = Promise.all([...promises...]);
 
 例如，下面的 `Promise.all` 在 3 秒之后被 settled，然后它的结果就是一个 `[1, 2, 3]` 数组：
 
-```js run
+```js
 Promise.all([
   new Promise(resolve => setTimeout(() => resolve(1), 3000)), // 1
   new Promise(resolve => setTimeout(() => resolve(2), 2000)), // 2
@@ -36,7 +36,7 @@ Promise.all([
 
 例如，如果我们有一个存储 URL 的数组，我们可以像这样 fetch 它们：
 
-```js run
+```js
 let urls = [
   'https://api.github.com/users/iliakan',
   'https://api.github.com/users/remy',
@@ -55,7 +55,7 @@ Promise.all(requests)
 
 一个更真实的示例，通过 GitHub 用户名来获取一个 GitHub 用户数组中用户的信息（我们也可以通过商品 id 来获取商品数组中的商品信息，逻辑都是一样的）：
 
-```js run
+```js
 let names = ['iliakan', 'remy', 'jeresig'];
 
 let requests = names.map(name => fetch(`https://api.github.com/users/${name}`));
@@ -79,19 +79,19 @@ Promise.all(requests)
 
 例如：
 
-```js run
+```js
 Promise.all([
   new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
-*!*
+
   new Promise((resolve, reject) => setTimeout(() => reject(new Error("Whoops!")), 2000)),
-*/!*
+
   new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
 ]).catch(alert); // Error: Whoops!
 ```
 
 这里的第二个 promise 在两秒后 reject。这立即导致了 `Promise.all` 的 reject，因此 `.catch` 执行了：被 reject 的 error 成为了整个 `Promise.all` 的结果。
 
-```warn header="如果出现 error，其他 promise 将被忽略"
+"如果出现 error，其他 promise 将被忽略"
 如果其中一个 promise 被 reject，`Promise.all` 就会立即被 reject，完全忽略列表中其他的 promise。它们的结果也被忽略。
 
 例如，像上面那个例子，如果有多个同时进行的 `fetch` 调用，其中一个失败，其他的 `fetch` 操作仍然会继续执行，但是 `Promise.all` 将不会再关心（watch）它们。它们可能会 settle，但是它们的结果将被忽略。
@@ -99,12 +99,12 @@ Promise.all([
 `Promise.all` 没有采取任何措施来取消它们，因为 promise 中没有“取消”的概念。在 [另一个章节](info:fetch-abort) 中，我们将介绍可以帮助我们解决这个问题（译注：指的是“取消” promise）的 `AbortController`，但它不是 Promise API 的一部分。
 ```
 
-````smart header="`Promise.all(iterable)` 允许在 `iterable` 中使用 non-promise 的“常规”值"
+``Promise.all(iterable)` 允许在 `iterable` 中使用 non-promise 的“常规”值"
 通常，`Promise.all(...)` 接受可迭代对象（iterable）的 promise（大多数情况下是数组）。但是，如果这些对象中的任意一个都不是 promise，那么它将被“按原样”传递给结果数组。
 
 例如，这里的结果是 `[1, 2, 3]`：
 
-```js run
+```js
 Promise.all([
   new Promise((resolve, reject) => {
     setTimeout(() => resolve(1), 1000)
@@ -140,7 +140,7 @@ Promise.all([
 
 让我们使用 `Promise.allSettled`：
 
-```js run
+```js
 let urls = [
   'https://api.github.com/users/iliakan',
   'https://api.github.com/users/remy',
@@ -207,7 +207,7 @@ let promise = Promise.race(iterable);
 
 例如，这里的结果将是 `1`：
 
-```js run
+```js
 Promise.race([
   new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
   new Promise((resolve, reject) => setTimeout(() => reject(new Error("Whoops!")), 2000)),
@@ -243,9 +243,9 @@ let cache = new Map();
 
 function loadCached(url) {
   if (cache.has(url)) {
-*!*
+
     return Promise.resolve(cache.get(url)); // (*)
-*/!*
+
   }
 
   return fetch(url)

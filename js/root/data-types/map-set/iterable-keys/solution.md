@@ -4,14 +4,14 @@
 我们可以使用方法 `Array.from` 来将它转换为数组：
 
 
-```js run
+```js
 let map = new Map();
 
 map.set("name", "John");
 
-*!*
+
 let keys = Array.from(map.keys());
-*/!*
+
 
 keys.push("more");
 

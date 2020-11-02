@@ -1,4 +1,4 @@
-```js run demo
+```js demo
 function sumSalaries(salaries) {
 
   let sum = 0;

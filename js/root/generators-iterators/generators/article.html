@@ -19,9 +19,9 @@
 
 <span class="hljs-comment">// &quot;generator function&quot; 创建了一个 &quot;generator object&quot;</span>
 <span class="hljs-keyword">let</span> generator = generateSequence();
-*!*
+
 alert(generator); <span class="hljs-comment">// [object Generator]</span>
-*/!*</code></pre>
+</code></pre>
 <p>到目前为止，上面这段代码中的 <strong>函数体</strong> 代码还没有开始执行：</p>
 <p><img src="generateSequence-1.svg" alt=""></p>
 <p>一个 generator 的主要方法就是 <code>next()</code>。当被调用时（译注：指 <code>next()</code> 方法），它会恢复上图所示的运行，执行直到最近的 <code>yield &lt;value&gt;</code> 语句（<code>value</code> 可以被省略，默认为 <code>undefined</code>）。然后函数执行暂停，并将产出的（yielded）值返回到外部代码。</p>
@@ -39,9 +39,9 @@ alert(generator); <span class="hljs-comment">// [object Generator]</span>
 
 <span class="hljs-keyword">let</span> generator = generateSequence();
 
-*!*
+
 <span class="hljs-keyword">let</span> one = generator.next();
-*/!*
+
 
 alert(<span class="hljs-built_in">JSON</span>.stringify(one)); <span class="hljs-comment">// {value: 1, done: false}</span></code></pre>
 <p>截至目前，我们只获得了第一个值，现在函数执行处在第二行：</p>
@@ -54,7 +54,7 @@ alert(<span class="hljs-built_in">JSON</span>.stringify(two)); <span class="hljs
 <p>如果我们第三次调用 <code>generator.next()</code>，代码将会执行到 <code>return</code> 语句，此时就完成这个函数的执行：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> three = generator.next();
 
-alert(<span class="hljs-built_in">JSON</span>.stringify(three)); <span class="hljs-comment">// {value: 3, *!*done: true*/!*}</span></code></pre>
+alert(<span class="hljs-built_in">JSON</span>.stringify(three)); <span class="hljs-comment">// {value: 3, done: true}</span></code></pre>
 <p><img src="generateSequence-4.svg" alt=""></p>
 <p>现在 generator 执行完成。我们通过 <code>done:true</code> 可以看出来这一点，并且将 <code>value:3</code> 处理为最终结果。</p>
 <p>再对 <code>generator.next()</code> 进行新的调用不再有任何意义。如果我们这样做，它将返回相同的对象：<code>{done: true}</code>。</p>
@@ -68,7 +68,7 @@ alert(<span class="hljs-built_in">JSON</span>.stringify(three)); <span class="hl
 
 我们可以使用 `for..of` 循环遍历它所有的值：
 
-```js run
+```js
 function* generateSequence() {
   yield 1;
   yield 2;
@@ -86,9 +86,9 @@ for(let value of generator) {
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">generateSequence</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">yield</span> <span class="hljs-number">1</span>;
   <span class="hljs-keyword">yield</span> <span class="hljs-number">2</span>;
-*!*
+
   <span class="hljs-keyword">yield</span> <span class="hljs-number">3</span>;
-*/!*
+
 }
 
 <span class="hljs-keyword">let</span> generator = generateSequence();
@@ -183,7 +183,7 @@ alert( [...range] ); <span class="hljs-comment">// 1,2,3,4,5</span></code></pre>
 
 <span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">generatePasswordCodes</span>(<span class="hljs-params"></span>) </span>{
 
-*!*
+
   <span class="hljs-comment">// 0..9</span>
   <span class="hljs-keyword">yield</span>* generateSequence(<span class="hljs-number">48</span>, <span class="hljs-number">57</span>);
 
@@ -192,7 +192,7 @@ alert( [...range] ); <span class="hljs-comment">// 1,2,3,4,5</span></code></pre>
 
   <span class="hljs-comment">// a..z</span>
   <span class="hljs-keyword">yield</span>* generateSequence(<span class="hljs-number">97</span>, <span class="hljs-number">122</span>);
-*/!*
+
 
 }
 
@@ -211,7 +211,7 @@ alert(str); <span class="hljs-comment">// 0..9A..Za..z</span></code></pre>
 
 <span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">generateAlphaNum</span>(<span class="hljs-params"></span>) </span>{
 
-*!*
+
   <span class="hljs-comment">// yield* generateSequence(48, 57);</span>
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">48</span>; i &lt;= <span class="hljs-number">57</span>; i++) <span class="hljs-keyword">yield</span> i;
 
@@ -220,7 +220,7 @@ alert(str); <span class="hljs-comment">// 0..9A..Za..z</span></code></pre>
 
   <span class="hljs-comment">// yield* generateSequence(97, 122);</span>
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">97</span>; i &lt;= <span class="hljs-number">122</span>; i++) <span class="hljs-keyword">yield</span> i;
-*/!*
+
 
 }
 
@@ -238,10 +238,10 @@ alert(str); <span class="hljs-comment">// 0..9A..Za..z</span></code></pre>
 <p>调用 <code>generator.next(arg)</code>，我们就能将参数 <code>arg</code> 传递到 generator 内部。这个 <code>arg</code> 参数会变成 <code>yield</code> 的结果。</p>
 <p>我们来看一个例子：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span>* <span class="hljs-title">gen</span>(<span class="hljs-params"></span>) </span>{
-*!*
+
   <span class="hljs-comment">// 向外部代码传递一个问题并等待答案</span>
   <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">yield</span> <span class="hljs-string">&quot;2 + 2 = ?&quot;</span>; <span class="hljs-comment">// (*)</span>
-*/!*
+
 
   alert(result);
 }
@@ -309,9 +309,9 @@ alert( generator.next(<span class="hljs-number">9</span>).done ); <span class="h
 
 <span class="hljs-keyword">let</span> question = generator.next().value;
 
-*!*
+
 generator.throw(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;The answer is not found in my database&quot;</span>)); <span class="hljs-comment">// (2)</span>
-*/!*</code></pre>
+</code></pre>
 <p>在 <code>(2)</code> 行引入到 generator 的 error 导致了在 <code>(1)</code> 行中的 <code>yield</code> 出现了一个异常。在上面这个例子中，<code>try..catch</code> 捕获并显示了这个 error。</p>
 <p>如果我们没有捕获它，那么就会像其他的异常一样，它将从 generator “掉出”到调用代码中。</p>
 <p>调用代码的当前行是 <code>generator.throw</code> 所在的那一行，标记为 <code>(2)</code>。所以我们可以在这里捕获它，就像这样：</p>
@@ -323,13 +323,13 @@ generator.throw(<span class="hljs-keyword">new</span> <span class="hljs-built_in
 
 <span class="hljs-keyword">let</span> question = generator.next().value;
 
-*!*
+
 <span class="hljs-keyword">try</span> {
   generator.throw(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;The answer is not found in my database&quot;</span>));
 } <span class="hljs-keyword">catch</span>(e) {
   alert(e); <span class="hljs-comment">// 显示这个 error</span>
 }
-*/!*</code></pre>
+</code></pre>
 <p>如果我们没有在那里捕获这个 error，那么，通常，它会掉入外部调用代码（如果有），如果在外部也没有被捕获，则会杀死脚本。</p>
 <h2 id="总结">总结</h2>
 <ul>

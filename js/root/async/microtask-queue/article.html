@@ -34,9 +34,9 @@ alert(<span class="hljs-string">&quot;code finished&quot;</span>); <span class="
 <p><strong>如果一个 promise 的 error 未被在微任务队列的末尾进行处理，则会出现“未处理的 rejection”。</strong></p>
 <p>正常来说，如果我们预期可能会发生错误，我们会在 promise 链上添加 <code>.catch</code> 来处理 error：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> promise = <span class="hljs-built_in">Promise</span>.reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Promise Failed!&quot;</span>));
-*!*
+
 promise.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> alert(<span class="hljs-string">&#x27;caught&#x27;</span>));
-*/!*
+
 
 <span class="hljs-comment">// 不会运行：error 已经被处理</span>
 <span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&#x27;unhandledrejection&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> alert(event.reason));</code></pre>
@@ -47,9 +47,9 @@ promise.catch(<span class="hljs-function"><span class="hljs-params">err</span> =
 <span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&#x27;unhandledrejection&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> alert(event.reason));</code></pre>
 <p>如果我们迟一点再处理这个 error 会怎样？例如：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> promise = <span class="hljs-built_in">Promise</span>.reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Promise Failed!&quot;</span>));
-*!*
+
 <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> promise.catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> alert(<span class="hljs-string">&#x27;caught&#x27;</span>)), <span class="hljs-number">1000</span>);
-*/!*
+
 
 <span class="hljs-comment">// Error: Promise Failed!</span>
 <span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&#x27;unhandledrejection&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> alert(event.reason));</code></pre>

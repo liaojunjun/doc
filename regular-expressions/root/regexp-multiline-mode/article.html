@@ -8,17 +8,17 @@
 2nd place: Piglet
 33rd place: Eeyore`</span>;
 
-*!*
+
 alert( str.match(<span class="hljs-regexp">/^\d+/gm</span>) ); <span class="hljs-comment">// 1, 2, 33</span>
-*/!*</code></pre>
+</code></pre>
 <p>没有 flag  <code>/.../m</code> 时，仅仅是第一个数字被匹配到：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`1st place: Winnie
 2nd place: Piglet
 33rd place: Eeyore`</span>;
 
-*!*
+
 alert( str.match(<span class="hljs-regexp">/^\d+/g</span>) ); <span class="hljs-comment">// 1</span>
-*/!*</code></pre>
+</code></pre>
 <p>这是因为默认情况下，锚符 <code>^</code> 仅仅匹配文本的开头，在多行模式下，它匹配行的开头。</p>
 <p>正则表达式引擎将会在文本中查找以锚符 <code>^</code> 开始的字符串，我们找到之后继续匹配 <code>\d+</code> 模式。</p>
 <h2 id="行的结尾-">行的结尾 $</h2>

@@ -15,19 +15,19 @@
 
 比如说，我们需要找到一个点号 `pattern:'.'`。在一个正则表达式中一个点号意味着“除了换行符以外的任意字符”，所以如果我们想真正表示对“一个点号”查询的时候，可以在点号前加一个反斜杠。
 
-```js run
+```js
 alert( "Chapter 5.1".match(/\d\.\d/) ); // 5.1
 ```
 
 括号也是特殊字符，所以如果我们想要在正则中查找它们，我们应该使用 `pattern:\(`。下面的例子会查找一个字符串 `"g()"`：
 
-```js run
+```js
 alert( "function g()".match(/g\(\)/) ); // "g()"
 ```
 
 如果我们想查找反斜杠 `\`，我们就应该使用两个反斜杠来查找：
 
-```js run
+```js
 alert( "1\\2".match(/\\/) ); // '\'
 ```
 
@@ -37,13 +37,13 @@ alert( "1\\2".match(/\\/) ); // '\'
 
 下面是查询斜杠 `'/'` 的表达式：
 
-```js run
+```js
 alert( "/".match(/\//) ); // '/'
 ```
 
 从另一个方面看，如果使用另一种 `new RegExp` 方式就不需要转义斜杠：
 
-```js run
+```js
 alert( "/".match(new RegExp("/")) ); // '/'
 ```
 
@@ -53,7 +53,7 @@ alert( "/".match(new RegExp("/")) ); // '/'
 
 比如说，考虑下面的示例：
 
-```js run
+```js
 let reg = new RegExp("\d\.\d");
 
 alert( "Chapter 5.1".match(reg) ); // null
@@ -63,7 +63,7 @@ alert( "Chapter 5.1".match(reg) ); // null
 
 原因就在于字符串转义规则。看下面的例子：
 
-```js run
+```js
 alert("\d\.\d"); // d.d
 ```
 
@@ -77,10 +77,10 @@ alert("\d\.\d"); // d.d
 
 如果要修复这个问题，我们需要双斜杠，因为引用会把 `\\` 变为 `\`：
 
-```js run
-*!*
+```js
+
 let regStr = "\\d\\.\\d";
-*/!*
+
 alert(regStr); // \d\.\d (correct now)
 
 let regexp = new RegExp(regStr);

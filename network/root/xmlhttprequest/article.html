@@ -130,9 +130,9 @@ xhr.open(&#x27;GET&#x27;, url); // https://google.com/search?q=test+me%21
 
 xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/article/xmlhttprequest/example/json&#x27;</span>);
 
-*!*
+
 xhr.responseType = <span class="hljs-string">&#x27;json&#x27;</span>;
-*/!*
+
 
 xhr.send();
 
@@ -173,7 +173,7 @@ DONE = <span class="hljs-number">4</span>; <span class="hljs-comment">// 请求�
 <p>下面是重写的示例，<code>open</code> 的第三个参数为 <code>false</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();
 
-xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/article/xmlhttprequest/hello.txt&#x27;</span>, *!*<span class="hljs-literal">false</span>*/!*);
+xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/article/xmlhttprequest/hello.txt&#x27;</span>, <span class="hljs-literal">false</span>);
 
 <span class="hljs-keyword">try</span> {
   xhr.send();
@@ -199,14 +199,14 @@ xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-str
 xhr.setRequestHeader(&#x27;Content-Type&#x27;, &#x27;application/json&#x27;);
 ```
 
-```warn header=&quot;Header 的限制&quot;
+&quot;Header 的限制&quot;
 一些 header 是由浏览器专门管理的，例如 `Referer` 和 `Host`。
 完整列表请见 [规范](http://www.w3.org/TR/XMLHttpRequest/#the-setrequestheader-method)。
 
 为了用户安全和请求的正确性，`XMLHttpRequest` 不允许更改它们。
 ```
 
-````warn header=&quot;不能移除 header&quot;
+`&quot;不能移除 header&quot;
 `XMLHttpRequest` 的另一个特点是不能撤销 `setRequestHeader`。
 
 一旦设置了 header，就无法撤销了。其他调用会向 header 中添加信息，但不会覆盖它。
@@ -337,11 +337,11 @@ xhr.upload.onerror = <span class="hljs-function"><span class="hljs-keyword">func
   <span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();
 
   <span class="hljs-comment">// 跟踪上传进度</span>
-*!*
+
   xhr.upload.onprogress = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Uploaded <span class="hljs-subst">${event.loaded}</span> of <span class="hljs-subst">${event.total}</span>`</span>);
   };
-*/!*
+
 
   <span class="hljs-comment">// 跟踪完成：无论成功与否</span>
   xhr.onloadend = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
@@ -360,9 +360,9 @@ xhr.upload.onerror = <span class="hljs-function"><span class="hljs-keyword">func
 <p><code>XMLHttpRequest</code> 可以使用和 <a href="info:fetch-crossorigin">fetch</a> 相同的 CORS 策略进行跨源请求。</p>
 <p>就像 <code>fetch</code> 一样，默认情况下不会将 cookie 和 HTTP 授权发送到其他域。要启用它们，可以将 <code>xhr.withCredentials</code> 设置为 <code>true</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();
-*!*
+
 xhr.withCredentials = <span class="hljs-literal">true</span>;
-*/!*
+
 
 xhr.open(<span class="hljs-string">&#x27;POST&#x27;</span>, <span class="hljs-string">&#x27;http://anywhere.com/request&#x27;</span>);
 ...</code></pre>

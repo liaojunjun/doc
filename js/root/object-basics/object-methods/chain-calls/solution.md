@@ -1,25 +1,25 @@
 解决方案就是在每次调用后返回这个对象本身。
 
-```js run demo
+```js demo
 let ladder = {
   step: 0,
   up() {
     this.step++;
-*!*
+
     return this;
-*/!*
+
   },
   down() {
     this.step--;
-*!*
+
     return this;
-*/!*
+
   },
   showStep() {
     alert( this.step );
-*!*
+
     return this;
-*/!*
+
   }
 }
 

@@ -48,9 +48,9 @@ alert(regexp.lastIndex); <span class="hljs-comment">// 0（搜索结束时重置
 
 <span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/g</span>; <span class="hljs-comment">// 如果没有标志 &quot;g&quot;，属性 lastIndex 会被忽略</span>
 
-*!*
+
 regexp.lastIndex = <span class="hljs-number">4</span>;
-*/!*
+
 
 <span class="hljs-keyword">let</span> word = regexp.exec(str);
 alert(word); <span class="hljs-comment">// varName</span></code></pre>
@@ -60,9 +60,9 @@ alert(word); <span class="hljs-comment">// varName</span></code></pre>
 
 <span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/g</span>;
 
-*!*
+
 regexp.lastIndex = <span class="hljs-number">3</span>;
-*/!*
+
 
 <span class="hljs-keyword">let</span> word = regexp.exec(str);
 alert(word[<span class="hljs-number">0</span>]); <span class="hljs-comment">// varName</span>

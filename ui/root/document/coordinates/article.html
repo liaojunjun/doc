@@ -74,7 +74,7 @@ right:${r.right}
 <p>正如你所看到的，在这个例子中，<code>left/top</code> 与 <code>x/y</code> 不相等。</p>
 <p>但是实际上，<code>elem.getBoundingClientRect()</code> 总是返回正数的 width/height，这里我们提及负的 <code>width/height</code> 只是为了帮助你理解，为什么这些看起来重复的属性，实际上并不是重复的。</p>
 <pre><code>
-```warn header=&quot;IE 和 Edge 浏览器不支持 `x/y`&quot;
+&quot;IE 和 Edge 浏览器不支持 `x/y`&quot;
 由于历史原因，IE 和 Edge 浏览器不支持 `x/y` 属性。
 
 因此，我们可以写一个 polyfill（在 `DomRect.prototype` 中添加一个 getter），或者仅使用 `top/left`，因为对于正值的 `width/height` 来说，它们和 `x/y` 一直是一样的，尤其是对于 `elem.getBoundingClientRect()` 的结果。</code></pre>
@@ -96,16 +96,16 @@ right:${r.right}
 elem.style.background = <span class="hljs-string">&quot;red&quot;</span>;
 alert(elem.tagName);</code></pre>
 <p>因为它使用的是窗口坐标，所以元素可能会因当前滚动位置而有所不同。</p>
-<p>````warn header=&quot;对于在窗口之外的坐标，<code>elementFromPoint</code> 返回 <code>null</code>&quot;
+<p>`&quot;对于在窗口之外的坐标，<code>elementFromPoint</code> 返回 <code>null</code>&quot;
 方法 <code>document.elementFromPoint(x,y)</code> 只对在可见区域内的坐标 <code>(x,y)</code> 起作用。</p>
 <p>如果任何坐标为负或者超过了窗口的 width/height，那么该方法就会返回 <code>null</code>。</p>
 <p>在大多数情况下，这种行为并不是一个问题，但是我们应该记住这一点。</p>
 <p>如果我们没有对其进行检查，可能就会发生下面这个典型的错误：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> elem = <span class="hljs-built_in">document</span>.elementFromPoint(x, y);
 <span class="hljs-comment">// 如果坐标恰好在窗口外，则 elem = null</span>
-*!*
+
 elem.style.background = <span class="hljs-string">&#x27;&#x27;</span>; <span class="hljs-comment">// Error!</span>
-*/!*</code></pre>
+</code></pre>
 <pre><code>
 ## 用于 &quot;fixed&quot; 定位
 
@@ -122,13 +122,13 @@ function createMessageUnder(elem, html) {
   // 在这里最好使用 CSS class 来定义样式
   message.style.cssText = &quot;position:fixed; color: red&quot;;
 
-*!*
+
   // 分配坐标，不要忘记 &quot;px&quot;！
   let coords = elem.getBoundingClientRect();
 
   message.style.left = coords.left + &quot;px&quot;;
   message.style.top = coords.bottom + &quot;px&quot;;
-*/!*
+
 
   message.innerHTML = html;
 
@@ -193,9 +193,9 @@ function getCoords(elem) {
 ```js
 function createMessageUnder(elem, html) {
   let message = document.createElement(&#x27;div&#x27;);
-  message.style.cssText = &quot;*!*position:absolute*/!*; color: red&quot;;
+  message.style.cssText = &quot;position:absolute; color: red&quot;;
 
-  let coords = *!*getCoords(elem);*/!*
+  let coords = getCoords(elem);
 
   message.style.left = coords.left + &quot;px&quot;;
   message.style.top = coords.bottom + &quot;px&quot;;

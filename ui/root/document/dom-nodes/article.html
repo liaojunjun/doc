@@ -100,7 +100,7 @@ let node4 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,
 drawHtmlTree(node4, 'div.domtree', 690, 360);
 </script>
 
-<p>````warn header=&quot;表格永远有 <code>&lt;tbody&gt;</code>&quot;
+<p>`&quot;表格永远有 <code>&lt;tbody&gt;</code>&quot;
 表格是一个有趣的“特殊的例子”。按照 DOM 规范，它们必须具有 <code>&lt;tbody&gt;</code>，但 HTML 文本却（官方的）忽略了它。然后浏览器在创建 DOM 时，自动地创建了 <code>&lt;tbody&gt;</code>。</p>
 <p>对于 HTML：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;table&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></code></pre>
@@ -128,9 +128,9 @@ drawHtmlTree(node5,  'div.domtree', 600, 200);
   The truth about elk.
   &lt;ol&gt;
     &lt;li&gt;An elk is a smart&lt;/li&gt;
-*!*
+
     &lt;!-- comment --&gt;
-*/!*
+
     &lt;li&gt;...and cunning animal!&lt;/li&gt;
   &lt;/ol&gt;
 &lt;/body&gt;

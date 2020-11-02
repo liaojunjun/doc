@@ -11,15 +11,15 @@ cheaters, hectares, teachers -> aceehrst
 
 我们将使用进行字母排序后的单词的变体（variant）作为 map 的键，每个键仅对应存储一个值：
 
-```js run
+```js
 function aclean(arr) {
   let map = new Map();
 
   for (let word of arr) {
     // 将单词 split 成字母，对字母进行排序，之后再 join 回来
-*!*
+
     let sorted = word.toLowerCase().split('').sort().join(''); // (*)
-*/!*
+
     map.set(sorted, word);
   }
 
@@ -59,7 +59,7 @@ map.set(sorted, word);
 
 下面是解决方案：
 
-```js run demo
+```js demo
 function aclean(arr) {
   let obj = {};
 

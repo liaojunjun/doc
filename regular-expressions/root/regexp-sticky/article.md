@@ -29,7 +29,7 @@ regexps 的常见任务之一是＂词法分析＂：比如我们在程序设计
 
 一个例子（用标志 `pattern:g` ）：
 
-```js run
+```js
 let str = 'let varName';
 
 let regexp = /\w+/g;
@@ -52,7 +52,7 @@ alert(regexp.lastIndex); // 0（搜索结束时重置）
 
 我们可以在循环中得到所有的匹配。
 
-```js run
+```js
 let str = 'let varName';
 let regexp = /\w+/g;
 
@@ -71,14 +71,14 @@ while (result = regexp.exec(str)) {
 
 例如，让我们从位置 `4` 开始寻找一个单词。
 
-```js run
+```js
 let str = 'let varName = "value"';
 
 let regexp = /\w+/g; // 如果没有标志 "g"，属性 lastIndex 会被忽略
 
-*!*
+
 regexp.lastIndex = 4;
-*/!*
+
 
 let word = regexp.exec(str);
 alert(word); // varName
@@ -88,14 +88,14 @@ alert(word); // varName
 
 请注意：搜索从位置 `lastIndex` 开始，然后再往前走。如果在 `lastIndex` 位置上没有词，但它在后面的某个地方，那么它就会被找到：
 
-```js run
+```js
 let str = 'let varName = "value"';
 
 let regexp = /\w+/g;
 
-*!*
+
 regexp.lastIndex = 3;
-*/!*
+
 
 let word = regexp.exec(str);
 alert(word[0]); // varName
@@ -108,7 +108,7 @@ alert(word.index); // 4
 
 下面是使用标志 `pattern:y` 进行同样的搜索。
 
-```js run
+```js
 let str = 'let varName = "value"';
 
 let regexp = /\w+/y;

@@ -398,9 +398,9 @@ alert(newWindow.location.href); <span class="hljs-comment">// (*) about:blank，
 
 newWindow.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">let</span> html = <span class="hljs-string">`&lt;div style=&quot;font-size:30px&quot;&gt;Welcome!&lt;/div&gt;`</span>;
-*!*
+
   newWindow.document.body.insertAdjacentHTML(<span class="hljs-string">&#x27;afterbegin&#x27;</span>, html);
-*/!*
+
 };</code></pre>
 <p>请注意：在刚刚进行了 <code>window.open</code> 的时候，新窗口还没有加载完成。我们可以通过 <code>(*)</code> 行中的 <code>alert</code> 证实这一点。因此，我们需要等待 <code>onload</code> 以对新窗口进行更改。我们也可以对 <code>newWin.document</code> 使用 <code>DOMContentLoaded</code> 处理程序。</p>
 <pre><code class="language-warn">只有在窗口是同源的时，窗口才能自由访问彼此的内容（`相同的协议://domain:port`）。
@@ -521,14 +521,14 @@ newWindow.onload = <span class="hljs-function"><span class="hljs-keyword">functi
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   iframe.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-comment">// 我们可以获取对内部 window 的引用</span>
-*!*
+
     <span class="hljs-keyword">let</span> iframeWindow = iframe.contentWindow; <span class="hljs-comment">// OK</span>
-*/!*
+
     <span class="hljs-keyword">try</span> {
       <span class="hljs-comment">// ...但是无法获取其中的文档</span>
-*!*
+
       <span class="hljs-keyword">let</span> doc = iframe.contentDocument; <span class="hljs-comment">// ERROR</span>
-*/!*
+
     } <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">e</span>)</span> {
       alert(e); <span class="hljs-comment">// Security Error（另一个源）</span>
     }
@@ -536,17 +536,17 @@ newWindow.onload = <span class="hljs-function"><span class="hljs-keyword">functi
     <span class="hljs-comment">// 并且，我们也无法 **读取** iframe 中页面的 URL</span>
     <span class="hljs-keyword">try</span> {
       <span class="hljs-comment">// 无法从 location 对象中读取 URL</span>
-*!*
+
       <span class="hljs-keyword">let</span> href = iframe.contentWindow.location.href; <span class="hljs-comment">// ERROR</span>
-*/!*
+
     } <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">e</span>)</span> {
       alert(e); <span class="hljs-comment">// Security Error</span>
     }
 
     <span class="hljs-comment">// ...我们可以 **写入** location（所以，在 iframe 中加载了其他内容）！</span>
-*!*
+
     iframe.contentWindow.location = <span class="hljs-string">&#x27;/&#x27;</span>; <span class="hljs-comment">// OK</span>
-*/!*
+
 
     iframe.onload = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 清空处理程序，在 location 更改后不要再运行它</span>
   };
@@ -592,10 +592,10 @@ document.domain = &#x27;site.com&#x27;;</code></pre>
   <span class="hljs-keyword">let</span> oldDoc = iframe.contentDocument;
   iframe.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-keyword">let</span> newDoc = iframe.contentDocument;
-*!*
+
     <span class="hljs-comment">// 加载的文档与初始的文档不同！</span>
     alert(oldDoc == newDoc); <span class="hljs-comment">// false</span>
-*/!*
+
   };
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>我们不应该对尚未加载完成的 iframe 的文档进行处理，因为那是 <strong>错误的文档</strong>。如果我们在其上设置了任何事件处理程序，它们将会被忽略。</p>
@@ -692,9 +692,9 @@ document.domain = &#x27;site.com&#x27;;</code></pre>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-keyword">let</span> win = <span class="hljs-built_in">window</span>.frames.example;
 
-*!*
+
   win.postMessage(<span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-string">&quot;*&quot;</span>);
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <h3 id="onmessage">onmessage</h3>
 <p>为了接收消息，目标窗口应该在 <code>message</code> 事件上有一个处理程序。当 <code>postMessage</code> 被调用时触发该事件（并且 <code>targetOrigin</code> 检查成功）。</p>
@@ -786,9 +786,9 @@ iframe { /* 来自受害网站的 iframe */
   height: 100px;
   position: absolute;
   top:0; left:-20px;
-*!*
+
   opacity: 0.5; /* 在实际中为 opacity:0 */
-*/!*
+
   z-index: 1;
 }
 <span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
@@ -796,11 +796,11 @@ iframe { /* 来自受害网站的 iframe */
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>点击即可变得富有：<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
 <span class="hljs-comment">&lt;!-- 来自受害网站的 url --&gt;</span>
-*!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/clickjacking/facebook.html&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>点这里！<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-*/!*
+
 
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>……你很酷（我实际上是一名帅气的黑客）！<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 <p>完整的攻击示例如下：</p>
@@ -839,7 +839,7 @@ iframe { /* 来自受害网站的 iframe */
 <p><code>sandbox</code> 特性的限制之一就是导航。沙箱化的 iframe 不能更改 <code>top.location</code>。</p>
 <p>但我们可以添加具有 <code>sandbox=&quot;allow-scripts allow-forms&quot;</code> 的 iframe。从而放开限制，允许脚本和表单。但我们没添加 <code>allow-top-navigation</code>，因此更改 <code>top.location</code> 是被禁止的。</p>
 <p>代码如下：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> *!*<span class="hljs-attr">sandbox</span>=<span class="hljs-string">&quot;allow-scripts allow-forms&quot;</span>*/!* <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;facebook.html&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></code></pre>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">sandbox</span>=<span class="hljs-string">&quot;allow-scripts allow-forms&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;facebook.html&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span></code></pre>
 <p>还有其他方式可以绕过这个弱鸡防御。</p>
 <h2 id="x-frame-options">X-Frame-Options</h2>
 <p>服务器端 header <code>X-Frame-Options</code> 可以允许或禁止在 frame 中显示页面。</p>

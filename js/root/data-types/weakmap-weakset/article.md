@@ -11,9 +11,9 @@ let john = { name: "John" };
 // 覆盖引用
 john = null;
 
-*!*
+
 // 该对象将会被从内存中清除
-*/!*
+
 ```
 
 通常，当对象、数组这类数据结构在内存中时，它们的子元素，如对象的属性、数组的元素都是可以访问的。
@@ -29,10 +29,10 @@ let array = [ john ];
 
 john = null; // 覆盖引用
 
-*!*
+
 // john 被存储在数组里, 所以它不会被垃圾回收机制回收
 // 我们可以通过 array[0] 来获取它
-*/!*
+
 ```
 
 类似的，如果我们使用对象作为常规 `Map` 的键，那么当 `Map` 存在时，该对象也将存在。它会占用内存，并且应该不会被（垃圾回收机制）回收。
@@ -47,10 +47,10 @@ map.set(john, "...");
 
 john = null; // 覆盖引用
 
-*!*
+
 // john 被存储在 map 中，
 // 我们可以使用 map.keys() 来获取它
-*/!*
+
 ```
 
 `WeakMap` 在这方面有着根本上的不同。它不会阻止垃圾回收机制对作为键的对象（key object）的回收。
@@ -61,17 +61,17 @@ john = null; // 覆盖引用
 
 `WeakMap` 和 `Map` 的第一个不同点就是，`WeakMap` 的键必须是对象，不能是原始值：
 
-```js run
+```js
 let weakMap = new WeakMap();
 
 let obj = {};
 
 weakMap.set(obj, "ok"); // 正常工作（以对象作为键）
 
-*!*
+
 // 不能使用字符串作为键
 weakMap.set("test", "Whoops"); // Error，因为 "test" 不是一个对象
-*/!*
+
 ```
 
 现在，如果我们在 weakMap 中使用一个对象作为键，并且没有其他对这个对象的引用 —— 该对象将会被从内存（和map）中自动清除。
@@ -171,7 +171,7 @@ function countUser(user) {
 
 我们可以使用 `Map` 来存储结果，就像这样：
 
-```js run
+```js
 // 📁 cache.js
 let cache = new Map();
 
@@ -186,9 +186,9 @@ function process(obj) {
   return cache.get(obj);
 }
 
-*!*
+
 // 现在我们在其它文件中使用 process()
-*/!*
+
 
 // 📁 main.js
 let obj = {/* 假设我们有个对象 */};
@@ -208,11 +208,11 @@ alert(cache.size); // 1（啊！该对象依然在 cache 中，并占据着内�
 
 如果我们用 `WeakMap` 替代 `Map`，这个问题便会消失：当对象被垃圾回收时，对应的缓存的结果也会被自动地从内存中清除。
 
-```js run
+```js
 // 📁 cache.js
-*!*
+
 let cache = new WeakMap();
-*/!*
+
 
 // 计算并记结果
 function process(obj) {
@@ -251,7 +251,7 @@ obj = null;
 
 例如，我们可以将用户添加到 `WeakSet` 中，以追踪访问过我们网站的用户：
 
-```js run
+```js
 let visitedSet = new WeakSet();
 
 let john = { name: "John" };

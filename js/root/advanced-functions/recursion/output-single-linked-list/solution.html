@@ -28,7 +28,7 @@ printList(list);</code></pre>
 <p>请注意，我们使用了一个临时变量 <code>tmp</code> 来遍历链表。从技术上讲，我们可以使用函数的入参 <code>list</code> 来代替：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printList</span>(<span class="hljs-params">list</span>) </span>{
 
-  <span class="hljs-keyword">while</span>(*!*list*/!*) {
+  <span class="hljs-keyword">while</span>(list) {
     alert(list.value);
     list = list.next;
   }

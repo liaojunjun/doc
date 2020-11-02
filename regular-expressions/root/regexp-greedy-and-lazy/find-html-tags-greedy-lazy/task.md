@@ -4,7 +4,7 @@
 
 用例：
 
-```js run
+```js
 let reg = /你的正则表达式/g;
 
 let str = '<> <a href="/"> <input type="radio" checked> <b>';

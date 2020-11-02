@@ -7,9 +7,9 @@
 <p>函数 <code>update</code> 会刷新时钟，由 <code>setInterval</code> 每秒调用一次：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">update</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">let</span> clock = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;clock&#x27;</span>);
-*!*
+
   <span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(); <span class="hljs-comment">// (*)</span>
-*/!*
+
   <span class="hljs-keyword">let</span> hours = date.getHours();
   <span class="hljs-keyword">if</span> (hours &lt; <span class="hljs-number">10</span>) hours = <span class="hljs-string">&#x27;0&#x27;</span> + hours;
   clock.children[<span class="hljs-number">0</span>].innerHTML = hours;

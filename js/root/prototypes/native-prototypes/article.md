@@ -8,7 +8,7 @@
 
 假如我们输出一个空对象：
 
-```js run
+```js
 let obj = {};
 alert( obj ); // "[object Object]" ?
 ```
@@ -29,7 +29,7 @@ alert( obj ); // "[object Object]" ?
 
 我们可以这样验证它：
 
-```js run
+```js
 let obj = {};
 
 alert(obj.__proto__ === Object.prototype); // true
@@ -38,7 +38,7 @@ alert(obj.__proto__ === Object.prototype); // true
 
 请注意在 `Object.prototype` 上方的链中没有更多的 `[[Prototype]]`：
 
-```js run
+```js
 alert(Object.prototype.__proto__); // null
 ```
 
@@ -56,7 +56,7 @@ alert(Object.prototype.__proto__); // null
 
 让我们手动验证原型：
 
-```js run
+```js
 let arr = [1, 2, 3];
 
 // 它继承自 Array.prototype？
@@ -71,7 +71,7 @@ alert( arr.__proto__.__proto__.__proto__ ); // null
 
 一些方法在原型上可能会发生重叠，例如，`Array.prototype` 有自己的 `toString` 方法来列举出来数组的所有元素并用逗号分隔每一个元素。
 
-```js run
+```js
 let arr = [1, 2, 3]
 alert(arr); // 1,2,3 <-- Array.prototype.toString 的结果
 ```
@@ -88,7 +88,7 @@ alert(arr); // 1,2,3 <-- Array.prototype.toString 的结果
 
 其他内建对象也以同样的方式运行。即使是函数 —— 它们是内建构造器 `Function` 的对象，并且它们的方法（`call`/`apply` 及其他）都取自 `Function.prototype`。函数也有自己的 `toString` 方法。
 
-```js run
+```js
 function f() {}
 
 alert(f.__proto__ == Function.prototype); // true
@@ -103,7 +103,7 @@ alert(f.__proto__.__proto__ == Object.prototype); // true, inherit from objects
 
 这些对象对我们来说是无形地创建出来的。大多数引擎都会对其进行优化，但是规范中描述的就是通过这种方式。这些对象的方法也驻留在它们的 prototype 中，可以通过 `String.prototype`、`Number.prototype` 和 `Boolean.prototype` 进行获取。
 
-```warn header="值 `null` 和 `undefined` 没有对象包装器"
+"值 `null` 和 `undefined` 没有对象包装器"
 特殊值 `null` 和 `undefined` 比较特殊。它们没有对象包装器，所以它们没有方法和属性。并且它们也没有相应的原型。
 ```
 
@@ -111,7 +111,7 @@ alert(f.__proto__.__proto__ == Object.prototype); // true, inherit from objects
 
 原生的原型是可以被修改的。例如，我们向 `String.prototype` 中添加一个方法，这个方法将对所有的字符串都是可用的：
 
-```js run
+```js
 String.prototype.show = function() {
   alert(this);
 };
@@ -133,7 +133,7 @@ Polyfilling 是一个术语，表示某个方法在 JavaScript 规范中已存�
 
 例如：
 
-```js run
+```js
 if (!String.prototype.repeat) { // 如果这儿没有这个方法
   // 那就在 prototype 中添加它
 
@@ -162,16 +162,16 @@ alert( "La".repeat(3) ); // LaLaLa
 
 例如：
 
-```js run
+```js
 let obj = {
   0: "Hello",
   1: "world!",
   length: 2,
 };
 
-*!*
+
 obj.join = Array.prototype.join;
-*/!*
+
 
 alert( obj.join(',') ); // Hello,world!
 ```

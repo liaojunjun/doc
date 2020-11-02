@@ -477,7 +477,7 @@ let node4 = {"name":"HTML","nodeType":1,"children":[{"name":"HEAD","nodeType":1,
 drawHtmlTree(node4, 'div.domtree', 690, 360);
 </script>
 
-<p>````warn header=&quot;表格永远有 <code>&lt;tbody&gt;</code>&quot;
+<p>`&quot;表格永远有 <code>&lt;tbody&gt;</code>&quot;
 表格是一个有趣的“特殊的例子”。按照 DOM 规范，它们必须具有 <code>&lt;tbody&gt;</code>，但 HTML 文本却（官方的）忽略了它。然后浏览器在创建 DOM 时，自动地创建了 <code>&lt;tbody&gt;</code>。</p>
 <p>对于 HTML：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;table&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></code></pre>
@@ -505,9 +505,9 @@ drawHtmlTree(node5,  'div.domtree', 600, 200);
   The truth about elk.
   &lt;ol&gt;
     &lt;li&gt;An elk is a smart&lt;/li&gt;
-*!*
+
     &lt;!-- comment --&gt;
-*/!*
+
     &lt;li&gt;...and cunning animal!&lt;/li&gt;
   &lt;/ol&gt;
 &lt;/body&gt;
@@ -721,7 +721,7 @@ td.style.backgroundColor = <span class="hljs-string">&#x27;red&#x27;</span>;</co
 : 另一个被广泛使用的 DOM 节点是 <code>&lt;body&gt;</code> 元素 — <code>document.body</code>。</p>
 <p><code>&lt;head&gt;</code> = <code>document.head</code>
 : <code>&lt;head&gt;</code> 标签可以通过 <code>document.head</code> 访问。</p>
-<p>````warn header=&quot;这里有个问题：<code>document.body</code> 的值可能是 <code>null</code>&quot;
+<p>`&quot;这里有个问题：<code>document.body</code> 的值可能是 <code>null</code>&quot;
 脚本无法访问在运行时不存在的元素。</p>
 <p>尤其是，如果一个脚本是在 <code>&lt;head&gt;</code> 中，那么脚本是访问不到 <code>document.body</code> 元素的，因为浏览器还没有读到它。</p>
 <p>所以，下面例子中的第一个 <code>alert</code> 显示 <code>null</code>：</p>
@@ -729,9 +729,9 @@ td.style.backgroundColor = <span class="hljs-string">&#x27;red&#x27;</span>;</co
 
 <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
     alert( <span class="hljs-string">&quot;From HEAD: &quot;</span> + <span class="hljs-built_in">document</span>.body ); <span class="hljs-comment">// null，这里目前还没有 &lt;body&gt;</span>
-*/!*
+
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
 
@@ -757,7 +757,7 @@ td.style.backgroundColor = <span class="hljs-string">&#x27;red&#x27;</span>;</co
 
 例如，这里 `&lt;body&gt;` 有子元素 `&lt;div&gt;` 和 `&lt;ul&gt;`（以及一些空白的文本节点）：
 
-```html run
+```html
 &lt;html&gt;
 &lt;body&gt;
   &lt;div&gt;Begin&lt;/div&gt;
@@ -777,7 +777,7 @@ td.style.backgroundColor = <span class="hljs-string">&#x27;red&#x27;</span>;</co
 
 下面这个例子显示了 `document.body` 的子元素：
 
-```html run
+```html
 &lt;html&gt;
 &lt;body&gt;
   &lt;div&gt;Begin&lt;/div&gt;
@@ -789,11 +789,11 @@ td.style.backgroundColor = <span class="hljs-string">&#x27;red&#x27;</span>;</co
   &lt;div&gt;End&lt;/div&gt;
 
   &lt;script&gt;
-*!*
+
     for (let i = 0; i &lt; document.body.childNodes.length; i++) {
       alert( document.body.childNodes[i] ); // Text, DIV, Text, UL, ..., SCRIPT
     }
-*/!*
+
   &lt;/script&gt;
   ...more stuff...
 &lt;/body&gt;
@@ -827,17 +827,17 @@ elem.childNodes[elem.childNodes.length - 1] === elem.lastChild
   这是因为集合是可迭代的（提供了所需要的 `Symbol.iterator` 属性）。
 
 2. 无法使用数组的方法，因为它不是一个数组：
-  ```js run
+  ```js
   alert(document.body.childNodes.filter); // undefined（这里没有 filter 方法！）
   ```
 
 集合的性质所得到的第一个结果很不错。第二个结果也还可以忍受，因为如果我们想要使用数组的方法的话，我们可以使用 `Array.from` 方法来从集合创建一个“真”数组：
 
-  ```js run
+  ```js
   alert( Array.from(document.body.childNodes).filter ); // function
   ```
 
-```warn header=&quot;DOM 集合是只读的&quot;
+&quot;DOM 集合是只读的&quot;
 DOM 集合，甚至可以说本章中列出的 **所有** 导航（navigation）属性都是只读的。
 
 我们不能通过类似 `childNodes[i] = ...` 的操作来替换一个子节点。
@@ -845,18 +845,18 @@ DOM 集合，甚至可以说本章中列出的 **所有** 导航（navigation）
 修改子节点需要使用其它方法。我们将会在下一章中看到它们。
 ```
 
-```warn header=&quot;DOM 集合是实时的&quot;
+&quot;DOM 集合是实时的&quot;
 除小部分例外，几乎所有的 DOM 集合都是 **实时** 的。换句话说，它们反映了 DOM 的当前状态。
 
 如果我们保留一个对 `elem.childNodes` 的引用，然后向 DOM 中添加/移除节点，那么这些节点的更新会自动出现在集合中。
 ```
 
-````warn header=&quot;不要使用 `for..in` 来遍历集合&quot;
+`&quot;不要使用 `for..in` 来遍历集合&quot;
 可以使用 `for..of` 对集合进行迭代。但有时候人们会尝试使用 `for..in` 来迭代集合。
 
 请不要这么做。`for..in` 循环遍历的是所有可枚举的（enumerable）属性。集合还有一些“额外的”很少被用到的属性，通常这些属性也是我们不期望得到的：
 
-```html run
+```html
 &lt;body&gt;
 &lt;script&gt;
   // 显示 0，1，length，item，values 及其他。
@@ -909,7 +909,7 @@ alert( <span class="hljs-built_in">document</span>.documentElement.parentElement
 <pre><code>
 让我们修改上面的一个示例：用 `children` 来替换 `childNodes`。现在它只显示元素：
 
-```html run
+```html
 &lt;html&gt;
 &lt;body&gt;
   &lt;div&gt;Begin&lt;/div&gt;
@@ -921,11 +921,11 @@ alert( <span class="hljs-built_in">document</span>.documentElement.parentElement
   &lt;div&gt;End&lt;/div&gt;
 
   &lt;script&gt;
-*!*
+
     for (let elem of document.body.children) {
       alert(elem); // DIV, UL, DIV, SCRIPT
     }
-*/!*
+
   &lt;/script&gt;
   ...
 &lt;/body&gt;
@@ -958,7 +958,7 @@ alert( <span class="hljs-built_in">document</span>.documentElement.parentElement
 
 用法示例：
 
-```html run height=100
+```html height=100
 &lt;table id=&quot;table&quot;&gt;
   &lt;tr&gt;
     &lt;td&gt;one&lt;/td&gt;&lt;td&gt;two&lt;/td&gt;
@@ -970,7 +970,7 @@ alert( <span class="hljs-built_in">document</span>.documentElement.parentElement
 
 &lt;script&gt;
   // 获取带有 &quot;two&quot; 的 td（第一行，第二列）
-  let td = table.*!*rows[0].cells[1]*/!*;
+  let td = table.rows[0].cells[1];
   td.style.backgroundColor = &quot;red&quot;; // highlight it
 &lt;/script&gt;
 ```
@@ -1061,16 +1061,16 @@ inputs[inputs.length-<span class="hljs-number">1</span>] <span class="hljs-comme
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-comment">// 获取该元素</span>
-*!*
+
   <span class="hljs-keyword">let</span> elem = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;elem&#x27;</span>);
-*/!*
+
 
   <span class="hljs-comment">// 将该元素背景改为红色</span>
   elem.style.background = <span class="hljs-string">&#x27;red&#x27;</span>;
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>此外，还有一个通过 <code>id</code> 命名的全局变量，它引用了元素：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;*!*elem*/!*&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;*!*elem-content*/!*&quot;</span>&gt;</span>Element<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;elem-content&quot;</span>&gt;</span>Element<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
@@ -1099,7 +1099,7 @@ inputs[inputs.length-<span class="hljs-number">1</span>] <span class="hljs-comme
 <code>id</code> 必须是唯一的。在文档中，只能有一个元素带有给定的 <code>id</code>。</p>
 <p>如果有多个元素都带有同一个 <code>id</code>，那么使用它的方法的行为是不可预测的，例如 <code>document.getElementById</code> 可能会随机返回其中一个元素。因此，请遵守规则，保持 <code>id</code> 的唯一性。</p>
 <pre><code>
-```warn header=&quot;只有 `document.getElementById`，没有 `anyElem.getElementById`&quot;
+&quot;只有 `document.getElementById`，没有 `anyElem.getElementById`&quot;
 `getElementById` 方法只能被在 `document` 对象上调用。它会在整个文档中查找给定的 `id`。</code></pre>
 <h2 id="queryselectorall-queryselectorall">querySelectorAll [#querySelectorAll]</h2>
 <p>到目前为止，最通用的方法是 <code>elem.querySelectorAll(css)</code>，它返回 <code>elem</code> 中与给定 CSS 选择器匹配的所有元素。</p>
@@ -1113,9 +1113,9 @@ inputs[inputs.length-<span class="hljs-number">1</span>] <span class="hljs-comme
   <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>passed<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   <span class="hljs-keyword">let</span> elements = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;ul &gt; li:last-child&#x27;</span>);
-*/!*
+
 
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> elem <span class="hljs-keyword">of</span> elements) {
     alert(elem.innerHTML); <span class="hljs-comment">// &quot;test&quot;, &quot;passed&quot;</span>
@@ -1137,9 +1137,9 @@ inputs[inputs.length-<span class="hljs-number">1</span>] <span class="hljs-comme
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-comment">// 不一定是 document.body.children，还可以是任何集合</span>
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> elem <span class="hljs-keyword">of</span> <span class="hljs-built_in">document</span>.body.children) {
-*!*
+
     <span class="hljs-keyword">if</span> (elem.matches(<span class="hljs-string">&#x27;a[href$=&quot;zip&quot;]&#x27;</span>)) {
-*/!*
+
       alert(<span class="hljs-string">&quot;The archive reference: &quot;</span> + elem.href );
     }
   }
@@ -1198,19 +1198,19 @@ inputs[inputs.length-<span class="hljs-number">1</span>] <span class="hljs-comme
 <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   <span class="hljs-keyword">let</span> inputs = table.getElementsByTagName(<span class="hljs-string">&#x27;input&#x27;</span>);
-*/!*
+
 
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> input <span class="hljs-keyword">of</span> inputs) {
     alert( input.value + <span class="hljs-string">&#x27;: &#x27;</span> + input.checked );
   }
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
-<p>```warn header=&quot;不要忘记字母 <code>\&quot;s\&quot;</code>！&quot;
+<p>&quot;不要忘记字母 <code>\&quot;s\&quot;</code>！&quot;
 新手开发者有时会忘记字符 <code>&quot;s&quot;</code>。也就是说，他们会调用 <code>getElementByTagName</code> 而不是 <code>getElement<b>s</b>ByTagName</code>。</p>
 <p><code>getElementById</code> 中没有字母 <code>&quot;s&quot;</code>，是因为它只返回单个元素。但是 <code>getElementsByTagName</code> 返回的是元素的集合，所以里面有 <code>&quot;s&quot;</code>。</p>
 <pre><code>
-````warn header=&quot;它返回的是一个集合，不是一个元素！&quot;
+`&quot;它返回的是一个集合，不是一个元素！&quot;
 新手的另一个普遍的错误是写：
 
 ```js
@@ -1223,7 +1223,7 @@ document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
 <pre><code>
 查找 `.article` 元素：
 
-```html run height=50
+```html height=50
 &lt;form name=&quot;my-form&quot;&gt;
   &lt;div class=&quot;article&quot;&gt;Article&lt;/div&gt;
   &lt;div class=&quot;long article&quot;&gt;Long article&lt;/div&gt;
@@ -1248,7 +1248,7 @@ document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
 1. 第一个创建了对 `&lt;div&gt;` 的集合的引用。截至目前，它的长度是 `1`。
 2. 第二个脚本在浏览器再遇到一个 `&lt;div&gt;` 时运行，所以它的长度是 `2`。
 
-```html run
+```html
 &lt;div&gt;First div&lt;/div&gt;
 
 &lt;script&gt;
@@ -1259,9 +1259,9 @@ document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
 &lt;div&gt;Second div&lt;/div&gt;
 
 &lt;script&gt;
-*!*
+
   alert(divs.length); // 2
-*/!*
+
 &lt;/script&gt;
 ```
 
@@ -1270,7 +1270,7 @@ document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
 如果我们使用它，那么两个脚本都会输出 `1`：
 
 
-```html run
+```html
 &lt;div&gt;First div&lt;/div&gt;
 
 &lt;script&gt;
@@ -1281,9 +1281,9 @@ document.getElementsByTagName(&#x27;input&#x27;).value = 5;</code></pre>
 &lt;div&gt;Second div&lt;/div&gt;
 
 &lt;script&gt;
-*!*
+
   alert(divs.length); // 1
-*/!*
+
 &lt;/script&gt;
 ```
 
@@ -1554,28 +1554,28 @@ alert( <span class="hljs-built_in">document</span>.body <span class="hljs-keywor
 
 ```js
 // 定义 HTMLInputElement
-*!*
+
 // 冒号 &quot;:&quot; 表示 HTMLInputElement 继承自 HTMLElement
-*/!*
+
 interface HTMLInputElement: HTMLElement {
   // 接下来是 &lt;input&gt; 元素的属性和方法
 
-*!*
+
   // &quot;DOMString&quot; 表示属性的值是字符串
-*/!*
+
   attribute DOMString accept;
   attribute DOMString alt;
   attribute DOMString autocomplete;
   attribute DOMString value;
 
-*!*
+
   // 布尔值属性（true/false）
   attribute boolean autofocus;
-*/!*
+
   ...
-*!*
+
   // 现在方法：&quot;void&quot; 表示方法没有返回值
-*/!*
+
   void select();
   ...
 }</code></pre>
@@ -1592,7 +1592,7 @@ interface HTMLInputElement: HTMLElement {
 
 例如：
 
-```html run
+```html
 &lt;body&gt;
   &lt;script&gt;  
   let elem = document.body;
@@ -1617,7 +1617,7 @@ interface HTMLInputElement: HTMLElement {
 
 例如：
 
-```js run
+```js
 alert( document.body.nodeName ); // BODY
 alert( document.body.tagName ); // BODY
 ```
@@ -1636,7 +1636,7 @@ tagName 和 nodeName 之间有什么不同吗？
 例如，我们比较一下 `document` 的 `tagName` 和 `nodeName`，以及一个注释节点：
 
 
-```html run
+```html
 &lt;body&gt;&lt;!-- comment --&gt;
 
   &lt;script&gt;
@@ -1670,7 +1670,7 @@ tagName 和 nodeName 之间有什么不同吗？
 
 下面这个示例显示了 `document.body` 中的内容，然后将其完全替换：
 
-```html run
+```html
 &lt;body&gt;
   &lt;p&gt;A paragraph&lt;/p&gt;
   &lt;div&gt;A div&lt;/div&gt;
@@ -1685,7 +1685,7 @@ tagName 和 nodeName 之间有什么不同吗？
 
 我们可以尝试插入无效的 HTML，浏览器会修复我们的错误：
 
-```html run
+```html
 &lt;body&gt;
 
   &lt;script&gt;
@@ -1718,9 +1718,9 @@ chatDiv.innerHTML += &quot;How goes?&quot;;
 ```js
 elem.innerHTML += &quot;...&quot;;
 // 进行写入的一种更简短的方式：
-*!*
+
 elem.innerHTML = elem.innerHTML + &quot;...&quot;
-*/!*
+
 ```
 
 换句话说，`innerHTML+=` 做了以下工作：
@@ -1742,7 +1742,7 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 下面是一个示例：
 
-```html run
+```html
 &lt;div id=&quot;elem&quot;&gt;Hello &lt;b&gt;World&lt;/b&gt;&lt;/div&gt;
 
 &lt;script&gt;
@@ -1756,20 +1756,20 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 考虑下面这个示例：
 
-```html run
+```html
 &lt;div&gt;Hello, world!&lt;/div&gt;
 
 &lt;script&gt;
   let div = document.querySelector(&#x27;div&#x27;);
 
-*!*
+
   // 使用 &lt;p&gt;...&lt;/p&gt; 替换 div.outerHTML
-*/!*
+
   div.outerHTML = &#x27;&lt;p&gt;A new element&lt;/p&gt;&#x27;; // (*)
 
-*!*
+
   // 蛤！&#x27;div&#x27; 还是原来那样！
-*/!*
+
   alert(div.outerHTML); // &lt;div&gt;Hello, world!&lt;/div&gt; (**)
 &lt;/script&gt;
 ```
@@ -1797,20 +1797,20 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 读取文本节点和注释节点的内容的示例：
 
-```html run height=&quot;50&quot;
+```html height=&quot;50&quot;
 &lt;body&gt;
   Hello
   &lt;!-- Comment --&gt;
   &lt;script&gt;
     let text = document.body.firstChild;
-*!*
+
     alert(text.data); // Hello
-*/!*
+
 
     let comment = text.nextSibling;
-*!*
+
     alert(comment.data); // Comment
-*/!*
+
   &lt;/script&gt;
 &lt;/body&gt;
 ```
@@ -1833,7 +1833,7 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 例如：
 
-```html run
+```html
 &lt;div id=&quot;news&quot;&gt;
   &lt;h1&gt;Headline!&lt;/h1&gt;
   &lt;p&gt;Martians attack people!&lt;/p&gt;
@@ -1858,7 +1858,7 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 比较两者：
 
-```html run
+```html
 &lt;div id=&quot;elem1&quot;&gt;&lt;/div&gt;
 &lt;div id=&quot;elem2&quot;&gt;&lt;/div&gt;
 
@@ -1881,7 +1881,7 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 
 我们可以在 HTML 中使用它，或者使用 JavaScript 进行赋值，如下所示：
 
-```html run height=&quot;80&quot;
+```html height=&quot;80&quot;
 &lt;div&gt;Both divs below are hidden&lt;/div&gt;
 
 &lt;div hidden&gt;With the attribute &quot;hidden&quot;&lt;/div&gt;
@@ -1898,7 +1898,7 @@ elem.innerHTML = elem.innerHTML + &quot;...&quot;
 这里有一个 blinking 元素：
 
 
-```html run height=50
+```html height=50
 &lt;div id=&quot;elem&quot;&gt;A blinking element&lt;/div&gt;
 
 &lt;script&gt;
@@ -1917,7 +1917,7 @@ DOM 元素还有其他属性，特别是那些依赖于 class 的属性：
 
 例如：
 
-```html run height=&quot;80&quot;
+```html height=&quot;80&quot;
 &lt;input type=&quot;text&quot; id=&quot;elem&quot; value=&quot;value&quot;&gt;
 
 &lt;script&gt;
@@ -2016,9 +2016,9 @@ DOM 节点还具有其他属性，具体有哪些属性则取决于它们的类�
 <pre><code class="language-js"><span class="hljs-keyword">let</span> links = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">&#x27;a&#x27;</span>);
 
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> link <span class="hljs-keyword">of</span> links) {
-*!*
+
   <span class="hljs-keyword">let</span> href = link.getAttribute(<span class="hljs-string">&#x27;href&#x27;</span>);
-*/!*
+
   <span class="hljs-keyword">if</span> (!href) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 没有特性</span>
 
   <span class="hljs-keyword">if</span> (!href.includes(<span class="hljs-string">&#x27;://&#x27;</span>)) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 没有协议</span>
@@ -2111,10 +2111,10 @@ alert(<span class="hljs-built_in">document</span>.body.myData.title); <span clas
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;test&quot;</span> <span class="hljs-attr">something</span>=<span class="hljs-string">&quot;non-standard&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
     alert(<span class="hljs-built_in">document</span>.body.id); <span class="hljs-comment">// test</span>
-*!*
+
     <span class="hljs-comment">// 非标准的特性没有获得对应的属性</span>
     alert(<span class="hljs-built_in">document</span>.body.something); <span class="hljs-comment">// undefined</span>
-*/!*
+
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
 <p>请注意，一个元素的标准的特性对于另一个元素可能是未知的。例如 <code>&quot;type&quot;</code> 是 <code>&lt;input&gt;</code> 的一个标准的特性（<a href="https://html.spec.whatwg.org/#htmlinputelement">HTMLInputElement</a>），但对于 <code>&lt;body&gt;</code>（<a href="https://html.spec.whatwg.org/#htmlbodyelement">HTMLBodyElement</a>）来说则不是。规范中对相应元素类的标准的属性进行了详细的描述。</p>
@@ -2123,9 +2123,9 @@ alert(<span class="hljs-built_in">document</span>.body.myData.title); <span clas
   <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;input&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
     alert(input.type); <span class="hljs-comment">// text</span>
-*!*
+
     alert(body.type); <span class="hljs-comment">// undefined：DOM 属性没有被创建，因为它不是一个标准的特性</span>
-*/!*
+
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
 <p>所以，如果一个特性不是标准的，那么就没有相对应的 DOM 属性。那我们有什么方法来访问这些特性吗？</p>
@@ -2141,9 +2141,9 @@ alert(<span class="hljs-built_in">document</span>.body.myData.title); <span clas
 <p>下面是一个读取非标准的特性的示例：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">something</span>=<span class="hljs-string">&quot;non-standard&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
     alert(<span class="hljs-built_in">document</span>.body.getAttribute(<span class="hljs-string">&#x27;something&#x27;</span>)); <span class="hljs-comment">// 非标准的</span>
-*/!*
+
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
 <p>HTML 特性有以下几个特征：</p>
@@ -2200,11 +2200,11 @@ alert(<span class="hljs-built_in">document</span>.body.myData.title); <span clas
   input.setAttribute(<span class="hljs-string">&#x27;value&#x27;</span>, <span class="hljs-string">&#x27;text&#x27;</span>);
   alert(input.value); <span class="hljs-comment">// text</span>
 
-*!*
+
   <span class="hljs-comment">// 这个操作无效，属性 =&gt; 特性</span>
   input.value = <span class="hljs-string">&#x27;newValue&#x27;</span>;
   alert(input.getAttribute(<span class="hljs-string">&#x27;value&#x27;</span>)); <span class="hljs-comment">// text（没有被更新！）</span>
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>在上面这个例子中：</p>
 <ul>
@@ -2248,9 +2248,9 @@ alert(<span class="hljs-built_in">document</span>.body.myData.title); <span clas
 <p>有时，非标准的特性常常用于将自定义的数据从 HTML 传递到 JavaScript，或者用于为 JavaScript “标记” HTML 元素。</p>
 <p>像这样：</p>
 <pre><code class="language-html"><span class="hljs-comment">&lt;!-- 标记这个 div 以在这显示 &quot;name&quot; --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">div</span> *!*<span class="hljs-attr">show-info</span>=<span class="hljs-string">&quot;name&quot;</span>*/!*&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">show-info</span>=<span class="hljs-string">&quot;name&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-comment">&lt;!-- 标记这个 div 以在这显示 &quot;age&quot; --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">div</span> *!*<span class="hljs-attr">show-info</span>=<span class="hljs-string">&quot;age&quot;</span>*/!*&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">show-info</span>=<span class="hljs-string">&quot;age&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-comment">// 这段代码找到带有标记的元素，并显示需要的内容</span>
@@ -2420,9 +2420,9 @@ div.setAttribute(<span class="hljs-string">&#x27;order-state&#x27;</span>, <span
 <p>函数 <code>update</code> 会刷新时钟，由 <code>setInterval</code> 每秒调用一次：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">update</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">let</span> clock = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;clock&#x27;</span>);
-*!*
+
   <span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(); <span class="hljs-comment">// (*)</span>
-*/!*
+
   <span class="hljs-keyword">let</span> hours = date.getHours();
   <span class="hljs-keyword">if</span> (hours &lt; <span class="hljs-number">10</span>) hours = <span class="hljs-string">&#x27;0&#x27;</span> + hours;
   clock.children[<span class="hljs-number">0</span>].innerHTML = hours;
@@ -2670,9 +2670,9 @@ table.tBodies[<span class="hljs-number">0</span>].append(...sortedRows); <span c
 };</code></pre>
 <p>语法：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> container = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;container&#x27;</span>);
-*!*
+
 createTree(container, data); <span class="hljs-comment">// 将树创建在 container 中</span>
-*/!*</code></pre>
+</code></pre>
 <p>结果（树）看起来像这样：</p>
 <p>[iframe border=1 src=&quot;build-tree-dom&quot;]</p>
 <p>选择下面两种方式中的一种，来完成这个任务：</p>
@@ -2749,11 +2749,11 @@ createTree(container, data); <span class="hljs-comment">// 将树创建在 conta
 }
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
 
-*!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;alert&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Hi there!<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span> You&#x27;ve read an important message.
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-*/!*</code></pre>
+</code></pre>
 <p>这是一个 HTML 示例。现在，让我们使用 JavaScript 创建一个相同的 <code>div</code>（假设样式已经在 HTML/CSS 文件中）。</p>
 <h2 id="创建一个元素">创建一个元素</h2>
 <p>要创建 DOM 节点，这里有两种方法：</p>
@@ -2798,9 +2798,9 @@ div.innerHTML = <span class="hljs-string">&quot;&lt;strong&gt;Hi there!&lt;/stro
   div.className = <span class="hljs-string">&quot;alert&quot;</span>;
   div.innerHTML = <span class="hljs-string">&quot;&lt;strong&gt;Hi there!&lt;/strong&gt; You&#x27;ve read an important message.&quot;</span>;
 
-*!*
+
   <span class="hljs-built_in">document</span>.body.append(div);
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>在这个例子中，我们对 <code>document.body</code> 调用了 <code>append</code> 方法。不过我们可以在其他任何元素上调用 <code>append</code> 方法，以将另外一个元素放入到里面。例如，通过调用 <code>div.append(anotherElement)</code>，我们便可以在 <code>&lt;div&gt;</code> 末尾添加一些内容。</p>
 <p>这里是更多的元素插入方法，指明了不同的插入位置：</p>
@@ -2852,9 +2852,9 @@ after</code></pre>
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>请注意：这里的文字都被“作为文本”插入，而不是“作为 HTML 代码”。因此像 <code>&lt;</code>、<code>&gt;</code> 这样的符号都会被作转义处理来保证正确显示。</p>
 <p>所以，最终的 HTML 为：</p>
-<pre><code class="language-html">*!*
+<pre><code class="language-html">
 <span class="hljs-symbol">&amp;lt;</span>p<span class="hljs-symbol">&amp;gt;</span>Hello<span class="hljs-symbol">&amp;lt;</span>/p<span class="hljs-symbol">&amp;gt;</span>
-*/!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">hr</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;div&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
 <p>换句话说，字符串被以一种安全的方式插入到页面中，就像 <code>elem.textContent</code> 所做的一样。</p>
@@ -2925,9 +2925,9 @@ after</code></pre>
   div.innerHTML = <span class="hljs-string">&quot;&lt;strong&gt;Hi there!&lt;/strong&gt; You&#x27;ve read an important message.&quot;</span>;
 
   <span class="hljs-built_in">document</span>.body.append(div);
-*!*
+
   <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> div.remove(), <span class="hljs-number">1000</span>);
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>请注意：如果我们要将一个元素 <strong>移动</strong> 到另一个地方，则无需将其从原来的位置中删除。</p>
 <p><strong>所有插入方法都会自动从旧位置删除该节点。</strong></p>
@@ -2959,12 +2959,12 @@ after</code></pre>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   <span class="hljs-keyword">let</span> div2 = div.cloneNode(<span class="hljs-literal">true</span>); <span class="hljs-comment">// 克隆消息</span>
   div2.querySelector(<span class="hljs-string">&#x27;strong&#x27;</span>).innerHTML = <span class="hljs-string">&#x27;Bye there!&#x27;</span>; <span class="hljs-comment">// 修改克隆</span>
 
   div.after(div2); <span class="hljs-comment">// 在已有的 div 后显示克隆</span>
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <h2 id="documentfragment-document-fragment">DocumentFragment [#document-fragment]</h2>
 <p><code>DocumentFragment</code> 是一个特殊的 DOM 节点，用作来传递节点列表的包装器（wrapper）。</p>
@@ -2985,9 +2985,9 @@ after</code></pre>
   <span class="hljs-keyword">return</span> fragment;
 }
 
-*!*
+
 ul.append(getListContent()); <span class="hljs-comment">// (*)</span>
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>请注意，在最后一行 <code>(*)</code> 我们附加了 <code>DocumentFragment</code>，但是它和 <code>ul</code> “融为一体（blends in）”了，所以最终的文档结构应该是：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
@@ -3011,9 +3011,9 @@ ul.append(getListContent()); <span class="hljs-comment">// (*)</span>
   <span class="hljs-keyword">return</span> result;
 }
 
-*!*
+
 ul.append(...getListContent()); <span class="hljs-comment">// append + &quot;...&quot; operator = friends!</span>
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>我们之所以提到 <code>DocumentFragment</code>，主要是因为它上面有一些概念，例如 <a href="info:template-element">template</a> 元素，我们将在以后讨论。</p>
 <h2 id="老式的-insertremove-方法">老式的 insert/remove 方法</h2>
@@ -3025,7 +3025,7 @@ ul.append(...getListContent()); <span class="hljs-comment">// append + &quot;...
 : 将 <code>node</code> 附加为 <code>parentElem</code> 的最后一个子元素。</p>
 <pre><code>下面这个示例在 `&lt;ol&gt;` 的末尾添加了一个新的 `&lt;li&gt;`：
 
-```html run height=100
+```html height=100
 &lt;ol id=&quot;list&quot;&gt;
   &lt;li&gt;0&lt;/li&gt;
   &lt;li&gt;1&lt;/li&gt;
@@ -3043,7 +3043,7 @@ ul.append(...getListContent()); <span class="hljs-comment">// append + &quot;...
 : 在 <code>parentElem</code> 的 <code>nextSibling</code> 前插入 <code>node</code>。</p>
 <pre><code>下面这段代码在第二个 `&lt;li&gt;` 前插入了一个新的列表项：
 
-```html run height=100
+```html height=100
 &lt;ol id=&quot;list&quot;&gt;
   &lt;li&gt;0&lt;/li&gt;
   &lt;li&gt;1&lt;/li&gt;
@@ -3053,9 +3053,9 @@ ul.append(...getListContent()); <span class="hljs-comment">// append + &quot;...
   let newLi = document.createElement(&#x27;li&#x27;);
   newLi.innerHTML = &#x27;Hello, world!&#x27;;
 
-*!*
+
   list.insertBefore(newLi, list.children[1]);
-*/!*
+
 &lt;/script&gt;
 ```
 如果要将 `newLi` 插入为第一个元素，我们可以这样做：
@@ -3069,7 +3069,7 @@ list.insertBefore(newLi, list.firstChild);
 : 从 <code>parentElem</code> 中删除 <code>node</code>（假设 <code>node</code> 为 <code>parentElem</code> 的后代）。</p>
 <pre><code>下面这个示例从 `&lt;ol&gt;` 中删除了 `&lt;li&gt;`：
 
-```html run height=100
+```html height=100
 &lt;ol id=&quot;list&quot;&gt;
   &lt;li&gt;0&lt;/li&gt;
   &lt;li&gt;1&lt;/li&gt;
@@ -3086,11 +3086,11 @@ list.insertBefore(newLi, list.firstChild);
 <p>还有一个非常古老的向网页添加内容的方法：<code>document.write</code>。</p>
 <p>语法如下：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Somewhere in the page...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-*!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-built_in">document</span>.write(<span class="hljs-string">&#x27;&lt;b&gt;Hello from JS&lt;/b&gt;&#x27;</span>);
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-*/!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>The end<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></code></pre>
 <p>调用 <code>document.write(html)</code> 意味着将 <code>html</code> “就地马上”写入页面。<code>html</code> 字符串可以是动态生成的，所以它很灵活。我们可以使用 JavaScript 创建一个完整的页面并对其进行写入。</p>
 <p>这个方法来自于没有 DOM，没有标准的上古时期……。但这个方法依被保留了下来，因为还有脚本在使用它。</p>
@@ -3099,13 +3099,13 @@ list.insertBefore(newLi, list.firstChild);
 <p>如果我们稍后调用它，则现有文档内容将被擦除。</p>
 <p>例如：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>After one second the contents of this page will be replaced...<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-*!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-comment">// 1 秒后调用 document.write</span>
   <span class="hljs-comment">// 这时页面已经加载完成，所以它会擦除现有内容</span>
   <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">document</span>.write(<span class="hljs-string">&#x27;&lt;b&gt;...By this.&lt;/b&gt;&#x27;</span>), <span class="hljs-number">1000</span>);
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-*/!*</code></pre>
+</code></pre>
 <p>因此，在某种程度上讲，它在“加载完成”阶段是不可用的，这与我们上面介绍的其他 DOM 方法不同。</p>
 <p>这是它的缺陷。</p>
 <p>还有一个好处。从技术上讲，当在浏览器正在读取（“解析”）传入的 HTML 时调用 <code>document.write</code> 方法来写入一些东西，浏览器会像它本来就在 HTML 文本中那样使用它。</p>
@@ -3230,10 +3230,10 @@ elem.style.top = top; <span class="hljs-comment">// 例如 &#x27;456px&#x27;</sp
 <p>例如：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;main page&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
     <span class="hljs-comment">// 添加一个 class</span>
     <span class="hljs-built_in">document</span>.body.classList.add(<span class="hljs-string">&#x27;article&#x27;</span>);
-*/!*
+
 
     alert(<span class="hljs-built_in">document</span>.body.className); <span class="hljs-comment">// main page article</span>
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
@@ -3302,14 +3302,14 @@ button.style.WebkitBorderRadius = &#x27;5px&#x27;;
 
 例如，我们不应该将 `elem.style.top` 设置为 `10`，而应将其设置为 `10px`。否则设置会无效：
 
-```html run height=100
+```html height=100
 &lt;body&gt;
   &lt;script&gt;
-  *!*
+  
     // 无效！
     document.body.style.margin = 20;
     alert(document.body.style.margin); // &#x27;&#x27;（空字符串，赋值被忽略了）
-  */!*
+  
 
     // 现在添加了 CSS 单位（px）— 生效了
     document.body.style.margin = &#x27;20px&#x27;;
@@ -3335,7 +3335,7 @@ button.style.WebkitBorderRadius = &#x27;5px&#x27;;
 
 例如，这里的 `style` 看不到 margin：
 
-```html run height=60 no-beautify
+```html height=60 no-beautify
 &lt;head&gt;
   &lt;style&gt; body { color: red; margin: 5px } &lt;/style&gt;
 &lt;/head&gt;
@@ -3343,10 +3343,10 @@ button.style.WebkitBorderRadius = &#x27;5px&#x27;;
 
   The red text
   &lt;script&gt;
-*!*
+
     alert(document.body.style.color); // 空的
     alert(document.body.style.marginTop); // 空的
-*/!*
+
   &lt;/script&gt;
 &lt;/body&gt;
 ```
@@ -3371,7 +3371,7 @@ pseudo
 
 例如：
 
-```html run height=100
+```html height=100
 &lt;head&gt;
   &lt;style&gt; body { color: red; margin: 5px } &lt;/style&gt;
 &lt;/head&gt;
@@ -3400,14 +3400,14 @@ pseudo
 所以，现在 `getComputedStyle` 实际上返回的是属性的解析值（resolved）。
 ```
 
-````warn header=&quot;`getComputedStyle` 需要完整的属性名&quot;
+`&quot;`getComputedStyle` 需要完整的属性名&quot;
 我们应该总是使用我们想要的确切的属性，例如 `paddingLeft`、`marginTop` 或 `borderTopWidth`。否则，就不能保证正确的结果。
 
 例如，如果有 `paddingLeft/paddingTop` 属性，那么对于 `getComputedStyle(elem).padding`，我们会得到什么？什么都没有，或者是从已知的 padding 中“生成”的值？这里没有标准的规则。
 
 还有其他不一致的地方。例如，在下面这个例子中，某些浏览器（Chrome）会显示 `10px`，而某些浏览器（Firefox）则没有：
 
-```html run
+```html
 &lt;style&gt;
   body {
     margin: 10px;
@@ -3518,7 +3518,7 @@ ball.style.top = <span class="hljs-built_in">Math</span>.round(field.clientHeigh
 <p>因此，在图片加载完成之前，<code>ball.offsetWidth</code> 的值为 <code>0</code>。这会导致上面的代码中会有错误的坐标。</p>
 <p>在第一次加载完成后，浏览器通常会缓存该图片，并在下一次加载时，浏览器会立即拥有该图片的大小。但是在第一次加载时，<code>ball.offsetWidth</code> 的值为 <code>0</code>。</p>
 <p>我们应该通过在 <code>&lt;img&gt;</code> 中添加 <code>width/height</code> 来解决这个问题：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;ball.png&quot;</span> *!*<span class="hljs-attr">width</span>=<span class="hljs-string">&quot;40&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;40&quot;</span>*/!* <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ball&quot;</span>&gt;</span></code></pre>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;ball.png&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;40&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;40&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ball&quot;</span>&gt;</span></code></pre>
 <p>……或者在 CSS 中提供大小：</p>
 <pre><code class="language-css"><span class="hljs-selector-id">#ball</span> {
   <span class="hljs-attribute">width</span>: <span class="hljs-number">40px</span>;
@@ -3622,7 +3622,7 @@ ball.style.top = <span class="hljs-built_in">Math</span>.round(field.clientHeigh
 
 在下面这个例子中，内部的 `&lt;div&gt;` 有 `&lt;main&gt;` 作为 `offsetParent`，并且 `offsetLeft/offsetTop` 让它从左上角位移（`180`）：
 
-```html run height=10
+```html height=10
 &lt;main style=&quot;position: relative&quot; id=&quot;main&quot;&gt;
   &lt;article&gt;
     &lt;div id=&quot;example&quot; style=&quot;position: absolute; left: 180px; top: 180px&quot;&gt;...&lt;/div&gt;
@@ -3726,7 +3726,7 @@ element.style.height = <span class="hljs-string">`<span class="hljs-subst">${ele
 
 那为什么不像这样用 `getComputedStyle` 读取元素的 width 呢？
 
-```js run
+```js
 let elem = document.body;
 
 alert( getComputedStyle(elem).width ); // 显示 elem 的 CSS width
@@ -3737,13 +3737,13 @@ alert( getComputedStyle(elem).width ); // 显示 elem 的 CSS width
 1. 首先，CSS `width/height` 取决于另一个属性：`box-sizing`，它定义了“什么是” CSS 宽度和高度。出于 CSS 的目的而对 `box-sizing` 进行的更改可能会破坏此类 JavaScript 操作。
 2. 其次，CSS 的 `width/height` 可能是 `auto`，例如内联（inline）元素：
 
-    ```html run
+    ```html
     &lt;span id=&quot;elem&quot;&gt;Hello!&lt;/span&gt;
 
     &lt;script&gt;
-    *!*
+    
       alert( getComputedStyle(elem).width ); // auto
-    */!*
+    
     &lt;/script&gt;
     ```
 
@@ -3792,7 +3792,7 @@ alert( getComputedStyle(elem).width ); // 显示 elem 的 CSS width
 <pre><code class="language-online">例如，这个按钮会显示窗口的高度：
 
 &lt;button onclick=&quot;alert(document.documentElement.clientHeight)&quot;&gt;alert(document.documentElement.clientHeight)&lt;/button&gt;</code></pre>
-<p>````warn header=&quot;不是 <code>window.innerWidth/Height</code>&quot;
+<p>`&quot;不是 <code>window.innerWidth/Height</code>&quot;
 浏览器也支持 <code>window.innerWidth/innerHeight</code> 属性。它们看起来像我们想要的。那为什么不使用它们呢？</p>
 <p>如果这里存在一个滚动条，并且滚动条占用了一些空间，那么 <code>clientWidth/clientHeight</code> 会提供没有滚动条（减去它）的 width/height。换句话说，它们返回的是可用于内容的文档的可见部分的 width/height。</p>
 <p>……而 <code>window.innerWidth/innerHeight</code> 包括了滚动条。</p>
@@ -3801,7 +3801,7 @@ alert( getComputedStyle(elem).width ); // 显示 elem 的 CSS width
 alert( <span class="hljs-built_in">document</span>.documentElement.clientWidth ); <span class="hljs-comment">// 减去滚动条宽度后的窗口宽度</span></code></pre>
 <p>在大多数情况下，我们需要 <strong>可用</strong> 的窗口宽度：以绘制或放置某些东西。也就是说：在滚动条内（如果有）。所以我们应该使用 <code>documentElement.clientHeight/Width</code>。</p>
 <pre><code>
-```warn header=&quot;`DOCTYPE` 很重要&quot;
+&quot;`DOCTYPE` 很重要&quot;
 请注意：当 HTML 中没有 `&lt;!DOCTYPE HTML&gt;` 时，顶层级（top-level）几何属性的工作方式可能就会有所不同。可能会出现一些稀奇古怪的情况。
 
 在现代 HTML 中，我们始终都应该写 `DOCTYPE`。
@@ -3815,7 +3815,7 @@ alert( <span class="hljs-built_in">document</span>.documentElement.clientWidth )
 
 为了可靠地获得完整的文档高度，我们应该采用以下这些属性的最大值：
 
-```js run
+```js
 let scrollHeight = Math.max(
   document.body.scrollHeight, document.documentElement.scrollHeight,
   document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -3835,7 +3835,7 @@ DOM 元素的当前滚动状态在 `elem.scrollLeft/scrollTop` 中。
 
 幸运的是，我们根本不必记住这些特性，因为滚动在 `window.pageXOffset/pageYOffset` 中可用：
 
-```js run
+```js
 alert(&#x27;Current scroll from the top: &#x27; + window.pageYOffset);
 alert(&#x27;Current scroll from the left: &#x27; + window.pageXOffset);
 ```
@@ -4141,7 +4141,7 @@ right:${r.right}
 <p>正如你所看到的，在这个例子中，<code>left/top</code> 与 <code>x/y</code> 不相等。</p>
 <p>但是实际上，<code>elem.getBoundingClientRect()</code> 总是返回正数的 width/height，这里我们提及负的 <code>width/height</code> 只是为了帮助你理解，为什么这些看起来重复的属性，实际上并不是重复的。</p>
 <pre><code>
-```warn header=&quot;IE 和 Edge 浏览器不支持 `x/y`&quot;
+&quot;IE 和 Edge 浏览器不支持 `x/y`&quot;
 由于历史原因，IE 和 Edge 浏览器不支持 `x/y` 属性。
 
 因此，我们可以写一个 polyfill（在 `DomRect.prototype` 中添加一个 getter），或者仅使用 `top/left`，因为对于正值的 `width/height` 来说，它们和 `x/y` 一直是一样的，尤其是对于 `elem.getBoundingClientRect()` 的结果。</code></pre>
@@ -4163,16 +4163,16 @@ right:${r.right}
 elem.style.background = <span class="hljs-string">&quot;red&quot;</span>;
 alert(elem.tagName);</code></pre>
 <p>因为它使用的是窗口坐标，所以元素可能会因当前滚动位置而有所不同。</p>
-<p>````warn header=&quot;对于在窗口之外的坐标，<code>elementFromPoint</code> 返回 <code>null</code>&quot;
+<p>`&quot;对于在窗口之外的坐标，<code>elementFromPoint</code> 返回 <code>null</code>&quot;
 方法 <code>document.elementFromPoint(x,y)</code> 只对在可见区域内的坐标 <code>(x,y)</code> 起作用。</p>
 <p>如果任何坐标为负或者超过了窗口的 width/height，那么该方法就会返回 <code>null</code>。</p>
 <p>在大多数情况下，这种行为并不是一个问题，但是我们应该记住这一点。</p>
 <p>如果我们没有对其进行检查，可能就会发生下面这个典型的错误：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> elem = <span class="hljs-built_in">document</span>.elementFromPoint(x, y);
 <span class="hljs-comment">// 如果坐标恰好在窗口外，则 elem = null</span>
-*!*
+
 elem.style.background = <span class="hljs-string">&#x27;&#x27;</span>; <span class="hljs-comment">// Error!</span>
-*/!*</code></pre>
+</code></pre>
 <pre><code>
 ## 用于 &quot;fixed&quot; 定位
 
@@ -4189,13 +4189,13 @@ function createMessageUnder(elem, html) {
   // 在这里最好使用 CSS class 来定义样式
   message.style.cssText = &quot;position:fixed; color: red&quot;;
 
-*!*
+
   // 分配坐标，不要忘记 &quot;px&quot;！
   let coords = elem.getBoundingClientRect();
 
   message.style.left = coords.left + &quot;px&quot;;
   message.style.top = coords.bottom + &quot;px&quot;;
-*/!*
+
 
   message.innerHTML = html;
 
@@ -4260,9 +4260,9 @@ function getCoords(elem) {
 ```js
 function createMessageUnder(elem, html) {
   let message = document.createElement(&#x27;div&#x27;);
-  message.style.cssText = &quot;*!*position:absolute*/!*; color: red&quot;;
+  message.style.cssText = &quot;position:absolute; color: red&quot;;
 
-  let coords = *!*getCoords(elem);*/!*
+  let coords = getCoords(elem);
 
   message.style.left = coords.left + &quot;px&quot;;
   message.style.top = coords.bottom + &quot;px&quot;;
@@ -4954,10 +4954,10 @@ elem.addEventListener(..., <span class="hljs-literal">true</span>)</code></pre>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;grid&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
-*!*
+
       <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-type</span>=<span class="hljs-string">&quot;number&quot;</span>&gt;</span>Age<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">data-type</span>=<span class="hljs-string">&quot;string&quot;</span>&gt;</span>Name<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
-*/!*
+
     <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span>
@@ -5053,7 +5053,7 @@ elem.addEventListener(..., <span class="hljs-literal">true</span>)</code></pre>
 <p>代码如下：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> selectedTd;
 
-*!*
+
 table.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
   <span class="hljs-keyword">let</span> target = event.target; <span class="hljs-comment">// 在哪里点击的？</span>
 
@@ -5061,7 +5061,7 @@ table.onclick = <span class="hljs-function"><span class="hljs-keyword">function<
 
   highlight(target); <span class="hljs-comment">// 高亮显示它</span>
 };
-*/!*
+
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">highlight</span>(<span class="hljs-params">td</span>) </span>{
   <span class="hljs-keyword">if</span> (selectedTd) { <span class="hljs-comment">// 移除现有的高亮显示，如果有的话</span>
@@ -5224,18 +5224,18 @@ table.onclick = <span class="hljs-function"><span class="hljs-keyword">function<
   }
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
-<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://w3.org&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;*!*return handler()*/!*&quot;</span>&gt;</span>w3.org<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://w3.org&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;return handler()&quot;</span>&gt;</span>w3.org<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></code></pre>
 <p>我们也可以使用 <code>event.preventDefault()</code>，像这样：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handler</span>(<span class="hljs-params">event</span>) </span>{
     alert(<span class="hljs-string">&quot;...&quot;</span>);
     event.preventDefault();
   }
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
-<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://w3.org&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;*!*handler(event)*/!*&quot;</span>&gt;</span>w3.org<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://w3.org&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;handler(event)&quot;</span>&gt;</span>w3.org<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></code></pre>
 
       </fieldset>
       
@@ -5727,7 +5727,7 @@ alert(event.clientX); <span class="hljs-comment">// undefined，未知的属性�
 </tbody></table>
 <p>大多数鼠标设备只有左键和右键，对应的值就是 <code>0</code> 和 <code>2</code>。触屏设备中的点按操作也会触发类似的事件。</p>
 <p>另外，还有一个 <code>event.buttons</code> 属性，其中以整数的形式存储着当前所有按下的鼠标按键，每个按键一个比特位。在实际开发中，很少会用到这个属性，如果有需要的话，你可以在 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/buttons">MDN</a> 中找到更多细节。</p>
-<p>```warn header=&quot;过时的 <code>event.which</code>&quot;
+<p>&quot;过时的 <code>event.which</code>&quot;
 一些老代码可能会使用 <code>event.which</code> 属性来获得按下的按键。这是一个古老的非标准的方式，具有以下可能值：</p>
 <ul>
 <li><code>event.which == 1</code> —— 鼠标左键，</li>
@@ -5756,14 +5756,14 @@ alert(event.clientX); <span class="hljs-comment">// undefined，未知的属性�
 
 &lt;script&gt;
   button.onclick = function(event) {
-*!*
+
     if (event.altKey &amp;&amp; event.shiftKey) {
-*/!*
+
       alert(&#x27;Hooray!&#x27;);
     }
   };
 &lt;/script&gt;</code></pre>
-<p>```warn header=&quot;注意：在 Mac 上我们通常使用 <code>Cmd</code> 代替 <code>Ctrl</code>&quot;
+<p>&quot;注意：在 Mac 上我们通常使用 <code>Cmd</code> 代替 <code>Ctrl</code>&quot;
 在 Windows 和 Linux 上有 <code>key:Alt</code>，<code>key:Shift</code> 和 <code>key:Ctrl</code>。在 Mac 上还有：<code>key:Cmd</code>，它对应于属性 <code>metaKey</code>。</p>
 <p>在大多数情况下，当在 Windows/Linux 上使用 <code>key:Ctrl</code> 时，在 Mac 是使用 <code>key:Cmd</code>。</p>
 <p>也就说：当 Windows 用户按下 <code>key:Ctrl+Enter</code> 或 <code>key:Ctrl+A</code> 时，Mac 用户会按下 <code>key:Cmd+Enter</code> 或 <code>key:Cmd+A</code>，以此类推。</p>
@@ -5772,7 +5772,7 @@ alert(event.clientX); <span class="hljs-comment">// undefined，未知的属性�
 <p>因此，如果我们想让所有操作系统的用户都感到舒适，那么我们应该将 <code>ctrlKey</code> 与 <code>metaKey</code> 一起进行检查。</p>
 <p>对于 JS 代码，这意味着我们应该检查 <code>if (event.ctrlKey || event.metaKey)</code>。</p>
 <pre><code>
-```warn header=&quot;还有移动设备&quot;
+&quot;还有移动设备&quot;
 键盘组合是工作流的一个补充。这样，如果访客使用键盘操作 —— 它们就会起作用。
 
 但是，如果访客的设备没有键盘 —— 那么这里应该有另一种不使用键盘也能做到这一点的方式。</code></pre>
@@ -5799,7 +5799,7 @@ alert(event.clientX); <span class="hljs-comment">// undefined，未知的属性�
 <p>有多种防止选择的方法，你可以在 <a href="info:selection-range">info:selection-range</a> 一章中详细阅读。</p>
 <p>在这种情况下，最合理的方式是防止浏览器对 <code>mousedown</code> 进行操作。这样能够阻止刚刚提到的两种选择：</p>
 <pre><code class="language-html">Before...
-<span class="hljs-tag">&lt;<span class="hljs-name">b</span> <span class="hljs-attr">ondblclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;)&quot;</span> *!*<span class="hljs-attr">onmousedown</span>=<span class="hljs-string">&quot;return false&quot;</span>*/!*&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">b</span> <span class="hljs-attr">ondblclick</span>=<span class="hljs-string">&quot;alert(&#x27;Click!&#x27;)&quot;</span> <span class="hljs-attr">onmousedown</span>=<span class="hljs-string">&quot;return false&quot;</span>&gt;</span>
   Double-click me
 <span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span>
 ...After</code></pre>
@@ -5808,7 +5808,7 @@ alert(event.clientX); <span class="hljs-comment">// undefined，未知的属性�
 <pre><code class="language-smart">如果我们想禁用选择以保护我们页面的内容不被复制粘贴，那么我们可以使用另一个事件：`oncopy`。
 
 ```html autorun height=80 no-beautify
-&lt;div *!*oncopy=&quot;alert(&#x27;Copying forbidden!&#x27;);return false&quot;*/!*&gt;
+&lt;div oncopy=&quot;alert(&#x27;Copying forbidden!&#x27;);return false&quot;&gt;
   Dear user,
   The copying is forbidden for you.
   If you know JS or HTML, then you can get everything from the page source though.
@@ -6225,17 +6225,17 @@ ball.style.top = pageY - ball.offsetHeight / <span class="hljs-number">2</span> 
 <li><p>然后，在拖动球时，我们将鼠标指针相对于球的这个偏移也考虑在内，像这样：</p>
 <pre><code class="language-js"><span class="hljs-comment">// onmousemove</span>
 <span class="hljs-comment">// 球具有 position:absoute</span>
-ball.style.left = event.pageX - *!*shiftX*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;
-ball.style.top = event.pageY - *!*shiftY*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;</code></pre>
+ball.style.left = event.pageX - shiftX + <span class="hljs-string">&#x27;px&#x27;</span>;
+ball.style.top = event.pageY - shiftY + <span class="hljs-string">&#x27;px&#x27;</span>;</code></pre>
 </li>
 </ol>
 <p>能够更好地进行定位的最终代码：</p>
 <pre><code class="language-js">ball.onmousedown = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
 
-*!*
+
   <span class="hljs-keyword">let</span> shiftX = event.clientX - ball.getBoundingClientRect().left;
   <span class="hljs-keyword">let</span> shiftY = event.clientY - ball.getBoundingClientRect().top;
-*/!*
+
 
   ball.style.position = <span class="hljs-string">&#x27;absolute&#x27;</span>;
   ball.style.zIndex = <span class="hljs-number">1000</span>;
@@ -6246,8 +6246,8 @@ ball.style.top = event.pageY - *!*shiftY*/!* + <span class="hljs-string">&#x27;p
   <span class="hljs-comment">// 移动现在位于坐标 (pageX, pageY) 上的球</span>
   <span class="hljs-comment">// 将初始的偏移考虑在内</span>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">moveAt</span>(<span class="hljs-params">pageX, pageY</span>) </span>{
-    ball.style.left = pageX - *!*shiftX*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;
-    ball.style.top = pageY - *!*shiftY*/!* + <span class="hljs-string">&#x27;px&#x27;</span>;
+    ball.style.left = pageX - shiftX + <span class="hljs-string">&#x27;px&#x27;</span>;
+    ball.style.top = pageY - shiftY + <span class="hljs-string">&#x27;px&#x27;</span>;
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onMouseMove</span>(<span class="hljs-params">event</span>) </span>{
@@ -6861,10 +6861,10 @@ thumb.onpointermove = <span class="hljs-function"><span class="hljs-keyword">fun
   }
 }
 
-*!*
+
 showVisible();
 <span class="hljs-built_in">window</span>.onscroll = showVisible;
-*/!*</code></pre>
+</code></pre>
 <p>P.S. 此解决方案还有一个 <code>isVisible</code> 的变体，可以“预加载”当前文档滚动上方/下方 1 页内的图像</p>
 
       </fieldset>
@@ -7573,7 +7573,7 @@ Your email please: <span class="hljs-tag">&lt;<span class="hljs-name">input</spa
 <p>这是一个示例：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onsubmit</span>=<span class="hljs-string">&quot;return false&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;30&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Focus here and press enter&quot;</span> /&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> *!*<span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;click&#x27;)&quot;</span>*/!*&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;alert(&#x27;click&#x27;)&quot;</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></code></pre>
 <h2 id="方法：submit">方法：submit</h2>
 <p>如果要手动将表单提交到服务器，我们可以调用 <code>form.submit()</code>。</p>
@@ -8036,12 +8036,12 @@ script.src = <span class="hljs-string">&quot;my.js&quot;</span>;
 script.src = <span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js&quot;</span>
 <span class="hljs-built_in">document</span>.head.append(script);
 
-*!*
+
 script.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-comment">// 该脚本创建了一个辅助函数 &quot;_&quot;</span>
   alert(_); <span class="hljs-comment">// 该函数可用</span>
 };
-*/!*</code></pre>
+</code></pre>
 <p>因此，在 <code>onload</code> 中我们可以使用脚本中的变量，运行函数等。</p>
 <p>……如果加载失败怎么办？例如，这里没有这样的脚本（error 404）或者服务器宕机（不可用）。</p>
 <h3 id="scriptonerror">script.onerror</h3>
@@ -8051,11 +8051,11 @@ script.onload = <span class="hljs-function"><span class="hljs-keyword">function<
 script.src = <span class="hljs-string">&quot;https://example.com/404.js&quot;</span>; <span class="hljs-comment">// 没有这个脚本</span>
 <span class="hljs-built_in">document</span>.head.append(script);
 
-*!*
+
 script.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Error loading &quot;</span> + <span class="hljs-built_in">this</span>.src); <span class="hljs-comment">// Error loading https://example.com/404.js</span>
 };
-*/!*</code></pre>
+</code></pre>
 <p>请注意，在这里我们无法获取更多 HTTP error 的详细信息。我们不知道 error 是 404 还是 500 或者其他情况。只知道是加载失败了。</p>
 <pre><code class="language-warn">`onload`/`onerror` 事件仅跟踪加载本身。
 
@@ -8129,7 +8129,7 @@ https://javascript.info/article/onload-onerror/crossorigin/error.js, 1:1</code><
   alert(<span class="hljs-string">`<span class="hljs-subst">${message}</span>\n<span class="hljs-subst">${url}</span>, <span class="hljs-subst">${line}</span>:<span class="hljs-subst">${col}</span>`</span>);
 };
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> *!*<span class="hljs-attr">crossorigin</span>=<span class="hljs-string">&quot;anonymous&quot;</span>*/!* <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cors.javascript.info/article/onload-onerror/crossorigin/error.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">crossorigin</span>=<span class="hljs-string">&quot;anonymous&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cors.javascript.info/article/onload-onerror/crossorigin/error.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>现在，假设服务器提供了 <code>Access-Control-Allow-Origin</code> header，一切都正常。我们有了完整的 error 报告。</p>
 <h2 id="总结">总结</h2>
 <p>图片 <code>&lt;img&gt;</code>，外部样式，脚本和其他资源都提供了 <code>load</code> 和 <code>error</code> 事件以跟踪它们的加载：</p>
@@ -8250,10 +8250,10 @@ articleElem.innerHTML = article;</code></pre>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> article = <span class="hljs-comment">/* 从服务器获取新内容 */</span>
 articleElem.innerHTML = article;
 
-*!*
+
 <span class="hljs-keyword">let</span> snippets = articleElem.querySelectorAll(<span class="hljs-string">&#x27;pre[class*=&quot;language-&quot;]&#x27;</span>);
 snippets.forEach(Prism.highlightElem);
-*/!*</code></pre>
+</code></pre>
 <p>……但是，想象一下，代码中有很多地方可以加载内容：文章，测验，论坛帖子。我们是否需要在每个地方都附加一个高亮显示调用？那不太方便，也很容易忘记。</p>
 <p>并且，如果内容是由第三方模块加载的，该怎么办？例如，我们有一个由其他人编写的论坛，该论坛可以动态加载内容，并且我们想为其添加语法高亮显示。没有人喜欢修补第三方脚本。</p>
 <p>幸运的是，还有另一种选择。</p>
@@ -8393,12 +8393,12 @@ drawHtmlTree(selectPDomtree, 'div.select-p-domtree', 690, 320);
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;p&quot;</span>&gt;</span>Example: <span class="hljs-tag">&lt;<span class="hljs-name">i</span>&gt;</span>italic<span class="hljs-tag">&lt;/<span class="hljs-name">i</span>&gt;</span> and <span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>bold<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   <span class="hljs-keyword">let</span> range = <span class="hljs-keyword">new</span> Range();
 
   range.setStart(p, <span class="hljs-number">0</span>);
   range.setEnd(p, <span class="hljs-number">2</span>);
-*/!*
+
 
   <span class="hljs-comment">// 范围的 toString 以文本形式返回其内容（不带标签）</span>
   alert(range); <span class="hljs-comment">// Example: italic</span>
@@ -8417,12 +8417,12 @@ From <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class
 <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>Click to select<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   button.onclick = <span class="hljs-function">() =&gt;</span> {
-  *!*
+  
     <span class="hljs-keyword">let</span> range = <span class="hljs-keyword">new</span> Range();
 
     range.setStart(p, start.value);
     range.setEnd(p, end.value);
-  */!*
+  
 
     <span class="hljs-comment">// 应用选择，后文有解释</span>
     <span class="hljs-built_in">document</span>.getSelection().removeAllRanges();
@@ -9081,9 +9081,9 @@ alert(<span class="hljs-string">&quot;code&quot;</span>);</code></pre>
     } <span class="hljs-keyword">while</span> (i % <span class="hljs-number">1e3</span> != <span class="hljs-number">0</span>);
 
     <span class="hljs-keyword">if</span> (i &lt; <span class="hljs-number">1e6</span>) {
-  *!*
+  
       queueMicrotask(count);
-  */!*
+  
     }
 
   }

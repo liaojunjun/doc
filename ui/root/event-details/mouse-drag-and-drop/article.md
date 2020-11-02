@@ -125,8 +125,8 @@ ball.style.top = pageY - ball.offsetHeight / 2 + 'px';
     ```js
     // onmousemove
     // 球具有 position:absoute
-    ball.style.left = event.pageX - *!*shiftX*/!* + 'px';
-    ball.style.top = event.pageY - *!*shiftY*/!* + 'px';
+    ball.style.left = event.pageX - shiftX + 'px';
+    ball.style.top = event.pageY - shiftY + 'px';
     ```
 
 能够更好地进行定位的最终代码：
@@ -134,10 +134,10 @@ ball.style.top = pageY - ball.offsetHeight / 2 + 'px';
 ```js
 ball.onmousedown = function(event) {
 
-*!*
+
   let shiftX = event.clientX - ball.getBoundingClientRect().left;
   let shiftY = event.clientY - ball.getBoundingClientRect().top;
-*/!*
+
 
   ball.style.position = 'absolute';
   ball.style.zIndex = 1000;
@@ -148,8 +148,8 @@ ball.onmousedown = function(event) {
   // 移动现在位于坐标 (pageX, pageY) 上的球
   // 将初始的偏移考虑在内
   function moveAt(pageX, pageY) {
-    ball.style.left = pageX - *!*shiftX*/!* + 'px';
-    ball.style.top = pageY - *!*shiftY*/!* + 'px';
+    ball.style.left = pageX - shiftX + 'px';
+    ball.style.top = pageY - shiftY + 'px';
   }
 
   function onMouseMove(event) {
@@ -200,7 +200,7 @@ In action (inside `<iframe>`):
 
 例如，下面有两个 `<div>` 元素，红色的在蓝色的上面（完全覆盖）。这里，在蓝色的 `<div>` 中没有办法来捕获事件，因为红色的 `<div>` 在它上面：
 
-```html run autorun height=60
+```html autorun height=60
 <style>
   div {
     width: 50px;

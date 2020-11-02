@@ -1,7 +1,7 @@
 **答案：一个错误。**
 
 试一下：
-```js run
+```js
 function makeUser() {
   return {
     name: "John",
@@ -24,7 +24,7 @@ alert( user.ref.name ); // Error: Cannot read property 'name' of undefined
 
 我们可以重写这个函数，并返回和上面相同的值为 `undefined` 的 `this`：
 
-```js run
+```js
 function makeUser(){
   return this; // 这次这里没有对象字面量
 }
@@ -35,15 +35,15 @@ alert( makeUser().name ); // Error: Cannot read property 'name' of undefined
 
 这里有个反例：
 
-```js run
+```js
 function makeUser() {
   return {
     name: "John",
-*!*
+
     ref() {
       return this;
     }
-*/!*
+
   };
 };
 

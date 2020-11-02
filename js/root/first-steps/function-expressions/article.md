@@ -26,14 +26,14 @@ let sayHi = function() {
 
 我们还可以用 `alert` 打印这个变量值：
 
-```js run
+```js
 function sayHi() {
   alert( "Hello" );
 }
 
-*!*
+
 alert( sayHi ); // 显示函数代码
-*/!*
+
 ```
 
 注意，最后一行代码并不会运行函数，因为 `sayHi` 后没有括号。在其他编程语言中，只要提到函数的名称都会导致函数的调用执行，但 JavaScript 可不是这样。
@@ -46,7 +46,7 @@ alert( sayHi ); // 显示函数代码
 
 我们可以复制函数到其他变量：
 
-```js run no-beautify
+```js no-beautify
 function sayHi() {   // (1) 创建
   alert( "Hello" );
 }
@@ -77,7 +77,7 @@ let func = sayHi;
 这两种声明的函数是一样的。
 
 
-````smart header="为什么这里末尾会有个分号？"
+`为什么这里末尾会有个分号？"
 你可能想知道，为什么函数表达式结尾有一个分号 `;`，而函数声明没有：
 
 ```js
@@ -87,7 +87,7 @@ function sayHi() {
 
 let sayHi = function() {
   // ...
-}*!*;*/!*
+};
 ```
 
 答案很简单：
@@ -112,13 +112,13 @@ let sayHi = function() {
 
 函数需要提出 `question`（问题），并根据用户的回答，调用 `yes()` 或 `no()`：
 
-```js run
-*!*
+```js
+
 function ask(question, yes, no) {
   if (confirm(question)) yes()
   else no();
 }
-*/!*
+
 
 function showOk() {
   alert( "You agreed." );
@@ -140,26 +140,26 @@ ask("Do you agree?", showOk, showCancel);
 
 我们可以用函数表达式对同样的函数进行大幅简写：
 
-```js run no-beautify
+```js no-beautify
 function ask(question, yes, no) {
   if (confirm(question)) yes()
   else no();
 }
 
-*!*
+
 ask(
   "Do you agree?",
   function() { alert("You agreed."); },
   function() { alert("You canceled the execution."); }
 );
-*/!*
+
 ```
 
 这里直接在 `ask(...)` 调用内进行函数声明。这两个函数没有名字，所以叫 **匿名函数**。这样的函数在 `ask` 外无法访问（因为没有对它们分配变量），不过这正是我们想要的。
 
 这样的代码在我们的脚本中非常常见，这正符合 JavaScript 语言的思想。
 
-```smart header="一个函数是表示一个“行为”的值"
+一个函数是表示一个“行为”的值"
 字符串或数字等常规值代表 **数据**。
 
 函数可以被视为一个 **行为（action）**。
@@ -209,10 +209,10 @@ ask(
 
 例如下面的代码会正常工作：
 
-```js run refresh untrusted
-*!*
+```js refresh untrusted
+
 sayHi("John"); // Hello, John
-*/!*
+
 
 function sayHi(name) {
   alert( `Hello, ${name}` );
@@ -223,10 +223,10 @@ function sayHi(name) {
 
 ……如果它是一个函数表达式，它就不会工作：
 
-```js run refresh untrusted
-*!*
+```js refresh untrusted
+
 sayHi("John"); // error!
-*/!*
+
 
 let sayHi = function(name) {  // (*) no magic any more
   alert( `Hello, ${name}` );
@@ -243,7 +243,7 @@ let sayHi = function(name) {  // (*) no magic any more
 
 如果我们使用函数声明，以下则代码不能如愿工作：
 
-```js run
+```js
 let age = prompt("What is your age?", 18);
 
 // 有条件地声明一个函数
@@ -262,30 +262,30 @@ if (age < 18) {
 }
 
 // ……稍后使用
-*!*
+
 welcome(); // Error: welcome is not defined
-*/!*
+
 ```
 
 这是因为函数声明只在它所在的代码块中可见。
 
 下面是另一个例子：
 
-```js run
+```js
 let age = 16; // 拿 16 作为例子
 
 if (age < 18) {
-*!*
+
   welcome();               // \   (运行)
-*/!*
+
                            //  |
   function welcome() {     //  |  
     alert("Hello!");       //  |  函数声明在声明它的代码块内任意位置都可用
   }                        //  |  
                            //  |
-*!*
+
   welcome();               // /   (运行)
-*/!*
+
 
 } else {
 
@@ -297,9 +297,9 @@ if (age < 18) {
 // 在这里，我们在花括号外部调用函数，我们看不到它们内部的函数声明。
 
 
-*!*
+
 welcome(); // Error: welcome is not defined
-*/!*
+
 ```
 
 我们怎么才能让 `welcome` 在 `if` 外可见呢？
@@ -308,7 +308,7 @@ welcome(); // Error: welcome is not defined
 
 下面的代码可以如愿运行：
 
-```js run
+```js
 let age = prompt("What is your age?", 18);
 
 let welcome;
@@ -327,27 +327,27 @@ if (age < 18) {
 
 }
 
-*!*
+
 welcome(); // 现在可以了
-*/!*
+
 ```
 
 或者我们可以使用问号运算符 `?` 来进一步对代码进行简化：
 
-```js run
+```js
 let age = prompt("What is your age?", 18);
 
 let welcome = (age < 18) ?
   function() { alert("Hello!"); } :
   function() { alert("Greetings!"); };
 
-*!*
+
 welcome(); // 现在可以了
-*/!*
+
 ```
 
 
-```smart header="什么时候选择函数声明与函数表达式？"
+什么时候选择函数声明与函数表达式？"
 根据经验，当我们需要声明一个函数时，首先考虑函数声明语法。它能够为组织代码提供更多的灵活性。因为我们可以在声明这些函数之前调用这些函数。
 
 这对代码可读性也更好，因为在代码中查找 `function f(…) {…}` 比 `let f = function(…) {…}` 更容易。函数声明更“醒目”。

@@ -14,7 +14,7 @@ JavaScript 从一开始就有了原型继承。这是 JavaScript 编程语言的
 
 下面是一个例子：
 
-```js run
+```js
 let animal = {
   eats: true
 };
@@ -23,9 +23,9 @@ function Rabbit(name) {
   this.name = name;
 }
 
-*!*
+
 Rabbit.prototype = animal;
-*/!*
+
 
 let rabbit = new Rabbit("White Rabbit"); //  rabbit.__proto__ == animal
 
@@ -40,7 +40,7 @@ alert( rabbit.eats ); // true
 
 在上图中，`"prototype"` 是一个水平箭头，表示一个常规属性，`[[Prototype]]` 是垂直的，表示 `rabbit` 继承自 `animal`。
 
-```smart header="`F.prototype` 仅用在 `new F` 时"
+`F.prototype` 仅用在 `new F` 时"
 `F.prototype` 属性仅在 `new F` 被调用时使用，它为新对象的 `[[Prototype]]` 赋值。
 
 如果在创建之后，`F.prototype` 属性有了变化（`F.prototype = <another object>`），那么通过 `new F` 创建的新对象也将随之拥有新的对象作为 `[[Prototype]]`，但已经存在的对象将保持旧有的值。
@@ -66,7 +66,7 @@ Rabbit.prototype = { constructor: Rabbit };
 
 我们可以检查一下：
 
-```js run
+```js
 function Rabbit() {}
 // by default:
 // Rabbit.prototype = { constructor: Rabbit }
@@ -76,7 +76,7 @@ alert( Rabbit.prototype.constructor == Rabbit ); // true
 
 通常，如果我们什么都不做，`constructor` 属性可以通过 `[[Prototype]]` 给所有 rabbits 使用：
 
-```js run
+```js
 function Rabbit() {}
 // by default:
 // Rabbit.prototype = { constructor: Rabbit }
@@ -92,7 +92,7 @@ alert(rabbit.constructor == Rabbit); // true (from prototype)
 
 像这样：
 
-```js run
+```js
 function Rabbit(name) {
   this.name = name;
   alert(name);
@@ -100,9 +100,9 @@ function Rabbit(name) {
 
 let rabbit = new Rabbit("White Rabbit");
 
-*!*
+
 let rabbit2 = new rabbit.constructor("Black Rabbit");
-*/!*
+
 ```
 
 当我们有一个对象，但不知道它使用了哪个构造器（例如它来自第三方库），并且我们需要创建另一个类似的对象时，用这种方法就很方便。
@@ -117,16 +117,16 @@ let rabbit2 = new rabbit.constructor("Black Rabbit");
 
 例如：
 
-```js run
+```js
 function Rabbit() {}
 Rabbit.prototype = {
   jumps: true
 };
 
 let rabbit = new Rabbit();
-*!*
+
 alert(rabbit.constructor === Rabbit); // false
-*/!*
+
 ```
 
 因此，为了确保正确的 `"constructor"`，我们可以选择添加/删除属性到默认 `"prototype"`，而不是将其整个覆盖：
@@ -145,9 +145,9 @@ Rabbit.prototype.jumps = true
 ```js
 Rabbit.prototype = {
   jumps: true,
-*!*
+
   constructor: Rabbit
-*/!*
+
 };
 
 // 这样的 constructor 也是正确的，因为我们手动添加了它

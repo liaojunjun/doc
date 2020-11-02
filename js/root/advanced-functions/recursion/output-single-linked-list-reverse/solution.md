@@ -4,7 +4,7 @@
 
 我们需要先输出列表的其它元素，**然后** 输出当前的元素：
 
-```js run
+```js
 let list = {
   value: 1,
   next: {
@@ -39,7 +39,7 @@ printReverseList(list);
 
 因此，我们可以做的就是直接按顺序遍历每个元素，并把它们存到一个数组中，然后反向输出我们存储在数组中的元素：
 
-```js run
+```js
 let list = {
   value: 1,
   next: {

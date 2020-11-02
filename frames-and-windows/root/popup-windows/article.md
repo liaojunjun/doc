@@ -42,7 +42,7 @@ button.onclick = () => {
 
 试试运行一下这段代码：
 
-```js run
+```js
 // 3 秒后打开弹窗
 setTimeout(() => window.open('http://google.com'), 3000);
 ```
@@ -51,7 +51,7 @@ setTimeout(() => window.open('http://google.com'), 3000);
 
 ……如果我们减少延迟，则弹窗在 Firefox 中也会被打开：
 
-```js run
+```js
 // 1 秒后打开弹窗
 setTimeout(() => window.open('http://google.com'), 1000);
 ```
@@ -91,7 +91,7 @@ params
 
 让我们打开一个包含最小功能集的新窗口，来看看哪些功能是浏览器允许禁用的：
 
-```js run
+```js
 let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
 width=0,height=0,left=-1000,top=-1000`;
 
@@ -102,7 +102,7 @@ open('/', 'test', params);
 
 让我们添加正常的定位选项和合理的 `width`、`height`、`left` 和 `top` 坐标：
 
-```js run
+```js
 let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
 width=600,height=300,left=100,top=100`;
 
@@ -132,7 +132,7 @@ newWin.document.write("Hello, world!");
 
 这里，我们在其加载完成后，修改其中的内容：
 
-```js run
+```js
 let newWindow = open('/', 'example', 'width=300,height=300')
 newWindow.focus();
 
@@ -140,15 +140,15 @@ alert(newWindow.location.href); // (*) about:blank，加载尚未开始
 
 newWindow.onload = function() {
   let html = `<div style="font-size:30px">Welcome!</div>`;
-*!*
+
   newWindow.document.body.insertAdjacentHTML('afterbegin', html);
-*/!*
+
 };
 ```
 
 请注意：在刚刚进行了 `window.open` 的时候，新窗口还没有加载完成。我们可以通过 `(*)` 行中的 `alert` 证实这一点。因此，我们需要等待 `onload` 以对新窗口进行更改。我们也可以对 `newWin.document` 使用 `DOMContentLoaded` 处理程序。
 
-```warn header="同源策略"
+"同源策略"
 只有在窗口是同源的时，窗口才能自由访问彼此的内容（`相同的协议://domain:port`）。
 
 否则，例如，如果主窗口来自于 `site.com`，弹窗来自于 `gmail.com`，则处于安全性考虑，这两个窗口不能访问彼此的内容。有关详细信息，请参见 <info:cross-window-communication> 一章。
@@ -160,7 +160,7 @@ newWindow.onload = function() {
 
 如果你运行下面这段代码，它将用 "Test" 替换 opener（也就是当前的）窗口的内容：
 
-```js run
+```js
 let newWin = window.open("about:blank", "hello", "width=200,height=200");
 
 newWin.document.write(
@@ -182,7 +182,7 @@ newWin.document.write(
 
 这段代码加载并关闭了窗口：
 
-```js run
+```js
 let newWindow = open('/', 'example', 'width=300,height=300');
 
 newWindow.onload = function() {
@@ -210,11 +210,11 @@ newWindow.onload = function() {
 
 还有 `window.onresize` 事件。
 
-```warn header="仅对于弹窗"
+"仅对于弹窗"
 为了防止滥用，浏览器通常会阻止这些方法。它们仅在我们打开的，没有其他选项卡的弹窗中能够可靠地工作。
 ```
 
-```warn header="没有最小化/最大化"
+"没有最小化/最大化"
 JavaScript 无法最小化或者最大化一个窗口。这些操作系统级别的功能对于前端开发者而言是隐藏的。
 
 移动或者调整大小的方法不适用于最小化/最大化的窗口。
@@ -241,7 +241,7 @@ JavaScript 无法最小化或者最大化一个窗口。这些操作系统级别
 
 在过去，恶意网站滥用了这些方法。例如，看这段代码:
 
-```js run
+```js
 window.onblur = () => window.focus();
 ```
 

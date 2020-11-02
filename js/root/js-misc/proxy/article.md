@@ -19,7 +19,7 @@ let proxy = new Proxy(target, handler)
 
 首先，让我们创建一个没有任何捕捉器的代理（Proxy）：
 
-```js run
+```js
 let target = {};
 let proxy = new Proxy(target, {}); // 空的 handler 对象
 
@@ -69,7 +69,7 @@ Proxy 捕捉器会拦截这些方法的调用。它们在 [proxy 规范](https:/
 | `[[GetOwnProperty]]` | `getOwnPropertyDescriptor` | [Object.getOwnPropertyDescriptor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor), `for..in`, `Object.keys/values/entries` |
 | `[[OwnPropertyKeys]]` | `ownKeys` | [Object.getOwnPropertyNames](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames), [Object.getOwnPropertySymbols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertySymbols), `for..in`, `Object/keys/values/entries` |
 
-```warn header="不变量（Invariant）"
+"不变量（Invariant）"
 JavaScript 强制执行某些不变量 — 内部方法和捕捉器必须满足的条件。
 
 其中大多数用于返回值：
@@ -105,7 +105,7 @@ JavaScript 强制执行某些不变量 — 内部方法和捕捉器必须满足�
 
 通常，当人们尝试获取不存在的数组项时，他们会得到 `undefined`，但是我们在这将常规数组包装到代理（proxy）中，以捕获读取操作，并在没有要读取的属性的时返回 `0`：
 
-```js run
+```js
 let numbers = [0, 1, 2];
 
 numbers = new Proxy(numbers, {
@@ -118,10 +118,10 @@ numbers = new Proxy(numbers, {
   }
 });
 
-*!*
+
 alert( numbers[1] ); // 1
 alert( numbers[123] ); // 0（没有这个数组项）
-*/!*
+
 ```
 
 正如我们所看到的，使用 `get` 捕捉器很容易实现。
@@ -130,7 +130,7 @@ alert( numbers[123] ); // 0（没有这个数组项）
 
 想象一下，我们有一本词典，上面有短语及其翻译：
 
-```js run
+```js
 let dictionary = {
   'Hello': 'Hola',
   'Bye': 'Adiós'
@@ -144,16 +144,16 @@ alert( dictionary['Welcome'] ); // undefined
 
 为此，我们将把 `dictionary` 包装进一个拦截读取操作的代理：
 
-```js run
+```js
 let dictionary = {
   'Hello': 'Hola',
   'Bye': 'Adiós'
 };
 
 dictionary = new Proxy(dictionary, {
-*!*
+
   get(target, phrase) { // 拦截读取属性操作
-*/!*
+
     if (phrase in target) { //如果词典中有该短语
       return target[phrase]; // 返回其翻译
     } else {
@@ -166,9 +166,9 @@ dictionary = new Proxy(dictionary, {
 // 在词典中查找任意短语！
 // 最坏的情况也只是它们没有被翻译。
 alert( dictionary['Hello'] ); // Hola
-*!*
+
 alert( dictionary['Welcome to Proxy']); // Welcome to Proxy（没有被翻译）
-*/!*
+
 ```
 
 ````smart
@@ -198,13 +198,13 @@ dictionary = new Proxy(dictionary, ...);
 
 让我们用它来验证新值：
 
-```js run
+```js
 let numbers = [];
 
 numbers = new Proxy(numbers, { // (*)
-*!*
+
   set(target, prop, val) { // 拦截写入属性操作
-*/!*
+
     if (typeof val == 'number') {
       target[prop] = val;
       return true;
@@ -218,9 +218,9 @@ numbers.push(1); // 添加成功
 numbers.push(2); // 添加成功
 alert("Length is: " + numbers.length); // 2
 
-*!*
+
 numbers.push("test"); // TypeError（proxy 的 'set' 返回 false）
-*/!*
+
 
 alert("This line is never reached (error in the line above)");
 ```
@@ -231,7 +231,7 @@ alert("This line is never reached (error in the line above)");
 
 因此，代码简洁明了。
 
-```warn header="别忘了返回 `true`"
+"别忘了返回 `true`"
 如上所述，要保持不变量。
 
 对于 `set` 操作，它必须在成功写入时返回 `true`。
@@ -253,7 +253,7 @@ alert("This line is never reached (error in the line above)");
 
 在下面这个示例中，我们使用 `ownKeys` 捕捉器拦截 `for..in` 对 `user` 的遍历，并使用 `Object.keys` 和 `Object.values` 来跳过以下划线 `_` 开头的属性：
 
-```js run
+```js
 let user = {
   name: "John",
   age: 30,
@@ -261,9 +261,9 @@ let user = {
 };
 
 user = new Proxy(user, {
-*!*
+
   ownKeys(target) {
-*/!*
+
     return Object.keys(target).filter(key => !key.startsWith('_'));
   }
 });
@@ -280,13 +280,13 @@ alert( Object.values(user) ); // John,30
 
 尽管如此，但如果我们返回对象中不存在的键，`Object.keys` 并不会列出这些键：
 
-```js run
+```js
 let user = { };
 
 user = new Proxy(user, {
-*!*
+
   ownKeys(target) {
-*/!*
+
     return ['a', 'b', 'c'];
   }
 });
@@ -300,7 +300,7 @@ alert( Object.keys(user) ); // <empty>
 
 这是关于此的一个例子：
 
-```js run
+```js
 let user = { };
 
 user = new Proxy(user, {
@@ -329,7 +329,7 @@ alert( Object.keys(user) ); // a, b, c
 
 从技术上讲，我们也是能访问到这样的属性的：
 
-```js run
+```js
 let user = {
   name: "John",
   _password: "secret"
@@ -348,25 +348,25 @@ alert(user._password); // secret
 
 代码如下：
 
-```js run
+```js
 let user = {
   name: "John",
   _password: "***"
 };
 
 user = new Proxy(user, {
-*!*
+
   get(target, prop) {
-*/!*
+
     if (prop.startsWith('_')) {
       throw new Error("Access denied");
     }
     let value = target[prop];
     return (typeof value === 'function') ? value.bind(target) : value; // (*)
   },
-*!*
+
   set(target, prop, val) { // 拦截属性写入
-*/!*
+
     if (prop.startsWith('_')) {
       throw new Error("Access denied");
     } else {
@@ -374,9 +374,9 @@ user = new Proxy(user, {
       return true;
     }
   },
-*!*
+
   deleteProperty(target, prop) { // 拦截属性删除
-*/!*
+
     if (prop.startsWith('_')) {
       throw new Error("Access denied");
     } else {
@@ -384,9 +384,9 @@ user = new Proxy(user, {
       return true;
     }
   },
-*!*
+
   ownKeys(target) { // 拦截读取属性列表
-*/!*
+
     return Object.keys(target).filter(key => !key.startsWith('_'));
   }
 });
@@ -416,9 +416,9 @@ for(let key in user) alert(key); // name
 get(target, prop) {
   // ...
   let value = target[prop];
-*!*
+
   return (typeof value === 'function') ? value.bind(target) : value; // (*)
-*/!*
+
 }
 ```
 
@@ -447,7 +447,7 @@ user = {
 
 因此，在任何地方都不应使用这种代理。
 
-```smart header="类的私有属性"
+类的私有属性"
 现代 JavaScript 引擎原生支持 class 中的私有属性，这些私有属性以 `#` 为前缀。它们在 <info:private-protected-properties-methods> 一章中有详细描述。无需代理（proxy）。
 
 但是，此类属性有其自身的问题。特别是，它们是不可继承的。
@@ -477,24 +477,24 @@ let range = {
 
 示例如下
 
-```js run
+```js
 let range = {
   start: 1,
   end: 10
 };
 
 range = new Proxy(range, {
-*!*
+
   has(target, prop) {
-*/!*
+
     return prop >= target.start && prop <= target.end;
   }
 });
 
-*!*
+
 alert(5 in range); // true
 alert(50 in range); // false
-*/!*
+
 ```
 
 漂亮的语法糖，不是吗？而且实现起来非常简单。
@@ -515,7 +515,7 @@ alert(50 in range); // false
 
 这是以前的基于函数的实现：
 
-```js run
+```js
 function delay(f, ms) {
   // 返回一个包装器（wrapper），该包装器将在时间到了的时候将调用转发给函数 f
   return function() { // (*)
@@ -537,7 +537,7 @@ sayHi("John"); // Hello, John! (after 3 seconds)
 
 但是包装函数不会转发属性读取/写入操作或者任何其他操作。进行包装后，就失去了对原始函数属性的访问，例如 `name`，`length` 和其他属性：
 
-```js run
+```js
 function delay(f, ms) {
   return function() {
     setTimeout(() => f.apply(this, arguments), ms);
@@ -548,22 +548,22 @@ function sayHi(user) {
   alert(`Hello, ${user}!`);
 }
 
-*!*
+
 alert(sayHi.length); // 1（函数的 length 是函数声明中的参数个数）
-*/!*
+
 
 sayHi = delay(sayHi, 3000);
 
-*!*
+
 alert(sayHi.length); // 0（在包装器声明中，参数个数为 0)
-*/!*
+
 ```
 
 `Proxy` 的功能要强大得多，因为它可以将所有东西转发到目标对象。
 
 让我们使用 `Proxy` 来替换掉包装函数：
 
-```js run
+```js
 function delay(f, ms) {
   return new Proxy(f, {
     apply(target, thisArg, args) {
@@ -578,9 +578,9 @@ function sayHi(user) {
 
 sayHi = delay(sayHi, 3000);
 
-*!*
+
 alert(sayHi.length); // 1 (*) proxy 将“获取 length”的操作转发给目标对象
-*/!*
+
 
 sayHi("John"); // Hello, John!（3 秒后）
 ```
@@ -611,7 +611,7 @@ sayHi("John"); // Hello, John!（3 秒后）
 
 例如：
 
-```js run
+```js
 let user = {};
 
 Reflect.set(user, 'name', 'John');
@@ -627,7 +627,7 @@ alert(user.name); // John
 
 在下面这个示例中，捕捉器 `get` 和 `set` 均透明地（好像它们都不存在一样）将读取/写入操作转发到对象，并显示一条消息：
 
-```js run
+```js
 let user = {
   name: "John",
 };
@@ -635,15 +635,15 @@ let user = {
 user = new Proxy(user, {
   get(target, prop, receiver) {
     alert(`GET ${prop}`);
-*!*
+
     return Reflect.get(target, prop, receiver); // (1)
-*/!*
+
   },
   set(target, prop, val, receiver) {
     alert(`SET ${prop}=${val}`);
-*!*
+
     return Reflect.set(target, prop, val, receiver); // (2)
-*/!*
+
   }
 });
 
@@ -668,7 +668,7 @@ user.name = "Pete"; // 显示 "SET name=Pete"
 
 这是对 `user` 对象对一个代理（proxy）：
 
-```js run
+```js
 let user = {
   _name: "Guest",
   get name() {
@@ -676,13 +676,13 @@ let user = {
   }
 };
 
-*!*
+
 let userProxy = new Proxy(user, {
   get(target, prop, receiver) {
     return target[prop];
   }
 });
-*/!*
+
 
 alert(userProxy.name); // Guest
 ```
@@ -693,7 +693,7 @@ alert(userProxy.name); // Guest
 
 另一个对象 `admin` 从 `user` 继承后，我们可以观察到错误的行为：
 
-```js run
+```js
 let user = {
   _name: "Guest",
   get name() {
@@ -707,7 +707,7 @@ let userProxy = new Proxy(user, {
   }
 });
 
-*!*
+
 let admin = {
   __proto__: userProxy,
   _name: "Admin"
@@ -715,7 +715,7 @@ let admin = {
 
 // 期望输出：Admin
 alert(admin.name); // 输出：Guest (?!?)
-*/!*
+
 ```
 
 读取 `admin.name` 应该返回 `"Admin"`，而不是 `"Guest"`！
@@ -740,7 +740,7 @@ alert(admin.name); // 输出：Guest (?!?)
 
 这是更正后的变体：
 
-```js run
+```js
 let user = {
   _name: "Guest",
   get name() {
@@ -750,9 +750,9 @@ let user = {
 
 let userProxy = new Proxy(user, {
   get(target, prop, receiver) { // receiver = admin
-*!*
+
     return Reflect.get(target, prop, receiver); // (*)
-*/!*
+
   }
 });
 
@@ -762,9 +762,9 @@ let admin = {
   _name: "Admin"
 };
 
-*!*
+
 alert(admin.name); // Admin
-*/!*
+
 ```
 
 现在 `receiver` 保留了对正确 `this` 的引用（即 `admin`），该引用是在 `(*)` 行中被通过 `Reflect.get` 传递给 getter 的。
@@ -773,7 +773,7 @@ alert(admin.name); // Admin
 
 ```js
 get(target, prop, receiver) {
-  return Reflect.get(*!*...arguments*/!*);
+  return Reflect.get(...arguments);
 }
 ```
 
@@ -798,29 +798,29 @@ get(target, prop, receiver) {
 
 例如：
 
-```js run
+```js
 let map = new Map();
 
 let proxy = new Proxy(map, {});
 
-*!*
+
 proxy.set('test', 1); // Error
-*/!*
+
 ```
 
 在内部，一个 `Map` 将所有数据存储在其 `[[MapData]]` 内部插槽中。代理对象没有这样的插槽。[内建方法 `Map.prototype.set`](https://tc39.es/ecma262/#sec-map.prototype.set) 方法试图访问内部属性 `this.[[MapData]]`，但由于 `this=proxy`，在 `proxy` 中无法找到它，只能失败。
 
 幸运的是，这儿有一种解决方法：
 
-```js run
+```js
 let map = new Map();
 
 let proxy = new Proxy(map, {
   get(target, prop, receiver) {
     let value = Reflect.get(...arguments);
-*!*
+
     return typeof value == 'function' ? value.bind(target) : value;
-*/!*
+
   }
 });
 
@@ -832,7 +832,7 @@ alert(proxy.get('test')); // 1（工作了！）
 
 与前面的示例不同，`proxy.set(...)` 内部 `this` 的值并不是 `proxy`，而是原始的 `map`。因此，当`set` 捕捉器的内部实现尝试访问 `this.[[MapData]]` 内部插槽时，它会成功。
 
-```smart header="`Array` 没有内部插槽"
+`Array` 没有内部插槽"
 一个值得注意的例外：内建 `Array` 没有使用内部插槽。那是出于历史原因，因为它出现于很久以前。
 
 所以，代理数组时没有这种问题。
@@ -844,7 +844,7 @@ alert(proxy.get('test')); // 1（工作了！）
 
 例如，`getName()` 方法访问私有的 `#name` 属性，并在代理后中断（break）：
 
-```js run
+```js
 class User {
   #name = "Guest";
 
@@ -857,9 +857,9 @@ let user = new User();
 
 user = new Proxy(user, {});
 
-*!*
+
 alert(user.getName()); // Error
-*/!*
+
 ```
 
 原因是私有字段是通过内部插槽实现的。JavaScript 在访问它们时不使用 `[[Get]]/[[Set]]`。
@@ -868,7 +868,7 @@ alert(user.getName()); // Error
 
 再次，带有 `bind` 方法的解决方案使它恢复正常：
 
-```js run
+```js
 class User {
   #name = "Guest";
 
@@ -897,7 +897,7 @@ alert(user.getName()); // Guest
 
 所以，如果我们使用原始对象作为键，然后对其进行代理，之后却无法找到代理了：
 
-```js run
+```js
 let allUsers = new Set();
 
 class User {
@@ -913,14 +913,14 @@ alert(allUsers.has(user)); // true
 
 user = new Proxy(user, {});
 
-*!*
+
 alert(allUsers.has(user)); // false
-*/!*
+
 ```
 
 如我们所见，进行代理后，我们在 `allUsers` 中找不到 `user`，因为代理是一个不同的对象。
 
-```warn header="Proxy 无法拦截严格相等性检查 `===`"
+"Proxy 无法拦截严格相等性检查 `===`"
 Proxy 可以拦截许多操作符，例如 `new`（使用 `construct`），`in`（使用 `has`），`delete`（使用 `deleteProperty`）等。
 
 但是没有办法拦截对于对象的严格相等性检查。一个对象只严格等于其自身，没有其他值。
@@ -946,7 +946,7 @@ let {proxy, revoke} = Proxy.revocable(target, handler)
 
 这是一个例子：
 
-```js run
+```js
 let object = {
   data: "Valuable data"
 };
@@ -967,10 +967,10 @@ alert(proxy.data); // Error
 
 我们还可以将 `revoke` 存储在 `WeakMap` 中，以更便于通过代理对象轻松找到它：
 
-```js run
-*!*
+```js
+
 let revokes = new WeakMap();
-*/!*
+
 
 let object = {
   data: "Valuable data"

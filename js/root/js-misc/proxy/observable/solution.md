@@ -3,7 +3,7 @@
 1. 无论 `.observe(handler)` 何时被调用，我们都需要在某个地方记住 handler，以便以后可以调用它。我们可以使用 Symbol 作为属性键，将 handler 直接存储在对象中。
 2. 我们需要一个带有 `set` 陷阱的 proxy 来在发生任何更改时调用 handler。 
 
-```js run
+```js
 let handlers = Symbol('handlers');
 
 function makeObservable(target) {

@@ -4,7 +4,7 @@
 
 所以它们可以，例如，返回相同的外部定义的对象 `obj`：
 
-```js run no-beautify
+```js no-beautify
 let obj = {};
 
 function A() { return obj; }

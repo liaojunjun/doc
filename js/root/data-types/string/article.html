@@ -94,7 +94,7 @@ alert( <span class="hljs-string">&quot;\u{1F60D}&quot;</span> ); <span class="hl
 <p>所有的特殊字符都以反斜杠字符 <code>\</code> 开始。它也被称为“转义字符”。</p>
 <p>如果我们想要在字符串中插入一个引号，我们也会使用它。</p>
 <p>例如：</p>
-<pre><code class="language-js">alert( <span class="hljs-string">&#x27;I*!*\&#x27;*/!*m the Walrus!&#x27;</span> ); <span class="hljs-comment">// *!*I&#x27;m*/!* the Walrus!</span></code></pre>
+<pre><code class="language-js">alert( <span class="hljs-string">&#x27;I\&#x27;m the Walrus!&#x27;</span> ); <span class="hljs-comment">// I&#x27;m the Walrus!</span></code></pre>
 <p>正如你所看到的，我们必须在内部引号前加上反斜杠 <code>\&#39;</code>，否则它将表示字符串结束。</p>
 <p>当然，只有与外部闭合引号相同的引号才需要转义。因此，作为一个更优雅的解决方案，我们可以改用双引号或者反引号：</p>
 <pre><code class="language-js">alert( <span class="hljs-string">`I&#x27;m the Walrus!`</span> ); <span class="hljs-comment">// I&#x27;m the Walrus!</span></code></pre>
@@ -106,7 +106,7 @@ alert( <span class="hljs-string">&quot;\u{1F60D}&quot;</span> ); <span class="hl
 <p><code>length</code> 属性表示字符串长度：</p>
 <pre><code class="language-js">alert( <span class="hljs-string">`My\n`</span>.length ); <span class="hljs-comment">// 3</span></code></pre>
 <p>注意 <code>\n</code> 是一个单独的“特殊”字符，所以长度确实是 <code>3</code>。</p>
-<p>```warn header=&quot;<code>length</code> 是一个属性&quot;
+<p>&quot;<code>length</code> 是一个属性&quot;
 掌握其他编程语言的人，有时会错误地调用 <code>str.length()</code> 而不是 <code>str.length</code>。这是行不通的。</p>
 <p>请注意 <code>str.length</code> 是一个数字属性，而不是函数。后面不需要添加括号。</p>
 <pre><code>
@@ -114,7 +114,7 @@ alert( <span class="hljs-string">&quot;\u{1F60D}&quot;</span> ); <span class="hl
 
 要获取在 `pos` 位置的一个字符，可以使用方括号 `[pos]` 或者调用 [str.charAt(pos)](mdn:js/String/charAt) 方法。第一个字符从零位置开始：
 
-```js run
+```js
 let str = `Hello`;
 
 // 第一个字符
@@ -188,19 +188,19 @@ alert( str.indexOf(<span class="hljs-string">&#x27;id&#x27;</span>, <span class=
 <pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;As sly as a fox, as strong as an ox&quot;</span>;
 <span class="hljs-keyword">let</span> target = <span class="hljs-string">&quot;as&quot;</span>;
 
-*!*
+
 <span class="hljs-keyword">let</span> pos = <span class="hljs-number">-1</span>;
 <span class="hljs-keyword">while</span> ((pos = str.indexOf(target, pos + <span class="hljs-number">1</span>)) != <span class="hljs-number">-1</span>) {
   alert( pos );
 }
-*/!*</code></pre>
+</code></pre>
 <p>```smart header=&quot;<code>str.lastIndexOf(substr, pos)</code>&quot;
 还有一个类似的方法 <a href="mdn:js/String/lastIndexOf">str.lastIndexOf(substr, position)</a>，它从字符串的末尾开始搜索到开头。</p>
 <p>它会以相反的顺序列出这些事件。</p>
 <pre><code>
 在 `if` 测试中 `indexOf` 有一点不方便。我们不能像这样把它放在 `if` 中：
 
-```js run
+```js
 let str = &quot;Widget with id&quot;;
 
 if (str.indexOf(&quot;Widget&quot;)) {
@@ -210,9 +210,9 @@ if (str.indexOf(&quot;Widget&quot;)) {
 <p>因此我们应该检查 <code>-1</code>，像这样：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Widget with id&quot;</span>;
 
-*!*
+
 <span class="hljs-keyword">if</span> (str.indexOf(<span class="hljs-string">&quot;Widget&quot;</span>) != <span class="hljs-number">-1</span>) {
-*/!*
+
     alert(<span class="hljs-string">&quot;We found it&quot;</span>); <span class="hljs-comment">// 现在工作了！</span>
 }</code></pre>
 <h4 id="按位（bitwise）not-技巧">按位（bitwise）NOT 技巧</h4>
@@ -222,9 +222,9 @@ if (str.indexOf(&quot;Widget&quot;)) {
 <pre><code class="language-js">alert( ~<span class="hljs-number">2</span> ); <span class="hljs-comment">// -3，和 -(2+1) 相同</span>
 alert( ~<span class="hljs-number">1</span> ); <span class="hljs-comment">// -2，和 -(1+1) 相同</span>
 alert( ~<span class="hljs-number">0</span> ); <span class="hljs-comment">// -1，和 -(0+1) 相同</span>
-*!*
+
 alert( ~<span class="hljs-number">-1</span> ); <span class="hljs-comment">// 0，和 -(-1+1) 相同</span>
-*/!*</code></pre>
+</code></pre>
 <p>正如我们看到这样，只有当 <code>n == -1</code> 时，<code>~n</code> 才为零（适用于任何 32-bit 带符号的整数 <code>n</code>）。</p>
 <p>因此，仅当 <code>indexOf</code> 的结果不是 <code>-1</code> 时，检查 <code>if ( ~str.indexOf(&quot;...&quot;) )</code> 才为真。换句话说，当有匹配时。</p>
 <p>人们用它来简写 <code>indexOf</code> 检查：</p>
@@ -255,7 +255,7 @@ alert( <span class="hljs-string">&quot;Widget&quot;</span>.endsWith(<span class=
 : 返回字符串从 <code>start</code> 到（但不包括）<code>end</code> 的部分。</p>
 <pre><code>例如：
 
-```js run
+```js
 let str = &quot;stringify&quot;;
 alert( str.slice(0, 5) ); // &#x27;strin&#x27;，从 0 到 5 的子字符串（不包括 5）
 alert( str.slice(0, 1) ); // &#x27;s&#x27;，从 0 到 1，但不包括 1，所以只有在 0 处的字符
@@ -263,15 +263,15 @@ alert( str.slice(0, 1) ); // &#x27;s&#x27;，从 0 到 1，但不包括 1，所�
 
 如果没有第二个参数，`slice` 会一直运行到字符串末尾：
 
-```js run
-let str = &quot;st*!*ringify*/!*&quot;;
+```js
+let str = &quot;stringify&quot;;
 alert( str.slice(2) ); // 从第二个位置直到结束
 ```
 
 `start/end` 也有可能是负值。它们的意思是起始位置从字符串结尾计算：
 
-```js run
-let str = &quot;strin*!*gif*/!*y&quot;;
+```js
+let str = &quot;stringify&quot;;
 
 // 从右边的第四个位置开始，在右边的第一个位置结束
 alert( str.slice(-4, -1) ); // &#x27;gif&#x27;
@@ -282,8 +282,8 @@ alert( str.slice(-4, -1) ); // &#x27;gif&#x27;
 
 例如：
 
-```js run
-let str = &quot;st*!*ring*/!*ify&quot;;
+```js
+let str = &quot;stringify&quot;;
 
 // 这些对于 substring 是相同的
 alert( str.substring(2, 6) ); // &quot;ring&quot;
@@ -300,15 +300,15 @@ alert( str.slice(6, 2) ); // &quot;&quot;（空字符串）
 : 返回字符串从 <code>start</code> 开始的给定 <code>length</code> 的部分。</p>
 <pre><code>与以前的方法相比，这个允许我们指定 `length` 而不是结束位置：
 
-```js run
-let str = &quot;st*!*ring*/!*ify&quot;;
+```js
+let str = &quot;stringify&quot;;
 alert( str.substr(2, 4) ); // &#x27;ring&#x27;，从位置 2 开始，获取 4 个字符
 ```
 
 第一个参数可能是负数，从结尾算起：
 
-```js run
-let str = &quot;strin*!*gi*/!*fy&quot;;
+```js
+let str = &quot;stringify&quot;;
 alert( str.substr(-4, 2) ); // &#x27;gi&#x27;，从第 4 位获取 2 个字符
 ```</code></pre>
 <p>我们回顾一下这些方法，以免混淆：</p>
@@ -355,20 +355,20 @@ alert( str.substr(-4, 2) ); // &#x27;gi&#x27;，从第 4 位获取 2 个字符
 <p>所有的字符串都使用 <a href="https://en.wikipedia.org/wiki/UTF-16">UTF-16</a> 编码。即：每个字符都有对应的数字代码。有特殊的方法可以获取代码表示的字符，以及字符对应的代码。</p>
 <p><code>str.codePointAt(pos)</code>
 : 返回在 <code>pos</code> 位置的字符代码 :</p>
-<pre><code>```js run
+<pre><code>```js
 // 不同的字母有不同的代码
 alert( &quot;z&quot;.codePointAt(0) ); // 122
 alert( &quot;Z&quot;.codePointAt(0) ); // 90
 ```</code></pre>
 <p><code>String.fromCodePoint(code)</code>
 : 通过数字 <code>code</code> 创建字符</p>
-<pre><code>```js run
+<pre><code>```js
 alert( String.fromCodePoint(90) ); // Z
 ```
 
 我们还可以用 `\u` 后跟十六进制代码，通过这些代码添加 unicode 字符：
 
-```js run
+```js
 // 在十六进制系统中 90 为 5a
 alert( &#x27;\u005a&#x27; ); // Z
 ```</code></pre>

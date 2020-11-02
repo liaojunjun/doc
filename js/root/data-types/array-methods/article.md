@@ -19,7 +19,7 @@
 
 数组是对象，所以我们可以尝试使用 `delete`：
 
-```js run
+```js
 let arr = ["I", "go", "home"];
 
 delete arr[1]; // remove "go"
@@ -50,12 +50,12 @@ arr.splice(index[, deleteCount, elem1, ..., elemN])
 
 让我们从删除开始：
 
-```js run
+```js
 let arr = ["I", "study", "JavaScript"];
 
-*!*
+
 arr.splice(1, 1); // 从索引 1 开始删除 1 个元素
-*/!*
+
 
 alert( arr ); // ["I", "JavaScript"]
 ```
@@ -64,19 +64,19 @@ alert( arr ); // ["I", "JavaScript"]
 
 在下一个例子中，我们删除了 3 个元素，并用另外两个元素替换它们：
 
-```js run
-let arr = [*!*"I", "study", "JavaScript",*/!* "right", "now"];
+```js
+let arr = ["I", "study", "JavaScript", "right", "now"];
 
 // remove 3 first elements and replace them with another
 arr.splice(0, 3, "Let's", "dance");
 
-alert( arr ) // now [*!*"Let's", "dance"*/!*, "right", "now"]
+alert( arr ) // now ["Let's", "dance", "right", "now"]
 ```
 
 在这里我们可以看到 `splice` 返回了已删除元素的数组：
 
-```js run
-let arr = [*!*"I", "study",*/!* "JavaScript", "right", "now"];
+```js
+let arr = ["I", "study", "JavaScript", "right", "now"];
 
 // 删除前两个元素
 let removed = arr.splice(0, 2);
@@ -86,7 +86,7 @@ alert( removed ); // "I", "study" <-- 被从数组中删除了的元素
 
 我们可以将 `deleteCount` 设置为 `0`，`splice` 方法就能够插入元素而不用删除任何元素：
 
-```js run
+```js
 let arr = ["I", "study", "JavaScript"];
 
 // 从索引 2 开始
@@ -97,10 +97,10 @@ arr.splice(2, 0, "complex", "language");
 alert( arr ); // "I", "study", "complex", "language", "JavaScript"
 ```
 
-````smart header="允许负向索引"
+`允许负向索引"
 在这里和其他数组方法中，负向索引都是被允许的。它们从数组末尾计算位置，如下所示：
 
-```js run
+```js
 let arr = [1, 2, 5];
 
 // 从索引 -1（尾端前一位）
@@ -128,7 +128,7 @@ arr.slice([start], [end])
 
 例如：
 
-```js run
+```js
 let arr = ["t", "e", "s", "t"];
 
 alert( arr.slice(1, 3) ); // e,s（复制从位置 1 到位置 3 的元素）
@@ -156,7 +156,7 @@ arr.concat(arg1, arg2...)
 
 例如：
 
-```js run
+```js
 let arr = [1, 2];
 
 // create an array from: arr and [3,4]
@@ -171,7 +171,7 @@ alert( arr.concat([3, 4], 5, 6) ); // 1,2,3,4,5,6
 
 通常，它只复制数组中的元素。其他对象，即使它们看起来像数组一样，但仍然会被作为一个整体添加：
 
-```js run
+```js
 let arr = [1, 2];
 
 let arrayLike = {
@@ -184,15 +184,15 @@ alert( arr.concat(arrayLike) ); // 1,2,[object Object]
 
 ……但是，如果类似数组的对象具有 `Symbol.isConcatSpreadable` 属性，那么它就会被 `concat` 当作一个数组来处理：此对象中的元素将被添加：
 
-```js run
+```js
 let arr = [1, 2];
 
 let arrayLike = {
   0: "something",
   1: "else",
-*!*
+
   [Symbol.isConcatSpreadable]: true,
-*/!*
+
   length: 2
 };
 
@@ -212,14 +212,14 @@ arr.forEach(function(item, index, array) {
 
 例如，下面这个程序显示了数组的每个元素：
 
-```js run
+```js
 // 对每个元素调用 alert
 ["Bilbo", "Gandalf", "Nazgul"].forEach(alert);
 ```
 
 而这段代码更详细地介绍了它们在目标数组中的位置：
 
-```js run
+```js
 ["Bilbo", "Gandalf", "Nazgul"].forEach((item, index, array) => {
   alert(`${item} is at index ${index} in ${array}`);
 });
@@ -242,7 +242,7 @@ arr.forEach(function(item, index, array) {
 
 例如：
 
-```js run
+```js
 let arr = [1, 0, false];
 
 alert( arr.indexOf(0) ); // 1
@@ -258,7 +258,7 @@ alert( arr.includes(1) ); // true
 
 此外，`includes` 的一个非常小的差别是它能正确处理`NaN`，而不像 `indexOf/lastIndexOf`：
 
-```js run
+```js
 const arr = [NaN];
 alert( arr.indexOf(NaN) ); // -1（应该为 0，但是严格相等 === equality 对 NaN 无效）
 alert( arr.includes(NaN) );// true（这个结果是对的）
@@ -288,7 +288,7 @@ let result = arr.find(function(item, index, array) {
 
 例如，我们有一个存储用户的数组，每个用户都有 `id` 和 `name` 字段。让我们找到 `id == 1` 的那个用户：
 
-```js run
+```js
 let users = [
   {id: 1, name: "John"},
   {id: 2, name: "Pete"},
@@ -323,7 +323,7 @@ let results = arr.filter(function(item, index, array) {
 
 例如：
 
-```js run
+```js
 let users = [
   {id: 1, name: "John"},
   {id: 2, name: "Pete"},
@@ -356,7 +356,7 @@ let result = arr.map(function(item, index, array) {
 
 例如，在这里我们将每个元素转换为它的字符串长度：
 
-```js run
+```js
 let lengths = ["Bilbo", "Gandalf", "Nazgul"].map(item => item.length);
 alert(lengths); // 5,7,6
 ```
@@ -369,13 +369,13 @@ alert(lengths); // 5,7,6
 
 语法：
 
-```js run
+```js
 let arr = [ 1, 2, 15 ];
 
 // 该方法重新排列 arr 的内容
 arr.sort();
 
-alert( arr );  // *!*1, 15, 2*/!*
+alert( arr );  // 1, 15, 2
 ```
 
 你有没有注意到结果有什么奇怪的地方？
@@ -399,7 +399,7 @@ function compare(a, b) {
 
 例如，按数字进行排序：
 
-```js run
+```js
 function compareNumeric(a, b) {
   if (a > b) return 1;
   if (a == b) return 0;
@@ -408,11 +408,11 @@ function compareNumeric(a, b) {
 
 let arr = [ 1, 2, 15 ];
 
-*!*
-arr.sort(compareNumeric);
-*/!*
 
-alert(arr);  // *!*1, 2, 15*/!*
+arr.sort(compareNumeric);
+
+
+alert(arr);  // 1, 2, 15
 ```
 
 现在结果符合预期了。
@@ -423,7 +423,7 @@ alert(arr);  // *!*1, 2, 15*/!*
 
 顺便说一句，如果我们想知道要比较哪些元素 —— 那么什么都不会阻止 alert 它们：
 
-```js run
+```js
 [1, -2, 15, 2, 0, 8].sort(function(a, b) {
   alert( a + " <> " + b );
 });
@@ -431,21 +431,21 @@ alert(arr);  // *!*1, 2, 15*/!*
 
 该算法可以在此过程中，将一个元素与多个其他元素进行比较，但是它会尝试进行尽可能少的比较。
 
-````smart header="比较函数可以返回任何数字"
+`比较函数可以返回任何数字"
 实际上，比较函数只需要返回一个正数表示“大于”，一个负数表示“小于”。
 
 通过这个原理我们可以编写更短的函数：
 
-```js run
+```js
 let arr = [ 1, 2, 15 ];
 
 arr.sort(function(a, b) { return a - b; });
 
-alert(arr);  // *!*1, 2, 15*/!*
+alert(arr);  // 1, 2, 15
 ```
 ````
 
-````smart header="箭头函数最好"
+`箭头函数最好"
 你还记得 [箭头函数](info:arrow-functions-basics) 吗？这里使用箭头函数会更加简洁：
 
 ```js
@@ -455,14 +455,14 @@ arr.sort( (a, b) => a - b );
 这与上面更长的版本完全相同。
 ````
 
-````smart header="使用 `localeCompare` for strings"
+`使用 `localeCompare` for strings"
 你记得 [字符串比较](info:string#correct-comparisons) 算法吗？默认情况下，它通过字母的代码比较字母。
 
 对于许多字母，最好使用 `str.localeCompare` 方法正确地对字母进行排序，例如 `Ö`。
 
 例如，让我们用德语对几个国家/地区进行排序：
 
-```js run
+```js
 let countries = ['Österreich', 'Andorra', 'Vietnam'];
 
 alert( countries.sort( (a, b) => a > b ? 1 : -1) ); // Andorra, Vietnam, Österreich（错的）
@@ -477,7 +477,7 @@ alert( countries.sort( (a, b) => a.localeCompare(b) ) ); // Andorra,Österreich,
 
 例如：
 
-```js run
+```js
 let arr = [1, 2, 3, 4, 5];
 arr.reverse();
 
@@ -494,7 +494,7 @@ alert( arr ); // 5,4,3,2,1
 
 在下面的例子中，我们用“逗号后跟着一个空格”作为分隔符：
 
-```js run
+```js
 let names = 'Bilbo, Gandalf, Nazgul';
 
 let arr = names.split(', ');
@@ -506,16 +506,16 @@ for (let name of arr) {
 
 `split` 方法有一个可选的第二个数字参数 —— 对数组长度的限制。如果提供了，那么额外的元素会被忽略。但实际上它很少使用：
 
-```js run
+```js
 let arr = 'Bilbo, Gandalf, Nazgul, Saruman'.split(', ', 2);
 
 alert(arr); // Bilbo, Gandalf
 ```
 
-````smart header="拆分为字母"
+`拆分为字母"
 调用带有空参数 `s` 的 `split(s)`，会将字符串拆分为字母数组：
 
-```js run
+```js
 let str = "test";
 
 alert( str.split('') ); // t,e,s,t
@@ -526,7 +526,7 @@ alert( str.split('') ); // t,e,s,t
 
 例如：
 
-```js run
+```js
 let arr = ['Bilbo', 'Gandalf', 'Nazgul'];
 
 let str = arr.join(';'); // 使用分号 ; 将数组粘合成字符串
@@ -569,7 +569,7 @@ let value = arr.reduce(function(accumulator, item, index, array) {
 
 在这里，我们通过一行代码得到一个数组的总和：
 
-```js run
+```js
 let arr = [1, 2, 3, 4, 5];
 
 let result = arr.reduce((sum, current) => sum + current, 0);
@@ -603,7 +603,7 @@ alert(result); // 15
 
 我们也可以省略初始值：
 
-```js run
+```js
 let arr = [1, 2, 3, 4, 5];
 
 // 删除 reduce 的初始值（没有 0）
@@ -620,7 +620,7 @@ alert( result ); // 15
 
 例如：
 
-```js run
+```js
 let arr = [];
 
 // Error: Reduce of empty array with no initial value
@@ -639,14 +639,14 @@ arr.reduce((sum, current) => sum + current);
 
 所以 `typeof` 不能帮助从数组中区分出普通对象：
 
-```js run
+```js
 alert(typeof {}); // object
 alert(typeof []); // same
 ```
 
 ……但是数组经常被使用，因此有一种特殊的方法用于判断：[Array.isArray(value)](mdn:js/Array/isArray)。如果 `value` 是一个数组，则返回 `true`；否则返回 `false`。
 
-```js run
+```js
 alert(Array.isArray({})); // false
 
 alert(Array.isArray([])); // true
@@ -672,7 +672,7 @@ arr.map(func, thisArg);
 
 例如，在这里我们使用 `army` 对象方法作为过滤器，`thisArg` 用于传递上下文（passes the context）：
 
-```js run
+```js
 let army = {
   minAge: 18,
   maxAge: 27,
@@ -688,10 +688,10 @@ let users = [
   {age: 30}
 ];
 
-*!*
+
 // 找到 army.canJoin 返回 true 的 user
 let soldiers = users.filter(army.canJoin, army);
-*/!*
+
 
 alert(soldiers.length); // 2
 alert(soldiers[0].age); // 20

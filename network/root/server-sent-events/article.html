@@ -43,7 +43,7 @@ data: of two lines</code></pre>
 </ul>
 <p>在实际开发中，复杂的消息通常是用 JSON 编码后发送。换行符在其中编码为 <code>\n</code>，因此不需要多行 <code>data:</code> 消息。</p>
 <p>例如：</p>
-<pre><code class="language-js">data: {<span class="hljs-string">&quot;user&quot;</span>:<span class="hljs-string">&quot;John&quot;</span>,<span class="hljs-string">&quot;message&quot;</span>:<span class="hljs-string">&quot;First line*!*\n*/!* Second line&quot;</span>}</code></pre>
+<pre><code class="language-js">data: {<span class="hljs-string">&quot;user&quot;</span>:<span class="hljs-string">&quot;John&quot;</span>,<span class="hljs-string">&quot;message&quot;</span>:<span class="hljs-string">&quot;First line\n Second line&quot;</span>}</code></pre>
 <p>……因此，我们可以假设一个 <code>data:</code> 只保存了一条消息。</p>
 <p>对于每个这样的消息，都会生成 <code>message</code> 事件：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> eventSource = <span class="hljs-keyword">new</span> EventSource(<span class="hljs-string">&quot;/events/subscribe&quot;</span>);

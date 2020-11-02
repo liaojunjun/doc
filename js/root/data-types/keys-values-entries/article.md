@@ -51,7 +51,7 @@ let user = {
 
 这里有一个使用 `Object.values` 来遍历属性值的例子：
 
-```js run
+```js
 let user = {
   name: "John",
   age: 30
@@ -63,7 +63,7 @@ for (let value of Object.values(user)) {
 }
 ```
 
-```warn header="Object.keys/values/entries 会忽略 symbol 属性"
+"Object.keys/values/entries 会忽略 symbol 属性"
 就像 `for..in` 循环一样，这些方法会忽略使用 `Symbol(...)` 作为键的属性。
 
 通常这很方便。但是，如果我们也想要 Symbol 类型的键，那么这儿有一个单独的方法 [Object.getOwnPropertySymbols](mdn:js/Object/getOwnPropertySymbols)，它会返回一个只包含 Symbol 类型的键的数组。另外，还有一种方法 [Reflect.ownKeys(obj)](mdn:js/Reflect/ownKeys)，它会返回 **所有** 键。
@@ -82,19 +82,19 @@ for (let value of Object.values(user)) {
 
 例如，我们有一个带有价格的对象，并想将它们加倍：
 
-```js run
+```js
 let prices = {
   banana: 1,
   orange: 2,
   meat: 4,
 };
 
-*!*
+
 let doublePrices = Object.fromEntries(
   // 转换为数组，之后使用 map 方法，然后通过 fromEntries 再转回到对象
   Object.entries(prices).map(([key, value]) => [key, value * 2])
 );
-*/!*
+
 
 alert(doublePrices.meat); // 8
 ```   

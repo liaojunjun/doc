@@ -104,10 +104,10 @@ articleElem.innerHTML = article;</code></pre>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> article = <span class="hljs-comment">/* 从服务器获取新内容 */</span>
 articleElem.innerHTML = article;
 
-*!*
+
 <span class="hljs-keyword">let</span> snippets = articleElem.querySelectorAll(<span class="hljs-string">&#x27;pre[class*=&quot;language-&quot;]&#x27;</span>);
 snippets.forEach(Prism.highlightElem);
-*/!*</code></pre>
+</code></pre>
 <p>……但是，想象一下，代码中有很多地方可以加载内容：文章，测验，论坛帖子。我们是否需要在每个地方都附加一个高亮显示调用？那不太方便，也很容易忘记。</p>
 <p>并且，如果内容是由第三方模块加载的，该怎么办？例如，我们有一个由其他人编写的论坛，该论坛可以动态加载内容，并且我们想为其添加语法高亮显示。没有人喜欢修补第三方脚本。</p>
 <p>幸运的是，还有另一种选择。</p>

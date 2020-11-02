@@ -16,12 +16,12 @@ JavaScript 中最常用的两种数据结构是 `Object` 和 `Array`。
 // 我们有一个存放了名字和姓氏的数组
 let arr = ["Ilya", "Kantor"]
 
-*!*
+
 // 解构赋值
 // sets firstName = arr[0]
 // and surname = arr[1]
 let [firstName, surname] = arr;
-*/!*
+
 
 alert(firstName); // Ilya
 alert(surname);  // Kantor
@@ -35,7 +35,7 @@ alert(surname);  // Kantor
 let [firstName, surname] = "Ilya Kantor".split(' ');
 ```
 
-````smart header="“解构”并不意味着“破坏”"
+`“解构”并不意味着“破坏”"
 这种语法叫做“解构赋值”，因为它通过将结构中的各元素复制到变量中来达到“解构”的目的。但数组本身是没有被修改的。
 
 这只是下面这些代码的更精简的写法而已：
@@ -46,14 +46,14 @@ let surname = arr[1];
 ```
 ````
 
-````smart header="忽略使用逗号的元素"
+`忽略使用逗号的元素"
 数组中不想要的元素也可以通过添加额外的逗号来把它丢弃：
 
-```js run
-*!*
+```js
+
 // 不需要第二个元素
 let [firstName, , title] = ["Julius", "Caesar", "Consul", "of the Roman Republic"];
-*/!*
+
 
 alert( title ); // Consul
 ```
@@ -61,7 +61,7 @@ alert( title ); // Consul
 在上面的代码中，数组的第二个元素被跳过了，第三个元素被赋值给了 `title` 变量，数组中剩下的元素也都被跳过了（因为在这没有对应给它们的变量）。
 ````
 
-````smart header="等号右侧可以是任何可迭代对象"
+`等号右侧可以是任何可迭代对象"
 
 ……实际上，我们可以将其与任何可迭代对象一起使用，而不仅限于数组：
 
@@ -73,12 +73,12 @@ let [one, two, three] = new Set([1, 2, 3]);
 ````
 
 
-````smart header="赋值给等号左侧的任何内容"
+`赋值给等号左侧的任何内容"
 
 我们可以在等号左侧使用任何“可以被赋值的”东西。
 
 例如，一个对象的属性：
-```js run
+```js
 let user = {};
 [user.name, user.surname] = "Ilya Kantor".split(' ');
 
@@ -87,45 +87,45 @@ alert(user.name); // Ilya
 
 ````
 
-````smart header="与 .entries() 方法进行循环操作"
+`与 .entries() 方法进行循环操作"
 
 在前面的章节中我们已经见过了 [Object.entries(obj)](mdn:js/Object/entries) 方法。
 
 我们可以将 .entries() 方法与解构语法一同使用，来遍历一个对象的“键—值”对：
 
-```js run
+```js
 let user = {
   name: "John",
   age: 30
 };
 
 // 循环遍历键—值对
-*!*
+
 for (let [key, value] of Object.entries(user)) {
-*/!*
+
   alert(`${key}:${value}`); // name:John, then age:30
 }
 ```
 
 ……对于 map 对象也类似：
 
-```js run
+```js
 let user = new Map();
 user.set("name", "John");
 user.set("age", "30");
 
-*!*
+
 for (let [key, value] of user) {
-*/!*
+
   alert(`${key}:${value}`); // name:John, then age:30
 }
 ```
 ````
 
-```smart header="交换变量值的技巧"
+交换变量值的技巧"
 一个用于交换变量值的典型技巧：
 
-```js run
+```js
 let guest = "Jane";
 let admin = "Pete";
 
@@ -144,18 +144,18 @@ alert(`${guest} ${admin}`); // Pete Jane（成功交换！）
 
 如果我们不只是要获得第一个值，还要将后续的所有元素都收集起来 — 我们可以使用三个点 `"..."` 来再加一个参数来接收“剩余的”元素：
 
-```js run
-let [name1, name2, *!*...rest*/!*] = ["Julius", "Caesar", *!*"Consul", "of the Roman Republic"*/!*];
+```js
+let [name1, name2, ...rest] = ["Julius", "Caesar", "Consul", "of the Roman Republic"];
 
 alert(name1); // Julius
 alert(name2); // Caesar
 
-*!*
+
 // 请注意，`rest` 的类型是数组
 alert(rest[0]); // Consul
 alert(rest[1]); // of the Roman Republic
 alert(rest.length); // 2
-*/!*
+
 ```
 
 `rest` 的值就是数组中剩下的元素组成的数组。不一定要使用变量名 `rest`，我们也可以使用其他的变量名，只要确保它前面有三个点，并且在解构赋值的最后一个参数位置上就行了。
@@ -164,10 +164,10 @@ alert(rest.length); // 2
 
 如果赋值语句中，变量的数量多于数组中实际元素的数量，赋值不会报错。未赋值的变量被认为是 `undefined`：
 
-```js run
-*!*
+```js
+
 let [firstName, surname] = [];
-*/!*
+
 
 alert(firstName); // undefined
 alert(surname); // undefined
@@ -175,11 +175,11 @@ alert(surname); // undefined
 
 如果我们想要一个“默认”值给未赋值的变量，我们可以使用 `=` 来提供：
 
-```js run
-*!*
+```js
+
 // 默认值
 let [name = "Guest", surname = "Anonymous"] = ["Julius"];
-*/!*
+
 
 alert(name);    // Julius（来自数组的值）
 alert(surname); // Anonymous（默认值被使用了）
@@ -189,7 +189,7 @@ alert(surname); // Anonymous（默认值被使用了）
 
 举个例子，我们使用了 `prompt` 函数来提供两个默认值，但它只会在未被赋值的那个变量上进行调用：
 
-```js run
+```js
 // 只会提示输入姓氏
 let [name = prompt('name?'), surname = prompt('surname?')] = ["Julius"];
 
@@ -213,16 +213,16 @@ let {var1, var2} = {var1:…, var2:…}
 
 举个例子：
 
-```js run
+```js
 let options = {
   title: "Menu",
   width: 100,
   height: 200
 };
 
-*!*
+
 let {title, width, height} = options;
-*/!*
+
 
 alert(title);  // Menu
 alert(width);  // 100
@@ -240,17 +240,17 @@ let {height, width, title} = { title: "Menu", height: 200, width: 100 }
 
 如果我们想把一个属性赋值给另一个名字的变量，比如把 `options.width` 属性赋值给变量 `w`，那么我们可以使用冒号来指定：
 
-```js run
+```js
 let options = {
   title: "Menu",
   width: 100,
   height: 200
 };
 
-*!*
+
 // { sourceProperty: targetVariable }
 let {width: w, height: h, title} = options;
-*/!*
+
 
 // width -> w
 // height -> h
@@ -265,14 +265,14 @@ alert(h);      // 200
 
 对于可能缺失的属性，我们可以使用 `"="` 设置默认值，如下所示：
 
-```js run
+```js
 let options = {
   title: "Menu"
 };
 
-*!*
+
 let {width = 100, height = 200, title} = options;
-*/!*
+
 
 alert(title);  // Menu
 alert(width);  // 100
@@ -283,14 +283,14 @@ alert(height); // 200
 
 在下面的代码中，`prompt` 提示输入 `width` 值，但不会提示输入 `title` 值：
 
-```js run
+```js
 let options = {
   title: "Menu"
 };
 
-*!*
+
 let {width = prompt("width?"), title = prompt("title?")} = options;
-*/!*
+
 
 alert(title);  // Menu
 alert(width);  //（无论 prompt 的结果是什么）
@@ -298,14 +298,14 @@ alert(width);  //（无论 prompt 的结果是什么）
 
 我们还可以将冒号和等号结合起来：
 
-```js run
+```js
 let options = {
   title: "Menu"
 };
 
-*!*
+
 let {width: w = 100, height: h = 200, title} = options;
-*/!*
+
 
 alert(title);  // Menu
 alert(w);      // 100
@@ -314,7 +314,7 @@ alert(h);      // 200
 
 如果我们有一个具有很多属性的复杂对象，那么我们可以只提取所需的内容：
 
-```js run
+```js
 let options = {
   title: "Menu",
   width: 100,
@@ -335,29 +335,29 @@ alert(title); // Menu
 
 看起来就像这样：
 
-```js run
+```js
 let options = {
   title: "Menu",
   height: 200,
   width: 100
 };
 
-*!*
+
 // title = 名为 title 的属性
 // rest = 存有剩余属性的对象
 let {title, ...rest} = options;
-*/!*
+
 
 // 现在 title="Menu", rest={height: 200, width: 100}
 alert(rest.height);  // 200
 alert(rest.width);   // 100
 ```
 
-````smart header="不使用 `let` 时的陷阱"
+`不使用 `let` 时的陷阱"
 在上面的示例中，变量都是在赋值中通过正确方式声明的：`let {…} = {…}`。当然，我们也可以使用已有的变量，而不用 `let`，但这里有一个陷阱。
 
 以下代码无法正常运行：
-```js run
+```js
 let title, width, height;
 
 // 这一行发生了错误
@@ -366,7 +366,7 @@ let title, width, height;
 
 问题在于 JavaScript 把主代码流（即不在其他表达式中）的 `{...}` 当做一个代码块。这样的代码块可以用于对语句分组，如下所示：
 
-```js run
+```js
 {
   // 一个代码块
   let message = "Hello";
@@ -379,11 +379,11 @@ let title, width, height;
 
 为了告诉 JavaScript 这不是一个代码块，我们可以把整个赋值表达式用括号 `(...)` 包起来：
 
-```js run
+```js
 let title, width, height;
 
 // 现在就可以了
-*!*(*/!*{title, width, height} = {title: "Menu", width: 200, height: 100}*!*)*/!*;
+({title, width, height} = {title: "Menu", width: 200, height: 100});
 
 alert( title ); // Menu
 ```
@@ -395,7 +395,7 @@ alert( title ); // Menu
 
 在下面的代码中，`options` 的属性 `size` 是另一个对象，属性 `items` 是另一个数组。赋值语句中等号左侧的模式（pattern）具有相同的结构以从中提取值：
 
-```js run
+```js
 let options = {
   size: {
     width: 100,
@@ -457,7 +457,7 @@ showMenu("My Menu", undefined, undefined, ["Item1", "Item2"])
 
 我们可以把所有参数当作一个对象来传递，然后函数马上把这个对象解构成多个变量：
 
-```js run
+```js
 // 我们传递一个对象给函数
 let options = {
   title: "My menu",
@@ -465,7 +465,7 @@ let options = {
 };
 
 // ……然后函数马上把对象展开成变量
-function showMenu(*!*{title = "Untitled", width = 200, height = 100, items = []}*/!*) {
+function showMenu({title = "Untitled", width = 200, height = 100, items = []}) {
   // title, items – 提取于 options，
   // width, height – 使用默认值
   alert( `${title} ${width} ${height}` ); // My Menu 200 100
@@ -477,20 +477,20 @@ showMenu(options);
 
 我们同样可以使用带有嵌套对象和冒号映射的更加复杂的解构：
 
-```js run
+```js
 let options = {
   title: "My menu",
   items: ["Item1", "Item2"]
 };
 
-*!*
+
 function showMenu({
   title = "Untitled",
   width: w = 100,  // width goes to w
   height: h = 200, // height goes to h
   items: [item1, item2] // items first element goes to item1, second to item2
 }) {
-*/!*
+
   alert( `${title} ${w} ${h}` ); // My Menu 100 200
   alert( item1 ); // Item1
   alert( item2 ); // Item2
@@ -519,8 +519,8 @@ showMenu(); // 这样会导致错误
 
 我们可以通过指定空对象 `{}` 为整个参数对象的默认值来解决这个问题：
 
-```js run
-function showMenu({ title = "Menu", width = 100, height = 200 }*!* = {}*/!*) {
+```js
+function showMenu({ title = "Menu", width = 100, height = 200 } = {}) {
   alert( `${title} ${width} ${height}` );
 }
 

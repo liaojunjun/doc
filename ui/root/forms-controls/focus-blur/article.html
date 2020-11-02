@@ -22,14 +22,14 @@ Your email please: <span class="hljs-tag">&lt;<span class="hljs-name">input</spa
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;error&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*input.onblur*/!* = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+input.onblur = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">if</span> (!input.value.includes(<span class="hljs-string">&#x27;@&#x27;</span>)) { <span class="hljs-comment">// not email</span>
     input.classList.add(<span class="hljs-string">&#x27;invalid&#x27;</span>);
     error.innerHTML = <span class="hljs-string">&#x27;Please enter a correct email.&#x27;</span>
   }
 };
 
-*!*input.onfocus*/!* = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+input.onfocus = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.classList.contains(<span class="hljs-string">&#x27;invalid&#x27;</span>)) {
     <span class="hljs-comment">// 移除 &quot;error&quot; 指示，因为用户想要重新输入一些内容</span>
     <span class="hljs-built_in">this</span>.classList.remove(<span class="hljs-string">&#x27;invalid&#x27;</span>);
@@ -55,10 +55,10 @@ Your email please: <span class="hljs-tag">&lt;<span class="hljs-name">input</spa
     <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">this</span>.value.includes(<span class="hljs-string">&#x27;@&#x27;</span>)) { <span class="hljs-comment">// not email</span>
       <span class="hljs-comment">// 显示 error</span>
       <span class="hljs-built_in">this</span>.classList.add(<span class="hljs-string">&quot;error&quot;</span>);
-*!*
+
       <span class="hljs-comment">// ...将焦点放回来</span>
       input.focus();
-*/!*
+
     } <span class="hljs-keyword">else</span> {
       <span class="hljs-built_in">this</span>.classList.remove(<span class="hljs-string">&quot;error&quot;</span>);
     }
@@ -119,7 +119,7 @@ Your email please: <span class="hljs-tag">&lt;<span class="hljs-name">input</spa
 
 ```html autorun height=80
 &lt;!-- on focusing in the form -- add the class --&gt;
-&lt;form *!*onfocus=&quot;this.className=&#x27;focused&#x27;&quot;*/!*&gt;
+&lt;form onfocus=&quot;this.className=&#x27;focused&#x27;&quot;&gt;
   &lt;input type=&quot;text&quot; name=&quot;name&quot; value=&quot;Name&quot;&gt;
   &lt;input type=&quot;text&quot; name=&quot;surname&quot; value=&quot;Surname&quot;&gt;
 &lt;/form&gt;
@@ -137,11 +137,11 @@ Your email please: <span class="hljs-tag">&lt;<span class="hljs-name">input</spa
 <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-class">.focused</span> { <span class="hljs-attribute">outline</span>: <span class="hljs-number">1px</span> solid red; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   <span class="hljs-comment">// 将处理程序置于捕获阶段（最后一个参数为 true）</span>
   form.addEventListener(<span class="hljs-string">&quot;focus&quot;</span>, <span class="hljs-function">() =&gt;</span> form.classList.add(<span class="hljs-string">&#x27;focused&#x27;</span>), <span class="hljs-literal">true</span>);
   form.addEventListener(<span class="hljs-string">&quot;blur&quot;</span>, <span class="hljs-function">() =&gt;</span> form.classList.remove(<span class="hljs-string">&#x27;focused&#x27;</span>), <span class="hljs-literal">true</span>);
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>方案二，可以使用 <code>focusin</code> 和 <code>focusout</code> 事件 —— 与 <code>focus/blur</code> 事件完全一样，只是它们会冒泡。</p>
 <p>值得注意的是，必须使用 <code>elem.addEventListener</code> 来分配它们，而不是 <code>on&lt;event&gt;</code>。</p>
@@ -154,10 +154,10 @@ Your email please: <span class="hljs-tag">&lt;<span class="hljs-name">input</spa
 <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css"> <span class="hljs-selector-class">.focused</span> { <span class="hljs-attribute">outline</span>: <span class="hljs-number">1px</span> solid red; } </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   form.addEventListener(<span class="hljs-string">&quot;focusin&quot;</span>, <span class="hljs-function">() =&gt;</span> form.classList.add(<span class="hljs-string">&#x27;focused&#x27;</span>));
   form.addEventListener(<span class="hljs-string">&quot;focusout&quot;</span>, <span class="hljs-function">() =&gt;</span> form.classList.remove(<span class="hljs-string">&#x27;focused&#x27;</span>));
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <h2 id="总结">总结</h2>
 <p>在元素获得/失去焦点时会触发 <code>focus</code> 和 <code>blur</code> 事件。</p>

@@ -35,14 +35,14 @@
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   iframe.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-comment">// 我们可以获取对内部 window 的引用</span>
-*!*
+
     <span class="hljs-keyword">let</span> iframeWindow = iframe.contentWindow; <span class="hljs-comment">// OK</span>
-*/!*
+
     <span class="hljs-keyword">try</span> {
       <span class="hljs-comment">// ...但是无法获取其中的文档</span>
-*!*
+
       <span class="hljs-keyword">let</span> doc = iframe.contentDocument; <span class="hljs-comment">// ERROR</span>
-*/!*
+
     } <span class="hljs-keyword">catch</span>(e) {
       alert(e); <span class="hljs-comment">// Security Error（另一个源）</span>
     }
@@ -50,17 +50,17 @@
     <span class="hljs-comment">// 并且，我们也无法 **读取** iframe 中页面的 URL</span>
     <span class="hljs-keyword">try</span> {
       <span class="hljs-comment">// 无法从 location 对象中读取 URL</span>
-*!*
+
       <span class="hljs-keyword">let</span> href = iframe.contentWindow.location.href; <span class="hljs-comment">// ERROR</span>
-*/!*
+
     } <span class="hljs-keyword">catch</span>(e) {
       alert(e); <span class="hljs-comment">// Security Error</span>
     }
 
     <span class="hljs-comment">// ...我们可以 **写入** location（所以，在 iframe 中加载了其他内容）！</span>
-*!*
+
     iframe.contentWindow.location = <span class="hljs-string">&#x27;/&#x27;</span>; <span class="hljs-comment">// OK</span>
-*/!*
+
 
     iframe.onload = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 清空处理程序，在 location 更改后不要再运行它</span>
   };
@@ -106,10 +106,10 @@ document.domain = &#x27;site.com&#x27;;</code></pre>
   <span class="hljs-keyword">let</span> oldDoc = iframe.contentDocument;
   iframe.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-keyword">let</span> newDoc = iframe.contentDocument;
-*!*
+
     <span class="hljs-comment">// 加载的文档与初始的文档不同！</span>
     alert(oldDoc == newDoc); <span class="hljs-comment">// false</span>
-*/!*
+
   };
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>我们不应该对尚未加载完成的 iframe 的文档进行处理，因为那是 <strong>错误的文档</strong>。如果我们在其上设置了任何事件处理程序，它们将会被忽略。</p>
@@ -206,9 +206,9 @@ document.domain = &#x27;site.com&#x27;;</code></pre>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   <span class="hljs-keyword">let</span> win = <span class="hljs-built_in">window</span>.frames.example;
 
-*!*
+
   win.postMessage(<span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-string">&quot;*&quot;</span>);
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <h3 id="onmessage">onmessage</h3>
 <p>为了接收消息，目标窗口应该在 <code>message</code> 事件上有一个处理程序。当 <code>postMessage</code> 被调用时触发该事件（并且 <code>targetOrigin</code> 检查成功）。</p>

@@ -57,14 +57,14 @@ function makeArmy() {
 
 我们可以通过将变量定义移动到循环中来修复它：
 
-```js run demo
+```js demo
 function makeArmy() {
 
   let shooters = [];
 
-*!*
+
   for(let i = 0; i < 10; i++) {
-*/!*
+
     let shooter = function() { // shooter 函数
       alert( i ); // 应该显示它自己的编号
     };
@@ -91,17 +91,17 @@ army[5](); // 5
 其他技巧也是可以的，让我们了解一下，以便更好地理解这个问题：
 
 
-```js run
+```js
 function makeArmy() {
   let shooters = [];
 
   let i = 0;
   while (i < 10) {
-*!*
+
     let j = i;
-*/!*
+
     let shooter = function() { // shooter 函数
-      alert( *!*j*/!* ); // 应该显示当前的编号
+      alert( j ); // 应该显示当前的编号
     };
     shooters.push(shooter);
     i++;

@@ -51,9 +51,9 @@
 <pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-string">&#x27;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&#x27;</span>;
 <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(url);
 
-*!*
+
 <span class="hljs-keyword">let</span> commits = <span class="hljs-keyword">await</span> response.json(); <span class="hljs-comment">// 读取 response body，并将其解析为 JSON</span>
-*/!*
+
 
 alert(commits[<span class="hljs-number">0</span>].author.login);</code></pre>
 <p>也可以使用纯 promise 语法，不使用 <code>await</code>：</p>
@@ -69,9 +69,9 @@ alert(text.slice(<span class="hljs-number">0</span>, <span class="hljs-number">8
 <p>作为一个读取为二进制格式的演示示例，让我们 fetch 并显示一张 <a href="https://fetch.spec.whatwg.org">&quot;fetch&quot; 规范</a> 中的图片（<code>Blob</code> 操作的有关内容请见 <a href="info:blob">Blob</a>）：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch/logo-fetch.svg&#x27;</span>);
 
-*!*
+
 <span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">await</span> response.blob(); <span class="hljs-comment">// 下载为 Blob 对象</span>
-*/!*
+
 
 <span class="hljs-comment">// 为其创建一个 &lt;img&gt;</span>
 <span class="hljs-keyword">let</span> img = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;img&#x27;</span>);
@@ -155,7 +155,7 @@ alert(response.headers.get(<span class="hljs-string">&#x27;Content-Type&#x27;</s
   <span class="hljs-attr">surname</span>: <span class="hljs-string">&#x27;Smith&#x27;</span>
 };
 
-*!*
+
 <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch/post/user&#x27;</span>, {
   <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
   <span class="hljs-attr">headers</span>: {
@@ -163,7 +163,7 @@ alert(response.headers.get(<span class="hljs-string">&#x27;Content-Type&#x27;</s
   },
   <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify(user)
 });
-*/!*
+
 
 <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
 alert(result.message);</code></pre>

@@ -1,5 +1,5 @@
 
-```js run
+```js
 let room = {
   number: 23
 };

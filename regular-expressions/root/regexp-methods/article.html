@@ -86,7 +86,7 @@ alert(<span class="hljs-string">&#x27;12-34-56&#x27;</span>.replace(<span class=
 <p>您可以在上面的示例中看到：只有第一个 <code>&quot;-&quot;</code> 被 <code>&quot;:&quot;</code> 替换了。</p>
 <p>如要找到所有的连字符，我们不应该用字符串 <code>&quot;-&quot;</code>，而应使用带 <code>pattern:g</code> 标记的正则表达式 <code>pattern:/-/g</code>：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 将连字符替换为冒号</span>
-alert( <span class="hljs-string">&#x27;12-34-56&#x27;</span>.replace( *!*<span class="hljs-regexp">/-/g</span>*<span class="hljs-regexp">/!*, &quot;:&quot; ) )  /</span><span class="hljs-regexp">/ 12:34:56</span></code></pre>
+alert( <span class="hljs-string">&#x27;12-34-56&#x27;</span>.replace( <span class="hljs-regexp">/-/g</span>*<span class="hljs-regexp">/!*, &quot;:&quot; ) )  /</span><span class="hljs-regexp">/ 12:34:56</span></code></pre>
 <p>第二个参数是一个替代字符串。我们可以在其中使用特殊字符：</p>
 <table>
 <thead>
@@ -214,13 +214,13 @@ alert( regexp.exec(str) ); <span class="hljs-comment">// null</span></code></pre
 <pre><code class="language-js">let str = &quot;I love JavaScript&quot;;
 
 // 这两个测试相同
-alert( *!*/love/i*/!*.test(str) ); // true
-alert( str.search(*!*/love/i*/!*) != -1 ); // true</code></pre>
+alert( /love/i.test(str) ); // true
+alert( str.search(/love/i) != -1 ); // true</code></pre>
 <p>一个反例：</p>
 <pre><code class="language-js">let str = &quot;Bla-bla-bla&quot;;
 
-alert( *!*/love/i*/!*.test(str) ); // false
-alert( str.search(*!*/love/i*/!*) != -1 ); // false</code></pre>
+alert( /love/i.test(str) ); // false
+alert( str.search(/love/i) != -1 ); // false</code></pre>
 <p>如果正则表达式带有标记 <code>pattern:g</code>，则 <code>regexp.test</code> 从  <code>regexp.lastIndex</code> 属性中查找，并更新此属性，就像 <code>regexp.exec</code> 一样。</p>
 <p>因此，我们可以用它从给定位置进行搜索：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/love/gi</span>;
@@ -234,7 +234,7 @@ alert( regexp.test(str) ); <span class="hljs-comment">// false（无匹配）</s
 
 例如，这里我们在同一文本上调用 `regexp.test` 两次，而第二次调用失败了：
 
-```js run
+```js
 let regexp = /javascript/g;  // （新建 regexp：regexp.lastIndex=0)
 
 alert( regexp.test(&quot;javascript&quot;) ); // true（现在 regexp.lastIndex=10）

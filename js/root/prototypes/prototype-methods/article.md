@@ -15,30 +15,30 @@
 
 例如：
 
-```js run
+```js
 let animal = {
   eats: true
 };
 
 // 创建一个以 animal 为原型的新对象
-*!*
+
 let rabbit = Object.create(animal);
-*/!*
+
 
 alert(rabbit.eats); // true
 
-*!*
-alert(Object.getPrototypeOf(rabbit) === animal); // true
-*/!*
 
-*!*
+alert(Object.getPrototypeOf(rabbit) === animal); // true
+
+
+
 Object.setPrototypeOf(rabbit, {}); // 将 rabbit 的原型修改为 {}
-*/!*
+
 ```
 
 `Object.create` 有一个可选的第二参数：属性描述器。我们可以在此处为新对象提供额外的属性，就像这样：
 
-```js run
+```js
 let animal = {
   eats: true
 };
@@ -78,7 +78,7 @@ let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescr
 
 为什么将 `__proto__` 替换成函数 `getPrototypeOf/setPrototypeOf`？这是一个有趣的问题，需要我们理解为什么 `__proto__` 不好。继续阅读，你就会知道答案。
 
-```warn header="如果速度很重要，就请不要修改已存在的对象的 `[[Prototype]]`"
+"如果速度很重要，就请不要修改已存在的对象的 `[[Prototype]]`"
 从技术上来讲，我们可以在任何时候 get/set `[[Prototype]]`。但是通常我们只在创建对象的时候设置它一次，自那之后不再修改：`rabbit` 继承自 `animal`，之后不再更改。
 
 并且，JavaScript 引擎对此进行了高度优化。用 `Object.setPrototypeOf` 或 `obj.__proto__=` “即时”更改原型是一个非常缓慢的操作，因为它破坏了对象属性访问操作的内部优化。因此，除非你知道自己在做什么，或者 JavaScript 的执行速度对你来说完全不重要，否则请避免使用它。
@@ -92,7 +92,7 @@ let clone = Object.create(Object.getPrototypeOf(obj), Object.getOwnPropertyDescr
 
 看一下这个例子：
 
-```js run
+```js
 let obj = {};
 
 let key = prompt("What's the key?", "__proto__");
@@ -129,10 +129,10 @@ alert(obj[key]); // [object Object]，并不是 "some value"！
 
 现在，我们想要将一个对象用作关联数组，并且摆脱此类问题，我们可以使用一些小技巧：
 
-```js run
-*!*
+```js
+
 let obj = Object.create(null);
-*/!*
+
 
 let key = prompt("What's the key?", "__proto__");
 obj[key] = "some value";
@@ -150,10 +150,10 @@ alert(obj[key]); // "some value"
 
 缺点是这样的对象没有任何内建的对象的方法，例如 `toString`：
 
-```js run
-*!*
+```js
+
 let obj = Object.create(null);
-*/!*
+
 
 alert(obj); // Error (no toString)
 ```
@@ -163,7 +163,7 @@ alert(obj); // Error (no toString)
 请注意，大多数与对象相关的方法都是 `Object.something(...)`，例如 `Object.keys(obj)` —— 它们不在 prototype 中，因此在 "very plain" 对象中它们还是可以继续使用：
 
 
-```js run
+```js
 let chineseDictionary = Object.create(null);
 chineseDictionary.hello = "你好";
 chineseDictionary.bye = "再见";

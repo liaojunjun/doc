@@ -12,14 +12,14 @@
 **基本的二进制对象是 `ArrayBuffer` —— 对固定长度的连续内存空间的引用。**
 
 我们这样创建它：
-```js run
+```js
 let buffer = new ArrayBuffer(16); // 创建一个长度为 16 的 buffer
 alert(buffer.byteLength); // 16
 ```
 
 它会分配一个 16 字节的连续内存空间，并用 0 进行预填充。
 
-```warn header="`ArrayBuffer` 不是某种东西的数组"
+"`ArrayBuffer` 不是某种东西的数组"
 让我们先澄清一个可能的误区。`ArrayBuffer` 与 `Array` 没有任何共同之处：
 - 它的长度是固定的，我们无法增加或减少它的长度。
 - 它正好占用了内存中的那么多空间。
@@ -47,14 +47,14 @@ alert(buffer.byteLength); // 16
 
 但是，如果我们要写入值或遍历它，基本上几乎所有操作 —— 我们必须使用视图（view），例如：
 
-```js run
+```js
 let buffer = new ArrayBuffer(16); // 创建一个长度为 16 的 buffer
 
-*!*
+
 let view = new Uint32Array(buffer); // 将 buffer 视为一个 32 位整数的序列
 
 alert(Uint32Array.BYTES_PER_ELEMENT); // 每个整数 4 个字节
-*/!*
+
 
 alert(view.length); // 4，它存储了 4 个整数
 alert(view.byteLength); // 16，字节中的大小
@@ -98,25 +98,25 @@ new TypedArray();
 2. 如果给定的是 `Array`，或任何类数组对象，则会创建一个相同长度的类型化数组，并复制其内容。
 
     我们可以使用它来预填充数组的数据：
-    ```js run
-    *!*
+    ```js
+    
     let arr = new Uint8Array([0, 1, 2, 3]);
-    */!*
+    
     alert( arr.length ); // 4，创建了相同长度的二进制数组
     alert( arr[1] ); // 1，用给定值填充了 4 个字节（无符号 8 位整数）
     ```
 3. 如果给定的是另一个 `TypedArray`，也是如此：创建一个相同长度的类型化数组，并复制其内容。如果需要的话，数据在此过程中会被转换为新的类型。
-    ```js run
+    ```js
     let arr16 = new Uint16Array([1, 1000]);
-    *!*
+    
     let arr8 = new Uint8Array(arr16);
-    */!*
+    
     alert( arr8[0] ); // 1
     alert( arr8[1] ); // 232，试图复制 1000，但无法将 1000 放进 8 位字节中（详述见下文）。
     ```
 
 4. 对于数字参数 `length` —— 创建类型化数组以包含这么多元素。它的字节长度将是 `length` 乘以单个 `TypedArray.BYTES_PER_ELEMENT` 中的字节数：
-    ```js run
+    ```js
     let arr = new Uint16Array(4); // 为 4 个整数创建类型化数组
     alert( Uint16Array.BYTES_PER_ELEMENT ); // 每个整数 2 个字节
     alert( arr.byteLength ); // 8（字节中的大小）
@@ -146,7 +146,7 @@ let arr16 = new Uint16Array(arr8.buffer);
 - `Int8Array`，`Int16Array`，`Int32Array` —— 用于有符号整数（可以为负数）。
 - `Float32Array`，`Float64Array` —— 用于 32 位和 64 位的有符号浮点数。
 
-```warn header="没有 `int8` 或类似的单值类型"
+"没有 `int8` 或类似的单值类型"
 请注意，尽管有类似 `Int8Array` 这样的名称，但 JavaScript 中并没有像 `int`，或 `int8` 这样的单值类型。
 
 这是合乎逻辑的，因为 `Int8Array` 不是这些单值的数组，而是 `ArrayBuffer` 上的视图。
@@ -172,7 +172,7 @@ let arr16 = new Uint16Array(arr8.buffer);
 
 示例如下：
 
-```js run
+```js
 let uint8array = new Uint8Array(16);
 
 let num = 256;
@@ -226,7 +226,7 @@ new DataView(buffer, [byteOffset], [byteLength])
 
 例如，这里我们从同一个 buffer 中提取不同格式的数字：
 
-```js run
+```js
 // 4 个字节的二进制数组，每个都是最大值 255
 let buffer = new Uint8Array([255, 255, 255, 255]).buffer;
 

@@ -5,7 +5,7 @@
 
 同时，我们可以在 `demoGithubUser` 中使用循环以摆脱递归：在 `async/await` 的帮助下很容易实现。
 
-```js run
+```js
 class HttpError extends Error {
   constructor(response) {
     super(`${response.status} for ${response.url}`);

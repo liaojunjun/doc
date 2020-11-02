@@ -6,10 +6,10 @@
 <p>所以，我们应该匹配两个引号之间的内容，且忽略中间转义的引号。</p>
 <p>这是任务的关键部分，否则这个任务就没什么意思了。</p>
 <p>匹配字符串示例：</p>
-<pre><code class="language-js">.. *!*<span class="hljs-string">&quot;test me&quot;</span>*/!* ..  
-.. *!*<span class="hljs-string">&quot;Say \&quot;Hello\&quot;!&quot;</span>*/!* ... (escaped quotes inside)
-.. *!*<span class="hljs-string">&quot;\\&quot;</span>*/!* ..  (double slash inside)
-.. *!*<span class="hljs-string">&quot;\\ \&quot;&quot;</span>*/!* ..  (double slash and an escaped quote inside)</code></pre>
+<pre><code class="language-js">.. <span class="hljs-string">&quot;test me&quot;</span> ..  
+.. <span class="hljs-string">&quot;Say \&quot;Hello\&quot;!&quot;</span> ... (escaped quotes inside)
+.. <span class="hljs-string">&quot;\\&quot;</span> ..  (double slash inside)
+.. <span class="hljs-string">&quot;\\ \&quot;&quot;</span> ..  (double slash and an escaped quote inside)</code></pre>
 <p>在 JavaScript 中，双斜杠用于把斜杠转义为字符串，如下所示：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27; .. &quot;test me&quot; .. &quot;Say \\&quot;Hello\\&quot;!&quot; .. &quot;\\\\ \\&quot;&quot; .. &#x27;</span>;
 

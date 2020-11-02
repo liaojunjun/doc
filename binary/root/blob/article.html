@@ -41,7 +41,7 @@ Blob 可以很容易用作 `&lt;a&gt;`、`&lt;img&gt;` 或其他标签的 URL，
 
 让我们从一个简单的例子开始。通过点击链接，你可以下载一个具有动态生成的内容为 `hello world` 的 `Blob` 的文件：
 
-```html run
+```html
 &lt;!-- download 特性（attribute）强制浏览器下载而不是导航 --&gt;
 &lt;a download=&quot;hello.txt&quot; href=&#x27;#&#x27; id=&quot;link&quot;&gt;Download&lt;/a&gt;
 
@@ -87,10 +87,10 @@ link.download = <span class="hljs-string">&#x27;hello.txt&#x27;</span>;
 
 <span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">new</span> Blob([<span class="hljs-string">&#x27;Hello, world!&#x27;</span>], {<span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text/plain&#x27;</span>});
 
-*!*
+
 <span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader();
 reader.readAsDataURL(blob); <span class="hljs-comment">// 将 Blob 转换为 base64 并调用 onload</span>
-*/!*
+
 
 reader.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   link.href = reader.result; <span class="hljs-comment">// data url</span>
@@ -144,9 +144,9 @@ canvas.toBlob(<span class="hljs-function"><span class="hljs-keyword">function</s
 <pre><code class="language-js"><span class="hljs-comment">// 从 blob 获取 arrayBuffer</span>
 <span class="hljs-keyword">let</span> fileReader = <span class="hljs-keyword">new</span> FileReader();
 
-*!*
+
 fileReader.readAsArrayBuffer(blob);
-*/!*
+
 
 fileReader.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
   <span class="hljs-keyword">let</span> arrayBuffer = fileReader.result;

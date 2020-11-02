@@ -46,7 +46,7 @@ data: of two lines
 例如：
 
 ```js
-data: {"user":"John","message":"First line*!*\n*/!* Second line"}
+data: {"user":"John","message":"First line\n Second line"}
 ```
 
 ……因此，我们可以假设一个 `data:` 只保存了一条消息。
@@ -142,7 +142,7 @@ id: 3
 - 将属性 `eventSource.lastEventId` 设置为其值。
 - 重新连接后，发送带有 `id` 的 header `Last-Event-ID`，以便服务器可以重新发送后面的消息。
 
-```smart header="把 `id:` 放在 `data:` 后"
+把 `id:` 放在 `data:` 后"
 请注意：`id` 被服务器附加到 `data` 消息后，以确保在收到消息后 `lastEventId` 会被更新。
 ```
 

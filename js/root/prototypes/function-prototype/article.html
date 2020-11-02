@@ -14,9 +14,9 @@
   <span class="hljs-built_in">this</span>.name = name;
 }
 
-*!*
+
 Rabbit.prototype = animal;
-*/!*
+
 
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;White Rabbit&quot;</span>); <span class="hljs-comment">//  rabbit.__proto__ == animal</span>
 
@@ -68,9 +68,9 @@ alert(rabbit.constructor == Rabbit); <span class="hljs-comment">// true (from pr
 
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit(<span class="hljs-string">&quot;White Rabbit&quot;</span>);
 
-*!*
+
 <span class="hljs-keyword">let</span> rabbit2 = <span class="hljs-keyword">new</span> rabbit.constructor(<span class="hljs-string">&quot;Black Rabbit&quot;</span>);
-*/!*</code></pre>
+</code></pre>
 <p>当我们有一个对象，但不知道它使用了哪个构造器（例如它来自第三方库），并且我们需要创建另一个类似的对象时，用这种方法就很方便。</p>
 <p>但是，关于 <code>&quot;constructor&quot;</code> 最重要的是……</p>
 <p><strong>……JavaScript 自身并不能确保正确的 <code>&quot;constructor&quot;</code> 函数值。</strong></p>
@@ -83,9 +83,9 @@ Rabbit.prototype = {
 };
 
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
-*!*
+
 alert(rabbit.constructor === Rabbit); <span class="hljs-comment">// false</span>
-*/!*</code></pre>
+</code></pre>
 <p>因此，为了确保正确的 <code>&quot;constructor&quot;</code>，我们可以选择添加/删除属性到默认 <code>&quot;prototype&quot;</code>，而不是将其整个覆盖：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Rabbit</span>(<span class="hljs-params"></span>) </span>{}
 
@@ -96,9 +96,9 @@ Rabbit.prototype.jumps = <span class="hljs-literal">true</span>
 <p>或者，也可以手动重新创建 <code>constructor</code> 属性：</p>
 <pre><code class="language-js">Rabbit.prototype = {
   <span class="hljs-attr">jumps</span>: <span class="hljs-literal">true</span>,
-*!*
+
   <span class="hljs-keyword">constructor</span>: Rabbit
-*/!*
+
 };
 
 // 这样的 <span class="hljs-keyword">constructor</span> 也是正确的，因为我们手动添加了它</code></pre>

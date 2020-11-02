@@ -20,7 +20,7 @@ JavaScript 使用 [Unicode 编码](https://en.wikipedia.org/wiki/Unicode) （Uni
 
 比如 `length` 认为这里的输入有 2 个字符：
 
-```js run
+```js
 alert('😄'.length); // 2
 alert('𝒳'.length); // 2
 ```
@@ -33,7 +33,7 @@ alert('𝒳'.length); // 2
 
 ## Unicode 属性（Unicode properties）\p{...}
 
-```warn header="在 Firefox 和 Edge 中缺乏支持"
+"在 Firefox 和 Edge 中缺乏支持"
 尽管 unicode property 从 2018 年以来便作为标准的一部分, 但 unicode 属性在 Firefox ([bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1361876)) 和 Edge ([bug](https://github.com/Microsoft/ChakraCore/issues/2969)) 中并没有相应的支持。
 
 目前 [XRegExp](http://xregexp.com) 这个库提供“扩展”的正则表达式，其中包括对 unicode property 的跨平台支持。
@@ -49,7 +49,7 @@ Unicode 中的每一个字符都具有很多的属性。它们描述了一个字
 
 在下面的例子中 3 种字母将会被查找出：英语、格鲁吉亚语和韩语。
 
-```js run
+```js
 let str = "A ბ ㄱ";
 
 alert( str.match(/\p{L}/gu) ); // A,ბ,ㄱ
@@ -117,7 +117,7 @@ Unicode 支持相当数量的属性，列出整个清单需要占用大量的空
 
 一个 16 进制数字可以表示为 `pattern:\p{Hex_Digit}`：
 
-```js run
+```js
 let regexp = /x\p{Hex_Digit}\p{Hex_Digit}/u;
 
 alert("number: xAF".match(regexp)); // xAF
@@ -131,7 +131,7 @@ alert("number: xAF".match(regexp)); // xAF
 
 为了实现查找一个给定的书写系统中的字符，我们需要使用 `pattern:Script=<value>`，例如对于西里尔字符：`pattern:\p{sc=Cyrillic}`, 中文字符：`pattern:\p{sc=Han}`，等等。
 
-```js run
+```js
 let regexp = /\p{sc=Han}/gu; // returns Chinese hieroglyphs
 
 let str = `Hello Привет 你好 123_456`;
@@ -145,7 +145,7 @@ alert( str.match(regexp) ); // 你,好
 
 让我们使用这一属性来查找符合“货币，接着是一个数字”的价格文本：
 
-```js run
+```js
 let regexp = /\p{Sc}\d/gu;
 
 let  str = `Prices: $2, €1, ¥9`;

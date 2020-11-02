@@ -9,7 +9,7 @@
 
 运行代码如下：
 
-```js run
+```js
 let reg = /"(\\.|[^"\\])*"/g;
 let str = ' .. "test me" .. "Say \\"Hello\\"!" .. "\\\\ \\"" .. ';
 

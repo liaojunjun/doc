@@ -1,6 +1,6 @@
 解决方案：
 
-```js run demo
+```js demo
 function delay(f, ms) {
 
   return function() {

@@ -25,11 +25,11 @@ alert( makeUser().name ); <span class="hljs-comment">// Error: Cannot read prope
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeUser</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> {
     <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
-*!*
+
     ref() {
       <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>;
     }
-*/!*
+
   };
 };
 

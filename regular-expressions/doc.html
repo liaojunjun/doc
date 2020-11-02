@@ -376,7 +376,7 @@ alert( <span class="hljs-string">&quot;I love JavaScript&quot;</span>.search(reg
 
 示例代码如下：
 
-```js run
+```js
 let str = &quot;I love JavaScript!&quot;;
 
 alert( str.search(/LOVE/) ); // -1（没找到）
@@ -479,7 +479,7 @@ alert( <span class="hljs-string">&quot;CS 4&quot;</span>.match(regexp) ); <span 
 
 幸运的是，有一种替代方法可以在任何地方使用。我们可以使用诸如 `pattern:[\s\S]` 之类的正则表达式来匹配“任何字符”。
 
-```js run
+```js
 alert( &quot;A\nB&quot;.match(/A[\s\S]B/) ); // A\nB (match!)
 ```
 
@@ -492,13 +492,13 @@ alert( &quot;A\nB&quot;.match(/A[\s\S]B/) ); // A\nB (match!)
 
 让我们尝试查找由连字符（-）分隔的数字：
 
-```js run
+```js
 alert( &quot;1 - 5&quot;.match(/\d-\d/) ); // null, no match!
 ```
 
 让我们修复一下，在正则表达式中添加空格：\ d-\ d`：
 
-```js run
+```js
 alert( &quot;1 - 5&quot;.match(/\d - \d/) ); // 1 - 5, now it works
 // or we can use \s class:
 alert( &quot;1 - 5&quot;.match(/\d\s-\s\d/) ); // 1 - 5, also works
@@ -749,17 +749,17 @@ alert( regexp.test(badInput) ); <span class="hljs-comment">// false</span></code
 2nd place: Piglet
 33rd place: Eeyore`</span>;
 
-*!*
+
 alert( str.match(<span class="hljs-regexp">/^\d+/gm</span>) ); <span class="hljs-comment">// 1, 2, 33</span>
-*/!*</code></pre>
+</code></pre>
 <p>没有 flag  <code>/.../m</code> 时，仅仅是第一个数字被匹配到：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`1st place: Winnie
 2nd place: Piglet
 33rd place: Eeyore`</span>;
 
-*!*
+
 alert( str.match(<span class="hljs-regexp">/^\d+/g</span>) ); <span class="hljs-comment">// 1</span>
-*/!*</code></pre>
+</code></pre>
 <p>这是因为默认情况下，锚符 <code>^</code> 仅仅匹配文本的开头，在多行模式下，它匹配行的开头。</p>
 <p>正则表达式引擎将会在文本中查找以锚符 <code>^</code> 开始的字符串，我们找到之后继续匹配 <code>\d+</code> 模式。</p>
 <h2 id="行的结尾-">行的结尾 $</h2>
@@ -834,7 +834,7 @@ alert( <span class="hljs-string">&quot;Hello, Java!&quot;</span>.match(<span cla
 <p>例如，模式 <code>pattern:\b\d\d\b</code> 查找独立的两位数。换句话说，它查找的是两位数，其周围是与 <code>pattern:\w</code> 不同的字符，例如空格或标点符号（或文本开头/结尾）。</p>
 <pre><code class="language-js">alert( <span class="hljs-string">&quot;1 23 456 78&quot;</span>.match(<span class="hljs-regexp">/\b\d\d\b/g</span>) ); <span class="hljs-comment">// 23,78</span>
 alert( <span class="hljs-string">&quot;12,34,56&quot;</span>.match(<span class="hljs-regexp">/\b\d\d\b/g</span>) ); <span class="hljs-comment">// 12,34,56</span></code></pre>
-<p>```warn header=&quot;词边界 <code>pattern:\b</code> 不适用于非拉丁字母&quot;
+<p>&quot;词边界 <code>pattern:\b</code> 不适用于非拉丁字母&quot;
 词边界测试 <code>pattern:\b</code> 检查位置的一侧是否匹配 <code>pattern:\w</code>，而另一侧则不匹配 &quot;<code>pattern:\w</code>&quot;。</p>
 <p>但是，<code>pattern:\w</code> 表示拉丁字母 <code>a-z</code>（或数字或下划线），因此此检查不适用于其他字符，如西里尔字母（cyrillic letters）或象形文字（hieroglyphs）。</p>
 <pre><code></code></pre>
@@ -880,9 +880,9 @@ alert( <span class="hljs-string">&quot;Chapter 5.1&quot;</span>.match(reg) ); <s
 </ul>
 <p>所以调用 <code>new RegExp</code> 会获得一个没有反斜杠的字符串。</p>
 <p>如果要修复这个问题，我们需要双斜杠，因为引用会把 <code>\\</code> 变为 <code>\</code>：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> regStr = <span class="hljs-string">&quot;\\d\\.\\d&quot;</span>;
-*/!*
+
 alert(regStr); <span class="hljs-comment">// \d\.\d (correct now)</span>
 
 <span class="hljs-keyword">let</span> regexp = <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(regStr);
@@ -1119,20 +1119,20 @@ alert( str.match(reg) )  <span class="hljs-comment">// #121212,#AA00ef</span></c
 : <code>pattern:\d{5}</code> 表示 5 位的数字，如同 <code>pattern:\d\d\d\d\d</code>。</p>
 <pre><code>接下来的例子将会查找一个五位数的数字：
 
-```js run
+```js
 alert( &quot;I&#x27;m 12345 years old&quot;.match(/\d{5}/) ); //  &quot;12345&quot;
 ```
 
 我们可以添加 `\b` 来排除更多位数的数字：`pattern:\b\d{5}\b`。</code></pre>
 <p>某个范围的位数：<code>{3,5}</code>
 : 我们可以将限制范围的数字放入括号中，来查找位数为 3 至 5 位的数字：<code>pattern:\d{3,5}</code></p>
-<pre><code>```js run
+<pre><code>```js
 alert( &quot;I&#x27;m not 12, but 1234 years old&quot;.match(/\d{3,5}/) ); // &quot;1234&quot;
 ```
 
 我们可以省略上限。那么正则表达式 `pattern:\d{3,}` 就会查找位数大于或等于 3 的数字：
 
-```js run
+```js
 alert( &quot;I&#x27;m not 12, but 345678 years old&quot;.match(/\d{3,}/) ); // &quot;345678&quot;
 ```</code></pre>
 <p>对于字符串 <code>+7(903)-123-45-67</code> 来说，我们如果需要一个或多个连续的数字，就使用 <code>pattern:\d{1,}</code>：</p>
@@ -1147,7 +1147,7 @@ alert(numbers); <span class="hljs-comment">// 7,903,123,45,67</span></code></pre
 : 代表“一个或多个”，相当于 <code>{1,}</code>。</p>
 <pre><code>例如，`pattern:\d+` 用来查找所有数字：
 
-```js run
+```js
 let str = &quot;+7(903)-123-45-67&quot;;
 
 alert( str.match(/\d+/g) ); // 7,903,123,45,67
@@ -1158,7 +1158,7 @@ alert( str.match(/\d+/g) ); // 7,903,123,45,67
 
 所以他能够在 `subject:color` 中找到 `match:or`，以及在 `subject:colour` 中找到 `match:our`：
 
-```js run
+```js
 let str = &quot;Should I write color or colour?&quot;;
 
 alert( str.match(/colou?r/g) ); // color, colour
@@ -1167,35 +1167,35 @@ alert( str.match(/colou?r/g) ); // color, colour
 : 代表着“零个或多个”，相当于 <code>{0,}</code>。也就是说，这个字符可以多次出现或不出现。</p>
 <pre><code>接下来的例子将要寻找一个后跟任意数量的 0 的数字：
 
-```js run
+```js
 alert( &quot;100 10 1&quot;.match(/\d0*/g) ); // 100, 10, 1
 ```
 
 将它与 `&#x27;+&#x27;`（一个或多个）作比较：
 
-```js run
+```js
 alert( &quot;100 10 1&quot;.match(/\d0+/g) ); // 100, 10
 ```</code></pre>
 <h2 id="更多示例">更多示例</h2>
 <p>量词是经常被使用的。它们是构成复杂的正则表达式的主要模块之一，我们接着来看更多的例子。</p>
 <p>正则表达式“浮点数”（带浮点的数字）：<code>pattern:\d+\.\d+</code>
 : 实现：
-    <code>js run     alert( &quot;0 1 12.345 7890&quot;.match(/\d+\.\d+/g) ); // 12.345     </code></p>
+    <code>js     alert( &quot;0 1 12.345 7890&quot;.match(/\d+\.\d+/g) ); // 12.345     </code></p>
 <p>正则表达式“打开没有属性的 HTML 标记”，比如 <code>&lt;span&gt;</code> 或 <code>&lt;p&gt;</code>：<code>pattern:/&lt;[a-z]+&gt;/i</code>
 : 实现：</p>
-<pre><code>```js run
+<pre><code>```js
 alert( &quot;&lt;body&gt; ... &lt;/body&gt;&quot;.match(/&lt;[a-z]+&gt;/gi) ); // &lt;body&gt;
 ```
 
 我们查找字符 `pattern:&#x27;&lt;&#x27;` 后跟一个或多个英文字母，然后是 `pattern:&#x27;&gt;&#x27;`。</code></pre>
 <p>正则表达式“打开没有属性的HTML标记”（改进版）：<code>pattern:/&lt;[a-z][a-z0-9]*&gt;/i</code>
 : 更好的表达式：根据标准，HTML 标记名称可以在除了第一个位置以外的任意一个位置有一个数字，比如 <code>&lt;h1&gt;</code>。</p>
-<pre><code>```js run
+<pre><code>```js
 alert( &quot;&lt;h1&gt;Hi!&lt;/h1&gt;&quot;.match(/&lt;[a-z][a-z0-9]*&gt;/gi) ); // &lt;h1&gt;
 ```</code></pre>
 <p>正则表达式“打开没有属性的HTML标记”：<code>pattern:/&lt;\/?[a-z][a-z0-9]*&gt;/i</code>
 : 我们在标记前加上了一个可选的斜杆 <code>pattern:/?</code>。必须用一个反斜杠来转义它，否则 JavaScript 就会认为它是这个模式的结束符。</p>
-<pre><code>```js run
+<pre><code>```js
 alert( &quot;&lt;h1&gt;Hi!&lt;/h1&gt;&quot;.match(/&lt;\/?[a-z][a-z0-9]*&gt;/gi) ); // &lt;h1&gt;, &lt;/h1&gt;
 ```</code></pre>
 <pre><code class="language-smart">我们能够从这些例子中看到一个共同的规则：正则表达式越精确 —— 它就越长且越复杂。
@@ -1731,7 +1731,7 @@ alert( match[<span class="hljs-number">1</span>] ); <span class="hljs-comment">/
 alert( match[<span class="hljs-number">2</span>] ); <span class="hljs-comment">// c</span></code></pre>
 <p>数组长度是恒定的：<code>3</code>。但是对于组 <code>pattern:(z)?</code> 而言，什么都没有，所以结果是 <code>[&quot;ac&quot;, undefined, &quot;c&quot;]</code>。</p>
 <h2 id="搜索所有具有组的匹配项：matchall">搜索所有具有组的匹配项：matchAll</h2>
-<p>```warn header=&quot;<code>matchAll</code> 是一个新方法，可能需要使用 polyfill&quot;
+<p>&quot;<code>matchAll</code> 是一个新方法，可能需要使用 polyfill&quot;
 旧的浏览器不支持 <code>matchAll</code>。</p>
 <p>可能需要一个 polyfill，例如 <a href="https://github.com/ljharb/String.prototype.matchAll">https://github.com/ljharb/String.prototype.matchAll</a>.</p>
 <pre><code>
@@ -1739,7 +1739,7 @@ alert( match[<span class="hljs-number">2</span>] ); <span class="hljs-comment">/
 
 例如，让我们查找字符串中的所有标签：
 
-```js run
+```js
 let str = &#x27;&lt;h1&gt; &lt;h2&gt;&#x27;;
 
 let tags = str.match(/&lt;(.*?)&gt;/g);
@@ -1800,10 +1800,10 @@ alert( tag1.input ); <span class="hljs-comment">// &lt;h1&gt; &lt;h2&gt;</span><
 
 例如，让我们查找 &quot;year-month-day&quot; 格式的日期：
 
-```js run
-*!*
+```js
+
 let dateRegexp = /(?&lt;year&gt;[0-9]{4})-(?&lt;month&gt;[0-9]{2})-(?&lt;day&gt;[0-9]{2})/;
-*/!*
+
 let str = &quot;2019-04-30&quot;;
 
 let groups = str.match(dateRegexp).groups;
@@ -1850,10 +1850,10 @@ alert( str.replace(regexp, <span class="hljs-string">&#x27;$&lt;day&gt;.$&lt;mon
 <p>在下面的示例中，我们仅将名称 <code>match:John</code> 作为匹配项的单独成员：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;Gogogo John!&quot;</span>;
 
-*!*
+
 <span class="hljs-comment">// ?: 从捕获组中排除 &#x27;go&#x27;</span>
 <span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/(?:go)+ (\w+)/i</span>;
-*/!*
+
 
 <span class="hljs-keyword">let</span> result = str.match(regexp);
 
@@ -1895,16 +1895,16 @@ alert( str.match(regexp) ); <span class="hljs-comment">// &quot;She&#x27;</span>
 <p>这是正确的代码：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">`He said: &quot;She&#x27;s the one!&quot;.`</span>;
 
-*!*
+
 <span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/([&#x27;&quot;])(.*?)\1/g</span>;
-*/!*
+
 
 alert( str.match(regexp) ); <span class="hljs-comment">// &quot;She&#x27;s the one!&quot;</span></code></pre>
 <p>现在可以了！正则表达式引擎会找到第一个引号 <code>pattern:([&#39;&quot;])</code> 并记住其内容。那是第一个捕获组。</p>
 <p><code>pattern:\1</code> 在模式中进一步的含义是“查找与第一（捕获）分组相同的文本”，在我们的示例中为完全相同的引号。</p>
 <p>与此类似，<code>pattern:\2</code> 表示第二（捕获）分组的内容，<code>pattern:\3</code> – 第三分组，依此类推。</p>
 <pre><code class="language-smart">如果我们在组中使用 `?:`，那么我们将无法引用它。用 `(?:...)` 捕获的组被排除，引擎不会存储。</code></pre>
-<p>```warn header=&quot;不要搞混了： 在模式中用 <code>pattern:\1</code>，在替换项中用：<code>pattern:$1</code>&quot;
+<p>&quot;不要搞混了： 在模式中用 <code>pattern:\1</code>，在替换项中用：<code>pattern:$1</code>&quot;
 在替换字符串中我们使用美元符号：<code>pattern:$1</code>，而在模式中 - 使用反斜杠 <code>pattern:\1</code>。</p>
 <pre><code>
 ## 按命名反向引用：`\k&lt;name&gt;`
@@ -1915,12 +1915,12 @@ alert( str.match(regexp) ); <span class="hljs-comment">// &quot;She&#x27;s the o
 
 在下面的示例中引号组命名为 `pattern:?&lt;quote&gt;`，因此反向引用为  `pattern:\k&lt;quote&gt;`：
 
-```js run
+```js
 let str = `He said: &quot;She&#x27;s the one!&quot;.`;
 
-*!*
+
 let regexp = /(?&lt;quote&gt;[&#x27;&quot;])(.*?)\k&lt;quote&gt;/g;
-*/!*
+
 
 alert( str.match(regexp) ); // &quot;She&#x27;s the one!&quot;</code></pre>
 
@@ -2043,10 +2043,10 @@ alert( str.match(reg) ); <span class="hljs-comment">// &quot;test me&quot;,&quot
 <p>所以，我们应该匹配两个引号之间的内容，且忽略中间转义的引号。</p>
 <p>这是任务的关键部分，否则这个任务就没什么意思了。</p>
 <p>匹配字符串示例：</p>
-<pre><code class="language-js">.. *!*<span class="hljs-string">&quot;test me&quot;</span>*/!* ..  
-.. *!*<span class="hljs-string">&quot;Say \&quot;Hello\&quot;!&quot;</span>*/!* ... (escaped quotes inside)
-.. *!*<span class="hljs-string">&quot;\\&quot;</span>*/!* ..  (double slash inside)
-.. *!*<span class="hljs-string">&quot;\\ \&quot;&quot;</span>*/!* ..  (double slash and an escaped quote inside)</code></pre>
+<pre><code class="language-js">.. <span class="hljs-string">&quot;test me&quot;</span> ..  
+.. <span class="hljs-string">&quot;Say \&quot;Hello\&quot;!&quot;</span> ... (escaped quotes inside)
+.. <span class="hljs-string">&quot;\\&quot;</span> ..  (double slash inside)
+.. <span class="hljs-string">&quot;\\ \&quot;&quot;</span> ..  (double slash and an escaped quote inside)</code></pre>
 <p>在 JavaScript 中，双斜杠用于把斜杠转义为字符串，如下所示：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> str = <span class="hljs-string">&#x27; .. &quot;test me&quot; .. &quot;Say \\&quot;Hello\\&quot;!&quot; .. &quot;\\\\ \\&quot;&quot; .. &#x27;</span>;
 
@@ -2135,7 +2135,7 @@ alert(<span class="hljs-string">&quot;00:00 10:10 23:59 25:99 1:2&quot;</span>.m
 
 <span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;0 12 -5 123 -18&quot;</span>;
 
-<span class="hljs-built_in">console</span>.log( str.match(regexp) ); <span class="hljs-comment">// 0, 12, 123, *!*8*/!*</span></code></pre>
+<span class="hljs-built_in">console</span>.log( str.match(regexp) ); <span class="hljs-comment">// 0, 12, 123, 8</span></code></pre>
 <p>As you can see, it matches <code>match:8</code>, from <code>subject:-18</code>. To exclude it, we need to ensure that the regexp starts matching a number not from the middle of another (non-matching) number.</p>
 <p>We can do it by specifying another negative lookbehind: <code>pattern:(?&lt;!-)(?&lt;!\d)\d+</code>. Now <code>pattern:(?&lt;!\d)</code> ensures that a match does not start after another digit, just what we need.</p>
 <p>We can also join them into a single lookbehind here:</p>
@@ -2312,7 +2312,7 @@ alert( str.match(reg) ); <span class="hljs-comment">// 30, $</span></code></pre>
 alert( regexp.test(<span class="hljs-string">&quot;A good string&quot;</span>) ); <span class="hljs-comment">// true</span>
 alert( regexp.test(<span class="hljs-string">&quot;Bad characters: $@#&quot;</span>) ); <span class="hljs-comment">// false</span></code></pre>
 <p>It seems to work. The result is correct. Although, on certain strings it takes a lot of time. So long that JavaScript engine &quot;hangs&quot; with 100% CPU consumption.</p>
-<p>If you run the example below, you probably won&#39;t see anything, as JavaScript will just &quot;hang&quot;. A web-browser will stop reacting on events, the UI will stop working. After some time it will suggest to reloaad the page. So be careful with this:</p>
+<p>If you the example below, you probably won&#39;t see anything, as JavaScript will just &quot;hang&quot;. A web-browser will stop reacting on events, the UI will stop working. After some time it will suggest to reloaad the page. So be careful with this:</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/^(\w+\s?)*$/</span>;
 <span class="hljs-keyword">let</span> str = <span class="hljs-string">&quot;An input string that takes a long time or even makes this regexp to hang!&quot;</span>;
 
@@ -2528,9 +2528,9 @@ alert(regexp.lastIndex); <span class="hljs-comment">// 0（搜索结束时重置
 
 <span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/g</span>; <span class="hljs-comment">// 如果没有标志 &quot;g&quot;，属性 lastIndex 会被忽略</span>
 
-*!*
+
 regexp.lastIndex = <span class="hljs-number">4</span>;
-*/!*
+
 
 <span class="hljs-keyword">let</span> word = regexp.exec(str);
 alert(word); <span class="hljs-comment">// varName</span></code></pre>
@@ -2540,9 +2540,9 @@ alert(word); <span class="hljs-comment">// varName</span></code></pre>
 
 <span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/\w+/g</span>;
 
-*!*
+
 regexp.lastIndex = <span class="hljs-number">3</span>;
-*/!*
+
 
 <span class="hljs-keyword">let</span> word = regexp.exec(str);
 alert(word[<span class="hljs-number">0</span>]); <span class="hljs-comment">// varName</span>
@@ -2655,7 +2655,7 @@ alert(<span class="hljs-string">&#x27;12-34-56&#x27;</span>.replace(<span class=
 <p>您可以在上面的示例中看到：只有第一个 <code>&quot;-&quot;</code> 被 <code>&quot;:&quot;</code> 替换了。</p>
 <p>如要找到所有的连字符，我们不应该用字符串 <code>&quot;-&quot;</code>，而应使用带 <code>pattern:g</code> 标记的正则表达式 <code>pattern:/-/g</code>：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 将连字符替换为冒号</span>
-alert( <span class="hljs-string">&#x27;12-34-56&#x27;</span>.replace( *!*<span class="hljs-regexp">/-/g</span>*<span class="hljs-regexp">/!*, &quot;:&quot; ) )  /</span><span class="hljs-regexp">/ 12:34:56</span></code></pre>
+alert( <span class="hljs-string">&#x27;12-34-56&#x27;</span>.replace( <span class="hljs-regexp">/-/g</span>*<span class="hljs-regexp">/!*, &quot;:&quot; ) )  /</span><span class="hljs-regexp">/ 12:34:56</span></code></pre>
 <p>第二个参数是一个替代字符串。我们可以在其中使用特殊字符：</p>
 <table>
 <thead>
@@ -2783,13 +2783,13 @@ alert( regexp.exec(str) ); <span class="hljs-comment">// null</span></code></pre
 <pre><code class="language-js">let str = &quot;I love JavaScript&quot;;
 
 // 这两个测试相同
-alert( *!*/love/i*/!*.test(str) ); // true
-alert( str.search(*!*/love/i*/!*) != -1 ); // true</code></pre>
+alert( /love/i.test(str) ); // true
+alert( str.search(/love/i) != -1 ); // true</code></pre>
 <p>一个反例：</p>
 <pre><code class="language-js">let str = &quot;Bla-bla-bla&quot;;
 
-alert( *!*/love/i*/!*.test(str) ); // false
-alert( str.search(*!*/love/i*/!*) != -1 ); // false</code></pre>
+alert( /love/i.test(str) ); // false
+alert( str.search(/love/i) != -1 ); // false</code></pre>
 <p>如果正则表达式带有标记 <code>pattern:g</code>，则 <code>regexp.test</code> 从  <code>regexp.lastIndex</code> 属性中查找，并更新此属性，就像 <code>regexp.exec</code> 一样。</p>
 <p>因此，我们可以用它从给定位置进行搜索：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> regexp = <span class="hljs-regexp">/love/gi</span>;
@@ -2803,7 +2803,7 @@ alert( regexp.test(str) ); <span class="hljs-comment">// false（无匹配）</s
 
 例如，这里我们在同一文本上调用 `regexp.test` 两次，而第二次调用失败了：
 
-```js run
+```js
 let regexp = /javascript/g;  // （新建 regexp：regexp.lastIndex=0)
 
 alert( regexp.test(&quot;javascript&quot;) ); // true（现在 regexp.lastIndex=10）

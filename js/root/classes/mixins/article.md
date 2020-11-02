@@ -18,10 +18,10 @@
 
 例如，这个名为 `sayHiMixin` 的 mixin 用于给 `User` 添加一些“语言功能”：
 
-```js run
-*!*
+```js
+
 // mixin
-*/!*
+
 let sayHiMixin = {
   sayHi() {
     alert(`Hello ${this.name}`);
@@ -31,9 +31,9 @@ let sayHiMixin = {
   }
 };
 
-*!*
+
 // 用法：
-*/!*
+
 class User {
   constructor(name) {
     this.name = name;
@@ -61,7 +61,7 @@ Mixin 可以在自己内部使用继承。
 
 例如，这里的 `sayHiMixin` 继承自 `sayMixin`：
 
-```js run
+```js
 let sayMixin = {
   say(phrase) {
     alert(phrase);
@@ -72,9 +72,9 @@ let sayHiMixin = {
   __proto__: sayMixin, // (或者，我们可以在这儿使用 Object.create 来设置原型)
 
   sayHi() {
-    *!*
+    
     // 调用父类方法
-    */!*
+    
     super.say(`Hello ${this.name}`); // (*)
   },
   sayBye() {
@@ -121,7 +121,7 @@ new User("Dude").sayHi(); // Hello Dude!
 
 下面是代码：
 
-```js run
+```js
 let eventMixin = {
   /**
    * 订阅事件，用法：
@@ -171,7 +171,7 @@ let eventMixin = {
 
 用法：
 
-```js run
+```js
 // 创建一个 class
 class Menu {
   choose(value) {
@@ -184,9 +184,9 @@ Object.assign(Menu.prototype, eventMixin);
 let menu = new Menu();
 
 // 添加一个事件处理程序（handler），在被选择时被调用：
-*!*
+
 menu.on("select", value => alert(`Value selected: ${value}`));
-*/!*
+
 
 // 触发事件 => 运行上述的事件处理程序（handler）并显示：
 // 被选中的值：123

@@ -6,7 +6,7 @@
 - `c = 2`
 - `d = 1`
 
-```js run no-beautify
+```js no-beautify
 let a = 1, b = 1;
 
 alert( ++a ); // 2，前置运算符返回最新值

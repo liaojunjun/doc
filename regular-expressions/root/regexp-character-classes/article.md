@@ -10,7 +10,7 @@
 
 例如，让我们找到电话号码的第一个数字：
 
-```js run
+```js
 let str = "+7(903)-123-45-67";
 
 let regexp = /\d/;
@@ -22,7 +22,7 @@ alert( str.match(regexp) ); // 7
 
 让我们添加 `pattern:g`标志来查找所有数字：
 
-```js run
+```js
 let str = "+7(903)-123-45-67";
 
 let regexp = /\d/g;
@@ -52,7 +52,7 @@ alert( str.match(regexp).join('') ); // 79035419441
 
 例如，`pattern:CSS\d` 匹配字符串 `match:CSS` 与后面的数字：
 
-```js run
+```js
 let str = "Is there CSS4?";
 let regexp = /CSS\d/
 
@@ -61,7 +61,7 @@ alert( str.match(regexp) ); // CSS4
 
 我们还可以使用许多字符类：
 
-```js run
+```js
 alert( "I love HTML5!".match(/\s\w\w\w\w\d/) ); // ' HTML5'
 ```
 
@@ -86,7 +86,7 @@ alert( "I love HTML5!".match(/\s\w\w\w\w\d/) ); // ' HTML5'
 
 在这一章的开头，我们看到了如何从 `subject:+7(903)-123-45-67` 这样的字符串中创建一个只包含数字的电话号码: 找到所有的数字并将它们连接起来。
 
-```js run
+```js
 let str = "+7(903)-123-45-67";
 
 alert( str.match(/\d/g).join('') ); // 79031234567
@@ -94,7 +94,7 @@ alert( str.match(/\d/g).join('') ); // 79031234567
 
 另一种快捷的替代方法是查找非数字 `pattern:\D` 并将其从字符串中删除：
 
-```js run
+```js
 let str = "+7(903)-123-45-67";
 
 alert( str.replace(/\D/g, "") ); // 79031234567
@@ -106,13 +106,13 @@ alert( str.replace(/\D/g, "") ); // 79031234567
 
 例如：
 
-```js run
+```js
 alert( "Z".match(/./) ); // Z
 ```
 
 或在正则表达式中间：
 
-```js run
+```js
 let regexp = /CS.4/;
 
 alert( "CSS4".match(regexp) ); // CSS4
@@ -122,7 +122,7 @@ alert( "CS 4".match(regexp) ); // CS 4 (space is also a character)
 
 请注意，点表示“任何字符”，而不是“缺少字符”。必须有一个与之匹配的字符：
 
-```js run
+```js
 alert( "CS4".match(/CS.4/) ); // null, no match because there's no character for the dot
 ```
 
@@ -132,7 +132,7 @@ alert( "CS4".match(/CS.4/) ); // null, no match because there's no character for
 
 例如，正则表达式 `pattern:A.B` 匹配 `match:A`，然后匹配 `match:B` 和它们之间的任何字符，除了换行符`\n`：
 
-```js run
+```js
 alert( "A\nB".match(/A.B/) ); // null (no match)
 ```
 
@@ -140,16 +140,16 @@ alert( "A\nB".match(/A.B/) ); // null (no match)
 
 这就是标志 `pattern:s` 所做的。如果有一个正则表达式，则点 `pattern:.` 实际上匹配任何字符：
 
-```js run
+```js
 alert( "A\nB".match(/A.B/s) ); // A\nB (match!)
 ```
 
-````warn header="不支持 Firefox、IE、Edge"
+`"不支持 Firefox、IE、Edge"
 使用前可从 <https://caniuse.com/#search=dotall> 确认以获得最新的支持状态。在撰写本文时，它不包括 Firefox、IE、Edge。
 
 幸运的是，有一种替代方法可以在任何地方使用。我们可以使用诸如 `pattern:[\s\S]` 之类的正则表达式来匹配“任何字符”。
 
-```js run
+```js
 alert( "A\nB".match(/A[\s\S]B/) ); // A\nB (match!)
 ```
 
@@ -158,20 +158,20 @@ alert( "A\nB".match(/A[\s\S]B/) ); // A\nB (match!)
 如果我们希望两种“点”都使用相同的模式，也可以使用此技巧：实际的点 `pattern:.` 具有常规方式（“不包括换行符”）以及一种使用 `pattern:[\s\S]` 或类似形式匹配“任何字符”。
 ````
 
-````warn header="注意空格"
+`"注意空格"
 通常我们很少注意空格。对我们来说，字符串 `subject:1-5` 和 `subject:1 - 5` 几乎相同。
 
 但是，如果正则表达式未考虑空格，则可能无法正常工作。
 
 让我们尝试查找由连字符（-）分隔的数字：
 
-```js run
+```js
 alert( "1 - 5".match(/\d-\d/) ); // null, no match!
 ```
 
 让我们修复一下，在正则表达式中添加空格：\ d-\ d`：
 
-```js run
+```js
 alert( "1 - 5".match(/\d - \d/) ); // 1 - 5, now it works
 // or we can use \s class:
 alert( "1 - 5".match(/\d\s-\s\d/) ); // 1 - 5, also works

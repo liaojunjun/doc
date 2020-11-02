@@ -9,9 +9,9 @@
 <li><p>如果一个运算符对应的只有一个运算元，那么它是 <strong>一元运算符</strong>。比如说一元负号运算符（unary negation）<code>-</code>，它的作用是对数字进行正负转换：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> x = <span class="hljs-number">1</span>;
 
-*!*
+
 x = -x;
-*/!*
+
 alert( x ); <span class="hljs-comment">// -1，一元负号运算符生效</span></code></pre>
 </li>
 <li><p>如果一个运算符拥有两个运算元，那么它是 <strong>二元运算符</strong>。减号还存在二元运算符形式：</p>
@@ -75,11 +75,11 @@ alert( +x ); <span class="hljs-comment">// 1</span>
 <span class="hljs-keyword">let</span> y = <span class="hljs-number">-2</span>;
 alert( +y ); <span class="hljs-comment">// -2</span>
 
-*!*
+
 <span class="hljs-comment">// 转化非数字</span>
 alert( +<span class="hljs-literal">true</span> ); <span class="hljs-comment">// 1</span>
 alert( +<span class="hljs-string">&quot;&quot;</span> );   <span class="hljs-comment">// 0</span>
-*/!*</code></pre>
+</code></pre>
 <p>它的效果和 <code>Number(...)</code> 相同，但是更加简短。</p>
 <p>我们经常会有将字符串转化为数字的需求。比如，如果我们正在从 HTML 表单中取值，通常得到的都是字符串。如果我们想对它们求和，该怎么办？</p>
 <p>二元运算符加号会把它们合并成字符串：</p>
@@ -91,10 +91,10 @@ alert( apples + oranges ); <span class="hljs-comment">// &quot;23&quot;，二元
 <pre><code class="language-js"><span class="hljs-keyword">let</span> apples = <span class="hljs-string">&quot;2&quot;</span>;
 <span class="hljs-keyword">let</span> oranges = <span class="hljs-string">&quot;3&quot;</span>;
 
-*!*
+
 <span class="hljs-comment">// 在二元运算符加号起作用之前，所有的值都被转化为了数字</span>
 alert( +apples + +oranges ); <span class="hljs-comment">// 5</span>
-*/!*
+
 
 <span class="hljs-comment">// 更长的写法</span>
 <span class="hljs-comment">// alert( Number(apples) + Number(oranges) ); // 5</span></code></pre>
@@ -185,9 +185,9 @@ alert( x ); <span class="hljs-comment">// 5</span></code></pre>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> a = <span class="hljs-number">1</span>;
 <span class="hljs-keyword">let</span> b = <span class="hljs-number">2</span>;
 
-*!*
+
 <span class="hljs-keyword">let</span> c = <span class="hljs-number">3</span> - (a = b + <span class="hljs-number">1</span>);
-*/!*
+
 
 alert( a ); <span class="hljs-comment">// 3</span>
 alert( c ); <span class="hljs-comment">// 0</span></code></pre>
@@ -198,9 +198,9 @@ alert( c ); <span class="hljs-comment">// 0</span></code></pre>
 <p>另一个有趣的特性是链式赋值：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> a, b, c;
 
-*!*
+
 a = b = c = <span class="hljs-number">2</span> + <span class="hljs-number">2</span>;
-*/!*
+
 
 alert( a ); <span class="hljs-comment">// 4</span>
 alert( b ); <span class="hljs-comment">// 4</span>
@@ -260,13 +260,13 @@ alert( counter ); <span class="hljs-comment">// 1</span></code></pre>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> counter = <span class="hljs-number">1</span>;
 <span class="hljs-keyword">let</span> a = ++counter; <span class="hljs-comment">// (*)</span>
 
-alert(a); <span class="hljs-comment">// *!*2*/!*</span></code></pre>
+alert(a); <span class="hljs-comment">// 2</span></code></pre>
 <p><code>(*)</code> 所在的行是前置形式 <code>++counter</code>，对 <code>counter</code> 做自增运算，返回的是新的值 <code>2</code>。因此 <code>alert</code> 显示的是 <code>2</code>。</p>
 <p>下面让我们看看后置形式：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> counter = <span class="hljs-number">1</span>;
 <span class="hljs-keyword">let</span> a = counter++; <span class="hljs-comment">// (*) 将 ++counter 改为 counter++</span>
 
-alert(a); <span class="hljs-comment">// *!*1*/!*</span></code></pre>
+alert(a); <span class="hljs-comment">// 1</span></code></pre>
 <p><code>(*)</code> 所在的行是后置形式 <code>counter++</code>，它同样对 <code>counter</code> 做加法，但是返回的是 <strong>旧值</strong>（做加法之前的值）。因此 <code>alert</code> 显示的是 <code>1</code>。</p>
 <p>总结：</p>
 <ul>
@@ -289,14 +289,14 @@ alert( counter++ ); <span class="hljs-comment">// 0</span></code></pre>
 
 举个例子：
 
-```js run
+```js
 let counter = 1;
 alert( 2 * ++counter ); // 4
 ```
 
 与下方例子对比：
 
-```js run
+```js
 let counter = 1;
 alert( 2 * counter++ ); // 2，因为 counter++ 返回的是“旧值”
 ```
@@ -307,7 +307,7 @@ alert( 2 * counter++ ); // 2，因为 counter++ 返回的是“旧值”
 
 我们建议用“一行一个行为”的模式：
 
-```js run
+```js
 let counter = 1;
 alert( 2 * counter );
 counter++;
@@ -330,9 +330,9 @@ counter++;
 <p>逗号运算符 <code>,</code> 是最少见最不常使用的运算符之一。有时候它会被用来写更简短的代码，因此为了能够理解代码，我们需要了解它。</p>
 <p>逗号运算符能让我们处理多个语句，使用 <code>,</code> 将它们分开。每个语句都运行了，但是只有最后的语句的结果会被返回。</p>
 <p>举个例子：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> a = (<span class="hljs-number">1</span> + <span class="hljs-number">2</span>, <span class="hljs-number">3</span> + <span class="hljs-number">4</span>);
-*/!*
+
 
 alert( a ); <span class="hljs-comment">// 7（3 + 4 的结果）</span></code></pre>
 <p>这里，第一个语句 <code>1 + 2</code> 运行了，但是它的结果被丢弃了。随后计算 <code>3 + 4</code>，并且该计算结果被返回。</p>
@@ -343,7 +343,7 @@ alert( a ); <span class="hljs-comment">// 7（3 + 4 的结果）</span></code></
 <p>有时候，人们会使用它把几个行为放在一行上来进行复杂的运算。</p>
 <p>举个例子：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 一行上有三个运算符</span>
-<span class="hljs-keyword">for</span> (*!*a = <span class="hljs-number">1</span>, b = <span class="hljs-number">3</span>, c = a * b*/!*; a &lt; <span class="hljs-number">10</span>; a++) {
+<span class="hljs-keyword">for</span> (a = <span class="hljs-number">1</span>, b = <span class="hljs-number">3</span>, c = a * b; a &lt; <span class="hljs-number">10</span>; a++) {
  ...
 }</code></pre>
 <p>这样的技巧在许多 JavaScript 框架中都有使用，这也是为什么我们提到它。但是通常它并不能提升代码的可读性，使用它之前，我们要想清楚。</p>

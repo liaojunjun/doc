@@ -8,7 +8,7 @@ importance: 3
 
 例如：
 
-```js run
+```js
 class Rabbit {
   constructor(name) {
     this.name = name;
@@ -17,10 +17,10 @@ class Rabbit {
 
 let rabbit = new Rabbit("Rab");
 
-*!*
+
 // hasOwnProperty 方法来自于 Object.prototype
 alert( rabbit.hasOwnProperty('name') ); // true
-*/!*
+
 ```
 
 但是，如果我们像这样 `"class Rabbit extends Object"` 把它明确地写出来，那么结果会与简单的 `"class Rabbit"` 有所不同么？

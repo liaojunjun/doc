@@ -32,19 +32,19 @@ document.head.append(script);
 
 例如：
 
-```js run untrusted
+```js untrusted
 let script = document.createElement('script');
 
 // 可以从任意域（domain），加载任意脚本
 script.src = "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js"
 document.head.append(script);
 
-*!*
+
 script.onload = function() {
   // 该脚本创建了一个辅助函数 "_"
   alert(_); // 该函数可用
 };
-*/!*
+
 ```
 
 因此，在 `onload` 中我们可以使用脚本中的变量，运行函数等。
@@ -57,16 +57,16 @@ script.onload = function() {
 
 例如，我们请求一个不存在的脚本：
 
-```js run
+```js
 let script = document.createElement('script');
 script.src = "https://example.com/404.js"; // 没有这个脚本
 document.head.append(script);
 
-*!*
+
 script.onerror = function() {
   alert("Error loading " + this.src); // Error loading https://example.com/404.js
 };
-*/!*
+
 ```
 
 请注意，在这里我们无法获取更多 HTTP error 的详细信息。我们不知道 error 是 404 还是 500 或者其他情况。只知道是加载失败了。
@@ -83,7 +83,7 @@ script.onerror = function() {
 
 例如：
 
-```js run
+```js
 let img = document.createElement('img');
 img.src = "https://js.cx/clipart/train.gif"; // (*)
 
@@ -121,7 +121,7 @@ noSuchFunction();
 
 现在从它所在的同一个网站加载它：
 
-```html run height=0
+```html height=0
 <script>
 window.onerror = function(message, url, line, col, errorObj) {
   alert(`${message}\n${url}, ${line}:${col}`);
@@ -139,7 +139,7 @@ https://javascript.info/article/onload-onerror/crossorigin/error.js, 1:1
 
 现在，让我们从另一个域中加载相同的脚本：
 
-```html run height=0
+```html height=0
 <script>
 window.onerror = function(message, url, line, col, errorObj) {
   alert(`${message}\n${url}, ${line}:${col}`);
@@ -183,13 +183,13 @@ error 的详细信息可能因浏览器而异，但是原理是相同的：有�
 
 如果我们不关心 cookie，那么可以选择 `"anonymous"`：
 
-```html run height=0
+```html height=0
 <script>
 window.onerror = function(message, url, line, col, errorObj) {
   alert(`${message}\n${url}, ${line}:${col}`);
 };
 </script>
-<script *!*crossorigin="anonymous"*/!* src="https://cors.javascript.info/article/onload-onerror/crossorigin/error.js"></script>
+<script crossorigin="anonymous" src="https://cors.javascript.info/article/onload-onerror/crossorigin/error.js"></script>
 ```
 
 现在，假设服务器提供了 `Access-Control-Allow-Origin` header，一切都正常。我们有了完整的 error 报告。

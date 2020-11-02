@@ -7,7 +7,7 @@
 模块路径必须是原始类型字符串，不能是函数调用，下面这样的 `import` 行不通：
 
 ```js
-import ... from *!*getModuleName()*/!*; // Error, only from "string" is allowed
+import ... from getModuleName(); // Error, only from "string" is allowed
 ```
 
 其次，我们无法根据条件或者在运行时导入：

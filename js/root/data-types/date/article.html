@@ -5,13 +5,13 @@
 <p>创建一个新的 <code>Date</code> 对象，只需要调用 <code>new Date()</code>，在调用时可以带有下面这些参数之一：</p>
 <p><code>new Date()</code>
 : 不带参数 —— 创建一个表示当前日期和时间的 <code>Date</code> 对象：</p>
-<pre><code>```js run
+<pre><code>```js
 let now = new Date();
 alert( now ); // 显示当前的日期/时间
 ```</code></pre>
 <p><code>new Date(milliseconds)</code>
 : 创建一个 <code>Date</code> 对象，其时间等于 1970-01-01 00:00:00 UTC+0 再过一毫秒（1/1000 秒）。</p>
-<pre><code>```js run
+<pre><code>```js
 // 0 表示 01.01.1970 UTC+0
 let Jan01_1970 = new Date(0);
 alert( Jan01_1970 );
@@ -26,14 +26,14 @@ alert( Jan02_1970 );
 这是一种日期的轻量级数字表示形式。我们通常使用 `new Date(timestamp)` 通过时间戳来创建日期，并可以使用 `date.getTime()` 将现有的 `Date` 对象转化为时间戳（下文会讲到）。
 
 在 01.01.1970 之前的日期带有负的时间戳，例如：
-```js run
+```js
 // 31 Dec 1969
 let Dec31_1969 = new Date(-24 * 3600 * 1000);
 alert( Dec31_1969 );
 ```</code></pre>
 <p><code>new Date(datestring)</code>
 : 如果只有一个参数，并且是字符串，那么它会被自动解析。该算法与 <code>Date.parse</code> 所使用的算法相同，我们将在下文中进行介绍。</p>
-<pre><code>```js run
+<pre><code>```js
 let date = new Date(&quot;2017-01-26&quot;);
 alert(date);
 // 该时间未被设定，因此被假定为格林尼治标准时间（GMT）的午夜（midnight）
@@ -59,7 +59,7 @@ new Date(2011, 0, 1); // 同样，时分秒等均为默认值 0
 
 时间度量最小精确到 1 毫秒（1/1000 秒）：
 
-```js run
+```js
 let date = new Date(2011, 0, 1, 2, 3, 4, 567);
 alert( date ); // 1.01.2011, 02:03:04.567
 ```</code></pre>
@@ -73,7 +73,7 @@ alert( date ); // 1.01.2011, 02:03:04.567
 : 获取当月的具体日期，从 1 到 31，这个方法名称可能看起来有些令人疑惑。</p>
 <p><a href="mdn:js/Date/getHours">getHours()</a>，<a href="mdn:js/Date/getMinutes">getMinutes()</a>，<a href="mdn:js/Date/getSeconds">getSeconds()</a>，<a href="mdn:js/Date/getMilliseconds">getMilliseconds()</a>
 : 获取相应的时间组件。</p>
-<p>```warn header=&quot;不是 <code>getYear()</code>，而是 <code>getFullYear()</code>&quot;
+<p>&quot;不是 <code>getYear()</code>，而是 <code>getFullYear()</code>&quot;
 很多 JavaScript 引擎都实现了一个非标准化的方法 <code>getYear()</code>。不推荐使用这个方法。它有时候可能会返回 2 位的年份信息。永远都不要使用它。要获取年份就使用 <code>getFullYear()</code>。</p>
 <pre><code>
 另外，我们还可以获取一周中的第几天：
@@ -87,7 +87,7 @@ alert( date ); // 1.01.2011, 02:03:04.567
 
 如果你当地时区相对于 UTC 有偏移，那么下面代码会显示不同的小时数：
 
-```js run
+```js
 //  当前日期
 let date = new Date();
 
@@ -101,7 +101,7 @@ alert( date.getUTCHours() );</code></pre>
 : 返回日期的时间戳 —— 从 1970-1-1 00:00:00 UTC+0 开始到现在所经过的毫秒数。</p>
 <p><a href="mdn:js/Date/getTimezoneOffset">getTimezoneOffset()</a>
 : 返回 UTC 与本地时区之间的时差，以分钟为单位：</p>
-<pre><code>```js run
+<pre><code>```js
 // 如果你在时区 UTC-1，输出 60
 // 如果你在时区 UTC+3，输出 -180
 alert( new Date().getTimezoneOffset() );
@@ -132,14 +132,14 @@ alert(today); <span class="hljs-comment">// 日期依然是今天，时间为 00
 <h2 id="自动校准（autocorrection）">自动校准（Autocorrection）</h2>
 <p><strong>自动校准</strong> 是 <code>Date</code> 对象的一个非常方便的特性。我们可以设置超范围的数值，它会自动校准。</p>
 <p>举个例子：</p>
-<pre><code class="language-js">let date = new Date(2013, 0, *!*32*/!*); // 32 Jan 2013 ?!?
+<pre><code class="language-js">let date = new Date(2013, 0, 32); // 32 Jan 2013 ?!?
 alert(date); // ……是 1st Feb 2013!</code></pre>
 <p>超出范围的日期组件将会被自动分配。</p>
 <p>假设我们要在日期 &quot;28 Feb 2016&quot; 上加 2 天。结果可能是 &quot;2 Mar&quot; 或 &quot;1 Mar&quot;，因为存在闰年。但是我们不需要去考虑这些，只需要直接加 2 天，剩下的 <code>Date</code> 对象会帮我们处理：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> date = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2016</span>, <span class="hljs-number">1</span>, <span class="hljs-number">28</span>);
-*!*
+
 date.setDate(date.getDate() + <span class="hljs-number">2</span>);
-*/!*
+
 
 alert( date ); <span class="hljs-comment">// 1 Mar 2016</span></code></pre>
 <p>这个特性经常被用来获取给定时间段后的日期。例如，我们想获取“现在 70 秒后”的日期：</p>
@@ -177,18 +177,18 @@ alert( <span class="hljs-string">`The loop took <span class="hljs-subst">${end -
 <p>它相当于 <code>new Date().getTime()</code>，但它不会创建中间的 <code>Date</code> 对象。因此它更快，而且不会对垃圾处理造成额外的压力。</p>
 <p>这种方法很多时候因为方便，又或是因性能方面的考虑而被采用，例如使用 JavaScript 编写游戏或其他的特殊应用场景。</p>
 <p>因此这样做可能会更好：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> start = <span class="hljs-built_in">Date</span>.now(); <span class="hljs-comment">// 从 1 Jan 1970 至今的时间戳</span>
-*/!*
+
 
 <span class="hljs-comment">// do the job</span>
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100000</span>; i++) {
   <span class="hljs-keyword">let</span> doSomething = i * i * i;
 }
 
-*!*
+
 <span class="hljs-keyword">let</span> end = <span class="hljs-built_in">Date</span>.now(); <span class="hljs-comment">// 完成</span>
-*/!*
+
 
 alert( <span class="hljs-string">`The loop took <span class="hljs-subst">${end - start}</span> ms`</span> ); <span class="hljs-comment">// 相减的是时间戳，而不是日期</span></code></pre>
 <h2 id="度量（benchmarking）">度量（Benchmarking）</h2>
@@ -254,13 +254,13 @@ alert( <span class="hljs-string">&#x27;Time of diffGetTime: &#x27;</span> + benc
 <span class="hljs-keyword">let</span> time1 = <span class="hljs-number">0</span>;
 <span class="hljs-keyword">let</span> time2 = <span class="hljs-number">0</span>;
 
-*!*
+
 <span class="hljs-comment">// 交替运行 bench(upperSlice) 和 bench(upperLoop) 各 10 次</span>
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) {
   time1 += bench(diffSubtract);
   time2 += bench(diffGetTime);
 }
-*/!*
+
 
 alert( <span class="hljs-string">&#x27;Total time for diffSubtract: &#x27;</span> + time1 );
 alert( <span class="hljs-string">&#x27;Total time for diffGetTime: &#x27;</span> + time2 );</code></pre>

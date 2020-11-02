@@ -10,12 +10,12 @@
 
 例如：
 
-```js run
+```js
 let year = prompt('In which year was ECMAScript-2015 specification published?', '');
 
-*!*
+
 if (year == 2015) alert( 'You are right!' );
-*/!*
+
 ```
 
 在上面这个例子中，条件是一个简单的相等性检查（`year == 2015`），但它还可以更复杂。
@@ -71,7 +71,7 @@ if (cond) {
 `if` 语句有时会包含一个可选的 "else" 块。如果判断条件不成立，就会执行它内部的代码。
 
 例如：
-```js run
+```js
 let year = prompt('In which year was ECMAScript-2015 specification published?', '');
 
 if (year == 2015) {
@@ -87,7 +87,7 @@ if (year == 2015) {
 
 例如：
 
-```js run
+```js
 let year = prompt('In which year was ECMAScript-2015 specification published?', '');
 
 if (year < 2015) {
@@ -109,17 +109,17 @@ if (year < 2015) {
 
 如下所示：
 
-```js run no-beautify
+```js no-beautify
 let accessAllowed;
 let age = prompt('How old are you?', '');
 
-*!*
+
 if (age > 18) {
   accessAllowed = true;
 } else {
   accessAllowed = false;
 }
-*/!*
+
 
 alert(accessAllowed);
 ```
@@ -167,7 +167,7 @@ let accessAllowed = age > 18;
 使用一系列问号 `?` 运算符可以返回一个取决于多个条件的值。
 
 例如：
-```js run
+```js
 let age = prompt('age?', 18);
 
 let message = (age < 3) ? 'Hi, baby!' :
@@ -203,13 +203,13 @@ if (age < 3) {
 
 有时可以使用问号 `?` 来代替 `if` 语句：
 
-```js run no-beautify
+```js no-beautify
 let company = prompt('Which company created JavaScript?', '');
 
-*!*
+
 (company == 'Netscape') ?
    alert('Right!') : alert('Wrong.');
-*/!*
+
 ```
 
 根据条件 `company =='Netscape'`，要么执行 `?` 后面的第一个表达式并显示对应内容，要么执行第二个表达式并显示对应内容。
@@ -222,16 +222,16 @@ let company = prompt('Which company created JavaScript?', '');
 
 下面是使用 `if` 语句实现相同功能的代码，进行下比较：
 
-```js run no-beautify
+```js no-beautify
 let company = prompt('Which company created JavaScript?', '');
 
-*!*
+
 if (company == 'Netscape') {
   alert('Right!');
 } else {
   alert('Wrong.');
 }
-*/!*
+
 ```
 
 因为我们的眼睛垂直扫描代码。所以，跨越几行的代码块比长而水平的代码更易于理解。

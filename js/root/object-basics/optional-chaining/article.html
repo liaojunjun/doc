@@ -36,7 +36,7 @@ alert( user?.address.street ); <span class="hljs-comment">// undefined</span></c
 例如，如果根据我们的代码逻辑，`user` 对象必须存在，但 `address` 是可选的，那么 `user.address?.street` 会更好。
 
 所以，如果 `user` 恰巧因为失误变为 undefined，我们会知道并修复这个失误。否则，代码中的 error 在不恰当的地方被消除了，这会导致调试更加困难。</code></pre>
-<p>````warn header=&quot;<code>?.</code> 前的变量必须已声明&quot;
+<p>`&quot;<code>?.</code> 前的变量必须已声明&quot;
 如果未声明变量 <code>user</code>，那么 <code>user?.anything</code> 会触发一个错误：</p>
 <pre><code class="language-js"><span class="hljs-comment">// ReferenceError: user is not defined</span>
 user?.address;</code></pre>
@@ -48,7 +48,7 @@ user?.address;</code></pre>
 
 所以，如果后面有任何函数调用或者副作用，它们均不会执行：
 
-```js run
+```js
 let user = null;
 let x = 0;
 
@@ -65,7 +65,7 @@ alert(x); // 0，值没有增加
 
 在下面这段代码中，有些用户具有 `admin` 方法，而有些没有：
 
-```js run
+```js
 let user1 = {
   admin() {
     alert(&quot;I am admin&quot;);
@@ -74,10 +74,10 @@ let user1 = {
 
 let user2 = {};
 
-*!*
+
 user1.admin?.(); // I am admin
 user2.admin?.();
-*/!*
+
 ```
 
 在这两行代码中，我们首先使用点符号 `.` 来获取 `admin` 属性，因为用户对象一定存在，因此可以安全地读取它。
@@ -86,7 +86,7 @@ user2.admin?.();
 
 如果我们想使用方括号 `[]` 而不是点符号 `.` 来访问属性，语法 `?.[]` 也可以使用。跟前面的例子类似，它允许从一个可能不存在的对象上安全地读取属性。
 
-```js run
+```js
 let user1 = {
   firstName: &quot;John&quot;
 };
@@ -103,14 +103,14 @@ alert( user1?.[key]?.something?.not?.existing); // undefined
 
 此外，我们还可以将 `?.` 跟 `delete` 一起使用：
 
-```js run
+```js
 delete user?.name; // 如果 user 存在，则删除 user.name
 ```
 
-```warn header=&quot;我们可以使用 `?.` 来安全地读取或删除，但不能写入&quot;
+&quot;我们可以使用 `?.` 来安全地读取或删除，但不能写入&quot;
 可选链 `?.` 不能用在赋值语句的左侧：
 
-```js run
+```js
 // 下面这段代码的想法是要写入 user.name，如果 user 存在的话
 
 user?.name = &quot;John&quot;; // Error，不起作用

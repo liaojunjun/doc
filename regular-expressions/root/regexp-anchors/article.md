@@ -6,7 +6,7 @@
 
 举个例子，让我们测试一下文本是否以 `Mary` 开头：
 
-```js run
+```js
 let str1 = "Mary had a little lamb";
 alert( /^Mary/.test(str1) ); // true
 ```
@@ -15,7 +15,7 @@ alert( /^Mary/.test(str1) ); // true
 
 与此类似，我们可以用 `pattern:snow$` 来测试文本是否以 `snow` 结尾:
 
-```js run
+```js
 let str1 = "it's fleece was white as snow";
 alert( /snow$/.test(str1) ); // true
 ```
@@ -30,7 +30,7 @@ alert( /snow$/.test(str1) ); // true
 
 用正则表达式来表示就是 `pattern:\d\d:\d\d`：
 
-```js run
+```js
 let goodInput = "12:34";
 let badInput = "12:345";
 
@@ -45,7 +45,7 @@ alert( regexp.test(badInput) ); // false
 
 当修饰符 `pattern:m` 出现时，锚点将会有不同的行为。我们将在后面学习到。
 
-```smart header="锚点具有“零宽度”"
+锚点具有“零宽度”"
 锚点 `pattern:^` 和 `pattern:$` 属于测试。它们的宽度为零。
 
 换句话来说，它们并不匹配一个具体的字符，而是让正则引擎测试所表示的条件（文本开头/文本末尾）。

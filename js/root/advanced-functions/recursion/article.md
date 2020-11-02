@@ -24,7 +24,7 @@ pow(2, 4) = 16
 
 1. 迭代思路：使用 `for` 循环：
 
-    ```js run
+    ```js
     function pow(x, n) {
       let result = 1;
 
@@ -41,7 +41,7 @@ pow(2, 4) = 16
 
 2. 递归思路：简化任务，调用自身：
 
-    ```js run
+    ```js
     function pow(x, n) {
       if (n == 1) {
         return x;
@@ -82,12 +82,12 @@ pow(x, n) =
 
 因此，递归将函数调用简化为一个更简单的函数调用，然后再将其简化为一个更简单的函数，以此类推，直到结果变得显而易见。
 
-````smart header="递归通常更短"
+`递归通常更短"
 递归解通常比迭代解更短。
 
 在这儿，我们可以使用条件运算符 `?` 而不是 `if` 语句，从而使 `pow(x, n)` 更简洁并且可读性依然很高：
 
-```js run
+```js
 function pow(x, n) {
   return (n == 1) ? x : (x * pow(x, n - 1));
 }
@@ -134,14 +134,14 @@ function pow(x, n) {
 
 这是函数开始执行的时候。条件 `n == 1` 结果为 false，所以执行流程进入 `if` 的第二分支。
 
-```js run
+```js
 function pow(x, n) {
   if (n == 1) {
     return x;
   } else {
-*!*
+
     return x * pow(x, n - 1);
-*/!*
+
   }
 }
 
@@ -223,9 +223,9 @@ alert( pow(2, 3) );
 ```js
 function pow(x, n) {
   if (n == 1) {
-*!*
+
     return x;
-*/!*
+
   } else {
     return x * pow(x, n - 1);
   }
@@ -348,7 +348,7 @@ let company = {
 这个算法从代码来看可能会更简单：
 
 
-```js run
+```js
 let company = { // 是同一个对象，简洁起见被压缩了
   sales: [{name: 'John', salary: 1000}, {name: 'Alice', salary: 1600 }],
   development: {
@@ -358,7 +358,7 @@ let company = { // 是同一个对象，简洁起见被压缩了
 };
 
 // 用来完成任务的函数
-*!*
+
 function sumSalaries(department) {
   if (Array.isArray(department)) { // 情况（1）
     return department.reduce((prev, current) => prev + current.salary, 0); // 求数组的和
@@ -370,7 +370,7 @@ function sumSalaries(department) {
     return sum;
   }
 }
-*/!*
+
 
 alert(sumSalaries(company)); // 7700
 ```
@@ -489,10 +489,10 @@ list.next = { value: 2 };
 list.next.next = { value: 3 };
 list.next.next.next = { value: 4 };
 
-*!*
+
 // 将新值添加到链表头部
 list = { value: "new item", next: list };
-*/!*
+
 ```
 
 ![链表](linked-list-0.svg)

@@ -5,7 +5,7 @@
 
 代码如下：
 
-```js run
+```js
 function sum(a) {
 
   let currentSum = a;

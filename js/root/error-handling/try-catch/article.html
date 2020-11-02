@@ -26,11 +26,11 @@
 <li><p>没有 error 的例子：显示 <code>alert</code> <code>(1)</code> 和 <code>(2)</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">try</span> {
 
-  alert(<span class="hljs-string">&#x27;Start of try runs&#x27;</span>);  <span class="hljs-comment">// *!*(1) &lt;--*/!*</span>
+  alert(<span class="hljs-string">&#x27;Start of try runs&#x27;</span>);  <span class="hljs-comment">// (1) &lt;--</span>
 
   <span class="hljs-comment">// ...这里没有 error</span>
 
-  alert(<span class="hljs-string">&#x27;End of try runs&#x27;</span>);   <span class="hljs-comment">// *!*(2) &lt;--*/!*</span>
+  alert(<span class="hljs-string">&#x27;End of try runs&#x27;</span>);   <span class="hljs-comment">// (2) &lt;--</span>
 
 } <span class="hljs-keyword">catch</span>(err) {
 
@@ -41,22 +41,22 @@
 <li><p>包含 error 的例子：显示 <code>(1)</code> 和 <code>(3)</code> 行的 <code>alert</code> 中的内容：</p>
 <pre><code class="language-js"><span class="hljs-keyword">try</span> {
 
-  alert(<span class="hljs-string">&#x27;Start of try runs&#x27;</span>);  <span class="hljs-comment">// *!*(1) &lt;--*/!*</span>
+  alert(<span class="hljs-string">&#x27;Start of try runs&#x27;</span>);  <span class="hljs-comment">// (1) &lt;--</span>
 
-*!*
+
   lalala; <span class="hljs-comment">// Error，变量未定义！</span>
-*/!*
+
 
   alert(<span class="hljs-string">&#x27;End of try (never reached)&#x27;</span>);  <span class="hljs-comment">// (2)</span>
 
 } <span class="hljs-keyword">catch</span>(err) {
 
-  alert(<span class="hljs-string">`Error has occurred!`</span>); <span class="hljs-comment">// *!*(3) &lt;--*/!*</span>
+  alert(<span class="hljs-string">`Error has occurred!`</span>); <span class="hljs-comment">// (3) &lt;--</span>
 
 }</code></pre>
 </li>
 </ul>
-<p>````warn header=&quot;<code>try..catch</code> 仅对运行时的 error 有效&quot;
+<p>`&quot;<code>try..catch</code> 仅对运行时的 error 有效&quot;
 要使得 <code>try..catch</code> 能工作，代码必须是可执行的。换句话说，它必须是有效的 JavaScript 代码。</p>
 <p>如果代码包含语法错误，那么 <code>try..catch</code> 将无法正常工作，例如含有不匹配的花括号：</p>
 <pre><code class="language-js"><span class="hljs-keyword">try</span> {
@@ -68,10 +68,10 @@
 <p>所以，<code>try..catch</code> 只能处理有效代码中出现的错误。这类错误被称为“运行时的错误（runtime errors）”，有时被称为“异常（exceptions）”。</p>
 <pre><code>
 
-````warn header=&quot;`try..catch` 同步工作&quot;
+`&quot;`try..catch` 同步工作&quot;
 如果在“计划的（scheduled）”代码中发生异常，例如在 `setTimeout` 中，则 `try..catch` 不会捕获到异常：
 
-```js run
+```js
 try {
   setTimeout(function() {
     noSuchVariable; // 脚本将在这里停止运行
@@ -84,7 +84,7 @@ try {
 因为 `try..catch` 包裹了计划要执行的函数，该函数本身要稍后才执行，这时引擎已经离开了 `try..catch` 结构。
 
 为了捕获到计划的（scheduled）函数中的异常，那么 `try..catch` 必须在这个函数内：
-```js run
+```js
 setTimeout(function() {
   try {
     noSuchVariable; // try..catch 处理 error 了！
@@ -110,9 +110,9 @@ setTimeout(function() {
 : 当前的调用栈：用于调试目的的一个字符串，其中包含有关导致 error 的嵌套调用序列的信息。</p>
 <p>例如：</p>
 <pre><code class="language-js"><span class="hljs-keyword">try</span> {
-*!*
+
   lalala; <span class="hljs-comment">// error, variable is not defined!</span>
-*/!*
+
 } <span class="hljs-keyword">catch</span>(err) {
   alert(err.name); <span class="hljs-comment">// ReferenceError</span>
   alert(err.message); <span class="hljs-comment">// lalala is not defined</span>
@@ -137,9 +137,9 @@ setTimeout(function() {
 <p>我们收到数据后，然后像下面这样调用 <code>JSON.parse</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> json = <span class="hljs-string">&#x27;{&quot;name&quot;:&quot;John&quot;, &quot;age&quot;: 30}&#x27;</span>; <span class="hljs-comment">// 来自服务器的数据</span>
 
-*!*
+
 <span class="hljs-keyword">let</span> user = <span class="hljs-built_in">JSON</span>.parse(json); <span class="hljs-comment">// 将文本表示转换成 JS 对象</span>
-*/!*
+
 
 <span class="hljs-comment">// 现在 user 是一个解析自 json 字符串的有自己属性的对象</span>
 alert( user.name ); <span class="hljs-comment">// John</span>
@@ -153,18 +153,18 @@ alert( user.age );  <span class="hljs-comment">// 30</span></code></pre>
 
 <span class="hljs-keyword">try</span> {
 
-*!*
+
   <span class="hljs-keyword">let</span> user = <span class="hljs-built_in">JSON</span>.parse(json); <span class="hljs-comment">// &lt;-- 当出现一个 error 时...</span>
-*/!*
+
   alert( user.name ); <span class="hljs-comment">// 不工作</span>
 
 } <span class="hljs-keyword">catch</span> (e) {
-*!*
+
   <span class="hljs-comment">// ...执行会跳转到这里并继续执行</span>
   alert( <span class="hljs-string">&quot;Our apologies, the data has errors, we&#x27;ll try to request it one more time.&quot;</span> );
   alert( e.name );
   alert( e.message );
-*/!*
+
 }</code></pre>
 <p>在这儿，我们将 <code>catch</code> 块仅仅用于显示信息，但是我们可以做更多的事儿：发送一个新的网络请求，向访问者建议一个替代方案，将有关错误的信息发送给记录日志的设备，……。所有这些都比代码“死掉”好得多。</p>
 <h2 id="抛出我们自定义的-error">抛出我们自定义的 error</h2>
@@ -175,9 +175,9 @@ alert( user.age );  <span class="hljs-comment">// 30</span></code></pre>
 <span class="hljs-keyword">try</span> {
 
   <span class="hljs-keyword">let</span> user = <span class="hljs-built_in">JSON</span>.parse(json); <span class="hljs-comment">// &lt;-- 没有 error</span>
-*!*
+
   alert( user.name ); <span class="hljs-comment">// 没有 name！</span>
-*/!*
+
 
 } <span class="hljs-keyword">catch</span> (e) {
   alert( <span class="hljs-string">&quot;doesn&#x27;t execute&quot;</span> );
@@ -206,9 +206,9 @@ alert(error.message); <span class="hljs-comment">// Things happen o_O</span></co
 <pre><code class="language-js"><span class="hljs-keyword">try</span> {
   <span class="hljs-built_in">JSON</span>.parse(<span class="hljs-string">&quot;{ bad json o_O }&quot;</span>);
 } <span class="hljs-keyword">catch</span>(e) {
-*!*
+
   alert(e.name); <span class="hljs-comment">// SyntaxError</span>
-*/!*
+
   alert(e.message); <span class="hljs-comment">// Unexpected token b in JSON at position 2</span>
 }</code></pre>
 <p>正如我们所看到的， 那是一个  <code>SyntaxError</code>。</p>
@@ -221,9 +221,9 @@ alert(error.message); <span class="hljs-comment">// Things happen o_O</span></co
   <span class="hljs-keyword">let</span> user = <span class="hljs-built_in">JSON</span>.parse(json); <span class="hljs-comment">// &lt;-- 没有 error</span>
 
   <span class="hljs-keyword">if</span> (!user.name) {
-*!*
+
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">SyntaxError</span>(<span class="hljs-string">&quot;Incomplete data: no name&quot;</span>); <span class="hljs-comment">// (*)</span>
-*/!*
+
   }
 
   alert( user.name );
@@ -260,9 +260,9 @@ alert(error.message); <span class="hljs-comment">// Things happen o_O</span></co
 <pre><code class="language-js"><span class="hljs-keyword">try</span> {
   user = { <span class="hljs-comment">/*...*/</span> };
 } <span class="hljs-keyword">catch</span>(err) {
-*!*
+
   <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">ReferenceError</span>) {
-*/!*
+
     alert(<span class="hljs-string">&#x27;ReferenceError&#x27;</span>); <span class="hljs-comment">// 访问一个未定义（undefined）的变量产生了 &quot;ReferenceError&quot;</span>
   }
 }</code></pre>
@@ -277,21 +277,21 @@ alert(error.message); <span class="hljs-comment">// Things happen o_O</span></co
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">SyntaxError</span>(<span class="hljs-string">&quot;Incomplete data: no name&quot;</span>);
   }
 
-*!*
+
   blabla(); <span class="hljs-comment">// 预料之外的 error</span>
-*/!*
+
 
   alert( user.name );
 
 } <span class="hljs-keyword">catch</span>(e) {
 
-*!*
+
   <span class="hljs-keyword">if</span> (e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span>) {
     alert( <span class="hljs-string">&quot;JSON Error: &quot;</span> + e.message );
   } <span class="hljs-keyword">else</span> {
     <span class="hljs-keyword">throw</span> e; <span class="hljs-comment">// 再次抛出 (*)</span>
   }
-*/!*
+
 
 }</code></pre>
 <p>如果 <code>(*)</code> 标记的这行 <code>catch</code> 块中的 error 从 <code>try..catch</code> 中“掉了出来”，那么它也可以被外部的 <code>try..catch</code> 结构（如果存在）捕获到，如果外部不存在这种结构，那么脚本就会被杀死。</p>
@@ -302,15 +302,15 @@ alert(error.message); <span class="hljs-comment">// Things happen o_O</span></co
 
   <span class="hljs-keyword">try</span> {
     <span class="hljs-comment">// ...</span>
-*!*
+
     blabla(); <span class="hljs-comment">// error!</span>
-*/!*
+
   } <span class="hljs-keyword">catch</span> (e) {
     <span class="hljs-comment">// ...</span>
     <span class="hljs-keyword">if</span> (!(e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">SyntaxError</span>)) {
-*!*
+
       <span class="hljs-keyword">throw</span> e; <span class="hljs-comment">// 再次抛出（不知道如何处理它）</span>
-*/!*
+
     }
   }
 }
@@ -318,9 +318,9 @@ alert(error.message); <span class="hljs-comment">// Things happen o_O</span></co
 <span class="hljs-keyword">try</span> {
   readData();
 } <span class="hljs-keyword">catch</span> (e) {
-*!*
+
   alert( <span class="hljs-string">&quot;External catch got: &quot;</span> + e ); <span class="hljs-comment">// 捕获了它！</span>
-*/!*
+
 }</code></pre>
 <p>上面这个例子中的 <code>readData</code> 只知道如何处理 <code>SyntaxError</code>，而外部的 <code>try..catch</code> 知道如何处理任意的 error。</p>
 <h2 id="trycatchfinally">try..catch..finally</h2>
@@ -332,11 +332,11 @@ alert(error.message); <span class="hljs-comment">// Things happen o_O</span></co
 <li><code>catch</code> 之后，如果没有 error。</li>
 </ul>
 <p>该扩展语法如下所示：</p>
-<pre><code class="language-js">*!*<span class="hljs-keyword">try</span>*/!* {
+<pre><code class="language-js"><span class="hljs-keyword">try</span> {
    ... 尝试执行的代码 ...
-} *!*<span class="hljs-keyword">catch</span>*/!*(e) {
+} <span class="hljs-keyword">catch</span>(e) {
    ... 处理 error ...
-} *!*<span class="hljs-keyword">finally</span>*/!* {
+} <span class="hljs-keyword">finally</span> {
    ... 总是会执行的代码 ...
 }</code></pre>
 <p>试试运行这段代码：</p>
@@ -374,11 +374,11 @@ alert(error.message); <span class="hljs-comment">// Things happen o_O</span></co
   result = fib(num);
 } <span class="hljs-keyword">catch</span> (e) {
   result = <span class="hljs-number">0</span>;
-*!*
+
 } <span class="hljs-keyword">finally</span> {
   diff = <span class="hljs-built_in">Date</span>.now() - start;
 }
-*/!*
+
 
 alert(result || <span class="hljs-string">&quot;error occurred&quot;</span>);
 
@@ -394,20 +394,20 @@ alert( <span class="hljs-string">`execution took <span class="hljs-subst">${diff
 
 在下面这个例子中，在 `try` 中有一个 `return`。在这种情况下，`finally` 会在控制转向外部代码前被执行。
 
-```js run
+```js
 function func() {
 
   try {
-*!*
+
     return 1;
-*/!*
+
 
   } catch (e) {
     /* ... */
   } finally {
-*!*
+
     alert( &#x27;finally&#x27; );
-*/!*
+
   }
 }
 
@@ -447,11 +447,11 @@ function func() {
 : Error 对象。</p>
 <p>例如：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   <span class="hljs-built_in">window</span>.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message, url, line, col, error</span>) </span>{
     alert(<span class="hljs-string">`<span class="hljs-subst">${message}</span>\n At <span class="hljs-subst">${line}</span>:<span class="hljs-subst">${col}</span> of <span class="hljs-subst">${url}</span>`</span>);
   };
-*/!*
+
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readData</span>(<span class="hljs-params"></span>) </span>{
     badFunc(); <span class="hljs-comment">// 啊，出问题了！</span>

@@ -62,7 +62,7 @@
 - 通过右键单击并选择移除来删除一个断点。
 - ……等等。
 
-```smart header="条件断点"
+条件断点"
 在行号上 **右键单击** 允许你创建一个 **条件** 断点。只有当给定的表达式为真（即满足条件）时才会被触发。
 
 当我们需要在特定的变量值或参数的情况下暂停程序执行时，这种调试方法就很有用了。
@@ -76,9 +76,9 @@
 function hello(name) {
   let phrase = `Hello, ${name}!`;
 
-*!*
+
   debugger;  // <-- 调试器会在这停止
-*/!*
+
 
   say(phrase);
 }
@@ -157,7 +157,7 @@ function hello(name) {
 <span class="devtools" style="background-position:-264px -4px"></span> —— 启用/禁用出现错误时自动暂停脚本执行。
 : 当启动此功能并且开发者工具是打开着的时候，任何一个脚本的错误都会导致该脚本执行自动暂停。然后我们可以分析变量来看一下什么出错了。因此如果我们的脚本因为错误挂掉的时候，我们可以打开调试器，启用这个选项然后重载页面，查看一下哪里导致它挂掉了和当时的上下文是什么。
 
-```smart header="Continue to here"
+Continue to here"
 在代码中的某一行上右键，在显示的关联菜单（context menu）中点击一个非常有用的名为 "Continue to here" 的选项。
 
 当你想要向前移动很多步到某一行为止，但是又懒得设置一个断点时非常的方便。
@@ -169,7 +169,7 @@ function hello(name) {
 
 例如：将从 `0` 到 `4` 的值输出到控制台上：
 
-```js run
+```js
 // 打开控制台来查看
 for (let i = 0; i < 5; i++) {
   console.log("value", i);

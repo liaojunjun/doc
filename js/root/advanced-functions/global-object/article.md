@@ -11,7 +11,7 @@
 
 全局对象的所有属性都可以被直接访问：
 
-```js run
+```js
 alert("Hello");
 // 等同于
 window.alert("Hello");
@@ -19,7 +19,7 @@ window.alert("Hello");
 
 在浏览器中，使用 `var`（而不是 `let/const`！）声明的全局函数和变量会成为全局对象的属性。
 
-```js run untrusted refresh
+```js untrusted refresh
 var gVar = 5;
 
 alert(window.gVar); // 5（成为了全局对象的属性）
@@ -29,7 +29,7 @@ alert(window.gVar); // 5（成为了全局对象的属性）
 
 如果我们使用 `let`，就不会发生这种情况：
 
-```js run untrusted refresh
+```js untrusted refresh
 let gLet = 5;
 
 alert(window.gLet); // undefined（不会成为全局对象的属性）
@@ -37,13 +37,13 @@ alert(window.gLet); // undefined（不会成为全局对象的属性）
 
 如果一个值非常重要，以至于你想使它在全局范围内可用，那么可以直接将其作为属性写入：
 
-```js run
-*!*
+```js
+
 // 将当前用户信息全局化，以允许所有脚本访问它
 window.currentUser = {
   name: "John"
 };
-*/!*
+
 
 // 代码中的另一个位置
 alert(currentUser.name);  // John
@@ -60,7 +60,7 @@ alert(window.currentUser.name); // John
 我们使用全局对象来测试对现代语言功能的支持。
 
 例如，测试是否存在内建的 `Promise` 对象（在版本特别旧的浏览器中不存在）：
-```js run
+```js
 if (!window.Promise) {
   alert("Your browser is really old!");
 }
@@ -68,7 +68,7 @@ if (!window.Promise) {
 
 如果没有（例如，我们使用的是旧版浏览器），那么我们可以创建 "polyfills"：添加环境不支持但在现代标准中存在的功能。
 
-```js run
+```js
 if (!window.Promise) {
   window.Promise = ... // 定制实现现代语言功能
 }

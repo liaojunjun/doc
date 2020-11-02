@@ -10,33 +10,32 @@
 
 ![](document-client-width-height.svg)
 
-```online
-例如，这个按钮会显示窗口的高度：
-
-<button onclick="alert(document.documentElement.clientHeight)">alert(document.documentElement.clientHeight)</button>
+```html
+<!-- 例如，这个按钮会显示窗口的高度： -->
+<button onclick="alert(document.documentElement.clientHeight)">
+  alert(document.documentElement.clientHeight)
+</button>
 ```
 
-````warn header="不是 `window.innerWidth/Height`"
-浏览器也支持 `window.innerWidth/innerHeight` 属性。它们看起来像我们想要的。那为什么不使用它们呢？
+`"不是 `window.innerWidth/Height`" 浏览器也支持 `window.innerWidth/innerHeight` 属性。它们看起来像我们想要的。那为什么不使用它们呢？
 
 如果这里存在一个滚动条，并且滚动条占用了一些空间，那么 `clientWidth/clientHeight` 会提供没有滚动条（减去它）的 width/height。换句话说，它们返回的是可用于内容的文档的可见部分的 width/height。
 
 ……而 `window.innerWidth/innerHeight` 包括了滚动条。
 
 如果这里有一个滚动条，它占用了一些空间，那么这两行代码会显示不同的值：
-```js run
-alert( window.innerWidth ); // 整个窗口的宽度
-alert( document.documentElement.clientWidth ); // 减去滚动条宽度后的窗口宽度
+
+```js
+alert(window.innerWidth); // 整个窗口的宽度
+alert(document.documentElement.clientWidth); // 减去滚动条宽度后的窗口宽度
 ```
 
 在大多数情况下，我们需要 **可用** 的窗口宽度：以绘制或放置某些东西。也就是说：在滚动条内（如果有）。所以我们应该使用 `documentElement.clientHeight/Width`。
-````
 
-```warn header="`DOCTYPE` 很重要"
+"`DOCTYPE` 很重要"
 请注意：当 HTML 中没有 `<!DOCTYPE HTML>` 时，顶层级（top-level）几何属性的工作方式可能就会有所不同。可能会出现一些稀奇古怪的情况。
 
 在现代 HTML 中，我们始终都应该写 `DOCTYPE`。
-```
 
 ## 文档的 width/height
 
@@ -46,14 +45,17 @@ alert( document.documentElement.clientWidth ); // 减去滚动条宽度后的窗
 
 为了可靠地获得完整的文档高度，我们应该采用以下这些属性的最大值：
 
-```js run
+```js
 let scrollHeight = Math.max(
-  document.body.scrollHeight, document.documentElement.scrollHeight,
-  document.body.offsetHeight, document.documentElement.offsetHeight,
-  document.body.clientHeight, document.documentElement.clientHeight
+  document.body.scrollHeight,
+  document.documentElement.scrollHeight,
+  document.body.offsetHeight,
+  document.documentElement.offsetHeight,
+  document.body.clientHeight,
+  document.documentElement.clientHeight
 );
 
-alert('Full document height, with scrolled out part: ' + scrollHeight);
+alert("Full document height, with scrolled out part: " + scrollHeight);
 ```
 
 为什么这样？最好不要问。这些不一致来源于远古时代，而不是“聪明”的逻辑。
@@ -66,20 +68,18 @@ DOM 元素的当前滚动状态在 `elem.scrollLeft/scrollTop` 中。
 
 幸运的是，我们根本不必记住这些特性，因为滚动在 `window.pageXOffset/pageYOffset` 中可用：
 
-```js run
-alert('Current scroll from the top: ' + window.pageYOffset);
-alert('Current scroll from the left: ' + window.pageXOffset);
+```js
+alert("Current scroll from the top: " + window.pageYOffset);
+alert("Current scroll from the left: " + window.pageXOffset);
 ```
 
 这些属性是只读的。
 
 ## 滚动：scrollTo，scrollBy，scrollIntoView [#window-scroll]
 
-```warn
 必须在 DOM 完全构建好之后才能通过 JavaScript 滚动页面
 
 例如，如果我们尝试从 `<head>` 中的脚本滚动页面，它将无法正常工作。
-```
 
 可以通过更改 `scrollTop/scrollLeft` 来滚动常规元素。
 
@@ -89,18 +89,19 @@ alert('Current scroll from the left: ' + window.pageXOffset);
 
 - 方法 `scrollBy(x,y)` 将页面滚动至 **相对于当前位置的 `(x, y)` 位置**。例如，`scrollBy(0,10)` 会将页面向下滚动 `10px`。
 
-    ```online
-    下面这个按钮演示了这个方法：
+  ```html
+  <!-- 下面这个按钮演示了这个方法： -->
 
-    <button onclick="window.scrollBy(0,10)">window.scrollBy(0,10)</button>
-    ```
+  <button onclick="window.scrollBy(0,10)">window.scrollBy(0,10)</button>
+  ```
+
 - 方法 `scrollTo(pageX,pageY)` 将页面滚动至 **绝对坐标**，使得可见部分的左上角具有相对于文档左上角的坐标 `(pageX, pageY)`。就像设置了 `scrollLeft/scrollTop` 一样。
 
-    要滚动到最开始，我们可以使用 `scrollTo(0,0)`。
+  要滚动到最开始，我们可以使用 `scrollTo(0,0)`。
 
-    ```online
-    <button onclick="window.scrollTo(0,0)">window.scrollTo(0,0)</button>
-    ```
+  ```html
+  <button onclick="window.scrollTo(0,0)">window.scrollTo(0,0)</button>
+  ```
 
 这些方法适用于所有浏览器。
 
@@ -113,12 +114,12 @@ alert('Current scroll from the left: ' + window.pageXOffset);
 - 如果 `top=true`（默认值），页面滚动，使 `elem` 出现在窗口顶部。元素的上边缘与窗口顶部对齐。
 - 如果 `top=false`，页面滚动，使 `elem` 出现在窗口底部。元素的底部边缘与窗口底部对齐。
 
-```online
-下面这个按钮会滚动页面，以使它自身显示在窗口顶部：
+```html
+<!-- 下面这个按钮会滚动页面，以使它自身显示在窗口顶部： -->
 
 <button onclick="this.scrollIntoView()">this.scrollIntoView()</button>
 
-下面这个按钮会滚动页面，以使它自身显示在窗口底部：
+<!-- 下面这个按钮会滚动页面，以使它自身显示在窗口底部： -->
 
 <button onclick="this.scrollIntoView(false)">this.scrollIntoView(false)</button>
 ```
@@ -129,14 +130,18 @@ alert('Current scroll from the left: ' + window.pageXOffset);
 
 要使文档不可滚动，只需要设置 `document.body.style.overflow = "hidden"`。该页面将冻结在其当前滚动上。
 
-```online
-试一试：
+```html
+<!-- 试一试： -->
 
-<button onclick="document.body.style.overflow = 'hidden'">document.body.style.overflow = 'hidden'</button>
+<button onclick="document.body.style.overflow = 'hidden'">
+  document.body.style.overflow = 'hidden'
+</button>
 
-<button onclick="document.body.style.overflow = ''">document.body.style.overflow = ''</button>
+<button onclick="document.body.style.overflow = ''">
+  document.body.style.overflow = ''
+</button>
 
-第一个按钮冻结了滚动，第二个按钮则恢复了滚动。
+<!-- 第一个按钮冻结了滚动，第二个按钮则恢复了滚动。 -->
 ```
 
 我们还可以使用相同的技术来“冻结”其他元素的滚动，而不仅仅是 `document.body`。
@@ -152,19 +157,22 @@ alert('Current scroll from the left: ' + window.pageXOffset);
 - 文档可见部分的 width/height（内容区域的 width/height）：`document.documentElement.clientWidth/Height`
 - 整个文档的 width/height，其中包括滚动出去的部分：
 
-    ```js
-    let scrollHeight = Math.max(
-      document.body.scrollHeight, document.documentElement.scrollHeight,
-      document.body.offsetHeight, document.documentElement.offsetHeight,
-      document.body.clientHeight, document.documentElement.clientHeight
-    );
-    ```
+  ```js
+  let scrollHeight = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.offsetHeight,
+    document.body.clientHeight,
+    document.documentElement.clientHeight
+  );
+  ```
 
 滚动：
 
 - 读取当前的滚动：`window.pageYOffset/pageXOffset`。
 - 更改当前的滚动：
 
-    - `window.scrollTo(pageX,pageY)` — 绝对坐标，
-    - `window.scrollBy(x,y)` — 相对当前位置进行滚动，
-    - `elem.scrollIntoView(top)` — 滚动以使 `elem` 可见（`elem` 与窗口的顶部/底部对齐）。
+  - `window.scrollTo(pageX,pageY)` — 绝对坐标，
+  - `window.scrollBy(x,y)` — 相对当前位置进行滚动，
+  - `elem.scrollIntoView(top)` — 滚动以使 `elem` 可见（`elem` 与窗口的顶部/底部对齐）。

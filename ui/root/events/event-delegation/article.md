@@ -50,7 +50,7 @@
 ```js
 let selectedTd;
 
-*!*
+
 table.onclick = function(event) {
   let target = event.target; // 在哪里点击的？
 
@@ -58,7 +58,7 @@ table.onclick = function(event) {
 
   highlight(target); // 高亮显示它
 };
-*/!*
+
 
 function highlight(td) {
   if (selectedTd) { // 移除现有的高亮显示，如果有的话

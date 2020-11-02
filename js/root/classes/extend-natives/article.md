@@ -5,7 +5,7 @@
 
 例如，这里有一个继承自原生 `Array` 的类 `PowerArray`： 
 
-```js run
+```js
 // 给 PowerArray 新增了一个方法（可以增加更多）
 class PowerArray extends Array {
   isEmpty() {
@@ -36,18 +36,18 @@ arr.constructor === PowerArray
 
 如果我们希望像 `map` 或 `filter` 这样的内建方法返回常规数组，我们可以在 `Symbol.species` 中返回 `Array`，就像这样：
 
-```js run
+```js
 class PowerArray extends Array {
   isEmpty() {
     return this.length === 0;
   }
 
-*!*
+
   // 内建方法将使用这个作为 constructor
   static get [Symbol.species]() {
     return Array;
   }
-*/!*
+
 }
 
 let arr = new PowerArray(1, 2, 5, 10, 50);
@@ -56,15 +56,15 @@ alert(arr.isEmpty()); // false
 // filter 使用 arr.constructor[Symbol.species] 作为 constructor 创建新数组
 let filteredArr = arr.filter(item => item >= 10);
 
-*!*
+
 // filteredArr 不是 PowerArray，而是 Array
-*/!*
+
 alert(filteredArr.isEmpty()); // Error: filteredArr.isEmpty is not a function
 ```
 
 正如你所看到的，现在 `.filter` 返回 `Array`。所以扩展的功能不再传递。
 
-```smart header="其他集合的工作方式类似"
+其他集合的工作方式类似"
 其他集合，例如 `Map` 和 `Set` 的工作方式类似。它们也使用 `Symbol.species`。
 ```
 

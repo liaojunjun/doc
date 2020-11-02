@@ -4,7 +4,7 @@
   <span class="hljs-keyword">let</span> now = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>();
 
   <span class="hljs-comment">// tomorrow date</span>
-  <span class="hljs-keyword">let</span> tomorrow = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(now.getFullYear(), now.getMonth(), *!*now.getDate()+<span class="hljs-number">1</span>*/!*);
+  <span class="hljs-keyword">let</span> tomorrow = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(now.getFullYear(), now.getMonth(), now.getDate()+<span class="hljs-number">1</span>);
 
   <span class="hljs-keyword">let</span> diff = tomorrow - now; <span class="hljs-comment">// difference in ms</span>
   <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.round(diff / <span class="hljs-number">1000</span>); <span class="hljs-comment">// convert to seconds</span>

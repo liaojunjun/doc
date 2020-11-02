@@ -16,15 +16,15 @@ let str = "Just like \"here\".";
 
 匹配字符串示例：
 ```js
-.. *!*"test me"*/!* ..  
-.. *!*"Say \"Hello\"!"*/!* ... (escaped quotes inside)
-.. *!*"\\"*/!* ..  (double slash inside)
-.. *!*"\\ \""*/!* ..  (double slash and an escaped quote inside)
+.. "test me" ..  
+.. "Say \"Hello\"!" ... (escaped quotes inside)
+.. "\\" ..  (double slash inside)
+.. "\\ \"" ..  (double slash and an escaped quote inside)
 ```
 
 在 JavaScript 中，双斜杠用于把斜杠转义为字符串，如下所示：
 
-```js run
+```js
 let str = ' .. "test me" .. "Say \\"Hello\\"!" .. "\\\\ \\"" .. ';
 
 // the in-memory string

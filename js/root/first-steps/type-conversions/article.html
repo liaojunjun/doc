@@ -12,10 +12,10 @@
 <pre><code class="language-js"><span class="hljs-keyword">let</span> value = <span class="hljs-literal">true</span>;
 alert(<span class="hljs-keyword">typeof</span> value); <span class="hljs-comment">// boolean</span>
 
-*!*
+
 value = <span class="hljs-built_in">String</span>(value); <span class="hljs-comment">// 现在，值是一个字符串形式的 &quot;true&quot;</span>
 alert(<span class="hljs-keyword">typeof</span> value); <span class="hljs-comment">// string</span>
-*/!*</code></pre>
+</code></pre>
 <p>字符串转换最明显。<code>false</code> 变成 <code>&quot;false&quot;</code>，<code>null</code> 变成 <code>&quot;null&quot;</code> 等。</p>
 <h2 id="数字型转换">数字型转换</h2>
 <p>在算术函数和表达式中，会自动进行 number 类型转换。</p>
@@ -79,7 +79,7 @@ alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-number">0</s
 
 alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-string">&quot;hello&quot;</span>) ); <span class="hljs-comment">// true</span>
 alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-string">&quot;&quot;</span>) ); <span class="hljs-comment">// false</span></code></pre>
-<p>````warn header=&quot;请注意：包含 0 的字符串 <code>\&quot;0\&quot;</code> 是 <code>true</code>&quot;
+<p>`&quot;请注意：包含 0 的字符串 <code>\&quot;0\&quot;</code> 是 <code>true</code>&quot;
 一些编程语言（比如 PHP）视 <code>&quot;0&quot;</code> 为 <code>false</code>。但在 JavaScript 中，非空的字符串总是 <code>true</code>。</p>
 <pre><code class="language-js">alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-string">&quot;0&quot;</span>) ); <span class="hljs-comment">// true</span>
 alert( <span class="hljs-built_in">Boolean</span>(<span class="hljs-string">&quot; &quot;</span>) ); <span class="hljs-comment">// 空白，也是 true（任何非空字符串都是 true）</span></code></pre>

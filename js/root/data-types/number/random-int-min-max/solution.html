@@ -15,23 +15,23 @@ values <span class="hljs-keyword">from</span> <span class="hljs-number">2.5</spa
 <p>现在我们可以清楚地看到 <code>1</code> 的值比 <code>2</code> 少两倍。和 <code>3</code> 一样。</p>
 <h1 id="正确的解决方案">正确的解决方案</h1>
 <p>这个题目有很多正确的解决方案。其中之一是调整取值范围的边界。为了确保相同的取值范围，我们可以生成从 0.5 到 3.5 的值，从而将所需的概率添加到取值范围的边界：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">randomInteger</span>(<span class="hljs-params">min, max</span>) </span>{
   <span class="hljs-comment">// 现在范围是从  (min-0.5) 到 (max+0.5)</span>
   <span class="hljs-keyword">let</span> rand = min - <span class="hljs-number">0.5</span> + <span class="hljs-built_in">Math</span>.random() * (max - min + <span class="hljs-number">1</span>);
   <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.round(rand);
 }
-*/!*
+
 
 alert( randomInteger(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>) );</code></pre>
 <p>另一种方法是使用 <code>Math.floor</code> 来取范围从 <code>min</code> 到 <code>max+1</code> 的随机数：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">randomInteger</span>(<span class="hljs-params">min, max</span>) </span>{
   <span class="hljs-comment">// here rand is from min to (max+1)</span>
   <span class="hljs-keyword">let</span> rand = min + <span class="hljs-built_in">Math</span>.random() * (max + <span class="hljs-number">1</span> - min);
   <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.floor(rand);
 }
-*/!*
+
 
 alert( randomInteger(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>) );</code></pre>
 <p>现在所有间隔都以这种方式映射：</p>

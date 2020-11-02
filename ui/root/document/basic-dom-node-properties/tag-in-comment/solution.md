@@ -1,6 +1,6 @@
 答案：**`BODY`**。
 
-```html run
+```html
 <script>
   let body = document.body;
 

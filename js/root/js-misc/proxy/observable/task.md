@@ -5,7 +5,7 @@
 
 其工作方式如下：
 
-```js run
+```js
 function makeObservable(target) {
   /* 你的代码 */
 }

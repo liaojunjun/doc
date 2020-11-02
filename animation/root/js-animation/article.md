@@ -105,7 +105,7 @@ cancelAnimationFrame(requestId);
 
 下面的代码显示了 `requestAnimationFrame` 的前 10 次运行之间的时间间隔。通常是 10-20ms：
 
-```html run height=40 refresh
+```html height=40 refresh
 <script>
   let prev = performance.now();
   let times = 0;

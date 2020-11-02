@@ -143,9 +143,9 @@ function pow() {
 
       it("raises to n-th power", function() {
         assert.equal(pow(2, 3), 8);
-    *!*
+    
         assert.equal(pow(3, 4), 81);
-    */!*
+    
       });
 
     });
@@ -232,9 +232,9 @@ describe("pow", function() {
 ```js
 describe("pow", function() {
 
-*!*
+
   describe("raises x to power 3", function() {
-*/!*
+
 
     function makeTest(x) {
       let expected = x * x * x;
@@ -247,9 +247,9 @@ describe("pow", function() {
       makeTest(x);
     }
 
-*!*
+
   });
-*/!*
+
 
   // ……可以在这里写更多的测试代码，describe 和 it 都可以添加在这。
 });
@@ -261,7 +261,7 @@ describe("pow", function() {
 
 将来，我们可以在顶级域中使用 `it` 和 `describe` 的辅助函数添加更多的 `it` 和 `describe`，它们不会看到 `makeTest`。
 
-````smart header="`before/after` 和 `beforeEach/afterEach`"
+``before/after` 和 `beforeEach/afterEach`"
 我们可以设置 `before/after` 函数来在运行测试之前/之后执行。也可以使用 `beforeEach/afterEach` 函数来设置在执行 **每一个** `it` 之前/之后执行。
 
 例如：
@@ -315,15 +315,15 @@ describe("pow", function() {
   // ...
 
   it("for negative n the result is NaN", function() {
-*!*
+
     assert.isNaN(pow(2, -1));
-*/!*
+
   });
 
   it("for non-integer n the result is NaN", function() {
-*!*
+
     assert.isNaN(pow(2, 1.5));    
-*/!*
+
   });
 
 });
@@ -335,7 +335,7 @@ describe("pow", function() {
 
 新加的测试失败了，因为我们的实现方式是不支持它们的。这就是 BDD 的做法：我们首先写一些暂时无法通过的测试，然后去实现它们。
 
-```smart header="Other assertions"
+Other assertions"
 请注意断言语句 `assert.isNaN`：它用来检查 `NaN`。
 
 在 [Chai](http://chaijs.com) 中也有其他的断言，例如：
@@ -352,10 +352,10 @@ describe("pow", function() {
 
 ```js
 function pow(x, n) {
-*!*
+
   if (n < 0) return NaN;
   if (Math.round(n) != n) return NaN;
-*/!*
+
 
   let result = 1;
 

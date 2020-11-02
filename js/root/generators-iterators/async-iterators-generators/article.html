@@ -9,9 +9,9 @@
   <span class="hljs-attr">to</span>: <span class="hljs-number">5</span>,
 
   <span class="hljs-comment">// 在刚使用 for..of 循环时，for..of 就会调用一次这个方法</span>
-*!*
+
   [<span class="hljs-built_in">Symbol</span>.iterator]() {
-*/!*
+
     <span class="hljs-comment">// ...它返回 iterator object：</span>
     <span class="hljs-comment">// 后续的操作中，for..of 将只针对这个对象</span>
     <span class="hljs-comment">// 并使用 next() 向它请求下一个值</span>
@@ -20,10 +20,10 @@
       <span class="hljs-attr">last</span>: <span class="hljs-built_in">this</span>.to,
 
       <span class="hljs-comment">// for..of 循环在每次迭代时都会调用 next()</span>
-*!*
+
       next() { <span class="hljs-comment">// (2)</span>
         <span class="hljs-comment">// 它应该以对象 {done:.., value :...} 的形式返回值</span>
-*/!*
+
         <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.current &lt;= <span class="hljs-built_in">this</span>.last) {
           <span class="hljs-keyword">return</span> { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">value</span>: <span class="hljs-built_in">this</span>.current++ };
         } <span class="hljs-keyword">else</span> {
@@ -50,9 +50,9 @@
   <span class="hljs-attr">to</span>: <span class="hljs-number">5</span>,
 
   <span class="hljs-comment">// 在刚使用 for await..of 循环时，for await..of 就会调用一次这个方法</span>
-*!*
+
   [<span class="hljs-built_in">Symbol</span>.asyncIterator]() { <span class="hljs-comment">// (1)</span>
-*/!*
+
     <span class="hljs-comment">// ...它返回 iterator object：</span>
     <span class="hljs-comment">// 后续的操作中，for await..of 将只针对这个对象</span>
     <span class="hljs-comment">// 并使用 next() 向它请求下一个值</span>
@@ -61,16 +61,16 @@
       <span class="hljs-attr">last</span>: <span class="hljs-built_in">this</span>.to,
 
       <span class="hljs-comment">// for await..of 循环在每次迭代时都会调用 next()</span>
-*!*
+
       <span class="hljs-keyword">async</span> next() { <span class="hljs-comment">// (2)</span>
         <span class="hljs-comment">// 它应该以对象 {done:.., value :...} 的形式返回值</span>
         <span class="hljs-comment">// (会被 async 自动包装成一个 promise)</span>
-*/!*
 
-*!*
+
+
         <span class="hljs-comment">// 可以在内部使用 await，执行异步任务：</span>
         <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">1000</span>)); <span class="hljs-comment">// (3)</span>
-*/!*
+
 
         <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.current &lt;= <span class="hljs-built_in">this</span>.last) {
           <span class="hljs-keyword">return</span> { <span class="hljs-attr">done</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">value</span>: <span class="hljs-built_in">this</span>.current++ };
@@ -84,11 +84,11 @@
 
 (<span class="hljs-keyword">async</span> () =&gt; {
 
-*!*
+
   <span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> (<span class="hljs-keyword">let</span> value <span class="hljs-keyword">of</span> range) { <span class="hljs-comment">// (4)</span>
     alert(value); <span class="hljs-comment">// 1,2,3,4,5</span>
   }
-*/!*
+
 
 })()</code></pre>
 <p>正如我们所看到的，其结构与常规的 iterator 类似:</p>
@@ -123,7 +123,7 @@
 <td><code>for await..of</code></td>
 </tr>
 </tbody></table>
-<p>````warn header=&quot;Spread 语法 <code>...</code> 无法异步工作&quot;
+<p>`&quot;Spread 语法 <code>...</code> 无法异步工作&quot;
 需要常规的同步 iterator 的功能，无法与异步 iterator 一起使用。</p>
 <p>例如，spread 语法无法工作：</p>
 <pre><code class="language-js">alert( [...range] ); <span class="hljs-comment">// Error, no Symbol.iterator</span></code></pre>
@@ -135,7 +135,7 @@
 
 让我们回顾一下 &lt;info:generators&gt; 一章的序列生成器（generator）。它生成从 `start` 到 `end` 的一系列值：
 
-```js run
+```js
 function* generateSequence(start, end) {
   for (let i = start; i &lt;= end; i++) {
     yield i;
@@ -153,15 +153,15 @@ for(let value of generateSequence(1, 5)) {
 
 没问题，只需要在它前面加上 `async` 即可，就像这样：
 
-```js run
-*!*async*/!* function* generateSequence(start, end) {
+```js
+async function* generateSequence(start, end) {
 
   for (let i = start; i &lt;= end; i++) {
 
-*!*
+
     // 耶，可以使用 await 了！
     await new Promise(resolve =&gt; setTimeout(resolve, 1000));
-*/!*
+
 
     yield i;
   }
@@ -171,7 +171,7 @@ for(let value of generateSequence(1, 5)) {
 (async () =&gt; {
 
   let generator = generateSequence(1, 5);
-  for *!*await*/!* (let value of generator) {
+  for await (let value of generator) {
     alert(value); // 1，然后 2，然后 3，然后 4，然后 5
   }
 
@@ -198,11 +198,11 @@ result = await generator.next(); // result = {value: ..., done: true/false}
 let range = {
   from: 1,
   to: 5,
-*!*
+
   [Symbol.iterator]() {
     return &lt;object with next to make range iterable&gt;
   }
-*/!*
+
 }
 ```
 
@@ -210,7 +210,7 @@ let range = {
 
 让我们回顾一下来自之前 [](info:generators) 一章中的一个示例：
 
-```js run
+```js
 let range = {
   from: 1,
   to: 5,
@@ -231,14 +231,14 @@ for(let value of range) {
 
 如果们想要给 generator 加上异步行为，那么我们应该将 `Symbol.iterator` 替换成异步的 `Symbol.asyncIterator`：
 
-```js run
+```js
 let range = {
   from: 1,
   to: 5,
 
-*!*
+
   async *[Symbol.asyncIterator]() { // 等价于 [Symbol.asyncIterator]: async function*()
-*/!*
+
     for(let value = this.from; value &lt;= this.to; value++) {
 
       // 在 value 之间暂停一会儿，等待一些东西
@@ -251,7 +251,7 @@ let range = {
 
 (async () =&gt; {
 
-  for *!*await*/!* (let value of range) {
+  for await (let value of range) {
     alert(value); // 1，然后 2，然后 3，然后 4，然后 5
   }
 
@@ -317,7 +317,7 @@ async function* fetchCommits(repo) {
 
 这是一个使用示例（在控制台中显示 commit 的作者）
 
-```js run
+```js
 (async () =&gt; {
 
   let count = 0;

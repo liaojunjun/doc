@@ -58,12 +58,12 @@ loadScriptPromise(...).then(...);</code></pre>
 function promisify(f, manyArgs = false) {
   return function (...args) {
     return new Promise((resolve, reject) =&gt; {
-      function *!*callback(err, ...results*/!*) { // 我们自定义的 f 的回调
+      function callback(err, ...results) { // 我们自定义的 f 的回调
         if (err) {
           reject(err);
         } else {
           // 如果 manyArgs 被指定，则使用所有回调的结果 resolve
-          *!*resolve(manyArgs ? results : results[0]);*/!*
+          resolve(manyArgs ? results : results[0]);
         }
       }
 

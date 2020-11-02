@@ -1,4 +1,4 @@
-```js run
+```js
 
 let john = { name: "John", age: 25 };
 let pete = { name: "Pete", age: 30 };

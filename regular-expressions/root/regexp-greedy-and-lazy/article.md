@@ -18,7 +18,7 @@
 
 ...但如果我们试着在一个如此简单的例子中去应用它...
 
-```js run
+```js
 let reg = /".+"/g;
 
 let str = 'a "witch" and her "broom" is one';
@@ -106,7 +106,7 @@ alert( str.match(reg) ); // "witch" and her "broom"
 
 正则表达式 `pattern:/".+?"/g` 正如预期工作：它找到了 `match:"witch"` 和 `match:"broom"`：
 
-```js run
+```js
 let reg = /".+?"/g;
 
 let str = 'a "witch" and her "broom" is one';
@@ -150,7 +150,7 @@ alert( str.match(reg) ); // witch, broom
 
 例如：
 
-```js run
+```js
 alert( "123 456".match(/\d+ \d+?/g) ); // 123 4
 ```
 
@@ -163,7 +163,7 @@ alert( "123 456".match(/\d+ \d+?/g) ); // 123 4
     懒惰模式不会在不必要的情况下重复任何事情。模式结束，所以我们找到了匹配项 `match:123 4`。
 4. 接下来的搜索工作从字符 `5` 开始。
 
-```smart header="Optimizations"
+Optimizations"
 当代的正则表达式引擎会通过优化内部算法来提升效率。所以它们的工作流程和所描述的算法可能略有不同。
 
 但如果只是为了理解正则表达式是如何工作以及如何构建的，我们不需要知道这些，它们仅用于内部优化。
@@ -177,7 +177,7 @@ alert( "123 456".match(/\d+ \d+?/g) ); // 123 4
 
 在用例中，我们能够在不启用懒惰模式的情况下用 `pattern:"[^"]+"` 找到带引号的字符串：
 
-```js run
+```js
 let reg = /"[^"]+"/g;
 
 let str = 'a "witch" and her "broom" is one';
@@ -202,7 +202,7 @@ alert( str.match(reg) ); // witch, broom
 首先可能会想到：`pattern:/<a href=".*" class="doc">/g`。
 
 验证一下：
-```js run
+```js
 let str = '...<a href="link" class="doc">...';
 let reg = /<a href=".*" class="doc">/g;
 
@@ -212,7 +212,7 @@ alert( str.match(reg) ); // <a href="link" class="doc">
 
 ...但如果文本中有多个链接呢？
 
-```js run
+```js
 let str = '...<a href="link1" class="doc">... <a href="link2" class="doc">...';
 let reg = /<a href=".*" class="doc">/g;
 
@@ -231,7 +231,7 @@ alert( str.match(reg) ); // <a href="link1" class="doc">... <a href="link2" clas
 
 让我们启用惰性量词 `pattern:.*?` 来修改模式：
 
-```js run
+```js
 let str = '...<a href="link1" class="doc">... <a href="link2" class="doc">...';
 let reg = /<a href=".*?" class="doc">/g;
 
@@ -248,7 +248,7 @@ alert( str.match(reg) ); // <a href="link1" class="doc">, <a href="link2" class=
 
 它的工作原理是 —— 在上述的解释之后，这应该是显而易见的。所以我们不停留在这些细节上，来再尝试一个例子：
 
-```js run
+```js
 let str = '...<a href="link1" class="wrong">... <p style="" class="doc">...';
 let reg = /<a href=".*?" class="doc">/g;
 
@@ -283,7 +283,7 @@ alert( str.match(reg) ); // <a href="link1" class="wrong">... <p style="" class=
 
 一个实例：
 
-```js run
+```js
 let str1 = '...<a href="link1" class="wrong">... <p style="" class="doc">...';
 let str2 = '...<a href="link1" class="doc">... <a href="link2" class="doc">...';
 let reg = /<a href="[^"]*" class="doc">/g;

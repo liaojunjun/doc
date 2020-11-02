@@ -17,9 +17,9 @@ let mary = { name: "Mary", surname: "Key", id: 3 };
 
 let users = [ john, pete, mary ];
 
-*!*
+
 let usersMapped = /* ... your code ... */
-*/!*
+
 
 /*
 usersMapped = [

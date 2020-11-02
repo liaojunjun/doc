@@ -1,7 +1,7 @@
 
 解析在代码下面：
 
-```js run
+```js
 async function loadJson(url) { // (1)
   let response = await fetch(url); // (2)
 

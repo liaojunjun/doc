@@ -6,21 +6,21 @@
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkAge</span>(<span class="hljs-params">age</span>) </span>{
   <span class="hljs-keyword">if</span> (age &gt; <span class="hljs-number">18</span>) {
     <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
-*!*
+
   } <span class="hljs-keyword">else</span> {
     <span class="hljs-comment">// ...</span>
     <span class="hljs-keyword">return</span> confirm(<span class="hljs-string">&#x27;Did parents allow you?&#x27;</span>);
   }
-*/!*
+
 }</code></pre>
 <p>如果 <code>else</code> 被删除，函数的工作方式会不同吗？</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkAge</span>(<span class="hljs-params">age</span>) </span>{
   <span class="hljs-keyword">if</span> (age &gt; <span class="hljs-number">18</span>) {
     <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
   }
-*!*
+
   <span class="hljs-comment">// ...</span>
   <span class="hljs-keyword">return</span> confirm(<span class="hljs-string">&#x27;Did parents allow you?&#x27;</span>);
-*/!*
+
 }</code></pre>
 <p>这两个变体的行为是否有区别？</p>

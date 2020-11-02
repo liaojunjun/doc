@@ -1,6 +1,6 @@
 使用循环的解法：
 
-```js run
+```js
 function sumTo(n) {
   let sum = 0;
   for (let i = 1; i <= n; i++) {
@@ -14,7 +14,7 @@ alert( sumTo(100) );
 
 使用递归的解法：
 
-```js run
+```js
 function sumTo(n) {
   if (n == 1) return 1;
   return n + sumTo(n - 1);
@@ -25,7 +25,7 @@ alert( sumTo(100) );
 
 使用公式 `sumTo(n) = n*(n+1)/2` 的解法：
 
-```js run
+```js
 function sumTo(n) {
   return n * (n + 1) / 2;
 }

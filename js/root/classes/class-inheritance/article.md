@@ -15,7 +15,7 @@ class Animal {
     this.speed = 0;
     this.name = name;
   }
-  run(speed) {
+ (speed) {
     this.speed = speed;
     alert(`${this.name} runs with speed ${this.speed}.`);
   }
@@ -41,9 +41,9 @@ let animal = new Animal("My animal");
 让我们创建一个继承自 `Animal` 的 `class Rabbit`：
 
 ```js
-*!*
+
 class Rabbit extends Animal {
-*/!*
+
   hide() {
     alert(`${this.name} hides!`);
   }
@@ -68,21 +68,21 @@ Class `Rabbit` 的对象可以访问例如 `rabbit.hide()` 等 `Rabbit` 的方�
 
 我们可以回忆一下 <info:native-prototypes> 这一章的内容，JavaScript 内建对象同样也使用原型继承。例如，`Date.prototype.[[Prototype]]` 是 `Object.prototype`。这就是为什么日期可以访问通用对象的方法。
 
-````smart header="在 `extends` 后允许任意表达式"
+`在 `extends` 后允许任意表达式"
 类语法不仅允许指定一个类，在 `extends` 后可以指定任意表达式。
 
 例如，一个生成父类的函数调用：
 
-```js run
+```js
 function f(phrase) {
   return class {
     sayHi() { alert(phrase) }
   }
 }
 
-*!*
+
 class User extends f("Hello") {}
-*/!*
+
 
 new User().sayHi(); // Hello
 ```
@@ -115,7 +115,7 @@ Class 为此提供了 `"super"` 关键字。
 
 例如，让我们的 rabbit 在停下来的时候自动 hide：
 
-```js run
+```js
 class Animal {
 
   constructor(name) {
@@ -123,7 +123,7 @@ class Animal {
     this.name = name;
   }
 
-  run(speed) {
+ (speed) {
     this.speed = speed;
     alert(`${this.name} runs with speed ${this.speed}.`);
   }
@@ -140,12 +140,12 @@ class Rabbit extends Animal {
     alert(`${this.name} hides!`);
   }
 
-*!*
+
   stop() {
     super.stop(); // 调用父类的 stop
     this.hide(); // 然后 hide
   }
-*/!*
+
 }
 
 let rabbit = new Rabbit("White Rabbit");
@@ -156,7 +156,7 @@ rabbit.stop(); // White Rabbit 停止了。White rabbit hide 了！
 
 现在，`Rabbit` 在执行过程中调用父类的 `super.stop()` 方法，所以 `Rabbit` 也具有了 `stop` 方法。
 
-````smart header="箭头函数没有 `super`"
+`箭头函数没有 `super`"
 正如我们在 <info:arrow-functions> 一章中所提到的，箭头函数没有 `super`。
 
 如果被访问，它会从外部函数获取。例如：
@@ -188,11 +188,11 @@ setTimeout(function() { super.stop() }, 1000);
 ```js
 class Rabbit extends Animal {
   // 为没有自己的 constructor 的扩展类生成的
-*!*
+
   constructor(...args) {
     super(...args);
   }
-*/!*
+
 }
 ```
 
@@ -200,7 +200,7 @@ class Rabbit extends Animal {
 
 现在，我们给 `Rabbit` 添加一个自定义的 constructor。除了 `name` 之外，它还会指定 `earLength`。
 
-```js run
+```js
 class Animal {
   constructor(name) {
     this.speed = 0;
@@ -211,21 +211,21 @@ class Animal {
 
 class Rabbit extends Animal {
 
-*!*
+
   constructor(name, earLength) {
     this.speed = 0;
     this.name = name;
     this.earLength = earLength;
   }
-*/!*
+
 
   // ...
 }
 
-*!*
+
 // 不工作！
 let rabbit = new Rabbit("White Rabbit", 10); // Error: this is not defined.
-*/!*
+
 ```
 
 哎呦！我们得到了一个报错。现在我们没法新建 rabbit。是什么地方出错了？
@@ -249,7 +249,7 @@ let rabbit = new Rabbit("White Rabbit", 10); // Error: this is not defined.
 
 为了让 `Rabbit` 的 constructor 可以工作，它需要在使用 `this` 之前调用 `super()`，就像下面这样：
 
-```js run
+```js
 class Animal {
 
   constructor(name) {
@@ -263,28 +263,28 @@ class Animal {
 class Rabbit extends Animal {
 
   constructor(name, earLength) {
-*!*
+
     super(name);
-*/!*
+
     this.earLength = earLength;
   }
 
   // ...
 }
 
-*!*
+
 // 现在可以了
 let rabbit = new Rabbit("White Rabbit", 10);
 alert(rabbit.name); // White Rabbit
 alert(rabbit.earLength); // 10
-*/!*
+
 ```
 
 
 
 ### 重写类字段: 一个棘手的注意要点
 
-```warn header="高阶要点"
+"高阶要点"
 这个要点假设你对类已经有了一定的经验，或许是在其他编程语言中。
 
 这里提供了一个更好的视角来窥探这门语言，且解释了它的行为为什么可能会是 bugs 的来源(但不是非常频繁)。
@@ -298,7 +298,7 @@ alert(rabbit.earLength); // 10
 
 请思考此示例：
 
-```js run
+```js
 class Animal {
   name = 'animal'
 
@@ -312,9 +312,9 @@ class Rabbit extends Animal {
 }
 
 new Animal(); // animal
-*!*
+
 new Rabbit(); // animal
-*/!*
+
 ```
 
 这里，`Rabbit` 继承自 `Animal`，并且用它自己的值重写了 `name` 字段。
@@ -331,7 +331,7 @@ new Rabbit(); // animal
 
 这里是相同的代码，但是我们调用 `this.showName()` 方法而不是 `this.name` 字段：
 
-```js run
+```js
 class Animal {
   showName() {  // 而不是 this.name = 'animal'
     alert('animal');
@@ -349,9 +349,9 @@ class Rabbit extends Animal {
 }
 
 new Animal(); // animal
-*!*
+
 new Rabbit(); // rabbit
-*/!*
+
 ```
 
 请注意：这时的输出是不同的。
@@ -379,7 +379,7 @@ new Rabbit(); // rabbit
 
 ## 深入：内部探究和 [[HomeObject]]
 
-```warn header="进阶内容"
+"进阶内容"
 如果你是第一次阅读本教程，那么则可以跳过本节。
 
 这是关于继承和 `super` 背后的内部机制。
@@ -399,7 +399,7 @@ new Rabbit(); // rabbit
 
 在下面的例子中，`rabbit.__proto__ = animal`。现在让我们尝试一下：在 `rabbit.eat()` 我们将会使用 `this.__proto__` 调用 `animal.eat()`：
 
-```js run
+```js
 let animal = {
   name: "Animal",
   eat() {
@@ -411,10 +411,10 @@ let rabbit = {
   __proto__: animal,
   name: "Rabbit",
   eat() {
-*!*
+
     // 这就是 super.eat() 可以大概工作的方式
     this.__proto__.eat.call(this); // (*)
-*/!*
+
   }
 };
 
@@ -427,7 +427,7 @@ rabbit.eat(); // Rabbit eats.
 
 现在，让我们在原型链上再添加一个对象。我们将看到这件事是如何被打破的：
 
-```js run
+```js
 let animal = {
   name: "Animal",
   eat() {
@@ -451,9 +451,9 @@ let longEar = {
   }
 };
 
-*!*
+
 longEar.eat(); // Error: Maximum call stack size exceeded
-*/!*
+
 ```
 
 代码无法再运行了！我们可以看到，在试图调用 `longEar.eat()` 时抛出了错误。
@@ -500,7 +500,7 @@ longEar.eat(); // Error: Maximum call stack size exceeded
 
 让我们看看它是怎么工作的，首先，对于普通对象：
 
-```js run
+```js
 let animal = {
   name: "Animal",
   eat() {         // animal.eat.[[HomeObject]] == animal
@@ -524,10 +524,10 @@ let longEar = {
   }
 };
 
-*!*
+
 // 正确执行
 longEar.eat();  // Long Ear eats.
-*/!*
+
 ```
 
 它基于 `[[HomeObject]]` 运行机制按照预期执行。一个方法，例如 `longEar.eat`，知道其 `[[HomeObject]]` 并且从其原型中获取父方法。并没有使用 `this`。
@@ -542,7 +542,7 @@ longEar.eat();  // Long Ear eats.
 
 下面是复制后错误的 `super` 结果的示例：
 
-```js run
+```js
 let animal = {
   sayHi() {
     console.log(`I'm an animal`);
@@ -566,14 +566,14 @@ let plant = {
 // tree 继承自 plant
 let tree = {
   __proto__: plant,
-*!*
+
   sayHi: rabbit.sayHi // (*)
-*/!*
+
 };
 
-*!*
+
 tree.sayHi();  // I'm an animal (?!?)
-*/!*
+
 ```
 
 调用 `tree.sayHi()` 显示 "I'm an animal"。这绝对是错误的。
@@ -595,7 +595,7 @@ tree.sayHi();  // I'm an animal (?!?)
 
 在下面的例子中，使用非方法（non-method）语法进行了比较。未设置 `[[HomeObject]]` 属性，并且继承无效：
 
-```js run
+```js
 let animal = {
   eat: function() { // 这里是故意这样写的，而不是 eat() {...
     // ...
@@ -609,9 +609,9 @@ let rabbit = {
   }
 };
 
-*!*
+
 rabbit.eat();  // 错误调用 super（因为这里没有 [[HomeObject]]）
-*/!*
+
 ```
 
 ## 总结

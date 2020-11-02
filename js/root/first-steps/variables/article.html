@@ -13,16 +13,16 @@
 <p>现在，我们可以通过赋值运算符 <code>=</code> 为变量添加一些数据：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> message;
 
-*!*
+
 message = <span class="hljs-string">&#x27;Hello&#x27;</span>; <span class="hljs-comment">// 保存字符串</span>
-*/!*</code></pre>
+</code></pre>
 <p>现在这个字符串已经保存到与该变量相关联的内存区域了，我们可以通过使用该变量名称访问它：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> message;
 message = <span class="hljs-string">&#x27;Hello!&#x27;</span>;
 
-*!*
+
 alert(message); <span class="hljs-comment">// 显示变量内容</span>
-*/!*</code></pre>
+</code></pre>
 <p>简洁一点，我们可以将变量定义和赋值合并成一行：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> message = <span class="hljs-string">&#x27;Hello!&#x27;</span>; <span class="hljs-comment">// 定义变量，并且赋值</span>
 
@@ -45,7 +45,7 @@ alert(message); <span class="hljs-comment">// Hello!</span></code></pre>
 <p>技术上讲，这些变体都有一样的效果。所以，这是个个人品味和审美方面的问题。</p>
 <p>````smart header=&quot;<code>var</code> 而不是 <code>let</code>&quot;
 在较旧的脚本中，你也可能发现另一个关键字 <code>var</code>，而不是 <code>let</code>：</p>
-<pre><code class="language-js">*!*<span class="hljs-keyword">var</span>*/!* message = <span class="hljs-string">&#x27;Hello&#x27;</span>;</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">var</span> message = <span class="hljs-string">&#x27;Hello&#x27;</span>;</code></pre>
 <p><code>var</code> 关键字与 <code>let</code> <strong>大体</strong> 相同，也用来声明变量，但稍微有些不同，也有点“老派”。</p>
 <p><code>let</code> 和 <code>var</code> 之间有些微妙的差别，但目前对于我们来说并不重要。我们将会在 <a href="info:var">info:var</a> 章节中介绍它们。</p>
 <pre><code>
@@ -60,7 +60,7 @@ alert(message); <span class="hljs-comment">// Hello!</span></code></pre>
 我们可以在盒子内放入任何值。
 
 并且，这个盒子的值，我们想改变多少次，就可以改变多少次：
-```js run
+```js
 let message;
 
 message = &#x27;Hello!&#x27;;
@@ -76,27 +76,27 @@ alert(message);
 
 我们还可以声明两个变量，然后将其中一个变量的数据拷贝到另一个变量。
 
-```js run
+```js
 let hello = &#x27;Hello world!&#x27;;
 
 let message;
 
-*!*
+
 // 将字符串 &#x27;Hello world&#x27; 从变量 hello 拷贝到 message
 message = hello;
-*/!*
+
 
 // 现在两个变量保存着相同的数据
 alert(hello); // Hello world!
 alert(message); // Hello world!
 ```
 
-````warn header=&quot;声明两次会触发 error&quot;
+`&quot;声明两次会触发 error&quot;
 一个变量应该只被声明一次。
 
 对同一个变量进行重复声明会触发 error：
 
-```js run
+```js
 let message = &quot;This&quot;;
 
 // 重复 &#x27;let&#x27; 会导致 error
@@ -143,11 +143,11 @@ let 我 = &#x27;...&#x27;;
 
 下面的代码将会抛出一个语法错误：
 
-```js run no-beautify
+```js no-beautify
 let let = 5; // 不能用 &quot;let&quot; 来命名一个变量，错误！
 let return = 5; // 同样，不能使用 &quot;return&quot;，错误！
 ```</code></pre>
-<p>````warn header=&quot;未采用 <code>use strict</code> 下的赋值&quot;</p>
+<p>`&quot;未采用 <code>use strict</code> 下的赋值&quot;</p>
 <p>一般，我们需要在使用一个变量前定义它。但是在早期，我们可以不使用 <code>let</code> 进行变量声明，而可以简单地通过赋值来创建一个变量。现在如果我们不在脚本中使用 <code>use strict</code> 声明启用严格模式，这仍然可以正常工作，这是为了保持对旧脚本的兼容。</p>
 <pre><code class="language-js"><span class="hljs-comment">// 注意：这个例子中没有 &quot;use strict&quot;</span>
 
@@ -157,9 +157,9 @@ alert(num); <span class="hljs-comment">// 5</span></code></pre>
 <p>上面这是个糟糕的做法，严格模式下会报错。</p>
 <pre><code class="language-js"><span class="hljs-meta">&quot;use strict&quot;</span>;
 
-*!*
+
 num = <span class="hljs-number">5</span>; <span class="hljs-comment">// 错误：num 未定义</span>
-*/!*</code></pre>
+</code></pre>
 <pre><code>
 ## 常量
 
@@ -171,7 +171,7 @@ const myBirthday = &#x27;18.04.1982&#x27;;
 
 使用 `const` 声明的变量称为“常量”。它们不能被修改，如果你尝试修改就会发现报错：
 
-```js run
+```js
 const myBirthday = &#x27;18.04.1982&#x27;;
 
 myBirthday = &#x27;01.01.2001&#x27;; // 错误，不能对常量重新赋值
@@ -188,7 +188,7 @@ myBirthday = &#x27;01.01.2001&#x27;; // 错误，不能对常量重新赋值
 
 例如，让我们以所谓的“web”（十六进制）格式为颜色声明常量：
 
-```js run
+```js
 const COLOR_RED = &quot;#F00&quot;;
 const COLOR_GREEN = &quot;#0F0&quot;;
 const COLOR_BLUE = &quot;#00F&quot;;

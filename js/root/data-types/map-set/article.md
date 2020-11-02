@@ -24,7 +24,7 @@
 
 举个例子：
 
-```js run
+```js
 let map = new Map();
 
 map.set('1', 'str1');   // 字符串键
@@ -41,7 +41,7 @@ alert( map.size ); // 3
 
 如我们所见，与对象不同，键不会被转换成字符串。键可以是任何类型。
 
-```smart header="`map[key]` 不是使用 `Map` 的正确方式"
+`map[key]` 不是使用 `Map` 的正确方式"
 虽然 `map[key]` 也有效，例如我们可以设置 `map[key] = 2`，这样会将 `map` 视为 JavaScript 的 plain object，因此它暗含了所有相应的限制（没有对象键等）。
 
 所以我们应该使用 `map` 方法：`set` 和 `get` 等。
@@ -51,7 +51,7 @@ alert( map.size ); // 3
 
 例如：
 
-```js run
+```js
 let john = { name: "John" };
 
 // 存储每个用户的来访次数
@@ -67,28 +67,28 @@ alert( visitsCountMap.get(john) ); // 123
   
 我们来尝试一下：
 
-```js run
+```js
 let john = { name: "John" };
 
 let visitsCountObj = {}; // 尝试使用对象
 
 visitsCountObj[john] = 123; // 尝试将 john 对象作为键
 
-*!*
+
 // 是写成了这样!
 alert( visitsCountObj["[object Object]"] ); // 123
-*/!*
+
 ```
 
 因为 `visitsCountObj` 是一个对象，它会将所有的键如 `john` 转换为字符串，所以我们得到字符串键 `"[object Object]"`。这显然不是我们想要的结果。
 
-```smart header="`Map` 是怎么比较键的？"
+`Map` 是怎么比较键的？"
 `Map` 使用 [SameValueZero](https://tc39.github.io/ecma262/#sec-samevaluezero) 算法来比较键是否相等。它和严格等于 `===` 差不多，但区别是 `NaN` 被看成是等于 `NaN`。所以 `NaN` 也可以被用作键。
 
 这个算法不能被改变或者自定义。
 ```
 
-````smart header="链式调用"
+`链式调用"
 每一次 `map.set` 调用都会返回 map 本身，所以我们可以进行“链式”调用：
 
 ```js
@@ -109,7 +109,7 @@ map.set('1', 'str1')
 
 例如：
 
-```js run
+```js
 let recipeMap = new Map([
   ['cucumber', 500],
   ['tomatoes', 350],
@@ -132,7 +132,7 @@ for (let entry of recipeMap) { // 与 recipeMap.entries() 相同
 }
 ```
 
-```smart header="使用插入顺序"
+使用插入顺序"
 迭代的顺序与插入值的顺序相同。与普通的 `Object` 不同，`Map` 保留了此顺序。
 ```
 
@@ -149,7 +149,7 @@ recipeMap.forEach( (value, key, map) => {
 
 当创建一个 `Map` 后，我们可以传入一个带有键值对的数组（或其它可迭代对象）来进行初始化，如下所示：
 
-```js run
+```js
 // 键值对 [key, value] 数组
 let map = new Map([
   ['1',  'str1'],
@@ -164,15 +164,15 @@ alert( map.get('1') ); // str1
 
 所以可以像下面这样从一个对象创建一个 Map：
 
-```js run
+```js
 let obj = {
   name: "John",
   age: 30
 };
 
-*!*
+
 let map = new Map(Object.entries(obj));
-*/!*
+
 
 alert( map.get('name') ); // John
 ```
@@ -186,7 +186,7 @@ alert( map.get('name') ); // John
 
 `Object.fromEntries` 方法的作用是相反的：给定一个具有 `[key, value]` 键值对的数组，它会根据给定数组创建一个对象：
 
-```js run
+```js
 let prices = Object.fromEntries([
   ['banana', 1],
   ['orange', 2],
@@ -204,15 +204,15 @@ alert(prices.orange); // 2
 
 我们来开始：
 
-```js run
+```js
 let map = new Map();
 map.set('banana', 1);
 map.set('orange', 2);
 map.set('meat', 4);
 
-*!*
+
 let obj = Object.fromEntries(map.entries()); // 创建一个普通对象（plain object）(*)
-*/!*
+
 
 // 完成了！
 // obj = { banana: 1, orange: 2, meat: 4 }
@@ -248,7 +248,7 @@ let obj = Object.fromEntries(map); // 省掉 .entries()
 
 `Set` 可以帮助我们解决这个问题：
 
-```js run
+```js
 let set = new Set();
 
 let john = { name: "John" };
@@ -276,7 +276,7 @@ for (let user of set) {
 
 我们可以使用 `for..of` 或 `forEach` 来遍历 Set：
 
-```js run
+```js
 let set = new Set(["oranges", "apples", "bananas"]);
 
 for (let value of set) alert(value);

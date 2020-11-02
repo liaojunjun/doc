@@ -68,7 +68,7 @@
 
 另外，还有一个 `event.buttons` 属性，其中以整数的形式存储着当前所有按下的鼠标按键，每个按键一个比特位。在实际开发中，很少会用到这个属性，如果有需要的话，你可以在 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/buttons) 中找到更多细节。
 
-```warn header="过时的 `event.which`"
+"过时的 `event.which`"
 一些老代码可能会使用 `event.which` 属性来获得按下的按键。这是一个古老的非标准的方式，具有以下可能值：
 
 - `event.which == 1` —— 鼠标左键，
@@ -98,16 +98,16 @@
 
 <script>
   button.onclick = function(event) {
-*!*
+
     if (event.altKey && event.shiftKey) {
-*/!*
+
       alert('Hooray!');
     }
   };
 </script>
 ```
 
-```warn header="注意：在 Mac 上我们通常使用 `Cmd` 代替 `Ctrl`"
+"注意：在 Mac 上我们通常使用 `Cmd` 代替 `Ctrl`"
 在 Windows 和 Linux 上有 `key:Alt`，`key:Shift` 和 `key:Ctrl`。在 Mac 上还有：`key:Cmd`，它对应于属性 `metaKey`。
 
 在大多数情况下，当在 Windows/Linux 上使用 `key:Ctrl` 时，在 Mac 是使用 `key:Cmd`。
@@ -123,7 +123,7 @@
 对于 JS 代码，这意味着我们应该检查 `if (event.ctrlKey || event.metaKey)`。
 ```
 
-```warn header="还有移动设备"
+"还有移动设备"
 键盘组合是工作流的一个补充。这样，如果访客使用键盘操作 —— 它们就会起作用。
 
 但是，如果访客的设备没有键盘 —— 那么这里应该有另一种不使用键盘也能做到这一点的方式。
@@ -170,7 +170,7 @@
 
 ```html autorun height=50
 Before...
-<b ondblclick="alert('Click!')" *!*onmousedown="return false"*/!*>
+<b ondblclick="alert('Click!')" onmousedown="return false">
   Double-click me
 </b>
 ...After
@@ -180,11 +180,11 @@ Before...
 
 请注意：其中的文本仍然是可选择的。但是，选择不应该开始于该文本自身，而应该在该文本之前或之后开始。通常，这对用户来说挺好的。
 
-````smart header="防止复制"
+`防止复制"
 如果我们想禁用选择以保护我们页面的内容不被复制粘贴，那么我们可以使用另一个事件：`oncopy`。
 
 ```html autorun height=80 no-beautify
-<div *!*oncopy="alert('Copying forbidden!');return false"*/!*>
+<div oncopy="alert('Copying forbidden!');return false">
   Dear user,
   The copying is forbidden for you.
   If you know JS or HTML, then you can get everything from the page source though.

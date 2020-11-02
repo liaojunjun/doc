@@ -16,10 +16,10 @@
   <span class="hljs-attr">stomach</span>: [],
 
   eat(food) {
-*!*
+
     <span class="hljs-comment">// 分配给 this.stomach 而不是 this.stomach.push</span>
     <span class="hljs-built_in">this</span>.stomach = [food];
-*/!*
+
   }
 };
 
@@ -49,16 +49,16 @@ alert( lazy.stomach ); <span class="hljs-comment">// &lt;nothing&gt;</span></cod
 
 <span class="hljs-keyword">let</span> speedy = {
   <span class="hljs-attr">__proto__</span>: hamster,
-*!*
+
   stomach: []
-*/!*
+
 };
 
 <span class="hljs-keyword">let</span> lazy = {
   <span class="hljs-attr">__proto__</span>: hamster,
-*!*
+
   stomach: []
-*/!*
+
 };
 
 <span class="hljs-comment">// 仓鼠 Speedy 找到了食物</span>

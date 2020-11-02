@@ -30,11 +30,11 @@
   <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:
     alert( <span class="hljs-string">&#x27;Too small&#x27;</span> );
     <span class="hljs-keyword">break</span>;
-*!*
+
   <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:
     alert( <span class="hljs-string">&#x27;Exactly!&#x27;</span> );
     <span class="hljs-keyword">break</span>;
-*/!*
+
   <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>:
     alert( <span class="hljs-string">&#x27;Too large&#x27;</span> );
     <span class="hljs-keyword">break</span>;
@@ -50,14 +50,14 @@
 <span class="hljs-keyword">switch</span> (a) {
   <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:
     alert( <span class="hljs-string">&#x27;Too small&#x27;</span> );
-*!*
+
   <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:
     alert( <span class="hljs-string">&#x27;Exactly!&#x27;</span> );
   <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>:
     alert( <span class="hljs-string">&#x27;Too big&#x27;</span> );
   <span class="hljs-keyword">default</span>:
     alert( <span class="hljs-string">&quot;I don&#x27;t know such values&quot;</span> );
-*/!*
+
 }</code></pre>
 <p>在上面的例子中我们会看到连续执行的三个 <code>alert</code>：</p>
 <pre><code class="language-js">alert( <span class="hljs-string">&#x27;Exactly!&#x27;</span> );
@@ -70,14 +70,14 @@ alert( <span class="hljs-string">&quot;I don&#x27;t know such values&quot;</span
 <span class="hljs-keyword">let</span> b = <span class="hljs-number">0</span>;
 
 <span class="hljs-keyword">switch</span> (+a) {
-*!*
+
   <span class="hljs-keyword">case</span> b + <span class="hljs-number">1</span>:
     alert(<span class="hljs-string">&quot;this runs, because +a is 1, exactly equals b+1&quot;</span>);
     <span class="hljs-keyword">break</span>;
-*/!*
+
 
   <span class="hljs-keyword">default</span>:
-    alert(<span class="hljs-string">&quot;this doesn&#x27;t run&quot;</span>);
+    alert(<span class="hljs-string">&quot;this doesn&#x27;t&quot;</span>);
 }</code></pre>
 <p>这里 <code>+a</code> 返回 <code>1</code>，这个值跟 <code>case</code> 中 <code>b + 1</code> 相比较，然后执行对应的代码。</p>
 <pre><code>
@@ -87,7 +87,7 @@ alert( <span class="hljs-string">&quot;I don&#x27;t know such values&quot;</span
 
 比如，如果我们想让 `case 3` 和 `case 5` 执行同样的代码：
 
-```js run no-beautify
+```js no-beautify
 let a = 3;
 
 switch (a) {
@@ -95,13 +95,13 @@ switch (a) {
     alert(&#x27;Right!&#x27;);
     break;
 
-*!*
+
   case 3: // (*) 下面这两个 case 被分在一组
   case 5:
     alert(&#x27;Wrong!&#x27;);
     alert(&quot;Why don&#x27;t you take a math class?&quot;);
     break;
-*/!*
+
 
   default:
     alert(&#x27;The result is strange. Really.&#x27;);
@@ -118,7 +118,7 @@ switch (a) {
 
 比如，我们来看下面的代码：
 
-```js run
+```js
 let arg = prompt(&quot;Enter a value?&quot;)
 switch (arg) {
   case &#x27;0&#x27;:

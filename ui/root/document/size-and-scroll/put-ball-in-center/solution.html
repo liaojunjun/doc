@@ -21,7 +21,7 @@ ball.style.top = <span class="hljs-built_in">Math</span>.round(field.clientHeigh
 <p>因此，在图片加载完成之前，<code>ball.offsetWidth</code> 的值为 <code>0</code>。这会导致上面的代码中会有错误的坐标。</p>
 <p>在第一次加载完成后，浏览器通常会缓存该图片，并在下一次加载时，浏览器会立即拥有该图片的大小。但是在第一次加载时，<code>ball.offsetWidth</code> 的值为 <code>0</code>。</p>
 <p>我们应该通过在 <code>&lt;img&gt;</code> 中添加 <code>width/height</code> 来解决这个问题：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;ball.png&quot;</span> *!*<span class="hljs-attr">width</span>=<span class="hljs-string">&quot;40&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;40&quot;</span>*/!* <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ball&quot;</span>&gt;</span></code></pre>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;ball.png&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;40&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;40&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ball&quot;</span>&gt;</span></code></pre>
 <p>……或者在 CSS 中提供大小：</p>
 <pre><code class="language-css"><span class="hljs-selector-id">#ball</span> {
   <span class="hljs-attribute">width</span>: <span class="hljs-number">40px</span>;

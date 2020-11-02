@@ -15,9 +15,9 @@
   <span class="hljs-attr">jumps</span>: <span class="hljs-literal">true</span>
 };
 
-*!*
+
 rabbit.__proto__ = animal;
-*/!*</code></pre>
+</code></pre>
 <p>```smart header=&quot;<code>__proto__</code> 是 <code>[[Prototype]]</code> 的因历史原因而留下来的 getter/setter&quot;
 请注意，<code>__proto__</code> 与 <code>[[Prototype]]</code> **不一样**。<code>__proto__</code> 是 <code>[[Prototype]]</code> 的 getter/setter。</p>
 <p><code>__proto__</code> 的存在是历史的原因。在现代编程语言中，将其替换为函数 <code>Object.getPrototypeOf/Object.setPrototypeOf</code> 也能 get/set 原型。我们稍后将学习造成这种情况的原因以及这些函数。</p>
@@ -35,14 +35,14 @@ let rabbit = {
   jumps: true
 };
 
-*!*
+
 rabbit.__proto__ = animal; // (*)
-*/!*
+
 
 // 现在这两个属性我们都能在 rabbit 中找到：
-*!*
+
 alert( rabbit.eats ); // true (**)
-*/!*
+
 alert( rabbit.jumps ); // true</code></pre>
 <p>这里的 <code>(*)</code> 行将 <code>animal</code> 设置为 <code>rabbit</code> 的原型。</p>
 <p>当 <code>alert</code> 试图读取 <code>rabbit.eats</code> <code>(**)</code> 时，因为它不存在于 <code>rabbit</code> 中，所以 JavaScript 会顺着 <code>[[Prototype]]</code> 引用，在 <code>animal</code> 中查找（自下而上）：</p>
@@ -52,11 +52,11 @@ alert( rabbit.jumps ); // true</code></pre>
 <p>如果我们在 <code>animal</code> 中有一个方法，它可以在 <code>rabbit</code> 中被调用：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {
   <span class="hljs-attr">eats</span>: <span class="hljs-literal">true</span>,
-*!*
+
   walk() {
     alert(<span class="hljs-string">&quot;Animal walk&quot;</span>);
   }
-*/!*
+
 };
 
 <span class="hljs-keyword">let</span> rabbit = {
@@ -65,9 +65,9 @@ alert( rabbit.jumps ); // true</code></pre>
 };
 
 <span class="hljs-comment">// walk 方法是从原型中获得的</span>
-*!*
+
 rabbit.walk(); <span class="hljs-comment">// Animal walk</span>
-*/!*</code></pre>
+</code></pre>
 <p>该方法是自动地从原型中获得的，像这样：</p>
 <p><img src="proto-animal-rabbit-walk.svg" alt=""></p>
 <p>原型链可以很长：</p>
@@ -80,16 +80,16 @@ rabbit.walk(); <span class="hljs-comment">// Animal walk</span>
 
 <span class="hljs-keyword">let</span> rabbit = {
   <span class="hljs-attr">jumps</span>: <span class="hljs-literal">true</span>,
-*!*
+
   __proto__: animal
-*/!*
+
 };
 
 <span class="hljs-keyword">let</span> longEar = {
   <span class="hljs-attr">earLength</span>: <span class="hljs-number">10</span>,
-*!*
+
   __proto__: rabbit
-*/!*
+
 };
 
 <span class="hljs-comment">// walk 是通过原型链获得的</span>
@@ -117,11 +117,11 @@ alert(longEar.jumps); <span class="hljs-comment">// true（从 rabbit）</span><
   <span class="hljs-attr">__proto__</span>: animal
 };
 
-*!*
+
 rabbit.walk = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Rabbit! Bounce-bounce!&quot;</span>);
 };
-*/!*
+
 
 rabbit.walk(); <span class="hljs-comment">// Rabbit! Bounce-bounce!</span></code></pre>
 <p>从现在开始，<code>rabbit.walk()</code> 将立即在对象中找到该方法并执行，而无需使用原型：</p>
@@ -197,15 +197,15 @@ alert(animal.isSleeping); <span class="hljs-comment">// undefined（原型中没
   <span class="hljs-attr">__proto__</span>: animal
 };
 
-*!*
+
 <span class="hljs-comment">// Object.keys 只返回自己的 key</span>
 alert(<span class="hljs-built_in">Object</span>.keys(rabbit)); <span class="hljs-comment">// jumps</span>
-*/!*
 
-*!*
+
+
 <span class="hljs-comment">// for..in 会遍历自己以及继承的键</span>
 <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> prop <span class="hljs-keyword">in</span> rabbit) alert(prop); <span class="hljs-comment">// jumps，然后是 eats</span>
-*/!*</code></pre>
+</code></pre>
 <p>如果这不是我们想要的，并且我们想排除继承的属性，那么这儿有一个内建方法 <a href="mdn:js/Object/hasOwnProperty">obj.hasOwnProperty(key)</a>：如果 <code>obj</code> 具有自己的（非继承的）名为 <code>key</code> 的属性，则返回 <code>true</code>。</p>
 <p>因此，我们可以过滤掉继承的属性（或对它们进行其他操作）：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> animal = {

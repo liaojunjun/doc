@@ -17,7 +17,7 @@ JavaScript 语言最初是为 Web 浏览器创建的。此后，它已经发展�
 
 例如，在这里我们将它用作全局对象：
 
-```js run
+```js
 function sayHi() {
   alert("Hello");
 }
@@ -28,7 +28,7 @@ window.sayHi();
 
 在这里，我们将它用作浏览器窗口，以查看窗口高度：
 
-```js run
+```js
 alert(window.innerHeight); // 内部窗口高度
 ```
 
@@ -41,27 +41,26 @@ alert(window.innerHeight); // 内部窗口高度
 `document` 对象是页面的主要“入口点”。我们可以使用它来更改或创建页面上的任何内容。
 
 例如：
-```js run
+
+```js
 // 将背景颜色修改为红色
 document.body.style.background = "red";
 
 // 在 1 秒后将其修改回来
-setTimeout(() => document.body.style.background = "", 1000);
+setTimeout(() => (document.body.style.background = ""), 1000);
 ```
 
 在这里，我们使用了 `document.body.style`，但还有很多很多其他的东西。规范中有属性和方法的详细描述：[DOM Living Standard](https://dom.spec.whatwg.org)。
 
-```smart header="DOM 不仅仅用于浏览器"
+DOM 不仅仅用于浏览器"
 DOM 规范解释了文档的结构，并提供了操作文档的对象。有的非浏览器设备也使用 DOM。
 
 例如，下载 HTML 文件并对其进行处理的服务器端脚本也可以使用 DOM。但它们可能仅支持部分规范中的内容。
-```
 
-```smart header="用于样式的 CSSOM"
+用于样式的 CSSOM"
 另外也有一份针对 CSS 规则和样式表的、单独的规范 [CSS Object Model (CSSOM)](https://www.w3.org/TR/cssom-1/)，这份规范解释了如何将 CSS 表示为对象，以及如何读写这些对象。
 
 当我们修改文档的样式规则时，CSSOM 与 DOM 是一起使用的。但实际上，很少需要 CSSOM，因为我们很少需要从 JavaScript 中修改 CSS 规则（我们通常只是添加/移除一些 CSS 类，而不是直接修改其中的 CSS 规则），但这也是可行的。
-```
 
 ## 浏览器对象模型（BOM）
 
@@ -74,7 +73,7 @@ DOM 规范解释了文档的结构，并提供了操作文档的对象。有的�
 
 这是我们可以如何使用 `location` 对象的方法：
 
-```js run
+```js
 alert(location.href); // 显示当前 URL
 if (confirm("Go to Wikipedia?")) {
   location.href = "https://wikipedia.org"; // 将浏览器重定向到另一个 URL
@@ -83,11 +82,10 @@ if (confirm("Go to Wikipedia?")) {
 
 函数 `alert/confirm/prompt` 也是 BOM 的一部分：它们与文档（document）没有直接关系，但它代表了与用户通信的纯浏览器方法。
 
-```smart header="规范"
+规范
 BOM 是通用 [HTML 规范](https://html.spec.whatwg.org) 的一部分。
 
 是的，你没听错。在 <https://html.spec.whatwg.org> 中的 HTML 规范不仅是关于“HTML 语言”（标签，特性）的，还涵盖了一堆对象、方法和浏览器特定的 DOM 扩展。这就是“广义的 HTML”。此外，某些部分也有其他的规范，它们被列在 <https://spec.whatwg.org> 中。
-```
 
 ## 总结
 

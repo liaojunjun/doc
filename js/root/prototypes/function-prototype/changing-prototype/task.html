@@ -20,9 +20,9 @@ Rabbit.prototype = {
 
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
 
-*!*
+
 Rabbit.prototype = {};
-*/!*
+
 
 alert( rabbit.eats ); <span class="hljs-comment">// ?</span></code></pre>
 </li>
@@ -34,9 +34,9 @@ Rabbit.prototype = {
 
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
 
-*!*
+
 Rabbit.prototype.eats = <span class="hljs-literal">false</span>;
-*/!*
+
 
 alert( rabbit.eats ); <span class="hljs-comment">// ?</span></code></pre>
 </li>
@@ -48,9 +48,9 @@ Rabbit.prototype = {
 
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
 
-*!*
+
 <span class="hljs-keyword">delete</span> rabbit.eats;
-*/!*
+
 
 alert( rabbit.eats ); <span class="hljs-comment">// ?</span></code></pre>
 </li>
@@ -62,9 +62,9 @@ Rabbit.prototype = {
 
 <span class="hljs-keyword">let</span> rabbit = <span class="hljs-keyword">new</span> Rabbit();
 
-*!*
+
 <span class="hljs-keyword">delete</span> Rabbit.prototype.eats;
-*/!*
+
 
 alert( rabbit.eats ); <span class="hljs-comment">// ?</span></code></pre>
 </li>

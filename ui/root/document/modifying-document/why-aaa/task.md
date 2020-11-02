@@ -10,7 +10,7 @@ importance: 1
 
 这是为什么？
 
-```html height=100 run
+```html height=100
 <table id="table">
   aaa
   <tr>

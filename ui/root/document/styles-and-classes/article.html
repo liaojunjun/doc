@@ -30,10 +30,10 @@ elem.style.top = top; <span class="hljs-comment">// 例如 &#x27;456px&#x27;</sp
 <p>例如：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;main page&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
     <span class="hljs-comment">// 添加一个 class</span>
     <span class="hljs-built_in">document</span>.body.classList.add(<span class="hljs-string">&#x27;article&#x27;</span>);
-*/!*
+
 
     alert(<span class="hljs-built_in">document</span>.body.className); <span class="hljs-comment">// main page article</span>
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
@@ -102,14 +102,14 @@ button.style.WebkitBorderRadius = &#x27;5px&#x27;;
 
 例如，我们不应该将 `elem.style.top` 设置为 `10`，而应将其设置为 `10px`。否则设置会无效：
 
-```html run height=100
+```html height=100
 &lt;body&gt;
   &lt;script&gt;
-  *!*
+  
     // 无效！
     document.body.style.margin = 20;
     alert(document.body.style.margin); // &#x27;&#x27;（空字符串，赋值被忽略了）
-  */!*
+  
 
     // 现在添加了 CSS 单位（px）— 生效了
     document.body.style.margin = &#x27;20px&#x27;;
@@ -135,7 +135,7 @@ button.style.WebkitBorderRadius = &#x27;5px&#x27;;
 
 例如，这里的 `style` 看不到 margin：
 
-```html run height=60 no-beautify
+```html height=60 no-beautify
 &lt;head&gt;
   &lt;style&gt; body { color: red; margin: 5px } &lt;/style&gt;
 &lt;/head&gt;
@@ -143,10 +143,10 @@ button.style.WebkitBorderRadius = &#x27;5px&#x27;;
 
   The red text
   &lt;script&gt;
-*!*
+
     alert(document.body.style.color); // 空的
     alert(document.body.style.marginTop); // 空的
-*/!*
+
   &lt;/script&gt;
 &lt;/body&gt;
 ```
@@ -171,7 +171,7 @@ pseudo
 
 例如：
 
-```html run height=100
+```html height=100
 &lt;head&gt;
   &lt;style&gt; body { color: red; margin: 5px } &lt;/style&gt;
 &lt;/head&gt;
@@ -200,14 +200,14 @@ pseudo
 所以，现在 `getComputedStyle` 实际上返回的是属性的解析值（resolved）。
 ```
 
-````warn header=&quot;`getComputedStyle` 需要完整的属性名&quot;
+`&quot;`getComputedStyle` 需要完整的属性名&quot;
 我们应该总是使用我们想要的确切的属性，例如 `paddingLeft`、`marginTop` 或 `borderTopWidth`。否则，就不能保证正确的结果。
 
 例如，如果有 `paddingLeft/paddingTop` 属性，那么对于 `getComputedStyle(elem).padding`，我们会得到什么？什么都没有，或者是从已知的 padding 中“生成”的值？这里没有标准的规则。
 
 还有其他不一致的地方。例如，在下面这个例子中，某些浏览器（Chrome）会显示 `10px`，而某些浏览器（Firefox）则没有：
 
-```html run
+```html
 &lt;style&gt;
   body {
     margin: 10px;

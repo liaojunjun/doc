@@ -25,8 +25,8 @@
 <p>可能会有多个名字相同的元素，这种情况经常在处理单选按钮中出现。</p>
 <p>在这种情况下，<code>form.elements[name]</code> 将会是一个集合，例如：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> *!*<span class="hljs-attr">name</span>=<span class="hljs-string">&quot;age&quot;</span>*/!* <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;10&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> *!*<span class="hljs-attr">name</span>=<span class="hljs-string">&quot;age&quot;</span>*/!* <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;20&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;age&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;10&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;radio&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;age&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;20&quot;</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
@@ -34,16 +34,16 @@
 
 <span class="hljs-keyword">let</span> ageElems = form.elements.age;
 
-*!*
+
 alert(ageElems[<span class="hljs-number">0</span>]); <span class="hljs-comment">// [object HTMLInputElement]</span>
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>这些导航（navigation）属性并不依赖于标签的结构。所有的控件元素，无论它们在表单中有多深，都可以通过 <code>form.elements</code> 获取到。</p>
 <pre><code class="language-smart">一个表单内会有一个或多个 `&lt;fieldset&gt;` 元素。它们也具有 `elements` 属性，该属性列出了 `&lt;fieldset&gt;` 中的表单控件。
 
 例如：
 
-```html run height=80
+```html height=80
 &lt;body&gt;
   &lt;form id=&quot;form&quot;&gt;
     &lt;fieldset name=&quot;userFields&quot;&gt;
@@ -55,17 +55,17 @@ alert(ageElems[<span class="hljs-number">0</span>]); <span class="hljs-comment">
   &lt;script&gt;
     alert(form.elements.login); // &lt;input name=&quot;login&quot;&gt;
 
-*!*
+
     let fieldset = form.elements.userFields;
     alert(fieldset); // HTMLFieldSetElement
 
     // 我们可以通过名字从表单和 fieldset 中获取 input
     alert(fieldset.elements.login == form.elements.login); // true
-*/!*
+
   &lt;/script&gt;
 &lt;/body&gt;
 ```</code></pre>
-<p>````warn header=&quot;更简短的表示方式：<code>form.name</code>&quot;
+<p>`&quot;更简短的表示方式：<code>form.name</code>&quot;
 还有一个更简短的表示方式：我们可以通过 <code>form[index/name]</code> 来访问元素。</p>
 <p>换句话说，我们可以将 <code>form.elements.login</code> 写成 <code>form.login</code>。</p>
 <p>这也有效，但是会有一个小问题：如果我们访问一个元素，然后修改它的 <code>name</code>，之后它仍然可以被通过旧的 <code>name</code> 访问到（当然也能通过新的 <code>name</code> 访问）。</p>
@@ -83,10 +83,10 @@ alert(ageElems[<span class="hljs-number">0</span>]); <span class="hljs-comment">
   alert(form.elements.login); <span class="hljs-comment">// undefined</span>
   alert(form.elements.username); <span class="hljs-comment">// input</span>
 
-*!*
+
   <span class="hljs-comment">// form 允许我们使用两个名字：新的名字和旧的名字</span>
   alert(form.username == form.login); <span class="hljs-comment">// true</span>
-*/!*
+
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>这通常来说并不是一个问题，因为我们很少修改表单元素的名字。</p>
 <pre><code>
@@ -100,19 +100,19 @@ alert(ageElems[<span class="hljs-number">0</span>]); <span class="hljs-comment">
 
 例如：
 
-```html run height=40
+```html height=40
 &lt;form id=&quot;form&quot;&gt;
   &lt;input type=&quot;text&quot; name=&quot;login&quot;&gt;
 &lt;/form&gt;
 
 &lt;script&gt;
-*!*
+
   // form -&gt; element
   let login = form.login;
 
   // element -&gt; form
   alert(login.form); // HTMLFormElement
-*/!*
+
 &lt;/script&gt;
 ```
 
@@ -133,7 +133,7 @@ textarea.value = &quot;New text&quot;;
 input.checked = true; // 对于复选框（checkbox）或单选按钮（radio button）
 ```
 
-```warn header=&quot;使用 `textarea.value` 而不是 `textarea.innerHTML`&quot;
+&quot;使用 `textarea.value` 而不是 `textarea.innerHTML`&quot;
 请注意，即使 `&lt;textarea&gt;...&lt;/textarea&gt;` 将它们的 `value` 作为嵌套的 HTML 标签来保存，我们也绝不应该使用 `textarea.innerHTML` 来访问它。
 
 它仅存储最初在页面上的 HTML，而不是存储的当前 `value`。
@@ -157,7 +157,7 @@ input.checked = true; // 对于复选框（checkbox）或单选按钮（radio bu
 
 下面是一个例子：
 
-```html run
+```html
 &lt;select id=&quot;select&quot;&gt;
   &lt;option value=&quot;apple&quot;&gt;Apple&lt;/option&gt;
   &lt;option value=&quot;pear&quot;&gt;Pear&lt;/option&gt;
@@ -176,8 +176,8 @@ input.checked = true; // 对于复选框（checkbox）或单选按钮（radio bu
 
 我们可以通过 `select.options` 来获取它们的集合，例如：
 
-```html run
-&lt;select id=&quot;select&quot; *!*multiple*/!*&gt;
+```html
+&lt;select id=&quot;select&quot; multiple&gt;
   &lt;option value=&quot;blues&quot; selected&gt;Blues&lt;/option&gt;
   &lt;option value=&quot;rock&quot; selected&gt;Rock&lt;/option&gt;
   &lt;option value=&quot;classic&quot;&gt;Classic&lt;/option&gt;

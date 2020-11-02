@@ -2,7 +2,7 @@
 
 斐波那契数根据定义是递归的：
 
-```js run
+```js
 function fib(n) {
   return n <= 1 ? n : fib(n - 1) + fib(n - 2);
 }
@@ -88,7 +88,7 @@ c = a + b; // c = fib(5)
 
 完整代码：
 
-```js run
+```js
 function fib(n) {
   let a = 1;
   let b = 1;

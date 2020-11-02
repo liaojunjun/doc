@@ -5,11 +5,11 @@
 <h2 id="getter-和-setter">Getter 和 setter</h2>
 <p>访问器属性由 &quot;getter&quot; 和 &quot;setter&quot; 方法表示。在对象字面量中，它们用 <code>get</code> 和 <code>set</code> 表示：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> obj = {
-  *!*<span class="hljs-keyword">get</span> <span class="hljs-title">propName</span>()*/!* {
+  <span class="hljs-keyword">get</span> <span class="hljs-title">propName</span>() {
     <span class="hljs-comment">// 当读取 obj.propName 时，getter 起作用</span>
   },
 
-  *!*<span class="hljs-keyword">set</span> <span class="hljs-title">propName</span>(<span class="hljs-params">value</span>)*/!* {
+  <span class="hljs-keyword">set</span> <span class="hljs-title">propName</span>(<span class="hljs-params">value</span>) {
     <span class="hljs-comment">// 当执行 obj.propName = value 操作时，setter 起作用</span>
   }
 };</code></pre>
@@ -24,16 +24,16 @@
   <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
   <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Smith&quot;</span>,
 
-*!*
+
   <span class="hljs-keyword">get</span> <span class="hljs-title">fullName</span>() {
     <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> <span class="hljs-subst">${<span class="hljs-built_in">this</span>.surname}</span>`</span>;
   }
-*/!*
+
 };
 
-*!*
+
 alert(user.fullName); <span class="hljs-comment">// John Smith</span>
-*/!*</code></pre>
+</code></pre>
 <p>从外表看，访问器属性看起来就像一个普通属性。这就是访问器属性的设计思想。我们不以函数的方式 <strong>调用</strong> <code>user.fullName</code>，我们正常 <strong>读取</strong> 它：getter 在幕后运行。</p>
 <p>截至目前，<code>fullName</code> 只有一个 getter。如果我们尝试赋值操作 <code>user.fullName=</code>，将会出现错误：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
@@ -42,9 +42,9 @@ alert(user.fullName); <span class="hljs-comment">// John Smith</span>
   }
 };
 
-*!*
+
 user.fullName = <span class="hljs-string">&quot;Test&quot;</span>; <span class="hljs-comment">// Error（属性只有一个 getter）</span>
-*/!*</code></pre>
+</code></pre>
 <p>让我们通过为 <code>user.fullName</code> 添加一个 setter 来修复它：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
   <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
@@ -54,11 +54,11 @@ user.fullName = <span class="hljs-string">&quot;Test&quot;</span>; <span class="
     <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> <span class="hljs-subst">${<span class="hljs-built_in">this</span>.surname}</span>`</span>;
   },
 
-*!*
+
   <span class="hljs-keyword">set</span> <span class="hljs-title">fullName</span>(<span class="hljs-params">value</span>) {
     [<span class="hljs-built_in">this</span>.name, <span class="hljs-built_in">this</span>.surname] = value.split(<span class="hljs-string">&quot; &quot;</span>);
   }
-*/!*
+
 };
 
 <span class="hljs-comment">// set fullName 将以给定值执行</span>
@@ -83,7 +83,7 @@ alert(user.surname); <span class="hljs-comment">// Cooper</span></code></pre>
   <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Smith&quot;</span>
 };
 
-*!*
+
 <span class="hljs-built_in">Object</span>.defineProperty(user, <span class="hljs-string">&#x27;fullName&#x27;</span>, {
   get() {
     <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">this</span>.name}</span> <span class="hljs-subst">${<span class="hljs-built_in">this</span>.surname}</span>`</span>;
@@ -92,7 +92,7 @@ alert(user.surname); <span class="hljs-comment">// Cooper</span></code></pre>
   set(value) {
     [<span class="hljs-built_in">this</span>.name, <span class="hljs-built_in">this</span>.surname] = value.split(<span class="hljs-string">&quot; &quot;</span>);
   }
-*/!*
+
 });
 
 alert(user.fullName); <span class="hljs-comment">// John Smith</span>
@@ -100,9 +100,9 @@ alert(user.fullName); <span class="hljs-comment">// John Smith</span>
 <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> user) alert(key); <span class="hljs-comment">// name, surname</span></code></pre>
 <p>请注意，一个属性要么是访问器（具有 <code>get/set</code> 方法），要么是数据属性（具有 <code>value</code>），但不能两者都是。</p>
 <p>如果我们试图在同一个描述符中同时提供 <code>get</code> 和 <code>value</code>，则会出现错误：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-comment">// Error: Invalid property descriptor.</span>
-*/!*
+
 <span class="hljs-built_in">Object</span>.defineProperty({}, <span class="hljs-string">&#x27;prop&#x27;</span>, {
   get() {
     <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>
@@ -159,7 +159,7 @@ alert( john.age ); <span class="hljs-comment">// 25</span></code></pre>
   <span class="hljs-built_in">this</span>.name = name;
   <span class="hljs-built_in">this</span>.birthday = birthday;
 
-*!*
+
   <span class="hljs-comment">// 年龄是根据当前日期和生日计算得出的</span>
   <span class="hljs-built_in">Object</span>.defineProperty(<span class="hljs-built_in">this</span>, <span class="hljs-string">&quot;age&quot;</span>, {
     get() {
@@ -167,7 +167,7 @@ alert( john.age ); <span class="hljs-comment">// 25</span></code></pre>
       <span class="hljs-keyword">return</span> todayYear - <span class="hljs-built_in">this</span>.birthday.getFullYear();
     }
   });
-*/!*
+
 }
 
 <span class="hljs-keyword">let</span> john = <span class="hljs-keyword">new</span> User(<span class="hljs-string">&quot;John&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">1992</span>, <span class="hljs-number">6</span>, <span class="hljs-number">1</span>));

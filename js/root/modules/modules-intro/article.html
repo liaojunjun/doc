@@ -58,9 +58,9 @@ sayHi(<span class="hljs-string">&#x27;John&#x27;</span>); <span class="hljs-comm
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
-  *!*
+  
   alert(user); <span class="hljs-comment">// Error: user is not defined</span>
-  */!*
+  
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p>如果我们真的需要创建一个 window-level 的全局变量，我们可以将其明确地赋值给 <code>window</code>，并以 <code>window.user</code> 来访问它。但是这需要你有足够充分的理由，否则就不要这样做。</p>
 <h3 id="模块代码仅在第一次导入时被解析">模块代码仅在第一次导入时被解析</h3>
@@ -93,10 +93,10 @@ admin.name = <span class="hljs-string">&quot;Pete&quot;</span>;
 <span class="hljs-keyword">import</span> {admin} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./admin.js&#x27;</span>;
 alert(admin.name); <span class="hljs-comment">// Pete</span>
 
-*!*
+
 <span class="hljs-comment">// 1.js 和 2.js 导入的是同一个对象</span>
 <span class="hljs-comment">// 在 1.js 中对对象做的更改，在 2.js 中也是可见的</span>
-*/!*</code></pre>
+</code></pre>
 <p>所以，让我们重申一下 —— 模块只被执行一次。生成导出，然后它被分享给所有对其的导入，所以如果某个地方修改了 <code>admin</code> 对象，其他的模块也能看到这个修改。</p>
 <p>这种行为让我们可以在首次导入时 <strong>设置</strong> 模块。我们只需要设置其属性一次，然后在进一步的导入中就都可以直接使用了。</p>
 <p>例如，下面的 <code>admin.js</code> 模块可能提供了特定的功能，但是希望凭证（credential）从外部进入 <code>admin</code> 对象：</p>
@@ -114,9 +114,9 @@ admin.name = <span class="hljs-string">&quot;Pete&quot;</span>;</code></pre>
 <pre><code class="language-js"><span class="hljs-comment">// 📁 other.js</span>
 <span class="hljs-keyword">import</span> {admin, sayHi} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./admin.js&#x27;</span>;
 
-alert(admin.name); <span class="hljs-comment">// *!*Pete*/!*</span>
+alert(admin.name); <span class="hljs-comment">// Pete</span>
 
-sayHi(); <span class="hljs-comment">// Ready to serve, *!*Pete*/!*!</span></code></pre>
+sayHi(); <span class="hljs-comment">// Ready to serve, Pete!</span></code></pre>
 <h3 id="importmeta">import.meta</h3>
 <p><code>import.meta</code> 对象包含关于当前模块的信息。</p>
 <p>它的内容取决于其所在的环境。在浏览器环境中，它包含当前脚本的 URL，或者如果它是在 HTML 中的话，则包含当前页面的 URL。</p>
@@ -148,18 +148,18 @@ sayHi(); <span class="hljs-comment">// Ready to serve, *!*Pete*/!*!</span></code
 <p>它的一个副作用是，模块脚本总是会“看到”已完全加载的 HTML 页面，包括在它们下方的 HTML 元素。</p>
 <p>例如：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
-*!*
+
   alert(<span class="hljs-keyword">typeof</span> button); <span class="hljs-comment">// object：脚本可以“看见”下面的 button</span>
-*/!*
+
   <span class="hljs-comment">// 因为模块是被延迟的（deferred，所以模块脚本会在整个页面加载完成后才运行</span>
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
 相较于下面这个常规脚本：
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-*!*
+
   alert(<span class="hljs-keyword">typeof</span> button); <span class="hljs-comment">// Error: button is undefined，脚本看不到下面的元素</span>
-*/!*
+
   <span class="hljs-comment">// 常规脚本会立即运行，常规脚本的运行是在在处理页面的其余部分之前进行的</span>
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 
@@ -175,7 +175,7 @@ sayHi(); <span class="hljs-comment">// Ready to serve, *!*Pete*/!*!</span></code
 <p>这对于不依赖任何其他东西的功能来说是非常棒的，例如计数器，广告，文档级事件监听器。</p>
 <pre><code class="language-html"><span class="hljs-comment">&lt;!-- 所有依赖都获取完成（analytics.js）然后脚本开始运行 --&gt;</span>
 <span class="hljs-comment">&lt;!-- 不会等待 HTML 文档或者其他 &lt;script&gt; 标签 --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> *!*<span class="hljs-attr">async</span>*/!* <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">async</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="javascript">
   <span class="hljs-keyword">import</span> {counter} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./analytics.js&#x27;</span>;
 
   counter.count();
@@ -191,7 +191,7 @@ sayHi(); <span class="hljs-comment">// Ready to serve, *!*Pete*/!*!</span></code
 <li><p>从另一个源（例如另一个网站）获取的外部脚本需要 <a href="mdn:Web/HTTP/CORS">CORS</a> header，如我们在 <a href="info:fetch-crossorigin">info:fetch-crossorigin</a> 一章中所讲的那样。换句话说，如果一个模块脚本是从另一个源获取的，则远程服务器必须提供表示允许获取的 header <code>Access-Control-Allow-Origin</code>。</p>
 <pre><code class="language-html"><span class="hljs-comment">&lt;!-- another-site.com 必须提供 Access-Control-Allow-Origin --&gt;</span>
 <span class="hljs-comment">&lt;!-- 否则，脚本将无法执行 --&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;*!*http://another-site.com/their.js*/!*&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;http://another-site.com/their.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <p> 默认这样做可以确保更好的安全性。</p>
 </li>
 </ol>

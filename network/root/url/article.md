@@ -24,7 +24,7 @@ let url = new URL('https://javascript.info/profile/admin');
 
 下面这两个 URL 是一样的：
 
-```js run
+```js
 let url1 = new URL('https://javascript.info/profile/admin');
 let url2 = new URL('/profile/admin', 'https://javascript.info');
 
@@ -34,7 +34,7 @@ alert(url2); // https://javascript.info/profile/admin
 
 我们可以根据相对于现有 URL 的路径轻松创建一个新的 URL：
 
-```js run
+```js
 let url = new URL('https://javascript.info/profile/admin');
 let newUrl = new URL('tester', url);
 
@@ -43,7 +43,7 @@ alert(newUrl); // https://javascript.info/profile/tester
 
 `URL` 对象立即允许我们访问其组件，因此这是一个解析 url 的好方法，例如：
 
-```js run
+```js
 let url = new URL('https://javascript.info/url');
 
 alert(url.protocol); // https:
@@ -62,7 +62,7 @@ alert(url.pathname); // /url
 - 如果存在 HTTP 身份验证，则这里可能还会有 `user` 和 `password` 属性：`http://login:password@site.com`（图片上没有，很少被用到）。
 
 
-```smart header="我们可以将 `URL` 对象传递给网络（和大多数其他）方法，而不是字符串"
+我们可以将 `URL` 对象传递给网络（和大多数其他）方法，而不是字符串"
 我们可以在 `fetch` 或 `XMLHttpRequest` 中使用 `URL` 对象，几乎可以在任何需要 URL 字符串的地方都能使用 `URL` 对象。
 
 通常，`URL` 对象可以替代字符串传递给任何方法，因为大多数方法都会执行字符串转换，这会将 `URL` 对象转换为具有完整 URL 的字符串。
@@ -95,7 +95,7 @@ new URL('https://google.com/search?query=JavaScript')
 
 包含空格和标点符号的参数的示例：
 
-```js run
+```js
 let url = new URL('https://google.com/search');
 
 url.searchParams.set('q', 'test me!'); // 添加带有一个空格和一个 ! 的参数
@@ -122,7 +122,7 @@ for(let [name, value] of url.searchParams) {
 
 好消息是 `URL` 对象会自动处理这些。我们仅需提供未编码的参数，然后将 `URL` 转换为字符串：
 
-```js run
+```js
 // 在此示例中使用一些西里尔字符
 
 let url = new URL('https://ru.wikipedia.org/wiki/Тест');
@@ -167,7 +167,7 @@ https://site.com:8080/path/page?p1=v1&p2=v2#hash
 
 所以，对于一个 URL 整体，我们可以使用 `encodeURI`：
 
-```js run
+```js
 // 在 url 路径中使用西里尔字符
 let url = encodeURI('http://site.com/привет');
 
@@ -176,7 +176,7 @@ alert(url); // http://site.com/%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82
 
 ……而对于 URL 参数，我们应该改用 `encodeURIComponent`：
 
-```js run
+```js
 let music = encodeURIComponent('Rock&Roll');
 
 let url = `https://google.com/search?q=${music}`;
@@ -185,7 +185,7 @@ alert(url); // https://google.com/search?q=Rock%26Roll
 
 将其与 `encodeURI` 进行比较：
 
-```js run
+```js
 let music = encodeURI('Rock&Roll');
 
 let url = `https://google.com/search?q=${music}`;
@@ -198,12 +198,12 @@ alert(url); // https://google.com/search?q=Rock&Roll
 
 因此，对于每个搜索参数，我们应该使用 `encodeURIComponent`，以将其正确地插入到 URL 字符串中。最安全的方式是对 name 和 value 都进行编码，除非我们能够绝对确保它只包含允许的字符。
 
-````smart header="`encode*` 与 `URL` 之间的编码差异"
+``encode*` 与 `URL` 之间的编码差异"
 类 [URL](https://url.spec.whatwg.org/#url-class) 和 [URLSearchParams](https://url.spec.whatwg.org/#interface-urlsearchparams) 基于最新的 URL 规范：[RFC3986](https://tools.ietf.org/html/rfc3986)，而 `encode*` 函数是基于过时的 [RFC2396](https://www.ietf.org/rfc/rfc2396.txt)。
 
 它们之间有一些区别，例如对 IPv6 地址的编码方式不同：
 
-```js run
+```js
 // IPv6 地址的合法 url
 let url = 'http://[2607:f8b0:4005:802::1007]/';
 

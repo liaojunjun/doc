@@ -16,7 +16,7 @@ JavaScript 中的每个值都有一种类型，那么函数是什么类型呢？
 
 比如，一个函数的名字可以通过属性 "name" 来访问：
 
-```js run
+```js
 function sayHi() {
   alert("Hi");
 }
@@ -26,7 +26,7 @@ alert(sayHi.name); // sayHi
 
 更有趣的是，名称赋值的逻辑很智能。即使函数被创建时没有名字，名称赋值的逻辑也能给它赋予一个正确的名字，然后进行赋值：
 
-```js run
+```js
 let sayHi = function() {
   alert("Hi");
 };
@@ -36,7 +36,7 @@ alert(sayHi.name); // sayHi（有名字！）
 
 当以默认值的方式完成了赋值时，它也有效：
 
-```js run
+```js
 function f(sayHi = function() {}) {
   alert(sayHi.name); // sayHi（生效了！）
 }
@@ -48,7 +48,7 @@ f();
 
 对象方法也有名字：
 
-```js run
+```js
 let user = {
 
   sayHi() {
@@ -81,7 +81,7 @@ alert( arr[0].name ); // <空字符串>
 
 还有另一个内置属性 "length"，它返回函数入参的个数，比如：
 
-```js run
+```js
 function f1(a) {}
 function f2(a, b) {}
 function many(a, b, ...more) {}
@@ -106,7 +106,7 @@ alert(many.length); // 2
 
 我们的想法是，我们用一个简单的无参数的 `handler` 语法来处理积极的回答（最常见的变体），但也要能够提供通用的 handler：
 
-```js run
+```js
 function ask(question, ...handlers) {
   let isYes = confirm(question);
 
@@ -133,14 +133,14 @@ ask("Question?", () => alert('You said yes'), result => alert(result));
 
 这里我们添加了 `counter` 属性，用来跟踪总的调用次数：
 
-```js run
+```js
 function sayHi() {
   alert("Hi");
 
-  *!*
+  
   // 计算调用次数
   sayHi.counter++;
-  */!*
+  
 }
 sayHi.counter = 0; // 初始值
 
@@ -150,7 +150,7 @@ sayHi(); // Hi
 alert( `Called ${sayHi.counter} times` ); // Called 2 times
 ```
 
-```warn header="属性不是变量"
+"属性不是变量"
 被赋值给函数的属性，比如 `sayHi.counter = 0`，**不会** 在函数内定义一个局部变量 `counter`。换句话说，属性 `counter` 和变量 `let counter` 是毫不相关的两个东西。
 
 我们可以把函数当作对象，在它里面存储属性，但是这对它的执行没有任何影响。变量不是函数属性，反之亦然。它们之间是平行的。
@@ -158,7 +158,7 @@ alert( `Called ${sayHi.counter} times` ); // Called 2 times
 
 函数属性有时会用来替代闭包。例如，我们可以使用函数属性将 <info:closure> 章节中 counter 函数的例子进行重写：
 
-```js run
+```js
 function makeCounter() {
   // 不需要这个了
   // let count = 0
@@ -183,7 +183,7 @@ alert( counter() ); // 1
 
 两者最大的不同就是如果 `count` 的值位于外层（函数）变量中，那么外部的代码无法访问到它，只有嵌套的函数可以修改它。而如果它是绑定到函数的，那么就很容易：
 
-```js run
+```js
 function makeCounter() {
 
   function counter() {
@@ -197,10 +197,10 @@ function makeCounter() {
 
 let counter = makeCounter();
 
-*!*
+
 counter.count = 10;
 alert( counter() ); // 10
-*/!*
+
 ```
 
 所以，选择哪种实现方式取决于我们的需求是什么。
@@ -220,7 +220,7 @@ let sayHi = function(who) {
 然后给它加一个名字：
 
 ```js
-let sayHi = function *!*func*/!*(who) {
+let sayHi = function func(who) {
   alert(`Hello, ${who}`);
 };
 ```
@@ -233,8 +233,8 @@ let sayHi = function *!*func*/!*(who) {
 
 函数依然可以通过 `sayHi()` 来调用：
 
-```js run
-let sayHi = function *!*func*/!*(who) {
+```js
+let sayHi = function func(who) {
   alert(`Hello, ${who}`);
 };
 
@@ -248,14 +248,14 @@ sayHi("John"); // Hello, John
 
 例如，下面的函数 `sayHi` 会在没有入参 `who` 时，以 `"Guest"` 为入参调用自己：
 
-```js run
-let sayHi = function *!*func*/!*(who) {
+```js
+let sayHi = function func(who) {
   if (who) {
     alert(`Hello, ${who}`);
   } else {
-*!*
+
     func("Guest"); // 使用 func 再次调用函数自身
-*/!*
+
   }
 };
 
@@ -275,23 +275,23 @@ let sayHi = function(who) {
   if (who) {
     alert(`Hello, ${who}`);
   } else {
-*!*
+
     sayHi("Guest");
-*/!*
+
   }
 };
 ```
 
 上面这段代码的问题在于 `sayHi` 的值可能会被函数外部的代码改变。如果该函数被赋值给另外一个变量（译注：也就是原变量被修改），那么函数就会开始报错：
 
-```js run
+```js
 let sayHi = function(who) {
   if (who) {
     alert(`Hello, ${who}`);
   } else {
-*!*
+
     sayHi("Guest"); // Error: sayHi is not a function
-*/!*
+
   }
 };
 
@@ -307,14 +307,14 @@ welcome(); // Error，嵌套调用 sayHi 不再有效！
 
 让我们使用它来修复我们的代码：
 
-```js run
-let sayHi = function *!*func*/!*(who) {
+```js
+let sayHi = function func(who) {
   if (who) {
     alert(`Hello, ${who}`);
   } else {
-*!*
+
     func("Guest"); // 现在一切正常
-*/!*
+
   }
 };
 
@@ -328,7 +328,7 @@ welcome(); // Hello, Guest（嵌套调用有效）
 
 外部代码仍然有该函数的 `sayHi` 或 `welcome` 变量。而且 `func` 是一个“内部函数名”，可用于函数在自身内部进行自调用。
 
-```smart header="函数声明没有这个东西"
+函数声明没有这个东西"
 这里所讲的“内部名”特性只针对函数表达式，而不是函数声明。对于函数声明，没有用来添加“内部”名的语法。
 
 有时，当我们需要一个可靠的内部名时，这就成为了你把函数声明重写成函数表达式的理由了。

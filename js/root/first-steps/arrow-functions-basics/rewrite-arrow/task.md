@@ -3,7 +3,7 @@
 
 用箭头函数重写下面的函数表达式：
 
-```js run
+```js
 function ask(question, yes, no) {
   if (confirm(question)) yes()
   else no();

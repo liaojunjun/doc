@@ -33,7 +33,7 @@
 <p>代码如下：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> selectedTd;
 
-*!*
+
 table.onclick = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
   <span class="hljs-keyword">let</span> target = event.target; <span class="hljs-comment">// 在哪里点击的？</span>
 
@@ -41,7 +41,7 @@ table.onclick = <span class="hljs-function"><span class="hljs-keyword">function<
 
   highlight(target); <span class="hljs-comment">// 高亮显示它</span>
 };
-*/!*
+
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">highlight</span>(<span class="hljs-params">td</span>) </span>{
   <span class="hljs-keyword">if</span> (selectedTd) { <span class="hljs-comment">// 移除现有的高亮显示，如果有的话</span>
@@ -55,9 +55,9 @@ table.onclick = <span class="hljs-function"><span class="hljs-keyword">function<
 <p>点击可能不是发生在 <code>&lt;td&gt;</code> 上，而是发生在其内部。</p>
 <p>在我们的例子中，如果我们看一下 HTML 内部，我们可以看到 <code>&lt;td&gt;</code> 内还有嵌套的标签，例如 <code>&lt;strong&gt;</code>：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>
-  *!*
+  
   <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Northwest<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
-  */!* ...
+   ...
 <span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></code></pre>
 <p>自然地，如果在该 <code>&lt;strong&gt;</code> 上点击，那么它将成为 <code>event.target</code> 的值。</p>
 <p><img src="bagua-bubble.svg" alt=""></p>
@@ -84,7 +84,7 @@ table.onclick = <span class="hljs-function"><span class="hljs-keyword">function<
 <p>事件委托还有其他用途。（译注：本节标题中的“标记中的行为”即 action in markup）</p>
 <p>例如，我们想要编写一个有“保存”、“加载”和“搜索”等按钮的菜单。并且，这里有一个具有 <code>save</code>、<code>load</code> 和 <code>search</code> 等方法的对象。如何匹配它们？</p>
 <p>第一个想法可能是为每个按钮分配一个单独的处理程序。但是有一个更优雅的解决方案。我们可以为整个菜单添加一个处理程序，并为具有方法调用的按钮添加 <code>data-action</code> 特性（attribute）：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> *!*<span class="hljs-attr">data-action</span>=<span class="hljs-string">&quot;save&quot;</span>*/!*&gt;</span>Click to Save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-action</span>=<span class="hljs-string">&quot;save&quot;</span>&gt;</span>Click to Save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre>
 <p>处理程序读取特性（attribute）并执行该方法。工作示例如下：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;menu&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-action</span>=<span class="hljs-string">&quot;save&quot;</span>&gt;</span>Save<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
@@ -112,12 +112,12 @@ table.onclick = <span class="hljs-function"><span class="hljs-keyword">function<
       }
 
       onClick(event) {
-  *!*
+  
         <span class="hljs-keyword">let</span> action = event.target.dataset.action;
         <span class="hljs-keyword">if</span> (action) {
           <span class="hljs-built_in">this</span>[action]();
         }
-  */!*
+  
       };
     }
 

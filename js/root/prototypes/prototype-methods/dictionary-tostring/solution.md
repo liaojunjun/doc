@@ -3,8 +3,8 @@
 
 为了使 `toString` 不可枚举，我们使用一个属性描述器来定义它。`Object.create` 语法允许我们为一个对象提供属性描述器作为第二参数。
 
-```js run
-*!*
+```js
+
 let dictionary = Object.create(null, {
   toString: { // 定义 toString 属性
     value() { // value 是一个 function
@@ -12,7 +12,7 @@ let dictionary = Object.create(null, {
     }
   }
 });
-*/!*
+
 
 dictionary.apple = "Apple";
 dictionary.__proto__ = "test";

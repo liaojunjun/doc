@@ -10,7 +10,7 @@
 
 1. 如果 `regexp` 不带有 `pattern:g` 标记，则它以数组的形式返回第一个匹配项，其中包含分组和属性 `index`（匹配项的位置）、`input`（输入字符串，等于 `str `）：
 
-    ```js run
+    ```js
     let str = "I love JavaScript";
 
     let result = str.match(/Java(Script)/);
@@ -25,7 +25,7 @@
     ```
 
 2. 如果 `regexp` 带有 `pattern:g` 标记，则它将所有匹配项的数组作为字符串返回，而不包含分组和其他详细信息。
-    ```js run
+    ```js
     let str = "I love JavaScript";
 
     let result = str.match(/Java(Script)/g);
@@ -38,7 +38,7 @@
 
     这是一个重要的细微差别。如果没有匹配项，我们得到的不是一个空数组，而是 `null`。忘记这一点很容易出错，例如：
 
-    ```js run
+    ```js
     let str = "I love JavaScript";
 
     let result = str.match(/HTML/);
@@ -69,7 +69,7 @@
 
 用法示例：
 
-```js run
+```js
 let str = '<h1>Hello, world!</h1>';
 let regexp = /<(.*?)>/g;
 
@@ -94,13 +94,13 @@ alert( firstMatch.input );  // <h1>Hello, world!</h1>
 
 我们可以用 `split` 来分割字符串，如下所示：
 
-```js run
+```js
 alert('12-34-56'.split('-')) // 数组 ['12', '34', '56']
 ```
 
 但同样，我们也可以用正则表达式来做：
 
-```js run
+```js
 alert('12, 34, 56'.split(/,\s*/)) // 数组 ['12', '34', '56']
 ```
 
@@ -108,7 +108,7 @@ alert('12, 34, 56'.split(/,\s*/)) // 数组 ['12', '34', '56']
 
 方法 `str.search(regexp)` 返回第一个匹配项的位置，如果未找到，则返回 `-1`：
 
-```js run
+```js
 let str = "A drop of ink may make a million think";
 
 alert( str.search( /ink/i ) ); // 10（第一个匹配位置）
@@ -124,7 +124,7 @@ alert( str.search( /ink/i ) ); // 10（第一个匹配位置）
 
 我们可以不用正则表达式来搜索和替换子字符串：
 
-```js run
+```js
 // 用冒号替换连字符
 alert('12-34-56'.replace("-", ":")) // 12:34-56
 ```
@@ -137,9 +137,9 @@ alert('12-34-56'.replace("-", ":")) // 12:34-56
 
 如要找到所有的连字符，我们不应该用字符串 `"-"`，而应使用带 `pattern:g` 标记的正则表达式 `pattern:/-/g`：
 
-```js run
+```js
 // 将连字符替换为冒号
-alert( '12-34-56'.replace( *!*/-/g*/!*, ":" ) )  // 12:34:56
+alert( '12-34-56'.replace( /-/g, ":" ) )  // 12:34:56
 ```
 
 第二个参数是一个替代字符串。我们可以在其中使用特殊字符：
@@ -155,7 +155,7 @@ alert( '12-34-56'.replace( *!*/-/g*/!*, ":" ) )  // 12:34:56
 
 例如：
 
-```js run
+```js
 let str = "John Smith";
 
 // 交换名字和姓氏
@@ -178,7 +178,7 @@ alert(str.replace(/(john) (smith)/i, '$2, $1')) // Smith, John
 
 例如，将所有匹配项都大写：
 
-```js run
+```js
 let str = "html and css";
 
 let result = str.replace(/html|css/gi, str => str.toUpperCase());
@@ -188,13 +188,13 @@ alert(result); // HTML and CSS
 
 按其在字符串中的位置来替换每个匹配项：
 
-```js run
+```js
 alert("Ho-Ho-ho".replace(/ho/gi, (match, offset) => offset)); // 0-3-6
 ```
 
 在下面的示例中，有两对括号，因此将使用 5 个参数调用替换函数：第一个是完全匹配项，然后是 2 对括号，然后是匹配位置（在示例中未使用）和源字符串：
 
-```js run
+```js
 let str = "John Smith";
 
 let result = str.replace(/(\w+) (\w+)/, (match, name, surname) => `${surname}, ${name}`);
@@ -204,7 +204,7 @@ alert(result); // Smith, John
 
 如果有许多组，用 rest 参数（...）可以很方便的访问：
 
-```js run
+```js
 let str = "John Smith";
 
 let result = str.replace(/(\w+) (\w+)/, (...match) => `${match[2]}, ${match[1]}`);
@@ -214,7 +214,7 @@ alert(result); // Smith, John
 
 或者，如果我们使用的是命名组，则带有它们的 `groups` 对象始终是最后一个对象，因此我们可以这样获得它：
 
-```js run
+```js
 let str = "John Smith";
 
 let result = str.replace(/(?<name>\w+) (?<surname>\w+)/, (...match) => {
@@ -246,7 +246,7 @@ alert(result); // Smith, John
 
 过去，在将 `str.matchAll` 方法添加到 `JavaScript` 之前，在循环中是通过调用 `regexp.exec` 来获取分组的所有匹配项：
 
-```js run
+```js
 let str = 'More about JavaScript at https://javascript.info';
 let regexp = /javascript/ig;
 
@@ -265,7 +265,7 @@ while (result = regexp.exec(str)) {
 
 例如：
 
-```js run
+```js
 let str = 'Hello, world!';
 
 let regexp = /\w+/g; // 带有标记 "g"，lastIndex 属性被忽略
@@ -278,7 +278,7 @@ alert( regexp.exec(str) ); // world
 
 让我们将上例中的 `pattern:g` 标记替换为 `pattern:y`。现在没有找到匹配项了，因为在位置 `5` 处没有单词：
 
-```js run
+```js
 let str = 'Hello, world!';
 
 let regexp = /\w+/y;
@@ -295,28 +295,28 @@ alert( regexp.exec(str) ); // null
 
 例如：
 
-```js run
+```js
 let str = "I love JavaScript";
 
 // 这两个测试相同
-alert( *!*/love/i*/!*.test(str) ); // true
-alert( str.search(*!*/love/i*/!*) != -1 ); // true
+alert( /love/i.test(str) ); // true
+alert( str.search(/love/i) != -1 ); // true
 ```
 
 一个反例：
 
-```js run
+```js
 let str = "Bla-bla-bla";
 
-alert( *!*/love/i*/!*.test(str) ); // false
-alert( str.search(*!*/love/i*/!*) != -1 ); // false
+alert( /love/i.test(str) ); // false
+alert( str.search(/love/i) != -1 ); // false
 ```
 
 如果正则表达式带有标记 `pattern:g`，则 `regexp.test` 从  `regexp.lastIndex` 属性中查找，并更新此属性，就像 `regexp.exec` 一样。
 
 因此，我们可以用它从给定位置进行搜索：
 
-```js run
+```js
 let regexp = /love/gi;
 
 let str = "I love JavaScript";
@@ -326,12 +326,12 @@ regexp.lastIndex = 10;
 alert( regexp.test(str) ); // false（无匹配）
 ```
 
-````warn header="相同的全局正则表达式在不同的源字符串上测试可能会失败"
+`"相同的全局正则表达式在不同的源字符串上测试可能会失败"
 如果我们在不同的源字符串上应用相同的全局表达式，可能会出现错误的结果，因为 `regexp.test` 的调用会增加 `regexp.lastIndex` 属性值，因此在另一个字符串中的搜索可能是从非 0 位置开始的。
 
 例如，这里我们在同一文本上调用 `regexp.test` 两次，而第二次调用失败了：
 
-```js run
+```js
 let regexp = /javascript/g;  // （新建 regexp：regexp.lastIndex=0)
 
 alert( regexp.test("javascript") ); // true（现在 regexp.lastIndex=10）

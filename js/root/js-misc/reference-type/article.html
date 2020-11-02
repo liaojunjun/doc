@@ -13,9 +13,9 @@
 user.hi(); <span class="hljs-comment">// 正常运行</span>
 
 <span class="hljs-comment">// 现在让我们基于 name 来选择调用 user.hi 或 user.bye</span>
-*!*
+
 (user.name == <span class="hljs-string">&quot;John&quot;</span> ? user.hi : user.bye)(); <span class="hljs-comment">// Error!</span>
-*/!*</code></pre>
+</code></pre>
 <p>在最后一行有个在 <code>user.hi</code> 和 <code>user.bye</code> 中做选择的条件（三元）运算符。当前情形下的结果是 <code>user.hi</code>。</p>
 <p>接着该方法被通过 <code>()</code> 立刻调用。但是并不能正常工作！</p>
 <p>如你所见，此处调用导致了一个错误，因为在该调用中 <code>&quot;this&quot;</code> 的值变成了 <code>undefined</code>。</p>
@@ -37,11 +37,11 @@ user.hi(); <span class="hljs-comment">// 正常运行</span>
   hi() { alert(<span class="hljs-built_in">this</span>.name); }
 }
 
-*!*
+
 <span class="hljs-comment">// 把获取方法和调用方法拆成两行</span>
 <span class="hljs-keyword">let</span> hi = user.hi;
 hi(); <span class="hljs-comment">// 报错了，因为 this 的值是 undefined</span>
-*/!*</code></pre>
+</code></pre>
 <p>这里 <code>hi = user.hi</code> 把函数赋值给了一个变量，接下来在最后一行它是完全独立的，所以这里没有 <code>this</code>。</p>
 <p><strong>为确保 <code>user.hi()</code> 调用正常运行，JavaScript 玩了个小把戏 —— 点 <code>&#39;.&#39;</code> 返回的不是一个函数，而是一个特殊的 <a href="https://tc39.github.io/ecma262/#sec-reference-specification-type">Reference Type</a> 的值。</strong></p>
 <p>Reference Type 是 ECMA 中的一个“规范类型”。我们不能直接使用它，但它被用在 JavaScript 语言内部。</p>

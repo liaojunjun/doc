@@ -4,7 +4,7 @@
 
 所以结果是 `1`（元素节点）。
 
-```html run height=60
+```html height=60
 <html>
 
 <body>

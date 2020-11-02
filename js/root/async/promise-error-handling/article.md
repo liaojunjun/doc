@@ -5,10 +5,10 @@ Promise 链在错误（error）处理中十分强大。当一个 promise 被 rej
 
 例如，下面代码中所 `fetch` 的 URL 是错的（没有这个网站），`.catch` 对这个 error 进行了处理：
 
-```js run
-*!*
+```js
+
 fetch('https://no-such-server.blabla') // rejects
-*/!*
+
   .then(response => response.json())
   .catch(err => alert(err)) // TypeError: failed to fetch（这里的文字可能有所不同）
 ```
@@ -17,7 +17,7 @@ fetch('https://no-such-server.blabla') // rejects
 
 或者，可能该网站一切正常，但响应不是有效的 JSON。捕获所有 error 的最简单的方法是，将 `.catch` 附加到链的末尾：
 
-```js run
+```js
 fetch('/article/promise-chaining/user.json')
   .then(response => response.json())
   .then(user => fetch(`https://api.github.com/users/${user.name}`))
@@ -33,9 +33,9 @@ fetch('/article/promise-chaining/user.json')
       resolve(githubUser);
     }, 3000);
   }))
-*!*
+
   .catch(error => alert(error.message));
-*/!*
+
 ```
 
 通常情况下，这样的 `.catch` 根本不会被触发。但是如果上述任意一个 promise 被 reject（网络问题或者无效的 json 或其他），`.catch` 就会捕获它。
@@ -46,21 +46,21 @@ Promise 的执行者（executor）和 promise 的处理程序（handler）周围
 
 例如，下面这段代码：
 
-```js run
+```js
 new Promise((resolve, reject) => {
-*!*
+
   throw new Error("Whoops!");
-*/!*
+
 }).catch(alert); // Error: Whoops!
 ```
 
 ……与下面这段代码工作上完全相同：
 
-```js run
+```js
 new Promise((resolve, reject) => {
-*!*
+
   reject(new Error("Whoops!"));
-*/!*
+
 }).catch(alert); // Error: Whoops!
 ```
 
@@ -70,25 +70,25 @@ new Promise((resolve, reject) => {
 
 这是一个例子：
 
-```js run
+```js
 new Promise((resolve, reject) => {
   resolve("ok");
 }).then((result) => {
-*!*
+
   throw new Error("Whoops!"); // reject 这个 promise
-*/!*
+
 }).catch(alert); // Error: Whoops!
 ```
 
 对于所有的 error 都会发生这种情况，而不仅仅是由 `throw` 语句导致的这些 error。例如，一个编程错误：
 
-```js run
+```js
 new Promise((resolve, reject) => {
   resolve("ok");
 }).then((result) => {
-*!*
+
   blabla(); // 没有这个函数
-*/!*
+
 }).catch(alert); // ReferenceError: blabla is not defined
 ```
 
@@ -104,7 +104,7 @@ new Promise((resolve, reject) => {
 
 在下面这个例子中，`.catch` 成功处理了 error：
 
-```js run
+```js
 // 执行流：catch -> then
 new Promise((resolve, reject) => {
 
@@ -121,7 +121,7 @@ new Promise((resolve, reject) => {
 
 在下面的例子中，我们可以看到 `.catch` 的另一种情况。`(*)` 行的处理程序（handler）捕获了 error，但无法处理它（例如，它只知道如何处理 `URIError`），所以它将其再次抛出：
 
-```js run
+```js
 // 执行流：catch -> catch
 new Promise((resolve, reject) => {
 
@@ -134,9 +134,9 @@ new Promise((resolve, reject) => {
   } else {
     alert("Can't handle such error");
 
-*!*
+
     throw error; // 再次抛出此 error 或另外一个 error，执行将跳转至下一个 catch
-*/!*
+
   }
 
 }).then(function() {
@@ -155,7 +155,7 @@ new Promise((resolve, reject) => {
 
 当一个 error 没有被处理会发生什么？例如，我们忘了在链的尾端附加 `.catch`，像这样：
 
-```js untrusted run refresh
+```js untrusted refresh
 new Promise(function() {
   noSuchFunction(); // 这里出现 error（没有这个函数）
 })
@@ -174,14 +174,14 @@ JavaScript 引擎会跟踪此类 rejection，在这种情况下会生成一个�
 
 在浏览器中，我们可以使用 `unhandledrejection` 事件来捕获这类 error：
 
-```js run
-*!*
+```js
+
 window.addEventListener('unhandledrejection', function(event) {
   // 这个事件对象有两个特殊的属性：
   alert(event.promise); // [object Promise] - 生成该全局 error 的 promise
   alert(event.reason); // Error: Whoops! - 未处理的 error 对象
 });
-*/!*
+
 
 new Promise(function() {
   throw new Error("Whoops!");
@@ -205,7 +205,7 @@ new Promise(function() {
 
 ## 补充内容
 
-```smart header="说明"
+说明"
 为了更清晰地讲解 promise，本文经过大幅重写，以下内容是重写时被优化掉的内容，译者认为还是很有学习价值的，遂保留下来供大家学习。
 ```
 
@@ -217,7 +217,7 @@ new Promise(function() {
 
 如果在 `(*)` 行，服务器返回一个错误 500 的非 JSON（non-JSON）页面该怎么办？如果没有这个用户，GitHub 返回错误 404 的页面又该怎么办呢？
 
-```js run
+```js
 fetch('no-such-user.json') // (*)
   .then(response => response.json())
   .then(user => fetch(`https://api.github.com/users/${user.name}`)) // (**)
@@ -232,7 +232,7 @@ fetch('no-such-user.json') // (*)
 
 因此我们多添加一步：我们应该检查具有 HTTP 状态的 `response.status` 属性，如果不是 200 就抛出错误。
 
-```js run
+```js
 class HttpError extends Error { // (1)
   constructor(response) {
     super(`${response.status} for ${response.url}`);
@@ -266,7 +266,7 @@ loadJson('no-such-user.json') // (3)
 
 下面的代码从 GitHub 加载给定名称的用户。如果没有这个用户，它将告知用户填写正确的名称：
 
-```js run
+```js
 function demoGithubUser() {
   let name = prompt("Enter a name?", "iliakan");
 
@@ -276,9 +276,9 @@ function demoGithubUser() {
       return user;
     })
     .catch(err => {
-*!*
+
       if (err instanceof HttpError && err.response.status == 404) {
-*/!*
+
         alert("No such user, please reenter.");
         return demoGithubUser();
       } else {
@@ -298,21 +298,21 @@ demoGithubUser();
 
 如果我们有加载指示（load-indication），`.finally` 是一个很好的处理程序（handler），在 fetch 完成时停止它：
 
-```js run
+```js
 function demoGithubUser() {
   let name = prompt("Enter a name?", "iliakan");
 
-*!*
+
   document.body.style.opacity = 0.3; // (1) 开始指示（indication）
-*/!*
+
 
   return loadJson(`https://api.github.com/users/${name}`)
-*!*
+
     .finally(() => { // (2) 停止指示（indication）
       document.body.style.opacity = '';
       return new Promise(resolve => setTimeout(resolve)); // (*)
     })
-*/!*
+
     .then(user => {
       alert(`Full name: ${user.name}.`);
       return user;

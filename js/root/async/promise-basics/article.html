@@ -34,7 +34,7 @@
   <span class="hljs-comment">// 当 promise 被构造完成时，自动执行此函数</span>
 
   <span class="hljs-comment">// 1 秒后发出工作已经被完成的信号，并带有结果 &quot;done&quot;</span>
-  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> *!*resolve(<span class="hljs-string">&quot;done&quot;</span>)*/!*, <span class="hljs-number">1000</span>);
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> resolve(<span class="hljs-string">&quot;done&quot;</span>), <span class="hljs-number">1000</span>);
 });</code></pre>
 <p>通过运行上面的代码，我们可以看到两件事儿：</p>
 <ol>
@@ -49,7 +49,7 @@
 <p>现在的则是一个 executor 以 error 拒绝 promise 的示例：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> promise = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">resolve, reject</span>) </span>{
   <span class="hljs-comment">// 1 秒后发出工作已经被完成的信号，并带有 error</span>
-  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> *!*reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Whoops!&quot;</span>))*/!*, <span class="hljs-number">1000</span>);
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> reject(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;Whoops!&quot;</span>)), <span class="hljs-number">1000</span>);
 });</code></pre>
 <p>对 <code>reject(...)</code> 的调用将 promise 对象的状态移至 <code>&quot;rejected&quot;</code>：</p>
 <p><img src="promise-reject-1.svg" alt=""></p>
@@ -61,9 +61,9 @@
 
 ```js
 let promise = new Promise(function(resolve, reject) {
-*!*
+
   resolve(&quot;done&quot;);
-*/!*
+
 
   reject(new Error(&quot;…&quot;)); // 被忽略
   setTimeout(() =&gt; resolve(&quot;…&quot;)); // 被忽略
@@ -103,8 +103,8 @@ Promise 对象充当的是 executor（“生产者代码”或“歌手”）和
 
 ```js
 promise.then(
-  function(result) { *!*/* handle a successful result */*/!* },
-  function(error) { *!*/* handle an error */*/!* }
+  function(result) { /* handle a successful result */ },
+  function(error) { /* handle an error */ }
 );
 ```
 
@@ -114,16 +114,16 @@ promise.then(
 
 例如，以下是对成功 resolved 的 promise 做出的反应：
 
-```js run
+```js
 let promise = new Promise(function(resolve, reject) {
   setTimeout(() =&gt; resolve(&quot;done!&quot;), 1000);
 });
 
 // resolve 运行 .then 中的第一个函数
 promise.then(
-*!*
+
   result =&gt; alert(result), // 1 秒后显示 &quot;done!&quot;
-*/!*
+
   error =&gt; alert(error) // 不运行
 );
 ```
@@ -132,7 +132,7 @@ promise.then(
 
 在 reject 的情况下，运行第二个：
 
-```js run
+```js
 let promise = new Promise(function(resolve, reject) {
   setTimeout(() =&gt; reject(new Error(&quot;Whoops!&quot;)), 1000);
 });
@@ -140,22 +140,22 @@ let promise = new Promise(function(resolve, reject) {
 // reject 运行 .then 中的第二个函数
 promise.then(
   result =&gt; alert(result), // 不运行
-*!*
+
   error =&gt; alert(error) // 1 秒后显示 &quot;Error: Whoops!&quot;
-*/!*
+
 );
 ```
 
 如果我们只对成功完成的情况感兴趣，那么我们可以只为 `.then` 提供一个函数参数：
 
-```js run
+```js
 let promise = new Promise(resolve =&gt; {
   setTimeout(() =&gt; resolve(&quot;done!&quot;), 1000);
 });
 
-*!*
+
 promise.then(alert); // 1 秒后显示 &quot;done!&quot;
-*/!*
+
 ```
 
 ### catch
@@ -163,15 +163,15 @@ promise.then(alert); // 1 秒后显示 &quot;done!&quot;
 如果我们只对 error 感兴趣，那么我们可以使用 `null` 作为第一个参数：`.then(null, errorHandlingFunction)`。或者我们也可以使用 `.catch(errorHandlingFunction)`，其实是一样的：
 
 
-```js run
+```js
 let promise = new Promise((resolve, reject) =&gt; {
   setTimeout(() =&gt; reject(new Error(&quot;Whoops!&quot;)), 1000);
 });
 
-*!*
+
 // .catch(f) 与 promise.then(null, f) 一样
 promise.catch(alert); // 1 秒后显示 &quot;Error: Whoops!&quot;
-*/!*
+
 ```
 
 `.catch(f)` 调用是 `.then(null, f)` 的完全的模拟，它只是一个简写形式。
@@ -190,10 +190,10 @@ promise.catch(alert); // 1 秒后显示 &quot;Error: Whoops!&quot;
 new Promise((resolve, reject) =&gt; {
   /* 做一些需要时间的事儿，然后调用 resolve/reject */
 })
-*!*
+
   // 在 promise 被 settled 时运行，无论成功与否
   .finally(() =&gt; stop loading indicator)
-*/!*
+
   .then(result =&gt; show result, err =&gt; show error)
 ```
 
@@ -203,7 +203,7 @@ new Promise((resolve, reject) =&gt; {
 2. `finally` 处理程序将结果和 error 传递给下一个处理程序。
 
     例如，在这儿结果被从 `finally` 传递给了 `then`：
-    ```js run
+    ```js
     new Promise((resolve, reject) =&gt; {
       setTimeout(() =&gt; resolve(&quot;result&quot;), 2000)
     })
@@ -213,7 +213,7 @@ new Promise((resolve, reject) =&gt; {
 
     在这儿，promise 中有一个 error，这个 error 被从 `finally` 传递给了 `catch`：
 
-    ```js run
+    ```js
     new Promise((resolve, reject) =&gt; {
       throw new Error(&quot;error&quot;);
     })
@@ -230,7 +230,7 @@ new Promise((resolve, reject) =&gt; {
 ````smart header=&quot;在 settled 的 promise 上，`then` 会立即运行&quot;
 如果 promise 为 pending 状态，`.then/catch/finally` 处理程序（handler）将等待它。否则，如果 promise 已经是 settled 状态，它们就会立即执行：
 
-```js run
+```js
 // the promise becomes resolved immediately upon creation
 let promise = new Promise(resolve =&gt; resolve(&quot;done!&quot;));
 

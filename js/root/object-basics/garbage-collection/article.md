@@ -62,9 +62,9 @@ let user = {
   name: "John"
 };
 
-*!*
+
 let admin = user;
-*/!*
+
 ```
 
 ![](memory-user-john-admin.svg)

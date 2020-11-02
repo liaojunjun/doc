@@ -14,7 +14,7 @@
 
 我们可以将两种引号放在方括号中：`pattern:['"](.*?)['"]`，但它会找到带有混合引号的字符串，例如 `match:"...'` 和 `match:'..."`。当一种引号出现在另一种引号内，比如在字符串 `subject:"She's the one!"` 中时，便会导致不正确的匹配：
 
-```js run
+```js
 let str = `He said: "She's the one!".`;
 
 let regexp = /['"](.*?)['"]/g;
@@ -29,12 +29,12 @@ alert( str.match(regexp) ); // "She'
 
 这是正确的代码：
 
-```js run
+```js
 let str = `He said: "She's the one!".`;
 
-*!*
+
 let regexp = /(['"])(.*?)\1/g;
-*/!*
+
 
 alert( str.match(regexp) ); // "She's the one!"
 ```
@@ -49,7 +49,7 @@ alert( str.match(regexp) ); // "She's the one!"
 如果我们在组中使用 `?:`，那么我们将无法引用它。用 `(?:...)` 捕获的组被排除，引擎不会存储。
 ```
 
-```warn header="不要搞混了： 在模式中用 `pattern:\1`，在替换项中用：`pattern:$1`"
+"不要搞混了： 在模式中用 `pattern:\1`，在替换项中用：`pattern:$1`"
 在替换字符串中我们使用美元符号：`pattern:$1`，而在模式中 - 使用反斜杠 `pattern:\1`。
 ```
 
@@ -61,12 +61,12 @@ alert( str.match(regexp) ); // "She's the one!"
 
 在下面的示例中引号组命名为 `pattern:?<quote>`，因此反向引用为  `pattern:\k<quote>`：
 
-```js run
+```js
 let str = `He said: "She's the one!".`;
 
-*!*
+
 let regexp = /(?<quote>['"])(.*?)\k<quote>/g;
-*/!*
+
 
 alert( str.match(regexp) ); // "She's the one!"
 ```

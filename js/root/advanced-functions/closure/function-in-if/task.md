@@ -3,7 +3,7 @@
 
 看看下面这个代码。最后一行代码的执行结果是什么？
 
-```js run
+```js
 let phrase = "Hello";
 
 if (true) {
@@ -14,7 +14,7 @@ if (true) {
   }
 }
 
-*!*
+
 sayHi();
-*/!*
+
 ```

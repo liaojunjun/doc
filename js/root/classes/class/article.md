@@ -31,7 +31,7 @@ class MyClass {
 
 例如：
 
-```js run
+```js
 class User {
 
   constructor(name) {
@@ -56,7 +56,7 @@ user.sayHi();
 ……然后我们就可以调用对象方法了，例如 `user.sayHi`。
 
 
-```warn header="类的方法之间没有逗号"
+"类的方法之间没有逗号"
 对于新手开发人员来说，常见的陷阱是在类的方法之间放置逗号，这会导致语法错误。
 
 不要把这里的符号与对象字面量相混淆。在类中，不需要逗号。
@@ -72,16 +72,16 @@ user.sayHi();
 
 看看下面这段代码：
 
-```js run
+```js
 class User {
   constructor(name) { this.name = name; }
   sayHi() { alert(this.name); }
 }
 
 // 佐证：User 是一个函数
-*!*
+
 alert(typeof User); // function
-*/!*
+
 ```
 
 `class User {...}` 构造实际上做了如下的事儿：
@@ -97,7 +97,7 @@ alert(typeof User); // function
 
 下面这些代码很好地解释了它们：
 
-```js run
+```js
 class User {
   constructor(name) { this.name = name; }
   sayHi() { alert(this.name); }
@@ -120,7 +120,7 @@ alert(Object.getOwnPropertyNames(User.prototype)); // constructor, sayHi
 
 人们常说 `class` 是一个语法糖（旨在使内容更易阅读，但不引入任何新内容的语法），因为我们实际上可以在没有 `class` 的情况下声明相同的内容：
 
-```js run
+```js
 // 用纯函数重写 class User
 
 // 1. 创建构造器函数
@@ -148,7 +148,7 @@ user.sayHi();
 
     编程语言会在许多地方检查该属性。例如，与普通函数不同，必须使用 `new` 来调用它：
 
-    ```js run
+    ```js
     class User {
       constructor() {}
     }
@@ -159,7 +159,7 @@ user.sayHi();
 
     此外，大多数 JavaScript 引擎中的类构造器的字符串表示形式都以 "class..." 开头
 
-    ```js run
+    ```js
     class User {
       constructor() {}
     }
@@ -196,10 +196,10 @@ let User = class {
 
 如果类表达式有名字，那么该名字仅在类内部可见：
 
-```js run
+```js
 // “命名类表达式（Named Class Expression）”
 // (规范中没有这样的术语，但是它和命名函数表达式类似)
-let User = class *!*MyClass*/!* {
+let User = class MyClass {
   sayHi() {
     alert(MyClass); // MyClass 这个名字仅在类内部可见
   }
@@ -212,7 +212,7 @@ alert(MyClass); // error，MyClass 在外部不可见
 
 我们甚至可以动态地“按需”创建类，就像这样：
 
-```js run
+```js
 function makeClass(phrase) {
   // 声明一个类并返回它
   return class {
@@ -235,7 +235,7 @@ new User().sayHi(); // Hello
 
 这是一个使用 `get/set` 实现 `user.name` 的示例：
 
-```js run
+```js
 class User {
 
   constructor(name) {
@@ -243,15 +243,15 @@ class User {
     this.name = name;
   }
 
-*!*
+
   get name() {
-*/!*
+
     return this._name;
   }
 
-*!*
+
   set name(value) {
-*/!*
+
     if (value.length < 4) {
       alert("Name is too short.");
       return;
@@ -273,12 +273,12 @@ user = new User(""); // Name is too short.
 
 这里有一个使用中括号 `[...]` 的计算方法名称示例：
 
-```js run
+```js
 class User {
 
-*!*
+
   ['say' + 'Hi']() {
-*/!*
+
     alert("Hello");
   }
 
@@ -291,7 +291,7 @@ new User().sayHi();
 
 ## Class 字段
 
-```warn header="旧的浏览器可能需要 polyfill"
+"旧的浏览器可能需要 polyfill"
 类字段（field）是最近才添加到语言中的。
 ```
 
@@ -301,11 +301,11 @@ new User().sayHi();
 
 例如，让我们在 `class User` 中添加一个 `name` 属性：
 
-```js run
+```js
 class User {
-*!*
+
   name = "John";
-*/!*
+
 
   sayHi() {
     alert(`Hello, ${this.name}!`);
@@ -319,11 +319,11 @@ new User().sayHi(); // Hello, John!
 
 类字段重要的不同之处在于，它们会在每个独立对象中被设好，而不是设在 `User.prototype`：
 
-```js run
+```js
 class User {
-*!*
+
   name = "John";
-*/!*
+
 }
 
 let user = new User();
@@ -333,11 +333,11 @@ alert(User.prototype.name); // undefined
 
 我们也可以在赋值时使用更复杂的表达式和函数调用：
 
-```js run
+```js
 class User {
-*!*
+
   name = prompt("Name, please?", "John");
-*/!*
+
 }
 
 let user = new User();
@@ -353,7 +353,7 @@ alert(user.name); // John
 
 例如，此代码将显示 `undefined`：
 
-```js run
+```js
 class Button {
   constructor(value) {
     this.value = value;
@@ -366,9 +366,9 @@ class Button {
 
 let button = new Button("hello");
 
-*!*
+
 setTimeout(button.click, 1000); // undefined
-*/!*
+
 ```
 
 这个问题被称为“丢失 `this`”。
@@ -380,16 +380,16 @@ setTimeout(button.click, 1000); // undefined
 
 类字段提供了另一种非常优雅的语法：
 
-```js run
+```js
 class Button {
   constructor(value) {
     this.value = value;
   }
-*!*
+
   click = () => {
     alert(this.value);
   }
-*/!*
+
 }
 
 let button = new Button("hello");

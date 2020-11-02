@@ -18,7 +18,7 @@
 or
 <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;event.preventDefault()&quot;</span>&gt;</span>here<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></code></pre>
 <p>在下一个示例中，我们将使用此技术来创建 JavaScript 驱动的菜单。</p>
-<p>```warn header=&quot;从处理程序返回 <code>false</code> 是一个例外&quot;
+<p>&quot;从处理程序返回 <code>false</code> 是一个例外&quot;
 事件处理程序返回的值通常会被忽略。</p>
 <p>唯一的例外是从使用 <code>on&lt;event&gt;</code> 分配的处理程序中返回的 <code>return false</code>。</p>
 <p>在所有其他情况下，<code>return</code> 值都会被忽略。并且，返回 <code>true</code> 没有意义。</p>
@@ -48,9 +48,9 @@ or
   <span class="hljs-keyword">let</span> href = event.target.getAttribute(<span class="hljs-string">&#x27;href&#x27;</span>);
   alert( href ); <span class="hljs-comment">// ...可以从服务器加载，UI 生成等</span>
 
-*!*
+
   <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <span class="hljs-comment">// 阻止浏览器行为（不前往访问 URL）</span>
-*/!*
+
 };</code></pre>
 <p>如果我们省略 <code>return false</code>，那么在我们的代码执行完毕后，浏览器将执行它的“默认行为” —— 导航至在 <code>href</code> 中的 URL。</p>
 <p>顺便说一句，这里使用事件委托会使我们的菜单更灵活。我们可以添加嵌套列表并使用 CSS 对其进行样式设置来实现 &quot;slide down&quot; 的效果。</p>
@@ -60,9 +60,9 @@ or
 
 尝试点击下面的第一个 `&lt;input&gt;` —— 会发生 `focus` 事件。但是如果你点击第二个，则没有聚焦。
 
-```html run autorun
+```html autorun
 &lt;input value=&quot;Focus works&quot; onfocus=&quot;this.value=&#x27;&#x27;&quot;&gt;
-&lt;input *!*onmousedown=&quot;return false&quot;*/!* onfocus=&quot;this.value=&#x27;&#x27;&quot; value=&quot;Click me&quot;&gt;
+&lt;input onmousedown=&quot;return false&quot; onfocus=&quot;this.value=&#x27;&#x27;&quot; value=&quot;Click me&quot;&gt;
 ```
 
 这是因为浏览器行为在 `mousedown` 上被取消。如果我们用另一种方式进行输入，则仍然可以进行聚焦。例如，可以使用 `key:Tab` 键从第一个输入切换到第二个输入。但鼠标点击则不行。</code></pre>
@@ -82,7 +82,7 @@ or
 <p>默认情况下，浏览器在 <code>contextmenu</code> 事件（单击鼠标右键）时，显示带有标准选项的上下文菜单。我们可以阻止它并显示我们自定义的菜单，就像这样：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>Right-click shows browser context menu<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 
-<span class="hljs-tag">&lt;<span class="hljs-name">button</span> *!*<span class="hljs-attr">oncontextmenu</span>=<span class="hljs-string">&quot;alert(&#x27;Draw our menu&#x27;); return false&quot;</span>*/!*&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">oncontextmenu</span>=<span class="hljs-string">&quot;alert(&#x27;Draw our menu&#x27;); return false&quot;</span>&gt;</span>
   Right-click shows our context menu
 <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></code></pre>
 <p>现在，除了该上下文菜单外，我们还想实现文档范围的上下文菜单。</p>
@@ -109,9 +109,9 @@ or
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   elem.oncontextmenu = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
     event.preventDefault();
-*!*
+
     event.stopPropagation();
-*/!*
+
     alert(<span class="hljs-string">&quot;Button context menu&quot;</span>);
   };
 
@@ -132,9 +132,9 @@ or
   };
 
   <span class="hljs-built_in">document</span>.oncontextmenu = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
-*!*
+
     <span class="hljs-keyword">if</span> (event.defaultPrevented) <span class="hljs-keyword">return</span>;
-*/!*
+
 
     event.preventDefault();
     alert(<span class="hljs-string">&quot;Document context menu&quot;</span>);

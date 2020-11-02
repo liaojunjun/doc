@@ -1,6 +1,6 @@
 <p>可以使用 <code>Object.keys</code> 获取所有可枚举的键，并输出其列表。</p>
 <p>为了使 <code>toString</code> 不可枚举，我们使用一个属性描述器来定义它。<code>Object.create</code> 语法允许我们为一个对象提供属性描述器作为第二参数。</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> dictionary = <span class="hljs-built_in">Object</span>.create(<span class="hljs-literal">null</span>, {
   <span class="hljs-attr">toString</span>: { <span class="hljs-comment">// 定义 toString 属性</span>
     value() { <span class="hljs-comment">// value 是一个 function</span>
@@ -8,7 +8,7 @@
     }
   }
 });
-*/!*
+
 
 dictionary.apple = <span class="hljs-string">&quot;Apple&quot;</span>;
 dictionary.__proto__ = <span class="hljs-string">&quot;test&quot;</span>;

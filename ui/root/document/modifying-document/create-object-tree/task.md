@@ -32,9 +32,9 @@ let data = {
 
 ```js
 let container = document.getElementById('container');
-*!*
+
 createTree(container, data); // 将树创建在 container 中
-*/!*
+
 ```
 
 结果（树）看起来像这样：

@@ -56,9 +56,9 @@ CSS 提供了四个属性来描述一个过渡：
 
 <style>
 #growing {
-*!*
+
   transition: font-size 3s, color 2s;
-*/!*
+
 }
 </style>
 
@@ -119,10 +119,10 @@ stripe.classList.add('animate');
 ```js
 stripe.onclick = function() {
   let sec = new Date().getSeconds() % 10;
-*!*
+
   // for instance, -3s here starts the animation from the 3rd second
   stripe.style.transitionDelay = '-' + sec + 's';
-*/!*
+
   stripe.classList.add('animate');
 };
 ```
@@ -267,7 +267,7 @@ CSS 提供几条内置的曲线：`linear`、`ease`、`ease-in`、`ease-out` 和
 ```css
 #stripe.animate  {
   transform: translate(-90%);
-  transition: transform 9s *!*steps(9, start)*/!*;
+  transition: transform 9s steps(9, start);
 }
 ```
 
@@ -371,22 +371,22 @@ boat.onclick = function() {
 <div class="progress"></div>
 
 <style>
-*!*
+
   @keyframes go-left-right {        /* 指定一个名字："go-left-right" */
     from { left: 0px; }             /* 从 left: 0px 开始 */
     to { left: calc(100% - 50px); } /* 移动至 left: 100%-50px */
   }
-*/!*
+
 
   .progress {
-*!*
+
     animation: go-left-right 3s infinite alternate;
     /* 把动画 "go-left-right" 应用到元素上
        持续 3 秒
        持续次数：infinite
        每次都改变方向
     */
-*/!*
+
 
     position: relative;
     border: 2px solid green;

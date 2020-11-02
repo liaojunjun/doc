@@ -13,7 +13,7 @@ JavaScript 程序可以在 `<script>` 标签的帮助下插入到 HTML 文档的
 
 比如：
 
-```html run height=100
+```html height=100
 <!DOCTYPE HTML>
 <html>
 
@@ -21,11 +21,11 @@ JavaScript 程序可以在 `<script>` 标签的帮助下插入到 HTML 文档的
 
   <p>script 标签之前...</p>
 
-*!*
+
   <script>
     alert('Hello, world!');
   </script>
-*/!*
+
 
   <p>...script 标签之后</p>
 
@@ -99,13 +99,13 @@ JavaScript 程序可以在 `<script>` 标签的帮助下插入到 HTML 文档的
 这可以节省流量，并使得页面（加载）更快。
 ```
 
-````warn header="如果设置了 `src` 特性，`script` 标签内容将会被忽略。"
+`"如果设置了 `src` 特性，`script` 标签内容将会被忽略。"
 一个单独的 `<script>` 标签不能同时有 `src` 特性和内部包裹的代码。
 
 这将不会工作：
 
 ```html
-<script *!*src*/!*="file.js">
+<script src="file.js">
   alert(1); // 此内容会被忽略，因为设定了 src
 </script>
 ```

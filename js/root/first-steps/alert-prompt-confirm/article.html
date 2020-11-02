@@ -22,7 +22,7 @@
 
 举个例子：
 
-```js run
+```js
 let age = prompt(&#x27;How old are you?&#x27;, 100);
 
 alert(`You are ${age} years old!`); // You are 100 years old!</code></pre>
@@ -30,13 +30,13 @@ alert(`You are ${age} years old!`); // You are 100 years old!</code></pre>
 
 我们可以在 Internet Explorer 中运行下面这行代码来看看效果：
 
-```js run
+```js
 let test = prompt(&quot;Test&quot;);
 ```
 
 所以，为了 prompt 在 IE 中有好的效果，我们建议始终提供第二个参数：
 
-```js run
+```js
 let test = prompt(&quot;Test&quot;, &#x27;&#x27;); // &lt;-- 用于 IE 浏览器
 ```</code></pre>
 <h2 id="confirm">confirm</h2>

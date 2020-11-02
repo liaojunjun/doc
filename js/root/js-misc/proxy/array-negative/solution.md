@@ -1,5 +1,5 @@
 
-```js run
+```js
 let array = [1, 2, 3];
 
 array = new Proxy(array, {

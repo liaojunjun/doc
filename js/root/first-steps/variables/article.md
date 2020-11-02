@@ -23,25 +23,25 @@ let message;
 ```js
 let message;
 
-*!*
+
 message = 'Hello'; // 保存字符串
-*/!*
+
 ```
 
 现在这个字符串已经保存到与该变量相关联的内存区域了，我们可以通过使用该变量名称访问它：
 
-```js run
+```js
 let message;
 message = 'Hello!';
 
-*!*
+
 alert(message); // 显示变量内容
-*/!*
+
 ```
 
 简洁一点，我们可以将变量定义和赋值合并成一行：
 
-```js run
+```js
 let message = 'Hello!'; // 定义变量，并且赋值
 
 alert(message); // Hello!
@@ -80,11 +80,11 @@ let user = 'John'
 
 技术上讲，这些变体都有一样的效果。所以，这是个个人品味和审美方面的问题。
 
-````smart header="`var` 而不是 `let`"
+``var` 而不是 `let`"
 在较旧的脚本中，你也可能发现另一个关键字 `var`，而不是 `let`：
 
 ```js
-*!*var*/!* message = 'Hello';
+var message = 'Hello';
 ```
 
 `var` 关键字与 `let` **大体** 相同，也用来声明变量，但稍微有些不同，也有点“老派”。
@@ -103,7 +103,7 @@ let user = 'John'
 我们可以在盒子内放入任何值。
 
 并且，这个盒子的值，我们想改变多少次，就可以改变多少次：
-```js run
+```js
 let message;
 
 message = 'Hello!';
@@ -119,27 +119,27 @@ alert(message);
 
 我们还可以声明两个变量，然后将其中一个变量的数据拷贝到另一个变量。
 
-```js run
+```js
 let hello = 'Hello world!';
 
 let message;
 
-*!*
+
 // 将字符串 'Hello world' 从变量 hello 拷贝到 message
 message = hello;
-*/!*
+
 
 // 现在两个变量保存着相同的数据
 alert(hello); // Hello world!
 alert(message); // Hello world!
 ```
 
-````warn header="声明两次会触发 error"
+`"声明两次会触发 error"
 一个变量应该只被声明一次。
 
 对同一个变量进行重复声明会触发 error：
 
-```js run
+```js
 let message = "This";
 
 // 重复 'let' 会导致 error
@@ -148,7 +148,7 @@ let message = "That"; // SyntaxError: 'message' has already been declared
 因此，我们对同一个变量应该只声明一次，之后在不使用 `let` 的情况下对其进行引用。
 ````
 
-```smart header="函数式语言"
+函数式语言"
 有趣的是，也存在禁止更改变量值的 [函数式](https://en.wikipedia.org/wiki/Functional_programming) 编程语言。比如 [Scala](http://www.scala-lang.org/) 或 [Erlang](http://www.erlang.org/)。
 
 在这种类型的语言中，一旦值保存在盒子中，就永远存在。如果你试图保存其他值，它会强制创建一个新盒子（声明一个新变量），无法重用之前的变量。
@@ -176,7 +176,7 @@ let test123;
 
 下面的命名是有效的：
 
-```js run untrusted
+```js untrusted
 let $ = 1; // 使用 "$" 声明一个变量
 let _ = 2; // 现在用 "_" 声明一个变量
 
@@ -191,11 +191,11 @@ let 1a; // 不能以数字开始
 let my-name; // 连字符 '-' 不允许用于变量命名
 ```
 
-```smart header="区分大小写"
+区分大小写"
 命名为 `apple` 和 `AppLE` 的变量是不同的两个变量。
 ```
 
-````smart header="允许非英文字母，但不推荐"
+`允许非英文字母，但不推荐"
 可以使用任何语言，包括西里尔字母（cyrillic letters）甚至是象形文字，就像这样：
 
 ```js
@@ -206,24 +206,24 @@ let 我 = '...';
 从技术上讲，这样没问题。这样的命名是完全允许的，但是用英文进行变量命名是国际惯例。哪怕我们正在写一个很小的脚本，它也有可能会被使用很久。某个时候，来自其他国家的人可能会需要阅读它。
 ````
 
-````warn header="保留字"
+`"保留字"
 有一张 [保留字列表](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords)，这张表中的保留字无法用作变量命名，因为它们被用于编程语言本身了。
 
 比如，`let`、`class`、`return`、`function` 都被保留了。
 
 下面的代码将会抛出一个语法错误：
 
-```js run no-beautify
+```js no-beautify
 let let = 5; // 不能用 "let" 来命名一个变量，错误！
 let return = 5; // 同样，不能使用 "return"，错误！
 ```
 ````
 
-````warn header="未采用 `use strict` 下的赋值"
+`"未采用 `use strict` 下的赋值"
 
 一般，我们需要在使用一个变量前定义它。但是在早期，我们可以不使用 `let` 进行变量声明，而可以简单地通过赋值来创建一个变量。现在如果我们不在脚本中使用 `use strict` 声明启用严格模式，这仍然可以正常工作，这是为了保持对旧脚本的兼容。
 
-```js run no-strict
+```js no-strict
 // 注意：这个例子中没有 "use strict"
 
 num = 5; // 如果变量 "num" 不存在，就会被创建
@@ -233,12 +233,12 @@ alert(num); // 5
 
 上面这是个糟糕的做法，严格模式下会报错。
 
-```js run untrusted
+```js untrusted
 "use strict";
 
-*!*
+
 num = 5; // 错误：num 未定义
-*/!*
+
 ```
 ````
 
@@ -252,7 +252,7 @@ const myBirthday = '18.04.1982';
 
 使用 `const` 声明的变量称为“常量”。它们不能被修改，如果你尝试修改就会发现报错：
 
-```js run
+```js
 const myBirthday = '18.04.1982';
 
 myBirthday = '01.01.2001'; // 错误，不能对常量重新赋值
@@ -269,7 +269,7 @@ myBirthday = '01.01.2001'; // 错误，不能对常量重新赋值
 
 例如，让我们以所谓的“web”（十六进制）格式为颜色声明常量：
 
-```js run
+```js
 const COLOR_RED = "#F00";
 const COLOR_GREEN = "#0F0";
 const COLOR_BLUE = "#00F";
@@ -320,7 +320,7 @@ const pageLoadTime = /* 网页加载所需的时间 */;
 
 听上去很简单？确实如此，但是在实践中选择一个一目了然的变量名称并非如此简单。大胆试试吧。
 
-```smart header="重用还是新建？"
+重用还是新建？"
 最后一点，有一些懒惰的程序员，倾向于重用现有的变量，而不是声明一个新的变量。
 
 结果是，这个变量就像是被扔进不同东西盒子，但没有改变它的贴纸。现在里面是什么？谁知道呢。我们需要靠近一点，仔细检查才能知道。

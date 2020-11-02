@@ -110,12 +110,12 @@ coffeeMachine.power = <span class="hljs-number">25</span>; <span class="hljs-com
 class CoffeeMachine {
   _waterAmount = 0;
 
-  *!*setWaterAmount(value)*/!* {
+  setWaterAmount(value) {
     if (value &lt; 0) throw new Error(&quot;Negative water&quot;);
     this._waterAmount = value;
   }
 
-  *!*getWaterAmount()*/!* {
+  getWaterAmount() {
     return this._waterAmount;
   }
 }
@@ -135,26 +135,26 @@ new CoffeeMachine().setWaterAmount(100);
 <p>私有属性和方法应该以 <code>#</code> 开头。它们只在类的内部可被访问。</p>
 <p>例如，这儿有一个私有属性 <code>#waterLimit</code> 和检查水量的私有方法 <code>#checkWater</code>：</p>
 <pre><code class="language-js">class CoffeeMachine {
-*!*
-  #waterLimit = 200;
-*/!*
 
-*!*
+  #waterLimit = 200;
+
+
+
   #checkWater(value) {
     if (value &lt; 0) throw new Error(&quot;Negative water&quot;);
     if (value &gt; this.#waterLimit) throw new Error(&quot;Too much water&quot;);
   }
-*/!*
+
 
 }
 
 let coffeeMachine = new CoffeeMachine();
 
-*!*
+
 // 不能从类的外部访问类的私有属性和方法
 coffeeMachine.#checkWater(); // Error
 coffeeMachine.#waterLimit = 1000; // Error
-*/!*</code></pre>
+</code></pre>
 <p>在语言级别，<code>#</code> 是该字段为私有的特殊标志。我们无法从外部或从继承的类中访问它。</p>
 <p>私有字段与公共字段不会发生冲突。我们可以同时拥有私有的 <code>#waterAmount</code> 和公共的 <code>waterAmount</code> 字段。</p>
 <p>例如，让我们使 <code>waterAmount</code> 成为 <code>#waterAmount</code> 的一个访问器：</p>
@@ -180,9 +180,9 @@ alert(machine.#waterAmount); // Error</code></pre>
 <p>但是如果我们继承自 <code>CoffeeMachine</code>，那么我们将无法直接访问 <code>#waterAmount</code>。我们需要依靠 <code>waterAmount</code> getter/setter：</p>
 <pre><code class="language-js">class MegaCoffeeMachine extends CoffeeMachine {
   method() {
-*!*
+
     alert( this.#waterAmount ); // Error: can only access from CoffeeMachine
-*/!*
+
   }
 }</code></pre>
 <p>在许多情况下，这种限制太严重了。如果我们扩展 <code>CoffeeMachine</code>，则可能有正当理由访问其内部。这就是为什么大多数时候都会使用受保护字段，即使它们不受语言语法的支持。</p>
@@ -195,7 +195,7 @@ class User {
   ...
   sayHi() {
     let fieldName = &quot;name&quot;;
-    alert(`Hello, ${*!*this[fieldName]*/!*}`);
+    alert(`Hello, ${this[fieldName]}`);
   }
 }
 ```

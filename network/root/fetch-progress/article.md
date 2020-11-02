@@ -43,7 +43,7 @@ Streams API 还描述了如果使用 `for await..of` 循环异步迭代 `Readabl
 
 这是获取响应，并在控制台中记录进度的完整工作示例，下面有更多说明：
 
-```js run async
+```js async
 // Step 1：启动 fetch，并获得一个 reader
 let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits?per_page=100');
 

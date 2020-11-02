@@ -1,4 +1,4 @@
-```js run demo
+```js demo
 function* pseudoRandom(seed) {
   let value = seed;
 
@@ -18,7 +18,7 @@ alert(generator.next().value); // 1622650073
 
 请注意，也可以使用常规函数来完成相同的操作，就像这样：
 
-```js run
+```js
 function pseudoRandom(seed) {
   let value = seed;
 

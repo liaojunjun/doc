@@ -8,7 +8,7 @@ importance: 5
 
 最初，我们有以下代码：
 
-```js run
+```js
 function Rabbit() {}
 Rabbit.prototype = {
   eats: true
@@ -30,9 +30,9 @@ alert( rabbit.eats ); // true
 
     let rabbit = new Rabbit();
 
-    *!*
+    
     Rabbit.prototype = {};
-    */!*
+    
 
     alert( rabbit.eats ); // ?
     ```
@@ -47,9 +47,9 @@ alert( rabbit.eats ); // true
 
     let rabbit = new Rabbit();
 
-    *!*
+    
     Rabbit.prototype.eats = false;
-    */!*
+    
 
     alert( rabbit.eats ); // ?
     ```
@@ -64,9 +64,9 @@ alert( rabbit.eats ); // true
 
     let rabbit = new Rabbit();
 
-    *!*
+    
     delete rabbit.eats;
-    */!*
+    
 
     alert( rabbit.eats ); // ?
     ```
@@ -81,9 +81,9 @@ alert( rabbit.eats ); // true
 
     let rabbit = new Rabbit();
 
-    *!*
+    
     delete Rabbit.prototype.eats;
-    */!*
+    
 
     alert( rabbit.eats ); // ?
     ```

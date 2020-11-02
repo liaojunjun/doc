@@ -2,7 +2,7 @@
 
 1. **从 1 到 4**
 
-    ```js run
+    ```js
     let i = 0;
     while (++i < 5) alert( i );
     ```
@@ -15,7 +15,7 @@
 
 2. **从 1 到 5**
 
-    ```js run
+    ```js
     let i = 0;
     while (i++ < 5) alert( i );
     ```

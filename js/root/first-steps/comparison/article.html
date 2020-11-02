@@ -62,7 +62,7 @@ alert( <span class="hljs-literal">false</span> == <span class="hljs-number">0</s
 
 例如：
 
-```js run
+```js
 let a = 0;
 alert( Boolean(a) ); // false
 
@@ -90,12 +90,12 @@ alert(a == b); // true!
 <p>当使用 <code>null</code> 或 <code>undefined</code> 与其他值进行比较时，其返回结果常常出乎你的意料。</p>
 <p>当使用严格相等 <code>===</code> 比较二者时 
 : 它们不相等，因为它们属于不同的类型。</p>
-<pre><code>```js run
+<pre><code>```js
 alert( null === undefined ); // false
 ```</code></pre>
 <p>当使用非严格相等 <code>==</code> 比较二者时
 : JavaScript 存在一个特殊的规则，会判定它们相等。它们俩就像“一对恋人”，仅仅等于对方而不等于其他任何的值（只在非严格相等下成立）。</p>
-<pre><code>```js run
+<pre><code>```js
 alert( null == undefined ); // true
 ```</code></pre>
 <p>当使用数学式或其他比较方法 <code>&lt; &gt; &lt;= &gt;=</code> 时：
@@ -105,7 +105,7 @@ alert( null == undefined ); // true
 <p>通过比较 <code>null</code> 和 0 可得：</p>
 <pre><code class="language-js">alert( <span class="hljs-literal">null</span> &gt; <span class="hljs-number">0</span> );  <span class="hljs-comment">// (1) false</span>
 alert( <span class="hljs-literal">null</span> == <span class="hljs-number">0</span> ); <span class="hljs-comment">// (2) false</span>
-alert( <span class="hljs-literal">null</span> &gt;= <span class="hljs-number">0</span> ); <span class="hljs-comment">// (3) *!*true*/!*</span></code></pre>
+alert( <span class="hljs-literal">null</span> &gt;= <span class="hljs-number">0</span> ); <span class="hljs-comment">// (3) true</span></code></pre>
 <p>是的，上面的结果完全打破了你对数学的认识。在最后一行代码显示“<code>null</code> 大于等于 0”的情况下，前两行代码中一定会有一个是正确的，然而事实表明它们的结果都是 false。</p>
 <p>为什么会出现这种反常结果，这是因为相等性检查 <code>==</code> 和普通比较符 <code>&gt; &lt; &gt;= &lt;=</code> 的代码逻辑是相互独立的。进行值的比较时，<code>null</code> 会被转化为数字，因此它被转化为了 <code>0</code>。这就是为什么（3）中 <code>null &gt;= 0</code> 返回值是 true，（1）中 <code>null &gt; 0</code> 返回值是 false。</p>
 <p>另一方面，<code>undefined</code> 和 <code>null</code> 在相等性检查 <code>==</code> 中不会进行任何的类型转换，它们有自己独立的比较规则，所以除了它们之间互等外，不会等于任何其他的值。这就解释了为什么（2）中 <code>null == 0</code> 会返回 false。</p>

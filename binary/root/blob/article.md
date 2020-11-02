@@ -47,7 +47,7 @@ blob.slice([byteStart], [byteEnd], [contentType]);
 
 参数值类似于 `array.slice`，也允许是负数。
 
-```smart header="`Blob` 对象是不可改变的"
+`Blob` 对象是不可改变的"
 我们无法直接在 `Blob` 中更改数据，但我们可以通过 `slice` 获得 `Blob` 的多个部分，从这些部分创建新的 `Blob` 对象，将它们组成新的 `Blob`，等。
 
 这种行为类似于 JavaScript 字符串：我们无法更改字符串中的字符，但可以生成一个新的改动过的字符串。
@@ -61,7 +61,7 @@ Blob 可以很容易用作 `<a>`、`<img>` 或其他标签的 URL，来显示它
 
 让我们从一个简单的例子开始。通过点击链接，你可以下载一个具有动态生成的内容为 `hello world` 的 `Blob` 的文件：
 
-```html run
+```html
 <!-- download 特性（attribute）强制浏览器下载而不是导航 -->
 <a download="hello.txt" href='#' id="link">Download</a>
 
@@ -76,7 +76,7 @@ link.href = URL.createObjectURL(blob);
 
 下面是类似的代码，此代码可以让用户无需任何 HTML 即可下载动态生成的 `Blob`（译注：也就是通过代码模拟用户点击，从而自动下载）：
 
-```js run
+```js
 let link = document.createElement('a');
 link.download = 'hello.txt';
 
@@ -134,16 +134,16 @@ blob:https://javascript.info/1e67e00e-860d-40a5-89ae-6ab0cbee6273
 
 下面是下载 `Blob` 的示例，这次是通过 base-64：
 
-```js run
+```js
 let link = document.createElement('a');
 link.download = 'hello.txt';
 
 let blob = new Blob(['Hello, world!'], {type: 'text/plain'});
 
-*!*
+
 let reader = new FileReader();
 reader.readAsDataURL(blob); // 将 Blob 转换为 base64 并调用 onload
-*/!*
+
 
 reader.onload = function() {
   link.href = reader.result; // data url
@@ -171,7 +171,7 @@ reader.onload = function() {
 
 在下面这个示例中，图像只是被复制了，不过我们可以在创建 blob 之前，从中裁剪图像，或者在 canvas 上对其进行转换：
 
-```js run
+```js
 // 获取任何图像
 let img = document.querySelector('img');
 
@@ -217,9 +217,9 @@ let blob = await new Promise(resolve => canvasElem.toBlob(resolve, 'image/png'))
 // 从 blob 获取 arrayBuffer
 let fileReader = new FileReader();
 
-*!*
+
 fileReader.readAsArrayBuffer(blob);
-*/!*
+
 
 fileReader.onload = function(event) {
   let arrayBuffer = fileReader.result;

@@ -20,14 +20,14 @@
 <h3 id="使用表单">使用表单</h3>
 <p>其中一种和其他服务器通信的方法是在那里提交一个 <code>&lt;form&gt;</code>。人们将它提交到 <code>&lt;iframe&gt;</code>，只是为了停留在当前页面，像这样：</p>
 <pre><code class="language-html"><span class="hljs-comment">&lt;!-- 表单目标 --&gt;</span>
-*!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
-*/!*
+
 
 <span class="hljs-comment">&lt;!-- 表单可以由 JavaScript 动态生成并提交 --&gt;</span>
-*!*
+
 <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;iframe&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;POST&quot;</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;http://another.com/…&quot;</span>&gt;</span>
-*/!*
+
   ...
 <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></code></pre>
 <p>因此，即使没有网络方法，也可以向其他网站发出 GET/POST 请求，因为表单可以将数据发送到任何地方。但是由于禁止从其他网站访问 <code>&lt;iframe&gt;</code> 中的内容，因此就无法读取响应。</p>
@@ -92,9 +92,9 @@ gotWeather({
 <p>例如，如果我们从 <code>https://javascript.info/page</code> 请求 <code>https://anywhere.com/request</code>，请求的 header 将会如下：</p>
 <pre><code class="language-http">GET /request
 Host: anywhere.com
-*!*
+
 Origin: https://javascript.info
-*/!*
+
 ...</code></pre>
 <p>正如你所见，<code>Origin</code> 包含了确切的源（domain/protocol/port），没有路径。</p>
 <p>服务器可以检查 <code>Origin</code>，如果同意接受这样的请求，就会在响应中添加一个特殊的 header <code>Access-Control-Allow-Origin</code>。该 header 包含了允许的源（在我们的示例中是 <code>https://javascript.info</code>），或者一个星号 <code>*</code>。然后响应成功，否则报错。</p>
@@ -107,9 +107,9 @@ Origin: https://javascript.info
 <p>这是一个带有服务器许可的响应示例：</p>
 <pre><code class="language-http">200 OK
 Content-Type:text/html; charset=UTF-8
-*!*
+
 Access-Control-Allow-Origin: https://javascript.info
-*/!*</code></pre>
+</code></pre>
 <h2 id="response-header">Response header</h2>
 <p>对于跨源请求，默认情况下，JavaScript 只能访问“简单” response header：</p>
 <ul>
@@ -131,9 +131,9 @@ Content-Type:text/html; charset=UTF-8
 Content-Length: 12345
 API-Key: 2c9de507f2c54aa1
 Access-Control-Allow-Origin: https://javascript.info
-*!*
+
 Access-Control-Expose-Headers: Content-Length,API-Key
-*/!*</code></pre>
+</code></pre>
 <p>有了这种 <code>Access-Control-Expose-Headers</code> header，此脚本就被允许读取响应的 <code>Content-Length</code> 和 <code>API-Key</code> header。</p>
 <h2 id="非简单请求">“非简单”请求</h2>
 <p>我们可以使用任何 HTTP 方法：不仅仅是 <code>GET/POST</code>，也可以是 <code>PATCH</code>，<code>DELETE</code> 及其他。</p>

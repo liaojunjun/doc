@@ -329,7 +329,7 @@
 <pre><code class="language-js"><span class="hljs-keyword">let</span> buffer = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ArrayBuffer</span>(<span class="hljs-number">16</span>); <span class="hljs-comment">// 创建一个长度为 16 的 buffer</span>
 alert(buffer.byteLength); <span class="hljs-comment">// 16</span></code></pre>
 <p>它会分配一个 16 字节的连续内存空间，并用 0 进行预填充。</p>
-<p>```warn header=&quot;<code>ArrayBuffer</code> 不是某种东西的数组&quot;
+<p>&quot;<code>ArrayBuffer</code> 不是某种东西的数组&quot;
 让我们先澄清一个可能的误区。<code>ArrayBuffer</code> 与 <code>Array</code> 没有任何共同之处：</p>
 <ul>
 <li>它的长度是固定的，我们无法增加或减少它的长度。</li>
@@ -353,11 +353,11 @@ alert(buffer.byteLength); <span class="hljs-comment">// 16</span></code></pre>
 <p>但是，如果我们要写入值或遍历它，基本上几乎所有操作 —— 我们必须使用视图（view），例如：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> buffer = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ArrayBuffer</span>(<span class="hljs-number">16</span>); <span class="hljs-comment">// 创建一个长度为 16 的 buffer</span>
 
-*!*
+
 <span class="hljs-keyword">let</span> view = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint32Array</span>(buffer); <span class="hljs-comment">// 将 buffer 视为一个 32 位整数的序列</span>
 
 alert(<span class="hljs-built_in">Uint32Array</span>.BYTES_PER_ELEMENT); <span class="hljs-comment">// 每个整数 4 个字节</span>
-*/!*
+
 
 alert(view.length); <span class="hljs-comment">// 4，它存储了 4 个整数</span>
 alert(view.byteLength); <span class="hljs-comment">// 16，字节中的大小</span>
@@ -388,17 +388,17 @@ view[<span class="hljs-number">0</span>] = <span class="hljs-number">123456</spa
 </li>
 <li><p>如果给定的是 <code>Array</code>，或任何类数组对象，则会创建一个相同长度的类型化数组，并复制其内容。</p>
 <p> 我们可以使用它来预填充数组的数据：</p>
-<pre><code class="language-js">*!*
+<pre><code class="language-js">
 <span class="hljs-keyword">let</span> arr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
-*/!*
+
 alert( arr.length ); <span class="hljs-comment">// 4，创建了相同长度的二进制数组</span>
 alert( arr[<span class="hljs-number">1</span>] ); <span class="hljs-comment">// 1，用给定值填充了 4 个字节（无符号 8 位整数）</span></code></pre>
 </li>
 <li><p>如果给定的是另一个 <code>TypedArray</code>，也是如此：创建一个相同长度的类型化数组，并复制其内容。如果需要的话，数据在此过程中会被转换为新的类型。</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> arr16 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint16Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">1000</span>]);
-*!*
+
 <span class="hljs-keyword">let</span> arr8 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(arr16);
-*/!*
+
 alert( arr8[<span class="hljs-number">0</span>] ); <span class="hljs-comment">// 1</span>
 alert( arr8[<span class="hljs-number">1</span>] ); <span class="hljs-comment">// 232，试图复制 1000，但无法将 1000 放进 8 位字节中（详述见下文）。</span></code></pre>
 </li>
@@ -430,7 +430,7 @@ alert( arr.byteLength ); <span class="hljs-comment">// 8（字节中的大小）
 <li><code>Int8Array</code>，<code>Int16Array</code>，<code>Int32Array</code> —— 用于有符号整数（可以为负数）。</li>
 <li><code>Float32Array</code>，<code>Float64Array</code> —— 用于 32 位和 64 位的有符号浮点数。</li>
 </ul>
-<p>```warn header=&quot;没有 <code>int8</code> 或类似的单值类型&quot;
+<p>&quot;没有 <code>int8</code> 或类似的单值类型&quot;
 请注意，尽管有类似 <code>Int8Array</code> 这样的名称，但 JavaScript 中并没有像 <code>int</code>，或 <code>int8</code> 这样的单值类型。</p>
 <p>这是合乎逻辑的，因为 <code>Int8Array</code> 不是这些单值的数组，而是 <code>ArrayBuffer</code> 上的视图。</p>
 <pre><code>
@@ -454,7 +454,7 @@ alert( arr.byteLength ); <span class="hljs-comment">// 8（字节中的大小）
 
 示例如下：
 
-```js run
+```js
 let uint8array = new Uint8Array(16);
 
 let num = 256;
@@ -636,7 +636,7 @@ Blob 可以很容易用作 `&lt;a&gt;`、`&lt;img&gt;` 或其他标签的 URL，
 
 让我们从一个简单的例子开始。通过点击链接，你可以下载一个具有动态生成的内容为 `hello world` 的 `Blob` 的文件：
 
-```html run
+```html
 &lt;!-- download 特性（attribute）强制浏览器下载而不是导航 --&gt;
 &lt;a download=&quot;hello.txt&quot; href=&#x27;#&#x27; id=&quot;link&quot;&gt;Download&lt;/a&gt;
 
@@ -682,10 +682,10 @@ link.download = <span class="hljs-string">&#x27;hello.txt&#x27;</span>;
 
 <span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">new</span> Blob([<span class="hljs-string">&#x27;Hello, world!&#x27;</span>], {<span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text/plain&#x27;</span>});
 
-*!*
+
 <span class="hljs-keyword">let</span> reader = <span class="hljs-keyword">new</span> FileReader();
 reader.readAsDataURL(blob); <span class="hljs-comment">// 将 Blob 转换为 base64 并调用 onload</span>
-*/!*
+
 
 reader.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
   link.href = reader.result; <span class="hljs-comment">// data url</span>
@@ -739,9 +739,9 @@ canvas.toBlob(<span class="hljs-function"><span class="hljs-keyword">function</s
 <pre><code class="language-js"><span class="hljs-comment">// 从 blob 获取 arrayBuffer</span>
 <span class="hljs-keyword">let</span> fileReader = <span class="hljs-keyword">new</span> FileReader();
 
-*!*
+
 fileReader.readAsArrayBuffer(blob);
-*/!*
+
 
 fileReader.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
   <span class="hljs-keyword">let</span> arrayBuffer = fileReader.result;

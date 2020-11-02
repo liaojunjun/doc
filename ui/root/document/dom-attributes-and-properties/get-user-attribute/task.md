@@ -6,7 +6,7 @@ importance: 5
 
 编写代码，从文档（document）中获取带有 `data-widget-name` 特性（attribute）的元素，并读取它的值。
 
-```html run
+```html
 <!DOCTYPE html>
 <html>
 <body>

@@ -7,7 +7,7 @@
 
 函数实现：
 
-```js run
+```js
 function random(min, max) {
   return min + Math.random() * (max - min);
 }

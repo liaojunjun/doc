@@ -1,6 +1,6 @@
 为了获取 `date` 距离当前时间的间隔 —— 我们将两个日期相减。
 
-```js run demo
+```js demo
 function formatDate(date) {
   let diff = new Date() - date; // 以毫秒表示的差值
 
@@ -46,7 +46,7 @@ alert( formatDate(new Date(new Date - 86400 * 1000)) );
 
 另一种解法：
 
-```js run
+```js
 function formatDate(date) {
   let dayOfMonth = date.getDate();
   let month = date.getMonth() + 1;

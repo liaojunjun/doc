@@ -15,9 +15,9 @@ function work(a, b) {
   alert( a + b ); // work 是一个任意的函数或方法
 }
 
-*!*
+
 work = spy(work);
-*/!*
+
 
 work(1, 2); // 3
 work(4, 5); // 9
