@@ -1,4 +1,3 @@
-
 # DOM 变动观察器（Mutation observer）
 
 `MutationObserver` 是一个内建对象，它观察 DOM 元素，在其发生更改时触发回调。
@@ -22,6 +21,7 @@ observer.observe(node, config);
 ```
 
 `config` 是一个具有布尔选项的对象，该布尔选项表示“将对哪些更改做出反应”：
+
 - `childList` —— `node` 的直接子节点的更改，
 - `subtree` —— `node` 的所有后代的更改，
 - `attributes` —— `node` 的特性（attribute），
@@ -29,6 +29,7 @@ observer.observe(node, config);
 - `characterData` —— 是否观察 `node.data`（文本内容），
 
 其他几个选项：
+
 - `attributeOldValue` —— 如果为 `true`，则将特性的旧值和新值都传递给回调（参见下文），否则只传新值（需要 `attributes` 选项），
 - `characterDataOldValue` —— 如果为 `true`，则将 `node.data` 的旧值和新值都传递给回调（参见下文），否则只传新值（需要 `characterData` 选项）。
 
@@ -37,9 +38,9 @@ observer.observe(node, config);
 [MutationRecord](https://dom.spec.whatwg.org/#mutationrecord) 对象具有以下属性：
 
 - `type` —— 变动类型，以下类型之一：
-    - `"attributes"`：特性被修改了，
-    - `"characterData"`：数据被修改了，用于文本节点，
-    - `"childList"`：添加/删除了子元素。
+  - `"attributes"`：特性被修改了，
+  - `"characterData"`：数据被修改了，用于文本节点，
+  - `"childList"`：添加/删除了子元素。
 - `target` —— 更改发生在何处：`"attributes"` 所在的元素，或 `"characterData"` 所在的文本节点，或 `"childList"` 变动所在的元素，
 - `addedNodes/removedNodes` —— 添加/删除的节点，
 - `previousSibling/nextSibling` —— 添加/删除的节点的上一个/下一个兄弟节点，
@@ -49,19 +50,19 @@ observer.observe(node, config);
 例如，这里有一个 `<div>`，它具有 `contentEditable` 特性。该特性使我们可以聚焦和编辑元素。
 
 ```html
-<div contentEditable id="elem">Click and <b>edit</b>, please</div>
+<div contenteditable id="elem">Click and <b>edit</b>, please</div>
 
 <script>
-let observer = new MutationObserver(mutationRecords => {
-  console.log(mutationRecords); // console.log(the changes)
-});
+  let observer = new MutationObserver((mutationRecords) => {
+    console.log(mutationRecords); // console.log(the changes)
+  });
 
-// 观察除了特性之外的所有变动
-observer.observe(elem, {
-  childList: true, // 观察直接子节点
-  subtree: true, // 及其更低的后代节点
-  characterDataOldValue: true // 将旧的数据传递给回调
-});
+  // 观察除了特性之外的所有变动
+  observer.observe(elem, {
+    childList: true, // 观察直接子节点
+    subtree: true, // 及其更低的后代节点
+    characterDataOldValue: true, // 将旧的数据传递给回调
+  });
 </script>
 ```
 
@@ -134,7 +135,9 @@ mutationRecords = [{
 
 ```js
 // 高亮显示页面上的所有代码段
-document.querySelectorAll('pre[class*="language"]').forEach(Prism.highlightElem);
+document
+  .querySelectorAll('pre[class*="language"]')
+  .forEach(Prism.highlightElem);
 ```
 
 到目前为止，一切都很简单，对吧？HTML 中有 `<pre>` 代码段，我们高亮显示它们。
@@ -142,8 +145,7 @@ document.querySelectorAll('pre[class*="language"]').forEach(Prism.highlightElem)
 现在让我们继续。假设我们要从服务器动态获取资料。我们将 [在本教程的后续章节](info:fetch) 中学习进行此操作的方法。目前，只需要关心我们从网络服务器获取 HTML 文章并按需显示：
 
 ```js
-let article = /* 从服务器获取新内容 */
-articleElem.innerHTML = article;
+let article = /* 从服务器获取新内容 */ (articleElem.innerHTML = article);
 ```
 
 新的 `article` HTML 可能包含代码段。我们需要对其调用 `Prism.highlightElem`，否则它们将不会被高亮显示。
@@ -153,13 +155,10 @@ articleElem.innerHTML = article;
 我们可以将该调用附加到加载文章的代码中，如下所示：
 
 ```js
-let article = /* 从服务器获取新内容 */
-articleElem.innerHTML = article;
-
+let article = /* 从服务器获取新内容 */ (articleElem.innerHTML = article);
 
 let snippets = articleElem.querySelectorAll('pre[class*="language-"]');
 snippets.forEach(Prism.highlightElem);
-
 ```
 
 ……但是，想象一下，代码中有很多地方可以加载内容：文章，测验，论坛帖子。我们是否需要在每个地方都附加一个高亮显示调用？那不太方便，也很容易忘记。
@@ -179,12 +178,11 @@ snippets.forEach(Prism.highlightElem);
 如果你运行这段代码，它将开始观察下面的元素，并高亮显示现在此处的所有代码段：
 
 ```js
-let observer = new MutationObserver(mutations => {
-
-  for(let mutation of mutations) {
+let observer = new MutationObserver((mutations) => {
+  for (let mutation of mutations) {
     // 检查新节点，有什么需要高亮显示的吗？
 
-    for(let node of mutation.addedNodes) {
+    for (let node of mutation.addedNodes) {
       // 我们只跟踪元素，跳过其他节点（例如文本节点）
       if (!(node instanceof HTMLElement)) continue;
 
@@ -194,17 +192,16 @@ let observer = new MutationObserver(mutations => {
       }
 
       // 或者可能在子树的某个地方有一个代码段？
-      for(let elem of node.querySelectorAll('pre[class*="language-"]')) {
+      for (let elem of node.querySelectorAll('pre[class*="language-"]')) {
         Prism.highlightElement(elem);
       }
     }
   }
-
 });
 
-let demoElem = document.getElementById('highlight-demo');
+let demoElem = document.getElementById("highlight-demo");
 
-observer.observe(demoElem, {childList: true, subtree: true});
+observer.observe(demoElem, { childList: true, subtree: true });
 ```
 
 下面有一个 HTML 元素，以及使用 `innerHTML` 动态填充它的 JavaScript。
@@ -216,7 +213,7 @@ observer.observe(demoElem, {childList: true, subtree: true});
 下面这段代码填充了其 `innerHTML`，这导致 `MutationObserver` 作出反应，并突出显示其内容：
 
 ```js
-let demoElem = document.getElementById('highlight-demo');
+let demoElem = document.getElementById("highlight-demo");
 
 // 动态插入带有代码段的内容
 demoElem.innerHTML = `下面是一个代码段：
@@ -248,16 +245,15 @@ observer.disconnect();
 
 // 处理未处理的变动
 let mutationRecords = observer.takeRecords();
-...
 ```
 
-垃圾回收"
+### 垃圾回收
+
 观察器在内部对节点使用弱引用。也就是说：如果一个节点被从 DOM 中删除了，并且该节点变得不可访问，那么它就会被垃圾回收。
 
 观察到 DOM 节点这一事实并不能阻止垃圾回收。
-```
 
-## 总结  
+## 总结
 
 `MutationObserver` 可以对 DOM 的变化作出反应：特性（attribute），添加/删除的元素，文本内容。
 

@@ -1,5 +1,0 @@
-<p>我们需要 <code>Origin</code>，是因为有时会没有 <code>Referer</code>。例如，当我们从 HTTPS（从高安全性访问低安全性）<code>fetch</code> HTTP 页面时，便没有 <code>Referer</code>。</p>
-<p><a href="http://en.wikipedia.org/wiki/Content_Security_Policy">内容安全策略</a> 可能会禁止发送 <code>Referer</code>。</p>
-<p>正如我们将看到的，<code>fetch</code> 也具有阻止发送 <code>Referer</code> 的选项，甚至允许修改它（在同一网站内）。</p>
-<p>根据规范，<code>Referer</code> 是一个可选的 HTTP-header。</p>
-<p>正是因为 <code>Referer</code> 不可靠，才发明了 <code>Origin</code>。浏览器保证跨源请求的正确 <code>Origin</code>。</p>

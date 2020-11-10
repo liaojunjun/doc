@@ -1,32 +1,12 @@
-fetch
- fetch-users
-  solution.md
-  task.md
- article.md
-formdata
- article.md
-fetch-progress
- article.md
-fetch-abort
- article.md
-fetch-crossorigin
- do-we-need-origin
-  solution.md
-  task.md
- article.md
-fetch-api
- article.md
-url
- article.md
-xmlhttprequest
- article.md
- hello.txt
- phones.json
-resume-upload
- article.md
-long-polling
- article.md
-websocket
- article.md
-server-sent-events
- article.md
+fetch.md
+formData.md
+fetch-progress.md
+fetch-abort.md
+fetch-crossorigin.md
+fetch-api.md
+url.md
+xmlhttprequest.md
+resume-upload.md
+long-polling.md
+websocket.md
+server-sent-events.md

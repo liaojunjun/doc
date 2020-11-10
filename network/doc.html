@@ -302,73 +302,12 @@
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
   </div><div id="page">
-      <fieldset id='_g6HUmi'>
-      <legend>solution</legend>
-      <p>要获取一个用户，我们需要：<code>fetch(&#39;https://api.github.com/users/USERNAME&#39;)</code>.</p>
-<p>如果响应的状态码是 <code>200</code>，则调用 <code>.json()</code> 来读取 JS 对象。</p>
-<p>否则，如果 <code>fetch</code> 失败，或者响应的状态码不是 <code>200</code>，我们只需要向结果数组返回 <code>null</code> 即可。</p>
-<p>代码如下：</p>
-<pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getUsers</span>(<span class="hljs-params">names</span>) </span>{
-  <span class="hljs-keyword">let</span> jobs = [];
-
-  <span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> name <span class="hljs-keyword">of</span> names</span>)</span> {
-    <span class="hljs-keyword">let</span> job = fetch(<span class="hljs-string">`https://api.github.com/users/<span class="hljs-subst">${name}</span>`</span>).then(
-      <span class="hljs-function"><span class="hljs-params">successResponse</span> =&gt;</span> {
-        <span class="hljs-keyword">if</span> (successResponse.status != <span class="hljs-number">200</span>) {
-          <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
-        } <span class="hljs-keyword">else</span> {
-          <span class="hljs-keyword">return</span> successResponse.json();
-        }
-      },
-      <span class="hljs-function"><span class="hljs-params">failResponse</span> =&gt;</span> {
-        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
-      }
-    );
-    jobs.push(job);
-  }
-
-  <span class="hljs-keyword">let</span> results = <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.all(jobs);
-
-  <span class="hljs-keyword">return</span> results;
-}</code></pre>
-<p>请注意：<code>.then</code> 调用紧跟在 <code>fetch</code> 后面，这样，当我们收到响应时，它不会等待其他的 fetch，而是立即开始读取 <code>.json()</code>。</p>
-<p>如果我们使用 <code>await Promise.all(names.map(name =&gt; fetch(...)))</code>，并在 <code>results</code> 上调用 <code>.json()</code> 方法，那么它将会等到所有 fetch 都获取到响应数据才开始解析。通过将 <code>.json()</code> 直接添加到每个 <code>fetch</code> 中，我们就能确保每个 fetch 在收到响应时都会立即开始以 JSON 格式读取数据，而不会彼此等待。</p>
-<p>这个例子表明，即使我们主要使用 <code>async/await</code>，低级别的 Promise API 仍然很有用。</p>
-
-      </fieldset>
-      
-      <fieldset id='_208rMV'>
-      <legend>task</legend>
-      <h1 id="从-github-fetch-用户信息">从 GitHub fetch 用户信息</h1>
-<p>创建一个异步函数 <code>getUsers(names)</code>，该函数接受 GitHub 登录名数组作为输入，查询 GitHub 以获取有关这些用户的信息，并返回 GitHub 用户数组。</p>
-<p>带有给定 <code>USERNAME</code> 的用户信息的 GitHub 网址是：<code>https://api.github.com/users/USERNAME</code>。</p>
-<p>沙箱中有一个测试用例。</p>
-<p>重要的细节：</p>
-<ol>
-<li>对每一个用户都应该有一个 <code>fetch</code> 请求。</li>
-<li>请求不应该相互等待。以便能够尽快获取到数据。</li>
-<li>如果任何一个请求失败了，或者没有这个用户，则函数应该返回 <code>null</code> 到结果数组中。</li>
-</ol>
-
-      </fieldset>
-      
-      <fieldset id='_ffwyV4'>
-      <legend>article</legend>
-      <h1 id="fetch">Fetch</h1>
-<p>JavaScript 可以将网络请求发送到服务器，并在需要时加载新信息。</p>
-<p>例如，我们可以使用网络请求来：</p>
-<ul>
-<li>提交订单，</li>
-<li>加载用户信息，</li>
-<li>从服务器接收最新的更新，</li>
-<li>……等。</li>
-</ul>
-<p>……所有这些都没有重新加载页面！</p>
-<p>对于来自 JavaScript 的网络请求，有一个总称术语 &quot;AJAX&quot;（<b>A</b>synchronous <b>J</b>avaScript <b>A</b>nd <b>X</b>ML 的简称）。但是，我们不必使用 XML：这个术语诞生于很久以前，所以这个词一直在那儿。</p>
-<p>有很多方式可以向服务器发送网络请求，并从服务器获取信息。</p>
-<p><code>fetch()</code> 方法是一种现代通用的方法，那么我们就从它开始吧。旧版本的浏览器不支持它（可以 polyfill），但是它在现代浏览器中的支持情况很好。</p>
+      <fieldset id='_l1JYNb'>
+      <legend>fetch</legend>
+      <p>有很多方式可以向服务器发送网络请求，并从服务器获取信息。</p>
+<p><code>fetch()</code> 方法是一种现代通用的方法。旧版本的浏览器不支持它（可以 polyfill），但是它在现代浏览器中的支持情况很好。</p>
 <p>基本语法：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> promise = fetch(url, [options])</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> promise = fetch(url, [options]);</code></pre>
 <ul>
 <li><strong><code>url</code></strong> —— 要访问的 URL。</li>
 <li><strong><code>options</code></strong> —— 可选参数：method，header 等。</li>
@@ -387,7 +326,8 @@
 <p>例如：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(url);
 
-<span class="hljs-keyword">if</span> (response.ok) { <span class="hljs-comment">// 如果 HTTP 状态码为 200-299</span>
+<span class="hljs-keyword">if</span> (response.ok) {
+  <span class="hljs-comment">// 如果 HTTP 状态码为 200-299</span>
   <span class="hljs-comment">// 获取 response body（此方法会在下面解释）</span>
   <span class="hljs-keyword">let</span> json = <span class="hljs-keyword">await</span> response.json();
 } <span class="hljs-keyword">else</span> {
@@ -404,58 +344,58 @@
 <li>另外，<code>response.body</code> 是 <a href="https://streams.spec.whatwg.org/#rs-class">ReadableStream</a> 对象，它允许你逐块读取 body，我们稍后会用一个例子解释它。</li>
 </ul>
 <p>例如，我们从 GitHub 获取最新 commits 的 JSON 对象：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-string">&#x27;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&#x27;</span>;
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url =
+  <span class="hljs-string">&quot;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&quot;</span>;
 <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(url);
-
 
 <span class="hljs-keyword">let</span> commits = <span class="hljs-keyword">await</span> response.json(); <span class="hljs-comment">// 读取 response body，并将其解析为 JSON</span>
 
-
 alert(commits[<span class="hljs-number">0</span>].author.login);</code></pre>
 <p>也可以使用纯 promise 语法，不使用 <code>await</code>：</p>
-<pre><code class="language-js">fetch(<span class="hljs-string">&#x27;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&#x27;</span>)
-  .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
-  .then(<span class="hljs-function"><span class="hljs-params">commits</span> =&gt;</span> alert(commits[<span class="hljs-number">0</span>].author.login));</code></pre>
+<pre><code class="language-js">fetch(
+  <span class="hljs-string">&quot;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&quot;</span>
+)
+  .then(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> response.json())
+  .then(<span class="hljs-function">(<span class="hljs-params">commits</span>) =&gt;</span> alert(commits[<span class="hljs-number">0</span>].author.login));</code></pre>
 <p>要获取响应文本，可以使用 <code>await response.text()</code> 代替 <code>.json()</code>：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&#x27;</span>);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(
+  <span class="hljs-string">&quot;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&quot;</span>
+);
 
 <span class="hljs-keyword">let</span> text = <span class="hljs-keyword">await</span> response.text(); <span class="hljs-comment">// 将 response body 读取为文本</span>
 
-alert(text.slice(<span class="hljs-number">0</span>, <span class="hljs-number">80</span>) + <span class="hljs-string">&#x27;...&#x27;</span>);</code></pre>
-<p>作为一个读取为二进制格式的演示示例，让我们 fetch 并显示一张 <a href="https://fetch.spec.whatwg.org">&quot;fetch&quot; 规范</a> 中的图片（<code>Blob</code> 操作的有关内容请见 <a href="info:blob">Blob</a>）：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch/logo-fetch.svg&#x27;</span>);
-
+alert(text.slice(<span class="hljs-number">0</span>, <span class="hljs-number">80</span>) + <span class="hljs-string">&quot;...&quot;</span>);</code></pre>
+<p>一个读取为二进制格式的演示示例</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&quot;/article/fetch/logo-fetch.svg&quot;</span>);
 
 <span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">await</span> response.blob(); <span class="hljs-comment">// 下载为 Blob 对象</span>
 
-
 <span class="hljs-comment">// 为其创建一个 &lt;img&gt;</span>
-<span class="hljs-keyword">let</span> img = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;img&#x27;</span>);
-img.style = <span class="hljs-string">&#x27;position:fixed;top:10px;left:10px;width:100px&#x27;</span>;
+<span class="hljs-keyword">let</span> img = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&quot;img&quot;</span>);
+img.style = <span class="hljs-string">&quot;position:fixed;top:10px;left:10px;width:100px&quot;</span>;
 <span class="hljs-built_in">document</span>.body.append(img);
 
 <span class="hljs-comment">// 显示它</span>
 img.src = URL.createObjectURL(blob);
 
-<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> { <span class="hljs-comment">// 3 秒后将其隐藏</span>
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// 3 秒后将其隐藏</span>
   img.remove();
   URL.revokeObjectURL(img.src);
 }, <span class="hljs-number">3000</span>);</code></pre>
-<pre><code class="language-warn">我们只能选择一种读取 body 的方法。
-
-如果我们已经使用了 `response.text()` 方法来获取 response，那么如果再用 `response.json()`，则不会生效，因为 body 内容已经被处理过了。
-
-```js
-let text = await response.text(); // response body 被处理了
-let parsed = await response.json(); // 失败（已经被处理过了）
-```</code></pre>
+<p>我们只能选择一种读取 body 的方法。</p>
+<p>如果我们已经使用了 <code>response.text()</code> 方法来获取 response，那么如果再用 <code>response.json()</code>，则不会生效，因为 body 内容已经被处理过了。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> text = <span class="hljs-keyword">await</span> response.text(); <span class="hljs-comment">// response body 被处理了</span>
+<span class="hljs-keyword">let</span> parsed = <span class="hljs-keyword">await</span> response.json(); <span class="hljs-comment">// 失败（已经被处理过了）</span></code></pre>
 <h2 id="response-header">Response header</h2>
 <p>Response header 位于 <code>response.headers</code> 中的一个类似于 Map 的 header 对象。</p>
 <p>它不是真正的 Map，但是它具有类似的方法，我们可以按名称（name）获取各个 header，或迭代它们：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&#x27;</span>);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(
+  <span class="hljs-string">&quot;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits&quot;</span>
+);
 
 <span class="hljs-comment">// 获取一个 header</span>
-alert(response.headers.get(<span class="hljs-string">&#x27;Content-Type&#x27;</span>)); <span class="hljs-comment">// application/json; charset=utf-8</span>
+alert(response.headers.get(<span class="hljs-string">&quot;Content-Type&quot;</span>)); <span class="hljs-comment">// application/json; charset=utf-8</span>
 
 <span class="hljs-comment">// 迭代所有 header</span>
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> [key, value] <span class="hljs-keyword">of</span> response.headers) {
@@ -465,8 +405,8 @@ alert(response.headers.get(<span class="hljs-string">&#x27;Content-Type&#x27;</s
 <p>要在 <code>fetch</code> 中设置 request header，我们可以使用 <code>headers</code> 选项。它有一个带有输出 header 的对象，如下所示：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> response = fetch(protectedUrl, {
   <span class="hljs-attr">headers</span>: {
-    <span class="hljs-attr">Authentication</span>: <span class="hljs-string">&#x27;secret&#x27;</span>
-  }
+    <span class="hljs-attr">Authentication</span>: <span class="hljs-string">&quot;secret&quot;</span>,
+  },
 });</code></pre>
 <p>……但是有一些我们无法设置的 header（详见 <a href="https://fetch.spec.whatwg.org/#forbidden-header-name">forbidden HTTP headers</a>）：</p>
 <ul>
@@ -507,19 +447,17 @@ alert(response.headers.get(<span class="hljs-string">&#x27;Content-Type&#x27;</s
 <p>JSON 形式是最常用的。</p>
 <p>例如，下面这段代码以 JSON 形式发送 <code>user</code> 对象：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> user = {
-  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;John&#x27;</span>,
-  <span class="hljs-attr">surname</span>: <span class="hljs-string">&#x27;Smith&#x27;</span>
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
+  <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Smith&quot;</span>,
 };
 
-
-<span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch/post/user&#x27;</span>, {
-  <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+<span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&quot;/article/fetch/post/user&quot;</span>, {
+  <span class="hljs-attr">method</span>: <span class="hljs-string">&quot;POST&quot;</span>,
   <span class="hljs-attr">headers</span>: {
-    <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json;charset=utf-8&#x27;</span>
+    <span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;application/json;charset=utf-8&quot;</span>,
   },
-  <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify(user)
+  <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify(user),
 });
-
 
 <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
 alert(result.message);</code></pre>
@@ -529,9 +467,14 @@ alert(result.message);</code></pre>
 <p>我们同样可以使用 <code>Blob</code> 或 <code>BufferSource</code> 对象通过 <code>fetch</code> 提交二进制数据。</p>
 <p>例如，这里有一个 <code>&lt;canvas&gt;</code>，我们可以通过在其上移动鼠标来进行绘制。点击 &quot;submit&quot; 按钮将图片发送到服务器：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin:0&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;canvasElem&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;100&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;80&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;border:1px solid&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span>
+    <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;canvasElem&quot;</span>
+    <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;100&quot;</span>
+    <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;80&quot;</span>
+    <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;border:1px solid&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
 
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;submit()&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;submit()&quot;</span> /&gt;</span>
 
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
     canvasElem.onmousemove = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
@@ -540,7 +483,7 @@ alert(result.message);</code></pre>
       ctx.stroke();
     };
 
-    <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">submit</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">submit</span>(<span class="hljs-params"></span>) </span>{
       <span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> canvasElem.toBlob(resolve, <span class="hljs-string">&#x27;image/png&#x27;</span>));
       <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch/post/image&#x27;</span>, {
         <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
@@ -551,58 +494,35 @@ alert(result.message);</code></pre>
       <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
       alert(result.message);
     }
-
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
 <p>请注意，这里我们没有手动设置 <code>Content-Type</code> header，因为 <code>Blob</code> 对象具有内建的类型（这里是 <code>image/png</code>，通过 <code>toBlob</code> 生成的）。对于 <code>Blob</code> 对象，这个类型就变成了 <code>Content-Type</code> 的值。</p>
 <p>可以在不使用 <code>async/await</code> 的情况下重写 <code>submit()</code> 函数，像这样：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">submit</span>(<span class="hljs-params"></span>) </span>{
-  canvasElem.toBlob(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">blob</span>) </span>{        
-    fetch(<span class="hljs-string">&#x27;/article/fetch/post/image&#x27;</span>, {
-      <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
-      <span class="hljs-attr">body</span>: blob
+  canvasElem.toBlob(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">blob</span>) </span>{
+    fetch(<span class="hljs-string">&quot;/article/fetch/post/image&quot;</span>, {
+      <span class="hljs-attr">method</span>: <span class="hljs-string">&quot;POST&quot;</span>,
+      <span class="hljs-attr">body</span>: blob,
     })
-      .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
-      .then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> alert(<span class="hljs-built_in">JSON</span>.stringify(result, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>)))
-  }, <span class="hljs-string">&#x27;image/png&#x27;</span>);
+      .then(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> response.json())
+      .then(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> alert(<span class="hljs-built_in">JSON</span>.stringify(result, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>)));
+  }, <span class="hljs-string">&quot;image/png&quot;</span>);
 }</code></pre>
-<h2 id="总结">总结</h2>
-<p>典型的 fetch 请求由两个 <code>await</code> 调用组成：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(url, options); <span class="hljs-comment">// 解析 response header</span>
-<span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json(); <span class="hljs-comment">// 将 body 读取为 json</span></code></pre>
-<p>或者以 promise 形式：</p>
-<pre><code class="language-js">fetch(url, options)
-  .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())
-  .then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> <span class="hljs-comment">/* process result */</span>)</code></pre>
-<p>响应的属性：</p>
-<ul>
-<li><code>response.status</code> —— response 的 HTTP 状态码，</li>
-<li><code>response.ok</code> —— HTTP 状态码为 200-299，则为 <code>true</code>。</li>
-<li><code>response.headers</code> —— 类似于 Map 的带有 HTTP header 的对象。</li>
-</ul>
-<p>获取 response body 的方法：</p>
-<ul>
-<li><strong><code>response.text()</code></strong> —— 读取 response，并以文本形式返回 response，</li>
-<li><strong><code>response.json()</code></strong> —— 将 response 解析为 JSON 对象形式，</li>
-<li><strong><code>response.formData()</code></strong> —— 以 <code>FormData</code> 对象（form/multipart 编码，参见下一章）的形式返回 response，</li>
-<li><strong><code>response.blob()</code></strong> —— 以 <a href="info:blob">Blob</a>（具有类型的二进制数据）形式返回 response，</li>
-<li><strong><code>response.arrayBuffer()</code></strong> —— 以 <a href="info:arraybuffer-binary-arrays">ArrayBuffer</a>（低级别的二进制数据）形式返回 response。</li>
-</ul>
-<p>到目前为止我们了解到的 fetch 选项：</p>
-<ul>
-<li><code>method</code> —— HTTP 方法，</li>
-<li><code>headers</code> —— 具有 request header 的对象（不是所有 header 都是被允许的）</li>
-<li><code>body</code> —— 要以 <code>string</code>，<code>FormData</code>，<code>BufferSource</code>，<code>Blob</code> 或 <code>UrlSearchParams</code> 对象的形式发送的数据（request body）。</li>
-</ul>
-<p>在下一章，我们将会看到更多 <code>fetch</code> 的选项和用例。</p>
+<h1 id="从-github-fetch-用户信息">从 GitHub fetch 用户信息</h1>
+<p>创建一个异步函数 <code>getUsers(names)</code>，该函数接受 GitHub 登录名数组作为输入，查询 GitHub 以获取有关这些用户的信息，并返回 GitHub 用户数组。</p>
+<p>带有给定 <code>USERNAME</code> 的用户信息的 GitHub 网址是：<code>https://api.github.com/users/USERNAME</code>。</p>
+<p>重要的细节：</p>
+<ol>
+<li>对每一个用户都应该有一个 <code>fetch</code> 请求。</li>
+<li>请求不应该相互等待。以便能够尽快获取到数据。</li>
+<li>如果任何一个请求失败了，或者没有这个用户，则函数应该返回 <code>null</code> 到结果数组中。</li>
+</ol>
 
       </fieldset>
       
-      <fieldset id='_znWON4'>
-      <legend>article</legend>
-      <h1 id="formdata">FormData</h1>
-<p>这一章是关于发送 HTML 表单的：带有或不带文件，带有其他字段等。</p>
-<p><a href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> 对象可以提供帮助。你可能已经猜到了，它是表示 HTML 表单数据的对象。</p>
+      <fieldset id='_HUnVem'>
+      <legend>formData</legend>
+      <p>FormData 表示 HTML 表单数据的对象。</p>
 <p>构造函数是：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> formData = <span class="hljs-keyword">new</span> FormData([form]);</code></pre>
 <p>如果提供了 HTML <code>form</code> 元素，它会自动捕获 <code>form</code> 元素字段。</p>
@@ -610,30 +530,24 @@ alert(result.message);</code></pre>
 <p>从服务器角度来看，它就像是一个普通的表单提交。</p>
 <h2 id="发送一个简单的表单">发送一个简单的表单</h2>
 <p>我们先来发送一个简单的表单。</p>
-<p>正如你所看到的，它几乎就是一行代码：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;formElem&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;John&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;surname&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Smith&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;John&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;surname&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Smith&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> /&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   formElem.onsubmit = <span class="hljs-keyword">async</span> (e) =&gt; {
     e.preventDefault();
 
-    <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/formdata/post/user&#x27;</span>, {
-      <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
-
-      body: <span class="hljs-keyword">new</span> FormData(formElem)
-
+    <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&quot;/article/formdata/post/user&quot;</span>, {
+      <span class="hljs-attr">method</span>: <span class="hljs-string">&quot;POST&quot;</span>,
+      <span class="hljs-attr">body</span>: <span class="hljs-keyword">new</span> FormData(formElem),
     });
-
     <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
-
     alert(result.message);
   };
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
-<p>在这个示例中，没有将服务器代码展示出来，因为它超出了我们当前的学习范围。服务器接受 POST 请求并回应 &quot;User saved&quot;。</p>
 <h2 id="formdata-方法">FormData 方法</h2>
 <p>我们可以使用以下方法修改 <code>FormData</code> 中的字段：</p>
 <ul>
@@ -651,31 +565,30 @@ alert(result.message);</code></pre>
 </ul>
 <p>我们也可以使用 <code>for..of</code> 循环迭代 formData 字段：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> formData = <span class="hljs-keyword">new</span> FormData();
-formData.append(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;value1&#x27;</span>);
-formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;value2&#x27;</span>);
+formData.append(<span class="hljs-string">&quot;key1&quot;</span>, <span class="hljs-string">&quot;value1&quot;</span>);
+formData.append(<span class="hljs-string">&quot;key2&quot;</span>, <span class="hljs-string">&quot;value2&quot;</span>);
 
 <span class="hljs-comment">// 列出 key/value 对</span>
-<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> [name, value] <span class="hljs-keyword">of</span> formData</span>)</span> {
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> [name, value] <span class="hljs-keyword">of</span> formData) {
   alert(<span class="hljs-string">`<span class="hljs-subst">${name}</span> = <span class="hljs-subst">${value}</span>`</span>); <span class="hljs-comment">// key1=value1，然后是 key2=value2</span>
 }</code></pre>
 <h2 id="发送带有文件的表单">发送带有文件的表单</h2>
 <p>表单始终以 <code>Content-Type: multipart/form-data</code> 来发送数据，这个编码允许发送文件。因此 <code>&lt;input type=&quot;file&quot;&gt;</code> 字段也能被发送，类似于普通的表单提交。</p>
 <p>这是具有这种形式的示例：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;formElem&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;firstName&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;John&quot;</span>&gt;</span>
-  Picture: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;file&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;picture&quot;</span> <span class="hljs-attr">accept</span>=<span class="hljs-string">&quot;image/*&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;firstName&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;John&quot;</span> /&gt;</span>
+  Picture: <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;file&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;picture&quot;</span> <span class="hljs-attr">accept</span>=<span class="hljs-string">&quot;image/*&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> /&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
   formElem.onsubmit = <span class="hljs-keyword">async</span> (e) =&gt; {
     e.preventDefault();
 
-    <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/formdata/post/user-avatar&#x27;</span>, {
-      <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+    <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&quot;/article/formdata/post/user-avatar&quot;</span>, {
+      <span class="hljs-attr">method</span>: <span class="hljs-string">&quot;POST&quot;</span>,
 
-      body: <span class="hljs-keyword">new</span> FormData(formElem)
-
+      <span class="hljs-attr">body</span>: <span class="hljs-keyword">new</span> FormData(formElem),
     });
 
     <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
@@ -684,74 +597,56 @@ formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="
   };
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <h2 id="发送具有-blob-数据的表单">发送具有 Blob 数据的表单</h2>
-<p>正如我们在 <a href="info:fetch">info:fetch</a> 一章中所看到的，以 <code>Blob</code> 发送一个动态生成的二进制数据，例如图片，是很简单的。我们可以直接将其作为 <code>fetch</code> 参数的 <code>body</code>。</p>
+<p>以 <code>Blob</code> 发送一个动态生成的二进制数据，例如图片，是很简单的。我们可以直接将其作为 <code>fetch</code> 参数的 <code>body</code>。</p>
 <p>但在实际中，通常更方便的发送图片的方式不是单独发送，而是将其作为表单的一部分，并带有附加字段（例如 &quot;name&quot; 和其他 metadata）一起发送。</p>
 <p>并且，服务器通常更适合接收多部分编码的表单（multipart-encoded form），而不是原始的二进制数据。</p>
 <p>下面这个例子使用 <code>FormData</code> 将一个来自 <code>&lt;canvas&gt;</code> 的图片和一些其他字段一起作为一个表单提交：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">body</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin:0&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;canvasElem&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;100&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;80&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;border:1px solid&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span>
+    <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;canvasElem&quot;</span>
+    <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;100&quot;</span>
+    <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;80&quot;</span>
+    <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;border:1px solid&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
 
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;submit()&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Submit&quot;</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">&quot;submit()&quot;</span> /&gt;</span>
 
   <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-    canvasElem.onmousemove = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
-      <span class="hljs-keyword">let</span> ctx = canvasElem.getContext(<span class="hljs-string">&#x27;2d&#x27;</span>);
+    canvasElem.onmousemove = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) </span>{
+      <span class="hljs-keyword">let</span> ctx = canvasElem.getContext(<span class="hljs-string">&quot;2d&quot;</span>);
       ctx.lineTo(e.clientX, e.clientY);
       ctx.stroke();
     };
 
     <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">submit</span>(<span class="hljs-params"></span>) </span>{
-      <span class="hljs-keyword">let</span> imageBlob = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> canvasElem.toBlob(resolve, <span class="hljs-string">&#x27;image/png&#x27;</span>));
-
+      <span class="hljs-keyword">let</span> imageBlob = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span>
+        canvasElem.toBlob(resolve, <span class="hljs-string">&quot;image/png&quot;</span>)
+      );
 
       <span class="hljs-keyword">let</span> formData = <span class="hljs-keyword">new</span> FormData();
       formData.append(<span class="hljs-string">&quot;firstName&quot;</span>, <span class="hljs-string">&quot;John&quot;</span>);
       formData.append(<span class="hljs-string">&quot;image&quot;</span>, imageBlob, <span class="hljs-string">&quot;image.png&quot;</span>);
-    
 
-      <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/formdata/post/image-form&#x27;</span>, {
-        <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
-        <span class="hljs-attr">body</span>: formData
+      <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&quot;/article/formdata/post/image-form&quot;</span>, {
+        <span class="hljs-attr">method</span>: <span class="hljs-string">&quot;POST&quot;</span>,
+        <span class="hljs-attr">body</span>: formData,
       });
       <span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> response.json();
       alert(result.message);
     }
-
   </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></code></pre>
 <p>请注意图片 <code>Blob</code> 是如何添加的：</p>
 <pre><code class="language-js">formData.append(<span class="hljs-string">&quot;image&quot;</span>, imageBlob, <span class="hljs-string">&quot;image.png&quot;</span>);</code></pre>
 <p>就像表单中有 <code>&lt;input type=&quot;file&quot; name=&quot;image&quot;&gt;</code> 一样，用户从他们的文件系统中使用数据 <code>imageBlob</code>（第二个参数）提交了一个名为 <code>image.png</code>（第三个参数）的文件。</p>
 <p>服务器读取表单数据和文件，就好像它是常规的表单提交一样。</p>
-<h2 id="总结">总结</h2>
-<p><a href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> 对象用于捕获 HTML 表单，并使用 <code>fetch</code> 或其他网络方法提交。</p>
-<p>我们可以从 HTML 表单创建 <code>new FormData(form)</code>，也可以创建一个完全没有表单的对象，然后使用以下方法附加字段：</p>
-<ul>
-<li><code>formData.append(name, value)</code></li>
-<li><code>formData.append(name, blob, fileName)</code></li>
-<li><code>formData.set(name, value)</code></li>
-<li><code>formData.set(name, blob, fileName)</code></li>
-</ul>
-<p>让我们在这里注意两个特点：</p>
-<ol>
-<li><code>set</code> 方法会移除具有相同名称（name）的字段，而 <code>append</code> 不会。</li>
-<li>要发送文件，需要使用三个参数的语法，最后一个参数是文件名，一般是通过 <code>&lt;input type=&quot;file&quot;&gt;</code> 从用户文件系统中获取的。</li>
-</ol>
-<p>其他方法是：</p>
-<ul>
-<li><code>formData.delete(name)</code></li>
-<li><code>formData.get(name)</code></li>
-<li><code>formData.has(name)</code></li>
-</ul>
-<p>这就是它的全貌！</p>
 
       </fieldset>
       
-      <fieldset id='_ArFdSS'>
-      <legend>article</legend>
-      <h1 id="fetch：下载进度">Fetch：下载进度</h1>
-<p><code>fetch</code> 方法允许去跟踪 <strong>下载</strong> 进度。</p>
-<p>请注意：到目前为止，<code>fetch</code> 方法无法跟踪 <strong>上传</strong> 进度。对于这个目的，请使用 <a href="info:xmlhttprequest">XMLHttpRequest</a>，我们在后面章节会讲到。</p>
+      <fieldset id='_tZ3eVU'>
+      <legend>fetch-progress</legend>
+      <p><code>fetch</code> 方法允许去跟踪 <strong>下载</strong> 进度。</p>
+<p>请注意：到目前为止，<code>fetch</code> 方法无法跟踪 <strong>上传</strong> 进度。对于这个目的，请使用 XMLHttpRequest</p>
 <p>要跟踪下载进度，我们可以使用 <code>response.body</code> 属性。它是 <code>ReadableStream</code> —— 一个特殊的对象，它可以逐块（chunk）提供 body。在 <a href="https://streams.spec.whatwg.org/#rs-class">Streams API</a> 规范中有对 <code>ReadableStream</code> 的详细描述。</p>
 <p>与 <code>response.text()</code>，<code>response.json()</code> 和其他方法不同，<code>response.body</code> 给予了对进度读取的完全控制，我们可以随时计算下载了多少。</p>
 <p>这是从 <code>response.body</code> 读取 response 的示例代码：</p>
@@ -759,39 +654,40 @@ formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="
 <span class="hljs-keyword">const</span> reader = response.body.getReader();
 
 <span class="hljs-comment">// 在 body 下载时，一直为无限循环</span>
-<span class="hljs-function"><span class="hljs-title">while</span>(<span class="hljs-params"><span class="hljs-literal">true</span></span>)</span> {
+<span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
   <span class="hljs-comment">// 当最后一块下载完成时，done 值为 true</span>
   <span class="hljs-comment">// value 是块字节的 Uint8Array</span>
-  <span class="hljs-keyword">const</span> {done, value} = <span class="hljs-keyword">await</span> reader.read();
+  <span class="hljs-keyword">const</span> { done, value } = <span class="hljs-keyword">await</span> reader.read();
 
   <span class="hljs-keyword">if</span> (done) {
     <span class="hljs-keyword">break</span>;
   }
 
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Received <span class="hljs-subst">${value.length}</span> bytes`</span>)
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Received <span class="hljs-subst">${value.length}</span> bytes`</span>);
 }</code></pre>
 <p><code>await reader.read()</code> 调用的结果是一个具有两个属性的对象：</p>
 <ul>
 <li><strong><code>done</code></strong> —— 当读取完成时为 <code>true</code>，否则为 <code>false</code>。</li>
 <li><strong><code>value</code></strong> —— 字节的类型化数组：<code>Uint8Array</code>。</li>
 </ul>
-<pre><code class="language-smart">Streams API 还描述了如果使用 `for await..of` 循环异步迭代 `ReadableStream`，但是目前为止，它还未得到很好的支持（参见 [浏览器问题](https://github.com/whatwg/streams/issues/778#issuecomment-461341033)），所以我们使用了 `while` 循环。</code></pre>
 <p>我们在循环中接收响应块（response chunk），直到加载完成，也就是：直到 <code>done</code> 为 <code>true</code>。</p>
 <p>要将进度打印出来，我们只需要将每个接收到的片段 <code>value</code> 的长度（length）加到 counter 即可。</p>
 <p>这是获取响应，并在控制台中记录进度的完整工作示例，下面有更多说明：</p>
 <pre><code class="language-js"><span class="hljs-comment">// Step 1：启动 fetch，并获得一个 reader</span>
-<span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits?per_page=100&#x27;</span>);
+<span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(
+  <span class="hljs-string">&quot;https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits?per_page=100&quot;</span>
+);
 
 <span class="hljs-keyword">const</span> reader = response.body.getReader();
 
 <span class="hljs-comment">// Step 2：获得总长度（length）</span>
-<span class="hljs-keyword">const</span> contentLength = +response.headers.get(<span class="hljs-string">&#x27;Content-Length&#x27;</span>);
+<span class="hljs-keyword">const</span> contentLength = +response.headers.get(<span class="hljs-string">&quot;Content-Length&quot;</span>);
 
 <span class="hljs-comment">// Step 3：读取数据</span>
 <span class="hljs-keyword">let</span> receivedLength = <span class="hljs-number">0</span>; <span class="hljs-comment">// 当前接收到了这么多字节</span>
 <span class="hljs-keyword">let</span> chunks = []; <span class="hljs-comment">// 接收到的二进制块的数组（包括 body）</span>
-<span class="hljs-function"><span class="hljs-title">while</span>(<span class="hljs-params"><span class="hljs-literal">true</span></span>)</span> {
-  <span class="hljs-keyword">const</span> {done, value} = <span class="hljs-keyword">await</span> reader.read();
+<span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+  <span class="hljs-keyword">const</span> { done, value } = <span class="hljs-keyword">await</span> reader.read();
 
   <span class="hljs-keyword">if</span> (done) {
     <span class="hljs-keyword">break</span>;
@@ -800,15 +696,15 @@ formData.append(<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="
   chunks.push(value);
   receivedLength += value.length;
 
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Received <span class="hljs-subst">${receivedLength}</span> of <span class="hljs-subst">${contentLength}</span>`</span>)
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Received <span class="hljs-subst">${receivedLength}</span> of <span class="hljs-subst">${contentLength}</span>`</span>);
 }
 
 <span class="hljs-comment">// Step 4：将块连接到单个 Uint8Array</span>
 <span class="hljs-keyword">let</span> chunksAll = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(receivedLength); <span class="hljs-comment">// (4.1)</span>
 <span class="hljs-keyword">let</span> position = <span class="hljs-number">0</span>;
-<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> chunk <span class="hljs-keyword">of</span> chunks</span>)</span> {
-    chunksAll.set(chunk, position); <span class="hljs-comment">// (4.2)</span>
-    position += chunk.length;
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> chunk <span class="hljs-keyword">of</span> chunks) {
+  chunksAll.set(chunk, position); <span class="hljs-comment">// (4.2)</span>
+  position += chunk.length;
 }
 
 <span class="hljs-comment">// Step 5：解码成字符串</span>
@@ -820,13 +716,13 @@ alert(commits[<span class="hljs-number">0</span>].author.login);</code></pre>
 <p>让我们一步步解释下这个过程：</p>
 <ol>
 <li><p>我们像往常一样执行 <code>fetch</code>，但不是调用 <code>response.json()</code>，而是获得了一个流读取器（stream reader）<code>response.body.getReader()</code>。</p>
-<p> 请注意，我们不能同时使用这两种方法来读取相同的响应。要么使用流读取器，要么使用 reponse 方法来获取结果。</p>
+<p>请注意，我们不能同时使用这两种方法来读取相同的响应。要么使用流读取器，要么使用 reponse 方法来获取结果。</p>
 </li>
 <li><p>在读取数据之前，我们可以从 <code>Content-Length</code> header 中得到完整的响应长度。</p>
-<p> 跨源请求中可能不存在这个 header（请参见 <a href="info:fetch-crossorigin">info:fetch-crossorigin</a>），并且从技术上讲，服务器可以不设置它。但是通常情况下它都会在那里。</p>
+<p>跨源请求中可能不存在这个 header，并且从技术上讲，服务器可以不设置它。但是通常情况下它都会在那里。</p>
 </li>
 <li><p>调用 <code>await reader.read()</code>，直到它完成。</p>
-<p> 我们将响应块收集到数组 <code>chunks</code> 中。这很重要，因为在使用完（consumed）响应后，我们将无法使用 <code>response.json()</code> 或者其他方式（你可以试试，将会出现 error）去“重新读取”它。</p>
+<p>我们将响应块收集到数组 <code>chunks</code> 中。这很重要，因为在使用完（consumed）响应后，我们将无法使用 <code>response.json()</code> 或者其他方式（你可以试试，将会出现 error）去“重新读取”它。</p>
 </li>
 <li><p>最后，我们有了一个 <code>chunks</code> —— 一个 <code>Uint8Array</code> 字节块数组。我们需要将这些块合并成一个结果。但不幸的是，没有单个方法可以将它们串联起来，所以这里需要一些代码来实现：</p>
 <ol>
@@ -835,58 +731,54 @@ alert(commits[<span class="hljs-number">0</span>].author.login);</code></pre>
 </ol>
 </li>
 <li><p>我们的结果现在储存在 <code>chunksAll</code> 中。但它是一个字节数组，不是字符串。</p>
-<p> 要创建一个字符串，我们需要解析这些字节。可以使用内建的 <a href="info:text-decoder">TextDecoder</a> 对象完成。然后，我们可以 <code>JSON.parse</code> 它，如果有必要的话。</p>
-<p> 如果我们需要的是二进制内容而不是字符串呢？这更简单。用下面这行代码替换掉第 4 和第 5 步，这行代码从所有块创建一个 <code>Blob</code>：</p>
+<p>要创建一个字符串，我们需要解析这些字节。可以使用内建的 TextDecoder 对象完成。然后，我们可以 <code>JSON.parse</code> 它，如果有必要的话。</p>
+<p>如果我们需要的是二进制内容而不是字符串呢？这更简单。用下面这行代码替换掉第 4 和第 5 步，这行代码从所有块创建一个 <code>Blob</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> blob = <span class="hljs-keyword">new</span> Blob(chunks);</code></pre>
 </li>
 </ol>
 <p>最后，我们得到了结果（以字符串或 blob 的形式表示，什么方便就用什么），并在过程中对进度进行了跟踪。</p>
-<p>再强调一遍，这不能用于 <strong>上传</strong> 过程（现在无法通过 <code>fetch</code> 获取），仅用于 <strong>下载</strong> 过程。</p>
 
       </fieldset>
       
-      <fieldset id='_7uB62m'>
-      <legend>article</legend>
-      <h1 id="fetch：中止（abort）">Fetch：中止（Abort）</h1>
-<p>正如我们所知道的，<code>fetch</code> 返回一个 promise。JavaScript 通常并没有“中止” promise 的概念。那么我们怎样才能中止 <code>fetch</code> 呢？</p>
+      <fieldset id='_PRD5QB'>
+      <legend>fetch-abort</legend>
+      <p>正如我们所知道的，<code>fetch</code> 返回一个 promise。JavaScript 通常并没有“中止” promise 的概念。那么我们怎样才能中止 <code>fetch</code> 呢？</p>
 <p>为此有一个特殊的内建对象：<code>AbortController</code>，它不仅可以中止 <code>fetch</code>，还可以中止其他异步任务。</p>
 <p>用法很简单：</p>
 <ul>
 <li><p>Step 1：创建一个控制器（controller）：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> controller = <span class="hljs-keyword">new</span> AbortController();</code></pre>
-<p>  控制器是一个极其简单的对象。</p>
+<p>控制器是一个极其简单的对象。</p>
 <ul>
-<li><p>它具有单个方法 <code>abort()</code>，和单个属性 <code>signal</code>。</p>
-</li>
-<li><p>当 <code>abort()</code> 被调用时：</p>
-<ul>
+<li>它具有单个方法 <code>abort()</code>，和单个属性 <code>signal</code>。</li>
+<li>当 <code>abort()</code> 被调用时：<ul>
 <li><code>abort</code> 事件就会在 <code>controller.signal</code> 上触发</li>
 <li><code>controller.signal.aborted</code> 属性变为 <code>true</code>。</li>
 </ul>
+</li>
+</ul>
 <p>任何对 <code>abort()</code> 调用感兴趣的人，都可以在 <code>controller.signal</code> 上设置监听器来对其进行跟踪。</p>
-<p>就像这样（目前还没有 <code>fetch</code>）：</p>
+<p>就像这样 ：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> controller = <span class="hljs-keyword">new</span> AbortController();
 <span class="hljs-keyword">let</span> signal = controller.signal;
 
 <span class="hljs-comment">// 当 controller.abort() 被调用时触发</span>
-signal.addEventListener(<span class="hljs-string">&#x27;abort&#x27;</span>, <span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;abort!&quot;</span>));
+signal.addEventListener(<span class="hljs-string">&quot;abort&quot;</span>, <span class="hljs-function">() =&gt;</span> alert(<span class="hljs-string">&quot;abort!&quot;</span>));
 
 controller.abort(); <span class="hljs-comment">// 中止！</span>
 
 alert(signal.aborted); <span class="hljs-comment">// true</span></code></pre>
 </li>
-</ul>
-</li>
 <li><p>Step 2：将 <code>signal</code> 属性传递给 <code>fetch</code> 选项：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> controller = <span class="hljs-keyword">new</span> AbortController();
 fetch(url, {
-  <span class="hljs-attr">signal</span>: controller.signal
+  <span class="hljs-attr">signal</span>: controller.signal,
 });</code></pre>
-<p>  <code>fetch</code> 方法知道如何与 <code>AbortController</code> 一起使用，它会监听 <code>signal</code> 上的 <code>abort</code>。</p>
+<p><code>fetch</code> 方法知道如何与 <code>AbortController</code> 一起使用，它会监听 <code>signal</code> 上的 <code>abort</code>。</p>
 </li>
 <li><p>Step 3：调用 <code>controller.abort()</code> 来中止：</p>
 <pre><code class="language-js">controller.abort();</code></pre>
-<p>  我们完成啦：<code>fetch</code> 从 <code>signal</code> 获取了事件并中止了请求。</p>
+<p>我们完成啦：<code>fetch</code> 从 <code>signal</code> 获取了事件并中止了请求。</p>
 </li>
 </ul>
 <p>当一个 fetch 被中止，它的 promise 就会以一个 error <code>AbortError</code> reject，因此我们应该对其进行处理：</p>
@@ -895,11 +787,12 @@ fetch(url, {
 <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> controller.abort(), <span class="hljs-number">1000</span>);
 
 <span class="hljs-keyword">try</span> {
-  <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;/article/fetch-abort/demo/hang&#x27;</span>, {
-    <span class="hljs-attr">signal</span>: controller.signal
+  <span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&quot;/article/fetch-abort/demo/hang&quot;</span>, {
+    <span class="hljs-attr">signal</span>: controller.signal,
   });
-} <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">err</span>)</span> {
-  <span class="hljs-keyword">if</span> (err.name == <span class="hljs-string">&#x27;AbortError&#x27;</span>) { <span class="hljs-comment">// handle abort()</span>
+} <span class="hljs-keyword">catch</span> (err) {
+  <span class="hljs-keyword">if</span> (err.name == <span class="hljs-string">&quot;AbortError&quot;</span>) {
+    <span class="hljs-comment">// handle abort()</span>
     alert(<span class="hljs-string">&quot;Aborted!&quot;</span>);
   } <span class="hljs-keyword">else</span> {
     <span class="hljs-keyword">throw</span> err;
@@ -942,49 +835,13 @@ fetch(url, {
 
       </fieldset>
       
-      <fieldset id='_gvYrZU'>
-      <legend>solution</legend>
-      <p>我们需要 <code>Origin</code>，是因为有时会没有 <code>Referer</code>。例如，当我们从 HTTPS（从高安全性访问低安全性）<code>fetch</code> HTTP 页面时，便没有 <code>Referer</code>。</p>
-<p><a href="http://en.wikipedia.org/wiki/Content_Security_Policy">内容安全策略</a> 可能会禁止发送 <code>Referer</code>。</p>
-<p>正如我们将看到的，<code>fetch</code> 也具有阻止发送 <code>Referer</code> 的选项，甚至允许修改它（在同一网站内）。</p>
-<p>根据规范，<code>Referer</code> 是一个可选的 HTTP-header。</p>
-<p>正是因为 <code>Referer</code> 不可靠，才发明了 <code>Origin</code>。浏览器保证跨源请求的正确 <code>Origin</code>。</p>
-
-      </fieldset>
-      
-      <fieldset id='_RaxJGD'>
-      <legend>task</legend>
-      <p>importance: 5</p>
-<hr>
-<h1 id="我们为什么需要源（origin）？">我们为什么需要源（Origin）？</h1>
-<p>你可能知道有一个 HTTP-header <code>Referer</code>，它通常包含发起网络请求的页面的 url。</p>
-<p>例如，当从 <code>http://javascript.info/some/url</code> fetch <code>http://google.com</code> 时，header 看起来如下：</p>
-<pre><code class="language-http">Accept: */*
-Accept-Charset: utf-8
-Accept-Encoding: gzip,deflate,sdch
-Connection: keep-alive
-Host: google.com
-
-Origin: http://javascript.info
-Referer: http://javascript.info/some/url
-</code></pre>
-<p>正如你所看到的，存在 <code>Referer</code> 和 <code>Origin</code>。</p>
-<p>问题是：</p>
-<ol>
-<li>为什么需要 <code>Origin</code>，如果 <code>Referer</code> 甚至具有更多信息？</li>
-<li>如果这里没有 <code>Referer</code> 或 <code>Origin</code> 可行吗，还是说会出问题？</li>
-</ol>
-
-      </fieldset>
-      
-      <fieldset id='_ehUOUq'>
-      <legend>article</legend>
-      <h1 id="fetch：跨源请求">Fetch：跨源请求</h1>
-<p>如果我们向另一个网站发送 <code>fetch</code> 请求，则该请求可能会失败。</p>
+      <fieldset id='_Y4gAmz'>
+      <legend>fetch-crossorigin</legend>
+      <p>如果我们向另一个网站发送 <code>fetch</code> 请求，则该请求可能会失败。</p>
 <p>例如，让我们尝试向 <code>http://example.com</code> 发送 <code>fetch</code> 请求：</p>
 <pre><code class="language-js"><span class="hljs-keyword">try</span> {
-  <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;http://example.com&#x27;</span>);
-} <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">err</span>)</span> {
+  <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&quot;http://example.com&quot;</span>);
+} <span class="hljs-keyword">catch</span> (err) {
   alert(err); <span class="hljs-comment">// fetch 失败</span>
 }</code></pre>
 <p>正如所料，获取失败。</p>
@@ -998,21 +855,6 @@ Referer: http://javascript.info/some/url
 <p>这个简单有力的规则是互联网安全的基础。例如，来自 <code>hacker.com</code> 的脚本无法访问 <code>gmail.com</code> 上的用户邮箱。基于这样的规则，人们感到很安全。</p>
 <p>在那时候，JavaScript 并没有任何特殊的执行网络请求的方法。它只是一种用来装饰网页的玩具语言而已。</p>
 <p>但是 Web 开发人员需要更多功能。人们发明了各种各样的技巧去突破该限制，并向其他网站发出请求。</p>
-<h3 id="使用表单">使用表单</h3>
-<p>其中一种和其他服务器通信的方法是在那里提交一个 <code>&lt;form&gt;</code>。人们将它提交到 <code>&lt;iframe&gt;</code>，只是为了停留在当前页面，像这样：</p>
-<pre><code class="language-html"><span class="hljs-comment">&lt;!-- 表单目标 --&gt;</span>
-
-<span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;iframe&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
-
-
-<span class="hljs-comment">&lt;!-- 表单可以由 JavaScript 动态生成并提交 --&gt;</span>
-
-<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;iframe&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;POST&quot;</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;http://another.com/…&quot;</span>&gt;</span>
-
-  ...
-<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></code></pre>
-<p>因此，即使没有网络方法，也可以向其他网站发出 GET/POST 请求，因为表单可以将数据发送到任何地方。但是由于禁止从其他网站访问 <code>&lt;iframe&gt;</code> 中的内容，因此就无法读取响应。</p>
-<p>确切地说，实际上有一些技巧能够解决这个问题，这在 iframe 和页面中都需要添加特殊脚本。因此，与 iframe 的通信在技术上是可能的。现在我们没必要讲其细节内容，我们还是让这些古董代码不要再出现了吧。</p>
 <h3 id="使用-script">使用 script</h3>
 <p>另一个技巧是使用 <code>script</code> 标签。<code>script</code> 可以具有任何域的 <code>src</code>，例如 <code>&lt;script src=&quot;http://another.com/…&quot;&gt;</code>。也可以执行来自任何网站的 <code>script</code>。</p>
 <p>如果一个网站，例如 <code>another.com</code> 试图公开这种访问方式的数据，则会使用所谓的 &quot;JSONP (JSON with padding)&quot; 协议。</p>
@@ -1026,7 +868,7 @@ Referer: http://javascript.info/some/url
 }</code></pre>
 </li>
 <li><p>然后我们创建一个特性（attribute）为 <code>src=&quot;http://another.com/weather.json?callback=gotWeather&quot;</code> 的 <code>&lt;script&gt;</code> 标签，使用我们的函数名作为它的 <code>callback</code> URL-参数。</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> script = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;script&#x27;</span>);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> script = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&quot;script&quot;</span>);
 script.src = <span class="hljs-string">`http://another.com/weather.json?callback=gotWeather`</span>;
 <span class="hljs-built_in">document</span>.body.append(script);</code></pre>
 </li>
@@ -1034,7 +876,7 @@ script.src = <span class="hljs-string">`http://another.com/weather.json?callback
 <pre><code class="language-js"><span class="hljs-comment">// 我们期望来自服务器的回答看起来像这样：</span>
 gotWeather({
   <span class="hljs-attr">temperature</span>: <span class="hljs-number">25</span>,
-  <span class="hljs-attr">humidity</span>: <span class="hljs-number">78</span>
+  <span class="hljs-attr">humidity</span>: <span class="hljs-number">78</span>,
 });</code></pre>
 </li>
 <li><p>当远程脚本加载并执行时，<code>gotWeather</code> 函数将运行，并且因为它是我们的函数，我们就有了需要的数据。</p>
@@ -1084,7 +926,6 @@ Origin: https://javascript.info
 <li>它确保发送的跨源请求带有正确的 <code>Origin</code>。</li>
 <li>它检查响应中的许可 <code>Access-Control-Allow-Origin</code>，如果存在，则允许 JavaScript 访问响应，否则将失败并报错。</li>
 </ol>
-<p><img src="xhr-another-domain.svg" alt=""></p>
 <p>这是一个带有服务器许可的响应示例：</p>
 <pre><code class="language-http">200 OK
 Content-Type:text/html; charset=UTF-8
@@ -1102,9 +943,6 @@ Access-Control-Allow-Origin: https://javascript.info
 <li><code>Pragma</code></li>
 </ul>
 <p>访问任何其他 response header 都将导致 error。</p>
-<pre><code class="language-smart">请注意：列表中没有 `Content-Length` header！
-
-该 header 包含完整的响应长度。因此，如果我们正在下载某些内容，并希望跟踪进度百分比，则需要额外的权限才能访问该 header（请见下文）。</code></pre>
 <p>要授予 JavaScript 对任何其他 response header 的访问权限，服务器必须发送 <code>Access-Control-Expose-Headers</code> header。它包含一个以逗号分隔的应该被设置为可访问的非简单 header 名称列表。</p>
 <p>例如：</p>
 <pre><code class="language-http">200 OK
@@ -1131,14 +969,13 @@ Access-Control-Expose-Headers: Content-Length,API-Key
 <li><code>Access-Control-Allow-Headers</code> 必须具有一个允许的 header 列表。</li>
 <li>另外，header <code>Access-Control-Max-Age</code> 可以指定缓存此权限的秒数。因此，浏览器不是必须为满足给定权限的后续请求发送预检。</li>
 </ul>
-<p><img src="xhr-preflight.svg" alt=""></p>
 <p>让我们用一个例子来一步步看一下它是怎么工作的，对于一个跨源的 <code>PATCH</code> 请求（此方法经常被用于更新数据）：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;https://site.com/service.json&#x27;</span>, {
-  <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;PATCH&#x27;</span>,
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&quot;https://site.com/service.json&quot;</span>, {
+  <span class="hljs-attr">method</span>: <span class="hljs-string">&quot;PATCH&quot;</span>,
   <span class="hljs-attr">headers</span>: {
-    <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span>,
-    <span class="hljs-string">&#x27;API-Key&#x27;</span>: <span class="hljs-string">&#x27;secret&#x27;</span>
-  }
+    <span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;application/json&quot;</span>,
+    <span class="hljs-string">&quot;API-Key&quot;</span>: <span class="hljs-string">&quot;secret&quot;</span>,
+  },
 });</code></pre>
 <p>这里有三个理由解释为什么它不是一个简单请求（其实一个就够了）：</p>
 <ul>
@@ -1189,19 +1026,17 @@ Origin: https://javascript.info</code></pre>
 <p>服务器不应该忘记在主响应中添加 <code>Access-Control-Allow-Origin</code>。成功的预检并不能免除此要求：</p>
 <pre><code class="language-http"><span class="hljs-attribute">Access-Control-Allow-Origin</span>: https://javascript.info</code></pre>
 <p>然后，JavaScript 可以读取主服务器响应了。</p>
-<pre><code class="language-smart">预检请求发生在“幕后”，它对 JavaScript 不可见。
-
-JavaScript 仅获取对主请求的响应，如果没有服务器许可，则获得一个 error。</code></pre>
+<p>预检请求发生在“幕后”，它对 JavaScript 不可见。</p>
+<p>JavaScript 仅获取对主请求的响应，如果没有服务器许可，则获得一个 error。</p>
 <h2 id="凭据（credentials）">凭据（Credentials）</h2>
 <p>默认情况下，由 JavaScript 代码发起的跨源请求不会带来任何凭据（cookies 或者 HTTP 认证（HTTP authentication））。</p>
-<p>这对于 HTTP 请求来说并不常见。通常，对 <code>http://site.com</code> 的请求附带有该域的所有 cookie。但是由 JavaScript 方法发出的跨源请求是个例外。</p>
 <p>例如，<code>fetch(&#39;http://another.com&#39;)</code> 不会发送任何 cookie，即使那些 (!) 属于 <code>another.com</code> 域的 cookie。</p>
 <p>为什么？</p>
 <p>这是因为具有凭据的请求比没有凭据的请求要强大得多。如果被允许，它会使用它们的凭据授予 JavaScript 代表用户行为和访问敏感信息的全部权力。</p>
 <p>服务器真的这么信任这种脚本吗？是的，它必须显式地带有允许请求的凭据和附加 header。</p>
 <p>要在 <code>fetch</code> 中发送凭据，我们需要添加 <code>credentials: &quot;include&quot;</code> 选项，像这样：</p>
-<pre><code class="language-js">fetch(<span class="hljs-string">&#x27;http://another.com&#x27;</span>, {
-  <span class="hljs-attr">credentials</span>: <span class="hljs-string">&quot;include&quot;</span>
+<pre><code class="language-js">fetch(<span class="hljs-string">&quot;http://another.com&quot;</span>, {
+  <span class="hljs-attr">credentials</span>: <span class="hljs-string">&quot;include&quot;</span>,
 });</code></pre>
 <p>现在，<code>fetch</code> 将把源自 <code>another.com</code> 的 cookie 和我们的请求发送到该网站。</p>
 <p>如果服务器同意接受 <strong>带有凭据</strong> 的请求，则除了 <code>Access-Control-Allow-Origin</code> 外，服务器还应该在响应中添加 header <code>Access-Control-Allow-Credentials: true</code>。</p>
@@ -1210,61 +1045,13 @@ JavaScript 仅获取对主请求的响应，如果没有服务器许可，则获
 Access-Control-Allow-Origin: https://javascript.info
 Access-Control-Allow-Credentials: true</code></pre>
 <p>请注意：对于具有凭据的请求，禁止 <code>Access-Control-Allow-Origin</code> 使用星号 <code>*</code>。如上所示，它必须有一个确切的源。这是另一项安全措施，以确保服务器真的知道它信任的发出此请求的是谁。</p>
-<h2 id="总结">总结</h2>
-<p>从浏览器角度来看，有两种跨源请求：“简单”请求和其他请求。</p>
-<p><a href="http://www.w3.org/TR/cors/#terminology">简单请求</a> 必须满足下列条件：</p>
-<ul>
-<li>方法：GET，POST 或 HEAD。</li>
-<li>header —— 我们仅能设置：<ul>
-<li><code>Accept</code></li>
-<li><code>Accept-Language</code></li>
-<li><code>Content-Language</code></li>
-<li><code>Content-Type</code> 的值为 <code>application/x-www-form-urlencoded</code>，<code>multipart/form-data</code> 或 <code>text/plain</code>。</li>
-</ul>
-</li>
-</ul>
-<p>简单请求和其他请求的本质区别在于，自古以来使用 <code>&lt;form&gt;</code> 或 <code>&lt;script&gt;</code> 标签进行简单请求就是可行的，而长期以来浏览器都不能进行非简单请求。</p>
-<p>所以，实际区别在于，简单请求会使用 <code>Origin</code> header 并立即发送，而对于其他请求，浏览器会发出初步的“预检”请求，以请求许可。</p>
-<p><strong>对于简单请求：</strong></p>
-<ul>
-<li>→ 浏览器发送带有源的 <code>Origin</code> header。</li>
-<li>← 对于没有凭据的请求（默认不发送），服务器应该设置：<ul>
-<li><code>Access-Control-Allow-Origin</code> 为 <code>*</code> 或与 <code>Origin</code> 的值相同</li>
-</ul>
-</li>
-<li>← 对于具有凭据的请求，服务器应该设置：<ul>
-<li><code>Access-Control-Allow-Origin</code> 值与 <code>Origin</code> 的相同</li>
-<li><code>Access-Control-Allow-Credentials</code> 为 <code>true</code></li>
-</ul>
-</li>
-</ul>
-<p>此外，要授予 JavaScript 访问除 <code>Cache-Control</code>，<code>Content-Language</code>，<code>Content-Type</code>，<code>Expires</code>，<code>Last-Modified</code> 或 <code>Pragma</code> 外的任何 response header 的权限，服务器应该在 header <code>Access-Control-Expose-Headers</code> 中列出允许的那些 header。</p>
-<p><strong>对于非简单请求，会在请求之前发出初步“预检”请求：</strong></p>
-<ul>
-<li>→ 浏览器将具有以下 header 的 <code>OPTIONS</code> 请求发送到相同的 URL：<ul>
-<li><code>Access-Control-Request-Method</code> 有请求方法。</li>
-<li><code>Access-Control-Request-Headers</code> 以逗号分隔的“非简单” header 列表。</li>
-</ul>
-</li>
-<li>← 服务器应该响应状态码为 200 和 header：<ul>
-<li><code>Access-Control-Allow-Methods</code> 带有允许的方法的列表，</li>
-<li><code>Access-Control-Allow-Headers</code> 带有允许的 header 的列表，</li>
-<li><code>Access-Control-Max-Age</code> 带有指定缓存权限的秒数。</li>
-</ul>
-</li>
-<li>然后，发出实际请求，应用先前的“简单”方案。</li>
-</ul>
 
       </fieldset>
       
-      <fieldset id='_prpvOf'>
-      <legend>article</legend>
-      <h1 id="fetch-api">Fetch API</h1>
-<p>到目前为止，我们已经对 <code>fetch</code> 相当了解了。</p>
+      <fieldset id='_woMcXR'>
+      <legend>fetch-api</legend>
+      <p>到目前为止，我们已经对 <code>fetch</code> 相当了解了。</p>
 <p>现在让我们来看看 <code>fetch</code> 的剩余 API，来了解它的全部本领吧。</p>
-<pre><code class="language-smart">请注意：这些选项 (option) 大多都很少使用。即使跳过本章，你也可以很好地使用 `fetch`。
-
-但是，知道 `fetch` 可以做什么还是很好的，所以如果需要，你可以来看看这些细节内容。</code></pre>
 <p>这是所有可能的 <code>fetch</code> 选项及其默认值（注释中标注了可选值）的完整列表：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> promise = fetch(url, {
   <span class="hljs-attr">method</span>: <span class="hljs-string">&quot;GET&quot;</span>, <span class="hljs-comment">// POST，PUT，DELETE，等。</span>
@@ -1286,27 +1073,20 @@ Access-Control-Allow-Credentials: true</code></pre>
   <span class="hljs-attr">signal</span>: <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// AbortController 来中止请求</span>
   <span class="hljs-attr">window</span>: <span class="hljs-built_in">window</span> <span class="hljs-comment">// null</span>
 });</code></pre>
-<p>一个令人印象深刻的列表，对吧?</p>
-<p>我们已经在 <a href="info:fetch">info:fetch</a> 一章中详细介绍了 <code>method</code>，<code>headers</code> 和 <code>body</code>。</p>
-<p>在 <a href="info:fetch-abort">info:fetch-abort</a> 一章中介绍了 <code>signal</code> 选项。</p>
-<p>现在让我们学习其余的本领。</p>
 <h2 id="referrer，referrerpolicy">referrer，referrerPolicy</h2>
 <p>这些选项决定了 <code>fetch</code> 如何设置 HTTP 的 <code>Referer</code> header。</p>
 <p>通常来说，这个 header 是被自动设置的，并包含了发出请求的页面的 url。在大多数情况下，它一点也不重要，但有时出于安全考虑，删除或缩短它是有意义的。</p>
 <p><strong><code>referer</code> 选项允许设置在当前域的任何 <code>Referer</code>，或者移除它。</strong></p>
 <p>要不发送 referer，可以将 <code>referer</code> 设置为空字符串：</p>
-<pre><code class="language-js">fetch(<span class="hljs-string">&#x27;/page&#x27;</span>, {
-
-  referrer: <span class="hljs-string">&quot;&quot;</span> <span class="hljs-comment">// 没有 Referer header</span>
-
+<pre><code class="language-js">fetch(<span class="hljs-string">&quot;/page&quot;</span>, {
+  <span class="hljs-attr">referrer</span>: <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-comment">// 没有 Referer header</span>
 });</code></pre>
 <p>设置在当前域内的另一个 url：</p>
-<pre><code class="language-js">fetch(<span class="hljs-string">&#x27;/page&#x27;</span>, {
+<pre><code class="language-js">fetch(<span class="hljs-string">&quot;/page&quot;</span>, {
   <span class="hljs-comment">// 假设我们在 https://javascript.info</span>
   <span class="hljs-comment">// 我们可以设置任何 Referer header，但必须是在当前域内的</span>
 
-  referrer: <span class="hljs-string">&quot;https://javascript.info/anotherpage&quot;</span>
-
+  referrer: <span class="hljs-string">&quot;https://javascript.info/anotherpage&quot;</span>,
 });</code></pre>
 <p><strong><code>referrerPolicy</code> 选项为 <code>Referer</code> 设置一般的规则。</strong></p>
 <p>请求分为 3 种类型：</p>
@@ -1390,70 +1170,56 @@ Access-Control-Allow-Credentials: true</code></pre>
 <p>如果我们发送了一个 <code>fetch</code>，则默认情况下，它总是发送带有页面完整 url 的 <code>Referer</code> header（我们从 HTTPS 向 HTTP 发送请求的情况除外，这种情况下没有 <code>Referer</code>）。</p>
 <p>例如 <code>Referer: https://javascript.info/admin/secret/paths</code>。</p>
 <p>如果我们想让其他网站只知道域的部分，而不是 URL 路径，我们可以这样设置选项：</p>
-<pre><code class="language-js">fetch(<span class="hljs-string">&#x27;https://another.com/page&#x27;</span>, {
+<pre><code class="language-js">fetch(<span class="hljs-string">&quot;https://another.com/page&quot;</span>, {
   <span class="hljs-comment">// ...</span>
-  <span class="hljs-attr">referrerPolicy</span>: <span class="hljs-string">&quot;origin-when-cross-origin&quot;</span> <span class="hljs-comment">// Referer: https://javascript.info</span>
+  <span class="hljs-attr">referrerPolicy</span>: <span class="hljs-string">&quot;origin-when-cross-origin&quot;</span>, <span class="hljs-comment">// Referer: https://javascript.info</span>
 });</code></pre>
 <p>我们可以将其置于所有 <code>fetch</code> 调用中，也可以将其集成到我们项目的执行所有请求并在内部使用 <code>fetch</code> 的 JavaScript 库中。</p>
 <p>与默认行为相比，它的唯一区别在于，对于跨源请求，<code>fetch</code> 只发送 URL 域的部分（例如 <code>https://javascript.info</code>，没有路径）。对于同源请求，我们仍然可以获得完整的 <code>Referer</code>（可能对于调试目的是有用的）。</p>
-<p>```smart header=&quot;Referrer policy 不仅适用于 <code>fetch</code>&quot;
+<p>Referrer policy 不仅适用于 <code>fetch</code>&quot;
 在 <a href="https://w3c.github.io/webappsec-referrer-policy/">规范</a> 中描述的 referrer policy，不仅适用于 <code>fetch</code>，它还具有全局性。</p>
 <p>特别是，可以使用 <code>Referrer-Policy</code> HTTP header，或者为每个链接设置 <code>&lt;a rel=&quot;noreferrer&quot;&gt;</code>，来为整个页面设置默认策略（policy）。</p>
-<pre><code>
-## mode
-
-`mode` 选项是一种安全措施，可以防止偶发的跨源请求：
-
-- **`&quot;cors&quot;`** —— 默认值，允许跨源请求，如 &lt;info:fetch-crossorigin&gt; 一章所述，
-- **`&quot;same-origin&quot;`** —— 禁止跨源请求，
-- **`&quot;no-cors&quot;`** —— 只允许简单的跨源请求。
-
-当 `fetch` 的 URL 来自于第三方，并且我们想要一个“断电开关”来限制跨源能力时，此选项可能很有用。
-
-## credentials
-
-`credentials` 选项指定 `fetch` 是否应该随请求发送 cookie 和 HTTP-Authorization header。
-
-- **`&quot;same-origin&quot;`** —— 默认值，对于跨源请求不发送，
-- **`&quot;include&quot;`** —— 总是发送，需要来自跨源服务器的 `Accept-Control-Allow-Credentials`，才能使 JavaScript 能够访问响应，详细内容在 &lt;info:fetch-crossorigin&gt; 一章有详细介绍，
-- **`&quot;omit&quot;`** —— 不发送，即使对于同源请求。
-
-## cache
-
-默认情况下，`fetch` 请求使用标准的 HTTP 缓存。就是说，它遵从 `Expires`，`Cache-Control` header，发送 `If-Modified-Since`，等。就像常规的 HTTP 请求那样。
-
-使用 `cache` 选项可以忽略 HTTP 缓存或者对其用法进行微调：
-
-- **`&quot;default&quot;`** —— `fetch` 使用标准的 HTTP 缓存规则和 header，
-- **`&quot;no-store&quot;`** —— 完全忽略 HTTP 缓存，如果我们设置 header `If-Modified-Since`，`If-None-Match`，`If-Unmodified-Since`，`If-Match`，或 `If-Range`，则此模式会成为默认模式，
-- **`&quot;reload&quot;`** —— 不从 HTTP 缓存中获取结果（如果有），而是使用响应填充缓存（如果 response header 允许），
-- **`&quot;no-cache&quot;`** —— 如果有一个已缓存的响应，则创建一个有条件的请求，否则创建一个普通的请求。使用响应填充 HTTP 缓存，
-- **`&quot;force-cache&quot;`** —— 使用来自 HTTP 缓存的响应，即使该响应已过时（stale）。如果 HTTP 缓存中没有响应，则创建一个常规的 HTTP 请求，行为像正常那样，
-- **`&quot;only-if-cached&quot;`** —— 使用来自 HTTP 缓存的响应，即使该响应已过时（stale）。如果 HTTP 缓存中没有响应，则报错。只有当 `mode` 为 `same-origin` 时生效。
-
-## redirect
-
-通常来说，`fetch` 透明地遵循 HTTP 重定向，例如 301，302 等。
-
-`redirect` 选项允许对此进行更改：
-
-- **`&quot;follow&quot;`** —— 默认值，遵循 HTTP 重定向，
-- **`&quot;error&quot;`** —— HTTP 重定向时报错，
-- **`&quot;manual&quot;`** —— 不遵循 HTTP 重定向，但 `response.url` 将是一个新的 URL，并且 `response redirectd` 将为 `true`，以便我们能够手动执行重定向到新的 URL（如果需要的话）。
-
-## integrity
-
-`integrity` 选项允许检查响应是否与已知的预先校验和相匹配。
-
-正如 [规范](https://w3c.github.io/webappsec-subresource-integrity/) 所描述的，支持的哈希函数有 SHA-256，SHA-384，和 SHA-512，可能还有其他的，这取决于浏览器。
-
-例如，我们下载一个文件，并且我们知道它的 SHA-256 校验和为 &quot;abcdef&quot;（当然，实际校验和会更长）。
-
-我们可以将其放在 `integrity` 选项中，就像这样:
-
-```js
-fetch(&#x27;http://site.com/file&#x27;, {
-  integrity: &#x27;sha256-abcdef&#x27;
+<h2 id="mode">mode</h2>
+<p><code>mode</code> 选项是一种安全措施，可以防止偶发的跨源请求：</p>
+<ul>
+<li><strong><code>&quot;cors&quot;</code></strong> —— 默认值，允许跨源请求，如 <a href="info:fetch-crossorigin">info:fetch-crossorigin</a> 一章所述，</li>
+<li><strong><code>&quot;same-origin&quot;</code></strong> —— 禁止跨源请求，</li>
+<li><strong><code>&quot;no-cors&quot;</code></strong> —— 只允许简单的跨源请求。</li>
+</ul>
+<p>当 <code>fetch</code> 的 URL 来自于第三方，并且我们想要一个“断电开关”来限制跨源能力时，此选项可能很有用。</p>
+<h2 id="credentials">credentials</h2>
+<p><code>credentials</code> 选项指定 <code>fetch</code> 是否应该随请求发送 cookie 和 HTTP-Authorization header。</p>
+<ul>
+<li><strong><code>&quot;same-origin&quot;</code></strong> —— 默认值，对于跨源请求不发送，</li>
+<li><strong><code>&quot;include&quot;</code></strong> —— 总是发送，需要来自跨源服务器的 <code>Accept-Control-Allow-Credentials</code>，才能使 JavaScript 能够访问响应，详细内容在 <a href="info:fetch-crossorigin">info:fetch-crossorigin</a> 一章有详细介绍，</li>
+<li><strong><code>&quot;omit&quot;</code></strong> —— 不发送，即使对于同源请求。</li>
+</ul>
+<h2 id="cache">cache</h2>
+<p>默认情况下，<code>fetch</code> 请求使用标准的 HTTP 缓存。就是说，它遵从 <code>Expires</code>，<code>Cache-Control</code> header，发送 <code>If-Modified-Since</code>，等。就像常规的 HTTP 请求那样。</p>
+<p>使用 <code>cache</code> 选项可以忽略 HTTP 缓存或者对其用法进行微调：</p>
+<ul>
+<li><strong><code>&quot;default&quot;</code></strong> —— <code>fetch</code> 使用标准的 HTTP 缓存规则和 header，</li>
+<li><strong><code>&quot;no-store&quot;</code></strong> —— 完全忽略 HTTP 缓存，如果我们设置 header <code>If-Modified-Since</code>，<code>If-None-Match</code>，<code>If-Unmodified-Since</code>，<code>If-Match</code>，或 <code>If-Range</code>，则此模式会成为默认模式，</li>
+<li><strong><code>&quot;reload&quot;</code></strong> —— 不从 HTTP 缓存中获取结果（如果有），而是使用响应填充缓存（如果 response header 允许），</li>
+<li><strong><code>&quot;no-cache&quot;</code></strong> —— 如果有一个已缓存的响应，则创建一个有条件的请求，否则创建一个普通的请求。使用响应填充 HTTP 缓存，</li>
+<li><strong><code>&quot;force-cache&quot;</code></strong> —— 使用来自 HTTP 缓存的响应，即使该响应已过时（stale）。如果 HTTP 缓存中没有响应，则创建一个常规的 HTTP 请求，行为像正常那样，</li>
+<li><strong><code>&quot;only-if-cached&quot;</code></strong> —— 使用来自 HTTP 缓存的响应，即使该响应已过时（stale）。如果 HTTP 缓存中没有响应，则报错。只有当 <code>mode</code> 为 <code>same-origin</code> 时生效。</li>
+</ul>
+<h2 id="redirect">redirect</h2>
+<p>通常来说，<code>fetch</code> 透明地遵循 HTTP 重定向，例如 301，302 等。</p>
+<p><code>redirect</code> 选项允许对此进行更改：</p>
+<ul>
+<li><strong><code>&quot;follow&quot;</code></strong> —— 默认值，遵循 HTTP 重定向，</li>
+<li><strong><code>&quot;error&quot;</code></strong> —— HTTP 重定向时报错，</li>
+<li><strong><code>&quot;manual&quot;</code></strong> —— 不遵循 HTTP 重定向，但 <code>response.url</code> 将是一个新的 URL，并且 <code>response redirectd</code> 将为 <code>true</code>，以便我们能够手动执行重定向到新的 URL（如果需要的话）。</li>
+</ul>
+<h2 id="integrity">integrity</h2>
+<p><code>integrity</code> 选项允许检查响应是否与已知的预先校验和相匹配。</p>
+<p>正如 <a href="https://w3c.github.io/webappsec-subresource-integrity/">规范</a> 所描述的，支持的哈希函数有 SHA-256，SHA-384，和 SHA-512，可能还有其他的，这取决于浏览器。</p>
+<p>例如，我们下载一个文件，并且我们知道它的 SHA-256 校验和为 &quot;abcdef&quot;（当然，实际校验和会更长）。</p>
+<p>我们可以将其放在 <code>integrity</code> 选项中，就像这样:</p>
+<pre><code class="language-js">fetch(<span class="hljs-string">&quot;http://site.com/file&quot;</span>, {
+  <span class="hljs-attr">integrity</span>: <span class="hljs-string">&quot;sha256-abcdef&quot;</span>,
 });</code></pre>
 <p>然后 <code>fetch</code> 将自行计算 SHA-256 并将其与我们的字符串进行比较。如果不匹配，则会触发错误。</p>
 <h2 id="keepalive">keepalive</h2>
@@ -1461,13 +1227,12 @@ fetch(&#x27;http://site.com/file&#x27;, {
 <p>例如，我们收集有关当前访问者是如何使用我们的页面（鼠标点击，他查看的页面片段）的统计信息，以分析和改善用户体验。</p>
 <p>当访问者离开我们的网页时 —— 我们希望能够将数据保存到我们的服务器上。</p>
 <p>我们可以使用 <code>window.onunload</code> 事件来实现：</p>
-<pre><code class="language-js"><span class="hljs-built_in">window</span>.onunload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  fetch(<span class="hljs-string">&#x27;/analytics&#x27;</span>, {
-    <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+<pre><code class="language-js"><span class="hljs-built_in">window</span>.onunload = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  fetch(<span class="hljs-string">&quot;/analytics&quot;</span>, {
+    <span class="hljs-attr">method</span>: <span class="hljs-string">&quot;POST&quot;</span>,
     <span class="hljs-attr">body</span>: <span class="hljs-string">&quot;statistics&quot;</span>,
 
-    keepalive: <span class="hljs-literal">true</span>
-
+    <span class="hljs-attr">keepalive</span>: <span class="hljs-literal">true</span>,
   });
 };</code></pre>
 <p>通常，当一个文档被卸载时（unloaded），所有相关的网络请求都会被中止。但是，<code>keepalive</code> 选项告诉浏览器，即使在离开页面后，也要在后台执行请求。所以，此选项对于我们的请求成功至关重要。</p>
@@ -1486,39 +1251,37 @@ fetch(&#x27;http://site.com/file&#x27;, {
 
       </fieldset>
       
-      <fieldset id='_Cb6m1h'>
-      <legend>article</legend>
-      <h1 id="url-对象">URL 对象</h1>
-<p>内建的 <a href="https://url.spec.whatwg.org/#api">URL</a> 类提供了用于创建和解析 URL 的便捷接口。</p>
+      <fieldset id='_y8R4nt'>
+      <legend>url</legend>
+      <p>内建的 <a href="https://url.spec.whatwg.org/#api">URL</a> 类提供了用于创建和解析 URL 的便捷接口。</p>
 <p>没有任何一个网络方法一定需要使用 <code>URL</code> 对象，字符串就足够了。所以从技术上讲，我们并不是必须使用 <code>URL</code>。但是有些时候 <code>URL</code> 对象真的很有用。</p>
 <h2 id="创建-url-对象">创建 URL 对象</h2>
 <p>创建一个新 <code>URL</code> 对象的语法：</p>
-<pre><code class="language-js"><span class="hljs-keyword">new</span> URL(url, [base])</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> URL(url, [base]);</code></pre>
 <ul>
 <li><strong><code>url</code></strong> —— 完整的 URL，或者仅路径（如果设置了 base），</li>
 <li><strong><code>base</code></strong> —— 可选的 base URL：如果设置了此参数，且参数 <code>url</code> 只有路径，则会根据这个 <code>base</code> 生成 URL。</li>
 </ul>
 <p>例如：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://javascript.info/profile/admin&#x27;</span>);</code></pre>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&quot;https://javascript.info/profile/admin&quot;</span>);</code></pre>
 <p>下面这两个 URL 是一样的：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> url1 = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://javascript.info/profile/admin&#x27;</span>);
-<span class="hljs-keyword">let</span> url2 = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;/profile/admin&#x27;</span>, <span class="hljs-string">&#x27;https://javascript.info&#x27;</span>);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url1 = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&quot;https://javascript.info/profile/admin&quot;</span>);
+<span class="hljs-keyword">let</span> url2 = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&quot;/profile/admin&quot;</span>, <span class="hljs-string">&quot;https://javascript.info&quot;</span>);
 
 alert(url1); <span class="hljs-comment">// https://javascript.info/profile/admin</span>
 alert(url2); <span class="hljs-comment">// https://javascript.info/profile/admin</span></code></pre>
 <p>我们可以根据相对于现有 URL 的路径轻松创建一个新的 URL：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://javascript.info/profile/admin&#x27;</span>);
-<span class="hljs-keyword">let</span> newUrl = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;tester&#x27;</span>, url);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&quot;https://javascript.info/profile/admin&quot;</span>);
+<span class="hljs-keyword">let</span> newUrl = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&quot;tester&quot;</span>, url);
 
 alert(newUrl); <span class="hljs-comment">// https://javascript.info/profile/tester</span></code></pre>
 <p><code>URL</code> 对象立即允许我们访问其组件，因此这是一个解析 url 的好方法，例如：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://javascript.info/url&#x27;</span>);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&quot;https://javascript.info/url&quot;</span>);
 
 alert(url.protocol); <span class="hljs-comment">// https:</span>
-alert(url.host);     <span class="hljs-comment">// javascript.info</span>
+alert(url.host); <span class="hljs-comment">// javascript.info</span>
 alert(url.pathname); <span class="hljs-comment">// /url</span></code></pre>
 <p>这是 URL 组件的备忘单：</p>
-<p><img src="url-object.svg" alt=""></p>
 <ul>
 <li><code>href</code> 是完整的 URL，与 <code>url.toString()</code> 相同</li>
 <li><code>protocol</code> 以冒号字符 <code>:</code> 结尾</li>
@@ -1526,18 +1289,13 @@ alert(url.pathname); <span class="hljs-comment">// /url</span></code></pre>
 <li><code>hash</code> 以哈希字符 <code>#</code> 开头</li>
 <li>如果存在 HTTP 身份验证，则这里可能还会有 <code>user</code> 和 <code>password</code> 属性：<code>http://login:password@site.com</code>（图片上没有，很少被用到）。</li>
 </ul>
-<p>```smart header=&quot;我们可以将 <code>URL</code> 对象传递给网络（和大多数其他）方法，而不是字符串&quot;
+<p>我们可以将 <code>URL</code> 对象传递给网络（和大多数其他）方法，而不是字符串&quot;
 我们可以在 <code>fetch</code> 或 <code>XMLHttpRequest</code> 中使用 <code>URL</code> 对象，几乎可以在任何需要 URL 字符串的地方都能使用 <code>URL</code> 对象。</p>
 <p>通常，<code>URL</code> 对象可以替代字符串传递给任何方法，因为大多数方法都会执行字符串转换，这会将 <code>URL</code> 对象转换为具有完整 URL 的字符串。</p>
-<pre><code>
-## SearchParams &quot;?...&quot;
-
-假设，我们想要创建一个具有给定搜索参数的 url，例如：`https://google.com/search?query=JavaScript`。
-
-我们可以在 URL 字符串中提供它们：
-
-```js
-new URL(&#x27;https://google.com/search?query=JavaScript&#x27;)</code></pre>
+<h2 id="searchparams-">SearchParams &quot;?...&quot;</h2>
+<p>假设，我们想要创建一个具有给定搜索参数的 url，例如：<code>https://google.com/search?query=JavaScript</code>。</p>
+<p>我们可以在 URL 字符串中提供它们：</p>
+<pre><code class="language-js"><span class="hljs-keyword">new</span> URL(<span class="hljs-string">&quot;https://google.com/search?query=JavaScript&quot;</span>);</code></pre>
 <p>……但是，如果参数中包含空格，非拉丁字母等（具体参见下文），参数就需要被编码。</p>
 <p>因此，有一个 URL 属性用于解决这个问题：<code>url.searchParams</code>，<a href="https://url.spec.whatwg.org/#urlsearchparams">URLSearchParams</a> 类型的对象。</p>
 <p>它为搜索参数提供了简便的方法：</p>
@@ -1552,19 +1310,19 @@ new URL(&#x27;https://google.com/search?query=JavaScript&#x27;)</code></pre>
 <li>……并且它是可迭代的，类似于 <code>Map</code>。</li>
 </ul>
 <p>包含空格和标点符号的参数的示例：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://google.com/search&#x27;</span>);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&quot;https://google.com/search&quot;</span>);
 
-url.searchParams.set(<span class="hljs-string">&#x27;q&#x27;</span>, <span class="hljs-string">&#x27;test me!&#x27;</span>); <span class="hljs-comment">// 添加带有一个空格和一个 ! 的参数</span>
+url.searchParams.set(<span class="hljs-string">&quot;q&quot;</span>, <span class="hljs-string">&quot;test me!&quot;</span>); <span class="hljs-comment">// 添加带有一个空格和一个 ! 的参数</span>
 
 alert(url); <span class="hljs-comment">// https://google.com/search?q=test+me%21</span>
 
-url.searchParams.set(<span class="hljs-string">&#x27;tbs&#x27;</span>, <span class="hljs-string">&#x27;qdr:y&#x27;</span>); <span class="hljs-comment">// 添加带有一个冒号 : 的参数</span>
+url.searchParams.set(<span class="hljs-string">&quot;tbs&quot;</span>, <span class="hljs-string">&quot;qdr:y&quot;</span>); <span class="hljs-comment">// 添加带有一个冒号 : 的参数</span>
 
 <span class="hljs-comment">// 参数会被自动编码</span>
 alert(url); <span class="hljs-comment">// https://google.com/search?q=test+me%21&amp;tbs=qdr%3Ay</span>
 
 <span class="hljs-comment">// 遍历搜索参数（被解码）</span>
-<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> [name, value] <span class="hljs-keyword">of</span> url.searchParams</span>)</span> {
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> [name, value] <span class="hljs-keyword">of</span> url.searchParams) {
   alert(<span class="hljs-string">`<span class="hljs-subst">${name}</span>=<span class="hljs-subst">${value}</span>`</span>); <span class="hljs-comment">// q=test me!，然后是 tbs=qdr:y</span>
 }</code></pre>
 <h2 id="编码（encoding）">编码（encoding）</h2>
@@ -1573,9 +1331,9 @@ alert(url); <span class="hljs-comment">// https://google.com/search?q=test+me%21
 <p>好消息是 <code>URL</code> 对象会自动处理这些。我们仅需提供未编码的参数，然后将 <code>URL</code> 转换为字符串：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 在此示例中使用一些西里尔字符</span>
 
-<span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&#x27;https://ru.wikipedia.org/wiki/Тест&#x27;</span>);
+<span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&quot;https://ru.wikipedia.org/wiki/Тест&quot;</span>);
 
-url.searchParams.set(<span class="hljs-string">&#x27;key&#x27;</span>, <span class="hljs-string">&#x27;ъ&#x27;</span>);
+url.searchParams.set(<span class="hljs-string">&quot;key&quot;</span>, <span class="hljs-string">&quot;ъ&quot;</span>);
 alert(url); <span class="hljs-comment">//https://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D1%81%D1%82?key=%D1%8A</span></code></pre>
 <p>正如你所看到的，url 路径中的 <code>Тест</code> 和 <code>ъ</code> 参数都被编码了。</p>
 <p>URL 变长了，因为每个西里尔字母用 UTF-8 编码的两个字节表示，因此这里有两个 <code>%..</code> 实体（entities）。</p>
@@ -1601,40 +1359,37 @@ alert(url); <span class="hljs-comment">//https://ru.wikipedia.org/wiki/%D0%A2%D0
 </ul>
 <p>所以，对于一个 URL 整体，我们可以使用 <code>encodeURI</code>：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 在 url 路径中使用西里尔字符</span>
-<span class="hljs-keyword">let</span> url = <span class="hljs-built_in">encodeURI</span>(<span class="hljs-string">&#x27;http://site.com/привет&#x27;</span>);
+<span class="hljs-keyword">let</span> url = <span class="hljs-built_in">encodeURI</span>(<span class="hljs-string">&quot;http://site.com/привет&quot;</span>);
 
 alert(url); <span class="hljs-comment">// http://site.com/%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82</span></code></pre>
 <p>……而对于 URL 参数，我们应该改用 <code>encodeURIComponent</code>：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> music = <span class="hljs-built_in">encodeURIComponent</span>(<span class="hljs-string">&#x27;Rock&amp;Roll&#x27;</span>);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> music = <span class="hljs-built_in">encodeURIComponent</span>(<span class="hljs-string">&quot;Rock&amp;Roll&quot;</span>);
 
 <span class="hljs-keyword">let</span> url = <span class="hljs-string">`https://google.com/search?q=<span class="hljs-subst">${music}</span>`</span>;
 alert(url); <span class="hljs-comment">// https://google.com/search?q=Rock%26Roll</span></code></pre>
 <p>将其与 <code>encodeURI</code> 进行比较：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> music = <span class="hljs-built_in">encodeURI</span>(<span class="hljs-string">&#x27;Rock&amp;Roll&#x27;</span>);
+<pre><code class="language-js"><span class="hljs-keyword">let</span> music = <span class="hljs-built_in">encodeURI</span>(<span class="hljs-string">&quot;Rock&amp;Roll&quot;</span>);
 
 <span class="hljs-keyword">let</span> url = <span class="hljs-string">`https://google.com/search?q=<span class="hljs-subst">${music}</span>`</span>;
 alert(url); <span class="hljs-comment">// https://google.com/search?q=Rock&amp;Roll</span></code></pre>
 <p>我们可以看到，<code>encodeURI</code> 没有对 <code>&amp;</code> 进行编码，因为它对于整个 URL 来说是合法的字符。</p>
 <p>但是，我们应该编码在搜索参数中的 <code>&amp;</code> 字符，否则，我们将得到 <code>q=Rock&amp;Roll</code> —— 实际上是 <code>q=Rock</code> 加上某个晦涩的参数 <code>Roll</code>。不符合预期。</p>
 <p>因此，对于每个搜索参数，我们应该使用 <code>encodeURIComponent</code>，以将其正确地插入到 URL 字符串中。最安全的方式是对 name 和 value 都进行编码，除非我们能够绝对确保它只包含允许的字符。</p>
-<p>````smart header=&quot;<code>encode*</code> 与 <code>URL</code> 之间的编码差异&quot;
-类 <a href="https://url.spec.whatwg.org/#url-class">URL</a> 和 <a href="https://url.spec.whatwg.org/#interface-urlsearchparams">URLSearchParams</a> 基于最新的 URL 规范：<a href="https://tools.ietf.org/html/rfc3986">RFC3986</a>，而 <code>encode*</code> 函数是基于过时的 <a href="https://www.ietf.org/rfc/rfc2396.txt">RFC2396</a>。</p>
+<p>``encode*<code>与</code>URL<code>之间的编码差异&quot; 类 [URL](https://url.spec.whatwg.org/#url-class) 和 [URLSearchParams](https://url.spec.whatwg.org/#interface-urlsearchparams) 基于最新的 URL 规范：[RFC3986](https://tools.ietf.org/html/rfc3986)，而</code>encode*` 函数是基于过时的 <a href="https://www.ietf.org/rfc/rfc2396.txt">RFC2396</a>。</p>
 <p>它们之间有一些区别，例如对 IPv6 地址的编码方式不同：</p>
 <pre><code class="language-js"><span class="hljs-comment">// IPv6 地址的合法 url</span>
-<span class="hljs-keyword">let</span> url = <span class="hljs-string">&#x27;http://[2607:f8b0:4005:802::1007]/&#x27;</span>;
+<span class="hljs-keyword">let</span> url = <span class="hljs-string">&quot;http://[2607:f8b0:4005:802::1007]/&quot;</span>;
 
 alert(<span class="hljs-built_in">encodeURI</span>(url)); <span class="hljs-comment">// http://%5B2607:f8b0:4005:802::1007%5D/</span>
 alert(<span class="hljs-keyword">new</span> URL(url)); <span class="hljs-comment">// http://[2607:f8b0:4005:802::1007]/</span></code></pre>
 <p>正如我们所看到的，<code>encodeURI</code> 替换了方括号 <code>[...]</code>，这是不正确的，原因是：在 RFC2396 (August 1998) 时代，还不存在 IPv6 url。</p>
 <p>这种情况很少见，<code>encode*</code> 函数在大多数情况下都能正常工作。</p>
-<pre><code></code></pre>
 
       </fieldset>
       
-      <fieldset id='_qmzTfC'>
-      <legend>article</legend>
-      <h1 id="xmlhttprequest">XMLHttpRequest</h1>
-<p><code>XMLHttpRequest</code> 是一个内建的浏览器对象，它允许使用 JavaScript 发送 HTTP 请求。</p>
+      <fieldset id='_yUgDRP'>
+      <legend>xmlhttprequest</legend>
+      <p><code>XMLHttpRequest</code> 是一个内建的浏览器对象，它允许使用 JavaScript 发送 HTTP 请求。</p>
 <p>虽然它的名字里面有 &quot;XML&quot; 一词，但它可以操作任何数据，而不仅仅是 XML 格式。我们可以用它来上传/下载文件，跟踪进度等。</p>
 <p>现如今，我们有一个更为现代的方法叫做 <code>fetch</code>，它的出现使得 <code>XMLHttpRequest</code> 在某种程度上被弃用。</p>
 <p>在现代 Web 开发中，出于以下三种原因，我们还在使用 <code>XMLHttpRequest</code>：</p>
@@ -1643,7 +1398,6 @@ alert(<span class="hljs-keyword">new</span> URL(url)); <span class="hljs-comment
 <li>我们需要兼容旧浏览器，并且不想用 polyfill（例如为了使脚本更小）。</li>
 <li>我们需要做一些 <code>fetch</code> 目前无法做到的事情，例如跟踪上传进度。</li>
 </ol>
-<p>这些话听起来熟悉吗？如果是，那么请继续阅读下面的 <code>XMLHttpRequest</code> 相关内容吧。如果还不是很熟悉的话，那么请先阅读 <a href="info:fetch">info:fetch</a> 一章的内容。</p>
 <h2 id="xmlhttprequest-基础">XMLHttpRequest 基础</h2>
 <p>XMLHttpRequest 有两种执行模式：同步（synchronous）和异步（asynchronous）。</p>
 <p>我们首先来看看最常用的异步模式：</p>
@@ -1651,52 +1405,47 @@ alert(<span class="hljs-keyword">new</span> URL(url)); <span class="hljs-comment
 <ol>
 <li><p>创建 <code>XMLHttpRequest</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();</code></pre>
-<p> 此构造器没有参数。</p>
+<p>此构造器没有参数。</p>
 </li>
 <li><p>初始化它，通常就在 <code>new XMLHttpRequest</code> 之后：</p>
-<pre><code class="language-js">xhr.open(method, URL, [<span class="hljs-keyword">async</span>, user, password])</code></pre>
-<p> 此方法指定请求的主要参数：</p>
+<pre><code class="language-js">xhr.open(method, URL, [<span class="hljs-keyword">async</span>, user, password]);</code></pre>
+<p>此方法指定请求的主要参数：</p>
 <ul>
-<li><p><code>method</code> —— HTTP 方法。通常是 <code>&quot;GET&quot;</code> 或 <code>&quot;POST&quot;</code>。</p>
-</li>
-<li><p><code>URL</code> —— 要请求的 URL，通常是一个字符串，也可以是 <a href="info:url">URL</a> 对象。</p>
-</li>
-<li><p><code>async</code> —— 如果显式地设置为 <code>false</code>，那么请求将会以同步的方式处理，我们稍后会讲到它。</p>
-</li>
-<li><p><code>user</code>，<code>password</code> —— HTTP 基本身份验证（如果需要的话）的登录名和密码。</p>
+<li><code>method</code> —— HTTP 方法。通常是 <code>&quot;GET&quot;</code> 或 <code>&quot;POST&quot;</code>。</li>
+<li><code>URL</code> —— 要请求的 URL，通常是一个字符串，也可以是 <a href="info:url">URL</a> 对象。</li>
+<li><code>async</code> —— 如果显式地设置为 <code>false</code>，那么请求将会以同步的方式处理，我们稍后会讲到它。</li>
+<li><code>user</code>，<code>password</code> —— HTTP 基本身份验证（如果需要的话）的登录名和密码。</li>
+</ul>
 <p>请注意，<code>open</code> 调用与其名称相反，不会建立连接。它仅配置请求，而网络活动仅以 <code>send</code> 调用开启。</p>
 </li>
-</ul>
-</li>
 <li><p>发送请求。</p>
-<pre><code class="language-js">xhr.send([body])</code></pre>
-<p> 这个方法会建立连接，并将请求发送到服务器。可选参数 <code>body</code> 包含了 request body。</p>
-<p> 一些请求方法，像 <code>GET</code> 没有 request body。还有一些请求方法，像 <code>POST</code> 使用 <code>body</code> 将数据发送到服务器。我们稍后会看到相应示例。</p>
+<pre><code class="language-js">xhr.send([body]);</code></pre>
+<p>这个方法会建立连接，并将请求发送到服务器。可选参数 <code>body</code> 包含了 request body。</p>
+<p>一些请求方法，像 <code>GET</code> 没有 request body。还有一些请求方法，像 <code>POST</code> 使用 <code>body</code> 将数据发送到服务器。我们稍后会看到相应示例。</p>
 </li>
 <li><p>监听 <code>xhr</code> 事件以获取响应。</p>
-<p> 这三个事件是最常用的：</p>
+<p>这三个事件是最常用的：</p>
 <ul>
-<li><p><code>load</code> —— 当请求完成（即使 HTTP 状态为 400 或 500 等），并且响应已完全下载。</p>
-</li>
-<li><p><code>error</code> —— 当无法发出请求，例如网络中断或者无效的 URL。</p>
-</li>
-<li><p><code>progress</code> —— 在下载响应期间定期触发，报告已经下载了多少。</p>
-<pre><code class="language-js">xhr.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-alert(<span class="hljs-string">`Loaded: <span class="hljs-subst">${xhr.status}</span> <span class="hljs-subst">${xhr.response}</span>`</span>);
-};
-
-xhr.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// 仅在根本无法发出请求时触发</span>
-alert(<span class="hljs-string">`Network Error`</span>);
-};
-
-xhr.onprogress = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{ <span class="hljs-comment">// 定期触发</span>
-<span class="hljs-comment">// event.loaded —— 已经下载了多少字节</span>
-<span class="hljs-comment">// event.lengthComputable = true，当服务器发送了 Content-Length header 时</span>
-<span class="hljs-comment">// event.total —— 总字节数（如果 lengthComputable 为 true）</span>
-alert(<span class="hljs-string">`Received <span class="hljs-subst">${event.loaded}</span> of <span class="hljs-subst">${event.total}</span>`</span>);
-};</code></pre>
-</li>
+<li><code>load</code> —— 当请求完成（即使 HTTP 状态为 400 或 500 等），并且响应已完全下载。</li>
+<li><code>error</code> —— 当无法发出请求，例如网络中断或者无效的 URL。</li>
+<li><code>progress</code> —— 在下载响应期间定期触发，报告已经下载了多少。</li>
 </ul>
+<pre><code class="language-js">xhr.onload = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  alert(<span class="hljs-string">`Loaded: <span class="hljs-subst">${xhr.status}</span> <span class="hljs-subst">${xhr.response}</span>`</span>);
+};
+
+xhr.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// 仅在根本无法发出请求时触发</span>
+  alert(<span class="hljs-string">`Network Error`</span>);
+};
+
+xhr.onprogress = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-comment">// 定期触发</span>
+  <span class="hljs-comment">// event.loaded —— 已经下载了多少字节</span>
+  <span class="hljs-comment">// event.lengthComputable = true，当服务器发送了 Content-Length header 时</span>
+  <span class="hljs-comment">// event.total —— 总字节数（如果 lengthComputable 为 true）</span>
+  alert(<span class="hljs-string">`Received <span class="hljs-subst">${event.loaded}</span> of <span class="hljs-subst">${event.total}</span>`</span>);
+};</code></pre>
 </li>
 </ol>
 <p>下面是一个完整的示例。它从服务器加载 <code>/article/xmlhttprequest/example/load</code>，并打印加载进度：</p>
@@ -1704,30 +1453,31 @@ alert(<span class="hljs-string">`Received <span class="hljs-subst">${event.loade
 <span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();
 
 <span class="hljs-comment">// 2. 配置它：从 URL /article/.../load GET-request</span>
-xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/article/xmlhttprequest/example/load&#x27;</span>);
+xhr.open(<span class="hljs-string">&quot;GET&quot;</span>, <span class="hljs-string">&quot;/article/xmlhttprequest/example/load&quot;</span>);
 
 <span class="hljs-comment">// 3. 通过网络发送请求</span>
 xhr.send();
 
 <span class="hljs-comment">// 4. 当接收到响应后，将调用此函数</span>
-xhr.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">if</span> (xhr.status != <span class="hljs-number">200</span>) { <span class="hljs-comment">// 分析响应的 HTTP 状态</span>
+xhr.onload = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (xhr.status != <span class="hljs-number">200</span>) {
+    <span class="hljs-comment">// 分析响应的 HTTP 状态</span>
     alert(<span class="hljs-string">`Error <span class="hljs-subst">${xhr.status}</span>: <span class="hljs-subst">${xhr.statusText}</span>`</span>); <span class="hljs-comment">// 例如 404: Not Found</span>
-  } <span class="hljs-keyword">else</span> { <span class="hljs-comment">// 显示结果</span>
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 显示结果</span>
     alert(<span class="hljs-string">`Done, got <span class="hljs-subst">${xhr.response.length}</span> bytes`</span>); <span class="hljs-comment">// response 是服务器响应</span>
   }
 };
 
-xhr.onprogress = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+xhr.onprogress = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
   <span class="hljs-keyword">if</span> (event.lengthComputable) {
     alert(<span class="hljs-string">`Received <span class="hljs-subst">${event.loaded}</span> of <span class="hljs-subst">${event.total}</span> bytes`</span>);
   } <span class="hljs-keyword">else</span> {
     alert(<span class="hljs-string">`Received <span class="hljs-subst">${event.loaded}</span> bytes`</span>); <span class="hljs-comment">// 没有 Content-Length</span>
   }
-
 };
 
-xhr.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+xhr.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">&quot;Request failed&quot;</span>);
 };</code></pre>
 <p>一旦服务器有了响应，我们可以在以下 <code>xhr</code> 属性中接收结果：</p>
@@ -1740,16 +1490,12 @@ xhr.onerror = <span class="hljs-function"><span class="hljs-keyword">function</s
 <p>我们还可以使用相应的属性指定超时（timeout）：</p>
 <pre><code class="language-js">xhr.timeout = <span class="hljs-number">10000</span>; <span class="hljs-comment">// timeout 单位是 ms，此处即 10 秒</span></code></pre>
 <p>如果在给定时间内请求没有成功执行，请求就会被取消，并且触发 <code>timeout</code> 事件。</p>
-<pre><code class="language-smart">为了向 URL 添加像 `?name=value` 这样的参数，并确保正确的编码，我们可以使用 [URL](info:url) 对象：
+<p><code>URL 搜索参数（URL search parameters）&quot; 为了向 URL 添加像 </code>?name=value` 这样的参数，并确保正确的编码，我们可以使用 <a href="info:url">URL</a> 对象：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> url = <span class="hljs-keyword">new</span> URL(<span class="hljs-string">&quot;https://google.com/search&quot;</span>);
+url.searchParams.set(<span class="hljs-string">&quot;q&quot;</span>, <span class="hljs-string">&quot;test me!&quot;</span>);
 
-```js
-let url = new URL(&#x27;https://google.com/search&#x27;);
-url.searchParams.set(&#x27;q&#x27;, &#x27;test me!&#x27;);
-
-// 参数 &#x27;q&#x27; 被编码
-xhr.open(&#x27;GET&#x27;, url); // https://google.com/search?q=test+me%21
-```
-</code></pre>
+<span class="hljs-comment">// 参数 &#x27;q&#x27; 被编码</span>
+xhr.open(<span class="hljs-string">&quot;GET&quot;</span>, url); <span class="hljs-comment">// https://google.com/search?q=test+me%21</span></code></pre>
 <h2 id="响应类型">响应类型</h2>
 <p>我们可以使用 <code>xhr.responseType</code> 属性来设置响应格式：</p>
 <ul>
@@ -1763,22 +1509,17 @@ xhr.open(&#x27;GET&#x27;, url); // https://google.com/search?q=test+me%21
 <p>例如，我们以 JSON 格式获取响应：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();
 
-xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/article/xmlhttprequest/example/json&#x27;</span>);
+xhr.open(<span class="hljs-string">&quot;GET&quot;</span>, <span class="hljs-string">&quot;/article/xmlhttprequest/example/json&quot;</span>);
 
-
-xhr.responseType = <span class="hljs-string">&#x27;json&#x27;</span>;
-
+xhr.responseType = <span class="hljs-string">&quot;json&quot;</span>;
 
 xhr.send();
 
 <span class="hljs-comment">// 响应为 {&quot;message&quot;: &quot;Hello, world!&quot;}</span>
-xhr.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+xhr.onload = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">let</span> responseObj = xhr.response;
   alert(responseObj.message); <span class="hljs-comment">// Hello, world!</span>
 };</code></pre>
-<pre><code class="language-smart">在旧的脚本中，你可能会看到 `xhr.responseText`，甚至会看到 `xhr.responseXML` 属性。
-
-它们是由于历史原因而存在的，以获取字符串或 XML 文档。如今，我们应该在 `xhr.responseType` 中设置格式，然后就能获取如上所示的 `xhr.response` 了。</code></pre>
 <h2 id="readystate">readyState</h2>
 <p><code>XMLHttpRequest</code> 的状态（state）会随着它的处理进度变化而变化。可以通过 <code>xhr.readyState</code> 来了解当前状态。</p>
 <p><a href="https://xhr.spec.whatwg.org/#states">规范</a> 中提到的所有状态如下：</p>
@@ -1789,7 +1530,7 @@ LOADING = <span class="hljs-number">3</span>; <span class="hljs-comment">// 响�
 DONE = <span class="hljs-number">4</span>; <span class="hljs-comment">// 请求完成</span></code></pre>
 <p><code>XMLHttpRequest</code> 对象以 <code>0</code> -&gt; <code>1</code> -&gt; <code>2</code> -&gt; <code>3</code> -&gt; ... -&gt; <code>3</code> -&gt; <code>4</code> 的顺序在它们之间转变。每当通过网络接收到一个数据包，就会重复一次状态 <code>3</code>。</p>
 <p>我们可以使用 <code>readystatechange</code> 事件来跟踪它们：</p>
-<pre><code class="language-js">xhr.onreadystatechange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<pre><code class="language-js">xhr.onreadystatechange = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">if</span> (xhr.readyState == <span class="hljs-number">3</span>) {
     <span class="hljs-comment">// 加载中</span>
   }
@@ -1808,7 +1549,7 @@ DONE = <span class="hljs-number">4</span>; <span class="hljs-comment">// 请求�
 <p>下面是重写的示例，<code>open</code> 的第三个参数为 <code>false</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();
 
-xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/article/xmlhttprequest/hello.txt&#x27;</span>, <span class="hljs-literal">false</span>);
+xhr.open(<span class="hljs-string">&quot;GET&quot;</span>, <span class="hljs-string">&quot;/article/xmlhttprequest/hello.txt&quot;</span>, <span class="hljs-literal">false</span>);
 
 <span class="hljs-keyword">try</span> {
   xhr.send();
@@ -1817,7 +1558,8 @@ xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-str
   } <span class="hljs-keyword">else</span> {
     alert(xhr.response);
   }
-} <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">err</span>)</span> { <span class="hljs-comment">// 代替 onerror</span>
+} <span class="hljs-keyword">catch</span> (err) {
+  <span class="hljs-comment">// 代替 onerror</span>
   alert(<span class="hljs-string">&quot;Request failed&quot;</span>);
 }</code></pre>
 <p>这看起来好像不错，但是很少使用同步调用，因为它们会阻塞页面内的 JavaScript，直到加载完成。在某些浏览器中，滚动可能无法正常进行。如果一个同步调用执行时间过长，浏览器可能会建议关闭“挂起（hanging）”的网页。</p>
@@ -1834,15 +1576,9 @@ xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-str
 xhr.setRequestHeader(&#x27;Content-Type&#x27;, &#x27;application/json&#x27;);
 ```
 
-&quot;Header 的限制&quot;
-一些 header 是由浏览器专门管理的，例如 `Referer` 和 `Host`。
-完整列表请见 [规范](http://www.w3.org/TR/XMLHttpRequest/#the-setrequestheader-method)。
+&quot;Header 的限制&quot; 一些 header 是由浏览器专门管理的，例如 `Referer` 和 `Host`。 为了用户安全和请求的正确性，`XMLHttpRequest` 不允许更改它们。
 
-为了用户安全和请求的正确性，`XMLHttpRequest` 不允许更改它们。
-```
-
-`&quot;不能移除 header&quot;
-`XMLHttpRequest` 的另一个特点是不能撤销 `setRequestHeader`。
+`&quot;不能移除 header&quot; `XMLHttpRequest` 的另一个特点是不能撤销 `setRequestHeader`。
 
 一旦设置了 header，就无法撤销了。其他调用会向 header 中添加信息，但不会覆盖它。
 
@@ -1854,8 +1590,7 @@ xhr.setRequestHeader(&#x27;X-Auth&#x27;, &#x27;456&#x27;);
 
 // header 将是：
 // X-Auth: 123, 456
-```
-````</code></pre>
+```</code></pre>
 <p><code>getResponseHeader(name)</code>
 : 获取具有给定 <code>name</code> 的 header（<code>Set-Cookie</code> 和 <code>Set-Cookie2</code> 除外）。</p>
 <pre><code>例如：
@@ -1904,8 +1639,8 @@ formData.append(name, value); <span class="hljs-comment">// 附加一个字段</
 </ol>
 <p>例如：</p>
 <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;person&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;John&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;surname&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Smith&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;John&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;surname&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Smith&quot;</span> /&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
@@ -1929,11 +1664,11 @@ formData.append(name, value); <span class="hljs-comment">// 附加一个字段</
 
 <span class="hljs-keyword">let</span> json = <span class="hljs-built_in">JSON</span>.stringify({
   <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>,
-  <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Smith&quot;</span>
+  <span class="hljs-attr">surname</span>: <span class="hljs-string">&quot;Smith&quot;</span>,
 });
 
-xhr.open(<span class="hljs-string">&quot;POST&quot;</span>, <span class="hljs-string">&#x27;/submit&#x27;</span>)
-xhr.setRequestHeader(<span class="hljs-string">&#x27;Content-type&#x27;</span>, <span class="hljs-string">&#x27;application/json; charset=utf-8&#x27;</span>);
+xhr.open(<span class="hljs-string">&quot;POST&quot;</span>, <span class="hljs-string">&quot;/submit&quot;</span>);
+xhr.setRequestHeader(<span class="hljs-string">&quot;Content-type&quot;</span>, <span class="hljs-string">&quot;application/json; charset=utf-8&quot;</span>);
 
 xhr.send(json);</code></pre>
 <p><code>.send(body)</code> 方法就像一个非常杂食性的动物。它几乎可以发送任何 <code>body</code>，包括 <code>Blob</code> 和 <code>BufferSource</code> 对象。</p>
@@ -1953,43 +1688,42 @@ xhr.send(json);</code></pre>
 <li><code>loadend</code> —— 上传完成，无论成功还是 error。</li>
 </ul>
 <p>handler 示例：</p>
-<pre><code class="language-js">xhr.upload.onprogress = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+<pre><code class="language-js">xhr.upload.onprogress = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
   alert(<span class="hljs-string">`Uploaded <span class="hljs-subst">${event.loaded}</span> of <span class="hljs-subst">${event.total}</span> bytes`</span>);
 };
 
-xhr.upload.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+xhr.upload.onload = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">`Upload finished successfully.`</span>);
 };
 
-xhr.upload.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+xhr.upload.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
   alert(<span class="hljs-string">`Error during the upload: <span class="hljs-subst">${xhr.status}</span>`</span>);
 };</code></pre>
 <p>这是一个真实示例：带有进度指示的文件上传：</p>
-<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;file&quot;</span> <span class="hljs-attr">onchange</span>=<span class="hljs-string">&quot;upload(this.files[0])&quot;</span>&gt;</span>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;file&quot;</span> <span class="hljs-attr">onchange</span>=<span class="hljs-string">&quot;upload(this.files[0])&quot;</span> /&gt;</span>
 
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upload</span>(<span class="hljs-params">file</span>) </span>{
-  <span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upload</span>(<span class="hljs-params">file</span>) </span>{
+    <span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();
 
-  <span class="hljs-comment">// 跟踪上传进度</span>
+    <span class="hljs-comment">// 跟踪上传进度</span>
 
-  xhr.upload.onprogress = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Uploaded <span class="hljs-subst">${event.loaded}</span> of <span class="hljs-subst">${event.total}</span>`</span>);
-  };
+    xhr.upload.onprogress = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Uploaded <span class="hljs-subst">${event.loaded}</span> of <span class="hljs-subst">${event.total}</span>`</span>);
+    };
 
+    <span class="hljs-comment">// 跟踪完成：无论成功与否</span>
+    xhr.onloadend = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">if</span> (xhr.status == <span class="hljs-number">200</span>) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;success&quot;</span>);
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;error &quot;</span> + <span class="hljs-built_in">this</span>.status);
+      }
+    };
 
-  <span class="hljs-comment">// 跟踪完成：无论成功与否</span>
-  xhr.onloadend = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">if</span> (xhr.status == <span class="hljs-number">200</span>) {
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;success&quot;</span>);
-    } <span class="hljs-keyword">else</span> {
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;error &quot;</span> + <span class="hljs-built_in">this</span>.status);
-    }
-  };
-
-  xhr.open(<span class="hljs-string">&quot;POST&quot;</span>, <span class="hljs-string">&quot;/article/xmlhttprequest/post/upload&quot;</span>);
-  xhr.send(file);
-}
+    xhr.open(<span class="hljs-string">&quot;POST&quot;</span>, <span class="hljs-string">&quot;/article/xmlhttprequest/post/upload&quot;</span>);
+    xhr.send(file);
+  }
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
 <h2 id="跨源请求">跨源请求</h2>
 <p><code>XMLHttpRequest</code> 可以使用和 <a href="info:fetch-crossorigin">fetch</a> 相同的 CORS 策略进行跨源请求。</p>
@@ -2002,51 +1736,11 @@ xhr.withCredentials = <span class="hljs-literal">true</span>;
 xhr.open(<span class="hljs-string">&#x27;POST&#x27;</span>, <span class="hljs-string">&#x27;http://anywhere.com/request&#x27;</span>);
 ...</code></pre>
 <p>有关跨源 header 的详细信息，请见 <a href="info:fetch-crossorigin">info:fetch-crossorigin</a> 一章。</p>
-<h2 id="总结">总结</h2>
-<p>使用 <code>XMLHttpRequest</code> 的 GET 请求的典型代码：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> xhr = <span class="hljs-keyword">new</span> XMLHttpRequest();
-
-xhr.open(<span class="hljs-string">&#x27;GET&#x27;</span>, <span class="hljs-string">&#x27;/my/url&#x27;</span>);
-
-xhr.send();
-
-xhr.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">if</span> (xhr.status != <span class="hljs-number">200</span>) { <span class="hljs-comment">// HTTP error?</span>
-    <span class="hljs-comment">// 处理 error</span>
-    alert( <span class="hljs-string">&#x27;Error: &#x27;</span> + xhr.status);
-    <span class="hljs-keyword">return</span>;
-  }
-
-  <span class="hljs-comment">// 获取来自 xhr.response 的响应</span>
-};
-
-xhr.onprogress = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
-  <span class="hljs-comment">// 报告进度</span>
-  alert(<span class="hljs-string">`Loaded <span class="hljs-subst">${event.loaded}</span> of <span class="hljs-subst">${event.total}</span>`</span>);
-};
-
-xhr.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// 处理非 HTTP error（例如网络中断）</span>
-};</code></pre>
-<p>实际上还有很多事件，在 <a href="http://www.w3.org/TR/XMLHttpRequest/#events">现代规范</a> 中有详细列表（按生命周期排序）：</p>
-<ul>
-<li><code>loadstart</code> —— 请求开始。</li>
-<li><code>progress</code> —— 一个响应数据包到达，此时整个 response body 都在 <code>response</code> 中。</li>
-<li><code>abort</code> —— 调用 <code>xhr.abort()</code> 取消了请求。</li>
-<li><code>error</code> —— 发生连接错误，例如，域错误。不会发生诸如 404 这类的 HTTP 错误。</li>
-<li><code>load</code> —— 请求成功完成。</li>
-<li><code>timeout</code> —— 由于请求超时而取消了该请求（仅发生在设置了 timeout 的情况下）。</li>
-<li><code>loadend</code> —— 在 <code>load</code>，<code>error</code>，<code>timeout</code> 或 <code>abort</code> 之后触发。</li>
-</ul>
-<p><code>error</code>，<code>abort</code>，<code>timeout</code> 和 <code>load</code> 事件是互斥的。其中只有一种可能发生。</p>
-<p>最常用的事件是加载完成（<code>load</code>），加载失败（<code>error</code>），或者我们可以使用单个 <code>loadend</code> 处理程序并检查请求对象 <code>xhr</code> 的属性，以查看发生了什么。</p>
-<p>我们还了解了另一个事件：<code>readystatechange</code>。由于历史原因，它早在规范制定之前就出现了。如今我们已经无需使用它了，我们可以用新的事件代替它，但通常可以在旧的代码中找到它。</p>
-<p>如果我们需要专门跟踪上传，那么我们应该在 <code>xhr.upload</code> 对象上监听相同的事件。</p>
 
       </fieldset>
       
-      <fieldset id='_vvQuRT'>
-      <legend>article</legend>
+      <fieldset id='_QGSvIN'>
+      <legend>resume-upload</legend>
       <h1 id="可恢复的文件上传">可恢复的文件上传</h1>
 <p>使用 <code>fetch</code> 方法来上传文件相当容易。</p>
 <p>连接断开后如何恢复上传？这里没有对此的内建选项，但是我们有实现它的一些方式。</p>
@@ -2061,30 +1755,30 @@ xhr.onerror = <span class="hljs-function"><span class="hljs-keyword">function</s
 <h2 id="算法">算法</h2>
 <ol>
 <li><p>首先，创建一个文件 id，以唯一地标识我们要上传的文件：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> fileId = file.name + <span class="hljs-string">&#x27;-&#x27;</span> + file.size + <span class="hljs-string">&#x27;-&#x27;</span> + +file.lastModifiedDate;</code></pre>
-<p> 在恢复上传时需要用到它，以告诉服务器我们要恢复的内容。</p>
-<p> 如果名称，或大小，或最后一次修改事件发生了更改，则将有另一个 <code>fileId</code>。</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> fileId = file.name + <span class="hljs-string">&quot;-&quot;</span> + file.size + <span class="hljs-string">&quot;-&quot;</span> + +file.lastModifiedDate;</code></pre>
+<p>在恢复上传时需要用到它，以告诉服务器我们要恢复的内容。</p>
+<p>如果名称，或大小，或最后一次修改事件发生了更改，则将有另一个 <code>fileId</code>。</p>
 </li>
 <li><p>向服务器发送一个请求，询问它已经有了多少字节，像这样：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&#x27;status&#x27;</span>, {
+<pre><code class="language-js"><span class="hljs-keyword">let</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">&quot;status&quot;</span>, {
   <span class="hljs-attr">headers</span>: {
-    <span class="hljs-string">&#x27;X-File-Id&#x27;</span>: fileId
-  }
+    <span class="hljs-string">&quot;X-File-Id&quot;</span>: fileId,
+  },
 });
 
 <span class="hljs-comment">// 服务器已有的字节数</span>
-<span class="hljs-keyword">let</span> startByte = +<span class="hljs-keyword">await</span> response.text();</code></pre>
-<p> 这假设服务器通过 <code>X-File-Id</code> header 跟踪文件上传。应该在服务端实现。</p>
-<p> 如果服务器上尚不存在该文件，则服务器响应应为 <code>0</code>。</p>
+<span class="hljs-keyword">let</span> startByte = +(<span class="hljs-keyword">await</span> response.text());</code></pre>
+<p>这假设服务器通过 <code>X-File-Id</code> header 跟踪文件上传。应该在服务端实现。</p>
+<p>如果服务器上尚不存在该文件，则服务器响应应为 <code>0</code>。</p>
 </li>
 <li><p>然后，我们可以使用 <code>Blob</code> 和 <code>slice</code> 方法来发送从 <code>startByte</code> 开始的文件：</p>
 <pre><code class="language-js">xhr.open(<span class="hljs-string">&quot;POST&quot;</span>, <span class="hljs-string">&quot;upload&quot;</span>, <span class="hljs-literal">true</span>);
 
 <span class="hljs-comment">// 文件 id，以便服务器知道我们要恢复的是哪个文件</span>
-xhr.setRequestHeader(<span class="hljs-string">&#x27;X-File-Id&#x27;</span>, fileId);
+xhr.setRequestHeader(<span class="hljs-string">&quot;X-File-Id&quot;</span>, fileId);
 
 <span class="hljs-comment">// 发送我们要从哪个字节开始恢复，因此服务器知道我们正在恢复</span>
-xhr.setRequestHeader(<span class="hljs-string">&#x27;X-Start-Byte&#x27;</span>, startByte);
+xhr.setRequestHeader(<span class="hljs-string">&quot;X-Start-Byte&quot;</span>, startByte);
 
 xhr.upload.onprogress = <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Uploaded <span class="hljs-subst">${startByte + e.loaded}</span> of <span class="hljs-subst">${startByte + e.total}</span>`</span>);
@@ -2092,23 +1786,16 @@ xhr.upload.onprogress = <span class="hljs-function">(<span class="hljs-params">e
 
 <span class="hljs-comment">// 文件可以是来自 input.files[0]，或者另一个源</span>
 xhr.send(file.slice(startByte));</code></pre>
-<p> 这里我们将文件 id 作为 <code>X-File-Id</code> 发送给服务器，所以服务器知道我们正在上传哪个文件，并且，我们还将起始字节作为 <code>X-Start-Byte</code> 发送给服务器，所以服务器知道我们不是重新上传它，而是恢复其上传。</p>
-<p> 服务器应该检查其记录，如果有一个上传的该文件，并且当前已上传的文件大小恰好是 <code>X-Start-Byte</code>，那么就将数据附加到该文件。</p>
+<p>这里我们将文件 id 作为 <code>X-File-Id</code> 发送给服务器，所以服务器知道我们正在上传哪个文件，并且，我们还将起始字节作为 <code>X-Start-Byte</code> 发送给服务器，所以服务器知道我们不是重新上传它，而是恢复其上传。</p>
+<p>服务器应该检查其记录，如果有一个上传的该文件，并且当前已上传的文件大小恰好是 <code>X-Start-Byte</code>，那么就将数据附加到该文件。</p>
 </li>
 </ol>
-<p>这是用 Node.js 写的包含客户端和服务端代码的示例。</p>
-<p>在本网站上，它只有部分能工作，因为 Node.js 位于另一个服务 Nginx 后面，该服务器缓冲（buffer）上传的内容，当完全上传后才将其传递给 Node.js。</p>
-<p>但是你可以下载这些代码，在本地运行以进行完整演示：</p>
-<p>[codetabs src=&quot;upload-resume&quot; height=200]</p>
-<p>正如我们所看到的，现代网络方法在功能上已经与文件管理器非常接近 —— 控制 header，进度指示，发送文件片段等。</p>
-<p>我们可以实现可恢复的上传等。</p>
 
       </fieldset>
       
-      <fieldset id='_ZGMO1o'>
-      <legend>article</legend>
-      <h1 id="长轮询（long-polling）">长轮询（Long polling）</h1>
-<p>长轮询是与服务器保持持久连接的最简单的方式，它不使用任何特定的协议，例如 WebSocket 或者 Server Sent Event。</p>
+      <fieldset id='_H4CqRd'>
+      <legend>long-polling</legend>
+      <p>长轮询是与服务器保持持久连接的最简单的方式，它不使用任何特定的协议，例如 WebSocket 或者 Server Sent Event。</p>
 <p>它很容易实现，在很多场景下也很好用。</p>
 <h2 id="常规轮询">常规轮询</h2>
 <p>从服务器获取新信息的最简单的方式是定期轮询。也就是说，定期向服务器发出请求：“你好，我在这儿，你有关于我的任何信息吗？”例如，每 10 秒一次。</p>
@@ -2130,7 +1817,6 @@ xhr.send(file.slice(startByte));</code></pre>
 <li>浏览器立即发出一个新的请求。</li>
 </ol>
 <p>对于此方法，浏览器发出一个请求并与服务器之间建立起一个挂起的（pending）连接的情况是标准的。仅在有消息被传递时，才会重新建立连接。</p>
-<p><img src="long-polling.svg" alt=""></p>
 <p>如果连接丢失，可能是因为网络错误，浏览器会立即发送一个新请求。</p>
 <p>实现长轮询的客户端 <code>subscribe</code> 函数的示例代码：</p>
 <pre><code class="language-js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">subscribe</span>(<span class="hljs-params"></span>) </span>{
@@ -2146,7 +1832,7 @@ xhr.send(file.slice(startByte));</code></pre>
     <span class="hljs-comment">// 一个 error —— 让我们显示它</span>
     showMessage(response.statusText);
     <span class="hljs-comment">// 一秒后重新连接</span>
-    <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">1000</span>));
+    <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">1000</span>));
     <span class="hljs-keyword">await</span> subscribe();
   } <span class="hljs-keyword">else</span> {
     <span class="hljs-comment">// 获取并显示消息</span>
@@ -2159,17 +1845,12 @@ xhr.send(file.slice(startByte));</code></pre>
 
 subscribe();</code></pre>
 <p>正如你所看到的，<code>subscribe</code> 函数发起了一个 <code>fetch</code>，然后等待响应，处理它，并再次调用自身。</p>
-<pre><code class="language-warn">服务器架构必须能够处理许多挂起的连接。
-
-某些服务器架构是每个连接对应一个进程。对于许多连接的情况，将会有很多进程，并且每个进程占用大量内存。因此，过多的连接会消耗掉全部内存。
-
-使用 PHP，Ruby 语言编写的后端程序会经常遇到这个问题，但是从技术上讲，它不是语言问题，而是实现问题。大多数现代编程语言都允许实现适当的后端，但是其中一些语言比其他语言更容易实现。
-
-使用 Node.js 写的后端通常不会出现这样的问题。</code></pre>
+<p>&quot;服务器应该可以处理许多挂起的连接&quot;
+服务器架构必须能够处理许多挂起的连接。</p>
+<p>某些服务器架构是每个连接对应一个进程。对于许多连接的情况，将会有很多进程，并且每个进程占用大量内存。因此，过多的连接会消耗掉全部内存。</p>
+<p>使用 PHP，Ruby 语言编写的后端程序会经常遇到这个问题，但是从技术上讲，它不是语言问题，而是实现问题。大多数现代编程语言都允许实现适当的后端，但是其中一些语言比其他语言更容易实现。</p>
+<p>使用 Node.js 写的后端通常不会出现这样的问题。</p>
 <h2 id="示例：聊天">示例：聊天</h2>
-<p>这是一个聊天演示，你可以下载它并在本地运行（如果你熟悉 Node.js 并且可以安装模块）：</p>
-<p>[codetabs src=&quot;longpoll&quot; height=500]</p>
-<p>浏览器代码在 <code>browser.js</code> 中。</p>
 <h2 id="使用场景">使用场景</h2>
 <p>在消息很少的情况下，长轮询很有效。</p>
 <p>如果消息比较频繁，那么上面描绘的请求-接收（requesting-receiving）消息的图表就会变成锯状状（saw-like）。</p>
@@ -2178,64 +1859,59 @@ subscribe();</code></pre>
 
       </fieldset>
       
-      <fieldset id='_PjBK5m'>
-      <legend>article</legend>
-      <h1 id="websocket">WebSocket</h1>
-<p>在 <a href="http://tools.ietf.org/html/rfc6455">RFC 6455</a> 规范中描述的 <code>WebSocket</code> 协议提供了一种在浏览器和服务器之间建立持久连接来交换数据的方法。数据可以作为“数据包”在两个方向上传递，而不会断开连接和其他 HTTP 请求。</p>
+      <fieldset id='_42e9eO'>
+      <legend>websocket</legend>
+      <p>在 <a href="http://tools.ietf.org/html/rfc6455">RFC 6455</a> 规范中描述的 <code>WebSocket</code> 协议提供了一种在浏览器和服务器之间建立持久连接来交换数据的方法。数据可以作为“数据包”在两个方向上传递，而不会断开连接和其他 HTTP 请求。</p>
 <p>对于需要连续数据交换的服务，例如网络游戏，实时交易系统等，WebSocket 尤其有用。</p>
 <h2 id="一个简单例子">一个简单例子</h2>
 <p>要打开一个 WebSocket 连接，我们需要在 url 中使用特殊的协议 <code>ws</code> 创建 <code>new WebSocket</code>：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> socket = <span class="hljs-keyword">new</span> WebSocket(<span class="hljs-string">&quot;ws://javascript.info&quot;</span>);</code></pre>
 <p>同样也有一个加密的 <code>wss://</code> 协议。类似于 WebSocket 中的 HTTPS。</p>
-<p>```smart header=&quot;始终使用 <code>wss://</code>&quot;
+<p>始终使用 <code>wss://</code>&quot;
 <code>wss://</code> 协议不仅是被加密的，而且更可靠。</p>
 <p>因为 <code>ws://</code> 数据不是加密的，对于任何中间人来说其数据都是可见的。并且，旧的代理服务器不了解 WebSocket，它们可能会因为看到“奇怪的” header 而中止连接。</p>
 <p>另一方面，<code>wss://</code> 是基于 TLS 的 WebSocket，类似于 HTTPS 是基于 TLS 的 HTTP），传输安全层在发送方对数据进行了加密，在接收方进行解密。因此，数据包是通过代理加密传输的。它们看不到传输的里面的内容，且会让这些数据通过。</p>
-<pre><code>
-一旦 socket 被建立，我们就应该监听 socket 上的事件。一共有 4 个事件：
-- **`open`** —— 连接已建立，
-- **`message`** —— 接收到数据，
-- **`error`** —— WebSocket 错误，
-- **`close`** —— 连接已关闭。
+<p>一旦 socket 被建立，我们就应该监听 socket 上的事件。一共有 4 个事件：</p>
+<ul>
+<li><strong><code>open</code></strong> —— 连接已建立，</li>
+<li><strong><code>message</code></strong> —— 接收到数据，</li>
+<li><strong><code>error</code></strong> —— WebSocket 错误，</li>
+<li><strong><code>close</code></strong> —— 连接已关闭。</li>
+</ul>
+<p>……如果我们想发送一些东西，那么可以使用 <code>socket.send(data)</code>。</p>
+<p>这是一个示例：</p>
+<pre><code class="language-js"><span class="hljs-keyword">let</span> socket = <span class="hljs-keyword">new</span> WebSocket(
+  <span class="hljs-string">&quot;wss://javascript.info/article/websocket/demo/hello&quot;</span>
+);
 
-……如果我们想发送一些东西，那么可以使用 `socket.send(data)`。
-
-这是一个示例：
-
-```js
-let socket = new WebSocket(&quot;wss://javascript.info/article/websocket/demo/hello&quot;);
-
-socket.onopen = function(e) {
-  alert(&quot;[open] Connection established&quot;);
-  alert(&quot;Sending to server&quot;);
-  socket.send(&quot;My name is John&quot;);
+socket.onopen = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) </span>{
+  alert(<span class="hljs-string">&quot;[open] Connection established&quot;</span>);
+  alert(<span class="hljs-string">&quot;Sending to server&quot;</span>);
+  socket.send(<span class="hljs-string">&quot;My name is John&quot;</span>);
 };
 
-socket.onmessage = function(event) {
-  alert(`[message] Data received from server: ${event.data}`);
+socket.onmessage = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  alert(<span class="hljs-string">`[message] Data received from server: <span class="hljs-subst">${event.data}</span>`</span>);
 };
 
-socket.onclose = function(event) {
-  if (event.wasClean) {  
-    alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-  } else {
-    // 例如服务器进程被杀死或网络中断
-    // 在这种情况下，event.code 通常为 1006
-    alert(&#x27;[close] Connection died&#x27;);
+socket.onclose = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">if</span> (event.wasClean) {
+    alert(
+      <span class="hljs-string">`[close] Connection closed cleanly, code=<span class="hljs-subst">${event.code}</span> reason=<span class="hljs-subst">${event.reason}</span>`</span>
+    );
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 例如服务器进程被杀死或网络中断</span>
+    <span class="hljs-comment">// 在这种情况下，event.code 通常为 1006</span>
+    alert(<span class="hljs-string">&quot;[close] Connection died&quot;</span>);
   }
 };
 
-socket.onerror = function(error) {
-  alert(`[error] ${error.message}`);
+socket.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error</span>) </span>{
+  alert(<span class="hljs-string">`[error] <span class="hljs-subst">${error.message}</span>`</span>);
 };</code></pre>
-<p>出于演示目的，在上面的示例中，运行着一个用 Node.js 写的小型服务器 <a href="demo/server.js">server.js</a>。它响应为 &quot;Hello from server, John&quot;，然后等待 5 秒，关闭连接。</p>
-<p>所以你看到的事件顺序为：<code>open</code> -&gt; <code>message</code> -&gt; <code>close</code>。</p>
-<p>这就是 WebSocket，我们已经可以使用 WebSocket 通信了。很简单，不是吗？</p>
-<p>现在让我们更深入地学习它。</p>
 <h2 id="建立-websocket">建立 WebSocket</h2>
 <p>当 <code>new WebSocket(url)</code> 被创建后，它将立即开始连接。</p>
 <p>在连接期间，浏览器（使用 header）问服务器：“你支持 WebSocket 吗？”如果服务器回复说“我支持”，那么通信就以 WebSocket 协议继续进行，该协议根本不是 HTTP。</p>
-<p><img src="websocket-handshake.svg" alt=""></p>
 <p>这是由 <code>new WebSocket(&quot;wss://javascript.info/chat&quot;)</code> 发出的请求的浏览器 header 示例。</p>
 <pre><code>GET /chat
 Host: javascript.info
@@ -2251,12 +1927,15 @@ Sec-WebSocket-Version: 13</code></pre>
 <li><code>Sec-WebSocket-Key</code> —— 浏览器随机生成的安全密钥。</li>
 <li><code>Sec-WebSocket-Version</code> —— WebSocket 协议版本，当前为 13。</li>
 </ul>
-<pre><code class="language-smart">我们不能使用 `XMLHttpRequest` 或 `fetch` 来进行这种 HTTP 请求，因为不允许 JavaScript 设置这些 header。</code></pre>
+<p>无法模拟 WebSocket 握手&quot;
+我们不能使用 <code>XMLHttpRequest</code> 或 <code>fetch</code> 来进行这种 HTTP 请求，因为不允许 JavaScript 设置这些 header。</p>
 <p>如果服务器同意切换为 WebSocket 协议，服务器应该返回响应码 101：</p>
-<pre><code>101 Switching Protocols
+<pre><code>
+101 Switching Protocols
 Upgrade: websocket
 Connection: Upgrade
-Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=</code></pre>
+Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=
+</code></pre>
 <p>这里 <code>Sec-WebSocket-Accept</code> 是 <code>Sec-WebSocket-Key</code>，是使用特殊的算法重新编码的。浏览器使用它来确保响应与请求相对应。</p>
 <p>然后，就使用 WebSocket 协议传输数据，我们很快就会看到它的结构（&quot;frames&quot;）。它根本不是 HTTP。</p>
 <h3 id="扩展和子协议">扩展和子协议</h3>
@@ -2266,13 +1945,14 @@ Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=</code></pre>
 <li><p><code>Sec-WebSocket-Extensions: deflate-frame</code> 表示浏览器支持数据压缩。扩展与传输数据有关，扩展了 WebSocket 协议的功能。<code>Sec-WebSocket-Extensions</code> header 有浏览器自动发送，其中包含其支持的所有扩展的列表。</p>
 </li>
 <li><p><code>Sec-WebSocket-Protocol: soap, wamp</code> 表示我们不仅要传输任何数据，还要传输 <a href="http://en.wikipedia.org/wiki/SOAP">SOAP</a> 或 WAMP（&quot;The WebSocket Application Messaging Protocol&quot;）协议中的数据。WebSocket 子协议已经在 <a href="http://www.iana.org/assignments/websocket/websocket.xml">IANA catalogue</a> 中注册。</p>
-<p>  这个可选的 header 是使用 <code>new WebSocket</code> 的第二个参数设置的。它是子协议数组，例如，如果我们想使用 SOAP 或 WAMP：</p>
+<p>这个可选的 header 是使用 <code>new WebSocket</code> 的第二个参数设置的。它是子协议数组，例如，如果我们想使用 SOAP 或 WAMP：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> socket = <span class="hljs-keyword">new</span> WebSocket(<span class="hljs-string">&quot;wss://javascript.info/chat&quot;</span>, [<span class="hljs-string">&quot;soap&quot;</span>, <span class="hljs-string">&quot;wamp&quot;</span>]);</code></pre>
 </li>
 </ul>
 <p>服务器应该使用同意使用的协议和扩展的列表进行响应。</p>
 <p>例如，这个请求：</p>
-<pre><code>GET /chat
+<pre><code>
+GET /chat
 Host: javascript.info
 Upgrade: websocket
 Connection: Upgrade
@@ -2282,9 +1962,14 @@ Sec-WebSocket-Version: 13
 
 Sec-WebSocket-Extensions: deflate-frame
 Sec-WebSocket-Protocol: soap, wamp
-</code></pre>
-<p>响应：</p>
-<pre><code>101 Switching Protocols
+
+```
+
+响应：
+
+```
+
+101 Switching Protocols
 Upgrade: websocket
 Connection: Upgrade
 Sec-WebSocket-Accept: hsBlbuDTkk24srzEOTBUlZAlC2g=
@@ -2336,7 +2021,7 @@ socket.onmessage = <span class="hljs-function">(<span class="hljs-params">event<
 socket.close(<span class="hljs-number">1000</span>, <span class="hljs-string">&quot;Work complete&quot;</span>);
 
 <span class="hljs-comment">// 另一方</span>
-socket.onclose = <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+socket.onclose = <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
   <span class="hljs-comment">// event.code === 1000</span>
   <span class="hljs-comment">// event.reason === &quot;Work complete&quot;</span>
   <span class="hljs-comment">// event.wasClean === true (clean close)</span>
@@ -2356,7 +2041,7 @@ socket.onclose = <span class="hljs-function"><span class="hljs-params">event</sp
 <p>完整列表请见 <a href="https://tools.ietf.org/html/rfc6455#section-7.4.1">RFC6455, §7.4.1</a>。</p>
 <p>WebSocket 码有点像 HTTP 码，但它们是不同的。特别是，小于 <code>1000</code> 的码都是被保留的，如果我们尝试设置这样的码，将会出现错误。</p>
 <pre><code class="language-js"><span class="hljs-comment">// 在连接断开的情况下</span>
-socket.onclose = <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+socket.onclose = <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
   <span class="hljs-comment">// event.code === 1006</span>
   <span class="hljs-comment">// event.reason === &quot;&quot;</span>
   <span class="hljs-comment">// event.wasClean === false（未关闭 frame）</span>
@@ -2374,8 +2059,8 @@ socket.onclose = <span class="hljs-function"><span class="hljs-params">event</sp
 <p>HTML：我们需要一个 <code>&lt;form&gt;</code> 来发送消息，并且需要一个 <code>&lt;div&gt;</code> 来接收消息：</p>
 <pre><code class="language-html"><span class="hljs-comment">&lt;!-- 消息表单 --&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;publish&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;message&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Send&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;message&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;Send&quot;</span> /&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
 
 <span class="hljs-comment">&lt;!-- 带有消息的 div --&gt;</span>
@@ -2390,7 +2075,7 @@ socket.onclose = <span class="hljs-function"><span class="hljs-params">event</sp
 <pre><code class="language-js"><span class="hljs-keyword">let</span> socket = <span class="hljs-keyword">new</span> WebSocket(<span class="hljs-string">&quot;wss://javascript.info/article/websocket/chat/ws&quot;</span>);
 
 <span class="hljs-comment">// 从表单发送消息</span>
-<span class="hljs-built_in">document</span>.forms.publish.onsubmit = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-built_in">document</span>.forms.publish.onsubmit = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">let</span> outgoingMessage = <span class="hljs-built_in">this</span>.message.value;
 
   socket.send(outgoingMessage);
@@ -2398,13 +2083,13 @@ socket.onclose = <span class="hljs-function"><span class="hljs-params">event</sp
 };
 
 <span class="hljs-comment">// 收到消息 —— 在 div#messages 中显示消息</span>
-socket.onmessage = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+socket.onmessage = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
   <span class="hljs-keyword">let</span> message = event.data;
 
-  <span class="hljs-keyword">let</span> messageElem = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
+  <span class="hljs-keyword">let</span> messageElem = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&quot;div&quot;</span>);
   messageElem.textContent = message;
-  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;messages&#x27;</span>).prepend(messageElem);
-}</code></pre>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;messages&quot;</span>).prepend(messageElem);
+};</code></pre>
 <p>服务端代码有点超出我们的范围。在这里，我们将使用 Node.js，但你不必这样做。其他平台也有使用 WebSocket 的方法。</p>
 <p>服务器端的算法为：</p>
 <ol>
@@ -2413,8 +2098,8 @@ socket.onmessage = <span class="hljs-function"><span class="hljs-keyword">functi
 <li>当接收到消息：遍历客户端，并将消息发送给所有人。</li>
 <li>当连接被关闭：<code>clients.delete(socket)</code>。</li>
 </ol>
-<pre><code class="language-js"><span class="hljs-keyword">const</span> ws = <span class="hljs-keyword">new</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;ws&#x27;</span>);
-<span class="hljs-keyword">const</span> wss = <span class="hljs-keyword">new</span> ws.Server({<span class="hljs-attr">noServer</span>: <span class="hljs-literal">true</span>});
+<pre><code class="language-js"><span class="hljs-keyword">const</span> ws = <span class="hljs-keyword">new</span> <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;ws&quot;</span>);
+<span class="hljs-keyword">const</span> wss = <span class="hljs-keyword">new</span> ws.Server({ <span class="hljs-attr">noServer</span>: <span class="hljs-literal">true</span> });
 
 <span class="hljs-keyword">const</span> clients = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>();
 
@@ -2427,51 +2112,24 @@ http.createServer(<span class="hljs-function">(<span class="hljs-params">req, re
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onSocketConnect</span>(<span class="hljs-params">ws</span>) </span>{
   clients.add(ws);
 
-  ws.on(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">message</span>) </span>{
+  ws.on(<span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">message</span>) </span>{
     message = message.slice(<span class="hljs-number">0</span>, <span class="hljs-number">50</span>); <span class="hljs-comment">// message 的最大长度为 50</span>
 
-    <span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> client <span class="hljs-keyword">of</span> clients</span>)</span> {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> client <span class="hljs-keyword">of</span> clients) {
       client.send(message);
     }
   });
 
-  ws.on(<span class="hljs-string">&#x27;close&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  ws.on(<span class="hljs-string">&quot;close&quot;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
     clients.delete(ws);
   });
 }</code></pre>
-<p>这是运行示例：</p>
-<p>[iframe data-src=&quot;chat&quot; height=&quot;100&quot; zip]</p>
-<p>你也可以下载它（点击 iframe 右上角的按钮）然后在本地运行。运行之前请记得安装 <a href="https://nodejs.org/en/">Node.js</a> 和 <code>npm install ws</code>。</p>
-<h2 id="总结">总结</h2>
-<p>WebSocket 是一种在浏览器和服务器之间建立持久连接的现代方式。</p>
-<ul>
-<li>WebSocket 没有跨源限制。</li>
-<li>浏览器对 WebSocket 支持很好。</li>
-<li>可以发送/接收字符串和二进制数据。</li>
-</ul>
-<p>WebSocket 的 API 很简单。</p>
-<p>WebSocket 方法：</p>
-<ul>
-<li><code>socket.send(data)</code>，</li>
-<li><code>socket.close([code], [reason])</code>。</li>
-</ul>
-<p>WebSocket 事件：</p>
-<ul>
-<li><code>open</code>，</li>
-<li><code>message</code>，</li>
-<li><code>error</code>，</li>
-<li><code>close</code>。</li>
-</ul>
-<p>WebSocket 自身并不包含重新连接（reconnection），身份验证（authentication）和很多其他高级机制。因此，有针对于此的客户端/服务端的库，并且也可以手动实现这些功能。</p>
-<p>有时为了将 WebSocket 集成到现有项目中，人们将主 HTTP 服务器与 WebSocket 服务器并行运行，并且它们之间共享同一个数据库。对于 WebSocket 请求使用一个通向 WebSocket 服务器的子域 <code>wss://ws.site.com</code>，而 <code>https://site.com</code> 则通向主 HTTP 服务器。</p>
-<p>当然，其他集成方式也是可行的。</p>
 
       </fieldset>
       
-      <fieldset id='_1ZMIP9'>
-      <legend>article</legend>
-      <h1 id="server-sent-events">Server Sent Events</h1>
-<p><a href="https://html.spec.whatwg.org/multipage/comms.html#the-eventsource-interface">Server-Sent Events</a> 规范描述了一个内建的类 <code>EventSource</code>，它能保持与服务器的连接，并允许从中接收事件。</p>
+      <fieldset id='_6GSEc4'>
+      <legend>server-sent-events</legend>
+      <p><a href="https://html.spec.whatwg.org/multipage/comms.html#the-eventsource-interface">Server-Sent Events</a> 规范描述了一个内建的类 <code>EventSource</code>，它能保持与服务器的连接，并允许从中接收事件。</p>
 <p>与 <code>WebSocket</code> 类似，其连接是持久的。</p>
 <p>但是两者之间有几个重要的区别：</p>
 <table>
@@ -2520,7 +2178,7 @@ data: of two lines</code></pre>
 <p>对于每个这样的消息，都会生成 <code>message</code> 事件：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> eventSource = <span class="hljs-keyword">new</span> EventSource(<span class="hljs-string">&quot;/events/subscribe&quot;</span>);
 
-eventSource.onmessage = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
+eventSource.onmessage = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
   <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;New message&quot;</span>, event.data);
   <span class="hljs-comment">// 对于上面的数据流将打印三次</span>
 };
@@ -2532,7 +2190,7 @@ eventSource.onmessage = <span class="hljs-function"><span class="hljs-keyword">f
 <p>远程服务器将会获取到 <code>Origin</code> header，并且必须以 <code>Access-Control-Allow-Origin</code> 响应来处理。</p>
 <p>要传递凭证（credentials），我们应该设置附加选项 <code>withCredentials</code>，就像这样：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> source = <span class="hljs-keyword">new</span> EventSource(<span class="hljs-string">&quot;https://another-site.com/events&quot;</span>, {
-  <span class="hljs-attr">withCredentials</span>: <span class="hljs-literal">true</span>
+  <span class="hljs-attr">withCredentials</span>: <span class="hljs-literal">true</span>,
 });</code></pre>
 <p>更多关于跨源 header 的详细内容，请参见 <a href="info:fetch-crossorigin">info:fetch-crossorigin</a>。</p>
 <h2 id="重新连接">重新连接</h2>
@@ -2552,7 +2210,7 @@ eventSource.onmessage = <span class="hljs-function"><span class="hljs-keyword">f
 
 eventSource.close();</code></pre>
 <p>并且，如果响应具有不正确的 <code>Content-Type</code> 或者其 HTTP 状态码不是 301，307，200 和 204，则不会进行重新连接。在这种情况下，将会发出 <code>&quot;error&quot;</code> 事件，并且浏览器不会重新连接。</p>
-<pre><code class="language-smart">当连接最终被关闭时，就无法“重新打开”它。如果我们想要再次连接，只需要创建一个新的 `EventSource`。</code></pre>
+<p>当连接最终被关闭时，就无法“重新打开”它。如果我们想要再次连接，只需要创建一个新的 <code>EventSource</code>。</p>
 <h2 id="消息-id">消息 id</h2>
 <p>当一个连接由于网络问题而中断时，客户端和服务器都无法确定哪些消息已经收到哪些没有收到。</p>
 <p>为了正确地恢复连接，每条消息都应该有一个 <code>id</code> 字段，就像这样：</p>
@@ -2570,7 +2228,7 @@ id: 3</code></pre>
 <li>将属性 <code>eventSource.lastEventId</code> 设置为其值。</li>
 <li>重新连接后，发送带有 <code>id</code> 的 header <code>Last-Event-ID</code>，以便服务器可以重新发送后面的消息。</li>
 </ul>
-<p>```smart header=&quot;把 <code>id:</code> 放在 <code>data:</code> 后&quot;
+<p>把 <code>id:</code> 放在 <code>data:</code> 后&quot;
 请注意：<code>id</code> 被服务器附加到 <code>data</code> 消息后，以确保在收到消息后 <code>lastEventId</code> 会被更新。</p>
 <pre><code>
 ## 连接状态：readyState
@@ -2600,63 +2258,18 @@ data: Hello
 event: leave
 data: Bob</code></pre>
 <p>要处理自定义事件，我们必须使用 <code>addEventListener</code> 而非 <code>onmessage</code>：</p>
-<pre><code class="language-js">eventSource.addEventListener(<span class="hljs-string">&#x27;join&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+<pre><code class="language-js">eventSource.addEventListener(<span class="hljs-string">&quot;join&quot;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
   alert(<span class="hljs-string">`Joined <span class="hljs-subst">${event.data}</span>`</span>);
 });
 
-eventSource.addEventListener(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+eventSource.addEventListener(<span class="hljs-string">&quot;message&quot;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
   alert(<span class="hljs-string">`Said: <span class="hljs-subst">${event.data}</span>`</span>);
 });
 
-eventSource.addEventListener(<span class="hljs-string">&#x27;leave&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
+eventSource.addEventListener(<span class="hljs-string">&quot;leave&quot;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
   alert(<span class="hljs-string">`Left <span class="hljs-subst">${event.data}</span>`</span>);
 });</code></pre>
-<h2 id="完整示例">完整示例</h2>
-<p>服务器依次发送 <code>1</code>，<code>2</code>，<code>3</code>，最后发送 <code>bye</code> 并断开连接。</p>
-<p>然后浏览器会自动重新连接。</p>
-<p>[codetabs src=&quot;eventsource&quot;]</p>
-<h2 id="总结">总结</h2>
-<p><code>EventSource</code> 对象自动建立一个持久的连接，并允许服务器通过这个连接发送消息。</p>
-<p>它提供了：</p>
-<ul>
-<li>在可调的 <code>retry</code> 超时内自动重新连接。</li>
-<li>用于恢复事件的消息 id，重新连接后，最后接收到的标识符被在 <code>Last-Event-ID</code> header 中发送出去。</li>
-<li>当前状态位于 <code>readyState</code> 属性中。</li>
-</ul>
-<p>这使得 <code>EventSource</code> 成为 <code>WebSocket</code> 的一个可行的替代方案，因为 <code>WebSocket</code> 更低级（low-level），且缺乏这样的内建功能（尽管它们可以被实现）。</p>
-<p>在很多实际应用中，<code>EventSource</code> 的功能就已经够用了。</p>
-<p><code>EventSource</code> 在所有现代浏览器（除了 IE）中都得到了支持。</p>
-<p>语法：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> source = <span class="hljs-keyword">new</span> EventSource(url, [credentials]);</code></pre>
-<p>第二个参数只有一个可选项：<code>{ withCredentials: true }</code>，它允许发送跨源凭证。</p>
-<p>总体跨源安全性与 <code>fetch</code> 以及其他网络方法相同。</p>
-<h3 id="eventsource-对象的属性"><code>EventSource</code> 对象的属性</h3>
-<p><code>readyState</code>
-: 当前连接状态：为 <code>EventSource.CONNECTING (=0)</code>，<code>EventSource.OPEN (=1)</code>，<code>EventSource.CLOSED (=2)</code> 三者之一。</p>
-<p><code>lastEventId</code>
-: 最后接收到的 <code>id</code>。重新连接后，浏览器在 header <code>Last-Event-ID</code> 中发送此 id。</p>
-<h3 id="eventsource-对象的方法"><code>EventSource</code> 对象的方法</h3>
-<p><code>close()</code>
-: 关闭连接。</p>
-<h3 id="eventsource-对象的事件"><code>EventSource</code> 对象的事件</h3>
-<p><code>message</code>
-: 接收到的消息，消息数据在 <code>event.data</code> 中。</p>
-<p><code>open</code>
-: 连接已建立。</p>
-<p><code>error</code>
-: 如果发生错误，包括连接丢失（将会自动重连）以及其他致命错误。我们可以检查 <code>readyState</code> 以查看是否正在尝试重新连接。</p>
-<p>服务器可以在 <code>event:</code> 中设置自定义事件名称。应该使用 <code>addEventListener</code> 来处理此类事件，而不是使用 <code>on&lt;event&gt;</code>。</p>
-<h3 id="服务器响应格式">服务器响应格式</h3>
-<p>服务器发送由 <code>\n\n</code> 分隔的消息。</p>
-<p>一条消息可能有以下字段：</p>
-<ul>
-<li><code>data:</code> —— 消息体（body），一系列多个 <code>data</code> 被解释为单个消息，各个部分之间由 <code>\n</code> 分隔。</li>
-<li><code>id:</code> —— 更新 <code>lastEventId</code>，重连时以 <code>Last-Event-ID</code> 发送此 id。</li>
-<li><code>retry:</code> —— 建议重连的延迟，以 ms 为单位。无法通过 JavaScript 进行设置。</li>
-<li><code>event:</code> —— 事件名，必须在 <code>data:</code> 之前。</li>
-</ul>
-<p>一条消息可以按任何顺序包含一个或多个字段，但是 <code>id:</code> 通常排在最后。</p>
 
       </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>fetch</strong><br/></div><div style="margin-left:1em"><strong>fetch-users</strong><br/></div><div style="margin-left:2em"><a href="#_g6HUmi">solution</a><br/></div><div style="margin-left:2em"><a href="#_208rMV">task</a><br/></div><div style="margin-left:1em"><a href="#_ffwyV4">article</a><br/></div><div style="margin-left:0em"><strong>formdata</strong><br/></div><div style="margin-left:1em"><a href="#_znWON4">article</a><br/></div><div style="margin-left:0em"><strong>fetch-progress</strong><br/></div><div style="margin-left:1em"><a href="#_ArFdSS">article</a><br/></div><div style="margin-left:0em"><strong>fetch-abort</strong><br/></div><div style="margin-left:1em"><a href="#_7uB62m">article</a><br/></div><div style="margin-left:0em"><strong>fetch-crossorigin</strong><br/></div><div style="margin-left:1em"><strong>do-we-need-origin</strong><br/></div><div style="margin-left:2em"><a href="#_gvYrZU">solution</a><br/></div><div style="margin-left:2em"><a href="#_RaxJGD">task</a><br/></div><div style="margin-left:1em"><a href="#_ehUOUq">article</a><br/></div><div style="margin-left:0em"><strong>fetch-api</strong><br/></div><div style="margin-left:1em"><a href="#_prpvOf">article</a><br/></div><div style="margin-left:0em"><strong>url</strong><br/></div><div style="margin-left:1em"><a href="#_Cb6m1h">article</a><br/></div><div style="margin-left:0em"><strong>xmlhttprequest</strong><br/></div><div style="margin-left:1em"><a href="#_qmzTfC">article</a><br/></div><div style="margin-left:0em"><strong>resume-upload</strong><br/></div><div style="margin-left:1em"><a href="#_vvQuRT">article</a><br/></div><div style="margin-left:0em"><strong>long-polling</strong><br/></div><div style="margin-left:1em"><a href="#_ZGMO1o">article</a><br/></div><div style="margin-left:0em"><strong>websocket</strong><br/></div><div style="margin-left:1em"><a href="#_PjBK5m">article</a><br/></div><div style="margin-left:0em"><strong>server-sent-events</strong><br/></div><div style="margin-left:1em"><a href="#_1ZMIP9">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><a href="#_l1JYNb">fetch</a><br/></div><div style="margin-left:0em"><a href="#_HUnVem">formData</a><br/></div><div style="margin-left:0em"><a href="#_tZ3eVU">fetch-progress</a><br/></div><div style="margin-left:0em"><a href="#_PRD5QB">fetch-abort</a><br/></div><div style="margin-left:0em"><a href="#_Y4gAmz">fetch-crossorigin</a><br/></div><div style="margin-left:0em"><a href="#_woMcXR">fetch-api</a><br/></div><div style="margin-left:0em"><a href="#_y8R4nt">url</a><br/></div><div style="margin-left:0em"><a href="#_yUgDRP">xmlhttprequest</a><br/></div><div style="margin-left:0em"><a href="#_QGSvIN">resume-upload</a><br/></div><div style="margin-left:0em"><a href="#_H4CqRd">long-polling</a><br/></div><div style="margin-left:0em"><a href="#_42e9eO">websocket</a><br/></div><div style="margin-left:0em"><a href="#_6GSEc4">server-sent-events</a><br/></div></div>
 </body></html>
