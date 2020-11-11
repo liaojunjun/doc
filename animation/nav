@@ -1,21 +1,2 @@
-bezier-curve
- article.md
-css-animations
- animate-logo-css
-  solution.md
-  task.md
- animate-logo-bezier-css
-  solution.md
-  task.md
- animate-circle
-  solution.md
-  task.md
- article.md
-js-animation
- animate-ball
-  solution.md
-  task.md
- animate-ball-hops
-  solution.md
-  task.md
- article.md
+css-animations.md
+js-animation.md

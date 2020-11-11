@@ -302,10 +302,9 @@
   <div class="toggle-hash-btn">
     <button  onclick="toggleHash()">开启专注模式</button>
   </div><div id="page">
-      <fieldset id='_zYI9RW'>
-      <legend>article</legend>
-      <h1 id="cookie，documentcookie">Cookie，document.cookie</h1>
-<p>Cookie 是直接存储在浏览器中的一小串数据。它们是 HTTP 协议的一部分，由 <a href="https://tools.ietf.org/html/rfc6265">RFC 6265</a> 规范定义。</p>
+      <fieldset id='_WpRe9A'>
+      <legend>cookie</legend>
+      <p>Cookie 是直接存储在浏览器中的一小串数据。它们是 HTTP 协议的一部分，由 <a href="https://tools.ietf.org/html/rfc6265">RFC 6265</a> 规范定义。</p>
 <p>Cookie 通常是由 Web 服务器使用响应 <code>Set-Cookie</code> HTTP-header 设置的。然后浏览器使用 <code>Cookie</code> HTTP-header 将它们自动添加到（几乎）每个对相同域的请求中。</p>
 <p>最常见的用处之一就是身份验证：</p>
 <ol>
@@ -314,16 +313,10 @@
 <li>所以服务器知道是谁发起了请求。</li>
 </ol>
 <p>我们还可以使用 <code>document.cookie</code> 属性从浏览器访问 cookie。</p>
-<p>关于 cookie 及其选项，有很多棘手的事情。在本章中，我们将详细介绍它们。</p>
 <h2 id="从-documentcookie-中读取">从 document.cookie 中读取</h2>
-<pre><code class="language-online">你的浏览器是否存储了本网站的任何 cookie？让我们来看看：</code></pre>
-<pre><code class="language-offline">假设你在一个网站上，则可以看到来自该网站的 cookie，像这样：</code></pre>
-<pre><code class="language-js"><span class="hljs-comment">// 在 javascript.info，我们使用谷歌分析来进行统计，</span>
-<span class="hljs-comment">// 所以应该存在一些 cookie</span>
-alert( <span class="hljs-built_in">document</span>.cookie ); <span class="hljs-comment">// cookie1=value1; cookie2=value2;...</span></code></pre>
+<pre><code class="language-js">alert(<span class="hljs-built_in">document</span>.cookie); <span class="hljs-comment">// cookie1=value1; cookie2=value2;...</span></code></pre>
 <p><code>document.cookie</code> 的值由 <code>name=value</code> 对组成，以 <code>; </code> 分隔。每一个都是独立的 cookie。</p>
 <p>为了找到一个特定的 cookie，我们可以以 <code>; </code> 作为分隔，将 <code>document.cookie</code> 分开，然后找到对应的名字。我们可以使用正则表达式或者数组函数来实现。</p>
-<p>我们把这个留给读者当作练习。此外，在本章的最后，你可以找到一些操作 cookie 的辅助函数。</p>
 <h2 id="写入-documentcookie">写入 document.cookie</h2>
 <p>我们可以写入 <code>document.cookie</code>。但这不是一个数据属性，它是一个访问器（getter/setter）。对其的赋值操作会被特殊处理。</p>
 <p><strong>对 <code>document.cookie</code> 的写入操作只会更新其中提到的 cookie，而不会涉及其他 cookie。</strong></p>
@@ -334,18 +327,20 @@ alert(<span class="hljs-built_in">document</span>.cookie); <span class="hljs-com
 <p>从技术上讲，cookie 的名称和值可以是任何字符，为了保持有效的格式，它们应该使用内建的 <code>encodeURIComponent</code> 函数对其进行转义：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 特殊字符（空格），需要编码</span>
 <span class="hljs-keyword">let</span> name = <span class="hljs-string">&quot;my name&quot;</span>;
-<span class="hljs-keyword">let</span> value = <span class="hljs-string">&quot;John Smith&quot;</span>
+<span class="hljs-keyword">let</span> value = <span class="hljs-string">&quot;John Smith&quot;</span>;
 
 <span class="hljs-comment">// 将 cookie 编码为 my%20name=John%20Smith</span>
-<span class="hljs-built_in">document</span>.cookie = <span class="hljs-built_in">encodeURIComponent</span>(name) + <span class="hljs-string">&#x27;=&#x27;</span> + <span class="hljs-built_in">encodeURIComponent</span>(value);
+<span class="hljs-built_in">document</span>.cookie = <span class="hljs-built_in">encodeURIComponent</span>(name) + <span class="hljs-string">&quot;=&quot;</span> + <span class="hljs-built_in">encodeURIComponent</span>(value);
 
 alert(<span class="hljs-built_in">document</span>.cookie); <span class="hljs-comment">// ...; my%20name=John%20Smith</span></code></pre>
-<pre><code class="language-warn">存在一些限制：
-- `encodeURIComponent` 编码后的 `name=value` 对，大小不能超过 4kb。因此，我们不能在一个 cookie 中保存大的东西。
-- 每个域的 cookie 总数不得超过 20+ 左右，具体限制取决于浏览器。</code></pre>
+<p>存在一些限制：</p>
+<ul>
+<li><code>encodeURIComponent</code> 编码后的 <code>name=value</code> 对，大小不能超过 4kb。因此，我们不能在一个 cookie 中保存大的东西。</li>
+<li>每个域的 cookie 总数不得超过 20+ 左右，具体限制取决于浏览器。</li>
+</ul>
 <p>Cookie 有几个选项，其中很多都很重要，应该设置它。</p>
 <p>选项被列在 <code>key=value</code> 之后，以 <code>;</code> 分隔，像这样：</p>
-<pre><code class="language-js"><span class="hljs-built_in">document</span>.cookie = <span class="hljs-string">&quot;user=John; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT&quot;</span></code></pre>
+<pre><code class="language-js"><span class="hljs-built_in">document</span>.cookie = <span class="hljs-string">&quot;user=John; path=/; expires=Tue, 19 Jan 2038 03:14:07 GMT&quot;</span>;</code></pre>
 <h2 id="path">path</h2>
 <ul>
 <li><strong><code>path=/mypath</code></strong></li>
@@ -361,7 +356,7 @@ alert(<span class="hljs-built_in">document</span>.cookie); <span class="hljs-com
 <p>默认情况下，cookie 只有在设置的域下才能被访问到。所以，如果 cookie 设置在 <code>site.com</code> 下，我们在 <code>other.com</code> 下就无法获取它。</p>
 <p>……但是棘手的是，我们在子域 <code>forum.site.com</code> 下也无法获取它！</p>
 <pre><code class="language-js"><span class="hljs-comment">// 在 site.com</span>
-<span class="hljs-built_in">document</span>.cookie = <span class="hljs-string">&quot;user=John&quot;</span>
+<span class="hljs-built_in">document</span>.cookie = <span class="hljs-string">&quot;user=John&quot;</span>;
 
 <span class="hljs-comment">// 在 forum.site.com</span>
 alert(<span class="hljs-built_in">document</span>.cookie); <span class="hljs-comment">// 没有 user</span></code></pre>
@@ -370,7 +365,7 @@ alert(<span class="hljs-built_in">document</span>.cookie); <span class="hljs-com
 <p>……但是，如果我们想要批准像 <code>forum.site.com</code> 这样的子域访问 cookie，这是可以做到的。当我们设置一个在 <code>site.com</code> 的 cookie 时，我们应该将 <code>domain</code> 选项显式地设置为根域：<code>domain=site.com</code>：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 在 site.com</span>
 <span class="hljs-comment">// 使 cookie 可以被在任何子域 *.site.com 访问：</span>
-<span class="hljs-built_in">document</span>.cookie = <span class="hljs-string">&quot;user=John; domain=site.com&quot;</span>
+<span class="hljs-built_in">document</span>.cookie = <span class="hljs-string">&quot;user=John; domain=site.com&quot;</span>;
 
 <span class="hljs-comment">// 之后</span>
 
@@ -392,7 +387,7 @@ date = date.toUTCString();
 <span class="hljs-built_in">document</span>.cookie = <span class="hljs-string">&quot;user=John; expires=&quot;</span> + date;</code></pre>
 <p>如果我们将 <code>expires</code> 设置为过去的时间，则 cookie 会被删除。</p>
 <ul>
-<li> <strong><code>max-age=3600</code></strong></li>
+<li><strong><code>max-age=3600</code></strong></li>
 </ul>
 <p><code>expires</code> 的替代选项，具指明 cookie 的过期时间距离当前时间的秒数。</p>
 <p>如果为 0 或负数，则 cookie 会被删除：</p>
@@ -419,7 +414,6 @@ date = date.toUTCString();
 <p>想象一下，你登录了 <code>bank.com</code> 网站。此时：你有了来自该网站的身份验证 cookie。你的浏览器会在每次请求时将其发送到 <code>bank.com</code>，以便识别你，并执行所有敏感的财务上的操作。</p>
 <p>现在，在另外一个窗口中浏览网页时，你不小心访问了另一个网站 <code>evil.com</code>。该网站具有向 <code>bank.com</code> 网站提交一个具有启动与黑客账户交易的字段的表单 <code>&lt;form action=&quot;https://bank.com/pay&quot;&gt;</code> 的 JavaScript 代码。</p>
 <p>你每次访问 <code>bank.com</code> 时，浏览器都会发送 cookie，即使该表单是从 <code>evil.com</code> 提交过来的。因此，银行会识别你的身份，并执行真实的付款。</p>
-<p><img src="cookie-xsrf.svg" alt=""></p>
 <p>这就是“跨网站请求伪造（Cross-Site Request Forgery，简称 XSRF）”攻击。</p>
 <p>当然，实际的银行会防止出现这种情况。所有由 <code>bank.com</code> 生成的表单都具有一个特殊的字段，即所谓的 “XSRF 保护 token”，恶意页面既不能生成，也不能从远程页面提取它（它可以在那里提交表单，但是无法获取数据）。并且，网站 <code>bank.com</code> 会对收到的每个表单都进行这种 token 的检查。</p>
 <p>但是，实现这种防护需要花费时间：我们需要确保每个表单都具有 token 字段，并且还必须检查所有请求。</p>
@@ -444,10 +438,10 @@ date = date.toUTCString();
 <p>如果以下两个条件均成立，则会发送 <code>samesite=lax</code> cookie：</p>
 <ol>
 <li><p>HTTP 方法是“安全的”（例如 GET 方法，而不是 POST）。</p>
-<p> 所有安全的 HTTP 方法详见 <a href="https://tools.ietf.org/html/rfc7231">RFC7231 规范</a>。基本上，这些都是用于读取而不是写入数据的方法。它们不得执行任何更改数据的操作。跟随链接始终是 GET，是安全的方法。</p>
+<p>所有安全的 HTTP 方法详见 <a href="https://tools.ietf.org/html/rfc7231">RFC7231 规范</a>。基本上，这些都是用于读取而不是写入数据的方法。它们不得执行任何更改数据的操作。跟随链接始终是 GET，是安全的方法。</p>
 </li>
 <li><p>该操作执行顶级导航（更改浏览器地址栏中的 URL）。</p>
-<p> 这通常是成立的，但是如果导航是在一个 <code>&lt;iframe&gt;</code> 中执行的，那么它就不是顶级的。此外，用于网络请求的 JavaScript 方法不会执行任何导航，因此它们不适合。</p>
+<p>这通常是成立的，但是如果导航是在一个 <code>&lt;iframe&gt;</code> 中执行的，那么它就不是顶级的。此外，用于网络请求的 JavaScript 方法不会执行任何导航，因此它们不适合。</p>
 </li>
 </ol>
 <p>所以，<code>samesite=lax</code> 所做的是基本上允许最常见的“去往 URL”操作具有 cookie。例如，从笔记本中打开网站链接就满足这些条件。</p>
@@ -466,18 +460,19 @@ date = date.toUTCString();
 <p>这是一种预防措施，当黑客将自己的 JavaScript 代码注入网页，并等待用户访问该页面时发起攻击，而这个选项可以防止此时的这种攻击。这应该是不可能发生的，黑客应该无法将他们的代码注入我们的网站，但是网站有可能存在 bug，使得黑客能够实现这样的操作。</p>
 <p>通常来说，如果发生了这种情况，并且用户访问了带有黑客 JavaScript 代码的页面，黑客代码将执行并通过 <code>document.cookie</code> 获取到包含用户身份验证信息的 cookie。这就很糟糕了。</p>
 <p>但是，如果 cookie 设置了 <code>httpOnly</code>，那么 <code>document.cookie</code> 则看不到 cookie，所以它受到了保护。</p>
-<h2 id="附录-cookie-函数">附录: Cookie 函数</h2>
-<p>这里有一组有关 cookie 操作的函数，比手动修改 <code>document.cookie</code> 方便得多。</p>
-<p>有很多这种 cookie 库，所以这些函数只用于演示。虽然它们都能正常使用。</p>
 <h3 id="getcookiename">getCookie(name)</h3>
 <p>获取 cookie 最简短的方式是使用 <a href="info:regular-expressions">正则表达式</a>。</p>
 <p><code>getCookie(name)</code> 函数返回具有给定 <code>name</code> 的 cookie：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 返回具有给定 name 的 cookie，</span>
 <span class="hljs-comment">// 如果没找到，则返回 undefined</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCookie</span>(<span class="hljs-params">name</span>) </span>{
-  <span class="hljs-keyword">let</span> matches = <span class="hljs-built_in">document</span>.cookie.match(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(
-    <span class="hljs-string">&quot;(?:^|; )&quot;</span> + name.replace(<span class="hljs-regexp">/([\.$?*|{}\(\)\[\]\\\/\+^])/g</span>, <span class="hljs-string">&#x27;\\$1&#x27;</span>) + <span class="hljs-string">&quot;=([^;]*)&quot;</span>
-  ));
+  <span class="hljs-keyword">let</span> matches = <span class="hljs-built_in">document</span>.cookie.match(
+    <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(
+      <span class="hljs-string">&quot;(?:^|; )&quot;</span> +
+        name.replace(<span class="hljs-regexp">/([\.$?*|{}\(\)\[\]\\\/\+^])/g</span>, <span class="hljs-string">&quot;\\$1&quot;</span>) +
+        <span class="hljs-string">&quot;=([^;]*)&quot;</span>
+    )
+  );
   <span class="hljs-keyword">return</span> matches ? <span class="hljs-built_in">decodeURIComponent</span>(matches[<span class="hljs-number">1</span>]) : <span class="hljs-literal">undefined</span>;
 }</code></pre>
 <p>这里的 <code>new RegExp</code> 是动态生成的，以匹配 <code>; name=&lt;value&gt;</code>。</p>
@@ -485,18 +480,18 @@ date = date.toUTCString();
 <h3 id="setcookiename-value-options">setCookie(name, value, options)</h3>
 <p>将 cookie <code>name</code> 设置为具有默认值 <code>path=/</code>（可以修改以添加其他默认值）和给定值 <code>value</code>：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setCookie</span>(<span class="hljs-params">name, value, options = {}</span>) </span>{
-
   options = {
-    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/&#x27;</span>,
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&quot;/&quot;</span>,
     <span class="hljs-comment">// 如果需要，可以在这里添加其他默认值</span>
-    ...options
+    ...options,
   };
 
   <span class="hljs-keyword">if</span> (options.expires <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span>) {
     options.expires = options.expires.toUTCString();
   }
 
-  <span class="hljs-keyword">let</span> updatedCookie = <span class="hljs-built_in">encodeURIComponent</span>(name) + <span class="hljs-string">&quot;=&quot;</span> + <span class="hljs-built_in">encodeURIComponent</span>(value);
+  <span class="hljs-keyword">let</span> updatedCookie =
+    <span class="hljs-built_in">encodeURIComponent</span>(name) + <span class="hljs-string">&quot;=&quot;</span> + <span class="hljs-built_in">encodeURIComponent</span>(value);
 
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> optionKey <span class="hljs-keyword">in</span> options) {
     updatedCookie += <span class="hljs-string">&quot;; &quot;</span> + optionKey;
@@ -510,101 +505,22 @@ date = date.toUTCString();
 }
 
 <span class="hljs-comment">// 使用范例：</span>
-setCookie(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-string">&#x27;John&#x27;</span>, {<span class="hljs-attr">secure</span>: <span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;max-age&#x27;</span>: <span class="hljs-number">3600</span>});</code></pre>
+setCookie(<span class="hljs-string">&quot;user&quot;</span>, <span class="hljs-string">&quot;John&quot;</span>, { <span class="hljs-attr">secure</span>: <span class="hljs-literal">true</span>, <span class="hljs-string">&quot;max-age&quot;</span>: <span class="hljs-number">3600</span> });</code></pre>
 <h3 id="deletecookiename">deleteCookie(name)</h3>
 <p>要删除一个 cookie，我们可以给它设置一个负的过期时间来调用它：</p>
 <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">deleteCookie</span>(<span class="hljs-params">name</span>) </span>{
   setCookie(name, <span class="hljs-string">&quot;&quot;</span>, {
-    <span class="hljs-string">&#x27;max-age&#x27;</span>: -<span class="hljs-number">1</span>
-  })
+    <span class="hljs-string">&quot;max-age&quot;</span>: -<span class="hljs-number">1</span>,
+  });
 }</code></pre>
-<pre><code class="language-warn">请注意：当我们更新或删除一个 cookie 时，我们应该使用和设置 cookie 时相同的路径和域选项。</code></pre>
-<p>代码放在：<a href="cookie.js">cookie.js</a>。</p>
-<h2 id="附录：第三方-cookie">附录：第三方 cookie</h2>
-<p>如果 cookie 是由用户所访问的页面的域以外的域放置的，则称其为第三方 cookie。</p>
-<p>例如：</p>
-<ol>
-<li><p><code>site.com</code> 网站的一个页面加载了另外一个网站的 banner：<code>&lt;img src=&quot;https://ads.com/banner.png&quot;&gt;</code>。</p>
-</li>
-<li><p>与 banner 一起，<code>ads.com</code> 的远程服务器可能会设置带有 <code>id=1234</code> 这样的 cookie 的 <code>Set-Cookie</code> header。此类 cookie 源自 <code>ads.com</code> 域，并且仅在 <code>ads.com</code> 中可见：</p>
-<p> <img src="cookie-third-party.svg" alt=""></p>
-</li>
-<li><p>下次访问 <code>ads.com</code> 网站时，远程服务器获取 cookie <code>id</code> 并识别用户：</p>
-<p> <img src="cookie-third-party-2.svg" alt=""></p>
-</li>
-<li><p>更为重要的是，当用户从 <code>site.com</code> 网站跳转至另一个也带有 banner 的网站 <code>other.com</code> 时，<code>ads.com</code> 会获得该 cookie，因为它属于 <code>ads.com</code>，从而识别用户并在他在网站之间切换时对其进行跟踪：</p>
-<p> <img src="cookie-third-party-3.svg" alt=""></p>
-</li>
-</ol>
-<p>由于它的性质，第三方 cookie 通常用于跟踪和广告服务。它们被绑定在原始域上，因此 <code>ads.com</code> 可以在不同网站之间跟踪同一用户，如果这些网站都可以访问 <code>ads.com</code> 的话。</p>
-<p>当然，有些人不喜欢被跟踪，因此浏览器允许禁止此类 cookie。</p>
-<p>此外，一些现代浏览器对此类 cookie 采取特殊策略：</p>
-<ul>
-<li>Safari 浏览器完全不允许第三方 cookie。</li>
-<li>Firefox 浏览器附带了一个第三方域的黑名单，它阻止了来自名单内的域的第三方 cookie。</li>
-</ul>
-<pre><code class="language-smart">如果我们加载了一个来自第三方域的脚本，例如 `&lt;script src=&quot;https://google-analytics.com/analytics.js&quot;&gt;`，并且该脚本使用 `document.cookie` 设置了 cookie，那么此类 cookie 就不是第三方的。
-
-如果一个脚本设置了一个 cookie，那么无论脚本来自何处 —— 这个 cookie 都属于当前网页的域。</code></pre>
-<h2 id="附录-gdpr">附录: GDPR</h2>
-<p>本主题和 JavaScript 无关，只是设置 cookie 时的一些注意事项。</p>
-<p>欧洲有一项名为 GDPR 的立法，该法规针对网站尊重用户实施了一系列规则。其中之一就是需要明确的许可才可以跟踪用户的 cookie。</p>
-<p>请注意，这仅与跟踪/识别/授权 cookie 有关。</p>
-<p>所以，如果我们设置一个只保存了一些信息的 cookie，但是既不跟踪也不识别用户，那么我们可以自由地设置它。</p>
-<p>但是，如果我们要设置带有身份验证会话（session）或跟踪 id 的 cookie，那么必须得到用户的允许。</p>
-<p>网站为了遵循 GDPR 通常有两种做法。你一定已经在网站中看到过它们了：</p>
-<ol>
-<li><p>如果一个网站想要仅为已经经过身份验证的用户设置跟踪的 cookie。</p>
-<p> 为此，注册表单中必须要有一个复选框，例如“接受隐私政策”（描述怎么使用 cookie），用户必须勾选它，然后网站就可以自由设置身份验证 cookie 了。</p>
-</li>
-<li><p>如果一个网站想要为所有人设置跟踪的 cookie。</p>
-<p> 为了合法地这样做，网站为每个新用户显示一个模态“初始屏幕”，并要求他们同意设置 cookie。之后网站就可以设置 cookie，并可以让用户看到网站内容了。不过，这可能会使新用户感到反感。没有人喜欢看到“必须点击”的模态初始屏幕而不是网站内容。但是 GDPR 要求必须得到用户明确地准许。</p>
-</li>
-</ol>
-<p>GDPR 不仅涉及 cookie，还涉及其他与隐私相关的问题，但这超出了我们的讨论范围。</p>
-<h2 id="总结">总结</h2>
-<p><code>document.cookie</code> 提供了对 cookie 的访问</p>
-<ul>
-<li>写入操作只会修改其中提到的 cookie。</li>
-<li>name/value 必须被编码。</li>
-<li>一个 cookie 最大为 4kb，每个网站最多有 20+ 个左右的 cookie（具体取决于浏览器）。</li>
-</ul>
-<p>Cookie 选项：</p>
-<ul>
-<li><code>path=/</code>，默认为当前路径，使 cookie 仅在该路径下可见。</li>
-<li><code>domain=site.com</code>，默认 cookie 仅在当前域下可见，如果显式设置了域，可以使 cookie 在子域下也可见。</li>
-<li><code>expires</code> 或 <code>max-age</code> 设置 cookie 过期时间，如果没有设置，则当浏览器关闭时 cookie 就失效了。</li>
-<li><code>secure</code> 使 cookie 仅在 HTTPS 下有效。</li>
-<li><code>samesite</code>，如果请求来自外部网站，禁止浏览器发送 cookie，这有助于防止 XSRF 攻击。</li>
-</ul>
-<p>另外：</p>
-<ul>
-<li>浏览器可能会禁用第三方 cookie，例如 Safari 浏览器默认禁止所有第三方 cookie。</li>
-<li>在为欧盟公民设置跟踪 cookie 时，GDPR 要求必须得到用户明确许可。</li>
-</ul>
+<p>&quot;更新或删除必须使用相同的路径和域&quot;
+请注意：当我们更新或删除一个 cookie 时，我们应该使用和设置 cookie 时相同的路径和域选项。</p>
 
       </fieldset>
       
-      <fieldset id='_QYfsQT'>
-      <legend>solution</legend>
-      
-      </fieldset>
-      
-      <fieldset id='_bjI5N3'>
-      <legend>task</legend>
-      <h1 id="自动保存表单字段">自动保存表单字段</h1>
-<p>创建一个 <code>textarea</code> 字段，每当其值发生变化时，可以将其“自动保存”。</p>
-<p>因此，如果用户不小心关闭了页面，然后重新打开，他会发现之前未完成的输入仍然保留在那里。</p>
-<p>像这样：</p>
-<p>[iframe data-src=&quot;solution&quot; height=120]</p>
-
-      </fieldset>
-      
-      <fieldset id='_pjcDYo'>
-      <legend>article</legend>
-      <h1 id="localstorage，sessionstorage">LocalStorage，sessionStorage</h1>
-<p>Web 存储对象 <code>localStorage</code> 和 <code>sessionStorage</code> 允许我们在浏览器上保存键/值对。</p>
-<p>它们有趣的是，在页面刷新后（对于 <code>sessionStorage</code>）甚至浏览器完全重启（对于 <code>localStorage</code>）后，数据仍然保留在浏览器中。我们很快就会看到。</p>
+      <fieldset id='_uaUcId'>
+      <legend>storage</legend>
+      <p>Web 存储对象 <code>localStorage</code> 和 <code>sessionStorage</code> 允许我们在浏览器上保存键/值对。</p>
 <p>我们已经有了 cookie。为什么还要其他存储对象呢？</p>
 <ul>
 <li>与 cookie 不同，Web 存储对象不会随每个请求被发送到服务器。因此，我们可以保存更多数据。大多数浏览器都允许保存至少 2MB 的数据（或更多），并且具有用于配置数据的设置。</li>
@@ -629,9 +545,9 @@ setCookie(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-s
 <li>数据不会过期。它在浏览器重启甚至系统重启后仍然存在。</li>
 </ul>
 <p>例如，如果你运行此代码……</p>
-<pre><code class="language-js"><span class="hljs-built_in">localStorage</span>.setItem(<span class="hljs-string">&#x27;test&#x27;</span>, <span class="hljs-number">1</span>);</code></pre>
+<pre><code class="language-js"><span class="hljs-built_in">localStorage</span>.setItem(<span class="hljs-string">&quot;test&quot;</span>, <span class="hljs-number">1</span>);</code></pre>
 <p>……然后关闭/重新打开浏览器，或者只是在不同的窗口打开同一页面，然后你可以这样获取它：</p>
-<pre><code class="language-js">alert( <span class="hljs-built_in">localStorage</span>.getItem(<span class="hljs-string">&#x27;test&#x27;</span>) ); <span class="hljs-comment">// 1</span></code></pre>
+<pre><code class="language-js">alert(<span class="hljs-built_in">localStorage</span>.getItem(<span class="hljs-string">&quot;test&quot;</span>)); <span class="hljs-comment">// 1</span></code></pre>
 <p>我们只需要在同一个源（域/端口/协议），URL 路径可以不同。</p>
 <p>在所有同源的窗口之间，<code>localStorage</code> 数据可以共享。因此，如果我们在一个窗口中设置了数据，则在另一个窗口中也可以看到数据变化。</p>
 <h2 id="类对象形式访问">类对象形式访问</h2>
@@ -640,14 +556,14 @@ setCookie(<span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-s
 <span class="hljs-built_in">localStorage</span>.test = <span class="hljs-number">2</span>;
 
 <span class="hljs-comment">// 获取 key</span>
-alert( <span class="hljs-built_in">localStorage</span>.test ); <span class="hljs-comment">// 2</span>
+alert(<span class="hljs-built_in">localStorage</span>.test); <span class="hljs-comment">// 2</span>
 
 <span class="hljs-comment">// 删除 key</span>
 <span class="hljs-keyword">delete</span> <span class="hljs-built_in">localStorage</span>.test;</code></pre>
 <p>这是历史原因造成的，并且大多数情况下都可行，但通常不建议这样做，因为：</p>
 <ol>
 <li><p>如果键是由用户生成的，那么它可以是任何内容，例如 <code>length</code> 或 <code>toString</code>，也可以是 <code>localStorage</code> 的另一种内建方法。在这种情况下，<code>getItem/setItem</code> 可以正常工作，而类对象访问的方式则会失败：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> key = <span class="hljs-string">&#x27;length&#x27;</span>;
+<pre><code class="language-js"><span class="hljs-keyword">let</span> key = <span class="hljs-string">&quot;length&quot;</span>;
 <span class="hljs-built_in">localStorage</span>[key] = <span class="hljs-number">5</span>; <span class="hljs-comment">// Error，无法对 length 进行赋值</span></code></pre>
 </li>
 <li><p>有一个 <code>storage</code> 事件，在我们更改数据时会触发。但以类对象方式访问时，不会触发该事件。我们将在本章的后面看到。</p>
@@ -657,18 +573,18 @@ alert( <span class="hljs-built_in">localStorage</span>.test ); <span class="hljs
 <p>正如我们所看到的，这些方法提供了“按照键获取/设置/删除”的功能。但我们如何获取所有保存的值或键呢？</p>
 <p>不幸的是，存储对象是不可迭代的。</p>
 <p>一种方法是像遍历数组那样遍历它们：</p>
-<pre><code class="language-js"><span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">localStorage</span>.length; i++</span>)</span> {
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">localStorage</span>.length; i++) {
   <span class="hljs-keyword">let</span> key = <span class="hljs-built_in">localStorage</span>.key(i);
   alert(<span class="hljs-string">`<span class="hljs-subst">${key}</span>: <span class="hljs-subst">${<span class="hljs-built_in">localStorage</span>.getItem(key)}</span>`</span>);
 }</code></pre>
 <p>另一个方式是使用 <code>for key in localStorage</code> 循环，就像处理常规对象一样。</p>
 <p>它会遍历所有的键，但也会输出一些我们不需要的内建字段。</p>
 <pre><code class="language-js"><span class="hljs-comment">// 不好的尝试</span>
-<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">localStorage</span></span>)</span> {
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">localStorage</span>) {
   alert(key); <span class="hljs-comment">// 显示 getItem，setItem 和其他内建的东西</span>
 }</code></pre>
 <p>……因此，我们需要使用 <code>hasOwnProperty</code> 检查来过滤掉原型中的字段：</p>
-<pre><code class="language-js"><span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">localStorage</span></span>)</span> {
+<pre><code class="language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">localStorage</span>) {
   <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">localStorage</span>.hasOwnProperty(key)) {
     <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 跳过像 &quot;setItem&quot;，&quot;getItem&quot; 等这样的键</span>
   }
@@ -676,24 +592,24 @@ alert( <span class="hljs-built_in">localStorage</span>.test ); <span class="hljs
 }</code></pre>
 <p>……或者，使用 <code>Object.keys</code> 获取只属于“自己”的键，然后如果需要，可以遍历它们：</p>
 <pre><code class="language-js"><span class="hljs-keyword">let</span> keys = <span class="hljs-built_in">Object</span>.keys(<span class="hljs-built_in">localStorage</span>);
-<span class="hljs-function"><span class="hljs-title">for</span>(<span class="hljs-params"><span class="hljs-keyword">let</span> key <span class="hljs-keyword">of</span> keys</span>)</span> {
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">of</span> keys) {
   alert(<span class="hljs-string">`<span class="hljs-subst">${key}</span>: <span class="hljs-subst">${<span class="hljs-built_in">localStorage</span>.getItem(key)}</span>`</span>);
 }</code></pre>
 <p>后者有效，因为 <code>Object.keys</code> 只返回属于对象的键，会忽略原型上的。</p>
 <h2 id="仅字符串">仅字符串</h2>
 <p>请注意，键和值都必须是字符串。</p>
 <p>如果是任何其他类型，例数字或对象，它会被自动转换为字符串。</p>
-<pre><code class="language-js">sessionStorage.user = {<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>};
+<pre><code class="language-js">sessionStorage.user = { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> };
 alert(sessionStorage.user); <span class="hljs-comment">// [object Object]</span></code></pre>
 <p>我们可以使用 <code>JSON</code> 来存储对象：</p>
-<pre><code class="language-js">sessionStorage.user = <span class="hljs-built_in">JSON</span>.stringify({<span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span>});
+<pre><code class="language-js">sessionStorage.user = <span class="hljs-built_in">JSON</span>.stringify({ <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;John&quot;</span> });
 
 <span class="hljs-comment">// sometime later</span>
-<span class="hljs-keyword">let</span> user = <span class="hljs-built_in">JSON</span>.parse( sessionStorage.user );
-alert( user.name ); <span class="hljs-comment">// John</span></code></pre>
+<span class="hljs-keyword">let</span> user = <span class="hljs-built_in">JSON</span>.parse(sessionStorage.user);
+alert(user.name); <span class="hljs-comment">// John</span></code></pre>
 <p>也可以对整个存储对象进行字符串化处理，例如出于调试目的：</p>
 <pre><code class="language-js"><span class="hljs-comment">// 为 JSON.stringify 增加了格式设置选项，以使对象看起来更美观</span>
-alert( <span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-built_in">localStorage</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>) );</code></pre>
+alert(<span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-built_in">localStorage</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>));</code></pre>
 <h2 id="sessionstorage">sessionStorage</h2>
 <p><code>sessionStorage</code> 对象的使用频率比 <code>localStorage</code> 对象低得多。</p>
 <p>属性和方法是相同的，但是它有更多的限制：</p>
@@ -707,9 +623,9 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-built
 </ul>
 <p>让我们看看它的运行效果。</p>
 <p>运行此代码……</p>
-<pre><code class="language-js">sessionStorage.setItem(<span class="hljs-string">&#x27;test&#x27;</span>, <span class="hljs-number">1</span>);</code></pre>
+<pre><code class="language-js">sessionStorage.setItem(<span class="hljs-string">&quot;test&quot;</span>, <span class="hljs-number">1</span>);</code></pre>
 <p>……然后刷新页面。这时你仍然可以获取到数据：</p>
-<pre><code class="language-js">alert( sessionStorage.getItem(<span class="hljs-string">&#x27;test&#x27;</span>) ); <span class="hljs-comment">// after refresh: 1</span></code></pre>
+<pre><code class="language-js">alert(sessionStorage.getItem(<span class="hljs-string">&quot;test&quot;</span>)); <span class="hljs-comment">// after refresh: 1</span></code></pre>
 <p>……但是，如果你在另一个新的标签页中打开此页面，然后在新页面中再次运行上面这行代码，则会得到 <code>null</code>，表示“未找到数据”。</p>
 <p>这是因为 <code>sessionStorage</code> 不仅绑定到源，还绑定在同一浏览器标签页。因此，<code>sessionStorage</code> 很少被使用。</p>
 <h2 id="storage-事件">Storage 事件</h2>
@@ -727,661 +643,18 @@ alert( <span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-built
 <pre><code class="language-online">你可以想在浏览器的两个窗口中打开此页面来测试下面的代码。</code></pre>
 <p>如果两个窗口都在监听 <code>window.onstorage</code> 事件，那么每个窗口都会对另一个窗口中发生的更新作出反应。</p>
 <pre><code class="language-js"><span class="hljs-comment">// 在其他文档对同一存储进行更新时触发</span>
-<span class="hljs-built_in">window</span>.onstorage = <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> { <span class="hljs-comment">// 等同于 window.addEventListener(&#x27;storage&#x27;, () =&gt; {</span>
-  <span class="hljs-keyword">if</span> (event.key != <span class="hljs-string">&#x27;now&#x27;</span>) <span class="hljs-keyword">return</span>;
-  alert(event.key + <span class="hljs-string">&#x27;:&#x27;</span> + event.newValue + <span class="hljs-string">&quot; at &quot;</span> + event.url);
+<span class="hljs-built_in">window</span>.onstorage = <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-comment">// 等同于 window.addEventListener(&#x27;storage&#x27;, () =&gt; {</span>
+  <span class="hljs-keyword">if</span> (event.key != <span class="hljs-string">&quot;now&quot;</span>) <span class="hljs-keyword">return</span>;
+  alert(event.key + <span class="hljs-string">&quot;:&quot;</span> + event.newValue + <span class="hljs-string">&quot; at &quot;</span> + event.url);
 };
 
-<span class="hljs-built_in">localStorage</span>.setItem(<span class="hljs-string">&#x27;now&#x27;</span>, <span class="hljs-built_in">Date</span>.now());</code></pre>
+<span class="hljs-built_in">localStorage</span>.setItem(<span class="hljs-string">&quot;now&quot;</span>, <span class="hljs-built_in">Date</span>.now());</code></pre>
 <p>请注意，该事件还包含：<code>event.url</code> —— 发生数据更新的文档的 url。</p>
 <p>并且，<code>event.storageArea</code> 包含存储对象 —— <code>sessionStorage</code> 和 <code>localStorage</code> 具有相同的事件，所以 <code>event.storageArea</code> 引用了被修改的对象。我们可能会想设置一些东西，以“响应”更改。</p>
 <p><strong>这允许同源的不同窗口交换消息。</strong></p>
 <p>现代浏览器还支持 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API">Broadcast channel API</a>，这是用于同源窗口之间通信的特殊 API，它的功能更全，但被支持的情况不好。有一些库基于 <code>localStorage</code> 来 polyfill 该 API，使其可以用在任何地方。</p>
-<h2 id="总结">总结</h2>
-<p>Web 存储对象 <code>localStorage</code> 和 <code>sessionStorage</code> 允许我们在浏览器中保存键/值对。</p>
-<ul>
-<li><code>key</code> 和 <code>value</code> 都必须为字符串。</li>
-<li>存储大小限制为 5MB+，具体取决于浏览器。</li>
-<li>它们不会过期。</li>
-<li>数据绑定到源（域/端口/协议）。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th><code>localStorage</code></th>
-<th><code>sessionStorage</code></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>在同源的所有标签页和窗口之间共享数据</td>
-<td>在当前浏览器标签页中可见，包括同源的 iframe</td>
-</tr>
-<tr>
-<td>浏览器重启后数据仍然保留</td>
-<td>页面刷新后数据仍然保留（但标签页关闭后数据则不再保留）</td>
-</tr>
-</tbody></table>
-<p>API：</p>
-<ul>
-<li><code>setItem(key, value)</code> —— 存储键/值对。</li>
-<li><code>getItem(key)</code> —— 按照键获取值。</li>
-<li><code>removeItem(key)</code> —— 删除键及其对应的值。</li>
-<li><code>clear()</code> —— 删除所有数据。</li>
-<li><code>key(index)</code> —— 获取该索引下的键名。</li>
-<li><code>length</code> —— 存储的内容的长度。</li>
-<li>使用 <code>Object.keys</code> 来获取所有的键。</li>
-<li>我们将键作为对象属性来访问，在这种情况下，不会触发 <code>storage</code> 事件。</li>
-</ul>
-<p>Storage 事件：</p>
-<ul>
-<li>在调用 <code>setItem</code>，<code>removeItem</code>，<code>clear</code> 方法后触发。</li>
-<li>包含有关操作的所有数据（<code>key/oldValue/newValue</code>），文档 <code>url</code> 和存储对象 <code>storageArea</code>。</li>
-<li>在所有可访问到存储对象的 <code>window</code> 对象上触发，导致当前数据改变的 <code>window</code> 对象除外（对于 <code>sessionStorage</code> 是在当前标签页下，对于 <code>localStorage</code> 是在全局，即所有同源的窗口）。</li>
-</ul>
 
       </fieldset>
-      
-      <fieldset id='_ZqCBRl'>
-      <legend>article</legend>
-      <p>libs:</p>
-<ul>
-<li>&#39;<a href="https://cdn.jsdelivr.net/npm/idb@3.0.2/build/idb.min.js&#39;">https://cdn.jsdelivr.net/npm/idb@3.0.2/build/idb.min.js&#39;</a></li>
-</ul>
-<hr>
-<h1 id="indexeddb">IndexedDB</h1>
-<p>IndexedDB 是一个浏览器内置的数据库，它比 <code>localStorage</code> 强大得多。</p>
-<ul>
-<li>通过支持多种类型的键，来存储几乎可以是任何类型的值。</li>
-<li>支撑事务的可靠性。</li>
-<li>支持键范围查询、索引。</li>
-<li>和 <code>localStorage</code> 相比，它可以存储更大的数据量。</li>
-</ul>
-<p>对于传统的 客户端-服务器 应用，这些功能通常是没有必要的。IndexedDB 适用于离线应用，可与 ServiceWorkers 和其他技术相结合使用。</p>
-<p>根据规范 <a href="https://www.w3.org/TR/IndexedDB">https://www.w3.org/TR/IndexedDB</a> 中的描述，IndexedDB 的本机接口是基于事件的。</p>
-<p>我们还可以在基于 promise 的包装器（wrapper），如 <a href="https://github.com/jakearchibald/idb">https://github.com/jakearchibald/idb</a> 的帮助下使用 <code>async/await</code>。这要方便的多，但是包装器并不完美，它并不能替代所有情况下的事件。因此，我们先练习事件（events），在理解 IndexedDB 之后，我们将使用包装器。</p>
-<h2 id="打开数据库">打开数据库</h2>
-<p>要想使用 IndexedDB，首先需要 <code>open</code>（连接）一个数据库。</p>
-<p>语法：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> openRequest = indexedDB.open(name, version);</code></pre>
-<ul>
-<li><code>name</code> —— 字符串，即数据库名称。</li>
-<li><code>version</code> —— 一个正整数版本，默认为 <code>1</code>（下面解释）。</li>
-</ul>
-<p>数据库可以有许多不同的名称，但是必须存在于当前的源（域/协议/端口）中。不同的网站不能相互访问对方的数据库。</p>
-<p>调用之后会返回 <code>openRequest</code> 对象，我们需要监听该对象上的事件：</p>
-<ul>
-<li><code>success</code>：数据库准备就绪，<code>openRequest.result</code> 中有了一个数据库对象“Database Object”，使用它进行进一步的调用。</li>
-<li><code>error</code>：打开失败。</li>
-<li><code>upgradeneeded</code>：数据库已准备就绪，但其版本已过时（见下文）。</li>
-</ul>
-<p><strong>IndexedDB 具有内建的“模式（scheme）版本控制”机制，这在服务器端数据库中是不存在的。</strong></p>
-<p>与服务器端数据库不同，IndexedDB 存在于客户端，数据存储在浏览器中。因此，开发人员无法访问它。因此，当我们发布了新版本的应用程序，用户访问我们的网页，我们可能需要更新该数据库。</p>
-<p>如果本地数据库版本低于 <code>open</code> 中指定的版本，会触发一个特殊事件 <code>upgradeneeded</code>。我们可以根据需要比较版本并升级数据结构。</p>
-<p>当数据库还不存在时（从技术上讲，该版本为 <code>0</code>），也会触发 <code>upgradeneeded</code> 事件。因此，我们可以执行初始化。</p>
-<p>假设我们发布了应用程序的第一个版本。</p>
-<p>接下来我们就可以打开版本 <code>1</code> 中的 IndexedDB 数据库，并在 <code>upgradeneeded</code> 处理程序中执行初始化，如下所示：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> openRequest = indexedDB.open(<span class="hljs-string">&quot;store&quot;</span>, <span class="hljs-number">1</span>);
-
-openRequest.onupgradeneeded = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// 如果客户端没有数据库则触发</span>
-  <span class="hljs-comment">// ...执行初始化...</span>
-};
-
-openRequest.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-built_in">console</span>.error(<span class="hljs-string">&quot;Error&quot;</span>, openRequest.error);
-};
-
-openRequest.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">let</span> db = openRequest.result;
-  <span class="hljs-comment">// 继续使用 db 对象处理数据库</span>
-};</code></pre>
-<p>之后不久，我们发布了第二个版本。</p>
-<p>我们可以打开版本 <code>2</code> 中的 IndexedDB 数据库，并像这样进行升级：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> openRequest = indexedDB.open(<span class="hljs-string">&quot;store&quot;</span>, <span class="hljs-number">2</span>);
-
-openRequest.onupgradeneeded = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
-  <span class="hljs-comment">// 现有的数据库版本小于 2（或不存在）</span>
-  <span class="hljs-keyword">let</span> db = openRequest.result;
-  <span class="hljs-function"><span class="hljs-title">switch</span>(<span class="hljs-params">event.oldVersion</span>)</span> { <span class="hljs-comment">// 现有的 db 版本</span>
-    <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:
-      <span class="hljs-comment">// 版本 0 表示客户端没有数据库</span>
-      <span class="hljs-comment">// 执行初始化</span>
-    <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:
-      <span class="hljs-comment">// 客户端版本为 1</span>
-      <span class="hljs-comment">// 更新</span>
-  }
-};</code></pre>
-<p>请注意：虽然我们目前的版本是 <code>2</code>，<code>onupgradeneeded</code> 处理程序有针对版本 <code>0</code> 的代码分支（适用于初次访问，浏览器中没有数据库的用户）和针对版本 <code>1</code> 的代码分支（用于升级）。</p>
-<p>接下来，当且仅当 <code>onupgradeneeded</code> 处理程序没有错误地执行完成，<code>openRequest.onsuccess</code> 被触发，数据库才算是成功打开了。</p>
-<p>删除数据库：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> deleteRequest = indexedDB.deleteDatabase(name)
-<span class="hljs-comment">// deleteRequest.onsuccess/onerror 追踪（tracks）结果</span></code></pre>
-<pre><code class="language-warn">如果当前用户的数据库版本比 `open` 调用的版本更高（比如当前的数据库版本为 `3`，我们却尝试运行 `open(...2)`，就会产生错误并触发 `openRequest.onerror`）。
-
-这有些奇怪，但这样的事情可能会在用户加载了一个过时的 JavaScript 代码时发生（例如用户从一个代理缓存中加载 JS）。在这种情况下，代码是过时的，但数据库却是最新的。
-
-为了防止这样的错误产生，我们应当检查 `db.version` 并建议用户刷新页面。使用正确的 HTTP 缓存头（headers）来防止之前缓存的旧代码被加载。</code></pre>
-<h3 id="并行更新问题">并行更新问题</h3>
-<p>提到版本控制，有一个相关的小问题。</p>
-<p>举个例子：</p>
-<ol>
-<li>一个用户在一个浏览器标签页中打开了数据库版本为 <code>1</code> 的我们的网站。</li>
-<li>接下来我们发布了一个更新，使得代码更新了。</li>
-<li>接下来同一个用户在另一个浏览器标签中打开了这个网站。</li>
-</ol>
-<p>这时，有一个标签页和版本为 <code>1</code> 的数据库建立了一个连接，而另一个标签页试图在其 <code>upgradeneeded</code> 处理程序中将数据库版本升级到 <code>2</code>。</p>
-<p>问题是，这两个网页是同一个站点，同一个源，共享同一个数据库。而数据库不能同时为版本 <code>1</code> 和版本 <code>2</code>。要执行版本 <code>2</code> 的更新，必须关闭对版本 <code>1</code> 的所有连接，包括第一个标签页中的那个。</p>
-<p>为了解决这一问题，在这种情况下 <code>versionchange</code> 事件会在“过时的”数据库对象上触发。我们需要监听这个事件，关闭对旧版本数据库的连接（还应该建议访问者重新加载页面，以加载最新的代码）。</p>
-<p>如果我们不监听 <code>versionchange</code> 事件，也不去关闭旧连接，那么新的连接就不会建立。<code>openRequest</code> 对象会产生 <code>blocked</code> 事件，而不是 <code>success</code> 事件。因此第二个标签页无法正常工作。</p>
-<p>下面是能够正确处理并行升级情况的代码。</p>
-<p>它在数据库被打开后注入能够关闭旧连接的 <code>onversionchange</code> 处理程序：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> openRequest = indexedDB.open(<span class="hljs-string">&quot;store&quot;</span>, <span class="hljs-number">2</span>);
-
-openRequest.onupgradeneeded = ...;
-openRequest.onerror = ...;
-
-openRequest.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">let</span> db = openRequest.result;
-
-  
-  db.onversionchange = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    db.close();
-    alert(<span class="hljs-string">&quot;Database is outdated, please reload the page.&quot;</span>)
-  };
-  
-
-  <span class="hljs-comment">// ……数据库已经准备好，请使用它……</span>
-};
-
-
-openRequest.onblocked = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// 如果我们正确处理了 onversionchange 事件，这个事件就不应该触发</span>
-
-  <span class="hljs-comment">// 这意味着还有另一个指向同一数据库的连接</span>
-  <span class="hljs-comment">// 并且在 db.onversionchange 被触发后，该连接没有被关闭</span>
-};
-</code></pre>
-<p>在这我们做两件事：</p>
-<ol>
-<li>成功打开后添加 <code>db.onversionchange</code> 监听器，以得到尝试并行更新的消息。</li>
-<li>添加 <code>openRequest.onblocked</code> 监听器来处理旧连接未关闭的情况。如果在 <code>db.onversionchange</code> 中关闭，就不会发生这种情况。</li>
-</ol>
-<p>还有其他方案。例如，我们可以在 <code>db.onversionchange</code> 中优雅地关闭一些东西，关闭连接之前提示用户保存数据。如果 <code>db.onversionchange</code> 完成但没有关闭，新的连接将立即阻塞。可以要求用户只保留新的网页，关闭旧网页，以此更新数据。</p>
-<p>这种更新冲突很少发生，但我们至少应该处理一下。例如使用 <code>onblocked</code> 处理程序，以防程序卡死影响用户体验。</p>
-<h2 id="对象库（object-store）">对象库（object store）</h2>
-<p>要在 <code>IndexedDB</code> 中存储某些内容，我们需要一个<strong>对象库</strong>。</p>
-<p>对象库是 IndexedDB 的核心概念，在其他数据库中对应的对象称为“表”或“集合”。它是储存数据的地方。一个数据库可能有多个存储区：一个用于存储用户数据，另一个用于商品，等等。</p>
-<p>尽管被命名为“对象库”，但也可以存储原始类型。</p>
-<p><strong>几乎可以存储任何值，包括复杂的对象。</strong></p>
-<p>IndexedDB 使用<a href="https://www.w3.org/TR/html53/infrastructure.html#section-structuredserializeforstorage">标准序列化算法</a>来克隆和存储对象。类似于 <code>JSON.stringify</code>，不过功能更加强大，能够存储更多的数据类型。</p>
-<p>有一种对象不能被存储：循环引用的对象。此类对象不可序列化，也不能进行 <code>JSON.stringify</code>。</p>
-<p><strong>库中的每个值都必须有唯一的键 <code>key</code></strong></p>
-<p>键的类型必须为数字、日期、字符串、二进制或数组。它是唯一的标识符：通过键来 搜索/删除/更新 值。</p>
-<p><img src="indexeddb-structure.svg" alt=""></p>
-<p>类似于 <code>localStorage</code>，我们向存储区添加值时，可以提供一个键。但当我们存储对象时，IndexedDB 允许设置一个对象属性作为键，这就更加方便了。或者，我们可以自动生成键。</p>
-<p>但我们需要先创建一个对象库。</p>
-<p>创建对象库的语法：</p>
-<pre><code class="language-js">db.createObjectStore(name[, keyOptions]);</code></pre>
-<p>请注意，操作是同步的，不需要 <code>await</code>。</p>
-<ul>
-<li><code>name</code> 是存储区名称，例如 <code>&quot;books&quot;</code> 表示书。</li>
-<li><code>keyOptions</code> 是具有以下两个属性之一的可选对象：<ul>
-<li><code>keyPath</code> —— 对象属性的路径，IndexedDB 将以此路径作为键，例如 <code>id</code>。</li>
-<li><code>autoIncrement</code> —— 如果为 <code>true</code>，则自动生成新存储的对象的键，键是一个不断递增的数字。</li>
-</ul>
-</li>
-</ul>
-<p>如果我们不提供 <code>keyOptions</code>，那么以后需要在存储对象时，显式地提供一个键。</p>
-<p>例如，此对象库使用 <code>id</code> 属性作为键:</p>
-<pre><code class="language-js">db.createObjectStore(<span class="hljs-string">&#x27;books&#x27;</span>, {<span class="hljs-attr">keyPath</span>: <span class="hljs-string">&#x27;id&#x27;</span>});</code></pre>
-<p><strong>在 <code>upgradeneeded</code> 处理程序中，只有在创建数据库版本时，对象库被才能被 创建/修改。</strong></p>
-<p>这是技术上的限制。在 upgradeneedHandler 之外，可以 添加/删除/更新数据，但是只能在版本更新期间 创建/删除/更改对象库。</p>
-<p>要执行数据库版本升级，主要有两种方法：</p>
-<ol>
-<li>我们实现每个版本的升级功能：从 1 到 2，从 2 到 3，从 3 到 4，等等。在 <code>upgradeneeded</code> 中，可以进行版本比较（例如，老版本是 2，需要升级到 4），并针对每个中间版本（2 到 3，然后 3 到 4）逐步运行每个版本的升级。</li>
-<li>或者我们可以检查数据库：以 <code>db.objectStoreNames</code> 的形式获取现有对象库的列表。该对象是一个 <a href="https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#domstringlist">DOMStringList</a> 提供 <code>contains(name)</code> 方法来检查 name 是否存在，再根据存在和不存在的内容进行更新。</li>
-</ol>
-<p>对于小型数据库，第二种方法可能更简单。</p>
-<p>下面是第二种方法的演示:</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> openRequest = indexedDB.open(<span class="hljs-string">&quot;db&quot;</span>, <span class="hljs-number">2</span>);
-
-<span class="hljs-comment">// 创建/升级 数据库而无需版本检查</span>
-openRequest.onupgradeneeded = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">let</span> db = openRequest.result;
-  <span class="hljs-keyword">if</span> (!db.objectStoreNames.contains(<span class="hljs-string">&#x27;books&#x27;</span>)) { <span class="hljs-comment">// 如果没有 “books” 数据</span>
-    db.createObjectStore(<span class="hljs-string">&#x27;books&#x27;</span>, {<span class="hljs-attr">keyPath</span>: <span class="hljs-string">&#x27;id&#x27;</span>}); <span class="hljs-comment">// 创造它</span>
-  }
-};</code></pre>
-<p>删除对象库：</p>
-<pre><code class="language-js">db.deleteObjectStore(<span class="hljs-string">&#x27;books&#x27;</span>)</code></pre>
-<h2 id="事务">事务</h2>
-<p>术语“事务”是通用的，许多数据库中都有用到。</p>
-<p>事务是一组操作，要么全部成功，要么全部失败。</p>
-<p>例如，当一个人买东西时，我们需要：</p>
-<ol>
-<li>从他们的账户中扣除这笔钱。</li>
-<li>将该项目添加到他们的清单中。</li>
-</ol>
-<p>如果完成了第一个操作，但是出了问题，比如停电。这时无法完成第二个操作，这非常糟糕。两件时应该要么都成功（购买完成，好！）或同时失败（这个人保留了钱，可以重新尝试）。</p>
-<p>事务可以保证同时完成。</p>
-<p><strong>所有数据操作都必须在 IndexedDB 中的事务内进行。</strong></p>
-<p>启动事务：</p>
-<pre><code class="language-js">db.transaction(store[, type]);</code></pre>
-<ul>
-<li><code>store</code> 是事务要访问的库名称，例如 <code>&quot;books&quot;</code>。如果我们要访问多个库，则是库名称的数组。</li>
-<li><code>type</code> – 事务类型，以下类型之一：<ul>
-<li><code>readonly</code> —— 只读，默认值。</li>
-<li><code>readwrite</code> —— 只能读取和写入数据，而不能 创建/删除/更改 对象库。</li>
-</ul>
-</li>
-</ul>
-<p>还有 <code>versionchange</code> 事务类型：这种事务可以做任何事情，但不能被手动创建。IndexedDB 在打开数据库时，会自动为 <code>updateneeded</code> 处理程序创建 <code>versionchange</code> 事务。这就是它为什么可以更新数据库结构、创建/删除 对象库的原因。</p>
-<pre><code class="language-smart">性能是事务需要标记为 `只读（readonly）` 和 `读写（readwrite）` 的原因。
-
-许多只读事务能够同时访问同一存储区，但读写事务不能。因为读写事务会“锁定”存储区进行写操作。下一个事务必须等待前一个事务完成，才能访问相同的存储区。</code></pre>
-<p>创建事务后，我们可以将项目添加到库，就像这样：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> transaction = db.transaction(<span class="hljs-string">&quot;books&quot;</span>, <span class="hljs-string">&quot;readwrite&quot;</span>); <span class="hljs-comment">// (1)</span>
-
-<span class="hljs-comment">// 获取对象库进行操作</span>
-
-<span class="hljs-keyword">let</span> books = transaction.objectStore(<span class="hljs-string">&quot;books&quot;</span>); <span class="hljs-comment">// (2)</span>
-
-
-<span class="hljs-keyword">let</span> book = {
-  <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;js&#x27;</span>,
-  <span class="hljs-attr">price</span>: <span class="hljs-number">10</span>,
-  <span class="hljs-attr">created</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()
-};
-
-
-<span class="hljs-keyword">let</span> request = books.add(book); <span class="hljs-comment">// (3)</span>
-
-
-request.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// (4)</span>
-  <span class="hljs-comment">// 书已添加到存储区</span>
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Book added to the store&quot;</span>, request.result);
-};
-
-request.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Error&quot;</span>, request.error);
-};</code></pre>
-<p>基本有四个步骤：</p>
-<ol>
-<li>创建一个事务，在（1）表明要访问的所有存储。</li>
-<li>使用 <code>transaction.objectStore(name)</code>，在（2）中获取存储对象。</li>
-<li>在（3）执行对对象库 <code>books.add(book)</code> 的请求。</li>
-<li>……处理请求 成功/错误（4），还可以根据需要发出其他请求。</li>
-</ol>
-<p>对象库支持两种存储值的方法：</p>
-<ul>
-<li><p><strong>put(value, [key])</strong>
-  将 <code>value</code> 添加到存储区。仅当对象库没有 <code>keyPath</code> 或 <code>autoIncrement</code> 时，才提供 <code>key</code>。如果已经存在具有相同键的值，则将替换该值。</p>
-</li>
-<li><p><strong>add(value, [key])</strong>
-  与 <code>put</code> 相同，但是如果已经有一个值具有相同的键，则请求失败，并生成一个名为 <code>&quot;ConstraInterror&quot;</code> 的错误。</p>
-</li>
-</ul>
-<p>与打开数据库类似，我们可以发送一个请求：<code>books.add(book)</code>，然后等待 <code>success/error</code> 事件。</p>
-<ul>
-<li><code>add</code> 的 <code>request.result</code> 是新对象的键。</li>
-<li>错误在 <code>request.error</code>（如果有的话）中。</li>
-</ul>
-<h2 id="事务的自动提交">事务的自动提交</h2>
-<p>在上面的示例中，我们启动了事务并发出了 <code>add</code> 请求。但正如前面提到的，一个事务可能有多个相关的请求，这些请求必须全部成功或全部失败。那么如何标记事务为已完成，并不再请求呢？</p>
-<p>简短的回答是：没有。</p>
-<p>在下一个版本 3.0 规范中，可能会有一种手动方式来完成事务，但目前在 2.0 中还没有。</p>
-<p><strong>当所有事务的请求完成，并且 <a href="info:microtask-queue">微任务队列</a> 为空时，它将自动提交。</strong></p>
-<p>通常，我们可以假设事务在其所有请求完成时提交，并且当前代码完成。</p>
-<p>因此，在上面的示例中，不需要任何特殊调用即可完成事务。</p>
-<p>事务自动提交原则有一个重要的副作用。不能在事务中间插入 <code>fetch</code>, <code>setTimeout</code> 等异步操作。IndexedDB 不会让事务等待这些操作完成。</p>
-<p>在下面的代码中，<code>request2</code> 中的行 <code>(*)</code> 失败，因为事务已经提交，不能在其中发出任何请求:</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> request1 = books.add(book);
-
-request1.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  fetch(<span class="hljs-string">&#x27;/&#x27;</span>).then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> {
-
-    <span class="hljs-keyword">let</span> request2 = books.add(anotherBook); <span class="hljs-comment">// (*)</span>
-
-    request2.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-      <span class="hljs-built_in">console</span>.log(request2.error.name); <span class="hljs-comment">// TransactionInactiveError</span>
-    };
-  });
-};</code></pre>
-<p>这是因为 <code>fetch</code> 是一个异步操作，一个宏任务。事务在浏览器开始执行宏任务之前关闭。</p>
-<p>IndexedDB 规范的作者认为事务应该是短期的。主要是性能原因。</p>
-<p>值得注意的是，<code>readwrite</code> 事务将存储“锁定”以进行写入。因此，如果应用程序的一部分启动了 <code>books</code> 对象库上的 <code>readwrite</code> 操作，那么希望执行相同操作的另一部分必须等待新事务“挂起”，直到第一个事务完成。如果事务处理需要很长时间，将会导致奇怪的延迟。</p>
-<p>那么，该怎么办？</p>
-<p>在上面的示例中，我们可以在新请求 <code>(*)</code> 之前创建一个新的 <code>db.transaction</code>。</p>
-<p>如果需要在一个事务中把所有操作保持一致，更好的做法是将 IndexedDB 事务和“其他”异步内容分开。</p>
-<p>首先，执行 <code>fetch</code>，并根据需要准备数据。然后创建事务并执行所有数据库请求，然后就正常了。</p>
-<p>为了检测到成功完成的时刻，我们可以监听 <code>transaction.oncomplete</code> 事件:</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> transaction = db.transaction(<span class="hljs-string">&quot;books&quot;</span>, <span class="hljs-string">&quot;readwrite&quot;</span>);
-
-<span class="hljs-comment">// ……执行操作……</span>
-
-transaction.oncomplete = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Transaction is complete&quot;</span>); <span class="hljs-comment">// 事务执行完成</span>
-};</code></pre>
-<p>只有 <code>complete</code> 才能保证将事务作为一个整体保存。个别请求可能会成功，但最终的写入操作可能会出错（例如 I/O 错误或其他错误）。</p>
-<p>要手动中止事务，请调用：</p>
-<pre><code class="language-js">transaction.abort();</code></pre>
-<p>取消请求里所做的所有修改，并触发 <code>transaction.onabort</code> 事件。</p>
-<h2 id="错误处理">错误处理</h2>
-<p>写入请求可能会失败。</p>
-<p>这是意料之中的事，不仅是我们可能会犯的粗心失误，还有与事务本身相关的其他原因。例如超过了存储配额。因此，必须做好请求失败的处理。</p>
-<p><strong>失败的请求将自动中止事务，并取消所有的更改。</strong></p>
-<p>在一些情况下，我们会想自己去处理失败事务（例如尝试另一个请求）并让它继续执行，而不是取消现有的更改。可以调用 <code>request.onerror</code> 处理程序，在其中调用 <code>event.preventDefault()</code> 防止事务中止。</p>
-<p>在下面的示例中，添加了一本新书，键 (<code>id</code>) 与现有的书相同。<code>store.add</code> 方法生成一个 <code>&quot;ConstraInterror&quot;</code>。可以在不取消事务的情况下进行处理：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> transaction = db.transaction(<span class="hljs-string">&quot;books&quot;</span>, <span class="hljs-string">&quot;readwrite&quot;</span>);
-
-<span class="hljs-keyword">let</span> book = { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;js&#x27;</span>, <span class="hljs-attr">price</span>: <span class="hljs-number">10</span> };
-
-<span class="hljs-keyword">let</span> request = transaction.objectStore(<span class="hljs-string">&quot;books&quot;</span>).add(book);
-
-request.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
-  <span class="hljs-comment">// 有相同 id 的对象存在时，发生 ConstraintError</span>
-  <span class="hljs-keyword">if</span> (request.error.name == <span class="hljs-string">&quot;ConstraintError&quot;</span>) {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Book with such id already exists&quot;</span>); <span class="hljs-comment">// 处理错误</span>
-    event.preventDefault(); <span class="hljs-comment">// 不要中止事务</span>
-    <span class="hljs-comment">// 这个 book 用另一个键？</span>
-  } <span class="hljs-keyword">else</span> {
-    <span class="hljs-comment">// 意外错误，无法处理</span>
-    <span class="hljs-comment">// 事务将中止</span>
-  }
-};
-
-transaction.onabort = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Error&quot;</span>, transaction.error);
-};</code></pre>
-<h3 id="事件委托">事件委托</h3>
-<p>每个请求都需要调用 onerror/onsuccess ？并不，可以使用事件委托来代替。</p>
-<p><strong>IndexedDB 事件冒泡：请求 -&gt; 事务 -&gt; 数据库。</strong></p>
-<p>所有事件都是 DOM 事件，有捕获和冒泡，但通常只使用冒泡阶段。</p>
-<p>因此，出于报告或其他原因，我们可以使用 <code>db.onerror</code> 处理程序捕获所有错误：</p>
-<pre><code class="language-js">db.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
-  <span class="hljs-keyword">let</span> request = event.target; <span class="hljs-comment">// 导致错误的请求</span>
-
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Error&quot;</span>, request.error);
-};</code></pre>
-<p>……但是错误被完全处理了呢？这种情况不应该被报告。</p>
-<p>我们可以通过在 <code>request.onerror</code> 中使用 <code>event.stopPropagation()</code> 来停止冒泡，从而停止 <code>db.onerror</code> 事件。</p>
-<pre><code class="language-js">request.onerror = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) </span>{
-  <span class="hljs-keyword">if</span> (request.error.name == <span class="hljs-string">&quot;ConstraintError&quot;</span>) {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Book with such id already exists&quot;</span>); <span class="hljs-comment">// 处理错误</span>
-    event.preventDefault(); <span class="hljs-comment">// 不要中止事务</span>
-    event.stopPropagation(); <span class="hljs-comment">// 不要让错误冒泡, 停止它的传播</span>
-  } <span class="hljs-keyword">else</span> {
-    <span class="hljs-comment">// 什么都不做</span>
-    <span class="hljs-comment">// 事务将中止</span>
-    <span class="hljs-comment">// 我们可以解决 transaction.onabort 中的错误</span>
-  }
-};</code></pre>
-<h2 id="通过键搜索">通过键搜索</h2>
-<p>对象库有两种主要的搜索类型：</p>
-<ol>
-<li>通过一个键或一个键范围。即：通过在“books”中存储的 <code>book.id</code>。</li>
-<li>另一个对象字段，例如 <code>book.price</code>。</li>
-</ol>
-<p>首先，让我们来处理键和键范围 <code>(1)</code>。</p>
-<p>涉及到的搜索方法，包括支持精确键，也包括所谓的“范围查询” —— <a href="https://www.w3.org/TR/IndexedDB/#keyrange">IDBKeyRange</a> 对象指定一个“键范围”。</p>
-<p>使用以下调用函数创建范围：</p>
-<ul>
-<li><code>IDBKeyRange.lowerBound(lower, [open])</code> 表示：<code>≥lower</code>（如果 <code>open</code> 是 true，表示 <code>&gt;lower</code>）</li>
-<li><code>IDBKeyRange.upperBound(upper, [open])</code> 表示：<code>≤upper</code>（如果 <code>open</code> 是 true，表示  <code>&lt;upper</code>）</li>
-<li><code>IDBKeyRange.bound(lower, upper, [lowerOpen], [upperOpen])</code> 表示: 在 <code>lower</code> 和 <code>upper</code> 之间。如果 open 为 true，则相应的键不包括在范围中。</li>
-<li><code>IDBKeyRange.only(key)</code> —— 仅包含一个键的范围 <code>key</code>，很少使用。</li>
-</ul>
-<p>所有搜索方法都接受一个查询参数 <code>query</code>，该参数可以是精确键或者键范围：</p>
-<ul>
-<li><code>store.get(query)</code> —— 按键或范围搜索第一个值。</li>
-<li><code>store.getAll([query], [count])</code> —— 搜索所有值。如果 <code>count</code> 给定，则按 <code>count</code> 进行限制。</li>
-<li><code>store.getKey(query)</code> —— 搜索满足查询的第一个键，通常是一个范围。</li>
-<li><code>store.getAllKeys([query], [count])</code> —— 搜索满足查询的所有键，通常是一个范围。如果 <code>count</code> 给定，则最多为 count。</li>
-<li><code>store.count([query])</code> —— 获取满足查询的键的总数，通常是一个范围。</li>
-</ul>
-<p>例如，我们存储区里有很多书。因为 <code>id</code> 字段是键，因此所有方法都可以按 <code>id</code> 进行搜索。</p>
-<p>请求示例：</p>
-<pre><code class="language-js"><span class="hljs-comment">// 获取一本书</span>
-books.get(<span class="hljs-string">&#x27;js&#x27;</span>)
-
-<span class="hljs-comment">// 获取 &#x27;css&#x27; &lt;= id &lt;= &#x27;html&#x27; 的书</span>
-books.getAll(IDBKeyRange.bound(<span class="hljs-string">&#x27;css&#x27;</span>, <span class="hljs-string">&#x27;html&#x27;</span>))
-
-<span class="hljs-comment">// 获取 id &lt; &#x27;html&#x27; 的书</span>
-books.getAll(IDBKeyRange.upperBound(<span class="hljs-string">&#x27;html&#x27;</span>, <span class="hljs-literal">true</span>))
-
-<span class="hljs-comment">// 获取所有书</span>
-books.getAll()
-
-<span class="hljs-comment">// 获取所有 id &gt; &#x27;js&#x27; 的键</span>
-books.getAllKeys(IDBKeyRange.lowerBound(<span class="hljs-string">&#x27;js&#x27;</span>, <span class="hljs-literal">true</span>))</code></pre>
-<pre><code class="language-smart">对象库按键对值进行内部排序。
-
-因此，请求的返回值，是按照键的顺序排列的。</code></pre>
-<h2 id="通过带索引的字段搜索">通过带索引的字段搜索</h2>
-<p>要根据其他对象字段进行搜索，我们需要创建一个名为“索引（index）”的附加数据结构。</p>
-<p>索引是存储的&quot;附加项&quot;，用于跟踪给定的对象字段。对于该字段的每个值，它存储有该值的对象的键列表。下面会有更详细的图片。</p>
-<p>语法：</p>
-<pre><code class="language-js">objectStore.createIndex(name, keyPath, [options]);</code></pre>
-<ul>
-<li><strong><code>name</code></strong> —— 索引名称。</li>
-<li><strong><code>keyPath</code></strong> —— 索引应该跟踪的对象字段的路径（我们将根据该字段进行搜索）。</li>
-<li><strong><code>option</code></strong> —— 具有以下属性的可选对象：<ul>
-<li><strong><code>unique</code></strong> —— 如果为true，则存储中只有一个对象在 <code>keyPath</code> 上具有给定值。如果我们尝试添加重复项，索引将生成错误。</li>
-<li><strong><code>multiEntry</code></strong> —— 只有 <code>keypath</code> 上的值是数组才时使用。这时，默认情况下，索引将默认把整个数组视为键。但是如果 <code>multiEntry</code> 为 true，那么索引将为该数组中的每个值保留一个存储对象的列表。所以数组成员成为了索引键。</li>
-</ul>
-</li>
-</ul>
-<p>在我们的示例中，是按照 <code>id</code> 键存储图书的。</p>
-<p>假设我们想通过 <code>price</code> 进行搜索。</p>
-<p>首先，我们需要创建一个索引。它像对象库一样，必须在 <code>upgradeneeded</code> 中创建完成：</p>
-<pre><code class="language-js">openRequest.onupgradeneeded = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-comment">// 在 versionchange 事务中，我们必须在这里创建索引</span>
-  <span class="hljs-keyword">let</span> books = db.createObjectStore(<span class="hljs-string">&#x27;books&#x27;</span>, {<span class="hljs-attr">keyPath</span>: <span class="hljs-string">&#x27;id&#x27;</span>});
-
-  <span class="hljs-keyword">let</span> index = inventory.createIndex(<span class="hljs-string">&#x27;price_idx&#x27;</span>, <span class="hljs-string">&#x27;price&#x27;</span>);
-
-};</code></pre>
-<ul>
-<li>该索引将跟踪 <code>price</code> 字段。</li>
-<li>价格不是唯一的，可能有多本书价格相同，所以我们不设置唯一 <code>unique</code> 选项。</li>
-<li>价格不是一个数组，因此不适用多入口 <code>multiEntry</code> 标志。</li>
-</ul>
-<p>假设我们的库存里有4本书。下面的图片显示了该索引 <code>index</code> 的确切内容：</p>
-<p><img src="indexeddb-index.svg" alt=""></p>
-<p>如上所述，每个 price 值的索引（第二个参数）保存具有该价格的键的列表。</p>
-<p>索引自动保持最新，所以我们不必关心它。</p>
-<p>现在，当我们想要搜索给定的价格时，只需将相同的搜索方法应用于索引：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> transaction = db.transaction(<span class="hljs-string">&quot;books&quot;</span>); <span class="hljs-comment">// 只读</span>
-<span class="hljs-keyword">let</span> books = transaction.objectStore(<span class="hljs-string">&quot;books&quot;</span>);
-<span class="hljs-keyword">let</span> priceIndex = books.index(<span class="hljs-string">&quot;price_idx&quot;</span>);
-
-
-<span class="hljs-keyword">let</span> request = priceIndex.getAll(<span class="hljs-number">10</span>);
-
-
-request.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">if</span> (request.result !== <span class="hljs-literal">undefined</span>) {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;Books&quot;</span>, request.result); <span class="hljs-comment">// 价格为 10 的书的数组</span>
-  } <span class="hljs-keyword">else</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;No such books&quot;</span>);
-  }
-};</code></pre>
-<p>我们还可以使用 <code>IDBKeyRange</code> 创建范围，并查找 便宜/贵 的书：</p>
-<pre><code class="language-js"><span class="hljs-comment">// 查找价格 &lt;=5 的书籍</span>
-<span class="hljs-keyword">let</span> request = priceIndex.getAll(IDBKeyRange.upperBound(<span class="hljs-number">5</span>));</code></pre>
-<p>在我们的例子中，索引是按照被跟踪对象字段价格 <code>price</code> 进行内部排序的。所以当我们进行搜索时，搜索结果也会按照价格排序。</p>
-<h2 id="从存储中删除">从存储中删除</h2>
-<p><code>delete</code> 方法查找要由查询删除的值，调用格式类似于 <code>getAll</code></p>
-<ul>
-<li><strong><code>delete(query)</code></strong> —— 通过查询删除匹配的值。</li>
-</ul>
-<p>例如：</p>
-<pre><code class="language-js"><span class="hljs-comment">// 删除 id=&#x27;js&#x27; 的书</span>
-books.delete(<span class="hljs-string">&#x27;js&#x27;</span>);</code></pre>
-<p>如果要基于价格或其他对象字段删除书。首先需要在索引中找到键，然后调用 <code>delete</code>：</p>
-<pre><code class="language-js"><span class="hljs-comment">// 找到价格 = 5 的钥匙</span>
-<span class="hljs-keyword">let</span> request = priceIndex.getKey(<span class="hljs-number">5</span>);
-
-request.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">let</span> id = request.result;
-  <span class="hljs-keyword">let</span> deleteRequest = books.delete(id);
-};</code></pre>
-<p>删除所有内容：</p>
-<pre><code class="language-js">books.clear(); <span class="hljs-comment">// 清除存储。</span></code></pre>
-<h2 id="光标（cursors）">光标（Cursors）</h2>
-<p>像 <code>getAll/getAllKeys</code> 这样的方法，会返回一个 键/值 数组。</p>
-<p>但是一个对象库可能很大，比可用的内存还大。这时，<code>getAll</code> 就无法将所有记录作为一个数组获取。</p>
-<p>该怎么办呢？</p>
-<p>光标提供了解决这一问题的方法。</p>
-<p><strong>光标是一种特殊的对象，它在给定查询的情况下遍历对象库，一次返回一个键/值，从而节省内存。</strong></p>
-<p>由于对象库是按键在内部排序的，因此光标按键顺序（默认为升序）遍历存储。</p>
-<p>语法:</p>
-<pre><code class="language-js"><span class="hljs-comment">// 类似于 getAll，但带有光标：</span>
-<span class="hljs-keyword">let</span> request = store.openCursor(query, [direction]);
-
-<span class="hljs-comment">// 获取键，而不是值（例如 getAllKeys）：store.openKeyCursor </span></code></pre>
-<ul>
-<li><strong><code>query</code></strong> 是一个键或键范围，与 <code>getAll</code> 相同。</li>
-<li><strong><code>direction</code></strong> 是一个可选参数，使用顺序是：<ul>
-<li><code>&quot;next&quot;</code> —— 默认值，光标从有最小索引的记录向上移动。</li>
-<li><code>&quot;prev&quot;</code> —— 相反的顺序：从有最大的索引的记录开始下降。</li>
-<li><code>&quot;nextunique&quot;</code>，<code>&quot;prevunique&quot;</code> —— 同上，但是跳过键相同的记录 （仅适用于索引上的光标，例如，对于价格为 5 的书，仅返回第一本）。</li>
-</ul>
-</li>
-</ul>
-<p><strong>光标对象的主要区别在于 <code>request.onSuccess</code> 多次触发：每个结果触发一次。</strong></p>
-<p>这有一个如何使用光标的例子：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> transaction = db.transaction(<span class="hljs-string">&quot;books&quot;</span>);
-<span class="hljs-keyword">let</span> books = transaction.objectStore(<span class="hljs-string">&quot;books&quot;</span>);
-
-<span class="hljs-keyword">let</span> request = books.openCursor();
-
-<span class="hljs-comment">// 为光标找到的每本书调用</span>
-request.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">let</span> cursor = request.result;
-  <span class="hljs-keyword">if</span> (cursor) {
-    <span class="hljs-keyword">let</span> key = cursor.key; <span class="hljs-comment">// 书的键（id字段）</span>
-    <span class="hljs-keyword">let</span> value = cursor.value; <span class="hljs-comment">// 书本对象</span>
-    <span class="hljs-built_in">console</span>.log(key, value);
-    cursor.continue();
-  } <span class="hljs-keyword">else</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;No more books&quot;</span>);
-  }
-};</code></pre>
-<p>主要的光标方法有：</p>
-<ul>
-<li><code>advance(count)</code> —— 将光标向前移动 <code>count</code> 次，跳过值。</li>
-<li><code>continue([key])</code> —— 将光标移至匹配范围中的下一个值（如果给定键，紧接键之后）。</li>
-</ul>
-<p>无论是否有更多的值匹配光标 —— 调用 <code>onsuccess</code>。结果中，我们可以获得指向下一条记录的光标，或者 <code>undefined</code>。</p>
-<p>在上面的示例中，光标是为对象库创建的。</p>
-<p>也可以在索引上创建一个光标。索引是允许按对象字段进行搜索的。在索引上的光标与在对象存储上的光标完全相同 — 它们通过一次返回一个值来节省内存。</p>
-<p>对于索引上的游标，<code>cursor.key</code> 是索引键（例如：价格），我们应该使用 <code>cursor.primaryKey</code> 属性作为对象的键：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> request = priceIdx.openCursor(IDBKeyRange.upperBound(<span class="hljs-number">5</span>));
-
-<span class="hljs-comment">// 为每条记录调用</span>
-request.onsuccess = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">let</span> cursor = request.result;
-  <span class="hljs-keyword">if</span> (cursor) {
-    <span class="hljs-keyword">let</span> key = cursor.primaryKey; <span class="hljs-comment">// 下一个对象存储键（id 字段）</span>
-    <span class="hljs-keyword">let</span> value = cursor.value; <span class="hljs-comment">// 下一个对象存储对象（book 对象）</span>
-    <span class="hljs-keyword">let</span> key = cursor.key; <span class="hljs-comment">// 下一个索引键（price）</span>
-    <span class="hljs-built_in">console</span>.log(key, value);
-    cursor.continue();
-  } <span class="hljs-keyword">else</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;No more books&quot;</span>); <span class="hljs-comment">// 没有书了</span>
-  }
-};</code></pre>
-<h2 id="promise-包装器">Promise 包装器</h2>
-<p>将 <code>onsuccess/onerror</code> 添加到每个请求是一项相当麻烦的任务。我们可以通过使用事件委托（例如，在整个事务上设置处理程序）来简化我们的工作，但是 <code>async/await</code> 要方便的多。</p>
-<p>在本章，我们会进一步使用一个轻便的承诺包装器 <a href="https://github.com/jakearchibald/idb">https://github.com/jakearchibald/idb</a> 。它使用 <a href="info:promisify">promisified</a> IndexedDB 方法创建全局 <code>idb</code> 对象。 </p>
-<p>然后，我们可以不使用 <code>onsuccess/onerror</code>，而是这样写：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> db = <span class="hljs-keyword">await</span> idb.openDb(<span class="hljs-string">&#x27;store&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-function"><span class="hljs-params">db</span> =&gt;</span> {
-  <span class="hljs-keyword">if</span> (db.oldVersion == <span class="hljs-number">0</span>) {
-    <span class="hljs-comment">// 执行初始化</span>
-    db.createObjectStore(<span class="hljs-string">&#x27;books&#x27;</span>, {<span class="hljs-attr">keyPath</span>: <span class="hljs-string">&#x27;id&#x27;</span>});
-  }
-});
-
-<span class="hljs-keyword">let</span> transaction = db.transaction(<span class="hljs-string">&#x27;books&#x27;</span>, <span class="hljs-string">&#x27;readwrite&#x27;</span>);
-<span class="hljs-keyword">let</span> books = transaction.objectStore(<span class="hljs-string">&#x27;books&#x27;</span>);
-
-<span class="hljs-keyword">try</span> {
-  <span class="hljs-keyword">await</span> books.add(...);
-  <span class="hljs-keyword">await</span> books.add(...);
-
-  <span class="hljs-keyword">await</span> transaction.complete;
-
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;jsbook saved&#x27;</span>);
-} <span class="hljs-function"><span class="hljs-title">catch</span>(<span class="hljs-params">err</span>)</span> {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;error&#x27;</span>, err.message);
-}
-</code></pre>
-<p>现在我们有了可爱的“简单异步代码”和「try..catch」捕获的东西。</p>
-<h3 id="错误处理-1">错误处理</h3>
-<p>如果我们没有捕获到错误，那么程序将一直失败，直到外部最近的 <code>try..catch</code> 捕获到为止。</p>
-<p>未捕获的错误将成为 <code>window</code> 对象上的“unhandled promise rejection”事件。</p>
-<p>我们可以这样处理这种错误：</p>
-<pre><code class="language-js"><span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">&#x27;unhandledrejection&#x27;</span>, <span class="hljs-function"><span class="hljs-params">event</span> =&gt;</span> {
-  <span class="hljs-keyword">let</span> request = event.target; <span class="hljs-comment">// IndexedDB 本机请求对象</span>
-  <span class="hljs-keyword">let</span> error = event.reason; <span class="hljs-comment">//  未处理的错误对象，与 request.error 相同</span>
-  <span class="hljs-comment">// ……报告错误……</span>
-});</code></pre>
-<h3 id="非活跃事务陷阱">“非活跃事务”陷阱</h3>
-<p>我们都知道，浏览器一旦执行完成当前的代码和<strong>微任务</strong>之后，事务就会自动提交。因此，如果我们在事务中间放置一个类似 <code>fetch</code> 的宏任务，事务只是会自动提交，而不会等待它执行完成。因此，下一个请求会失败。</p>
-<p>对于 promise 包装器和 <code>async/await</code>，情况是相同的。</p>
-<p>这是在事务中间进行 <code>fetch</code> 的示例：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> transaction = db.transaction(<span class="hljs-string">&quot;inventory&quot;</span>, <span class="hljs-string">&quot;readwrite&quot;</span>);
-<span class="hljs-keyword">let</span> inventory = transaction.objectStore(<span class="hljs-string">&quot;inventory&quot;</span>);
-
-<span class="hljs-keyword">await</span> inventory.add({ <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;js&#x27;</span>, <span class="hljs-attr">price</span>: <span class="hljs-number">10</span>, <span class="hljs-attr">created</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>() });
-
-<span class="hljs-keyword">await</span> fetch(...); <span class="hljs-comment">// (*)</span>
-
-<span class="hljs-keyword">await</span> inventory.add({ <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;js&#x27;</span>, <span class="hljs-attr">price</span>: <span class="hljs-number">10</span>, <span class="hljs-attr">created</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>() }); <span class="hljs-comment">// 错误</span></code></pre>
-<p><code>fetch</code> <code>(*)</code> 后的下一个 <code>inventory.add</code> 失败，出现“非活动事务”错误，因为这时事务已经被提交并且关闭了。</p>
-<p>解决方法与使用本机 IndexedDB 时相同：进行新事务，或者将事情分开。</p>
-<ol>
-<li>准备数据，先获取所有需要的信息。</li>
-<li>然后保存在数据库中。</li>
-</ol>
-<h3 id="获取本机对象">获取本机对象</h3>
-<p>在内部，包装器执行本机 IndexedDB 请求，并添加 <code>onerror/onsuccess</code> 方法，并返回 rejects/resolves 结果的 promise。</p>
-<p>在大多数情况下都可以运行， 示例在这 <a href="https://github.com/jakearchibald/idb">https://github.com/jakearchibald/idb</a>。</p>
-<p>极少数情况下，我们需要原始的 <code>request</code> 对象。可以将 <code>promise</code> 的 <code>promise.request</code> 属性，当作原始对象进行访问：</p>
-<pre><code class="language-js"><span class="hljs-keyword">let</span> promise = books.add(book); <span class="hljs-comment">// 获取 promise 对象(不要 await 结果)</span>
-
-<span class="hljs-keyword">let</span> request = promise.request; <span class="hljs-comment">// 本地请求对象</span>
-<span class="hljs-keyword">let</span> transaction = request.transaction; <span class="hljs-comment">// 本地事务对象</span>
-
-<span class="hljs-comment">// ……做些本地的 IndexedDB 的处理……</span>
-
-<span class="hljs-keyword">let</span> result = <span class="hljs-keyword">await</span> promise; <span class="hljs-comment">// 如果仍然需要</span></code></pre>
-<h2 id="总结">总结</h2>
-<p>IndexedDB 可以被认为是“localStorage on steroids”。这是一个简单的键值对数据库，功能强大到足以支持离线应用，而且用起来比较简单。</p>
-<p>最好的指南是官方文档。<a href="https://w3c.github.io/IndexedDB">目前的版本</a>是2.0，但是<a href="https://w3c.github.io/IndexedDB/">3.0</a>版本中的一些方法（差别不大）也得到部分支持。</p>
-<p>基本用法可以用几个短语来描述：</p>
-<ol>
-<li>获取一个 promise 包装器，比如 <a href="https://github.com/jakearchibald/idb">idb</a>.</li>
-<li>打开一个数据库：<code>idb.openDb(name, version, onupgradeneeded)</code><ul>
-<li>在 <code>onupgradeneeded</code> 处理程序中创建对象存储和索引，或者根据需要执行版本更新。</li>
-</ul>
-</li>
-<li>对于请求：<ul>
-<li>创建事务 <code>db.transaction(&#39;books&#39;)</code>（如果需要的话，设置 readwrite）。</li>
-<li>获取对象存储 <code>transaction.objectStore(&#39;books&#39;)</code>。</li>
-</ul>
-</li>
-<li>按键搜索，可以直接调用对象库上的方法。<ul>
-<li>要按对象字段搜索，需要创建索引。</li>
-</ul>
-</li>
-<li>如果内存中容纳不下数据，请使用光标。</li>
-</ol>
-<p>这里有一个小应用程序示例：</p>
-<p>[codetabs src=&quot;books&quot; current=&quot;index.html&quot;]</p>
-
-      </fieldset>
-      </div><div id="nav"><div style="margin-left:0em"><strong>cookie</strong><br/></div><div style="margin-left:1em"><a href="#_zYI9RW">article</a><br/></div><div style="margin-left:0em"><strong>localstorage</strong><br/></div><div style="margin-left:1em"><strong>form-autosave</strong><br/></div><div style="margin-left:2em"><a href="#_QYfsQT">solution</a><br/></div><div style="margin-left:2em"><a href="#_bjI5N3">task</a><br/></div><div style="margin-left:1em"><a href="#_pjcDYo">article</a><br/></div><div style="margin-left:0em"><strong>indexeddb</strong><br/></div><div style="margin-left:1em"><a href="#_ZqCBRl">article</a><br/></div></div>
+      </div><div id="nav"><div style="margin-left:0em"><a href="#_WpRe9A">cookie</a><br/></div><div style="margin-left:0em"><a href="#_uaUcId">storage</a><br/></div></div>
 </body></html>

@@ -1,5 +1,3 @@
-# JavaScript 动画
-
 JavaScript 动画可以处理 CSS 无法处理的事情。
 
 例如，沿着具有与 Bezier 曲线不同的时序函数的复杂路径移动，或者实现画布上的动画。
@@ -25,7 +23,7 @@ let timer = setInterval(function() {
 ```js
 let start = Date.now(); // 保存开始时间
 
-let timer = setInterval(function() {
+let timer = setInterval(function () {
   // 距开始过了多长时间
   let timePassed = Date.now() - start;
 
@@ -36,19 +34,14 @@ let timer = setInterval(function() {
 
   // 在 timePassed 时刻绘制动画
   draw(timePassed);
-
 }, 20);
 
 // 随着 timePassed 从 0 增加到 2000
 // 将 left 的值从 0px 增加到 400px
 function draw(timePassed) {
-  train.style.left = timePassed / 5 + 'px';
+  train.style.left = timePassed / 5 + "px";
 }
 ```
-
-点击演示：
-
-[codetabs height=200 src="move"]
 
 ## 使用 requestAnimationFrame
 
@@ -63,11 +56,11 @@ function draw(timePassed) {
 换句话说，像下面这样：
 
 ```js
-setInterval(function() {
+setInterval(function () {
   animate1();
   animate2();
   animate3();
-}, 20)
+}, 20);
 ```
 
 ……比这样更好：
@@ -85,6 +78,7 @@ setInterval(animate3, 20);
 它解决了所有这些问题，甚至更多其它的问题。
 
 语法：
+
 ```js
 let requestId = requestAnimationFrame(callback);
 ```
@@ -94,6 +88,7 @@ let requestId = requestAnimationFrame(callback);
 如果我们对 `callback` 中的元素进行变化，这些变化将与其他 `requestAnimationFrame` 回调和 CSS 动画组合在一起。因此，只会有一次几何重新计算和重绘，而不是多次。
 
 返回值 `requestId` 可用来取消回调：
+
 ```js
 // 取消回调的周期执行
 cancelAnimationFrame(requestId);
@@ -105,13 +100,16 @@ cancelAnimationFrame(requestId);
 
 下面的代码显示了 `requestAnimationFrame` 的前 10 次运行之间的时间间隔。通常是 10-20ms：
 
-```html height=40 refresh
+```html
 <script>
   let prev = performance.now();
   let times = 0;
 
   requestAnimationFrame(function measure(time) {
-    document.body.insertAdjacentHTML("beforeEnd", Math.floor(time - prev) + " ");
+    document.body.insertAdjacentHTML(
+      "beforeEnd",
+      Math.floor(time - prev) + " "
+    );
     prev = time;
 
     if (times++ < 10) requestAnimationFrame(measure);
@@ -124,8 +122,7 @@ cancelAnimationFrame(requestId);
 现在我们可以在 `requestAnimationFrame` 基础上创建一个更通用的动画函数：
 
 ```js
-function animate({timing, draw, duration}) {
-
+function animate({ timing, draw, duration }) {
   let start = performance.now();
 
   requestAnimationFrame(function animate(time) {
@@ -141,7 +138,6 @@ function animate({timing, draw, duration}) {
     if (timeFraction < 1) {
       requestAnimationFrame(animate);
     }
-
   });
 }
 ```
@@ -164,7 +160,6 @@ function animate({timing, draw, duration}) {
 
     图像如下：
 
-    ![](linear.svg)
 
     它类似于 `transition-timing-function: linear`。后文有更多有趣的变体。
 
@@ -174,6 +169,7 @@ function animate({timing, draw, duration}) {
     这是实际绘制动画的函数。
 
     它可以移动元素：
+
     ```js
     function draw(progress) {
       train.style.left = progress + 'px';
@@ -182,12 +178,7 @@ function animate({timing, draw, duration}) {
 
     ……或者做任何其他事情，我们可以以任何方式为任何事物制作动画。
 
-
 让我们使用我们的函数将元素的 `width` 从 `0` 变化为 `100%`。
-
-点击演示元素：
-
-[codetabs height=60 src="width"]
 
 它的代码如下：
 
@@ -198,8 +189,8 @@ animate({
     return timeFraction;
   },
   draw(progress) {
-    elem.style.width = progress * 100 + '%';
-  }
+    elem.style.width = progress * 100 + "%";
+  },
 });
 ```
 
@@ -219,27 +210,11 @@ animate({
 
 ```js
 function quad(timeFraction) {
-  return Math.pow(timeFraction, 2)
+  return Math.pow(timeFraction, 2);
 }
 ```
 
-图像如下：
-
-![](quad.svg)
-
-看看实际效果（点击激活）：
-
-[iframe height=40 src="quad" link]
-
 ……或者三次曲线甚至使用更大的 `n`。增大幂会让动画加速得更快。
-
-下面是 `progress` 为 `5` 次幂的图像:
-
-![](quint.svg)
-
-实际效果：
-
-[iframe height=40 src="quint" link]
 
 ### 圆弧
 
@@ -250,12 +225,6 @@ function circ(timeFraction) {
   return 1 - Math.sin(Math.acos(timeFraction));
 }
 ```
-
-图像：
-
-![](circ.svg)
-
-[iframe height=40 src="circ" link]
 
 ### 反弹：弓箭射击
 
@@ -271,14 +240,6 @@ function back(x, timeFraction) {
 }
 ```
 
-**`x = 1.5` 时的图像：**
-
-![](back.svg)
-
-在动画中我们使用特定的 `x` 值。下面是 `x = 1.5` 时的例子：
-
-[iframe height=40 src="back" link]
-
 ### 弹跳
 
 想象一下，我们正在抛球。球落下之后，弹跳几次然后停下来。
@@ -289,34 +250,28 @@ function back(x, timeFraction) {
 function bounce(timeFraction) {
   for (let a = 0, b = 1, result; 1; a += b, b /= 2) {
     if (timeFraction >= (7 - 4 * a) / 11) {
-      return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2)
+      return (
+        -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2)
+      );
     }
   }
 }
 ```
 
-演示：
-
-[iframe height=40 src="bounce" link]
-
 ### 伸缩动画
 
-另一个“伸缩”函数接受附加参数 `x` 作为“初始范围”。
+另一个“伸缩”函数接受附加参数 `x` 作为“初始范围”
 
 ```js
 function elastic(x, timeFraction) {
-  return Math.pow(2, 10 * (timeFraction - 1)) * Math.cos(20 * Math.PI * x / 3 * timeFraction)
+  return (
+    Math.pow(2, 10 * (timeFraction - 1)) *
+    Math.cos(((20 * Math.PI * x) / 3) * timeFraction)
+  );
 }
 ```
 
-**`x=1.5` 时的图像：**
-![](elastic.svg)
-
-`x=1.5` 时的演示
-
-[iframe height=40 src="elastic" link]
-
-## 逆转：ease*
+## 逆转：ease\*
 
 我们有一组时序函数。它们的直接应用称为“easeIn”。
 
@@ -335,9 +290,9 @@ timingEaseOut(timeFraction) = 1 - timing(1 - timeFraction);
 ```js
 // 接受时序函数，返回变换后的变体
 function makeEaseOut(timing) {
-  return function(timeFraction) {
+  return function (timeFraction) {
     return 1 - timing(1 - timeFraction);
-  }
+  };
 }
 ```
 
@@ -347,21 +302,6 @@ function makeEaseOut(timing) {
 let bounceEaseOut = makeEaseOut(bounce);
 ```
 
-这样，弹跳不会在动画开始时执行，而是在动画结束时。这样看起来更好：
-
-[codetabs src="bounce-easeout"]
-
-在这里，我们可以看到变换如何改变函数的行为：
-
-![](bounce-inout.svg)
-
-如果在开始时有动画效果，比如弹跳 —— 那么它将在最后显示。
-
-上图中<span style="color:#EE6B47">常规弹跳</span>为红色，<span style="color:#62C0DC">easeOut 弹跳</span>为蓝色。
-
-- 常规弹跳 —— 物体在底部弹跳，然后突然跳到顶部。
-- `easeOut` 变换之后 —— 物体跳到顶部之后，在那里弹跳。
-
 ### easeInOut
 
 我们还可以在动画的开头和结尾都显示效果。该变换称为“easeInOut”。
@@ -369,9 +309,11 @@ let bounceEaseOut = makeEaseOut(bounce);
 给定时序函数，我们按下面的方式计算动画状态：
 
 ```js
-if (timeFraction <= 0.5) { // 动画前半部分
+if (timeFraction <= 0.5) {
+  // 动画前半部分
   return timing(2 * timeFraction) / 2;
-} else { // 动画后半部分
+} else {
+  // 动画后半部分
   return (2 - timing(2 * (1 - timeFraction))) / 2;
 }
 ```
@@ -380,40 +322,14 @@ if (timeFraction <= 0.5) { // 动画前半部分
 
 ```js
 function makeEaseInOut(timing) {
-  return function(timeFraction) {
-    if (timeFraction < .5)
-      return timing(2 * timeFraction) / 2;
-    else
-      return (2 - timing(2 * (1 - timeFraction))) / 2;
-  }
+  return function (timeFraction) {
+    if (timeFraction < 0.5) return timing(2 * timeFraction) / 2;
+    else return (2 - timing(2 * (1 - timeFraction))) / 2;
+  };
 }
 
 bounceEaseInOut = makeEaseInOut(bounce);
 ```
-
-`bounceEaseInOut` 演示如下:
-
-[codetabs src="bounce-easeinout"]
-
-“easeInOut” 变换将两个图像连接成一个：动画的前半部分为“easeIn”（常规），后半部分为“easeOut”（反向）。
-
-如果我们比较 `circ` 时序函数的 `easeIn`、`easeOut` 和 `easeInOut` 的图像，就可以清楚地看到效果：
-
-![](circ-ease.svg)
-
-- <span style="color:#EE6B47">红色</span>是 `circ`（`easeIn`）的常规变体。
-- <span style="color:#8DB173">绿色</span> —— `easeOut`。
-- <span style="color:#62C0DC">蓝色</span> —— `easeInOut`。
-
-正如我们所看到的，动画前半部分的图形是缩小的“easeIn”，后半部分是缩小的“easeOut”。结果是动画以相同的效果开始和结束。
-
-## 更有趣的 "draw"
-
-除了移动元素，我们还可以做其他事情。我们所需要的只是写出合适的 `draw`。
-
-这是动画形式的“弹跳”文字输入：
-
-[codetabs src="text"]
 
 ## 总结
 
@@ -424,8 +340,7 @@ JavaScript 动画应该通过 `requestAnimationFrame` 实现。该内置方法�
 这是设置大多数动画的 helper 函数 `animate`：
 
 ```js
-function animate({timing, draw, duration}) {
-
+function animate({ timing, draw, duration }) {
   let start = performance.now();
 
   requestAnimationFrame(function animate(time) {
@@ -441,19 +356,6 @@ function animate({timing, draw, duration}) {
     if (timeFraction < 1) {
       requestAnimationFrame(animate);
     }
-
   });
 }
 ```
-
-参数：
-
-- `duration` —— 动画运行的总毫秒数。
-- `timing` —— 计算动画进度的函数。获取从 0 到 1 的小数时间，返回动画进度，通常也是从 0 到 1。
-- `draw` —— 绘制动画的函数。
-
-当然我们可以改进它，增加更多花里胡哨的东西，但 JavaScript 动画不是经常用到。它们用于做一些有趣和不标准的事情。因此，您大可在必要时再添加所需的功能。
-
-JavaScript 动画可以使用任何时序函数。我们介绍了很多例子和变换，使它们更加通用。与 CSS 不同，我们不仅限于 Bezier 曲线。
-
-`draw` 也是如此：我们可以将任何东西动画化，而不仅仅是 CSS 属性。

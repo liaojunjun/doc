@@ -4,7 +4,7 @@ CSS 动画可以在不借助 Javascript 的情况下做出一些简单的动画�
 
 你也可以通过 Javascript 控制 CSS 动画，使用少量的代码，就能让动画表现更加出色。
 
-## CSS 过渡（transition）[#css-transition]
+## CSS 过渡（transition)
 
 CSS 过渡的理念非常简单，我们只需要定义某一个属性以及如何动态地表现其变化。当属性变化时，浏览器将会绘制出相应的过渡动画。
 
@@ -23,7 +23,7 @@ CSS 过渡的理念非常简单，我们只需要定义某一个属性以及如�
 
 单击以下按钮以演示动画：
 
-```html run autorun height=60
+```html
 <button id="color">Click me</button>
 
 <style>
@@ -34,8 +34,8 @@ CSS 过渡的理念非常简单，我们只需要定义某一个属性以及如�
 </style>
 
 <script>
-  color.onclick = function() {
-    this.style.backgroundColor = 'red';
+  color.onclick = function () {
+    this.style.backgroundColor = "red";
   };
 </script>
 ```
@@ -51,22 +51,20 @@ CSS 提供了四个属性来描述一个过渡：
 
 请看以下例子，点击按钮生成 `color` 和 `font-size` 的过渡动画：
 
-```html run height=80 autorun no-beautify
+```html
 <button id="growing">Click me</button>
 
 <style>
-#growing {
-
-  transition: font-size 3s, color 2s;
-
-}
+  #growing {
+    transition: font-size 3s, color 2s;
+  }
 </style>
 
 <script>
-growing.onclick = function() {
-  this.style.fontSize = '36px';
-  this.style.color = 'red';
-};
+  growing.onclick = function () {
+    this.style.fontSize = "36px";
+    this.style.color = "red";
+  };
 </script>
 ```
 
@@ -90,8 +88,6 @@ growing.onclick = function() {
 
 这里演示了数字从 `0` 到 `9` 的动画，使用了 CSS `translate` 方法：
 
-[codetabs src="digits"]
-
 如下在 `tranform` 属性上应用动画：
 
 ```css
@@ -105,25 +101,23 @@ growing.onclick = function() {
 在以上的例子中，JavaScript 把 `.animate` 类添加到了元素上，由此触发了动画：
 
 ```js
-stripe.classList.add('animate');
+stripe.classList.add("animate");
 ```
 
 我们也可以『从中间』开始，也就是说从某个特定数字开始，比方说，从当前的时间的秒数开始。这就要用到负的 `transition-delay`。
 
 此处，如果你单击这个数字，那么它会从当前的秒数开始渲染：
 
-[codetabs src="digits-negative-delay"]
-
 只需添加一行 JavaScript 代码：
 
 ```js
-stripe.onclick = function() {
+stripe.onclick = function () {
   let sec = new Date().getSeconds() % 10;
 
   // for instance, -3s here starts the animation from the 3rd second
-  stripe.style.transitionDelay = '-' + sec + 's';
+  stripe.style.transitionDelay = "-" + sec + "s";
 
-  stripe.classList.add('animate');
+  stripe.classList.add("animate");
 };
 ```
 
@@ -154,13 +148,9 @@ CSS 中设置一贝塞尔曲线的语法为：`cubic-bezier(x2, y2, x3, y3)`。�
 
 看上去就像这样：
 
-![](bezier-linear.svg)
-
 ...正如我们所见，这就是条直线。随着时间 `x` 推移，完成度 `y` 稳步从 `0` 增长到 `1`。
 
 例子中的列车匀速地从左侧移动到右侧：
-
-[codetabs src="train-linear"]
 
 这个里面的 CSS 就是基于刚才那条曲线的：
 
@@ -178,38 +168,34 @@ CSS 中设置一贝塞尔曲线的语法为：`cubic-bezier(x2, y2, x3, y3)`。�
 
 图像如下：
 
-![](train-curve.svg)
-
 正如我们所见，这个过程起初很快：曲线开始迅速升高，然后越来越慢。
 
 这是实际的效果演示：
 
-[codetabs src="train"]
-
 CSS：
+
 ```css
 .train {
   left: 0;
-  transition: left 5s cubic-bezier(0, .5, .5, 1);
+  transition: left 5s cubic-bezier(0, 0.5, 0.5, 1);
   /* JavaScript sets left to 450px */
 }
 ```
 
 CSS 提供几条内置的曲线：`linear`、`ease`、`ease-in`、`ease-out` 和 `ease-in-out`。
 
-`linear` 其实就是 `cubic-bezier(0, 0, 1, 1)` 的简写 —— 一条直线，刚刚我们已经看过了。 
+`linear` 其实就是 `cubic-bezier(0, 0, 1, 1)` 的简写 —— 一条直线，刚刚我们已经看过了。
 
 其它的名称是以下贝塞尔曲线的简写：
 
-| <code>ease</code><sup>*</sup> | <code>ease-in</code> | <code>ease-out</code> | <code>ease-in-out</code> |
-|-------------------------------|----------------------|-----------------------|--------------------------|
-| <code>(0.25, 0.1, 0.25, 1.0)</code> | <code>(0.42, 0, 1.0, 1.0)</code> | <code>(0, 0, 0.58, 1.0)</code> | <code>(0.42, 0, 0.58, 1.0)</code> |
-| ![ease, figure](ease.svg) | ![ease-in, figure](ease-in.svg) | ![ease-out, figure](ease-out.svg) | ![ease-in-out, figure](ease-in-out.svg) |
+| <code>ease</code><sup>\*</sup>      | <code>ease-in</code>             | <code>ease-out</code>             | <code>ease-in-out</code>                |
+| ----------------------------------- | -------------------------------- | --------------------------------- | --------------------------------------- |
+| <code>(0.25, 0.1, 0.25, 1.0)</code> | <code>(0.42, 0, 1.0, 1.0)</code> | <code>(0, 0, 0.58, 1.0)</code>    | <code>(0.42, 0, 0.58, 1.0)</code>       |
+| ![ease, figure](ease.svg)           | ![ease-in, figure](ease-in.svg)  | ![ease-out, figure](ease-out.svg) | ![ease-in-out, figure](ease-in-out.svg) |
 
 `*` —— 默认值，如果没有指定时间函数，那么将使用 `ease` 作为默认值。
 
 所以，我们可以使用 `ease-out` 来表现减速行驶的列车：
-
 
 ```css
 .train {
@@ -226,10 +212,11 @@ CSS 提供几条内置的曲线：`linear`、`ease`、`ease-in`、`ease-out` 和
 曲线上的控制点的 `y` 值可以使任意的：不管是负值还是一个很大的值。如此，贝塞尔曲线就会变得很低或者很高，让动画超出其正常的范围。
 
 在一下的例子中使用的代码：
+
 ```css
 .train {
   left: 100px;
-  transition: left 5s cubic-bezier(.5, -1, .5, 2);
+  transition: left 5s cubic-bezier(0.5, -1, 0.5, 2);
   /* JavaScript sets left to 400px */
 }
 ```
@@ -241,12 +228,6 @@ CSS 提供几条内置的曲线：`linear`、`ease`、`ease-in`、`ease-out` 和
 - 起初，列车会**反向**运动：`left` 会变得小于 `100px`。
 - 然后，它会变回往前运动，并且超过 `400px`。
 - 最后再返回 —— 回到 `400px`。
-
-[codetabs src="train-over"]
-
-为什么会这样？看一眼给定的贝塞尔曲线的图像你就会明白了。
-
-![](bezier-train-over.svg)
 
 我们把第二个点的 `y` 坐标移动到了小于 `0` 的位置，同时把第三个点的 `y` 坐标移动到了大于 `1` 的位置，因此曲线已经不再像一个四分之一圆了。`y` 坐标超出了常规的 `0..1` 的范围。
 
@@ -265,15 +246,13 @@ CSS 提供几条内置的曲线：`linear`、`ease`、`ease-in`、`ease-out` 和
 为了达到效果，我们把动画拆分为 9 段：
 
 ```css
-#stripe.animate  {
+#stripe.animate {
   transform: translate(-90%);
   transition: transform 9s steps(9, start);
 }
 ```
 
 `step(9, start)` 生效时：
-
-[codetabs src="step"]
 
 `steps` 的第一个参数表示段数。这个过渡动画将会被拆分为 9 个部分（每个占 10%）。时间间隔也会以同样的方式被拆分：9 秒会被分割为多个时长 1 秒的间隔。
 
@@ -303,8 +282,6 @@ CSS 提供几条内置的曲线：`linear`、`ease`、`ease-in`、`ease-out` 和
 
 `step(9, end)` 生效时：
 
-[codetabs src="step-end"]
-
 另外还有一些简写值：
 
 - `step-start` —— 等同于 `steps(1, start)`。即：动画立刻开始，并且只有一段。也就是说，会立刻开始，紧接着就结束了，宛如没有动画一样。
@@ -325,26 +302,25 @@ CSS 动画完成后，会触发 `transitionend` 事件。
 这个动画通过 `go` 函数初始化，并且在每次动画完成后都会重复执行，并转变方向：
 
 ```js
-boat.onclick = function() {
+boat.onclick = function () {
   //...
   let times = 1;
 
   function go() {
     if (times % 2) {
       // 向右移动
-      boat.classList.remove('back');
-      boat.style.marginLeft = 100 * times + 200 + 'px';
+      boat.classList.remove("back");
+      boat.style.marginLeft = 100 * times + 200 + "px";
     } else {
       // 向左移动
-      boat.classList.add('back');
-      boat.style.marginLeft = 100 * times - 200 + 'px';
+      boat.classList.add("back");
+      boat.style.marginLeft = 100 * times - 200 + "px";
     }
-
   }
 
   go();
 
-  boat.addEventListener('transitionend', function() {
+  boat.addEventListener("transitionend", function () {
     times++;
     go();
   });
@@ -367,26 +343,27 @@ boat.onclick = function() {
 
 这里有个详细的例子：
 
-```html run height=60 autorun="no-epub" no-beautify
+```html
 <div class="progress"></div>
 
 <style>
-
-  @keyframes go-left-right {        /* 指定一个名字："go-left-right" */
-    from { left: 0px; }             /* 从 left: 0px 开始 */
-    to { left: calc(100% - 50px); } /* 移动至 left: 100%-50px */
+  @keyframes go-left-right {
+    /* 指定一个名字："go-left-right" */
+    from {
+      left: 0px;
+    } /* 从 left: 0px 开始 */
+    to {
+      left: calc(100% - 50px);
+    } /* 移动至 left: 100%-50px */
   }
 
-
   .progress {
-
     animation: go-left-right 3s infinite alternate;
     /* 把动画 "go-left-right" 应用到元素上
        持续 3 秒
        持续次数：infinite
        每次都改变方向
     */
-
 
     position: relative;
     border: 2px solid green;
@@ -409,13 +386,9 @@ CSS 动画允许你为一个或者多个属性的变化创建丝滑流畅（也�
 
 相对于 JavaScript 动画，CSS 动画存在的特点如下：
 
-```compare plus="CSS animations" minus="JavaScript animations"
-+ 简单的事，简单地做。
-+ 快速，而且对 CPU 造成的压力很小。
+- 简单的事，简单地做。
+- 快速，而且对 CPU 造成的压力很小。
 - JavaScript 动画更加灵活。它们可以实现任何动画逻辑，比如某个元素的爆炸效果。
 - 不仅仅只是属性的变化。我们还可以在 JavaScript 中生成新元素用于动画。
-```
 
 本节已经介绍了可以使用 CSS 实现的主要动画类型，而且 `transitionend` 还允许在动画结束后执行 JavaScript 代码，因此它可以方便得与代码结合起来。
-
-但是在下一节，我们将会学习一些 JavaScript 动画来实现更加复杂的效果。

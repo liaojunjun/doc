@@ -1,8 +1,4 @@
-# LocalStorage，sessionStorage
-
 Web 存储对象 `localStorage` 和 `sessionStorage` 允许我们在浏览器上保存键/值对。
-
-它们有趣的是，在页面刷新后（对于 `sessionStorage`）甚至浏览器完全重启（对于 `localStorage`）后，数据仍然保留在浏览器中。我们很快就会看到。
 
 我们已经有了 cookie。为什么还要其他存储对象呢？
 
@@ -33,13 +29,13 @@ Web 存储对象 `localStorage` 和 `sessionStorage` 允许我们在浏览器上
 例如，如果你运行此代码……
 
 ```js
-localStorage.setItem('test', 1);
+localStorage.setItem("test", 1);
 ```
 
 ……然后关闭/重新打开浏览器，或者只是在不同的窗口打开同一页面，然后你可以这样获取它：
 
 ```js
-alert( localStorage.getItem('test') ); // 1
+alert(localStorage.getItem("test")); // 1
 ```
 
 我们只需要在同一个源（域/端口/协议），URL 路径可以不同。
@@ -55,7 +51,7 @@ alert( localStorage.getItem('test') ); // 1
 localStorage.test = 2;
 
 // 获取 key
-alert( localStorage.test ); // 2
+alert(localStorage.test); // 2
 
 // 删除 key
 delete localStorage.test;
@@ -64,10 +60,11 @@ delete localStorage.test;
 这是历史原因造成的，并且大多数情况下都可行，但通常不建议这样做，因为：
 
 1. 如果键是由用户生成的，那么它可以是任何内容，例如 `length` 或 `toString`，也可以是 `localStorage` 的另一种内建方法。在这种情况下，`getItem/setItem` 可以正常工作，而类对象访问的方式则会失败：
-    ```js
-    let key = 'length';
-    localStorage[key] = 5; // Error，无法对 length 进行赋值
-    ```
+
+   ```js
+   let key = "length";
+   localStorage[key] = 5; // Error，无法对 length 进行赋值
+   ```
 
 2. 有一个 `storage` 事件，在我们更改数据时会触发。但以类对象方式访问时，不会触发该事件。我们将在本章的后面看到。
 
@@ -80,7 +77,7 @@ delete localStorage.test;
 一种方法是像遍历数组那样遍历它们：
 
 ```js
-for(let i = 0; i < localStorage.length; i++) {
+for (let i = 0; i < localStorage.length; i++) {
   let key = localStorage.key(i);
   alert(`${key}: ${localStorage.getItem(key)}`);
 }
@@ -92,7 +89,7 @@ for(let i = 0; i < localStorage.length; i++) {
 
 ```js
 // 不好的尝试
-for(let key in localStorage) {
+for (let key in localStorage) {
   alert(key); // 显示 getItem，setItem 和其他内建的东西
 }
 ```
@@ -100,7 +97,7 @@ for(let key in localStorage) {
 ……因此，我们需要使用 `hasOwnProperty` 检查来过滤掉原型中的字段：
 
 ```js
-for(let key in localStorage) {
+for (let key in localStorage) {
   if (!localStorage.hasOwnProperty(key)) {
     continue; // 跳过像 "setItem"，"getItem" 等这样的键
   }
@@ -112,13 +109,12 @@ for(let key in localStorage) {
 
 ```js
 let keys = Object.keys(localStorage);
-for(let key of keys) {
+for (let key of keys) {
   alert(`${key}: ${localStorage.getItem(key)}`);
 }
 ```
 
 后者有效，因为 `Object.keys` 只返回属于对象的键，会忽略原型上的。
-
 
 ## 仅字符串
 
@@ -127,27 +123,26 @@ for(let key of keys) {
 如果是任何其他类型，例数字或对象，它会被自动转换为字符串。
 
 ```js
-sessionStorage.user = {name: "John"};
+sessionStorage.user = { name: "John" };
 alert(sessionStorage.user); // [object Object]
 ```
 
 我们可以使用 `JSON` 来存储对象：
 
 ```js
-sessionStorage.user = JSON.stringify({name: "John"});
+sessionStorage.user = JSON.stringify({ name: "John" });
 
 // sometime later
-let user = JSON.parse( sessionStorage.user );
-alert( user.name ); // John
+let user = JSON.parse(sessionStorage.user);
+alert(user.name); // John
 ```
 
 也可以对整个存储对象进行字符串化处理，例如出于调试目的：
 
 ```js
 // 为 JSON.stringify 增加了格式设置选项，以使对象看起来更美观
-alert( JSON.stringify(localStorage, null, 2) );
+alert(JSON.stringify(localStorage, null, 2));
 ```
-
 
 ## sessionStorage
 
@@ -165,13 +160,13 @@ alert( JSON.stringify(localStorage, null, 2) );
 运行此代码……
 
 ```js
-sessionStorage.setItem('test', 1);
+sessionStorage.setItem("test", 1);
 ```
 
 ……然后刷新页面。这时你仍然可以获取到数据：
 
 ```js
-alert( sessionStorage.getItem('test') ); // after refresh: 1
+alert(sessionStorage.getItem("test")); // after refresh: 1
 ```
 
 ……但是，如果你在另一个新的标签页中打开此页面，然后在新页面中再次运行上面这行代码，则会得到 `null`，表示“未找到数据”。
@@ -202,12 +197,13 @@ alert( sessionStorage.getItem('test') ); // after refresh: 1
 
 ```js
 // 在其他文档对同一存储进行更新时触发
-window.onstorage = event => { // 等同于 window.addEventListener('storage', () => {
-  if (event.key != 'now') return;
-  alert(event.key + ':' + event.newValue + " at " + event.url);
+window.onstorage = (event) => {
+  // 等同于 window.addEventListener('storage', () => {
+  if (event.key != "now") return;
+  alert(event.key + ":" + event.newValue + " at " + event.url);
 };
 
-localStorage.setItem('now', Date.now());
+localStorage.setItem("now", Date.now());
 ```
 
 请注意，该事件还包含：`event.url` —— 发生数据更新的文档的 url。
@@ -217,33 +213,3 @@ localStorage.setItem('now', Date.now());
 **这允许同源的不同窗口交换消息。**
 
 现代浏览器还支持 [Broadcast channel API](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API)，这是用于同源窗口之间通信的特殊 API，它的功能更全，但被支持的情况不好。有一些库基于 `localStorage` 来 polyfill 该 API，使其可以用在任何地方。
-
-## 总结
-
-Web 存储对象 `localStorage` 和 `sessionStorage` 允许我们在浏览器中保存键/值对。
-- `key` 和 `value` 都必须为字符串。
-- 存储大小限制为 5MB+，具体取决于浏览器。
-- 它们不会过期。
-- 数据绑定到源（域/端口/协议）。
-
-| `localStorage` | `sessionStorage` |
-|----------------|------------------|
-| 在同源的所有标签页和窗口之间共享数据 | 在当前浏览器标签页中可见，包括同源的 iframe |
-| 浏览器重启后数据仍然保留 | 页面刷新后数据仍然保留（但标签页关闭后数据则不再保留） |
-
-API：
-
-- `setItem(key, value)` —— 存储键/值对。
-- `getItem(key)` —— 按照键获取值。
-- `removeItem(key)` —— 删除键及其对应的值。
-- `clear()` —— 删除所有数据。
-- `key(index)` —— 获取该索引下的键名。
-- `length` —— 存储的内容的长度。
-- 使用 `Object.keys` 来获取所有的键。
-- 我们将键作为对象属性来访问，在这种情况下，不会触发 `storage` 事件。
-
-Storage 事件：
-
-- 在调用 `setItem`，`removeItem`，`clear` 方法后触发。
-- 包含有关操作的所有数据（`key/oldValue/newValue`），文档 `url` 和存储对象 `storageArea`。
-- 在所有可访问到存储对象的 `window` 对象上触发，导致当前数据改变的 `window` 对象除外（对于 `sessionStorage` 是在当前标签页下，对于 `localStorage` 是在全局，即所有同源的窗口）。
